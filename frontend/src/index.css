@@ -16,3 +16,10 @@ body {
   min-width: 320px;
   min-height: 100vh;
 }
+
+/* Shadcn */
+@layer base {
+  :root {
+    --radius: 0.5rem;
+  }
+}

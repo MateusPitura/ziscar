@@ -1,3 +1,10 @@
+import DsButton from "@/design-system/Button";
+
 export default function VehiclePage() {
-  return <div className="bg-light-primary text-display-large">Vehicle Page</div>;
+  return (
+    <>
+      <DsButton />
+      <div className="bg-light-primary text-display-large">Vehicle Page</div>
+    </>
+  );
 }
