@@ -1,3 +1,3 @@
 export default function VehiclePage() {
-  return <div className="bg-blue-500">Vehicle Page</div>;
+  return <div className="bg-light-primary text-display-large">Vehicle Page</div>;
 }
