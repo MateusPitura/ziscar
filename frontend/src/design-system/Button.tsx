@@ -25,12 +25,12 @@ function BaseButton({
   return (
     <button
       className={classNames(
-        "px-4 rounded-md h-10 hover:opacity-50 flex items-center gap-4",
+        "px-4 rounded-md h-10 hover:opacity-50 flex items-center gap-4 w-fit",
         className,
         {
           "pointer-events-none opacity-50": state === "disabled",
           "pointer-events-none animate-pulse": state === "loading",
-          "w-full": fullWidth,
+          "!w-full": fullWidth,
         }
       )}
       onClick={onClick}

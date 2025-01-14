@@ -1,277 +1,60 @@
+import PageHeader from "@/components/PageHeader";
 import Button from "@/design-system/Button";
+import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
+import DirectionsCarOutlinedIcon from "@mui/icons-material/DirectionsCarOutlined";
+import StoreOutlinedIcon from "@mui/icons-material/StoreOutlined";
+import VerifiedUserOutlinedIcon from "@mui/icons-material/VerifiedUserOutlined";
+import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
+import PageGroupContainer from "@/components/PageGroupContainer";
 
 export default function UsersPage() {
   return (
-    <>
-      Variants
-      <div className="flex gap-2 p-2">
-        <Button
-          variant="primary"
-          label="Button"
-          onClick={() => {
-            alert("teste");
-          }}
-        />
-        <Button variant="secondary" label="Button" onClick={() => {}} />
-        <Button variant="tertiary" label="Button" onClick={() => {}} />
-        <Button variant="quaternary" label="Button" onClick={() => {}} />
-        <div className="bg-blue-100 p-2 gap-2 flex">
-          <Button variant="primary" label="Button" onClick={() => {}} />
-          <Button variant="secondary" label="Button" onClick={() => {}} />
-          <Button variant="tertiary" label="Button" onClick={() => {}} />
-          <Button variant="quaternary" label="Button" onClick={() => {}} />
-        </div>
-      </div>
-      Active
-      <div className="flex gap-2 p-2">
-        <Button
-          variant="primary"
-          state="active"
-          label="Button"
-          onClick={() => {}}
-        />
-        <Button
-          variant="secondary"
-          state="active"
-          label="Button"
-          onClick={() => {}}
-        />
-        <Button
-          variant="tertiary"
-          state="active"
-          label="Button"
-          onClick={() => {}}
-        />
-        <Button
-          variant="quaternary"
-          state="active"
-          label="Button"
-          onClick={() => {}}
-        />
-        <div className="bg-blue-100 p-2 gap-2 flex">
+    <div className="w-full bg-light-surface h-screen">
+      <PageHeader />
+      <div className="w-64 bg-light-surfaceContainerLowest h-full p-4 flex flex-col gap-2">
+        <PageGroupContainer label="Cadastros">
           <Button
-            variant="primary"
+            label="Cadastros"
+            variant="quaternary"
+            iconLeft={<PersonOutlinedIcon />}
+            onClick={() => {}}
             state="active"
-            label="Button"
-            onClick={() => {}}
-          />
-          <Button
-            variant="secondary"
-            state="active"
-            label="Button"
-            onClick={() => {}}
-          />
-          <Button
-            variant="tertiary"
-            state="active"
-            label="Button"
-            onClick={() => {}}
-          />
-          <Button
-            variant="quaternary"
-            state="active"
-            label="Button"
-            onClick={() => {}}
-          />
-        </div>
-      </div>
-      Disabled
-      <div className="flex gap-2 p-2">
-        <Button
-          variant="primary"
-          state="disabled"
-          label="Button"
-          onClick={() => {}}
-        />
-        <Button
-          variant="secondary"
-          state="disabled"
-          label="Button"
-          onClick={() => {}}
-        />
-        <Button
-          variant="tertiary"
-          state="disabled"
-          label="Button"
-          onClick={() => {}}
-        />
-        <Button
-          variant="quaternary"
-          state="disabled"
-          label="Button"
-          onClick={() => {}}
-        />
-        <div className="bg-blue-100 p-2 gap-2 flex">
-          <Button
-            variant="primary"
-            state="disabled"
-            label="Button"
-            onClick={() => {}}
-          />
-          <Button
-            variant="secondary"
-            state="disabled"
-            label="Button"
-            onClick={() => {}}
-          />
-          <Button
-            variant="tertiary"
-            state="disabled"
-            label="Button"
-            onClick={() => {}}
-          />
-          <Button
-            variant="quaternary"
-            state="disabled"
-            label="Button"
-            onClick={() => {}}
-          />
-        </div>
-      </div>
-      Error
-      <div className="flex gap-2 p-2">
-        <Button
-          variant="primary"
-          state="red"
-          label="Button"
-          onClick={() => {}}
-        />
-        <Button
-          variant="secondary"
-          state="red"
-          label="Button"
-          onClick={() => {}}
-        />
-        <Button
-          variant="tertiary"
-          state="red"
-          label="Button"
-          onClick={() => {}}
-        />
-        <Button
-          variant="quaternary"
-          state="red"
-          label="Button"
-          onClick={() => {}}
-        />
-        <div className="bg-blue-100 p-2 gap-2 flex">
-          <Button
-            variant="primary"
-            state="red"
-            label="Button"
-            onClick={() => {}}
-          />
-          <Button
-            variant="secondary"
-            state="red"
-            label="Button"
-            onClick={() => {}}
-          />
-          <Button
-            variant="tertiary"
-            state="red"
-            label="Button"
-            onClick={() => {}}
-          />
-          <Button
-            variant="quaternary"
-            state="red"
-            label="Button"
-            onClick={() => {}}
-          />
-        </div>
-      </div>
-      Loading
-      <div className="flex gap-2 p-2">
-        <Button
-          variant="primary"
-          state="loading"
-          label="Button"
-          onClick={() => {}}
-        />
-        <Button
-          variant="secondary"
-          state="loading"
-          label="Button"
-          onClick={() => {}}
-        />
-        <Button
-          variant="tertiary"
-          state="loading"
-          label="Button"
-          onClick={() => {}}
-        />
-        <Button
-          variant="quaternary"
-          state="loading"
-          label="Button"
-          onClick={() => {}}
-        />
-        <div className="bg-blue-100 p-2 gap-2 flex">
-          <Button
-            variant="primary"
-            state="loading"
-            label="Button"
-            onClick={() => {}}
-          />
-          <Button
-            variant="secondary"
-            state="loading"
-            label="Button"
-            onClick={() => {}}
-          />
-          <Button
-            variant="tertiary"
-            state="loading"
-            label="Button"
-            onClick={() => {}}
-          />
-          <Button
-            variant="quaternary"
-            state="loading"
-            label="Button"
-            onClick={() => {}}
-          />
-        </div>
-      </div>
-      Full
-      <div className="flex gap-2 p-2">
-        <div className="bg-green-200 w-40">
-          <Button
             fullWidth
-            variant="primary"
-            label="Button"
-            onClick={() => {}}
-            textAlign="start"
           />
-        </div>
-        <div className="bg-green-200 w-40">
           <Button
-            fullWidth
-            variant="secondary"
-            label="Button"
-            onClick={() => {}}
-            textAlign="center"
-          />
-        </div>
-        <div className="bg-green-200 w-40">
-          <Button
-            fullWidth
-            variant="tertiary"
-            label="Button"
-            onClick={() => {}}
-            textAlign="end"
-          />
-        </div>
-        <div className="bg-green-200 w-40">
-          <Button
-            fullWidth
+            label="Veículos"
             variant="quaternary"
-            label="Button"
+            iconLeft={<DirectionsCarOutlinedIcon />}
             onClick={() => {}}
+            fullWidth
           />
-        </div>
+          <Button
+            label="Filiais"
+            variant="quaternary"
+            iconLeft={<StoreOutlinedIcon />}
+            onClick={() => {}}
+            fullWidth
+          />
+        </PageGroupContainer>
+        <PageGroupContainer label="Configurações">
+          <Button
+            label="Perfil"
+            variant="quaternary"
+            iconLeft={<SettingsOutlinedIcon />}
+            onClick={() => {}}
+            fullWidth
+          />
+        </PageGroupContainer>
+        <PageGroupContainer label="Outros">
+          <Button
+            label="Auditoria"
+            variant="quaternary"
+            iconLeft={<VerifiedUserOutlinedIcon />}
+            onClick={() => {}}
+            fullWidth
+          />
+        </PageGroupContainer>
       </div>
-    </>
+    </div>
   );
 }
