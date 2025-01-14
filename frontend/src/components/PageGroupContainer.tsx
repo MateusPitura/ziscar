@@ -10,7 +10,7 @@ export default function PageGroupContainer({
   label,
 }: PageGroupContainerProperties): ReactElement {
   return (
-    <div>
+    <div className="flex flex-col gap-2">
       <span className="text-label-medium text-light-outline">{label}</span>
       {children}
     </div>
