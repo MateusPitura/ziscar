@@ -261,7 +261,7 @@ export default function UsersPage() {
             label="Button"
             onClick={() => {}}
             textAlign="end"
-            />
+          />
         </div>
         <div className="bg-green-200 w-40">
           <Button

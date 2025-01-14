@@ -11,11 +11,11 @@ interface BaseButtonProps {
 
 function BaseButton({
   state = undefined,
+  fullWidth = false,
+  textAlign = "start",
   className,
   label,
   onClick,
-  fullWidth,
-  textAlign = "start",
 }: BaseButtonProps) {
   return (
     <button
@@ -50,10 +50,7 @@ interface ButtonProps extends Omit<BaseButtonProps, "className"> {
 export default function Button({
   variant = "primary",
   state = undefined,
-  label,
-  onClick,
-  fullWidth,
-  textAlign,
+  ...props
 }: ButtonProps) {
   switch (variant) {
     case "primary":
@@ -64,11 +61,8 @@ export default function Button({
             "bg-light-error": state === "red",
             "bg-light-outline": state === "disabled" || state === "loading",
           })}
-          onClick={onClick}
           state={state}
-          label={label}
-          fullWidth={fullWidth}
-          textAlign={textAlign}
+          {...props}
         />
       );
     case "secondary":
@@ -83,11 +77,8 @@ export default function Button({
                 state === "disabled" || state === "loading",
             }
           )}
-          onClick={onClick}
           state={state}
-          label={label}
-          fullWidth={fullWidth}
-          textAlign={textAlign}
+          {...props}
         />
       );
     case "tertiary":
@@ -98,11 +89,8 @@ export default function Button({
             "text-light-error": state === "red",
             "text-light-outline": state === "disabled" || state === "loading",
           })}
-          onClick={onClick}
           state={state}
-          label={label}
-          fullWidth={fullWidth}
-          textAlign={textAlign}
+          {...props}
         />
       );
     case "quaternary":
@@ -113,11 +101,8 @@ export default function Button({
             "text-light-error": state === "red",
             "text-light-outline": state === "disabled" || state === "loading",
           })}
-          onClick={onClick}
           state={state}
-          label={label}
-          fullWidth={fullWidth}
-          textAlign={textAlign}
+          {...props}
         />
       );
   }
