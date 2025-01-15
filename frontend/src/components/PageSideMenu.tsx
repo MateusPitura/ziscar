@@ -1,20 +1,29 @@
-import type { ReactElement } from "react";
+import { memo, useState, type ReactElement } from "react";
 import Button from "@/design-system/Button";
 import PageGroupContainer from "@/components/PageGroupContainer";
 import { routes } from "@/utils/constants/routes";
+import { useNavigate } from "react-router-dom";
 
-export default function PageSideMenu(): ReactElement {
+function PageSideMenu(): ReactElement {
+  const [activePath, setActivePath] = useState("");
+
+  const navigate = useNavigate();
+
   return (
-    <div className="w-64 bg-light-surfaceContainerLowest h-full p-4 flex flex-col gap-2">
+    <div className="min-w-64 max-w-64 bg-light-surfaceContainerLowest h-full p-4 flex flex-col gap-2 fixed top-16">
       {routes.map((group) => (
-        <PageGroupContainer key={group.id} label={group.groupName}>
+        <PageGroupContainer key={group.groupName} label={group.groupName}>
           {group.routes.map((route) => (
             <Button
-              key={route.id}
+              key={route.path}
               label={route.displayName}
+              state={activePath === route.path ? "active" : undefined}
               variant="quaternary"
               iconLeft={route.icon}
-              onClick={() => {}}
+              onClick={() => {
+                setActivePath(route.path);
+                navigate(route.path);
+              }}
               fullWidth
             />
           ))}
@@ -23,3 +32,5 @@ export default function PageSideMenu(): ReactElement {
     </div>
   );
 }
+
+export default memo(PageSideMenu);
