@@ -1,6 +1,6 @@
 import { useState, type ReactElement, type ReactNode } from "react";
-import PageHeader from "./PageHeader";
-import PageSideMenu from "./PageSideMenu";
+import PageTopBar from "./PageTopBar";
+import PageSideBar from "./PageSideBar";
 
 interface PageLayoutProps {
   children: ReactNode;
@@ -17,9 +17,9 @@ export default function PageLayout({
 
   return (
     <div className="bg-light-surfaceContainerLowest w-full h-screen flex flex-col">
-      <PageHeader onToggleSideMenu={handleToggleSideMenu} />
+      <PageTopBar onToggleSideMenu={handleToggleSideMenu} />
       <div className="flex flex-1 overflow-hidden">
-        <PageSideMenu isOpen={isSideMenuOpen} />
+        <PageSideBar isOpen={isSideMenuOpen} />
         <div className="bg-light-surface h-full p-4 rounded-tl-md w-full overflow-y-auto">
           {children}
         </div>

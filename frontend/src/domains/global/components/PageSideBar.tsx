@@ -1,15 +1,15 @@
 import { memo, useState, type ReactElement } from "react";
 import Button from "@/design-system/Button";
-import PageGroupContainer from "@/domains/global/components/PageGroupContainer";
+import RoutesGroup from "@/domains/global/components/RoutesGroup";
 import { routes } from "@/domains/global/constants/routes";
 import { useNavigate } from "react-router-dom";
 import classNames from "classnames";
 
-interface PageSideMenuProps {
+interface PageSideBarProps {
   isOpen: boolean;
 }
 
-function PageSideMenu({ isOpen }: PageSideMenuProps): ReactElement {
+function PageSideBar({ isOpen }: PageSideBarProps): ReactElement {
   const [activePath, setActivePath] = useState("");
 
   const navigate = useNavigate();
@@ -24,7 +24,7 @@ function PageSideMenu({ isOpen }: PageSideMenuProps): ReactElement {
       )}
     >
       {routes.map((group) => (
-        <PageGroupContainer
+        <RoutesGroup
           key={group.groupName}
           label={isOpen ? group.groupName : undefined}
         >
@@ -43,10 +43,10 @@ function PageSideMenu({ isOpen }: PageSideMenuProps): ReactElement {
               fullWidth
             />
           ))}
-        </PageGroupContainer>
+        </RoutesGroup>
       ))}
     </div>
   );
 }
 
-export default memo(PageSideMenu);
+export default memo(PageSideBar);

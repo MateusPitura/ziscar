@@ -1,33 +1,41 @@
 import Button from "@/design-system/Button";
 import type { ReactElement } from "react";
-import MenuIcon from "@mui/icons-material/Menu";
-import LogoutIcon from "@mui/icons-material/Logout";
 
-interface PageHeaderProps {
-  onToggleSideMenu: () => void;
+interface PageHeaderProperties {
+  title: string;
+  primaryButtonLabel?: string;
+  secondaryButtonLabel?: string;
+  onClickPrimary?: () => void;
+  onClickSecondary?: () => void;
 }
 
 export default function PageHeader({
-  onToggleSideMenu,
-}: PageHeaderProps): ReactElement {
+  title,
+  primaryButtonLabel,
+  onClickPrimary,
+  secondaryButtonLabel,
+  onClickSecondary,
+}: PageHeaderProperties): ReactElement {
   return (
-    <div className="flex w-full items-center p-4 bg-light-surfaceContainerLowest h-16 gap-4">
-      <div className="flex flex-1 gap-4">
-        <Button
-          onClick={onToggleSideMenu}
-          variant="tertiary"
-          iconLeft={<MenuIcon />}
-        />
-        <span className="text-headline-small text-light-onSurface flex items-center">
-          Projeto de Software
-        </span>
-      </div>
-      <div className="flex flex-2 gap-4">
-        <Button
-          onClick={() => {}}
-          variant="tertiary"
-          iconLeft={<LogoutIcon />}
-        />
+    <div className="w-full p-4 flex">
+      <span className="text-headline-large text-light-onSurface flex-1">
+        {title}
+      </span>
+      <div className="flex">
+        {onClickSecondary && (
+          <Button
+            variant="quaternary"
+            onClick={onClickSecondary}
+            label={secondaryButtonLabel}
+          />
+        )}
+        {onClickPrimary && (
+          <Button
+            variant="primary"
+            onClick={onClickPrimary}
+            label={primaryButtonLabel}
+          />
+        )}
       </div>
     </div>
   );

@@ -1,14 +1,14 @@
 import type { ReactElement, ReactNode } from "react";
 
-interface PageGroupContainerProps {
+interface RoutesGroupProps {
   children: ReactNode;
   label?: string;
 }
 
-export default function PageGroupContainer({
+export default function RoutesGroup({
   children,
   label,
-}: PageGroupContainerProps): ReactElement {
+}: RoutesGroupProps): ReactElement {
   return (
     <div className="flex flex-col gap-2">
       {label && (
