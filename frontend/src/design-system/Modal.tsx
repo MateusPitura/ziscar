@@ -1,12 +1,13 @@
 import type { ReactElement, ReactNode } from "react";
 import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogClose,
+    DialogDescription,
 } from "@/components/ui/dialog";
-import { DialogClose } from "@radix-ui/react-dialog";
 import Button from "./Button";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -38,9 +39,12 @@ export default function Modal({
       <DialogContent className="bg-light-surfaceContainerLowest [&>button]:hidden">
         <DialogHeader className="flex gap-2 flex-row items-center">
           <DialogTitle className="flex-1">
-            <span className="text-light-onSurface text-title-large">{title}</span>
+            <span className="text-light-onSurface text-title-large">
+              {title}
+            </span>
           </DialogTitle>
-          <DialogClose className="!m-0">
+          <DialogDescription/>
+          <DialogClose className="!m-0" asChild>
             <Button
               variant="tertiary"
               onClick={onClose}
@@ -51,14 +55,14 @@ export default function Modal({
         </DialogHeader>
         {children}
         <DialogFooter className="flex">
-          <DialogClose>
+          <DialogClose asChild>
             <Button
               variant="secondary"
               onClick={onClickSecondaryBtn}
               label={labelSecondaryBtn}
             />
           </DialogClose>
-          <DialogClose>
+          <DialogClose asChild>
             <Button
               variant="primary"
               onClick={onClickPrimaryBtn}

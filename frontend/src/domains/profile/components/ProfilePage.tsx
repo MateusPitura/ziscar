@@ -1,10 +1,13 @@
 import Modal from "@/design-system/Modal";
 import PageHeader from "@/domains/global/components/PageHeader";
 import Section from "@/domains/global/components/Section";
+import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import { useState, type ReactElement } from "react";
 
 export default function ProfilePage(): ReactElement {
   const [isOpen, setIsOpen] = useState(false);
+
+  const { showSuccessSnackbar } = useSnackbar();
 
   function handleOpen(open: boolean) {
     setIsOpen(open);
@@ -17,7 +20,12 @@ export default function ProfilePage(): ReactElement {
         onClose={() => handleOpen(false)}
         title="Editar email"
         labelPrimaryBtn="Salvar"
-        onClickPrimaryBtn={() => {}}
+        onClickPrimaryBtn={() => {
+          showSuccessSnackbar({
+            title: "Email alterado com sucesso",
+            description: "Seu email foi alterado com sucesso",
+          });
+        }}
         labelSecondaryBtn="Cancelar"
         onClickSecondaryBtn={() => {}}
       >
