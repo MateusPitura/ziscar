@@ -17,7 +17,7 @@ function PageSideMenu({ isOpen }: PageSideMenuProps): ReactElement {
   return (
     <div
       className={classNames(
-        "min-w-[5rem] max-w-[5rem] bg-light-surfaceContainerLowest p-4 flex flex-col gap-2 flex-1 overflow-y-auto",
+        "min-w-[5rem] max-w-[5rem] bg-light-surfaceContainerLowest p-4 flex flex-col gap-2 flex-1 overflow-y-auto transition-all duration-300 ease-in-out",
         {
           "!min-w-64 !max-w-64": isOpen,
         }
@@ -26,8 +26,7 @@ function PageSideMenu({ isOpen }: PageSideMenuProps): ReactElement {
       {routes.map((group) => (
         <PageGroupContainer
           key={group.groupName}
-          label={group.groupName}
-          showLabel={isOpen}
+          label={isOpen ? group.groupName : undefined}
         >
           {group.routes.map((route) => (
             <Button

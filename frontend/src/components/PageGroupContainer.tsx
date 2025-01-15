@@ -2,18 +2,16 @@ import type { ReactElement, ReactNode } from "react";
 
 interface PageGroupContainerProperties {
   children: ReactNode;
-  label: string;
-  showLabel: boolean;
+  label?: string;
 }
 
 export default function PageGroupContainer({
   children,
   label,
-  showLabel,
 }: PageGroupContainerProperties): ReactElement {
   return (
     <div className="flex flex-col gap-2">
-      {showLabel && (
+      {label && (
         <span className="text-label-medium text-light-outline">{label}</span>
       )}
       {children}
