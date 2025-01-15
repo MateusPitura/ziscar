@@ -10,12 +10,14 @@ interface BaseButtonProps {
   textAlign?: "start" | "center" | "end";
   iconLeft?: ReactNode;
   iconRight?: ReactNode;
+  padding?: "default" | "none";
 }
 
 function BaseButton({
   state = undefined,
   fullWidth = false,
   textAlign = "start",
+  padding = "default",
   className,
   label,
   onClick,
@@ -25,17 +27,19 @@ function BaseButton({
   return (
     <button
       className={classNames(
-        "px-4 rounded-md h-10 hover:opacity-50 flex items-center gap-4 w-fit",
+        "rounded-md h-10 hover:opacity-50 flex items-center gap-4 w-fit",
         className,
         {
           "pointer-events-none opacity-50": state === "disabled",
           "pointer-events-none animate-pulse": state === "loading",
           "!w-full": fullWidth,
+          "px-4": padding === "default",
+          "px-0": padding === "none",
         }
       )}
       onClick={onClick}
     >
-      {iconLeft}
+      {iconLeft && <div className="flex flex-1 justify-center">{iconLeft}</div>}
       {label && (
         <span
           className={classNames("text-label-large flex w-full", {
@@ -47,7 +51,9 @@ function BaseButton({
           {label}
         </span>
       )}
-      {iconRight}
+      {iconRight && (
+        <div className="flex flex-1 justify-center">{iconRight}</div>
+      )}
     </button>
   );
 }
