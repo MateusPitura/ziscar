@@ -22,7 +22,7 @@ export default function useSnackbar() {
       title,
       description,
       action: onActionClick && (
-        <ToastAction altText="Action button">
+        <ToastAction altText="Action button" asChild>
           <Button
             variant="quaternary"
             label={actionLabel}
@@ -45,7 +45,7 @@ export default function useSnackbar() {
       title,
       description,
       action: onActionClick && (
-        <ToastAction altText="Action button">
+        <ToastAction altText="Action button" asChild>
           <Button
             variant="primary"
             state="red"
