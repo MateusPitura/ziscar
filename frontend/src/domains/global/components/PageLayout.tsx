@@ -2,13 +2,13 @@ import { useState, type ReactElement, type ReactNode } from "react";
 import PageHeader from "./PageHeader";
 import PageSideMenu from "./PageSideMenu";
 
-interface PageLayoutProperties {
+interface PageLayoutProps {
   children: ReactNode;
 }
 
 export default function PageLayout({
   children,
-}: PageLayoutProperties): ReactElement {
+}: PageLayoutProps): ReactElement {
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(true);
 
   function handleToggleSideMenu() {

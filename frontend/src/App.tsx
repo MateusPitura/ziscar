@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { routes } from "@/utils/constants/routes";
-import PageLayout from "./components/PageLayout";
+import { routes } from "@/domains/global/constants/routes";
+import PageLayout from "@/domains/global/components/PageLayout";
 
 export default function App() {
   return (

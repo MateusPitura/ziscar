@@ -1,6 +1,6 @@
 import type { ReactElement, ReactNode } from "react";
 
-interface PageGroupContainerProperties {
+interface PageGroupContainerProps {
   children: ReactNode;
   label?: string;
 }
@@ -8,7 +8,7 @@ interface PageGroupContainerProperties {
 export default function PageGroupContainer({
   children,
   label,
-}: PageGroupContainerProperties): ReactElement {
+}: PageGroupContainerProps): ReactElement {
   return (
     <div className="flex flex-col gap-2">
       {label && (

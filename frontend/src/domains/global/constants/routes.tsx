@@ -5,8 +5,8 @@ import VerifiedUserOutlinedIcon from "@mui/icons-material/VerifiedUserOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import { lazy } from "react";
 
-const Vehicles = lazy(() => import("@/pages/vehicles/VehiclesPage"));
-const Users = lazy(() => import("@/pages/users/UsersPage"));
+const Vehicles = lazy(() => import("@/domains/vehicles/components/VehiclesPage"));
+const Users = lazy(() => import("@/domains/users/components/UsersPage"));
 
 export const routes = [
   {

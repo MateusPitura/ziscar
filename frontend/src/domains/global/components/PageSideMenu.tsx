@@ -1,7 +1,7 @@
 import { memo, useState, type ReactElement } from "react";
 import Button from "@/design-system/Button";
-import PageGroupContainer from "@/components/PageGroupContainer";
-import { routes } from "@/utils/constants/routes";
+import PageGroupContainer from "@/domains/global/components/PageGroupContainer";
+import { routes } from "@/domains/global/constants/routes";
 import { useNavigate } from "react-router-dom";
 import classNames from "classnames";
 
