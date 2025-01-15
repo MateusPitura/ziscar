@@ -10,7 +10,7 @@ function PageSideMenu(): ReactElement {
   const navigate = useNavigate();
 
   return (
-    <div className="min-w-64 max-w-64 bg-light-primary p-4 flex flex-col gap-2 flex-1">
+    <div className="min-w-64 max-w-64 bg-light-surfaceContainerLowest p-4 flex flex-col gap-2 flex-1 overflow-y-auto">
       {routes.map((group) => (
         <PageGroupContainer key={group.groupName} label={group.groupName}>
           {group.routes.map((route) => (
