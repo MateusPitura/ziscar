@@ -2,11 +2,11 @@ import Button from "@/design-system/Button";
 import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@radix-ui/react-toast";
 
-interface ShowSuccessSnackbarProps {
+interface ShowSnackbarProps {
   title: string;
   description?: string;
   actionLabel?: string;
-  onClick?: () => void;
+  onActionClick?: () => void;
 }
 
 export default function useSnackbar() {
@@ -15,19 +15,19 @@ export default function useSnackbar() {
   function showSuccessSnackbar({
     title,
     description,
-    onClick,
-    actionLabel
-  }: ShowSuccessSnackbarProps) {
+    onActionClick,
+    actionLabel,
+  }: ShowSnackbarProps) {
     toast({
       title,
       description,
-      action: onClick && (
+      action: onActionClick && (
         <ToastAction altText="Action button">
           <Button
             variant="quaternary"
             label={actionLabel}
             padding="none"
-            onClick={onClick}
+            onClick={onActionClick}
           />
         </ToastAction>
       ),
@@ -37,21 +37,21 @@ export default function useSnackbar() {
   function showErrorSnackbar({
     title,
     description,
-    onClick,
-    actionLabel
-  }: ShowSuccessSnackbarProps) {
+    onActionClick,
+    actionLabel,
+  }: ShowSnackbarProps) {
     toast({
       variant: "destructive",
       title,
       description,
-      action: onClick && (
+      action: onActionClick && (
         <ToastAction altText="Action button">
           <Button
             variant="primary"
             state="red"
             label={actionLabel}
             padding="none"
-            onClick={onClick}
+            onClick={onActionClick}
           />
         </ToastAction>
       ),

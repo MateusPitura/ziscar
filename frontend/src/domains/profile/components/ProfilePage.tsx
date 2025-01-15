@@ -24,6 +24,8 @@ export default function ProfilePage(): ReactElement {
           showSuccessSnackbar({
             title: "Email alterado com sucesso",
             description: "Seu email foi alterado com sucesso",
+            actionLabel: "Desfazer",
+            onActionClick: () => {},
           });
         }}
         labelSecondaryBtn="Cancelar"
