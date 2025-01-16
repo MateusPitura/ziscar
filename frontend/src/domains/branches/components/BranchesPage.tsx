@@ -1,3 +1,9 @@
+import { BranchesPageProvider } from "../contexts/BranchesPageContext";
+
 export default function BranchesPage() {
-  return <div>Branches Page</div>;
+  return (
+    <BranchesPageProvider>
+      <BranchesPage />
+    </BranchesPageProvider>
+  );
 }

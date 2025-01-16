@@ -1,3 +1,9 @@
+import { AuditPageProvider } from "../contexts/AuditPageContext";
+
 export default function AuditPage() {
-  return <div>Audit Page</div>;
+  return (
+    <AuditPageProvider>
+      <AuditPage />
+    </AuditPageProvider>
+  );
 }

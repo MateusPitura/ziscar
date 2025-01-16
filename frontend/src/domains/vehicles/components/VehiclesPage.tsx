@@ -1,3 +1,10 @@
+import { VehiclesPageProvider } from "../contexts/VehiclesPageContext";
+import VehicleContainer from "./VehicleContainer";
+
 export default function VehiclesPage() {
-  return <div>Vehicle Page</div>;
+  return (
+    <VehiclesPageProvider>
+      <VehicleContainer />
+    </VehiclesPageProvider>
+  );
 }
