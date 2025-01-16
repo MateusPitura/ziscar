@@ -10,6 +10,10 @@ const Vehicles = lazy(
 );
 const Users = lazy(() => import("@/domains/users/components/UsersPage"));
 const Profile = lazy(() => import("@/domains/profile/components/ProfilePage"));
+const Branches = lazy(
+  () => import("@/domains/branches/components/BranchesPage")
+);
+const Audit = lazy(() => import("@/domains/audit/components/AuditPage"));
 
 export const routes = [
   {
@@ -31,6 +35,7 @@ export const routes = [
         path: "/branches",
         displayName: "Filiais",
         icon: <StoreOutlinedIcon />,
+        entryPage: <Branches />,
       },
     ],
   },
@@ -52,6 +57,7 @@ export const routes = [
         path: "/audit",
         displayName: "Auditoria",
         icon: <VerifiedUserOutlinedIcon />,
+        entryPage: <Audit />,
       },
     ],
   },
