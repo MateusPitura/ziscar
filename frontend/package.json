@@ -5,10 +5,10 @@
   "type": "module",
   "homepage": "https://mateuspitura.github.io/projeto-de-software/",
   "scripts": {
-    "predeploy": "npm run build --mode production",
+    "predeploy": "tsc -b && vite build --mode production",
+    "build": "tsc -b && vite build --mode development",
     "deploy": "gh-pages -d dist",
     "dev": "vite --mode development",
-    "build": "tsc -b && vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview"
   },
