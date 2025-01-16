@@ -2,15 +2,48 @@ import Modal from "@/design-system/Modal";
 import PageHeader from "@/domains/global/components/PageHeader";
 import Section from "@/domains/global/components/Section";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
-import { useState, type ReactElement } from "react";
+import { useEffect, useMemo, useState, type ReactElement } from "react";
+import { GetProfileInfo } from "../requests/profile";
+import { User } from "@/domains/global/types/User";
+import useGlobalContext from "@/domains/global/hooks/useGlobalContext";
+import { format } from "date-fns";
+import { applyMask } from "@/domains/global/utils/applyMask";
 
 export default function ProfileContainer(): ReactElement {
   const [isOpen, setIsOpen] = useState(false);
+  const [user, setUser] = useState<User | undefined>(undefined);
+
+  const { userLogged } = useGlobalContext();
+
   const { showSuccessSnackbar } = useSnackbar();
 
   function handleOpen(open: boolean) {
     setIsOpen(open);
   }
+
+  async function handleGetProfileInfo(id: string) {
+    const data = await GetProfileInfo({ id });
+    setUser(data);
+  }
+
+  useEffect(() => {
+    if (userLogged?.id) {
+      handleGetProfileInfo(userLogged?.id);
+    }
+  }, [userLogged?.id]);
+
+  const birthDateFormatted = useMemo(
+    () =>
+      user?.birthDate ? format(new Date(user?.birthDate), "dd/MM/yyyy") : "",
+    [user?.birthDate]
+  );
+
+  const addressFormatted = useMemo(() => {
+    if (user?.address?.street && user?.address?.number) {
+      return `${user?.address?.street}, ${user?.address?.number}`;
+    }
+    return "";
+  }, [user?.address?.street, user?.address?.number]);
 
   return (
     <div className="flex flex-col gap-4">
@@ -44,50 +77,43 @@ export default function ProfileContainer(): ReactElement {
             <Section.Header title="Conta" />
             <Section.Row
               label="Email"
-              value="john.doe@gmail.com"
+              value={user?.email}
               onEdit={() => handleOpen(true)}
             />
-            <Section.Row label="Senha" value="************" onEdit={() => {}} />
+            <Section.Row label="Senha" value="••••••••••••" onEdit={() => {}} />
           </Section.Group>
           <Section.Group>
             <Section.Header title="Dados" />
             <Section.Row
               label="Nome completo"
-              value="John Doe"
+              value={user?.fullName}
               onEdit={() => {}}
             />
             <Section.Row
               label="Endereço"
-              value="Av. General Carlos Cavalcanti, 4748"
+              value={addressFormatted}
               onEdit={() => {}}
             />
             <Section.Row
               label="Data de nascimento"
-              value="01/01/1970"
+              value={birthDateFormatted}
               onEdit={() => {}}
             />
-            <Section.Row label="CPF" value="111.222.333-44" onEdit={() => {}} />
-            <Section.Row label="Matrícula" value="22222222" onEdit={() => {}} />
+            <Section.Row
+              label="CPF"
+              value={applyMask(user?.cpf, "CPF")}
+              onEdit={() => {}}
+            />
+            <Section.Row
+              label="Matrícula"
+              value={user?.code}
+              onEdit={() => {}}
+            />
             <Section.Row
               label="Celular"
-              value="(42) 9 8888-4444"
+              value={applyMask(user?.cellphone, "CELLPHONE")}
               onEdit={() => {}}
             />
-          </Section.Group>
-          <Section.Title title="Preferências" />
-          <Section.Group>
-            <Section.Header title="Notificações" />
-            <Section.Row label="Email" value="Ativado" onEdit={() => {}} />
-            <Section.Row label="SMS" value="Desativado" onEdit={() => {}} />
-          </Section.Group>
-          <Section.Group>
-            <Section.Header title="Sistema" />
-            <Section.Row
-              label="Modo escuro"
-              value="Desativado"
-              onEdit={() => {}}
-            />
-            <Section.Row label="Idioma" value="Português" onEdit={() => {}} />
           </Section.Group>
         </Section>
       </div>

@@ -48,7 +48,7 @@ function Header({ title }: HeaderProps) {
 
 interface SectionRowProps {
   label: string;
-  value: string;
+  value?: string;
   onEdit: () => void;
 }
 

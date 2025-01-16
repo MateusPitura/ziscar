@@ -1,13 +1,12 @@
 import { createContext, ReactNode, useMemo, useState } from "react";
+import { UserLogged } from "../types/User";
 
 interface GlobalContextValues {
-  isUserLogged: boolean;
-  handleSetIsUserLogged: (value: boolean) => void;
+  userLogged?: UserLogged;
 }
 
 const GlobalContext = createContext<GlobalContextValues>({
-  isUserLogged: false,
-  handleSetIsUserLogged: () => {},
+  userLogged: undefined,
 });
 
 interface GlobalProviderProps {
@@ -15,18 +14,15 @@ interface GlobalProviderProps {
 }
 
 function GlobalProvider({ children }: GlobalProviderProps) {
-  const [isUserLogged, setIsUserLogged] = useState(false);
-
-  function handleSetIsUserLogged(value: boolean) {
-    setIsUserLogged(value);
-  }
+  const [userLogged] = useState<UserLogged | undefined>({
+    id: "1",
+  });
 
   const valuesMemoized = useMemo(
     () => ({
-      isUserLogged,
-      handleSetIsUserLogged,
+      userLogged,
     }),
-    [isUserLogged]
+    [userLogged]
   );
 
   return (
