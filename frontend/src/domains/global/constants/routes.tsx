@@ -43,7 +43,7 @@ export const routes = [
     groupName: "Configurações",
     routes: [
       {
-        path: "/profile",
+        path: "/",
         displayName: "Perfil",
         icon: <SettingsOutlinedIcon />,
         entryPage: <Profile />,
