@@ -8,9 +8,10 @@
     "predeploy": "tsc -b && vite build --mode production",
     "build": "tsc -b && vite build --mode development",
     "deploy": "gh-pages -d dist",
-    "dev": "vite --mode development",
+    "dev": "vite",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "mockend": "npx json-server --watch ./mockend/db.json --port 8000"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -24,6 +25,7 @@
     "classnames": "^2.5.1",
     "clsx": "^2.1.1",
     "dotenv": "^16.4.7",
+    "json-server": "^1.0.0-beta.3",
     "lucide-react": "^0.471.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

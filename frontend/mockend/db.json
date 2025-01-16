@@ -1,0 +1,25 @@
+{
+  "users": [
+    {
+      "name": "Mateus Pitura",
+      "id": "2"
+    },
+    {
+      "id": "3",
+      "name": "Ahmed Ali",
+      "email": "ahmedali012@gmail.com",
+      "number": "09022222222"
+    },
+    {
+      "id": "4",
+      "name": "Grace Funsho",
+      "email": "gracefunsho@gmail.com",
+      "number": "09033333333"
+    },
+    {
+      "id": "491c",
+      "name": "Mateus Pitura",
+      "age": 20
+    }
+  ]
+}
