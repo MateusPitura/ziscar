@@ -1,8 +1,6 @@
 import { Address } from "./Address";
 
-export interface UserLogged {
-  id: string;
-}
+export type UserLogged = Pick<User, "id">;
 
 export interface User {
   id: string;
