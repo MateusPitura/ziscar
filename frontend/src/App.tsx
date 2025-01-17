@@ -2,11 +2,8 @@ import { Route, Routes, HashRouter } from "react-router-dom";
 import { routes } from "@/domains/global/constants/routes";
 import PageLayout from "@/domains/global/components/PageLayout";
 import { GlobalProvider } from "./domains/global/contexts/GlobalContext";
-import { lazy } from "react";
 import SuspensePage from "./domains/global/components/SuspensePage";
-
-const SnackbarLazy = lazy(() => import("./design-system/Snackbar"));
-const NotFound = lazy(() => import("./domains/global/components/NotFoundPage"));
+import Snackbar from "./design-system/Snackbar";
 
 export default function App() {
   return (
@@ -28,19 +25,11 @@ export default function App() {
                   />
                 ))
               )}
-              <Route
-                path="*"
-                element={
-                  <SuspensePage key="not_found">
-                    <NotFound />
-                  </SuspensePage>
-                }
-              />
             </Routes>
           </PageLayout>
         </GlobalProvider>
       </HashRouter>
-      <SnackbarLazy />
+      <Snackbar />
     </>
   );
 }

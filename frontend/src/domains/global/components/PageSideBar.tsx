@@ -1,8 +1,8 @@
-import { memo, useState, type ReactElement } from "react";
+import { memo, useEffect, useState, type ReactElement } from "react";
 import Button from "@/design-system/Button";
 import RoutesGroup from "@/domains/global/components/RoutesGroup";
 import { routes } from "@/domains/global/constants/routes";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import classNames from "classnames";
 
 interface PageSideBarProps {
@@ -13,6 +13,11 @@ function PageSideBar({ isOpen }: PageSideBarProps): ReactElement {
   const [activePath, setActivePath] = useState("");
 
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    setActivePath(location.pathname);
+  }, [location]);
 
   return (
     <div
@@ -28,21 +33,23 @@ function PageSideBar({ isOpen }: PageSideBarProps): ReactElement {
           key={group.groupName}
           label={isOpen ? group.groupName : undefined}
         >
-          {group.routes.map((route) => (
-            <Button
-              key={route.path}
-              padding={isOpen ? "default" : "none"}
-              label={isOpen ? route.displayName : undefined}
-              state={activePath === route.path ? "active" : undefined}
-              variant="quaternary"
-              iconLeft={route.icon}
-              onClick={() => {
-                setActivePath(route.path);
-                navigate(route.path);
-              }}
-              fullWidth
-            />
-          ))}
+          {group.routes.map(
+            (route) =>
+              route.shouldDisplay && (
+                <Button
+                  key={route.path}
+                  padding={isOpen ? "default" : "none"}
+                  label={isOpen ? route.displayName : undefined}
+                  state={activePath === route.path ? "active" : undefined}
+                  variant="quaternary"
+                  iconLeft={route.icon}
+                  onClick={() => {
+                    navigate(route.path);
+                  }}
+                  fullWidth
+                />
+              )
+          )}
         </RoutesGroup>
       ))}
     </div>
