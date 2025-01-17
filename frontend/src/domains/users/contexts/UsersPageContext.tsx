@@ -5,10 +5,7 @@ interface UsersPageContextValues {
   handleExample: (value: string) => void;
 }
 
-const UsersPageContext = createContext<UsersPageContextValues>({
-  example: "",
-  handleExample: () => {},
-});
+const UsersPageContext = createContext<UsersPageContextValues | null>(null);
 
 interface UsersPageProviderProps {
   children: ReactNode;

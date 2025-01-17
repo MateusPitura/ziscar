@@ -5,10 +5,7 @@ interface ProfilePageContextValues {
   handleExample: (value: string) => void;
 }
 
-const ProfilePageContext = createContext<ProfilePageContextValues>({
-  example: "",
-  handleExample: () => {},
-});
+const ProfilePageContext = createContext<ProfilePageContextValues | null>(null);
 
 interface ProfilePageProviderProps {
   children: ReactNode;

@@ -5,10 +5,7 @@ interface VehiclesPageContextValues {
   handleExample: (value: string) => void;
 }
 
-const VehiclesPageContext = createContext<VehiclesPageContextValues>({
-  example: "",
-  handleExample: () => {},
-});
+const VehiclesPageContext = createContext<VehiclesPageContextValues | null>(null);
 
 interface VehiclesPageProviderProps {
   children: ReactNode;

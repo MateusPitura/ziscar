@@ -50,8 +50,8 @@ export default function PasswordForm({
       formId={formId}
       schema={SchemaPasswordForm}
     >
-      <Input label="Nova senha" name="newPassword" />
-      <Input label="Confirmar senha" name="confirmPassword" />
+      <Input<PasswordFormInputs> label="Nova senha" name="newPassword" />
+      <Input<PasswordFormInputs> label="Confirmar senha" name="confirmPassword" />
     </Form>
   );
 }

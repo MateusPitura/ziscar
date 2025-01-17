@@ -7,10 +7,7 @@ interface GlobalContextValues {
   clientLogged?: ClientLogged;
 }
 
-const GlobalContext = createContext<GlobalContextValues>({
-  userLogged: undefined,
-  clientLogged: undefined,
-});
+const GlobalContext = createContext<GlobalContextValues | null>(null);
 
 interface GlobalProviderProps {
   children: ReactNode;

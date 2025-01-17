@@ -1,13 +1,13 @@
 import classNames from "classnames";
 import type { ReactElement } from "react";
-import { useFormContext, useFormState } from "react-hook-form";
+import { FieldValues, useFormContext, useFormState } from "react-hook-form";
 
-interface InputProperties {
-  name: string;
+interface InputProperties<T extends FieldValues> {
+  name: keyof T & string;
   label: string;
 }
 
-export default function Input({ label, name }: InputProperties): ReactElement {
+export default function Input<T extends FieldValues>({ label, name }: InputProperties<T>): ReactElement {
   const { register } = useFormContext();
   const { errors } = useFormState({
     name,

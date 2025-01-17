@@ -38,7 +38,7 @@ export default function EmailForm({
       formId={formId}
       schema={SchemaEmailForm}
     >
-      <Input name="email" label="Email" />
+      <Input<EmailFormInputs> name="email" label="Email" />
     </Form>
   );
 }

@@ -5,10 +5,7 @@ interface AuditPageContextValues {
   handleExample: (value: string) => void;
 }
 
-const AuditPageContext = createContext<AuditPageContextValues>({
-  example: "",
-  handleExample: () => {},
-});
+const AuditPageContext = createContext<AuditPageContextValues | null>(null);
 
 interface AuditPageProviderProps {
   children: ReactNode;

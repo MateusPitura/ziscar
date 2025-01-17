@@ -5,10 +5,9 @@ interface BranchesPageContextValues {
   handleExample: (value: string) => void;
 }
 
-const BranchesPageContext = createContext<BranchesPageContextValues>({
-  example: "",
-  handleExample: () => {},
-});
+const BranchesPageContext = createContext<BranchesPageContextValues | null>(
+  null
+);
 
 interface BranchesPageProviderProps {
   children: ReactNode;
