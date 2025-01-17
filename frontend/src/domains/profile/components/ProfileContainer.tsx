@@ -5,9 +5,9 @@ import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import { useEffect, useMemo, useState, type ReactElement } from "react";
 import { User } from "@/domains/global/types/User";
 import useGlobalContext from "@/domains/global/hooks/useGlobalContext";
-import { format } from "date-fns";
 import { applyMask } from "@/domains/global/utils/applyMask";
 import useFetch from "@/domains/global/hooks/useFetch";
+import convertDate from "@/domains/global/utils/convertDate";
 
 export default function ProfileContainer(): ReactElement {
   const [isOpen, setIsOpen] = useState(false);
@@ -35,7 +35,9 @@ export default function ProfileContainer(): ReactElement {
 
   const birthDateFormatted = useMemo(
     () =>
-      user?.birthDate ? format(new Date(user?.birthDate), "dd/MM/yyyy") : "",
+      user?.birthDate
+        ? convertDate({ date: new Date(user?.birthDate), format: "dd/MM/yyyy" })
+        : "",
     [user?.birthDate]
   );
 

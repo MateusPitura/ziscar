@@ -7,7 +7,7 @@
       "cellphone": "42988884444",
       "cpf": "11122233344",
       "code": "22222222",
-      "birthDate": "1970-01-01",
+      "birthDate": "1970-01-01T00:00:00Z",
       "address": {
         "street": "Rua dos Bobos",
         "number": "0"
@@ -20,7 +20,7 @@
       "cellphone": "41999995555",
       "cpf": "55566677788",
       "code": "33333333",
-      "birthDate": "1985-05-15",
+      "birthDate": "2004-02-19T00:00:00Z",
       "address": {
         "street": "Avenida Brasil",
         "number": "123"
