@@ -4,9 +4,7 @@ import {
   DialogContent,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
-  DialogClose,
-  DialogDescription,
+  DialogTitle, DialogDescription
 } from "@/components/ui/dialog";
 import Button from "./Button";
 import CloseIcon from "@mui/icons-material/Close";
@@ -16,9 +14,9 @@ interface ModalProperties {
   onClose: () => void;
   title: string;
   labelPrimaryBtn: string;
-  onClickPrimaryBtn: () => void;
+  onClickPrimaryBtn?: () => void;
   labelSecondaryBtn: string;
-  onClickSecondaryBtn: () => void;
+  onClickSecondaryBtn?: () => void;
   isPrimaryBtnRed?: boolean;
   children: ReactNode;
   formId?: string;
@@ -46,34 +44,28 @@ export default function Modal({
             </span>
           </DialogTitle>
           <DialogDescription />
-          <DialogClose className="!m-0" asChild>
-            <Button
-              variant="tertiary"
-              onClick={onClose}
-              iconLeft={<CloseIcon />}
-              padding="none"
-            />
-          </DialogClose>
+          <Button
+            variant="tertiary"
+            onClick={onClose}
+            iconLeft={<CloseIcon />}
+            padding="none"
+          />
         </DialogHeader>
         {children}
         <DialogFooter className="flex">
-          <DialogClose asChild>
-            <Button
-              variant="secondary"
-              onClick={onClickSecondaryBtn}
-              label={labelSecondaryBtn}
-            />
-          </DialogClose>
-          <DialogClose asChild>
-            <Button
-              variant="primary"
-              onClick={onClickPrimaryBtn}
-              label={labelPrimaryBtn}
-              state={isPrimaryBtnRed ? "red" : undefined}
-              type="submit"
-              form={formId}
-            />
-          </DialogClose>
+          <Button
+            variant="secondary"
+            onClick={onClickSecondaryBtn}
+            label={labelSecondaryBtn}
+          />
+          <Button
+            variant="primary"
+            onClick={onClickPrimaryBtn}
+            label={labelPrimaryBtn}
+            state={isPrimaryBtnRed ? "red" : undefined}
+            type="submit"
+            form={formId}
+          />
         </DialogFooter>
       </DialogContent>
     </Dialog>

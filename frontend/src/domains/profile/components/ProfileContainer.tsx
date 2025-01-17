@@ -70,7 +70,6 @@ export default function ProfileContainer(): ReactElement {
         onClose={handleCloseEditModal}
         title={editModalInfo.title}
         labelPrimaryBtn="Alterar"
-        onClickPrimaryBtn={handleCloseEditModal}
         labelSecondaryBtn="Cancelar"
         onClickSecondaryBtn={handleCloseEditModal}
         formId={editModalInfo.formId}
@@ -95,6 +94,7 @@ export default function ProfileContainer(): ReactElement {
                       <EmailForm
                         formId="email-form"
                         defaultValues={{ email: user?.email }}
+                        onSuccessSubmit={handleCloseEditModal}
                       />
                     ),
                     formId: "email-form",
@@ -108,7 +108,12 @@ export default function ProfileContainer(): ReactElement {
                   setEditModalInfo({
                     title: "Alterar senha",
                     open: true,
-                    body: <PasswordForm formId="password-form" />,
+                    body: (
+                      <PasswordForm
+                        formId="password-form"
+                        onSuccessSubmit={handleCloseEditModal}
+                      />
+                    ),
                     formId: "password-form",
                   })
                 }

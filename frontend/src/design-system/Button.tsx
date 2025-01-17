@@ -5,7 +5,7 @@ interface BaseButtonProps {
   state?: "active" | "disabled" | "red" | "loading";
   className?: string;
   label?: string;
-  onClick: () => void;
+  onClick?: () => void;
   fullWidth?: boolean;
   textAlign?: "start" | "center" | "end";
   iconLeft?: ReactNode;

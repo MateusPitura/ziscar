@@ -2,31 +2,42 @@ import Input from "@/design-system/Input";
 import Form from "@/domains/global/components/Form";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import type { ReactElement } from "react";
+import { z } from "zod";
 
-interface DefaultValues {
-  email?: string;
-}
+const SchemaEmailForm = z.object({
+  email: z.string().email({ message: "Email inválido" }),
+});
+
+type EmailFormInputs = z.infer<typeof SchemaEmailForm>;
 
 interface EmailFormProperties {
   formId: string;
-  defaultValues: DefaultValues;
+  onSuccessSubmit: () => void;
+  defaultValues: Partial<EmailFormInputs>;
 }
 
 export default function EmailForm({
   formId,
+  onSuccessSubmit,
   defaultValues,
 }: EmailFormProperties): ReactElement {
   const { showSuccessSnackbar } = useSnackbar();
 
-  function handleSubmit(data) {
-    console.log("🌠 data: ", data);
+  function handleSubmit(data: EmailFormInputs) {
+    console.log("🌠 data: ", data.email);
     showSuccessSnackbar({
       title: "Email atualizado com sucesso",
     });
+    onSuccessSubmit();
   }
 
   return (
-    <Form onSubmit={handleSubmit} defaultValues={defaultValues} formId={formId}>
+    <Form<EmailFormInputs>
+      onSubmit={handleSubmit}
+      defaultValues={defaultValues}
+      formId={formId}
+      schema={SchemaEmailForm}
+    >
       <Input name="email" label="Email" />
     </Form>
   );
