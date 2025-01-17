@@ -28,18 +28,21 @@ export default function Snackbar(): ReactElement {
             key={id}
             variant={variant}
             {...props}
-            className={classNames("bg-light-surfaceContainerLowest border-light-surfaceContainerLowest my-1", {
-              "bg-light-error border-light-error": variant === "destructive",
-            })}
+            className={classNames(
+              "bg-light-surfaceContainerLowest border-light-surfaceContainerLowest mt-2",
+              {
+                "bg-light-error border-light-error": variant === "destructive",
+              }
+            )}
           >
-            <div className="grid gap-1">
+            <div className="grid gap-1 flex-1 overflow-hidden">
               {title && (
                 <ToastTitle>
                   <span
                     className={classNames(
-                      "text-light-onSurface text-title-medium",
+                      "text-light-onSurface text-title-medium line-clamp-1",
                       {
-                        "text-light-onError": variant === "destructive",
+                        "!text-light-onError": variant === "destructive",
                       }
                     )}
                   >
@@ -51,9 +54,9 @@ export default function Snackbar(): ReactElement {
                 <ToastDescription>
                   <span
                     className={classNames(
-                      "text-light-onSurface text-body-medium",
+                      "text-light-onSurface text-body-medium line-clamp-1",
                       {
-                        "text-light-onError": variant === "destructive",
+                        "!text-light-onError": variant === "destructive",
                       }
                     )}
                   >
@@ -62,7 +65,7 @@ export default function Snackbar(): ReactElement {
                 </ToastDescription>
               )}
             </div>
-            {action}
+            <div>{action}</div>
             <ToastClose />
           </Toast>
         );

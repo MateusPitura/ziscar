@@ -3,11 +3,11 @@ import PageHeader from "@/domains/global/components/PageHeader";
 import Section from "@/domains/global/components/Section";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import { useEffect, useMemo, useState, type ReactElement } from "react";
-import { GetProfileInfo } from "../requests/profile";
 import { User } from "@/domains/global/types/User";
 import useGlobalContext from "@/domains/global/hooks/useGlobalContext";
 import { format } from "date-fns";
 import { applyMask } from "@/domains/global/utils/applyMask";
+import useFetch from "@/domains/global/hooks/useFetch";
 
 export default function ProfileContainer(): ReactElement {
   const [isOpen, setIsOpen] = useState(false);
@@ -16,13 +16,14 @@ export default function ProfileContainer(): ReactElement {
   const { userLogged } = useGlobalContext();
 
   const { showSuccessSnackbar } = useSnackbar();
+  const { request } = useFetch();
 
   function handleOpen(open: boolean) {
     setIsOpen(open);
   }
 
   async function handleGetProfileInfo(id: string) {
-    const data = await GetProfileInfo({ id });
+    const data = await request({ path: `/users/${id}` });
     setUser(data);
   }
 
