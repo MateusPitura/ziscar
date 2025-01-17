@@ -1,12 +1,12 @@
 import type { ReactElement, ReactNode } from "react";
 import {
-    Dialog,
-    DialogContent,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogClose,
-    DialogDescription,
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogClose,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import Button from "./Button";
 import CloseIcon from "@mui/icons-material/Close";
@@ -21,6 +21,7 @@ interface ModalProperties {
   onClickSecondaryBtn: () => void;
   isPrimaryBtnRed?: boolean;
   children: ReactNode;
+  formId?: string;
 }
 
 export default function Modal({
@@ -33,6 +34,7 @@ export default function Modal({
   onClickSecondaryBtn,
   isPrimaryBtnRed,
   children,
+  formId,
 }: ModalProperties): ReactElement {
   return (
     <Dialog open={open} onOpenChange={onClose}>
@@ -43,7 +45,7 @@ export default function Modal({
               {title}
             </span>
           </DialogTitle>
-          <DialogDescription/>
+          <DialogDescription />
           <DialogClose className="!m-0" asChild>
             <Button
               variant="tertiary"
@@ -68,6 +70,8 @@ export default function Modal({
               onClick={onClickPrimaryBtn}
               label={labelPrimaryBtn}
               state={isPrimaryBtnRed ? "red" : undefined}
+              type="submit"
+              form={formId}
             />
           </DialogClose>
         </DialogFooter>

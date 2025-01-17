@@ -1,20 +1,33 @@
 import Input from "@/design-system/Input";
 import Form from "@/domains/global/components/Form";
+import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import type { ReactElement } from "react";
 
-interface EmailFormProperties {}
+interface DefaultValues {
+  email?: string;
+}
 
-export default function EmailForm({}: EmailFormProperties): ReactElement {
-  function handleSubmit(value) {
-    console.log("🌠 value: ", value);
+interface EmailFormProperties {
+  formId: string;
+  defaultValues: DefaultValues;
+}
+
+export default function EmailForm({
+  formId,
+  defaultValues,
+}: EmailFormProperties): ReactElement {
+  const { showSuccessSnackbar } = useSnackbar();
+
+  function handleSubmit(data) {
+    console.log("🌠 data: ", data);
+    showSuccessSnackbar({
+      title: "Email atualizado com sucesso",
+    });
   }
 
   return (
-    <Form onSubmit={handleSubmit} defaultValues={{ email: "mateus@email.com" }}>
-      <div className="flex flex-col gap-2 ">
-        <Input name="email" label="Email" />
-        <input type="submit" />
-      </div>
+    <Form onSubmit={handleSubmit} defaultValues={defaultValues} formId={formId}>
+      <Input name="email" label="Email" />
     </Form>
   );
 }

@@ -8,6 +8,7 @@ import Snackbar from "./design-system/Snackbar";
 export default function App() {
   return (
     <>
+      <Snackbar />
       <HashRouter>
         <GlobalProvider>
           <PageLayout>
@@ -29,7 +30,6 @@ export default function App() {
           </PageLayout>
         </GlobalProvider>
       </HashRouter>
-      <Snackbar />
     </>
   );
 }

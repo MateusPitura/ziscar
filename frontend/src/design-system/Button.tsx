@@ -11,6 +11,8 @@ interface BaseButtonProps {
   iconLeft?: ReactNode;
   iconRight?: ReactNode;
   padding?: "default" | "none";
+  type?: "submit";
+  form?: string;
 }
 
 function BaseButton({
@@ -20,9 +22,9 @@ function BaseButton({
   padding = "default",
   className,
   label,
-  onClick,
   iconLeft,
   iconRight,
+  ...props
 }: BaseButtonProps) {
   return (
     <button
@@ -37,7 +39,7 @@ function BaseButton({
           "px-0": padding === "none",
         }
       )}
-      onClick={onClick}
+      {...props}
     >
       {iconLeft && <div className="flex flex-1 justify-center">{iconLeft}</div>}
       {label && (

@@ -4,13 +4,15 @@ import { FormProvider, useForm } from "react-hook-form";
 interface FormProperties {
   children: ReactNode;
   onSubmit: () => void;
-  defaultValues: object;
+  defaultValues?: object;
+  formId: string;
 }
 
 export default function Form({
   children,
   onSubmit,
   defaultValues,
+  formId,
 }: FormProperties): ReactElement {
   const methods = useForm({
     defaultValues: defaultValues,
@@ -18,7 +20,9 @@ export default function Form({
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)}>{children}</form>
+      <form onSubmit={methods.handleSubmit(onSubmit)} id={formId}>
+        {children}
+      </form>
     </FormProvider>
   );
 }
