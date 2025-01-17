@@ -42,3 +42,9 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background-color: #AAA
 }
+
+/* Input */
+
+input:focus {
+  outline: none; /* Remove a borda de foco */
+}

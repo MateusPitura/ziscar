@@ -8,9 +8,24 @@ import useGlobalContext from "@/domains/global/hooks/useGlobalContext";
 import { applyMask } from "@/domains/global/utils/applyMask";
 import useFetch from "@/domains/global/hooks/useFetch";
 import convertDate from "@/domains/global/utils/convertDate";
+import EmailForm from "../forms/EmailForm";
+
+interface EditModalInfoProps {
+  open: boolean;
+  title: string;
+  successSnackbarTitle: string;
+  body: ReactElement | undefined;
+  onSubmit: () => void;
+}
 
 export default function ProfileContainer(): ReactElement {
-  const [isOpen, setIsOpen] = useState(false);
+  const [editModalInfo, setEditModalInfo] = useState<EditModalInfoProps>({
+    open: false,
+    title: "",
+    successSnackbarTitle: "",
+    body: undefined,
+    onSubmit: () => {},
+  });
   const [user, setUser] = useState<User | undefined>(undefined);
 
   const { userLogged } = useGlobalContext();
@@ -18,8 +33,11 @@ export default function ProfileContainer(): ReactElement {
   const { showSuccessSnackbar } = useSnackbar();
   const { request } = useFetch();
 
-  function handleOpen(open: boolean) {
-    setIsOpen(open);
+  function handleCloseEditModal() {
+    setEditModalInfo((prev) => ({
+      ...prev,
+      open: false,
+    }));
   }
 
   async function handleGetProfileInfo(id: string) {
@@ -51,26 +69,19 @@ export default function ProfileContainer(): ReactElement {
   return (
     <div className="flex flex-col gap-4">
       <Modal
-        open={isOpen}
-        onClose={() => handleOpen(false)}
-        title="Editar email"
+        open={editModalInfo.open}
+        onClose={handleCloseEditModal}
+        title={editModalInfo.title}
         labelPrimaryBtn="Salvar"
         onClickPrimaryBtn={() => {
           showSuccessSnackbar({
-            title: "Email alterado com sucesso",
-            description: "Seu email foi alterado com sucesso",
-            actionLabel: "Desfazer",
-            onActionClick: () => {},
+            title: editModalInfo.successSnackbarTitle,
           });
         }}
         labelSecondaryBtn="Cancelar"
-        onClickSecondaryBtn={() => {}}
+        onClickSecondaryBtn={handleCloseEditModal}
       >
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio animi
-        eius voluptatibus velit fugit mollitia aspernatur sequi accusamus esse
-        cum, pariatur quam fuga modi quis provident neque aliquam quo eligendi
-        atque magni cupiditate ipsum. Optio eaque exercitationem fugit, harum ab
-        assumenda impedit quia. A magnam repudiandae libero sint sunt. Commodi?
+        {editModalInfo.body}
       </Modal>
       <PageHeader title="Perfil" />
       <div className="flex justify-center">
@@ -81,9 +92,29 @@ export default function ProfileContainer(): ReactElement {
             <Section.Row
               label="Email"
               value={user?.email}
-              onEdit={() => handleOpen(true)}
+              onEdit={() =>
+                setEditModalInfo((prev) => ({
+                  ...prev,
+                  title: "Alterar email",
+                  successSnackbarTitle: "Email alterado com sucesso",
+                  open: true,
+                  body: <EmailForm />,
+                }))
+              }
             />
-            <Section.Row label="Senha" value="••••••••••••" onEdit={() => {}} />
+            <Section.Row
+              label="Senha"
+              value="••••••••••••"
+              onEdit={() =>
+                setEditModalInfo((prev) => ({
+                  ...prev,
+                  title: "Alterar senha",
+                  successSnackbarTitle: "Senha alterada com sucesso",
+                  open: true,
+                  body: <div>Senha</div>,
+                }))
+              }
+            />
           </Section.Group>
           <Section.Group>
             <Section.Header title="Dados" />
