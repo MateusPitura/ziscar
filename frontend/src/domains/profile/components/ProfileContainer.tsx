@@ -24,15 +24,15 @@ export default function ProfileContainer(): ReactElement {
     body: undefined,
     formId: "",
   });
-  const [user, setUser] = useState<User | undefined>(undefined);
+  const [user, setUser] = useState<User | null>(null);
 
   const { userLogged } = useGlobalContext();
 
   const { request } = useFetch();
 
   async function handleGetProfileInfo(id: string) {
-    const data = await request({ path: `/users/${id}` }); // TODO: Ao implementar o back-end criar uma request que não precise de id, pegar o id automaticamente
-    setUser(data);
+    const response = await request({ path: `/users/${id}` }); // TODO: Ao implementar o back-end criar uma request que não precise de id, pegar o id automaticamente
+    setUser(response);
   }
 
   useEffect(() => {
