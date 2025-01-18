@@ -20,9 +20,9 @@ DELETE http://localhost:8000/users/1 HTTP/1.1
 content-type: application/json
 
 ### UPDATE Users
-PUT http://localhost:8000/users/2 HTTP/1.1
+PATCH http://localhost:8000/users/3 HTTP/1.1
 content-type: application/json
 
 {
-    "name": "Mateus Pitura"
+    "name": "mateus@email.com"
 }

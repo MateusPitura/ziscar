@@ -31,7 +31,7 @@ export default function ProfileContainer(): ReactElement {
   const { request } = useFetch();
 
   async function handleGetProfileInfo(id: string) {
-    const data = await request({ path: `/users/${id}` }); // Ao implementar o back-end criar uma request que não precise de id, pegar o id passado nos headers
+    const data = await request({ path: `/users/${id}` }); // TODO: Ao implementar o back-end criar uma request que não precise de id, pegar o id automaticamente
     setUser(data);
   }
 

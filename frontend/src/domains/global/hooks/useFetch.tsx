@@ -5,7 +5,7 @@ import useGlobalContext from "./useGlobalContext";
 
 interface Request {
   path: string;
-  method?: "GET" | "POST" | "PUT" | "DELETE";
+  method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
   body?: object;
 }
 
@@ -26,19 +26,22 @@ export default function useFetch() {
           },
           body: method != "GET" ? JSON.stringify(body) : undefined,
         });
-        const data = await response.json();
-        return data;
+        if (!response.ok) {
+          throw new Error("Erro ao realizar a requisição"); // TODO: exibir a mensagem de erro
+        }
+        return await response.json();
       } catch (error) {
         if (error instanceof Error) {
           showErrorSnackbar({
             title: "Ocorreu um erro",
             description: error.message,
           });
-          return;
+        } else {
+          showErrorSnackbar({
+            title: "Ocorreu um erro",
+          });
         }
-        showErrorSnackbar({
-          title: "Ocorreu um erro",
-        });
+        return null; // TODO: uma request que deu certo também poderia retornar null, melhorar isso
       }
     },
     [showErrorSnackbar, userLogged, clientLogged]
