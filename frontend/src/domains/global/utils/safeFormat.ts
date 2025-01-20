@@ -7,7 +7,7 @@ interface FormatDateProps {
 
 const ONE_HOUR = 60000;
 
-export default function convertDate({ date, format }: FormatDateProps) {
+export default function safeFormat({ date, format }: FormatDateProps) {
   const dateWithoutTimeZone = new Date(
     date.valueOf() + date.getTimezoneOffset() * ONE_HOUR
   );

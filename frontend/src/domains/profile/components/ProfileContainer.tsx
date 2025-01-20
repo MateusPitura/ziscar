@@ -1,14 +1,15 @@
 import Modal from "@/design-system/Modal";
 import PageHeader from "@/domains/global/components/PageHeader";
 import Section from "@/domains/global/components/Section";
-import { useEffect, useMemo, useState, type ReactElement } from "react";
+import { useMemo, useState, type ReactElement } from "react";
 import { User } from "@/domains/global/types/User";
 import useGlobalContext from "@/domains/global/hooks/useGlobalContext";
 import { applyMask } from "@/domains/global/utils/applyMask";
-import useFetch from "@/domains/global/hooks/useFetch";
-import convertDate from "@/domains/global/utils/convertDate";
+import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
+import safeFormat from "@/domains/global/utils/safeFormat";
 import EmailForm from "../forms/EmailForm";
 import PasswordForm from "../forms/PasswordForm";
+import { useQuery } from "@tanstack/react-query";
 
 interface EditModalInfoProps {
   open: boolean;
@@ -24,22 +25,19 @@ export default function ProfileContainer(): ReactElement {
     body: undefined,
     formId: "",
   });
-  const [user, setUser] = useState<User | null>(null);
 
   const { userLogged } = useGlobalContext();
 
-  const { request } = useFetch();
+  const { safeFetch } = useSafeFetch();
 
-  async function handleGetProfileInfo(id: string) {
-    const response = await request({ path: `/users/${id}` }); // TODO: Ao implementar o back-end criar uma request que não precise de id, pegar o id automaticamente
-    setUser(response);
+  async function getProfileInfo(): Promise<User> {
+    return await safeFetch({ path: `/users/${userLogged?.id}` }); // TODO: Ao implementar o back-end criar uma request que não precise de id, pegar o id automaticamente
   }
 
-  useEffect(() => {
-    if (userLogged?.id) {
-      handleGetProfileInfo(userLogged?.id);
-    }
-  }, [userLogged?.id]);
+  const { data: profileInfo } = useQuery({
+    queryKey: ["profileInfo"],
+    queryFn: getProfileInfo,
+  });
 
   function handleCloseEditModal() {
     setEditModalInfo((prev) => ({
@@ -50,18 +48,21 @@ export default function ProfileContainer(): ReactElement {
 
   const birthDateFormatted = useMemo(
     () =>
-      user?.birthDate
-        ? convertDate({ date: new Date(user?.birthDate), format: "dd/MM/yyyy" })
+      profileInfo?.birthDate
+        ? safeFormat({
+            date: new Date(profileInfo?.birthDate),
+            format: "dd/MM/yyyy",
+          })
         : "",
-    [user?.birthDate]
+    [profileInfo?.birthDate]
   );
 
   const addressFormatted = useMemo(() => {
-    if (user?.address?.street && user?.address?.number) {
-      return `${user?.address?.street}, ${user?.address?.number}`;
+    if (profileInfo?.address?.street && profileInfo?.address?.number) {
+      return `${profileInfo?.address?.street}, ${profileInfo?.address?.number}`;
     }
     return "";
-  }, [user?.address?.street, user?.address?.number]);
+  }, [profileInfo?.address?.street, profileInfo?.address?.number]);
 
   return (
     <>
@@ -85,7 +86,7 @@ export default function ProfileContainer(): ReactElement {
               <Section.Header title="Conta" />
               <Section.Row
                 label="Email"
-                value={user?.email}
+                value={profileInfo?.email}
                 onEdit={() =>
                   setEditModalInfo({
                     title: "Alterar email",
@@ -93,7 +94,7 @@ export default function ProfileContainer(): ReactElement {
                     body: (
                       <EmailForm
                         formId="email-form"
-                        defaultValues={{ email: user?.email }}
+                        defaultValues={{ email: profileInfo?.email }}
                         onSuccessSubmit={handleCloseEditModal}
                       />
                     ),
@@ -123,7 +124,7 @@ export default function ProfileContainer(): ReactElement {
               <Section.Header title="Dados" />
               <Section.Row
                 label="Nome completo"
-                value={user?.fullName}
+                value={profileInfo?.fullName}
                 onEdit={() => {}}
               />
               <Section.Row
@@ -138,17 +139,17 @@ export default function ProfileContainer(): ReactElement {
               />
               <Section.Row
                 label="CPF"
-                value={applyMask(user?.cpf, "CPF")}
+                value={applyMask(profileInfo?.cpf, "CPF")}
                 onEdit={() => {}}
               />
               <Section.Row
                 label="Matrícula"
-                value={user?.code}
+                value={profileInfo?.code}
                 onEdit={() => {}}
               />
               <Section.Row
                 label="Celular"
-                value={applyMask(user?.cellphone, "CELLPHONE")}
+                value={applyMask(profileInfo?.cellphone, "CELLPHONE")}
                 onEdit={() => {}}
               />
             </Section.Group>

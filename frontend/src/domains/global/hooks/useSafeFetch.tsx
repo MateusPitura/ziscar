@@ -9,12 +9,12 @@ interface Request {
   body?: object;
 }
 
-export default function useFetch() {
+export default function useSafeFetch() {
   const { userLogged, clientLogged } = useGlobalContext();
 
   const { showErrorSnackbar } = useSnackbar();
 
-  const request = useCallback(
+  const safeFetch = useCallback(
     async ({ path, method = "GET", body }: Request) => {
       try {
         const response = await fetch(`${baseUrl}${path}`, {
@@ -27,25 +27,24 @@ export default function useFetch() {
           body: method != "GET" ? JSON.stringify(body) : undefined,
         });
         if (!response.ok) {
-          throw new Error("Erro ao realizar a requisição"); // TODO: exibir a mensagem de erro
+          const content = await response.text();
+          throw new Error(content || "Erro ao realizar a requisição");
         }
         return await response.json();
       } catch (error) {
+        let description = undefined;
         if (error instanceof Error) {
-          showErrorSnackbar({
-            title: "Ocorreu um erro",
-            description: error.message,
-          });
-        } else {
-          showErrorSnackbar({
-            title: "Ocorreu um erro",
-          });
+          description = error.message;
         }
-        return null; // TODO: uma request que deu certo também poderia retornar null, melhorar isso
+        showErrorSnackbar({
+          title: "Ocorreu um erro",
+          description,
+        });
+        throw error;
       }
     },
     [showErrorSnackbar, userLogged, clientLogged]
   );
 
-  return { request };
+  return { safeFetch };
 }
