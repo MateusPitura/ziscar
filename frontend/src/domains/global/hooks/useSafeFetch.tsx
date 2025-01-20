@@ -6,7 +6,7 @@ import useGlobalContext from "./useGlobalContext";
 interface Request {
   path: string;
   method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
-  body?: object;
+  body?: unknown;
 }
 
 export default function useSafeFetch() {

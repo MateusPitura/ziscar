@@ -19,6 +19,7 @@ export default function Input<T extends FieldValues>({ label, name }: InputPrope
       <input
         {...register(name)}
         className="text-body-large text-light-onSurface p-1 border-light-outline border-2 rounded-md pl-2 caret-light-primary"
+        autoComplete="on"
       />
       <span
         className={classNames("text-body-small text-light-error p-1", {
