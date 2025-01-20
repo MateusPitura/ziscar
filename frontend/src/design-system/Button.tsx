@@ -11,8 +11,7 @@ interface BaseButtonProps {
   iconLeft?: ReactNode;
   iconRight?: ReactNode;
   padding?: "default" | "none";
-  type?: "submit";
-  form?: string;
+  type?: "submit" | "button";
 }
 
 function BaseButton({
@@ -20,6 +19,7 @@ function BaseButton({
   fullWidth = false,
   textAlign = "start",
   padding = "default",
+  type = "button",
   className,
   label,
   iconLeft,
@@ -39,6 +39,7 @@ function BaseButton({
           "px-0": padding === "none",
         }
       )}
+      type={type}
       {...props}
     >
       {iconLeft && <div className="flex flex-1 justify-center">{iconLeft}</div>}
@@ -76,7 +77,7 @@ export default function Button({
           className={classNames("bg-light-primary text-light-onPrimary", {
             "bg-light-secondary": state === "active",
             "!bg-light-error": state === "red",
-            "bg-light-outline": state === "disabled" || state === "loading",
+            "!bg-light-outline": state === "disabled" || state === "loading",
           })}
           state={state}
           {...props}

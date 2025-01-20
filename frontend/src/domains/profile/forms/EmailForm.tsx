@@ -1,8 +1,10 @@
 import Input from "@/design-system/Input";
 import Form from "@/domains/global/components/Form";
-import type { ReactElement } from "react";
+import { useMemo, type ReactElement } from "react";
 import { z } from "zod";
 import useUpdateProfileInfo from "../hooks/useUpdateProfileInfo";
+import Modal from "@/design-system/Modal";
+import { useFormContext } from "react-hook-form";
 
 const SchemaEmailForm = z.object({
   email: z.string().email({ message: "Email inválido" }),
@@ -10,30 +12,63 @@ const SchemaEmailForm = z.object({
 
 type EmailFormInputs = z.infer<typeof SchemaEmailForm>;
 
-interface EmailFormProperties {
-  formId: string;
-  onSuccessSubmit: () => void;
+interface EmailFormProps {
+  handleCloseModal: () => void;
   defaultValues: Partial<EmailFormInputs>;
 }
 
 export default function EmailForm({
-  formId,
-  onSuccessSubmit,
+  handleCloseModal,
   defaultValues,
-}: EmailFormProperties): ReactElement {
-  const { handleSubmit } = useUpdateProfileInfo<EmailFormInputs>({
-    onSuccessSubmit,
+}: EmailFormProps): ReactElement {
+  const { mutate, isPending } = useUpdateProfileInfo<EmailFormInputs>({
+    onSuccessSubmit: handleCloseModal,
     snackbarTitle: "Email atualizado com sucesso",
   });
 
   return (
     <Form<EmailFormInputs>
-      onSubmit={handleSubmit}
+      onSubmit={mutate}
       defaultValues={defaultValues}
-      formId={formId}
       schema={SchemaEmailForm}
     >
-      <Input<EmailFormInputs> name="email" label="Email" />
+      <EmailFormContent
+        handleCloseModal={handleCloseModal}
+        isPending={isPending}
+      />
     </Form>
+  );
+}
+
+interface EmailFormContentProps {
+  handleCloseModal: () => void;
+  isPending: boolean;
+}
+
+function EmailFormContent({
+  handleCloseModal,
+  isPending,
+}: EmailFormContentProps): ReactElement {
+  const {
+    formState: { isDirty },
+  } = useFormContext();
+
+  const primaryBtnState = useMemo(() => {
+    if (isPending) return "loading";
+    if (!isDirty) return "disabled";
+  }, [isPending, isDirty]);
+
+  return (
+    <>
+      <Modal.Body>
+        <Input<EmailFormInputs> name="email" label="Email" />
+      </Modal.Body>
+      <Modal.Footer
+        labelPrimaryBtn="Alterar"
+        labelSecondaryBtn="Cancelar"
+        onClickSecondaryBtn={handleCloseModal}
+        primaryBtnState={primaryBtnState}
+      />
+    </>
   );
 }

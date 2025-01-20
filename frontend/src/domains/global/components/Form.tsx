@@ -13,7 +13,6 @@ interface FormProperties<T extends FieldValues> {
   children: ReactNode;
   onSubmit: (data: T) => void;
   defaultValues?: DefaultValues<T>;
-  formId: string;
   schema: ZodType;
 }
 
@@ -21,7 +20,6 @@ export default function Form<T extends FieldValues>({
   children,
   onSubmit,
   defaultValues,
-  formId,
   schema,
 }: FormProperties<T>): ReactElement {
   const methods: UseFormReturn<T> = useForm<T>({
@@ -31,9 +29,7 @@ export default function Form<T extends FieldValues>({
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)} id={formId}>
-        {children}
-      </form>
+      <form onSubmit={methods.handleSubmit(onSubmit)}>{children}</form>
     </FormProvider>
   );
 }

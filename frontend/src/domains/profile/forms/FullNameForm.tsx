@@ -3,6 +3,7 @@ import { z } from "zod";
 import useUpdateProfileInfo from "../hooks/useUpdateProfileInfo";
 import Form from "@/domains/global/components/Form";
 import Input from "@/design-system/Input";
+import Modal from "@/design-system/Modal";
 
 const SchemaFullNameForm = z.object({
   fullName: z
@@ -13,18 +14,16 @@ const SchemaFullNameForm = z.object({
 type FullNameFormInputs = z.infer<typeof SchemaFullNameForm>;
 
 interface FullNameFormProperties {
-  formId: string;
-  onSuccessSubmit: () => void;
+  handleCloseModal: () => void;
   defaultValues: Partial<FullNameFormInputs>;
 }
 
 export default function FullNameForm({
   defaultValues,
-  formId,
-  onSuccessSubmit,
+  handleCloseModal,
 }: FullNameFormProperties): ReactElement {
   const { handleSubmit } = useUpdateProfileInfo<FullNameFormInputs>({
-    onSuccessSubmit,
+    onSuccessSubmit: handleCloseModal,
     snackbarTitle: "Nome completo atualizado com sucesso",
   });
 
@@ -32,10 +31,16 @@ export default function FullNameForm({
     <Form<FullNameFormInputs>
       onSubmit={handleSubmit}
       defaultValues={defaultValues}
-      formId={formId}
       schema={SchemaFullNameForm}
     >
-      <Input<FullNameFormInputs> name="fullName" label="Nome completo" />
+      <Modal.Body>
+        <Input<FullNameFormInputs> name="fullName" label="Nome completo" />
+      </Modal.Body>
+      <Modal.Footer
+        labelPrimaryBtn="Alterar"
+        labelSecondaryBtn="Cancelar"
+        onClickSecondaryBtn={handleCloseModal}
+      />
     </Form>
   );
 }

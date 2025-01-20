@@ -1,4 +1,5 @@
 import Input from "@/design-system/Input";
+import Modal from "@/design-system/Modal";
 import Form from "@/domains/global/components/Form";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import type { ReactElement } from "react";
@@ -25,13 +26,11 @@ const SchemaPasswordForm = z
 type PasswordFormInputs = z.infer<typeof SchemaPasswordForm>;
 
 interface PasswordFormProperties {
-  formId: string;
-  onSuccessSubmit: () => void;
+  handleCloseModal: () => void;
 }
 
 export default function PasswordForm({
-  formId,
-  onSuccessSubmit,
+  handleCloseModal,
 }: PasswordFormProperties): ReactElement {
   const { showSuccessSnackbar } = useSnackbar();
 
@@ -41,17 +40,26 @@ export default function PasswordForm({
     showSuccessSnackbar({
       title: "Senha atualizada com sucesso",
     });
-    onSuccessSubmit();
+    handleCloseModal();
   }
 
   return (
     <Form<PasswordFormInputs>
       onSubmit={handleOnSubmit}
-      formId={formId}
       schema={SchemaPasswordForm}
     >
-      <Input<PasswordFormInputs> label="Nova senha" name="newPassword" />
-      <Input<PasswordFormInputs> label="Confirmar senha" name="confirmPassword" />
+      <Modal.Body>
+        <Input<PasswordFormInputs> label="Nova senha" name="newPassword" />
+        <Input<PasswordFormInputs>
+          label="Confirmar senha"
+          name="confirmPassword"
+        />
+      </Modal.Body>
+      <Modal.Footer
+        labelPrimaryBtn="Alterar"
+        labelSecondaryBtn="Cancelar"
+        onClickSecondaryBtn={handleCloseModal}
+      />
     </Form>
   );
 }

@@ -2,7 +2,6 @@ import useGlobalContext from "@/domains/global/hooks/useGlobalContext";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useCallback } from "react";
 
 interface UseUpdateProfileInfoProperties {
   onSuccessSubmit: () => void;
@@ -26,7 +25,7 @@ export default function useUpdateProfileInfo<T>({
     });
   }
 
-  const mutation = useMutation({
+  const { mutate, isPending} = useMutation({
     mutationFn: updateProfileInfo,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["profileInfo"] });
@@ -37,12 +36,5 @@ export default function useUpdateProfileInfo<T>({
     },
   });
 
-  const handleSubmit = useCallback(
-    (data: T) => {
-      mutation.mutate(data);
-    },
-    [mutation]
-  );
-
-  return { handleSubmit };
+  return { mutate, isPending };
 }
