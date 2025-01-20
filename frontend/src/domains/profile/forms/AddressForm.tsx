@@ -1,0 +1,92 @@
+import { ReactElement, useMemo } from "react";
+import { z } from "zod";
+import useUpdateProfileInfo from "../hooks/useUpdateProfileInfo";
+import Form from "@/domains/global/components/Form";
+import Modal from "@/design-system/Modal";
+import Input from "@/design-system/Input";
+import { useFormContext } from "react-hook-form";
+
+const SchemaAddressForm = z.object({
+  cep: z.string().regex(/^\d{5}-?\d{3}$/, "CEP no formato inválido"),
+  street: z.string().nullable(),
+  number: z.string().nonempty({ message: "Campo obrigatório" }),
+  neighborhood: z.string().nullable(),
+  city: z.string().nullable(),
+  state: z.string().nullable(),
+  complement: z.string().nullable(),
+});
+
+type AddressFormInputs = z.infer<typeof SchemaAddressForm>;
+
+interface AddressFormProps {
+  handleCloseModal: () => void;
+  defaultValues: Partial<AddressFormInputs>;
+}
+
+export default function AddressForm({
+  handleCloseModal,
+  defaultValues,
+}: AddressFormProps): ReactElement {
+  const { mutate, isPending } = useUpdateProfileInfo<{
+    address: AddressFormInputs;
+  }>({
+    onSuccessSubmit: handleCloseModal,
+    snackbarTitle: "Endereço atualizado com sucesso",
+  });
+
+  function handleSubmit(data: AddressFormInputs) {
+    mutate({ address: data });
+  }
+
+  return (
+    <Form<AddressFormInputs>
+      onSubmit={handleSubmit}
+      schema={SchemaAddressForm}
+      defaultValues={defaultValues}
+    >
+      <AddressFormContent
+        handleCloseModal={handleCloseModal}
+        isPending={isPending}
+      />
+    </Form>
+  );
+}
+
+interface AddressFormContentProps {
+  handleCloseModal: () => void;
+  isPending: boolean;
+}
+
+function AddressFormContent({
+  handleCloseModal,
+  isPending,
+}: AddressFormContentProps): ReactElement {
+  const {
+    formState: { isDirty },
+  } = useFormContext();
+
+  const primaryBtnState = useMemo(() => {
+    if (isPending) return "loading";
+    if (!isDirty) return "disabled";
+  }, [isPending, isDirty]);
+
+  return (
+    <>
+      <Modal.Body>
+        <Input<AddressFormInputs> label="CEP" name="cep" />
+        <Input<AddressFormInputs> label="Número" name="number" />
+        <Input<AddressFormInputs> label="Rua" name="street" />
+        <Input<AddressFormInputs> label="Bairro" name="neighborhood" />
+        <Input<AddressFormInputs> label="Cidade" name="city" />
+        <Input<AddressFormInputs> label="Estado" name="state" />
+        <Input<AddressFormInputs> label="Complemento" name="complement" />
+      </Modal.Body>
+      <Modal.Footer
+        labelPrimaryBtn="Alterar"
+        labelSecondaryBtn="Cancelar"
+        onClickSecondaryBtn={handleCloseModal}
+        primaryBtnState={primaryBtnState}
+      />
+    </>
+  );
+}

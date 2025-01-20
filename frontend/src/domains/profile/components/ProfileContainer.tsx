@@ -11,6 +11,7 @@ import EmailForm from "../forms/EmailForm";
 import PasswordForm from "../forms/PasswordForm";
 import { useQuery } from "@tanstack/react-query";
 import FullNameForm from "../forms/FullNameForm";
+import AddressForm from "../forms/AddressForm";
 
 interface EditProfileInfoModalProps {
   open: boolean;
@@ -140,7 +141,18 @@ export default function ProfileContainer(): ReactElement {
                 label="Endereço"
                 value={addressFormatted}
                 isLoading={isFetching}
-                onEdit={() => {}}
+                onEdit={() =>
+                  setEditProfileInfoModal({
+                    title: "Alterar endereço",
+                    open: true,
+                    content: (
+                      <AddressForm
+                        handleCloseModal={handleCloseEditProfileInfoModal}
+                        defaultValues={{ ...profileInfo?.address }}
+                      />
+                    ),
+                  })
+                }
               />
               <Section.Row
                 label="Data de nascimento"

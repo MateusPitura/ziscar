@@ -1,9 +1,10 @@
 import Input from "@/design-system/Input";
 import Modal from "@/design-system/Modal";
 import Form from "@/domains/global/components/Form";
-import useSnackbar from "@/domains/global/hooks/useSnackbar";
-import type { ReactElement } from "react";
+import { useMemo, type ReactElement } from "react";
+import { useFormContext } from "react-hook-form";
 import { z } from "zod";
+import useUpdateProfileInfo from "../hooks/useUpdateProfileInfo";
 
 const SchemaPasswordForm = z
   .object({
@@ -25,29 +26,58 @@ const SchemaPasswordForm = z
 
 type PasswordFormInputs = z.infer<typeof SchemaPasswordForm>;
 
-interface PasswordFormProperties {
+interface PasswordFormProps {
   handleCloseModal: () => void;
 }
 
 export default function PasswordForm({
   handleCloseModal,
-}: PasswordFormProperties): ReactElement {
-  const { showSuccessSnackbar } = useSnackbar();
+}: PasswordFormProps): ReactElement {
+  const { mutate, isPending } = useUpdateProfileInfo<{
+    password: PasswordFormInputs["newPassword"];
+  }>({
+    onSuccessSubmit: handleCloseModal,
+    snackbarTitle: "Senha atualizada com sucesso",
+  });
 
-  function handleOnSubmit(data: PasswordFormInputs) {
-    console.log("🌠 data: ", data.confirmPassword);
-    console.log("🌠 data: ", data.newPassword);
-    showSuccessSnackbar({
-      title: "Senha atualizada com sucesso",
-    });
-    handleCloseModal();
+  function handleSubmit(data: PasswordFormInputs) {
+    mutate({ password: data.newPassword });
   }
 
   return (
     <Form<PasswordFormInputs>
-      onSubmit={handleOnSubmit}
+      onSubmit={handleSubmit}
       schema={SchemaPasswordForm}
+      defaultValues={{ newPassword: "", confirmPassword: "" }}
     >
+      <PasswordFormContent
+        handleCloseModal={handleCloseModal}
+        isPending={isPending}
+      />
+    </Form>
+  );
+}
+
+interface PasswordFormContentProps {
+  handleCloseModal: () => void;
+  isPending: boolean;
+}
+
+export function PasswordFormContent({
+  handleCloseModal,
+  isPending,
+}: PasswordFormContentProps): ReactElement {
+  const {
+    formState: { isDirty },
+  } = useFormContext();
+
+  const primaryBtnState = useMemo(() => {
+    if (isPending) return "loading";
+    if (!isDirty) return "disabled";
+  }, [isPending, isDirty]);
+
+  return (
+    <>
       <Modal.Body>
         <Input<PasswordFormInputs> label="Nova senha" name="newPassword" />
         <Input<PasswordFormInputs>
@@ -59,7 +89,8 @@ export default function PasswordForm({
         labelPrimaryBtn="Alterar"
         labelSecondaryBtn="Cancelar"
         onClickSecondaryBtn={handleCloseModal}
+        primaryBtnState={primaryBtnState}
       />
-    </Form>
+    </>
   );
 }
