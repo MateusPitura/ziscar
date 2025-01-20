@@ -1,6 +1,7 @@
 import Button from "@/design-system/Button";
 import { type ReactNode } from "react";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface SectionProps {
   children: ReactNode;
@@ -50,14 +51,19 @@ interface SectionRowProps {
   label: string;
   value?: string;
   onEdit: () => void;
+  isLoading?: boolean;
 }
 
-function Row({ label, value, onEdit }: SectionRowProps) {
+function Row({ label, value, onEdit, isLoading = false }: SectionRowProps) {
   return (
     <div className="p-4 border-b flex last:border-none">
       <div className="w-full flex items-center">
         <span className="text-light-onSurface flex-1">{label}</span>
-        <span className="text-light-onSurface flex-1">{value}</span>
+        {isLoading ? (
+          <Skeleton className="flex-1 h-6 bg-neutral-300" />
+        ) : (
+          <span className="text-light-onSurface flex-1">{value}</span>
+        )}
       </div>
       <Button
         variant="quaternary"

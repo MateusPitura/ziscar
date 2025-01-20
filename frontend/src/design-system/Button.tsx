@@ -32,7 +32,7 @@ function BaseButton({
         "rounded-md h-10 hover:opacity-50 flex items-center gap-4 w-fit",
         className,
         {
-          "pointer-events-none opacity-50": state === "disabled",
+          "pointer-events-none": state === "disabled",
           "pointer-events-none animate-pulse": state === "loading",
           "!w-full": fullWidth,
           "px-4": padding === "default",
@@ -77,7 +77,7 @@ export default function Button({
           className={classNames("bg-light-primary text-light-onPrimary", {
             "bg-light-secondary": state === "active",
             "!bg-light-error": state === "red",
-            "!bg-light-outline": state === "disabled" || state === "loading",
+            "!bg-neutral-300": state === "disabled" || state === "loading",
           })}
           state={state}
           {...props}
@@ -91,7 +91,7 @@ export default function Button({
             {
               "bg-light-primaryContainer": state === "active",
               "!border-light-error !text-light-error": state === "red",
-              "border-light-outline text-light-outline":
+              "border-neutral-300 text-neutral-300":
                 state === "disabled" || state === "loading",
             }
           )}
@@ -105,7 +105,7 @@ export default function Button({
           className={classNames("text-light-onSurface", {
             "text-light-primary": state === "active",
             "!text-light-error": state === "red",
-            "text-light-outline": state === "disabled" || state === "loading",
+            "text-neutral-300": state === "disabled" || state === "loading",
           })}
           state={state}
           {...props}
@@ -117,7 +117,7 @@ export default function Button({
           className={classNames("text-light-primary", {
             "bg-light-primaryContainer": state === "active",
             "!text-light-error": state === "red",
-            "text-light-outline": state === "disabled" || state === "loading",
+            "text-neutral-300": state === "disabled" || state === "loading",
           })}
           state={state}
           {...props}

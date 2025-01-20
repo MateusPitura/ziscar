@@ -34,7 +34,7 @@ export default function ProfileContainer(): ReactElement {
     return await safeFetch({ path: `/users/${userLogged?.id}` }); // TODO: Ao implementar o back-end criar uma request que não precise de id, pegar o id automaticamente
   }
 
-  const { data: profileInfo } = useQuery({
+  const { data: profileInfo, isFetching } = useQuery({
     queryKey: ["profileInfo"],
     queryFn: getProfileInfo,
   });
@@ -86,6 +86,7 @@ export default function ProfileContainer(): ReactElement {
               <Section.Row
                 label="Email"
                 value={profileInfo?.email}
+                isLoading={isFetching}
                 onEdit={() =>
                   setEditProfileInfoModal({
                     title: "Alterar email",
@@ -102,6 +103,7 @@ export default function ProfileContainer(): ReactElement {
               <Section.Row
                 label="Senha"
                 value="••••••••••••"
+                isLoading={isFetching}
                 onEdit={() =>
                   setEditProfileInfoModal({
                     title: "Alterar senha",
@@ -120,6 +122,7 @@ export default function ProfileContainer(): ReactElement {
               <Section.Row
                 label="Nome completo"
                 value={profileInfo?.fullName}
+                isLoading={isFetching}
                 onEdit={() =>
                   setEditProfileInfoModal({
                     title: "Alterar nome completo",
@@ -136,26 +139,31 @@ export default function ProfileContainer(): ReactElement {
               <Section.Row
                 label="Endereço"
                 value={addressFormatted}
+                isLoading={isFetching}
                 onEdit={() => {}}
               />
               <Section.Row
                 label="Data de nascimento"
                 value={birthDateFormatted}
+                isLoading={isFetching}
                 onEdit={() => {}}
               />
               <Section.Row
                 label="CPF"
                 value={applyMask(profileInfo?.cpf, "CPF")}
+                isLoading={isFetching}
                 onEdit={() => {}}
               />
               <Section.Row
                 label="Matrícula"
                 value={profileInfo?.code}
+                isLoading={isFetching}
                 onEdit={() => {}}
               />
               <Section.Row
                 label="Celular"
                 value={applyMask(profileInfo?.cellphone, "CELLPHONE")}
+                isLoading={isFetching}
                 onEdit={() => {}}
               />
             </Section.Group>
