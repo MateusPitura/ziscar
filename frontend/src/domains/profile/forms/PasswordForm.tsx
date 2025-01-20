@@ -38,6 +38,7 @@ export default function PasswordForm({
   }>({
     onSuccessSubmit: handleCloseModal,
     snackbarTitle: "Senha atualizada com sucesso",
+    shouldInvalidateQuery: false,
   });
 
   function handleSubmit(data: PasswordFormInputs) {

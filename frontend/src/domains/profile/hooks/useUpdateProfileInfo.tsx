@@ -6,11 +6,13 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 interface UseUpdateProfileInfoProperties {
   onSuccessSubmit: () => void;
   snackbarTitle: string;
+  shouldInvalidateQuery?: boolean;
 }
 
 export default function useUpdateProfileInfo<T>({
   onSuccessSubmit,
   snackbarTitle,
+  shouldInvalidateQuery = true,
 }: UseUpdateProfileInfoProperties) {
   const { safeFetch } = useSafeFetch();
   const { userLogged } = useGlobalContext();
@@ -25,10 +27,12 @@ export default function useUpdateProfileInfo<T>({
     });
   }
 
-  const { mutate, isPending} = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: updateProfileInfo,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["profileInfo"] });
+      if (shouldInvalidateQuery) {
+        queryClient.invalidateQueries({ queryKey: ["profileInfo"] });
+      }
       showSuccessSnackbar({
         title: snackbarTitle,
       });
