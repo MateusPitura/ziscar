@@ -10,8 +10,9 @@ import safeFormat from "@/domains/global/utils/safeFormat";
 import EmailForm from "../forms/EmailForm";
 import PasswordForm from "../forms/PasswordForm";
 import { useQuery } from "@tanstack/react-query";
+import FullNameForm from "../forms/FullNameForm";
 
-interface EditModalInfoProps {
+interface EditProfileInfoModalProps {
   open: boolean;
   title: string;
   body: ReactElement | undefined;
@@ -19,12 +20,13 @@ interface EditModalInfoProps {
 }
 
 export default function ProfileContainer(): ReactElement {
-  const [editModalInfo, setEditModalInfo] = useState<EditModalInfoProps>({
-    open: false,
-    title: "",
-    body: undefined,
-    formId: "",
-  });
+  const [editProfileInfoModal, setEditProfileInfoModal] =
+    useState<EditProfileInfoModalProps>({
+      open: false,
+      title: "",
+      body: undefined,
+      formId: "",
+    });
 
   const { userLogged } = useGlobalContext();
 
@@ -40,7 +42,7 @@ export default function ProfileContainer(): ReactElement {
   });
 
   function handleCloseEditModal() {
-    setEditModalInfo((prev) => ({
+    setEditProfileInfoModal((prev) => ({
       ...prev,
       open: false,
     }));
@@ -67,15 +69,15 @@ export default function ProfileContainer(): ReactElement {
   return (
     <>
       <Modal
-        open={editModalInfo.open}
+        open={editProfileInfoModal.open}
         onClose={handleCloseEditModal}
-        title={editModalInfo.title}
+        title={editProfileInfoModal.title}
         labelPrimaryBtn="Alterar"
         labelSecondaryBtn="Cancelar"
         onClickSecondaryBtn={handleCloseEditModal}
-        formId={editModalInfo.formId}
+        formId={editProfileInfoModal.formId}
       >
-        {editModalInfo.body}
+        {editProfileInfoModal.body}
       </Modal>
       <div className="flex flex-col gap-4">
         <PageHeader title="Perfil" />
@@ -88,7 +90,7 @@ export default function ProfileContainer(): ReactElement {
                 label="Email"
                 value={profileInfo?.email}
                 onEdit={() =>
-                  setEditModalInfo({
+                  setEditProfileInfoModal({
                     title: "Alterar email",
                     open: true,
                     body: (
@@ -106,7 +108,7 @@ export default function ProfileContainer(): ReactElement {
                 label="Senha"
                 value="••••••••••••"
                 onEdit={() =>
-                  setEditModalInfo({
+                  setEditProfileInfoModal({
                     title: "Alterar senha",
                     open: true,
                     body: (
@@ -125,7 +127,20 @@ export default function ProfileContainer(): ReactElement {
               <Section.Row
                 label="Nome completo"
                 value={profileInfo?.fullName}
-                onEdit={() => {}}
+                onEdit={() =>
+                  setEditProfileInfoModal({
+                    title: "Alterar nome completo",
+                    open: true,
+                    body: (
+                      <FullNameForm
+                        formId="full-name-form"
+                        onSuccessSubmit={handleCloseEditModal}
+                        defaultValues={{ fullName: profileInfo?.fullName }}
+                      />
+                    ),
+                    formId: "full-name-form",
+                  })
+                }
               />
               <Section.Row
                 label="Endereço"
