@@ -8,14 +8,14 @@ import { useFormContext } from "react-hook-form";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import { useQuery } from "@tanstack/react-query";
 import Button from "@/design-system/Button";
+import useSnackbar from "@/domains/global/hooks/useSnackbar";
 
 interface ViaCepAddress {
-  cep: string;
-  logradouro: string;
-  bairro: string;
-  localidade: string;
-  uf: string;
-  estado: string;
+  logradouro?: string;
+  bairro?: string;
+  localidade?: string;
+  uf?: string;
+  erro?: boolean;
 }
 
 const SchemaAddressForm = z.object({
@@ -84,6 +84,8 @@ function AddressFormContent({
 
   const { safeFetch } = useSafeFetch();
 
+  const { showErrorSnackbar } = useSnackbar();
+
   async function fillAddress() {
     const isValid = await trigger("cep");
     if (isValid) {
@@ -92,7 +94,7 @@ function AddressFormContent({
     }
   }
 
-  async function getCepInfo(cep: string): Promise<ViaCepAddress | null> {
+  async function getCepInfo(cep: string): Promise<ViaCepAddress | undefined> {
     return await safeFetch({
       path: `https://viacep.com.br/ws/${cep}/json/`,
     });
@@ -105,6 +107,13 @@ function AddressFormContent({
   });
 
   useEffect(() => {
+    if (cepInfo?.erro) {
+      showErrorSnackbar({
+        title: "CEP não encontrado",
+        description: "Por favor, insira um CEP válido",
+      });
+      return;
+    }
     if (cepInfo) {
       setValue("street", cepInfo.logradouro);
       setValue("neighborhood", cepInfo.bairro);
