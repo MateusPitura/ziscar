@@ -1,4 +1,4 @@
-import type { ReactElement, ReactNode } from "react";
+import { useCallback, useMemo, type ReactElement, type ReactNode } from "react";
 import {
   DefaultValues,
   FieldValues,
@@ -7,7 +7,7 @@ import {
   UseFormReturn,
 } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ZodType } from "zod";
+import { ZodObject, ZodType } from "zod";
 
 interface FormProperties<T extends FieldValues> {
   children: ReactNode;
@@ -22,14 +22,45 @@ export default function Form<T extends FieldValues>({
   defaultValues,
   schema,
 }: FormProperties<T>): ReactElement {
+  const safeDefaultValues = useMemo(() => {
+    /**
+     * This function is necessary because if some default value is undefined or
+     * null RHF replace it for an empty string, and this cause isDirty to fire
+     * So if the initial value already is a empty string this works fine
+     * But if the schema has some ZodEffect, like .refine(), the if statement
+     * will be false, in this cause you need to pass defaultValues with empty strings
+     */
+    const defaultValuesCopy = Object.assign({}, defaultValues);
+
+    if (schema instanceof ZodObject) {
+      Object.keys(schema.shape).forEach((key) => {
+        defaultValuesCopy[key] = defaultValuesCopy[key] ?? "";
+      });
+    }
+    return defaultValuesCopy;
+  }, [defaultValues, schema]);
+
   const methods: UseFormReturn<T> = useForm<T>({
-    defaultValues: defaultValues,
+    defaultValues: safeDefaultValues,
     resolver: zodResolver(schema),
   });
 
+  const safeOnSubmit = useCallback(
+    (data: T) => {
+      const dataCopy = Object.assign({}, data);
+      Object.keys(dataCopy).forEach((key) => {
+        if (dataCopy[key] === "") {
+          delete dataCopy[key];
+        }
+      });
+      onSubmit(dataCopy);
+    },
+    [onSubmit]
+  );
+
   return (
     <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)}>{children}</form>
+      <form onSubmit={methods.handleSubmit(safeOnSubmit)}>{children}</form>
     </FormProvider>
   );
 }

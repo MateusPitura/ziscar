@@ -12,6 +12,7 @@ import PasswordForm from "../forms/PasswordForm";
 import { useQuery } from "@tanstack/react-query";
 import FullNameForm from "../forms/FullNameForm";
 import AddressForm from "../forms/AddressForm";
+import { baseUrl } from "@/domains/global/constants/requests";
 
 interface EditProfileInfoModalProps {
   open: boolean;
@@ -32,7 +33,7 @@ export default function ProfileContainer(): ReactElement {
   const { safeFetch } = useSafeFetch();
 
   async function getProfileInfo(): Promise<User> {
-    return await safeFetch({ path: `/users/${userLogged?.id}` }); // TODO: Ao implementar o back-end criar uma request que não precise de id, pegar o id automaticamente
+    return await safeFetch({ path: `${baseUrl}/users/${userLogged?.id}` }); // TODO: Ao implementar o back-end criar uma request que não precise de id, pegar o id automaticamente
   }
 
   const { data: profileInfo, isFetching } = useQuery({

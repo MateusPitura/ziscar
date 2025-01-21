@@ -1,5 +1,4 @@
 import { useCallback } from "react";
-import { baseUrl } from "../constants/requests";
 import useSnackbar from "./useSnackbar";
 import useGlobalContext from "./useGlobalContext";
 
@@ -17,12 +16,12 @@ export default function useSafeFetch() {
   const safeFetch = useCallback(
     async ({ path, method = "GET", body }: Request) => {
       try {
-        const response = await fetch(`${baseUrl}${path}`, {
+        const response = await fetch(path, {
           method,
           headers: {
             "Content-Type": "application/json",
-            "User-Logged": JSON.stringify(userLogged),
-            "Client-Logged": JSON.stringify(clientLogged),
+            // "User-Logged": JSON.stringify(userLogged), // TODO: não enviar informações sensíveis no header, é barrado pelo viaCep. Colocar no JWT
+            // "Client-Logged": JSON.stringify(clientLogged),
           },
           body: method != "GET" ? JSON.stringify(body) : undefined,
         });

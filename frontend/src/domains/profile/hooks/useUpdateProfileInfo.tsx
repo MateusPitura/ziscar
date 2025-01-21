@@ -1,3 +1,4 @@
+import { baseUrl } from "@/domains/global/constants/requests";
 import useGlobalContext from "@/domains/global/hooks/useGlobalContext";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
@@ -21,7 +22,7 @@ export default function useUpdateProfileInfo<T>({
 
   async function updateProfileInfo(data: T) {
     await safeFetch({
-      path: `/users/${userLogged?.id}`, //  TODO: Ao implementar o back-end criar uma request que não precise de id, pegar o id automaticamente
+      path: `${baseUrl}/users/${userLogged?.id}`, //  TODO: Ao implementar o back-end criar uma request que não precise de id, pegar o id automaticamente
       method: "PATCH",
       body: data,
     });
