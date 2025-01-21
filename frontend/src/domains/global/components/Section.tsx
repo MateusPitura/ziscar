@@ -62,7 +62,7 @@ function Row({ label, value, onEdit, isLoading = false }: SectionRowProps) {
           {label}
         </span>
         <Loading
-          className="flex-1 text-light-onSurface text-body-large"
+          className="flex-1 text-light-onSurface text-body-large line-clamp-1"
           isLoading={isLoading}
         >
           {value}

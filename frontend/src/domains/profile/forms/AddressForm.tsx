@@ -19,9 +19,9 @@ interface ViaCepAddress {
 }
 
 const SchemaAddressForm = z.object({
-  cep: z.string().regex(/^\d{5}-?\d{3}$/, "CEP no formato inválido"),
+  cep: z.string().regex(/^\d{5}-?\d{3}$/, "CEP inválido"),
   street: z.string().nullable(),
-  number: z.string().nonempty({ message: "Campo obrigatório" }),
+  number: z.string().nonempty({ message: "Número inválido" }),
   neighborhood: z.string().nullable(),
   city: z.string().nullable(),
   state: z.string().nullable(),

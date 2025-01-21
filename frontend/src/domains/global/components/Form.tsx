@@ -27,7 +27,7 @@ export default function Form<T extends FieldValues>({
      * This function is necessary because if some default value is undefined or
      * null RHF replace it for an empty string, and this cause isDirty to fire
      * So if the initial value already is a empty string this works fine
-     * But if the schema has some ZodEffect, like .refine(), the if statement
+     * But if the schema has some ZodEffect, like .refine() in object, the if statement
      * will be false, in this cause you need to pass defaultValues with empty strings
      */
     const defaultValuesCopy = Object.assign({}, defaultValues);

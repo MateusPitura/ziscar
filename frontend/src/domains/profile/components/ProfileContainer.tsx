@@ -14,6 +14,7 @@ import FullNameForm from "../forms/FullNameForm";
 import AddressForm from "../forms/AddressForm";
 import { baseUrl } from "@/domains/global/constants/requests";
 import BirthDateForm from "../forms/BirthDateForm";
+import CpfForm from "../forms/CpfForm";
 
 interface EditProfileInfoModalProps {
   open: boolean;
@@ -180,7 +181,18 @@ export default function ProfileContainer(): ReactElement {
                 label="CPF"
                 value={applyMask(profileInfo?.cpf, "CPF")}
                 isLoading={isFetching}
-                onEdit={() => {}}
+                onEdit={() =>
+                  setEditProfileInfoModal({
+                    title: "Alterar CPF",
+                    open: true,
+                    content: (
+                      <CpfForm
+                        handleCloseModal={handleCloseEditProfileInfoModal}
+                        defaultValues={{ cpf: profileInfo?.cpf }}
+                      />
+                    ),
+                  })
+                }
               />
               <Section.Row
                 label="Matrícula"
