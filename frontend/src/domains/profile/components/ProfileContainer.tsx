@@ -13,6 +13,7 @@ import { useQuery } from "@tanstack/react-query";
 import FullNameForm from "../forms/FullNameForm";
 import AddressForm from "../forms/AddressForm";
 import { baseUrl } from "@/domains/global/constants/requests";
+import BirthDateForm from "../forms/BirthDateForm";
 
 interface EditProfileInfoModalProps {
   open: boolean;
@@ -48,23 +49,26 @@ export default function ProfileContainer(): ReactElement {
     }));
   }
 
-  const birthDateFormatted = useMemo(
-    () =>
-      profileInfo?.birthDate
-        ? safeFormat({
-            date: new Date(profileInfo?.birthDate),
-            format: "dd/MM/yyyy",
-          })
-        : "",
-    [profileInfo?.birthDate]
-  );
-
   const addressFormatted = useMemo(() => {
     if (profileInfo?.address?.street && profileInfo?.address?.number) {
       return `${profileInfo?.address?.street}, ${profileInfo?.address?.number}`;
     }
     return "";
   }, [profileInfo?.address?.street, profileInfo?.address?.number]);
+
+  function handleBirthDate(format: string) {
+    if (profileInfo?.birthDate) {
+      return {
+        birthDate: safeFormat({
+          date: new Date(profileInfo?.birthDate),
+          format,
+        }),
+      };
+    }
+    return {
+      birthDate: "",
+    };
+  }
 
   return (
     <>
@@ -157,9 +161,20 @@ export default function ProfileContainer(): ReactElement {
               />
               <Section.Row
                 label="Data de nascimento"
-                value={birthDateFormatted}
+                value={handleBirthDate("dd/MM/yyyy").birthDate}
                 isLoading={isFetching}
-                onEdit={() => {}}
+                onEdit={() =>
+                  setEditProfileInfoModal({
+                    title: "Alterar data de nascimento",
+                    open: true,
+                    content: (
+                      <BirthDateForm
+                        handleCloseModal={handleCloseEditProfileInfoModal}
+                        defaultValues={handleBirthDate("yyyy-MM-dd")}
+                      />
+                    ),
+                  })
+                }
               />
               <Section.Row
                 label="CPF"

@@ -60,7 +60,9 @@ export default function Form<T extends FieldValues>({
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(safeOnSubmit)}>{children}</form>
+      <form onSubmit={methods.handleSubmit(safeOnSubmit)} noValidate>
+        {children}
+      </form>
     </FormProvider>
   );
 }

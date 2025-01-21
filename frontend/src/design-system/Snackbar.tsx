@@ -65,7 +65,7 @@ export default function Snackbar(): ReactElement {
                 </ToastDescription>
               )}
             </div>
-            <div>{action}</div>
+            {action && <div>{action}</div>}
             <ToastClose />
           </Toast>
         );
