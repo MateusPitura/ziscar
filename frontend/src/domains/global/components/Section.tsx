@@ -71,6 +71,7 @@ function Row({ label, value, onEdit, isLoading = false }: SectionRowProps) {
       <Button
         variant="quaternary"
         onClick={onEdit}
+        state={isLoading ? "loading" : undefined}
         iconLeft={<EditOutlinedIcon />}
       />
     </div>

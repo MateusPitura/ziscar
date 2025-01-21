@@ -1,10 +1,12 @@
 import Input from "@/design-system/Input";
 import Modal from "@/design-system/Modal";
 import Form from "@/domains/global/components/Form";
-import { useMemo, type ReactElement } from "react";
+import { useMemo, useState, type ReactElement } from "react";
 import { useFormContext } from "react-hook-form";
 import { z } from "zod";
 import useUpdateProfileInfo from "../hooks/useUpdateProfileInfo";
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
+import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
 
 const SchemaPasswordForm = z
   .object({
@@ -68,6 +70,11 @@ export function PasswordFormContent({
   handleCloseModal,
   isPending,
 }: PasswordFormContentProps): ReactElement {
+  const [showPassword, setShowPassword] = useState({
+    newPassword: false,
+    confirmPassword: false,
+  });
+
   const {
     formState: { isDirty },
   } = useFormContext();
@@ -77,13 +84,41 @@ export function PasswordFormContent({
     if (!isDirty) return "disabled";
   }, [isPending, isDirty]);
 
+  function handleShowPassword(field: keyof typeof showPassword) {
+    setShowPassword((prevState) => ({
+      ...prevState,
+      [field]: !prevState[field],
+    }));
+  }
+
   return (
     <>
       <Modal.Body>
-        <Input<PasswordFormInputs> label="Nova senha" name="newPassword" />
+        <Input<PasswordFormInputs>
+          label="Nova senha"
+          name="newPassword"
+          iconRight={
+            showPassword.newPassword ? (
+              <VisibilityOutlinedIcon />
+            ) : (
+              <VisibilityOffOutlinedIcon />
+            )
+          }
+          onClickIconRight={() => handleShowPassword("newPassword")}
+          type={showPassword.newPassword ? "text" : "password"}
+        />
         <Input<PasswordFormInputs>
           label="Confirmar senha"
           name="confirmPassword"
+          iconRight={
+            showPassword.confirmPassword ? (
+              <VisibilityOutlinedIcon />
+            ) : (
+              <VisibilityOffOutlinedIcon />
+            )
+          }
+          onClickIconRight={() => handleShowPassword("confirmPassword")}
+          type={showPassword.confirmPassword ? "text" : "password"}
         />
       </Modal.Body>
       <Modal.Footer

@@ -39,6 +39,7 @@ function BaseButton({
           "px-0": padding === "none",
         }
       )}
+      disabled={state === "disabled" || state === "loading"}
       type={type}
       {...props}
     >

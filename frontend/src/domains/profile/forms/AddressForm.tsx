@@ -140,7 +140,7 @@ function AddressFormContent({
     <>
       <Modal.Body>
         <div
-          className="flex items-center justify-between"
+          className="flex items-center justify-between gap-1"
           onKeyDown={handleOnSubmitCepField}
         >
           <Input<AddressFormInputs> label="CEP" name="cep" mask="CEP" />
@@ -148,6 +148,7 @@ function AddressFormContent({
             variant="quaternary"
             label="Preencher automaticamente"
             onClick={fillAddress}
+            padding="none"
             state={isFetching ? "loading" : undefined}
           />
         </div>
