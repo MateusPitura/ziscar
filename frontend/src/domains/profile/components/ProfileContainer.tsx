@@ -15,6 +15,7 @@ import AddressForm from "../forms/AddressForm";
 import { baseUrl } from "@/domains/global/constants/requests";
 import BirthDateForm from "../forms/BirthDateForm";
 import CpfForm from "../forms/CpfForm";
+import CodeForm from "../forms/CodeForm";
 
 interface EditProfileInfoModalProps {
   open: boolean;
@@ -198,7 +199,18 @@ export default function ProfileContainer(): ReactElement {
                 label="Matrícula"
                 value={profileInfo?.code}
                 isLoading={isFetching}
-                onEdit={() => {}}
+                onEdit={() =>
+                  setEditProfileInfoModal({
+                    title: "Alterar matrícula",
+                    open: true,
+                    content: (
+                      <CodeForm
+                        handleCloseModal={handleCloseEditProfileInfoModal}
+                        defaultValues={{ code: profileInfo?.code }}
+                      />
+                    ),
+                  })
+                }
               />
               <Section.Row
                 label="Celular"

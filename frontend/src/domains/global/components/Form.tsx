@@ -46,14 +46,14 @@ export default function Form<T extends FieldValues>({
   });
 
   const safeOnSubmit = useCallback(
-    (data: T) => {
+    (data: Record<string, unknown>) => {
       const dataCopy = Object.assign({}, data);
       Object.keys(dataCopy).forEach((key) => {
         if (dataCopy[key] === "") {
-          delete dataCopy[key];
+          dataCopy[key] = null;
         }
       });
-      onSubmit(dataCopy);
+      onSubmit(dataCopy as T);
     },
     [onSubmit]
   );
