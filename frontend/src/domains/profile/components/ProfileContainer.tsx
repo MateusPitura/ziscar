@@ -16,6 +16,7 @@ import { baseUrl } from "@/domains/global/constants/requests";
 import BirthDateForm from "../forms/BirthDateForm";
 import CpfForm from "../forms/CpfForm";
 import CodeForm from "../forms/CodeForm";
+import CellphoneForm from "../forms/CellphoneForm";
 
 interface EditProfileInfoModalProps {
   open: boolean;
@@ -51,12 +52,13 @@ export default function ProfileContainer(): ReactElement {
     }));
   }
 
-  const addressFormatted = useMemo(() => {
-    if (profileInfo?.address?.street && profileInfo?.address?.number) {
-      return `${profileInfo?.address?.street}, ${profileInfo?.address?.number}`;
-    }
-    return "";
-  }, [profileInfo?.address?.street, profileInfo?.address?.number]);
+  const addressFormatted = useMemo(
+    () =>
+      [profileInfo?.address?.street, profileInfo?.address?.number]
+        .filter(Boolean)
+        .join(", "),
+    [profileInfo?.address?.street, profileInfo?.address?.number]
+  );
 
   function handleBirthDate(format: string) {
     if (profileInfo?.birthDate) {
@@ -216,7 +218,18 @@ export default function ProfileContainer(): ReactElement {
                 label="Celular"
                 value={applyMask(profileInfo?.cellphone, "CELLPHONE")}
                 isLoading={isFetching}
-                onEdit={() => {}}
+                onEdit={() =>
+                  setEditProfileInfoModal({
+                    title: "Alterar celular",
+                    open: true,
+                    content: (
+                      <CellphoneForm
+                        handleCloseModal={handleCloseEditProfileInfoModal}
+                        defaultValues={{ cellphone: profileInfo?.cellphone }}
+                      />
+                    ),
+                  })
+                }
               />
             </Section.Group>
           </Section>
