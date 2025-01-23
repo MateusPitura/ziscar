@@ -16,7 +16,7 @@ function PageSideBar({ isOpen }: PageSideBarProps): ReactElement {
   const location = useLocation();
 
   useEffect(() => {
-    setActivePath(location.pathname);
+    setActivePath(`/${location.pathname.split('/')[1]}`);
   }, [location]);
 
   return (

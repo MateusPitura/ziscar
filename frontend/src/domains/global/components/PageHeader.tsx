@@ -4,17 +4,19 @@ import type { ReactElement } from "react";
 interface PageHeaderProperties {
   title: string;
   primaryButtonLabel?: string;
+  onClickPrimaryBtn?: () => void;
+  primaryBtnIconRigth?: ReactElement;
   secondaryButtonLabel?: string;
-  onClickPrimary?: () => void;
-  onClickSecondary?: () => void;
+  onClickSecondaryBtn?: () => void;
 }
 
 export default function PageHeader({
   title,
   primaryButtonLabel,
-  onClickPrimary,
+  primaryBtnIconRigth,
+  onClickPrimaryBtn,
   secondaryButtonLabel,
-  onClickSecondary,
+  onClickSecondaryBtn,
 }: PageHeaderProperties): ReactElement {
   return (
     <div className="w-full p-4 flex">
@@ -22,18 +24,19 @@ export default function PageHeader({
         {title}
       </span>
       <div className="flex">
-        {onClickSecondary && (
+        {onClickSecondaryBtn && (
           <Button
             variant="quaternary"
-            onClick={onClickSecondary}
+            onClick={onClickSecondaryBtn}
             label={secondaryButtonLabel}
           />
         )}
-        {onClickPrimary && (
+        {onClickPrimaryBtn && (
           <Button
             variant="primary"
-            onClick={onClickPrimary}
+            onClick={onClickPrimaryBtn}
             label={primaryButtonLabel}
+            iconRight={primaryBtnIconRigth}
           />
         )}
       </div>
