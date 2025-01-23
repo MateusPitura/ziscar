@@ -4,7 +4,6 @@ import Section from "@/domains/global/components/Section";
 import { useMemo, useState, type ReactElement } from "react";
 import { User } from "@/domains/global/types/User";
 import useGlobalContext from "@/domains/global/hooks/useGlobalContext";
-import { applyMask } from "@/domains/global/utils/applyMask";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import safeFormat from "@/domains/global/utils/safeFormat";
 import EmailForm from "../forms/EmailForm";
@@ -17,6 +16,7 @@ import BirthDateForm from "../forms/BirthDateForm";
 import CpfForm from "../forms/CpfForm";
 import CodeForm from "../forms/CodeForm";
 import CellphoneForm from "../forms/CellphoneForm";
+import selectProfileInfo from "../utils/selectProfileInfo";
 
 interface EditProfileInfoModalProps {
   open: boolean;
@@ -43,6 +43,7 @@ export default function ProfileContainer(): ReactElement {
   const { data: profileInfo, isFetching } = useQuery({
     queryKey: ["profileInfo"],
     queryFn: getProfileInfo,
+    select: selectProfileInfo,
   });
 
   function handleCloseEditProfileInfoModal() {
@@ -60,18 +61,14 @@ export default function ProfileContainer(): ReactElement {
     [profileInfo?.address?.street, profileInfo?.address?.number]
   );
 
-  function handleBirthDate(format: string) {
+  function formatBirthDate(format: string) {
     if (profileInfo?.birthDate) {
-      return {
-        birthDate: safeFormat({
-          date: new Date(profileInfo?.birthDate),
-          format,
-        }),
-      };
+      return safeFormat({
+        date: new Date(profileInfo?.birthDate),
+        format,
+      });
     }
-    return {
-      birthDate: "",
-    };
+    return "";
   }
 
   return (
@@ -165,7 +162,7 @@ export default function ProfileContainer(): ReactElement {
               />
               <Section.Row
                 label="Data de nascimento"
-                value={handleBirthDate("dd/MM/yyyy").birthDate}
+                value={formatBirthDate("dd/MM/yyyy")}
                 isLoading={isFetching}
                 onEdit={() =>
                   setEditProfileInfoModal({
@@ -174,7 +171,9 @@ export default function ProfileContainer(): ReactElement {
                     content: (
                       <BirthDateForm
                         handleCloseModal={handleCloseEditProfileInfoModal}
-                        defaultValues={handleBirthDate("yyyy-MM-dd")}
+                        defaultValues={{
+                          birthDate: formatBirthDate("yyyy-MM-dd"),
+                        }}
                       />
                     ),
                   })
@@ -182,7 +181,7 @@ export default function ProfileContainer(): ReactElement {
               />
               <Section.Row
                 label="CPF"
-                value={applyMask(profileInfo?.cpf, "CPF")}
+                value={profileInfo?.cpf}
                 isLoading={isFetching}
                 onEdit={() =>
                   setEditProfileInfoModal({
@@ -216,7 +215,7 @@ export default function ProfileContainer(): ReactElement {
               />
               <Section.Row
                 label="Celular"
-                value={applyMask(profileInfo?.cellphone, "CELLPHONE")}
+                value={profileInfo?.cellphone}
                 isLoading={isFetching}
                 onEdit={() =>
                   setEditProfileInfoModal({
