@@ -106,6 +106,7 @@ export function PasswordFormContent({
           }
           onClickIconRight={() => handleShowPassword("newPassword")}
           type={showPassword.newPassword ? "text" : "password"}
+          required
         />
         <Input<PasswordFormInputs>
           label="Confirmar senha"
@@ -119,6 +120,7 @@ export function PasswordFormContent({
           }
           onClickIconRight={() => handleShowPassword("confirmPassword")}
           type={showPassword.confirmPassword ? "text" : "password"}
+          required
         />
       </Modal.Body>
       <Modal.Footer

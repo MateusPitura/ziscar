@@ -19,6 +19,7 @@ interface InputProperties<T extends FieldValues> {
   onClickIconRight?: () => void;
   type?: string;
   maxLength?: number;
+  required?: boolean;
 }
 
 export default function Input<T extends FieldValues>({
@@ -30,6 +31,7 @@ export default function Input<T extends FieldValues>({
   onClickIconRight,
   type = "text",
   maxLength,
+  required,
 }: InputProperties<T>): ReactElement {
   const { register, setValue } = useFormContext();
   const { errors } = useFormState({
@@ -46,7 +48,14 @@ export default function Input<T extends FieldValues>({
 
   return (
     <label className="flex flex-col">
-      <span className="text-body-medium text-light-onSurface p-1">{label}</span>
+      <div>
+        <span className="text-body-medium text-light-onSurface p-1">
+          {label}
+        </span>
+        {required && (
+          <span className="text-light-error text-body-medium">*</span>
+        )}
+      </div>
       <div className="border-light-outline border-2 rounded-md flex items-center px-1 gap-1">
         <input
           {...register(name)}
@@ -55,6 +64,7 @@ export default function Input<T extends FieldValues>({
           placeholder={placeholder}
           type={type}
           maxLength={maxLength}
+          required={required}
         />
         {iconRight && (
           <Button

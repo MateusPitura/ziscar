@@ -63,7 +63,7 @@ function FullNameFormContent({
   return (
     <>
       <Modal.Body>
-        <Input<FullNameFormInputs> name="fullName" label="Nome completo" />
+        <Input<FullNameFormInputs> name="fullName" label="Nome completo" required/>
       </Modal.Body>
       <Modal.Footer
         labelPrimaryBtn="Alterar"

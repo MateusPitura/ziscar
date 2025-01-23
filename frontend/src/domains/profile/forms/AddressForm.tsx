@@ -147,7 +147,13 @@ function AddressFormContent({
           className="flex items-center justify-between gap-1"
           onKeyDown={handleOnSubmitCepField}
         >
-          <Input<AddressFormInputs> label="CEP" name="cep" mask="CEP" maxLength={9}/>
+          <Input<AddressFormInputs>
+            label="CEP"
+            name="cep"
+            mask="CEP"
+            maxLength={9}
+            required
+          />
           <Button
             variant="quaternary"
             label="Preencher automaticamente"
@@ -156,7 +162,7 @@ function AddressFormContent({
             state={isFetching ? "loading" : undefined}
           />
         </div>
-        <Input<AddressFormInputs> label="Número" name="number" />
+        <Input<AddressFormInputs> label="Número" name="number" required />
         <Input<AddressFormInputs> label="Rua" name="street" />
         <Input<AddressFormInputs> label="Bairro" name="neighborhood" />
         <Input<AddressFormInputs> label="Cidade" name="city" />

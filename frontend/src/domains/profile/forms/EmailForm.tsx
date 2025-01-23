@@ -61,7 +61,7 @@ function EmailFormContent({
   return (
     <>
       <Modal.Body>
-        <Input<EmailFormInputs> name="email" label="Email" />
+        <Input<EmailFormInputs> name="email" label="Email" required/>
       </Modal.Body>
       <Modal.Footer
         labelPrimaryBtn="Alterar"
