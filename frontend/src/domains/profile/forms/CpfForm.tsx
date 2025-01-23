@@ -64,7 +64,12 @@ function CpfFormContent({ handleCloseModal, isPending }: CpfFormContentProps) {
   return (
     <>
       <Modal.Body>
-        <Input<CpfFormInputs> name="cpf" label="CPF" mask="CPF" />
+        <Input<CpfFormInputs>
+          name="cpf"
+          label="CPF"
+          mask="CPF"
+          maxLength={14}
+        />
       </Modal.Body>
       <Modal.Footer
         primaryBtnState={primaryBtnState}

@@ -18,6 +18,7 @@ interface InputProperties<T extends FieldValues> {
   iconRight?: ReactElement;
   onClickIconRight?: () => void;
   type?: string;
+  maxLength?: number;
 }
 
 export default function Input<T extends FieldValues>({
@@ -28,6 +29,7 @@ export default function Input<T extends FieldValues>({
   iconRight,
   onClickIconRight,
   type = "text",
+  maxLength,
 }: InputProperties<T>): ReactElement {
   const { register, setValue } = useFormContext();
   const { errors } = useFormState({
@@ -52,6 +54,7 @@ export default function Input<T extends FieldValues>({
           autoComplete="on"
           placeholder={placeholder}
           type={type}
+          maxLength={maxLength}
         />
         {iconRight && (
           <Button

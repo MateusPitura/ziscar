@@ -28,7 +28,7 @@ function Card({ label, value, isLoading }: CardProperties) {
       </Loading>
       <Loading
         isLoading={!!isLoading}
-        className="text-display-medium font-mono line-clamp-1"
+        className="text-display-medium tabular-nums line-clamp-1"
       >
         {value}
       </Loading>

@@ -147,7 +147,7 @@ function AddressFormContent({
           className="flex items-center justify-between gap-1"
           onKeyDown={handleOnSubmitCepField}
         >
-          <Input<AddressFormInputs> label="CEP" name="cep" mask="CEP" />
+          <Input<AddressFormInputs> label="CEP" name="cep" mask="CEP" maxLength={9}/>
           <Button
             variant="quaternary"
             label="Preencher automaticamente"

@@ -69,6 +69,7 @@ function CellphoneFormContent({
           name="cellphone"
           label="Matrícula"
           mask="CELLPHONE"
+          maxLength={15}
         />
       </Modal.Body>
       <Modal.Footer
