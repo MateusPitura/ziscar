@@ -6,12 +6,14 @@ import Modal from "@/design-system/Modal";
 import { useFormContext } from "react-hook-form";
 import { useMemo } from "react";
 import { validateCpf } from "@/domains/global/utils/validateCpf";
+import { removeMask } from "@/domains/global/utils/removeMask";
 
 const SchemaCpfForm = z.object({
   cpf: z
     .string()
     .nonempty({ message: "CPF inválido" })
-    .refine((cpf) => validateCpf(cpf), { message: "CPF inválido" }),
+    .refine((cpf) => validateCpf(cpf), { message: "CPF inválido" })
+    .transform((cpf) => removeMask(cpf, "CPF")),
 });
 
 type CpfFormInputs = z.infer<typeof SchemaCpfForm>;
@@ -52,7 +54,7 @@ interface CpfFormContentProps {
 function CpfFormContent({ handleCloseModal, isPending }: CpfFormContentProps) {
   const {
     formState: { isDirty },
-} = useFormContext();
+  } = useFormContext();
 
   const primaryBtnState = useMemo(() => {
     if (isPending) return "loading";

@@ -4,6 +4,8 @@ export function applyMask(
   value: string | undefined,
   mask: Mask
 ): string | undefined {
+  if (!value) return value;
+
   switch (mask) {
     case "CPF":
       return applyCpfMask(value);
@@ -16,9 +18,7 @@ export function applyMask(
   }
 }
 
-function applyCpfMask(value?: string): string | undefined {
-  if (!value) return value;
-
+function applyCpfMask(value: string): string {
   const digits = value.replace(/\D/g, "");
 
   if (digits.length <= 3) {
@@ -32,9 +32,7 @@ function applyCpfMask(value?: string): string | undefined {
   }
 }
 
-function applyCellphoneMask(value?: string): string | undefined {
-  if (!value) return value;
-
+function applyCellphoneMask(value: string): string {
   const digits = value.replace(/\D/g, "");
 
   if (digits.length === 0) {
@@ -48,7 +46,7 @@ function applyCellphoneMask(value?: string): string | undefined {
   }
 }
 
-function applyCepMask(value?: string): string | undefined {
+function applyCepMask(value: string): string {
   const digits = value?.replace(/\D/g, "");
 
   return digits?.replace(/(\d{5})(\d{1,3}).*/, "$1-$2");

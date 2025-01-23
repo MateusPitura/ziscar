@@ -9,6 +9,7 @@ import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import { useQuery } from "@tanstack/react-query";
 import Button from "@/design-system/Button";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
+import { removeMask } from "@/domains/global/utils/removeMask";
 
 interface ViaCepAddress {
   logradouro?: string;
@@ -19,7 +20,10 @@ interface ViaCepAddress {
 }
 
 const SchemaAddressForm = z.object({
-  cep: z.string().regex(/^\d{5}-?\d{3}$/, "CEP inválido"),
+  cep: z
+    .string()
+    .regex(/^\d{5}-?\d{3}$/, "CEP inválido")
+    .transform((cep) => removeMask(cep, "CEP")),
   street: z.string().nullable(),
   number: z.string().nonempty({ message: "Número inválido" }),
   neighborhood: z.string().nullable(),

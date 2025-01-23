@@ -5,11 +5,13 @@ import { useMemo } from "react";
 import { useFormContext } from "react-hook-form";
 import Modal from "@/design-system/Modal";
 import Input from "@/design-system/Input";
+import { removeMask } from "@/domains/global/utils/removeMask";
 
 const SchemaCellphoneForm = z.object({
   cellphone: z
     .string()
-    .regex(/^\(?\d{2}\)?\s?\d{5}-\d{4}$/, "Celular inválido"),
+    .regex(/^\(?\d{2}\)?\s?\d{5}-\d{4}$/, "Celular inválido")
+    .transform((cellphone) => removeMask(cellphone, "CELLPHONE")),
 });
 
 type CellphoneFormInputs = z.infer<typeof SchemaCellphoneForm>;
