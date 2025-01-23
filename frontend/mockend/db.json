@@ -2,29 +2,41 @@
   "users": [
     {
       "id": "1",
-      "fullName": "Mateus Pitura",
-      "email": "mateus@email.com",
-      "cellphone": "42988884444",
-      "cpf": "11122233344",
-      "code": "22222222",
-      "birthDate": "1970-01-01T00:00:00Z",
+      "fullName": "Mateus Mateus",
+      "email": "mateus@email.co",
+      "cellphone": "00000000000",
+      "code": "1111111111",
+      "password": "232321212121212121212aA!",
+      "birthDate": "2025-01-03T00:00:00.000Z",
       "address": {
-        "street": "Rua dos Bobos",
-        "number": "0"
-      }
+        "cep": "01153000",
+        "street": "Rua Vitorino Carmilo",
+        "number": "111",
+        "neighborhood": "Barra Funda",
+        "city": "São Paulo",
+        "state": "SP",
+        "complement": "Casa"
+      },
+      "cpf": "19222424034"
     },
     {
       "id": "2",
       "fullName": "João Silva",
       "email": "joao@email.com",
-      "cellphone": "41999995555",
-      "cpf": "55566677788",
+      "cellphone": "11111111111",
+      "cpf": "42644376017",
       "code": "33333333",
-      "birthDate": "2004-02-19T00:00:00Z",
+      "birthDate": "2025-01-22T00:00:00.000Z",
       "address": {
-        "street": "Avenida Brasil",
-        "number": "123"
-      }
+        "cep": "05407002",
+        "street": null,
+        "number": "123",
+        "neighborhood": null,
+        "city": null,
+        "state": null,
+        "complement": null
+      },
+      "password": "1111111111111a1A!"
     }
   ]
 }
