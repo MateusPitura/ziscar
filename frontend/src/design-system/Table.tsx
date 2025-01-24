@@ -11,8 +11,8 @@ interface TableProps {
 
 function Table({ children }: TableProps): ReactElement {
   return (
-    <div className="overflow-x-auto flex flex-1 bg-green-500">
-      <div className="min-w-[50rem] bg-blue-500 w-full">{children}</div>
+    <div className="overflow-x-auto flex flex-1">
+      <div className="min-w-[50rem] w-full flex flex-col">{children}</div>
     </div>
   );
 }
@@ -26,7 +26,7 @@ function Row({ children, className }: HeaderProps) {
   return (
     <div
       className={classNames(
-        "p-4 grid grid-cols-12 gap-2 bg-light-surfaceContainerLowest h-[72px] items-center border-b-2 border-neutral-300 last:border-none",
+        "p-4 grid grid-cols-12 gap-2 bg-light-surfaceContainerLowest h-[72px] items-center border-b border-neutral-300",
         className
       )}
     >
@@ -87,7 +87,9 @@ interface BodyProps {
 }
 
 function Body({ children }: BodyProps) {
-  return <div className="bg-yellow-500 h-[calc(100%-72px-72px)]">{children}</div>;
+  return (
+    <div className="flex-1 bg-light-surfaceContainerLowest overflow-y-auto">{children}</div>
+  );
 }
 
 interface FooterProps {

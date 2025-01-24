@@ -35,7 +35,7 @@ export default function UsersContainer(): ReactElement {
   });
 
   return (
-    <div className="flex flex-col gap-4 h-full bg-red-500">
+    <div className="flex flex-col gap-4 h-full">
       <PageHeader
         title="Usuários"
         primaryButtonLabel="Adicionar usuário"
@@ -47,7 +47,6 @@ export default function UsersContainer(): ReactElement {
           <DashBoard.Card key={item.id} label={item.label} value={item.value} />
         ))}
       </DashBoard>
-      
       <Table>
         <Table.Header>
           <Table.Head label="ID" />
