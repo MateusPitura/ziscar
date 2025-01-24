@@ -57,7 +57,7 @@ export default function UsersContainer(): ReactElement {
           <Table.Head label="Email" />
           <Table.Head label="Celular" />
           <Table.Head label="Status" />
-          <Table.Head label="Categoria" />
+          <Table.Head />
         </Table.Header>
         <Table.Body
           isLoading={isFetchingUsersInfo}
@@ -70,7 +70,7 @@ export default function UsersContainer(): ReactElement {
               <Table.Cell label={user.email} />
               <Table.Cell label={user.cellphone} />
               <Table.Cell label={user.isActive ? "Ativo" : "Inativo"} />
-              <Table.Cell label={user.category} />
+              <Table.Action />
             </Table.Row>
           ))}
         </Table.Body>

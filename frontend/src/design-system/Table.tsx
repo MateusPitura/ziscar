@@ -6,6 +6,7 @@ import NavigateNextOutlinedIcon from "@mui/icons-material/NavigateNextOutlined";
 import NavigateBeforeOutlinedIcon from "@mui/icons-material/NavigateBeforeOutlined";
 import LoadingSpinner from "@/domains/global/components/LoadingSpinner";
 import FilterListIcon from "@mui/icons-material/FilterList";
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 interface TableProps {
   children: ReactNode;
@@ -28,7 +29,7 @@ function Row({ children, className }: HeaderProps) {
   return (
     <div
       className={classNames(
-        "p-4 grid grid-cols-12 gap-2 bg-light-surfaceContainerLowest h-[72px] items-center border-b border-neutral-300",
+        "p-4 grid grid-cols-10 gap-2 bg-light-surfaceContainerLowest h-[72px] items-center border-b border-neutral-300",
         className
       )}
     >
@@ -55,21 +56,41 @@ function Header({ children, className }: HeaderProps) {
   );
 }
 
-interface CellProps {
+interface ActionProps {
   label?: string;
   className?: string;
 }
 
-function Cell({ label, className }: CellProps) {
+function Cell({ label, className }: ActionProps) {
   return (
     <span
       className={classNames(
-        "text-light-onTertiaryContainer text-body-medium flex-1 col-span-2 overflow-x-hidden",
+        "text-light-onTertiaryContainer text-body-medium col-span-2 overflow-x-hidden first:col-span-1 last:col-span-1",
         className
       )}
     >
       {label}
     </span>
+  );
+}
+
+interface ActionProps {
+  className?: string;
+}
+
+function Action({ className }: ActionProps) {
+  return (
+    <div
+      className={classNames(
+        "col-span-1 overflow-x-hidden",
+        className
+      )}
+    >
+      <Button
+        variant="tertiary"
+        iconRight={<MoreHorizIcon />}
+      />
+    </div>
   );
 }
 
@@ -214,7 +235,7 @@ function Filter({ onFilterCallback, filterBtnState }: FilterProps) {
   );
 }
 
-Object.assign(Table, { Row, Cell, Header, Head, Body, Footer, Filter });
+Object.assign(Table, { Row, Cell, Header, Head, Body, Footer, Filter, Action });
 
 type TableType = typeof Table & {
   Row: typeof Row;
@@ -224,6 +245,7 @@ type TableType = typeof Table & {
   Body: typeof Body;
   Footer: typeof Footer;
   Filter: typeof Filter;
+  Action: typeof Action;
 };
 
 export default Table as TableType;
