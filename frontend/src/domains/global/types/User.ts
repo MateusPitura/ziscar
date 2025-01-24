@@ -11,4 +11,6 @@ export interface User {
   code?: string;
   birthDate?: string;
   address?: Address;
+  isActive?: boolean;
+  category?: string;
 }

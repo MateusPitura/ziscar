@@ -7,6 +7,8 @@ import { useQuery } from "@tanstack/react-query";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import { baseUrl } from "@/domains/global/constants/requests";
 import { DashBoard as DashBoardProps } from "@/domains/global/types/DashBoard";
+import Table from "@/design-system/Table";
+import { User } from "@/domains/global/types/User";
 
 export default function UsersContainer(): ReactElement {
   const navigate = useNavigate();
@@ -23,12 +25,21 @@ export default function UsersContainer(): ReactElement {
       queryFn: getDashBoardInfo,
     });
 
+  async function getUsersInfo(): Promise<User[]> {
+    return await safeFetch({ path: `${baseUrl}/users` });
+  }
+
+  const { data: usersInfo, isFetching: isFetchingUsersInfo } = useQuery({
+    queryKey: ["users"],
+    queryFn: getUsersInfo,
+  });
+
   return (
-    <div>
+    <div className="flex flex-col gap-4 h-full bg-red-500">
       <PageHeader
         title="Usuários"
         primaryButtonLabel="Adicionar usuário"
-        onClickPrimaryBtn={() => navigate("/users/create")}
+        onClickPrimaryBtn={() => navigate("/users/new")}
         primaryBtnIconRigth={<PersonAddOutlinedIcon />}
       />
       <DashBoard isLoading={isFetchingDatashBoardInfo}>
@@ -36,6 +47,30 @@ export default function UsersContainer(): ReactElement {
           <DashBoard.Card key={item.id} label={item.label} value={item.value} />
         ))}
       </DashBoard>
+      
+      <Table>
+        <Table.Header>
+          <Table.Head label="ID" />
+          <Table.Head label="Nome" />
+          <Table.Head label="Email" />
+          <Table.Head label="Celular" />
+          <Table.Head label="Status" />
+          <Table.Head label="Categoria" />
+        </Table.Header>
+        <Table.Body>
+          {usersInfo?.map((user) => (
+            <Table.Row>
+              <Table.Cell label={user.id} />
+              <Table.Cell label={user.fullName} />
+              <Table.Cell label={user.email} />
+              <Table.Cell label={user.cellphone} />
+              <Table.Cell label={user.isActive ? "Ativo" : "Inativo"} />
+              <Table.Cell label={user.category} />
+            </Table.Row>
+          ))}
+        </Table.Body>
+        <Table.Footer />
+      </Table>
     </div>
   );
 }

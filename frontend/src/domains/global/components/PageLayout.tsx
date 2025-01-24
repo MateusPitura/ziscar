@@ -20,7 +20,7 @@ export default function PageLayout({
       <PageTopBar onToggleSideMenu={handleToggleSideMenu} />
       <div className="flex flex-1 overflow-hidden">
         <PageSideBar isOpen={isSideMenuOpen} />
-        <div className="bg-light-surface h-full p-4 rounded-tl-md w-full overflow-y-auto">
+        <div className="bg-light-surface p-4 rounded-tl-md w-full overflow-y-auto">
           {children}
         </div>
       </div>
