@@ -9,6 +9,7 @@ import { baseUrl } from "@/domains/global/constants/requests";
 import { DashBoard as DashBoardProps } from "@/domains/global/types/DashBoard";
 import Table from "@/design-system/Table";
 import { User } from "@/domains/global/types/User";
+import selectUsersInfo from "../utils/selectUsersInfo";
 
 export default function UsersContainer(): ReactElement {
   const navigate = useNavigate();
@@ -32,6 +33,7 @@ export default function UsersContainer(): ReactElement {
   const { data: usersInfo, isFetching: isFetchingUsersInfo } = useQuery({
     queryKey: ["users"],
     queryFn: getUsersInfo,
+    select: selectUsersInfo,
   });
 
   return (
@@ -48,6 +50,7 @@ export default function UsersContainer(): ReactElement {
         ))}
       </DashBoard>
       <Table>
+        <Table.Filter onFilterCallback={() => {}} />
         <Table.Header>
           <Table.Head label="ID" />
           <Table.Head label="Nome" />
@@ -56,7 +59,10 @@ export default function UsersContainer(): ReactElement {
           <Table.Head label="Status" />
           <Table.Head label="Categoria" />
         </Table.Header>
-        <Table.Body>
+        <Table.Body
+          isLoading={isFetchingUsersInfo}
+          isEmpty={!usersInfo?.length}
+        >
           {usersInfo?.map((user) => (
             <Table.Row>
               <Table.Cell label={user.id} />

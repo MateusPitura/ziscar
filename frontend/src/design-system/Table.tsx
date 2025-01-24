@@ -1,9 +1,11 @@
 import classNames from "classnames";
-import type { ReactElement, ReactNode } from "react";
+import type { ComponentProps, ReactElement, ReactNode } from "react";
 import Button from "./Button";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import NavigateNextOutlinedIcon from "@mui/icons-material/NavigateNextOutlined";
 import NavigateBeforeOutlinedIcon from "@mui/icons-material/NavigateBeforeOutlined";
+import LoadingSpinner from "@/domains/global/components/LoadingSpinner";
+import FilterListIcon from "@mui/icons-material/FilterList";
 
 interface TableProps {
   children: ReactNode;
@@ -84,19 +86,61 @@ function Head({ label, className }: HeadProps) {
 
 interface BodyProps {
   children: ReactNode;
+  isEmpty?: boolean;
+  isLoading?: boolean;
 }
 
-function Body({ children }: BodyProps) {
+function Body({ children, isEmpty, isLoading }: BodyProps) {
+  if (isLoading || isEmpty) {
+    return (
+      <div className="flex-1 bg-light-surfaceContainerLowest overflow-y-auto flex items-center justify-center">
+        {isLoading ? (
+          <LoadingSpinner />
+        ) : (
+          <span className="text-light-onSurface text-body-medium">
+            Nenhum item encontrado
+          </span>
+        )}
+      </div>
+    );
+  }
+
   return (
-    <div className="flex-1 bg-light-surfaceContainerLowest overflow-y-auto">{children}</div>
+    <div className="flex-1 bg-light-surfaceContainerLowest overflow-y-auto">
+      {children}
+    </div>
   );
 }
 
 interface FooterProps {
   className?: string;
+  onExportSpreadSheetCallback?: () => void;
+  exportSpreadSheetBtnState?: ComponentProps<typeof Button>["state"];
+  onExportPdfCallback?: () => void;
+  exportPdfBtnState?: ComponentProps<typeof Button>["state"];
+  onNavigateBeforeCallback?: () => void;
+  navBeforeBtnState?: ComponentProps<typeof Button>["state"];
+  onNavigateNextCallback?: () => void;
+  navNextBtnState?: ComponentProps<typeof Button>["state"];
+  currentStartItem?: number;
+  totalItems?: number;
+  itemsPerPage?: number;
 }
 
-function Footer({ className }: FooterProps) {
+function Footer({
+  className,
+  currentStartItem,
+  itemsPerPage,
+  onExportPdfCallback,
+  onExportSpreadSheetCallback,
+  onNavigateBeforeCallback,
+  onNavigateNextCallback,
+  totalItems,
+  exportPdfBtnState,
+  exportSpreadSheetBtnState,
+  navBeforeBtnState,
+  navNextBtnState,
+}: FooterProps) {
   return (
     <Row
       className={classNames(
@@ -105,29 +149,72 @@ function Footer({ className }: FooterProps) {
       )}
     >
       <div className="col-span-12 flex items-center gap-4 justify-end">
-        <Button
-          variant="quaternary"
-          label="Exportar como planilha"
-          iconRight={<FileDownloadOutlinedIcon />}
-        />
-        <Button
-          variant="quaternary"
-          label="Exportar como PDF"
-          iconRight={<FileDownloadOutlinedIcon />}
-        />
+        {onExportSpreadSheetCallback && (
+          <Button
+            variant="quaternary"
+            label="Exportar como planilha"
+            iconRight={<FileDownloadOutlinedIcon />}
+            onClick={onExportSpreadSheetCallback}
+            state={exportSpreadSheetBtnState}
+          />
+        )}
+        {onExportPdfCallback && (
+          <Button
+            variant="quaternary"
+            label="Exportar como PDF"
+            iconRight={<FileDownloadOutlinedIcon />}
+            onClick={onExportPdfCallback}
+            state={exportPdfBtnState}
+          />
+        )}
         <div>
           <span className="text-light-onTertiaryContainer text-body-large">
-            1-10 de 100
+            {currentStartItem && `${currentStartItem}`}
+            {itemsPerPage && `-${itemsPerPage}`}
+            {totalItems && ` de ${totalItems}`}
           </span>
         </div>
-        <Button variant="tertiary" iconLeft={<NavigateBeforeOutlinedIcon />} />
-        <Button variant="tertiary" iconLeft={<NavigateNextOutlinedIcon />} />
+        {onNavigateBeforeCallback && (
+          <Button
+            variant="tertiary"
+            iconLeft={<NavigateBeforeOutlinedIcon />}
+            onClick={onNavigateBeforeCallback}
+            state={navBeforeBtnState}
+          />
+        )}
+        {onNavigateNextCallback && (
+          <Button
+            variant="tertiary"
+            iconLeft={<NavigateNextOutlinedIcon />}
+            onClick={onNavigateNextCallback}
+            state={navNextBtnState}
+          />
+        )}
       </div>
     </Row>
   );
 }
 
-Object.assign(Table, { Row, Cell, Header, Head, Body, Footer });
+interface FilterProps {
+  onFilterCallback: () => void;
+  filterBtnState?: ComponentProps<typeof Button>["state"];
+}
+
+function Filter({ onFilterCallback, filterBtnState }: FilterProps) {
+  return (
+    <div className="mb-4 flex justify-end">
+      <Button
+        variant="secondary"
+        label="Filtros"
+        iconRight={<FilterListIcon />}
+        onClick={onFilterCallback}
+        state={filterBtnState}
+      />
+    </div>
+  );
+}
+
+Object.assign(Table, { Row, Cell, Header, Head, Body, Footer, Filter });
 
 type TableType = typeof Table & {
   Row: typeof Row;
@@ -136,6 +223,7 @@ type TableType = typeof Table & {
   Head: typeof Head;
   Body: typeof Body;
   Footer: typeof Footer;
+  Filter: typeof Filter;
 };
 
 export default Table as TableType;
