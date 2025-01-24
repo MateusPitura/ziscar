@@ -12,6 +12,7 @@ import NavigateBeforeOutlinedIcon from "@mui/icons-material/NavigateBeforeOutlin
 import LoadingSpinner from "@/domains/global/components/LoadingSpinner";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import { Popover } from "./Popover";
 
 interface ContainerProps {
   children: ReactNode;
@@ -104,9 +105,10 @@ function Cell({ label, className, colSpan }: CellProps) {
 interface ActionProps {
   className?: string;
   colSpan?: number;
+  children: ReactNode;
 }
 
-function Action({ className, colSpan = 1 }: ActionProps) {
+function Action({ className, colSpan = 1, children }: ActionProps) {
   return (
     <div
       className={classNames("overflow-x-hidden flex justify-end", className)}
@@ -114,7 +116,14 @@ function Action({ className, colSpan = 1 }: ActionProps) {
         gridColumn: `span ${colSpan} / span ${colSpan}`,
       }}
     >
-      <Button variant="tertiary" iconRight={<MoreHorizIcon />} />
+      <Popover>
+        <Popover.Trigger>
+          <Button variant="tertiary" iconRight={<MoreHorizIcon />} />
+        </Popover.Trigger>
+        <Popover.Content align="end">
+          {children}
+        </Popover.Content>
+      </Popover>
     </div>
   );
 }

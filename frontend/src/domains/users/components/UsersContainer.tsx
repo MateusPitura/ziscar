@@ -10,6 +10,7 @@ import { DashBoard as DashBoardProps } from "@/domains/global/types/DashBoard";
 import Table from "@/design-system/Table";
 import { User } from "@/domains/global/types/User";
 import selectUsersInfo from "../utils/selectUsersInfo";
+import Button from "@/design-system/Button";
 
 export default function UsersContainer(): ReactElement {
   const navigate = useNavigate();
@@ -70,7 +71,20 @@ export default function UsersContainer(): ReactElement {
               <Table.Cell label={user.email} />
               <Table.Cell label={user.cellphone} />
               <Table.Cell label={user.isActive ? "Ativo" : "Inativo"} />
-              <Table.Action />
+              <Table.Action>
+                <Button
+                  variant="tertiary"
+                  fullWidth
+                  label="Editar"
+                  onClick={() => navigate(`/users/${user.id}`)}
+                />
+                <Button
+                  variant="tertiary"
+                  fullWidth
+                  label="Excluir"
+                  onClick={() => navigate(`/users/${user.id}`)}
+                />
+              </Table.Action>
             </Table.Row>
           ))}
         </Table.Body>

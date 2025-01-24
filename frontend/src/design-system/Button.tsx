@@ -1,7 +1,7 @@
 import classNames from "classnames";
-import { ReactNode } from "react";
+import { forwardRef, ReactNode } from "react";
 
-interface BaseButtonProps {
+interface PrimitiveButtonProps {
   state?: "active" | "disabled" | "red" | "loading";
   className?: string;
   label?: string;
@@ -14,18 +14,21 @@ interface BaseButtonProps {
   type?: "submit" | "button";
 }
 
-function BaseButton({
-  state = undefined,
-  fullWidth = false,
-  textAlign = "start",
-  padding = "default",
-  type = "button",
-  className,
-  label,
-  iconLeft,
-  iconRight,
-  ...props
-}: BaseButtonProps) {
+function PrimitiveButton(
+  {
+    state = undefined,
+    fullWidth = false,
+    textAlign = "start",
+    padding = "default",
+    type = "button",
+    className,
+    label,
+    iconLeft,
+    iconRight,
+    ...props
+  }: PrimitiveButtonProps,
+  ref: React.Ref<HTMLButtonElement>
+) {
   return (
     <button
       className={classNames(
@@ -41,6 +44,7 @@ function BaseButton({
       )}
       disabled={state === "disabled" || state === "loading"}
       type={type}
+      ref={ref}
       {...props}
     >
       {iconLeft && <div className="flex flex-1 justify-center">{iconLeft}</div>}
@@ -62,31 +66,33 @@ function BaseButton({
   );
 }
 
-interface ButtonProps extends Omit<BaseButtonProps, "className"> {
-  variant: "primary" | "secondary" | "tertiary" | "quaternary";
+const BaseButtonWithRef = forwardRef(PrimitiveButton);
+
+interface BaseButtonProps extends Omit<PrimitiveButtonProps, "className"> {
+  variant?: "primary" | "secondary" | "tertiary" | "quaternary";
 }
 
-export default function Button({
-  variant = "primary",
-  state = undefined,
-  ...props
-}: ButtonProps) {
+function BaseButton(
+  { variant = "primary", state = undefined, ...props }: BaseButtonProps,
+  ref: React.Ref<HTMLButtonElement>
+) {
   switch (variant) {
     case "primary":
       return (
-        <BaseButton
+        <BaseButtonWithRef
           className={classNames("bg-light-primary text-light-onPrimary", {
             "bg-light-secondary": state === "active",
             "!bg-light-error": state === "red",
             "!bg-neutral-300": state === "disabled" || state === "loading",
           })}
           state={state}
+          ref={ref}
           {...props}
         />
       );
     case "secondary":
       return (
-        <BaseButton
+        <BaseButtonWithRef
           className={classNames(
             "border-light-primary border-2 text-light-primary",
             {
@@ -97,32 +103,39 @@ export default function Button({
             }
           )}
           state={state}
+          ref={ref}
           {...props}
         />
       );
     case "tertiary":
       return (
-        <BaseButton
+        <BaseButtonWithRef
           className={classNames("text-light-onSurface", {
             "text-light-primary": state === "active",
             "!text-light-error": state === "red",
             "text-neutral-300": state === "disabled" || state === "loading",
           })}
           state={state}
+          ref={ref}
           {...props}
         />
       );
     case "quaternary":
       return (
-        <BaseButton
+        <BaseButtonWithRef
           className={classNames("text-light-primary", {
             "bg-light-primaryContainer": state === "active",
             "!text-light-error": state === "red",
             "text-neutral-300": state === "disabled" || state === "loading",
           })}
           state={state}
+          ref={ref}
           {...props}
         />
       );
   }
 }
+
+const Button = forwardRef(BaseButton);
+
+export default Button;
