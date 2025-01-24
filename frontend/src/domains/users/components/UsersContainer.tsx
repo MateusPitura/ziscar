@@ -1,5 +1,5 @@
 import PageHeader from "@/domains/global/components/PageHeader";
-import type { ReactElement } from "react";
+import { useState, type ReactElement } from "react";
 import PersonAddOutlinedIcon from "@mui/icons-material/PersonAddOutlined";
 import { useNavigate } from "react-router-dom";
 import DashBoard from "./DashBoard";
@@ -11,8 +11,29 @@ import Table from "@/design-system/Table";
 import { User } from "@/domains/global/types/User";
 import selectUsersInfo from "../utils/selectUsersInfo";
 import Button from "@/design-system/Button";
+import DisableUserModal from "./DisableUserModal";
+
+interface DisableUserInfoModalProps {
+  open: boolean;
+  userName: string;
+  userId: string;
+}
 
 export default function UsersContainer(): ReactElement {
+  const [disableUserInfoModal, setDisableUserInfoModal] =
+    useState<DisableUserInfoModalProps>({
+      open: false,
+      userName: "",
+      userId: "",
+    });
+
+  function handleCloseDisableUserInfoModal() {
+    setDisableUserInfoModal((prev) => ({
+      ...prev,
+      open: false,
+    }));
+  }
+
   const navigate = useNavigate();
 
   const { safeFetch } = useSafeFetch();
@@ -38,66 +59,83 @@ export default function UsersContainer(): ReactElement {
   });
 
   return (
-    <div className="flex flex-col gap-4 h-full">
-      <PageHeader
-        title="Usuários"
-        primaryButtonLabel="Adicionar usuário"
-        onClickPrimaryBtn={() => navigate("/users/new")}
-        primaryBtnIconRigth={<PersonAddOutlinedIcon />}
+    <>
+      <DisableUserModal
+        {...disableUserInfoModal}
+        onClose={handleCloseDisableUserInfoModal}
       />
-      <DashBoard isLoading={isFetchingDatashBoardInfo}>
-        {dashBoardInfo?.map((item) => (
-          <DashBoard.Card key={item.id} label={item.label} value={item.value} />
-        ))}
-      </DashBoard>
-      <Table>
-        <Table.Filter onFilterCallback={() => {}} />
-        <Table.Header>
-          <Table.Head label="ID" />
-          <Table.Head label="Nome" />
-          <Table.Head label="Email" />
-          <Table.Head label="Celular" />
-          <Table.Head label="Status" />
-          <Table.Head action />
-        </Table.Header>
-        <Table.Body
-          isLoading={isFetchingUsersInfo}
-          isEmpty={!usersInfo?.length}
-        >
-          {usersInfo?.map((user) => (
-            <Table.Row key={user.id}>
-              <Table.Cell label={user.id} />
-              <Table.Cell label={user.fullName} />
-              <Table.Cell label={user.email} />
-              <Table.Cell label={user.cellphone} />
-              <Table.Cell label={user.isActive ? "Ativo" : "Inativo"} />
-              <Table.Action>
-                <Button
-                  variant="tertiary"
-                  fullWidth
-                  label="Editar"
-                  onClick={() => navigate(`/users/${user.id}`)}
-                />
-                <Button
-                  variant="tertiary"
-                  fullWidth
-                  label="Excluir"
-                  onClick={() => navigate(`/users/${user.id}`)}
-                />
-              </Table.Action>
-            </Table.Row>
-          ))}
-        </Table.Body>
-        <Table.Footer
-          currentStartItem={1}
-          itemsCurrentPage={10}
-          totalItems={usersInfo?.length}
-          onNavigateBeforeCallback={() => {}}
-          onNavigateNextCallback={() => {}}
-          onExportPdfCallback={() => {}}
-          onExportSpreadSheetCallback={() => {}}
+      <div className="flex flex-col gap-4 h-full">
+        <PageHeader
+          title="Usuários"
+          primaryButtonLabel="Adicionar usuário"
+          onClickPrimaryBtn={() => navigate("/users/new")}
+          primaryBtnIconRigth={<PersonAddOutlinedIcon />}
         />
-      </Table>
-    </div>
+        <DashBoard isLoading={isFetchingDatashBoardInfo}>
+          {dashBoardInfo?.map((item) => (
+            <DashBoard.Card
+              key={item.id}
+              label={item.label}
+              value={item.value}
+            />
+          ))}
+        </DashBoard>
+        <Table>
+          <Table.Filter onFilterCallback={() => {}} />
+          <Table.Header>
+            <Table.Head label="ID" />
+            <Table.Head label="Nome" />
+            <Table.Head label="Email" />
+            <Table.Head label="Celular" />
+            <Table.Head label="Status" />
+            <Table.Head action />
+          </Table.Header>
+          <Table.Body
+            isLoading={isFetchingUsersInfo}
+            isEmpty={!usersInfo?.length}
+          >
+            {usersInfo?.map((user) => (
+              <Table.Row key={user.id}>
+                <Table.Cell label={user.id} />
+                <Table.Cell label={user.fullName} />
+                <Table.Cell label={user.email} />
+                <Table.Cell label={user.cellphone} />
+                <Table.Cell label={user.isActive ? "Ativo" : "Inativo"} />
+                <Table.Action>
+                  <Button
+                    variant="tertiary"
+                    fullWidth
+                    label="Editar"
+                    onClick={() => navigate(`/users/${user.id}`)}
+                  />
+                  <Button
+                    variant="tertiary"
+                    fullWidth
+                    label="Desativar"
+                    onClick={() =>
+                      setDisableUserInfoModal((prev) => ({
+                        ...prev,
+                        open: true,
+                        userName: user.fullName,
+                        userId: user.id,
+                      }))
+                    }
+                  />
+                </Table.Action>
+              </Table.Row>
+            ))}
+          </Table.Body>
+          <Table.Footer
+            currentStartItem={1}
+            itemsCurrentPage={10}
+            totalItems={usersInfo?.length}
+            onNavigateBeforeCallback={() => {}}
+            onNavigateNextCallback={() => {}}
+            onExportPdfCallback={() => {}}
+            onExportSpreadSheetCallback={() => {}}
+          />
+        </Table>
+      </div>
+    </>
   );
 }
