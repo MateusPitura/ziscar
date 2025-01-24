@@ -12,7 +12,7 @@ interface TableProps {
 function Table({ children }: TableProps): ReactElement {
   return (
     <div className="overflow-x-auto flex flex-1 bg-green-500">
-      <div className="min-w-[50rem] bg-blue-500">{children}</div>
+      <div className="min-w-[50rem] bg-blue-500 w-full">{children}</div>
     </div>
   );
 }
