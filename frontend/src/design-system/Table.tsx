@@ -1,18 +1,23 @@
 import classNames from "classnames";
-import type { ComponentProps, ReactElement, ReactNode } from "react";
+import {
+  Children,
+  type ComponentProps,
+  type ReactElement,
+  type ReactNode,
+} from "react";
 import Button from "./Button";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import NavigateNextOutlinedIcon from "@mui/icons-material/NavigateNextOutlined";
 import NavigateBeforeOutlinedIcon from "@mui/icons-material/NavigateBeforeOutlined";
 import LoadingSpinner from "@/domains/global/components/LoadingSpinner";
 import FilterListIcon from "@mui/icons-material/FilterList";
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
-interface TableProps {
+interface ContainerProps {
   children: ReactNode;
 }
 
-function Table({ children }: TableProps): ReactElement {
+function Container({ children }: ContainerProps): ReactElement {
   return (
     <div className="overflow-x-auto flex flex-1">
       <div className="min-w-[50rem] w-full flex flex-col">{children}</div>
@@ -23,15 +28,26 @@ function Table({ children }: TableProps): ReactElement {
 interface HeaderProps {
   children: ReactNode;
   className?: string;
+  gridColumns?: number | "auto" | "default";
 }
 
-function Row({ children, className }: HeaderProps) {
+function Row({ children, className, gridColumns = "default" }: HeaderProps) {
+  let gridColumnsCount = gridColumns;
+  if (gridColumns === "default") {
+    gridColumnsCount = 10;
+  } else if (gridColumns === "auto") {
+    gridColumnsCount = (Children.count(children) - 2) * 2 + 2;
+  }
+
   return (
     <div
       className={classNames(
-        "p-4 grid grid-cols-10 gap-2 bg-light-surfaceContainerLowest h-[72px] items-center border-b border-neutral-300",
+        "p-4 grid gap-2 bg-light-surfaceContainerLowest h-[72px] items-center border-b border-neutral-300",
         className
       )}
+      style={{
+        gridTemplateColumns: `repeat(${gridColumnsCount}, minmax(0, 1fr))`,
+      }}
     >
       {children}
     </div>
@@ -41,33 +57,44 @@ function Row({ children, className }: HeaderProps) {
 interface HeaderProps {
   children: ReactNode;
   className?: string;
+  gridColumns?: HeaderProps["gridColumns"];
 }
 
-function Header({ children, className }: HeaderProps) {
+function Header({ children, className, gridColumns }: HeaderProps) {
   return (
     <Row
       className={classNames(
         "bg-light-tertiaryContainer rounded-t-md border-none",
         className
       )}
+      gridColumns={gridColumns}
     >
       {children}
     </Row>
   );
 }
 
-interface ActionProps {
+interface CellProps {
   label?: string;
   className?: string;
+  colSpan?: number;
 }
 
-function Cell({ label, className }: ActionProps) {
+function Cell({ label, className, colSpan }: CellProps) {
+  const colSpanAux = colSpan ?? 2;
+
   return (
     <span
       className={classNames(
-        "text-light-onTertiaryContainer text-body-medium col-span-2 overflow-x-hidden first:col-span-1 last:col-span-1",
-        className
+        "text-light-onTertiaryContainer text-body-medium overflow-x-hidden",
+        className,
+        {
+          "first:!col-span-1": !colSpan,
+        }
       )}
+      style={{
+        gridColumn: `span ${colSpanAux} / span ${colSpanAux}`,
+      }}
     >
       {label}
     </span>
@@ -76,20 +103,18 @@ function Cell({ label, className }: ActionProps) {
 
 interface ActionProps {
   className?: string;
+  colSpan?: number;
 }
 
-function Action({ className }: ActionProps) {
+function Action({ className, colSpan = 1 }: ActionProps) {
   return (
     <div
-      className={classNames(
-        "col-span-1 overflow-x-hidden",
-        className
-      )}
+      className={classNames("overflow-x-hidden flex justify-end", className)}
+      style={{
+        gridColumn: `span ${colSpan} / span ${colSpan}`,
+      }}
     >
-      <Button
-        variant="tertiary"
-        iconRight={<MoreHorizIcon />}
-      />
+      <Button variant="tertiary" iconRight={<MoreHorizIcon />} />
     </div>
   );
 }
@@ -97,11 +122,19 @@ function Action({ className }: ActionProps) {
 interface HeadProps {
   label?: string;
   className?: string;
+  action?: boolean;
+  colSpan?: CellProps["colSpan"];
 }
 
-function Head({ label, className }: HeadProps) {
+function Head({ label, className, action = false, colSpan }: HeadProps) {
   return (
-    <Cell className={classNames("!text-body-large", className)} label={label} />
+    <Cell
+      className={classNames("!text-body-large", className, {
+        "!col-span-1": action,
+      })}
+      label={label}
+      colSpan={colSpan}
+    />
   );
 }
 
@@ -145,13 +178,13 @@ interface FooterProps {
   navNextBtnState?: ComponentProps<typeof Button>["state"];
   currentStartItem?: number;
   totalItems?: number;
-  itemsPerPage?: number;
+  itemsCurrentPage?: number;
 }
 
 function Footer({
   className,
   currentStartItem,
-  itemsPerPage,
+  itemsCurrentPage,
   onExportPdfCallback,
   onExportSpreadSheetCallback,
   onNavigateBeforeCallback,
@@ -165,53 +198,52 @@ function Footer({
   return (
     <Row
       className={classNames(
-        "bg-light-tertiaryContainer rounded-b-md border-none",
+        "bg-light-tertiaryContainer rounded-b-md border-none !flex items-center gap-4 justify-end",
         className
       )}
+      gridColumns={1}
     >
-      <div className="col-span-12 flex items-center gap-4 justify-end">
-        {onExportSpreadSheetCallback && (
-          <Button
-            variant="quaternary"
-            label="Exportar como planilha"
-            iconRight={<FileDownloadOutlinedIcon />}
-            onClick={onExportSpreadSheetCallback}
-            state={exportSpreadSheetBtnState}
-          />
-        )}
-        {onExportPdfCallback && (
-          <Button
-            variant="quaternary"
-            label="Exportar como PDF"
-            iconRight={<FileDownloadOutlinedIcon />}
-            onClick={onExportPdfCallback}
-            state={exportPdfBtnState}
-          />
-        )}
-        <div>
-          <span className="text-light-onTertiaryContainer text-body-large">
-            {currentStartItem && `${currentStartItem}`}
-            {itemsPerPage && `-${itemsPerPage}`}
-            {totalItems && ` de ${totalItems}`}
-          </span>
-        </div>
-        {onNavigateBeforeCallback && (
-          <Button
-            variant="tertiary"
-            iconLeft={<NavigateBeforeOutlinedIcon />}
-            onClick={onNavigateBeforeCallback}
-            state={navBeforeBtnState}
-          />
-        )}
-        {onNavigateNextCallback && (
-          <Button
-            variant="tertiary"
-            iconLeft={<NavigateNextOutlinedIcon />}
-            onClick={onNavigateNextCallback}
-            state={navNextBtnState}
-          />
-        )}
+      {onExportSpreadSheetCallback && (
+        <Button
+          variant="quaternary"
+          label="Exportar como planilha"
+          iconRight={<FileDownloadOutlinedIcon />}
+          onClick={onExportSpreadSheetCallback}
+          state={exportSpreadSheetBtnState}
+        />
+      )}
+      {onExportPdfCallback && (
+        <Button
+          variant="quaternary"
+          label="Exportar como PDF"
+          iconRight={<FileDownloadOutlinedIcon />}
+          onClick={onExportPdfCallback}
+          state={exportPdfBtnState}
+        />
+      )}
+      <div>
+        <span className="text-light-onTertiaryContainer text-body-large">
+          {currentStartItem && `${currentStartItem}`}
+          {itemsCurrentPage && `-${itemsCurrentPage}`}
+          {totalItems && ` de ${totalItems}`}
+        </span>
       </div>
+      {onNavigateBeforeCallback && (
+        <Button
+          variant="tertiary"
+          iconLeft={<NavigateBeforeOutlinedIcon />}
+          onClick={onNavigateBeforeCallback}
+          state={navBeforeBtnState}
+        />
+      )}
+      {onNavigateNextCallback && (
+        <Button
+          variant="tertiary"
+          iconLeft={<NavigateNextOutlinedIcon />}
+          onClick={onNavigateNextCallback}
+          state={navNextBtnState}
+        />
+      )}
     </Row>
   );
 }
@@ -235,17 +267,15 @@ function Filter({ onFilterCallback, filterBtnState }: FilterProps) {
   );
 }
 
-Object.assign(Table, { Row, Cell, Header, Head, Body, Footer, Filter, Action });
+const Table = Object.assign(Container, {
+  Row,
+  Cell,
+  Header,
+  Head,
+  Body,
+  Footer,
+  Filter,
+  Action,
+});
 
-type TableType = typeof Table & {
-  Row: typeof Row;
-  Cell: typeof Cell;
-  Header: typeof Header;
-  Head: typeof Head;
-  Body: typeof Body;
-  Footer: typeof Footer;
-  Filter: typeof Filter;
-  Action: typeof Action;
-};
-
-export default Table as TableType;
+export default Table;

@@ -57,14 +57,14 @@ export default function UsersContainer(): ReactElement {
           <Table.Head label="Email" />
           <Table.Head label="Celular" />
           <Table.Head label="Status" />
-          <Table.Head />
+          <Table.Head action />
         </Table.Header>
         <Table.Body
           isLoading={isFetchingUsersInfo}
           isEmpty={!usersInfo?.length}
         >
           {usersInfo?.map((user) => (
-            <Table.Row>
+            <Table.Row key={user.id}>
               <Table.Cell label={user.id} />
               <Table.Cell label={user.fullName} />
               <Table.Cell label={user.email} />
@@ -74,7 +74,15 @@ export default function UsersContainer(): ReactElement {
             </Table.Row>
           ))}
         </Table.Body>
-        <Table.Footer />
+        <Table.Footer
+          currentStartItem={1}
+          itemsCurrentPage={10}
+          totalItems={usersInfo?.length}
+          onNavigateBeforeCallback={() => {}}
+          onNavigateNextCallback={() => {}}
+          onExportPdfCallback={() => {}}
+          onExportSpreadSheetCallback={() => {}}
+        />
       </Table>
     </div>
   );

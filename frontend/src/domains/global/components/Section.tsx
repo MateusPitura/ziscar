@@ -3,11 +3,11 @@ import { type ReactNode } from "react";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import Loading from "@/design-system/Loading";
 
-interface SectionProps {
+interface ContainerProps {
   children: ReactNode;
 }
 
-function Section({ children }: SectionProps) {
+function Container({ children }: ContainerProps) {
   return <div className="flex flex-col gap-4 w-[56rem]">{children}</div>;
 }
 
@@ -78,13 +78,6 @@ function Row({ label, value, onEdit, isLoading = false }: SectionRowProps) {
   );
 }
 
-Object.assign(Section, { Title, Group, Header, Row });
+const Section = Object.assign(Container, { Title, Group, Header, Row });
 
-type SectionType = typeof Section & {
-  Title: typeof Title;
-  Group: typeof Group;
-  Header: typeof Header;
-  Row: typeof Row;
-};
-
-export default Section as SectionType;
+export default Section;

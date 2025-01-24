@@ -10,13 +10,13 @@ import {
 import Button from "./Button";
 import CloseIcon from "@mui/icons-material/Close";
 
-interface ModalProps {
+interface ContainerProps {
   open: boolean;
   onClose: () => void;
   children: ReactNode;
 }
 
-function Modal({ open, onClose, children }: ModalProps): ReactElement {
+function Container({ open, onClose, children }: ContainerProps): ReactElement {
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="bg-light-surfaceContainerLowest [&>button]:hidden p-0 gap-0">
@@ -89,12 +89,6 @@ function Footer({
   );
 }
 
-Object.assign(Modal, { Header, Body, Footer });
+const Modal = Object.assign(Container, { Header, Body, Footer });
 
-type ModalType = typeof Modal & {
-  Header: typeof Header;
-  Body: typeof Body;
-  Footer: typeof Footer;
-};
-
-export default Modal as ModalType;
+export default Modal;
