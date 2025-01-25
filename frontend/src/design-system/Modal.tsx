@@ -4,11 +4,9 @@ import {
   DialogContent,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
-  DialogDescription,
+  DialogTitle
 } from "@/components/ui/dialog";
 import Button from "./Button";
-import CloseIcon from "@mui/icons-material/Close";
 
 interface ContainerProps {
   open: boolean;
@@ -19,7 +17,7 @@ interface ContainerProps {
 function Container({ open, onClose, children }: ContainerProps): ReactElement {
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="bg-light-surfaceContainerLowest [&>button]:hidden p-0 gap-0">
+      <DialogContent className="bg-light-surfaceContainerLowest p-0 gap-0">
         {children}
       </DialogContent>
     </Dialog>
@@ -27,23 +25,15 @@ function Container({ open, onClose, children }: ContainerProps): ReactElement {
 }
 
 interface HeaderProps {
-  onClose: () => void;
   title: string;
 }
 
-function Header({ onClose, title }: HeaderProps): ReactElement {
+function Header({ title }: HeaderProps): ReactElement {
   return (
     <DialogHeader className="flex gap-2 flex-row items-center px-6 pt-6 pb-2">
       <DialogTitle className="flex-1">
         <span className="text-light-onSurface text-title-large">{title}</span>
       </DialogTitle>
-      <DialogDescription />
-      <Button
-        variant="tertiary"
-        onClick={onClose}
-        iconLeft={<CloseIcon />}
-        padding="none"
-      />
     </DialogHeader>
   );
 }

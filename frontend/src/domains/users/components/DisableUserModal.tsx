@@ -43,7 +43,7 @@ export default function DisableUserModal({
 
   return (
     <Modal open={open} onClose={onClose}>
-      <Modal.Header title="Desativar usuário" onClose={onClose} />
+      <Modal.Header title="Desativar usuário" />
       <Modal.Body>
         <span className="text-body-medium text-light-onSurface">
           Tem certeza que deseja desativar o usuário

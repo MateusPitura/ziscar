@@ -4,6 +4,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import classNames from "classnames";
 
 interface ContainerProps {
   children: ReactNode;
@@ -19,11 +20,19 @@ interface ContentProps {
   sideOffset?: number;
   align?: "start" | "center" | "end";
   alignOffset?: number;
+  className?: string;
 }
 
-function Content({ children, ...props }: ContentProps): ReactElement {
+function Content({
+  children,
+  className,
+  ...props
+}: ContentProps): ReactElement {
   return (
-    <PopoverContent className="bg-light-surface" {...props}>
+    <PopoverContent
+      className={classNames("bg-light-surface", className)}
+      {...props}
+    >
       {children}
     </PopoverContent>
   );

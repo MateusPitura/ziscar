@@ -77,10 +77,7 @@ export default function ProfileContainer(): ReactElement {
         open={editProfileInfoModal.open}
         onClose={handleCloseEditProfileInfoModal}
       >
-        <Modal.Header
-          title={editProfileInfoModal.title}
-          onClose={handleCloseEditProfileInfoModal}
-        />
+        <Modal.Header title={editProfileInfoModal.title} />
         {editProfileInfoModal.content}
       </Modal>
       <div className="flex flex-col gap-4">

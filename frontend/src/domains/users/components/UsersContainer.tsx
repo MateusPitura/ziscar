@@ -80,8 +80,11 @@ export default function UsersContainer(): ReactElement {
             />
           ))}
         </DashBoard>
+        <Table.Filter
+          onFilterCallback={() => {}}
+          formComponent={<div>Teste</div>}
+        />
         <Table>
-          <Table.Filter onFilterCallback={() => {}} />
           <Table.Header>
             <Table.Head label="ID" />
             <Table.Head label="Nome" />

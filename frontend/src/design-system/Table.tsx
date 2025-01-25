@@ -1,6 +1,7 @@
 import classNames from "classnames";
 import {
   Children,
+  useState,
   type ComponentProps,
   type ReactElement,
   type ReactNode,
@@ -13,6 +14,7 @@ import LoadingSpinner from "@/domains/global/components/LoadingSpinner";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { Popover } from "./Popover";
+import SideSheet from "./SideSheet";
 
 interface ContainerProps {
   children: ReactNode;
@@ -120,9 +122,7 @@ function Action({ className, colSpan = 1, children }: ActionProps) {
         <Popover.Trigger>
           <Button variant="tertiary" iconRight={<MoreHorizIcon />} />
         </Popover.Trigger>
-        <Popover.Content align="end">
-          {children}
-        </Popover.Content>
+        <Popover.Content align="end" className="w-fit">{children}</Popover.Content>
       </Popover>
     </div>
   );
@@ -260,18 +260,39 @@ function Footer({
 interface FilterProps {
   onFilterCallback: () => void;
   filterBtnState?: ComponentProps<typeof Button>["state"];
+  formComponent: ReactNode;
 }
 
-function Filter({ onFilterCallback, filterBtnState }: FilterProps) {
+function Filter({
+  onFilterCallback,
+  filterBtnState,
+  formComponent,
+}: FilterProps) {
+  const [open, setOpen] = useState(false);
+
   return (
-    <div className="mb-4 flex justify-end">
-      <Button
-        variant="secondary"
-        label="Filtros"
-        iconRight={<FilterListIcon />}
-        onClick={onFilterCallback}
-        state={filterBtnState}
-      />
+    <div className="flex justify-end">
+      <SideSheet open={open} onOpenChange={setOpen}>
+        <SideSheet.Trigger>
+          <Button
+            variant="secondary"
+            label="Filtros"
+            iconRight={<FilterListIcon />}
+            onClick={onFilterCallback}
+            state={filterBtnState}
+          />
+        </SideSheet.Trigger>
+        <SideSheet.Content>
+          <SideSheet.Header label="Filtros" />
+          <SideSheet.Body>{formComponent}</SideSheet.Body>
+          <SideSheet.Footer
+            primaryLabel="Aplicar"
+            secondaryLabel="Limpar"
+            onSecondaryCallback={() => setOpen(false)}
+            onPrimaryCallback={() => setOpen(false)}
+          />
+        </SideSheet.Content>
+      </SideSheet>
     </div>
   );
 }
