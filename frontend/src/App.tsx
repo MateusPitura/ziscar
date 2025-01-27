@@ -6,6 +6,7 @@ import SuspensePage from "./domains/global/components/SuspensePage";
 import Snackbar from "./design-system/Snackbar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import GlobalErrorBoundary from "./ErrorBoundary";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -21,32 +22,32 @@ export default function App() {
   return (
     <>
       <Snackbar />
-      <HashRouter>
-        <GlobalProvider>
-          <QueryClientProvider client={queryClient}>
-            <PageLayout>
+      <GlobalErrorBoundary>
+        <HashRouter>
+          <GlobalProvider>
+            <QueryClientProvider client={queryClient}>
               <Routes>
                 <Route element={<PageLayout />}>
-                {routes.map((group) =>
-                  group.routes.map((route) => (
-                    <Route
-                      key={route.path}
-                      path={route.path}
-                      element={
-                        <SuspensePage key={route.path}>
-                          {route.entryPage}
-                        </SuspensePage>
-                      }
-                    />
-                  ))
-                )}
+                  {routes.map((group) =>
+                    group.routes.map((route) => (
+                      <Route
+                        key={route.path}
+                        path={route.path}
+                        element={
+                          <SuspensePage key={route.path}>
+                            {route.entryPage}
+                          </SuspensePage>
+                        }
+                      />
+                    ))
+                  )}
                 </Route>
               </Routes>
-            </PageLayout>
-            <ReactQueryDevtools />
-          </QueryClientProvider>
-        </GlobalProvider>
-      </HashRouter>
+              <ReactQueryDevtools />
+            </QueryClientProvider>
+          </GlobalProvider>
+        </HashRouter>
+      </GlobalErrorBoundary>
     </>
   );
 }
