@@ -4,7 +4,8 @@ import {
   DialogContent,
   DialogFooter,
   DialogHeader,
-  DialogTitle
+  DialogTitle,
+  DialogDescription
 } from "@/components/ui/dialog";
 import Button from "./Button";
 
@@ -34,6 +35,8 @@ function Header({ title }: HeaderProps): ReactElement {
       <DialogTitle className="flex-1">
         <span className="text-light-onSurface text-title-large">{title}</span>
       </DialogTitle>
+      {/* DialogDescription corrige warning de acessibilidade */}
+      <DialogDescription/>
     </DialogHeader>
   );
 }

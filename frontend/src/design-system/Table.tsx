@@ -122,7 +122,9 @@ function Action({ className, colSpan = 1, children }: ActionProps) {
         <Popover.Trigger>
           <Button variant="tertiary" iconRight={<MoreHorizIcon />} />
         </Popover.Trigger>
-        <Popover.Content align="end" className="w-fit">{children}</Popover.Content>
+        <Popover.Content align="end" className="w-fit">
+          {children}
+        </Popover.Content>
       </Popover>
     </div>
   );

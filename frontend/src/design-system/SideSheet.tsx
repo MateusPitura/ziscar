@@ -8,6 +8,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import Button from "./Button";
+import classNames from "classnames";
 
 interface ContainerProps {
   children: ReactNode;
@@ -63,10 +64,15 @@ function Header({ label }: HeaderProps): ReactElement {
 
 interface BodyProps {
   children: ReactNode;
+  className?: string;
 }
 
-function Body({ children }: BodyProps): ReactElement {
-  return <div className="px-6 flex-1 overflow-y-auto">{children}</div>;
+function Body({ children, className }: BodyProps): ReactElement {
+  return (
+    <div className={classNames("px-6 flex-1 overflow-y-auto", className)}>
+      {children}
+    </div>
+  );
 }
 
 interface FooterProps {
@@ -74,6 +80,7 @@ interface FooterProps {
   secondaryLabel: string;
   onSecondaryCallback: () => void;
   onPrimaryCallback: () => void;
+  className?: string;
 }
 
 function Footer({
@@ -81,10 +88,16 @@ function Footer({
   secondaryLabel,
   onPrimaryCallback,
   onSecondaryCallback,
+  className,
 }: FooterProps): ReactElement {
   return (
-    <div className="p-6 border-t border-neutral-300 flex">
-      <Button label={primaryLabel} onClick={onPrimaryCallback} />
+    <div
+      className={classNames(
+        "p-6 border-t border-neutral-300 flex flex-0",
+        className
+      )}
+    >
+      <Button label={primaryLabel} onClick={onPrimaryCallback} type="submit"/>
       <Button
         label={secondaryLabel}
         variant="quaternary"
