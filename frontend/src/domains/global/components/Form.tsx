@@ -14,6 +14,7 @@ interface FormProperties<T extends FieldValues> {
   onSubmit: (data: T) => void;
   defaultValues?: DefaultValues<T>;
   schema: ZodType;
+  className?: string;
 }
 
 export default function Form<T extends FieldValues>({
@@ -21,6 +22,7 @@ export default function Form<T extends FieldValues>({
   onSubmit,
   defaultValues,
   schema,
+  className,
 }: FormProperties<T>): ReactElement {
   const safeDefaultValues = useMemo(() => {
     /**
@@ -60,7 +62,11 @@ export default function Form<T extends FieldValues>({
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(safeOnSubmit)} noValidate>
+      <form
+        onSubmit={methods.handleSubmit(safeOnSubmit)}
+        noValidate
+        className={className}
+      >
         {children}
       </form>
     </FormProvider>

@@ -1,14 +1,9 @@
-import { useState, type ReactElement, type ReactNode } from "react";
+import { useState, type ReactElement } from "react";
 import PageTopBar from "./PageTopBar";
 import PageSideBar from "./PageSideBar";
+import { Outlet } from "react-router-dom";
 
-interface PageLayoutProps {
-  children: ReactNode;
-}
-
-export default function PageLayout({
-  children,
-}: PageLayoutProps): ReactElement {
+export default function PageLayout(): ReactElement {
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(true);
 
   function handleToggleSideMenu() {
@@ -21,7 +16,7 @@ export default function PageLayout({
       <div className="flex flex-1 overflow-hidden">
         <PageSideBar isOpen={isSideMenuOpen} />
         <div className="bg-light-surface p-4 rounded-tl-md w-full overflow-y-auto">
-          {children}
+          <Outlet />
         </div>
       </div>
     </div>

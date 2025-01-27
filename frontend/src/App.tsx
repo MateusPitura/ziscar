@@ -26,6 +26,7 @@ export default function App() {
           <QueryClientProvider client={queryClient}>
             <PageLayout>
               <Routes>
+                <Route element={<PageLayout />}>
                 {routes.map((group) =>
                   group.routes.map((route) => (
                     <Route
@@ -39,6 +40,7 @@ export default function App() {
                     />
                   ))
                 )}
+                </Route>
               </Routes>
             </PageLayout>
             <ReactQueryDevtools />
