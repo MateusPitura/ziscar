@@ -1,11 +1,9 @@
 import classNames from "classnames";
 import {
-  Children,
-  type ComponentProps,
-  type ReactElement,
-  type ReactNode,
+  Children, type ReactElement,
+  type ReactNode
 } from "react";
-import Button from "./Button";
+import Button, { ButtonState } from "./Button";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import NavigateNextOutlinedIcon from "@mui/icons-material/NavigateNextOutlined";
 import NavigateBeforeOutlinedIcon from "@mui/icons-material/NavigateBeforeOutlined";
@@ -168,13 +166,13 @@ function Body({ children, isEmpty, isLoading }: BodyProps) {
 interface FooterProps {
   className?: string;
   onExportSpreadSheetCallback?: () => void;
-  exportSpreadSheetBtnState?: ComponentProps<typeof Button>["state"];
+  exportSpreadSheetBtnState?: ButtonState;
   onExportPdfCallback?: () => void;
-  exportPdfBtnState?: ComponentProps<typeof Button>["state"];
+  exportPdfBtnState?: ButtonState;
   onNavigateBeforeCallback?: () => void;
-  navBeforeBtnState?: ComponentProps<typeof Button>["state"];
+  navBeforeBtnState?: ButtonState;
   onNavigateNextCallback?: () => void;
-  navNextBtnState?: ComponentProps<typeof Button>["state"];
+  navNextBtnState?: ButtonState;
   currentStartItem?: number;
   totalItems?: number;
   itemsCurrentPage?: number;
@@ -249,7 +247,7 @@ function Footer({
 
 interface FilterProps {
   onFilterCallback?: () => void;
-  filterBtnState?: ComponentProps<typeof Button>["state"];
+  filterBtnState?: ButtonState;
   formComponent: ReactNode;
 }
 

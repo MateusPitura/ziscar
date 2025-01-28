@@ -1,4 +1,4 @@
-import type { ComponentProps, ReactElement } from "react";
+import type { ReactElement } from "react";
 import {
   Dialog,
   DialogContent,
@@ -7,7 +7,7 @@ import {
   DialogTitle,
   DialogDescription
 } from "@/components/ui/dialog";
-import Button from "./Button";
+import Button, { ButtonState } from "./Button";
 import { Childrenable } from "@/domains/global/types/Components";
 
 interface ContainerProps extends Childrenable {
@@ -50,7 +50,7 @@ interface FooterProps {
   labelPrimaryBtn: string;
   onClickSecondaryBtn?: () => void;
   labelSecondaryBtn: string;
-  primaryBtnState: ComponentProps<typeof Button>["state"];
+  primaryBtnState: ButtonState;
 }
 
 function Footer({

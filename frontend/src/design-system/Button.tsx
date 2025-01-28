@@ -1,8 +1,10 @@
 import classNames from "classnames";
 import { forwardRef, ReactNode } from "react";
 
+export type ButtonState = "active" | "disabled" | "red" | "loading";
+
 interface PrimitiveButtonProps {
-  state?: "active" | "disabled" | "red" | "loading";
+  state?: ButtonState;
   className?: string;
   label?: string;
   onClick?: () => void;
