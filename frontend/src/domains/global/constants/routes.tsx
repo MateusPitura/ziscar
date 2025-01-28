@@ -22,6 +22,7 @@ const Vehicles = lazy(
   () => import("@/domains/vehicles/components/VehiclesPage")
 );
 const Users = lazy(() => import("@/domains/users/components/UsersPage"));
+const NewUsers = lazy(() => import("@/domains/users/components/NewUsersPage"));
 const Profile = lazy(() => import("@/domains/profile/components/ProfilePage"));
 const Branches = lazy(
   () => import("@/domains/branches/components/BranchesPage")
@@ -39,6 +40,11 @@ export const routes: RouteGroup[] = [
         icon: <PersonOutlinedIcon />,
         entryPage: <Users />,
         shouldDisplay: true,
+      },
+      {
+        path: "/users/new",
+        entryPage: <NewUsers />,
+        shouldDisplay: false,
       },
       {
         path: "/vehicles",
