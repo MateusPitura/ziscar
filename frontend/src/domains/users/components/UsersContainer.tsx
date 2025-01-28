@@ -12,6 +12,7 @@ import { User } from "@/domains/global/types/User";
 import selectUsersInfo from "../utils/selectUsersInfo";
 import Button from "@/design-system/Button";
 import DisableUserModal from "./DisableUserModal";
+import FilterUsersForm from "../forms/FilterUsersForm";
 
 interface DisableUserInfoModalProps {
   open: boolean;
@@ -80,10 +81,7 @@ export default function UsersContainer(): ReactElement {
             />
           ))}
         </DashBoard>
-        <Table.Filter
-          onFilterCallback={() => {}}
-          formComponent={<div>Teste</div>}
-        />
+        <Table.Filter formComponent={<FilterUsersForm />} />
         <Table>
           <Table.Header>
             <Table.Head label="ID" />

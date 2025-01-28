@@ -1,7 +1,6 @@
 import classNames from "classnames";
 import {
   Children,
-  useState,
   type ComponentProps,
   type ReactElement,
   type ReactNode,
@@ -15,6 +14,8 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { Popover } from "./Popover";
 import SideSheet from "./SideSheet";
+import { CustomFormProvider } from "@/domains/global/contexts/CustomFormContext";
+import useCustomFormContext from "@/domains/global/hooks/useCustomFormContext";
 
 interface ContainerProps {
   children: ReactNode;
@@ -260,22 +261,32 @@ function Footer({
 }
 
 interface FilterProps {
-  onFilterCallback: () => void;
+  onFilterCallback?: () => void;
   filterBtnState?: ComponentProps<typeof Button>["state"];
   formComponent: ReactNode;
 }
 
-function Filter({
+function Filter(props: FilterProps) {
+  return (
+    <CustomFormProvider>
+      <FilterContent {...props} />
+    </CustomFormProvider>
+  );
+}
+
+type FilterContentProps = FilterProps;
+
+function FilterContent({
   onFilterCallback,
   filterBtnState,
   formComponent,
-}: FilterProps) {
-  const [open, setOpen] = useState(false);
+}: FilterContentProps) {
+  const { open, setOpen } = useCustomFormContext();
 
   return (
-    <div className="flex justify-end">
-      <SideSheet open={open} onOpenChange={setOpen}>
-        <SideSheet.Trigger>
+    <SideSheet open={open} onOpenChange={setOpen}>
+      <SideSheet.Trigger>
+        <div className="flex justify-end">
           <Button
             variant="secondary"
             label="Filtros"
@@ -283,19 +294,13 @@ function Filter({
             onClick={onFilterCallback}
             state={filterBtnState}
           />
-        </SideSheet.Trigger>
-        <SideSheet.Content>
-          <SideSheet.Header label="Filtros" />
-          <SideSheet.Body>{formComponent}</SideSheet.Body>
-          <SideSheet.Footer
-            primaryLabel="Aplicar"
-            secondaryLabel="Limpar"
-            onSecondaryCallback={() => setOpen(false)}
-            onPrimaryCallback={() => setOpen(false)}
-          />
-        </SideSheet.Content>
-      </SideSheet>
-    </div>
+        </div>
+      </SideSheet.Trigger>
+      <SideSheet.Content>
+        <SideSheet.Header label="Filtros" />
+        {formComponent}
+      </SideSheet.Content>
+    </SideSheet>
   );
 }
 

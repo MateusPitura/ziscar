@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/sheet";
 import Button from "./Button";
 import classNames from "classnames";
+import { DialogDescription } from "@/components/ui/dialog";
 
 interface ContainerProps {
   children: ReactNode;
@@ -24,6 +25,8 @@ function Container({
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       {children}
+      {/* DialogDescription corrige warning de acessibilidade */}
+      <DialogDescription/>
     </Sheet>
   );
 }
