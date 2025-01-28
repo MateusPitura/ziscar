@@ -1,4 +1,4 @@
-import { Route, Routes, HashRouter } from "react-router-dom";
+import { Route, Routes, BrowserRouter } from "react-router-dom";
 import { routes } from "@/domains/global/constants/routes";
 import PageLayout from "@/domains/global/components/PageLayout";
 import { GlobalProvider } from "./domains/global/contexts/GlobalContext";
@@ -23,7 +23,7 @@ export default function App() {
     <>
       <Snackbar />
       <GlobalErrorBoundary>
-        <HashRouter>
+        <BrowserRouter>
           <GlobalProvider>
             <QueryClientProvider client={queryClient}>
               <Routes>
@@ -46,7 +46,7 @@ export default function App() {
               <ReactQueryDevtools />
             </QueryClientProvider>
           </GlobalProvider>
-        </HashRouter>
+        </BrowserRouter>
       </GlobalErrorBoundary>
     </>
   );
