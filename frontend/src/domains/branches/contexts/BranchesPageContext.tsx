@@ -1,4 +1,5 @@
-import { createContext, ReactNode, useMemo, useState } from "react";
+import { Childrenable } from "@/domains/global/types/Components";
+import { createContext, useMemo, useState } from "react";
 
 interface BranchesPageContextValues {
   example: string;
@@ -9,11 +10,7 @@ const BranchesPageContext = createContext<BranchesPageContextValues | null>(
   null
 );
 
-interface BranchesPageProviderProps {
-  children: ReactNode;
-}
-
-function BranchesPageProvider({ children }: BranchesPageProviderProps) {
+function BranchesPageProvider({ children }: Childrenable) {
   const [example, setExample] = useState("");
 
   function handleExample(value: string) {

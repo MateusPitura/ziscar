@@ -1,4 +1,4 @@
-import type { ReactElement, ReactNode } from "react";
+import type { ReactElement } from "react";
 
 import {
   Sheet,
@@ -10,9 +10,9 @@ import {
 import Button from "./Button";
 import classNames from "classnames";
 import { DialogDescription } from "@/components/ui/dialog";
+import { Childrenable } from "@/domains/global/types/Components";
 
-interface ContainerProps {
-  children: ReactNode;
+interface ContainerProps extends Childrenable {
   open?: boolean;
   onOpenChange?: (state: boolean) => void;
 }
@@ -31,19 +31,11 @@ function Container({
   );
 }
 
-interface TriggerProps {
-  children: ReactNode;
-}
-
-function Trigger({ children }: TriggerProps): ReactElement {
+function Trigger({ children }: Childrenable): ReactElement {
   return <SheetTrigger asChild>{children}</SheetTrigger>;
 }
 
-interface ContentProps {
-  children: ReactNode;
-}
-
-function Content({ children }: ContentProps): ReactElement {
+function Content({ children }: Childrenable): ReactElement {
   return (
     <SheetContent className="bg-light-surfaceContainerLowest rounded-tl-md flex flex-col p-0 gap-0 justify-between">
       {children}
@@ -65,8 +57,7 @@ function Header({ label }: HeaderProps): ReactElement {
   );
 }
 
-interface BodyProps {
-  children: ReactNode;
+interface BodyProps extends Childrenable {
   className?: string;
 }
 

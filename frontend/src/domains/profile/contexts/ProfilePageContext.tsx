@@ -1,4 +1,5 @@
-import { createContext, ReactNode, useMemo, useState } from "react";
+import { Childrenable } from "@/domains/global/types/Components";
+import { createContext, useMemo, useState } from "react";
 
 interface ProfilePageContextValues {
   example: string;
@@ -7,11 +8,7 @@ interface ProfilePageContextValues {
 
 const ProfilePageContext = createContext<ProfilePageContextValues | null>(null);
 
-interface ProfilePageProviderProps {
-  children: ReactNode;
-}
-
-function ProfilePageProvider({ children }: ProfilePageProviderProps) {
+function ProfilePageProvider({ children }: Childrenable) {
   const [example, setExample] = useState("");
 
   function handleExample(value: string) {

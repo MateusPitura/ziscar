@@ -1,8 +1,5 @@
-import React, { ErrorInfo, ReactNode } from "react";
-
-interface GlobalErrorBoundaryProps {
-  children: ReactNode;
-}
+import React, { ErrorInfo } from "react";
+import { Childrenable } from "./domains/global/types/Components";
 
 interface GlobalErrorBoundaryState {
   hasError: boolean;
@@ -10,10 +7,10 @@ interface GlobalErrorBoundaryState {
 }
 
 class GlobalErrorBoundary extends React.Component<
-  GlobalErrorBoundaryProps,
+  Childrenable,
   GlobalErrorBoundaryState
 > {
-  constructor(props: GlobalErrorBoundaryProps) {
+  constructor(props: Childrenable) {
     super(props);
     this.state = { hasError: false, error: null };
   }
@@ -30,7 +27,7 @@ class GlobalErrorBoundary extends React.Component<
     if (this.state.hasError) {
       return (
         // TODO: customizar mensagem de erro
-        <div> 
+        <div>
           <h1>Something went wrong.</h1>
           <p>{this.state.error?.message}</p>
         </div>

@@ -1,4 +1,4 @@
-import type { ComponentProps, ReactElement, ReactNode } from "react";
+import type { ComponentProps, ReactElement } from "react";
 import {
   Dialog,
   DialogContent,
@@ -8,11 +8,11 @@ import {
   DialogDescription
 } from "@/components/ui/dialog";
 import Button from "./Button";
+import { Childrenable } from "@/domains/global/types/Components";
 
-interface ContainerProps {
+interface ContainerProps extends Childrenable {
   open: boolean;
   onClose: () => void;
-  children: ReactNode;
 }
 
 function Container({ open, onClose, children }: ContainerProps): ReactElement {
@@ -41,11 +41,7 @@ function Header({ title }: HeaderProps): ReactElement {
   );
 }
 
-interface BodyProps {
-  children: ReactNode;
-}
-
-function Body({ children }: BodyProps): ReactElement {
+function Body({ children }: Childrenable): ReactElement {
   return <div className="px-6 py-2">{children}</div>;
 }
 

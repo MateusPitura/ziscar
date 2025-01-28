@@ -1,4 +1,5 @@
-import { createContext, ReactNode, useMemo, useState } from "react";
+import { Childrenable } from "@/domains/global/types/Components";
+import { createContext, useMemo, useState } from "react";
 
 interface UsersPageContextValues {
   example: string;
@@ -7,11 +8,7 @@ interface UsersPageContextValues {
 
 const UsersPageContext = createContext<UsersPageContextValues | null>(null);
 
-interface UsersPageProviderProps {
-  children: ReactNode;
-}
-
-function UsersPageProvider({ children }: UsersPageProviderProps) {
+function UsersPageProvider({ children }: Childrenable) {
   const [example, setExample] = useState("");
 
   function handleExample(value: string) {

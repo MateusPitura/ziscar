@@ -1,21 +1,17 @@
-import type { ReactElement, ReactNode } from "react";
+import type { ReactElement } from "react";
 import {
   Popover as PopoverShadcn,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
 import classNames from "classnames";
+import { Childrenable } from "@/domains/global/types/Components";
 
-interface ContainerProps {
-  children: ReactNode;
-}
-
-function Container({ children }: ContainerProps): ReactElement {
+function Container({ children }: Childrenable): ReactElement {
   return <PopoverShadcn>{children}</PopoverShadcn>;
 }
 
-interface ContentProps {
-  children: ReactNode;
+interface ContentProps extends Childrenable {
   side?: "top" | "right" | "bottom" | "left";
   sideOffset?: number;
   align?: "start" | "center" | "end";
@@ -38,11 +34,7 @@ function Content({
   );
 }
 
-interface TriggerProps {
-  children: ReactNode;
-}
-
-function Trigger({ children }: TriggerProps): ReactElement {
+function Trigger({ children }: Childrenable): ReactElement {
   return <PopoverTrigger asChild>{children}</PopoverTrigger>;
 }
 

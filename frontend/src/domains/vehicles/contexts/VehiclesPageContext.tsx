@@ -1,4 +1,5 @@
-import { createContext, ReactNode, useMemo, useState } from "react";
+import { Childrenable } from "@/domains/global/types/Components";
+import { createContext, useMemo, useState } from "react";
 
 interface VehiclesPageContextValues {
   example: string;
@@ -7,11 +8,7 @@ interface VehiclesPageContextValues {
 
 const VehiclesPageContext = createContext<VehiclesPageContextValues | null>(null);
 
-interface VehiclesPageProviderProps {
-  children: ReactNode;
-}
-
-function VehiclesPageProvider({ children }: VehiclesPageProviderProps) {
+function VehiclesPageProvider({ children }: Childrenable ) {
   const [example, setExample] = useState("");
 
   function handleExample(value: string) {

@@ -1,4 +1,4 @@
-import { useCallback, useMemo, type ReactElement, type ReactNode } from "react";
+import { useCallback, useMemo, type ReactElement } from "react";
 import {
   DefaultValues,
   FieldValues,
@@ -8,9 +8,9 @@ import {
 } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ZodObject, ZodType } from "zod";
+import { Childrenable } from "../types/Components";
 
-interface FormProperties<T extends FieldValues> {
-  children: ReactNode;
+interface FormProperties<T extends FieldValues> extends Childrenable {
   onSubmit: (data: T) => void;
   defaultValues?: DefaultValues<T>;
   schema: ZodType;

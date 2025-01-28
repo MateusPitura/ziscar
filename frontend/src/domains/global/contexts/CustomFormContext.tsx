@@ -1,4 +1,5 @@
-import { createContext, ReactNode, useMemo, useState } from "react";
+import { createContext, useMemo, useState } from "react";
+import { Childrenable } from "../types/Components";
 
 interface CustomFormContextProps {
   open: boolean;
@@ -7,11 +8,7 @@ interface CustomFormContextProps {
 
 const CustomFormContext = createContext<CustomFormContextProps | null>(null);
 
-interface CustomFormProviderProps {
-  children: ReactNode;
-}
-
-function CustomFormProvider({ children }: CustomFormProviderProps) {
+function CustomFormProvider({ children }: Childrenable) {
   const [open, setOpen] = useState(false);
 
   const valuesMemoized = useMemo(

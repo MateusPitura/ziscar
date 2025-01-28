@@ -16,12 +16,9 @@ import { Popover } from "./Popover";
 import SideSheet from "./SideSheet";
 import { CustomFormProvider } from "@/domains/global/contexts/CustomFormContext";
 import useCustomFormContext from "@/domains/global/hooks/useCustomFormContext";
+import { Childrenable } from "@/domains/global/types/Components";
 
-interface ContainerProps {
-  children: ReactNode;
-}
-
-function Container({ children }: ContainerProps): ReactElement {
+function Container({ children }: Childrenable): ReactElement {
   return (
     <div className="overflow-x-auto flex flex-1">
       <div className="min-w-[50rem] w-full flex flex-col">{children}</div>
@@ -29,13 +26,12 @@ function Container({ children }: ContainerProps): ReactElement {
   );
 }
 
-interface HeaderProps {
-  children: ReactNode;
+interface RowProps extends Childrenable {
   className?: string;
   gridColumns?: number | "auto" | "default";
 }
 
-function Row({ children, className, gridColumns = "default" }: HeaderProps) {
+function Row({ children, className, gridColumns = "default" }: RowProps) {
   let gridColumnsCount = gridColumns;
   if (gridColumns === "default") {
     gridColumnsCount = 10;
@@ -58,11 +54,7 @@ function Row({ children, className, gridColumns = "default" }: HeaderProps) {
   );
 }
 
-interface HeaderProps {
-  children: ReactNode;
-  className?: string;
-  gridColumns?: HeaderProps["gridColumns"];
-}
+type HeaderProps = RowProps;
 
 function Header({ children, className, gridColumns }: HeaderProps) {
   return (
@@ -79,9 +71,9 @@ function Header({ children, className, gridColumns }: HeaderProps) {
 }
 
 interface CellProps {
-  label?: string;
   className?: string;
   colSpan?: number;
+  label?: string;
 }
 
 function Cell({ label, className, colSpan }: CellProps) {
@@ -105,10 +97,9 @@ function Cell({ label, className, colSpan }: CellProps) {
   );
 }
 
-interface ActionProps {
+interface ActionProps extends Childrenable {
   className?: string;
   colSpan?: number;
-  children: ReactNode;
 }
 
 function Action({ className, colSpan = 1, children }: ActionProps) {
@@ -131,11 +122,8 @@ function Action({ className, colSpan = 1, children }: ActionProps) {
   );
 }
 
-interface HeadProps {
-  label?: string;
-  className?: string;
+interface HeadProps extends CellProps {
   action?: boolean;
-  colSpan?: CellProps["colSpan"];
 }
 
 function Head({ label, className, action = false, colSpan }: HeadProps) {
@@ -150,8 +138,7 @@ function Head({ label, className, action = false, colSpan }: HeadProps) {
   );
 }
 
-interface BodyProps {
-  children: ReactNode;
+interface BodyProps extends Childrenable {
   isEmpty?: boolean;
   isLoading?: boolean;
 }

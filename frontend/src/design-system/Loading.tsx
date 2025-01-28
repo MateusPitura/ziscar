@@ -1,12 +1,9 @@
-import {
-    type ReactElement,
-    type ReactNode
-} from "react";
+import { type ReactElement } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import classNames from "classnames";
+import { Childrenable } from "@/domains/global/types/Components";
 
-interface LoadingProperties {
-  children: ReactNode;
+interface LoadingProperties extends Childrenable {
   isLoading: boolean;
   className: string;
 }

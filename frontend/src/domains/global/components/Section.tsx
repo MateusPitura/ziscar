@@ -1,21 +1,13 @@
 import Button from "@/design-system/Button";
-import { type ReactNode } from "react";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import Loading from "@/design-system/Loading";
+import { Childrenable } from "../types/Components";
 
-interface ContainerProps {
-  children: ReactNode;
-}
-
-function Container({ children }: ContainerProps) {
+function Container({ children }: Childrenable) {
   return <div className="flex flex-col gap-4 w-[56rem]">{children}</div>;
 }
 
-interface GroupProps {
-  children: ReactNode;
-}
-
-function Group({ children }: GroupProps) {
+function Group({ children }: Childrenable) {
   return (
     <div className="bg-light-surfaceContainerLowest rounded-md overflow-hidden">
       {children}

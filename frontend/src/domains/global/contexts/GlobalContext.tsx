@@ -1,6 +1,7 @@
-import { createContext, ReactNode, useMemo, useState } from "react";
+import { createContext, useMemo, useState } from "react";
 import { UserLogged } from "../types/User";
 import { ClientLogged } from "../types/Client";
+import { Childrenable } from "../types/Components";
 
 interface GlobalContextValues {
   userLogged?: UserLogged;
@@ -9,11 +10,7 @@ interface GlobalContextValues {
 
 const GlobalContext = createContext<GlobalContextValues | null>(null);
 
-interface GlobalProviderProps {
-  children: ReactNode;
-}
-
-function GlobalProvider({ children }: GlobalProviderProps) {
+function GlobalProvider({ children }: Childrenable) {
   const [userLogged] = useState<UserLogged | undefined>({
     id: "1",
   });

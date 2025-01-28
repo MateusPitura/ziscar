@@ -1,4 +1,5 @@
-import { createContext, ReactNode, useMemo, useState } from "react";
+import { Childrenable } from "@/domains/global/types/Components";
+import { createContext, useMemo, useState } from "react";
 
 interface AuditPageContextValues {
   example: string;
@@ -7,11 +8,7 @@ interface AuditPageContextValues {
 
 const AuditPageContext = createContext<AuditPageContextValues | null>(null);
 
-interface AuditPageProviderProps {
-  children: ReactNode;
-}
-
-function AuditPageProvider({ children }: AuditPageProviderProps) {
+function AuditPageProvider({ children }: Childrenable) {
   const [example, setExample] = useState("");
 
   function handleExample(value: string) {

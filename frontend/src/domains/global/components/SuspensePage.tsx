@@ -1,13 +1,8 @@
-import { Suspense, type ReactElement, type ReactNode } from "react";
+import { Suspense, type ReactElement } from "react";
 import LoadingSpinner from "./LoadingSpinner";
+import { Childrenable } from "../types/Components";
 
-interface SuspensePageProperties {
-  children: ReactNode;
-}
-
-export default function SuspensePage({
-  children,
-}: SuspensePageProperties): ReactElement {
+export default function SuspensePage({ children }: Childrenable): ReactElement {
   return (
     <Suspense
       fallback={

@@ -1,7 +1,7 @@
-import type { ReactElement, ReactNode } from "react";
+import type { ReactElement } from "react";
+import { Childrenable } from "../types/Components";
 
-interface RoutesGroupProps {
-  children: ReactNode;
+interface RoutesGroupProps extends Childrenable {
   label?: string;
 }
 

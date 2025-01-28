@@ -1,8 +1,8 @@
 import Loading from "@/design-system/Loading";
-import type { ReactElement, ReactNode } from "react";
+import { Childrenable } from "@/domains/global/types/Components";
+import type { ReactElement } from "react";
 
-interface DashBoardProperties {
-  children: ReactNode;
+interface DashBoardProperties extends Childrenable {
   isLoading: boolean;
 }
 
