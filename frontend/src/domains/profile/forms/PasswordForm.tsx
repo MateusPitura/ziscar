@@ -32,6 +32,11 @@ interface PasswordFormProps {
   handleCloseModal: () => void;
 }
 
+const defaultValues: PasswordFormInputs = {
+  newPassword: "",
+  confirmPassword: "",
+};
+
 export default function PasswordForm({
   handleCloseModal,
 }: PasswordFormProps): ReactElement {
@@ -51,7 +56,7 @@ export default function PasswordForm({
     <Form<PasswordFormInputs>
       onSubmit={handleSubmit}
       schema={SchemaPasswordForm}
-      defaultValues={{ newPassword: "", confirmPassword: "" }}
+      defaultValues={defaultValues}
     >
       <PasswordFormContent isPending={isPending} />
     </Form>

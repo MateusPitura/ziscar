@@ -3,6 +3,7 @@ import Choice from "@/design-system/Form/Choice";
 import Input from "@/design-system/Form/Input";
 import SideSheet from "@/design-system/SideSheet";
 import { ReactElement } from "react";
+import { useFormContext } from "react-hook-form";
 import { z } from "zod";
 
 const SchemaUsersFilterForm = z.object({
@@ -16,6 +17,12 @@ type UsersFilterFormInputs = z.infer<typeof SchemaUsersFilterForm>;
 interface UsersFiltersFormProps {
   setUsersFilter: (value: string) => void;
 }
+
+const defaultValues: UsersFilterFormInputs = {
+  name: "",
+  orderBy: "name",
+  category: [],
+};
 
 export default function UsersFilterForm({
   setUsersFilter,
@@ -41,7 +48,7 @@ export default function UsersFilterForm({
       schema={SchemaUsersFilterForm}
       onSubmit={handleSubmit}
       className="flex-1 flex flex-col"
-      defaultValues={{ orderBy: "name", category: [] }}
+      defaultValues={defaultValues}
     >
       <UsersFilterFormContent />
     </Form>
@@ -49,6 +56,8 @@ export default function UsersFilterForm({
 }
 
 function UsersFilterFormContent(): ReactElement {
+  const { reset } = useFormContext();
+
   return (
     <>
       <SideSheet.Body className="flex flex-col gap-2">
@@ -71,7 +80,11 @@ function UsersFilterFormContent(): ReactElement {
           <Choice.Checkbox label="Inativo" value="inactive" />
         </Choice>
       </SideSheet.Body>
-      <SideSheet.Footer primaryLabel="Aplicar" secondaryLabel="Limpar" />
+      <SideSheet.Footer
+        primaryLabel="Aplicar"
+        secondaryLabel="Limpar"
+        onSecondaryCallback={() => reset(defaultValues)}
+      />
     </>
   );
 }
