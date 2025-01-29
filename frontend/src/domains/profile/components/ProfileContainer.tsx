@@ -31,7 +31,7 @@ export default function ProfileContainer(): ReactElement {
       content: undefined,
     });
 
-  const { open, closeDialog, openDialog } = useDialog();
+  const { isOpen, closeDialog, openDialog } = useDialog();
 
   const { userLogged } = useGlobalContext();
 
@@ -67,7 +67,7 @@ export default function ProfileContainer(): ReactElement {
 
   return (
     <>
-      <Modal open={open} onClose={closeDialog}>
+      <Modal open={isOpen} onClose={closeDialog}>
         <Modal.Header title={editProfileInfoModal.title} />
         {editProfileInfoModal.content}
       </Modal>

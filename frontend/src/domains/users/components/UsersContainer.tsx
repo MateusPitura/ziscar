@@ -26,7 +26,7 @@ export default function UsersContainer(): ReactElement {
       userName: "",
       userId: "",
     });
-  const { open, closeDialog, openDialog } = useDialog();
+  const { isOpen, closeDialog, openDialog } = useDialog();
 
   const navigate = useNavigate();
 
@@ -56,7 +56,7 @@ export default function UsersContainer(): ReactElement {
     <>
       <DisableUserModal
         {...disableUserInfoModal}
-        open={open}
+        open={isOpen}
         onClose={closeDialog}
       />
       <div className="flex flex-col gap-4 h-full">

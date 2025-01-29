@@ -266,10 +266,10 @@ function FilterContent({
   filterBtnState,
   formComponent,
 }: FilterContentProps) {
-  const { open, setOpen } = useDialog()
+  const { isOpen, setIsOpen } = useDialog()
 
   return (
-    <SideSheet open={open} onOpenChange={setOpen}>
+    <SideSheet open={isOpen} onOpenChange={setIsOpen}>
       <SideSheet.Trigger>
         <div className="flex justify-end">
           <Button
