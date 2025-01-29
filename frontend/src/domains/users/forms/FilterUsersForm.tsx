@@ -14,13 +14,33 @@ const SchemaFilterUsersForm = z.object({
 
 type FilterUsersFormInputs = z.infer<typeof SchemaFilterUsersForm>;
 
-export default function FilterUsersForm(): ReactElement {
+interface FilterUsersFormProps {
+  setUsersInfoFilter: (value: string) => void;
+}
+
+export default function FilterUsersForm({
+  setUsersInfoFilter,
+}: FilterUsersFormProps): ReactElement {
+  function handleSubmit(data: FilterUsersFormInputs) {
+    const filters = [];
+    if (data.name) {
+      filters.push(`fullName=${data.name}`);
+    }
+    if (data.orderBy) {
+      filters.push(`orderBy=${data.orderBy}`);
+    }
+    if (data.category?.length) {
+      filters.push(`category=${data.category?.join(",")}`);
+    }
+    if (!filters.length) return;
+    const filter = `?${filters.join("&")}`;
+    setUsersInfoFilter(filter);
+  }
+
   return (
     <Form<FilterUsersFormInputs>
       schema={SchemaFilterUsersForm}
-      onSubmit={(data) => {
-        console.log("🌠 data", data);
-      }}
+      onSubmit={handleSubmit}
       className="flex-1 flex flex-col"
       defaultValues={{ orderBy: "name", category: [] }}
     >
@@ -30,7 +50,7 @@ export default function FilterUsersForm(): ReactElement {
 }
 
 function FilterUsersFormContent(): ReactElement {
-  const { setOpen } = useCustomFormContext();
+  const { setOpen } = useCustomFormContext(); // TODO: Não funciona mais
 
   return (
     <>
@@ -58,7 +78,6 @@ function FilterUsersFormContent(): ReactElement {
         primaryLabel="Aplicar"
         secondaryLabel="Limpar"
         onSecondaryCallback={() => setOpen(false)}
-        onPrimaryCallback={() => {}}
       />
     </>
   );

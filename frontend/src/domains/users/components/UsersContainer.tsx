@@ -26,9 +26,15 @@ export default function UsersContainer(): ReactElement {
       userName: "",
       userId: "",
     });
+  const [usersInfoFilter, setUsersInfoFilter] = useState("");
+
   const { isOpen, closeDialog, openDialog } = useDialog();
 
   const navigate = useNavigate();
+
+  function handleUsersInfoFilter(value: string) {
+    setUsersInfoFilter(value);
+  }
 
   const { safeFetch } = useSafeFetch();
 
@@ -42,13 +48,13 @@ export default function UsersContainer(): ReactElement {
       queryFn: getDashBoardInfo,
     });
 
-  async function getUsersInfo(): Promise<User[]> {
-    return await safeFetch({ path: `${baseUrl}/users` });
+  async function getUsersInfo(filter: string): Promise<User[]> {
+    return await safeFetch({ path: `${baseUrl}/users${filter}` });
   }
 
   const { data: usersInfo, isFetching: isFetchingUsersInfo } = useQuery({
-    queryKey: ["users"],
-    queryFn: getUsersInfo,
+    queryKey: ["users", usersInfoFilter],
+    queryFn: ({ queryKey }) => getUsersInfo(queryKey[1]),
     select: selectUsersInfo,
   });
 
@@ -75,7 +81,11 @@ export default function UsersContainer(): ReactElement {
             />
           ))}
         </DashBoard>
-        <Table.Filter formComponent={<FilterUsersForm />} />
+        <Table.Filter
+          formComponent={
+            <FilterUsersForm setUsersInfoFilter={handleUsersInfoFilter} />
+          }
+        />
         <Table>
           <Table.Header>
             <Table.Head label="ID" />

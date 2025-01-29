@@ -73,7 +73,7 @@ interface FooterProps {
   primaryLabel: string;
   secondaryLabel: string;
   onSecondaryCallback: () => void;
-  onPrimaryCallback: () => void;
+  onPrimaryCallback?: () => void;
   className?: string;
 }
 
