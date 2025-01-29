@@ -13,8 +13,8 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { Popover } from "./Popover";
 import SideSheet from "./SideSheet";
 import { CustomFormProvider } from "@/domains/global/contexts/CustomFormContext";
-import useCustomFormContext from "@/domains/global/hooks/useCustomFormContext";
 import { Childrenable } from "@/domains/global/types/Components";
+import useDialog from "@/domains/profile/hooks/useDialog";
 
 function Container({ children }: Childrenable): ReactElement {
   return (
@@ -266,7 +266,7 @@ function FilterContent({
   filterBtnState,
   formComponent,
 }: FilterContentProps) {
-  const { open, setOpen } = useCustomFormContext();
+  const { open, setOpen } = useDialog()
 
   return (
     <SideSheet open={open} onOpenChange={setOpen}>

@@ -17,9 +17,9 @@ import CpfForm from "../forms/CpfForm";
 import CodeForm from "../forms/CodeForm";
 import CellphoneForm from "../forms/CellphoneForm";
 import selectProfileInfo from "../utils/selectProfileInfo";
+import useDialog from "../hooks/useDialog";
 
 interface EditProfileInfoModalProps {
-  open: boolean;
   title: string;
   content: ReactElement | undefined;
 }
@@ -27,10 +27,11 @@ interface EditProfileInfoModalProps {
 export default function ProfileContainer(): ReactElement {
   const [editProfileInfoModal, setEditProfileInfoModal] =
     useState<EditProfileInfoModalProps>({
-      open: false,
       title: "",
       content: undefined,
     });
+
+  const { open, closeDialog, openDialog } = useDialog();
 
   const { userLogged } = useGlobalContext();
 
@@ -45,13 +46,6 @@ export default function ProfileContainer(): ReactElement {
     queryFn: getProfileInfo,
     select: selectProfileInfo,
   });
-
-  function handleCloseEditProfileInfoModal() {
-    setEditProfileInfoModal((prev) => ({
-      ...prev,
-      open: false,
-    }));
-  }
 
   const addressFormatted = useMemo(
     () =>
@@ -73,10 +67,7 @@ export default function ProfileContainer(): ReactElement {
 
   return (
     <>
-      <Modal
-        open={editProfileInfoModal.open}
-        onClose={handleCloseEditProfileInfoModal}
-      >
+      <Modal open={open} onClose={closeDialog}>
         <Modal.Header title={editProfileInfoModal.title} />
         {editProfileInfoModal.content}
       </Modal>
@@ -91,34 +82,30 @@ export default function ProfileContainer(): ReactElement {
                 label="Email"
                 value={profileInfo?.email}
                 isLoading={isFetching}
-                onEdit={() =>
+                onEdit={() => {
+                  openDialog();
                   setEditProfileInfoModal({
                     title: "Alterar email",
-                    open: true,
                     content: (
                       <EmailForm
                         defaultValues={{ email: profileInfo?.email }}
-                        handleCloseModal={handleCloseEditProfileInfoModal}
+                        handleCloseModal={closeDialog}
                       />
                     ),
-                  })
-                }
+                  });
+                }}
               />
               <Section.Row
                 label="Senha"
                 value="••••••••••••"
                 isLoading={isFetching}
-                onEdit={() =>
+                onEdit={() => {
+                  openDialog();
                   setEditProfileInfoModal({
                     title: "Alterar senha",
-                    open: true,
-                    content: (
-                      <PasswordForm
-                        handleCloseModal={handleCloseEditProfileInfoModal}
-                      />
-                    ),
-                  })
-                }
+                    content: <PasswordForm handleCloseModal={closeDialog} />,
+                  });
+                }}
               />
             </Section.Group>
             <Section.Group>
@@ -127,105 +114,105 @@ export default function ProfileContainer(): ReactElement {
                 label="Nome completo"
                 value={profileInfo?.fullName}
                 isLoading={isFetching}
-                onEdit={() =>
+                onEdit={() => {
+                  openDialog();
                   setEditProfileInfoModal({
                     title: "Alterar nome completo",
-                    open: true,
                     content: (
                       <FullNameForm
-                        handleCloseModal={handleCloseEditProfileInfoModal}
                         defaultValues={{ fullName: profileInfo?.fullName }}
+                        handleCloseModal={closeDialog}
                       />
                     ),
-                  })
-                }
+                  });
+                }}
               />
               <Section.Row
                 label="Endereço"
                 value={addressFormatted}
                 isLoading={isFetching}
-                onEdit={() =>
+                onEdit={() => {
+                  openDialog();
                   setEditProfileInfoModal({
                     title: "Alterar endereço",
-                    open: true,
                     content: (
                       <AddressForm
-                        handleCloseModal={handleCloseEditProfileInfoModal}
+                        handleCloseModal={closeDialog}
                         defaultValues={{ ...profileInfo?.address }}
                       />
                     ),
-                  })
-                }
+                  });
+                }}
               />
               <Section.Row
                 label="Data de nascimento"
                 value={formatBirthDate("dd/MM/yyyy")}
                 isLoading={isFetching}
-                onEdit={() =>
+                onEdit={() => {
+                  openDialog();
                   setEditProfileInfoModal({
                     title: "Alterar data de nascimento",
-                    open: true,
                     content: (
                       <BirthDateForm
-                        handleCloseModal={handleCloseEditProfileInfoModal}
+                        handleCloseModal={closeDialog}
                         defaultValues={{
                           birthDate: formatBirthDate("yyyy-MM-dd"),
                         }}
                       />
                     ),
-                  })
-                }
+                  });
+                }}
               />
               <Section.Row
                 label="CPF"
                 value={profileInfo?.cpf}
                 isLoading={isFetching}
-                onEdit={() =>
+                onEdit={() => {
+                  openDialog();
                   setEditProfileInfoModal({
                     title: "Alterar CPF",
-                    open: true,
                     content: (
                       <CpfForm
-                        handleCloseModal={handleCloseEditProfileInfoModal}
+                        handleCloseModal={closeDialog}
                         defaultValues={{ cpf: profileInfo?.cpf }}
                       />
                     ),
-                  })
-                }
+                  });
+                }}
               />
               <Section.Row
                 label="Matrícula"
                 value={profileInfo?.code}
                 isLoading={isFetching}
-                onEdit={() =>
+                onEdit={() => {
+                  openDialog();
                   setEditProfileInfoModal({
                     title: "Alterar matrícula",
-                    open: true,
                     content: (
                       <CodeForm
-                        handleCloseModal={handleCloseEditProfileInfoModal}
+                        handleCloseModal={closeDialog}
                         defaultValues={{ code: profileInfo?.code }}
                       />
                     ),
-                  })
-                }
+                  });
+                }}
               />
               <Section.Row
                 label="Celular"
                 value={profileInfo?.cellphone}
                 isLoading={isFetching}
-                onEdit={() =>
+                onEdit={() => {
+                  openDialog();
                   setEditProfileInfoModal({
                     title: "Alterar celular",
-                    open: true,
                     content: (
                       <CellphoneForm
-                        handleCloseModal={handleCloseEditProfileInfoModal}
+                        handleCloseModal={closeDialog}
                         defaultValues={{ cellphone: profileInfo?.cellphone }}
                       />
                     ),
-                  })
-                }
+                  });
+                }}
               />
             </Section.Group>
           </Section>

@@ -13,9 +13,9 @@ import selectUsersInfo from "../utils/selectUsersInfo";
 import Button from "@/design-system/Button";
 import DisableUserModal from "./DisableUserModal";
 import FilterUsersForm from "../forms/FilterUsersForm";
+import useDialog from "@/domains/profile/hooks/useDialog";
 
 interface DisableUserInfoModalProps {
-  open: boolean;
   userName: string;
   userId: string;
 }
@@ -23,17 +23,10 @@ interface DisableUserInfoModalProps {
 export default function UsersContainer(): ReactElement {
   const [disableUserInfoModal, setDisableUserInfoModal] =
     useState<DisableUserInfoModalProps>({
-      open: false,
       userName: "",
       userId: "",
     });
-
-  function handleCloseDisableUserInfoModal() {
-    setDisableUserInfoModal((prev) => ({
-      ...prev,
-      open: false,
-    }));
-  }
+  const { open, closeDialog, openDialog } = useDialog();
 
   const navigate = useNavigate();
 
@@ -63,7 +56,8 @@ export default function UsersContainer(): ReactElement {
     <>
       <DisableUserModal
         {...disableUserInfoModal}
-        onClose={handleCloseDisableUserInfoModal}
+        open={open}
+        onClose={closeDialog}
       />
       <div className="flex flex-col gap-4 h-full">
         <PageHeader
@@ -113,14 +107,13 @@ export default function UsersContainer(): ReactElement {
                     variant="tertiary"
                     fullWidth
                     label="Desativar"
-                    onClick={() =>
-                      setDisableUserInfoModal((prev) => ({
-                        ...prev,
-                        open: true,
+                    onClick={() => {
+                      openDialog();
+                      setDisableUserInfoModal({
                         userName: user.fullName,
                         userId: user.id,
-                      }))
-                    }
+                      });
+                    }}
                   />
                 </Table.Action>
               </Table.Row>

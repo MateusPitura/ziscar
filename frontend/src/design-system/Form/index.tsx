@@ -31,6 +31,7 @@ export default function Form<T extends FieldValues>({
      * So if the initial value already is a empty string this works fine
      * But if the schema has some ZodEffect, like .refine() in object, the if statement
      * will be false, in this cause you need to pass defaultValues with empty strings
+     * It don't cover the case where the default value should be an array
      */
     const defaultValuesCopy = Object.assign({}, defaultValues);
 

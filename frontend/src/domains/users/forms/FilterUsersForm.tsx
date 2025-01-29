@@ -22,7 +22,7 @@ export default function FilterUsersForm(): ReactElement {
         console.log("🌠 data", data);
       }}
       className="flex-1 flex flex-col"
-      defaultValues={{ orderBy: "name" }}
+      defaultValues={{ orderBy: "name", category: [] }}
     >
       <FilterUsersFormContent />
     </Form>
