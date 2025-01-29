@@ -32,23 +32,16 @@ export default function CodeForm({
       defaultValues={defaultValues}
       schema={SchemaCodeForm}
     >
-      <CodeFormContent
-        handleCloseModal={handleCloseModal}
-        isPending={isPending}
-      />
+      <CodeFormContent isPending={isPending} />
     </Form>
   );
 }
 
 interface CodeFormContentProps {
-  handleCloseModal: () => void;
   isPending: boolean;
 }
 
-function CodeFormContent({
-  handleCloseModal,
-  isPending,
-}: CodeFormContentProps) {
+function CodeFormContent({ isPending }: CodeFormContentProps) {
   const {
     formState: { isDirty },
   } = useFormContext();
@@ -65,8 +58,6 @@ function CodeFormContent({
       </Modal.Body>
       <Modal.Footer
         labelPrimaryBtn="Alterar"
-        labelSecondaryBtn="Cancelar"
-        onClickSecondaryBtn={handleCloseModal}
         primaryBtnState={primaryBtnState}
       />
     </>

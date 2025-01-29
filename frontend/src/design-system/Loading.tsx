@@ -1,7 +1,7 @@
 import { type ReactElement } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import classNames from "classnames";
-import { Childrenable } from "@/domains/global/types/Components";
+import { Childrenable } from "@/domains/global/types/components";
 
 interface LoadingProperties extends Childrenable {
   isLoading: boolean;

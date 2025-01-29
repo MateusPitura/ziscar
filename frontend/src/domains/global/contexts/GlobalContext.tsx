@@ -1,7 +1,7 @@
 import { createContext, useMemo, useState } from "react";
-import { UserLogged } from "../types/User";
-import { ClientLogged } from "../types/Client";
-import { Childrenable } from "../types/Components";
+import { UserLogged } from "../types/user";
+import { ClientLogged } from "../types/client";
+import { Childrenable } from "../types/components";
 
 interface GlobalContextValues {
   userLogged?: UserLogged;

@@ -36,23 +36,16 @@ export default function CellphoneForm({
       defaultValues={defaultValues}
       schema={SchemaCellphoneForm}
     >
-      <CellphoneFormContent
-        handleCloseModal={handleCloseModal}
-        isPending={isPending}
-      />
+      <CellphoneFormContent isPending={isPending} />
     </Form>
   );
 }
 
 interface CellphoneFormContentProps {
-  handleCloseModal: () => void;
   isPending: boolean;
 }
 
-function CellphoneFormContent({
-  handleCloseModal,
-  isPending,
-}: CellphoneFormContentProps) {
+function CellphoneFormContent({ isPending }: CellphoneFormContentProps) {
   const {
     formState: { isDirty },
   } = useFormContext();
@@ -74,8 +67,6 @@ function CellphoneFormContent({
       </Modal.Body>
       <Modal.Footer
         labelPrimaryBtn="Alterar"
-        labelSecondaryBtn="Cancelar"
-        onClickSecondaryBtn={handleCloseModal}
         primaryBtnState={primaryBtnState}
       />
     </>

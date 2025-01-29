@@ -6,40 +6,36 @@ import DashBoard from "./DashBoard";
 import { useQuery } from "@tanstack/react-query";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import { baseUrl } from "@/domains/global/constants/requests";
-import { DashBoard as DashBoardProps } from "@/domains/global/types/DashBoard";
+import { DashBoard as DashBoardProps } from "@/domains/global/types/dashBoard";
 import Table from "@/design-system/Table";
-import { User } from "@/domains/global/types/User";
+import { User } from "@/domains/global/types/user";
 import selectUsersInfo from "../utils/selectUsersInfo";
 import Button from "@/design-system/Button";
 import DisableUserModal from "./DisableUserModal";
-import FilterUsersForm from "../forms/FilterUsersForm";
+import UsersFilterForm from "../forms/UsersFilterForm";
 import useDialog from "@/domains/profile/hooks/useDialog";
-
-interface DisableUserInfoModalProps {
-  userName: string;
-  userId: string;
-}
+import { DisableUser } from "../types/disableUser";
 
 export default function UsersContainer(): ReactElement {
-  const [disableUserInfoModal, setDisableUserInfoModal] =
-    useState<DisableUserInfoModalProps>({
+  const [disableUserInfo, setDisableUserInfo] =
+    useState<DisableUser>({
       userName: "",
       userId: "",
     });
-  const [usersInfoFilter, setUsersInfoFilter] = useState("");
+  const [usersFilter, setUsersFilter] = useState("");
 
   const { isOpen, closeDialog, openDialog } = useDialog();
 
   const navigate = useNavigate();
 
-  function handleUsersInfoFilter(value: string) {
-    setUsersInfoFilter(value);
+  function handleUsersFilter(value: string) {
+    setUsersFilter(value);
   }
 
   const { safeFetch } = useSafeFetch();
 
   async function getDashBoardInfo(): Promise<DashBoardProps[]> {
-    return await safeFetch({ path: `${baseUrl}/dashboard` });
+    return await safeFetch({ path: `${baseUrl}/userDashboard` });
   }
 
   const { data: dashBoardInfo, isFetching: isFetchingDatashBoardInfo } =
@@ -53,7 +49,7 @@ export default function UsersContainer(): ReactElement {
   }
 
   const { data: usersInfo, isFetching: isFetchingUsersInfo } = useQuery({
-    queryKey: ["users", usersInfoFilter],
+    queryKey: ["users", usersFilter],
     queryFn: ({ queryKey }) => getUsersInfo(queryKey[1]),
     select: selectUsersInfo,
   });
@@ -61,7 +57,7 @@ export default function UsersContainer(): ReactElement {
   return (
     <>
       <DisableUserModal
-        {...disableUserInfoModal}
+        {...disableUserInfo}
         open={isOpen}
         onClose={closeDialog}
       />
@@ -83,7 +79,7 @@ export default function UsersContainer(): ReactElement {
         </DashBoard>
         <Table.Filter
           formComponent={
-            <FilterUsersForm setUsersInfoFilter={handleUsersInfoFilter} />
+            <UsersFilterForm setUsersFilter={handleUsersFilter} />
           }
         />
         <Table>
@@ -119,7 +115,7 @@ export default function UsersContainer(): ReactElement {
                     label="Desativar"
                     onClick={() => {
                       openDialog();
-                      setDisableUserInfoModal({
+                      setDisableUserInfo({
                         userName: user.fullName,
                         userId: user.id,
                       });

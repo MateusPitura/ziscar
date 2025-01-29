@@ -1,5 +1,5 @@
 import Loading from "@/design-system/Loading";
-import { Childrenable } from "@/domains/global/types/Components";
+import { Childrenable } from "@/domains/global/types/components";
 import type { ReactElement } from "react";
 
 interface DashBoardProperties extends Childrenable {

@@ -53,21 +53,16 @@ export default function PasswordForm({
       schema={SchemaPasswordForm}
       defaultValues={{ newPassword: "", confirmPassword: "" }}
     >
-      <PasswordFormContent
-        handleCloseModal={handleCloseModal}
-        isPending={isPending}
-      />
+      <PasswordFormContent isPending={isPending} />
     </Form>
   );
 }
 
 interface PasswordFormContentProps {
-  handleCloseModal: () => void;
   isPending: boolean;
 }
 
 export function PasswordFormContent({
-  handleCloseModal,
   isPending,
 }: PasswordFormContentProps): ReactElement {
   const [showPassword, setShowPassword] = useState({
@@ -125,8 +120,6 @@ export function PasswordFormContent({
       </Modal.Body>
       <Modal.Footer
         labelPrimaryBtn="Alterar"
-        labelSecondaryBtn="Cancelar"
-        onClickSecondaryBtn={handleCloseModal}
         primaryBtnState={primaryBtnState}
       />
     </>

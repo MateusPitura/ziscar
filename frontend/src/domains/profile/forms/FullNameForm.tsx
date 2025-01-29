@@ -34,21 +34,16 @@ export default function FullNameForm({
       defaultValues={defaultValues}
       schema={SchemaFullNameForm}
     >
-      <FullNameFormContent
-        handleCloseModal={handleCloseModal}
-        isPending={isPending}
-      />
+      <FullNameFormContent isPending={isPending} />
     </Form>
   );
 }
 
 interface FullNameFormContentProps {
-  handleCloseModal: () => void;
   isPending: boolean;
 }
 
 function FullNameFormContent({
-  handleCloseModal,
   isPending,
 }: FullNameFormContentProps): ReactElement {
   const {
@@ -63,12 +58,14 @@ function FullNameFormContent({
   return (
     <>
       <Modal.Body>
-        <Input<FullNameFormInputs> name="fullName" label="Nome completo" required/>
+        <Input<FullNameFormInputs>
+          name="fullName"
+          label="Nome completo"
+          required
+        />
       </Modal.Body>
       <Modal.Footer
         labelPrimaryBtn="Alterar"
-        labelSecondaryBtn="Cancelar"
-        onClickSecondaryBtn={handleCloseModal}
         primaryBtnState={primaryBtnState}
       />
     </>

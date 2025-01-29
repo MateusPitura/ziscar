@@ -32,23 +32,16 @@ export default function EmailForm({
       defaultValues={defaultValues}
       schema={SchemaEmailForm}
     >
-      <EmailFormContent
-        handleCloseModal={handleCloseModal}
-        isPending={isPending}
-      />
+      <EmailFormContent isPending={isPending} />
     </Form>
   );
 }
 
 interface EmailFormContentProps {
-  handleCloseModal: () => void;
   isPending: boolean;
 }
 
-function EmailFormContent({
-  handleCloseModal,
-  isPending,
-}: EmailFormContentProps): ReactElement {
+function EmailFormContent({ isPending }: EmailFormContentProps): ReactElement {
   const {
     formState: { isDirty },
   } = useFormContext();
@@ -61,12 +54,10 @@ function EmailFormContent({
   return (
     <>
       <Modal.Body>
-        <Input<EmailFormInputs> name="email" label="Email" required/>
+        <Input<EmailFormInputs> name="email" label="Email" required />
       </Modal.Body>
       <Modal.Footer
         labelPrimaryBtn="Alterar"
-        labelSecondaryBtn="Cancelar"
-        onClickSecondaryBtn={handleCloseModal}
         primaryBtnState={primaryBtnState}
       />
     </>

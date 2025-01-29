@@ -1,7 +1,7 @@
 import Button from "@/design-system/Button";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import Loading from "@/design-system/Loading";
-import { Childrenable } from "../types/Components";
+import { Childrenable } from "../types/components";
 
 function Container({ children }: Childrenable) {
   return <div className="flex flex-col gap-4 w-[56rem]">{children}</div>;

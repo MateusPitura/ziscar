@@ -1,5 +1,5 @@
 import { createContext, useMemo, useState } from "react";
-import { Childrenable } from "../types/Components";
+import { Childrenable } from "../types/components";
 
 interface CustomFormContextProps {
   open: boolean;

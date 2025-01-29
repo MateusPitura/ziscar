@@ -2,6 +2,7 @@ import type { ReactElement } from "react";
 
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetHeader,
   SheetTitle,
@@ -10,7 +11,7 @@ import {
 import Button from "./Button";
 import classNames from "classnames";
 import { DialogDescription } from "@/components/ui/dialog";
-import { Childrenable } from "@/domains/global/types/Components";
+import { Childrenable } from "@/domains/global/types/components";
 
 interface ContainerProps extends Childrenable {
   open?: boolean;
@@ -26,7 +27,7 @@ function Container({
     <Sheet open={open} onOpenChange={onOpenChange}>
       {children}
       {/* DialogDescription corrige warning de acessibilidade */}
-      <DialogDescription/>
+      <DialogDescription />
     </Sheet>
   );
 }
@@ -72,14 +73,14 @@ function Body({ children, className }: BodyProps): ReactElement {
 interface FooterProps {
   primaryLabel: string;
   secondaryLabel: string;
-  onSecondaryCallback: () => void;
+  onSecondaryCallback?: () => void;
   onPrimaryCallback?: () => void;
   className?: string;
 }
 
 function Footer({
   primaryLabel,
-  secondaryLabel,
+  secondaryLabel = 'Cancelar',
   onPrimaryCallback,
   onSecondaryCallback,
   className,
@@ -91,12 +92,18 @@ function Footer({
         className
       )}
     >
-      <Button label={primaryLabel} onClick={onPrimaryCallback} type="submit"/>
-      <Button
-        label={secondaryLabel}
-        variant="quaternary"
-        onClick={onSecondaryCallback}
-      />
+      <Button label={primaryLabel} onClick={onPrimaryCallback} type="submit" />
+      {onSecondaryCallback ? (
+        <Button
+          label={secondaryLabel}
+          variant="quaternary"
+          onClick={onSecondaryCallback}
+        />
+      ) : (
+        <SheetClose asChild>
+          <Button label={secondaryLabel} variant="quaternary" />
+        </SheetClose>
+      )}
     </div>
   );
 }

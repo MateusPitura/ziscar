@@ -1,4 +1,4 @@
-import { Childrenable } from "@/domains/global/types/Components";
+import { Childrenable } from "@/domains/global/types/components";
 import {
   Children,
   cloneElement,

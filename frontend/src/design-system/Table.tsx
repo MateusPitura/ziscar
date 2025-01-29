@@ -13,7 +13,7 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { Popover } from "./Popover";
 import SideSheet from "./SideSheet";
 import { CustomFormProvider } from "@/domains/global/contexts/CustomFormContext";
-import { Childrenable } from "@/domains/global/types/Components";
+import { Childrenable } from "@/domains/global/types/components";
 import useDialog from "@/domains/profile/hooks/useDialog";
 
 function Container({ children }: Childrenable): ReactElement {

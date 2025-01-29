@@ -1,8 +1,7 @@
-import Modal from "@/design-system/Modal";
 import PageHeader from "@/domains/global/components/PageHeader";
 import Section from "@/domains/global/components/Section";
 import { useMemo, useState, type ReactElement } from "react";
-import { User } from "@/domains/global/types/User";
+import { User } from "@/domains/global/types/user";
 import useGlobalContext from "@/domains/global/hooks/useGlobalContext";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import safeFormat from "@/domains/global/utils/safeFormat";
@@ -18,15 +17,12 @@ import CodeForm from "../forms/CodeForm";
 import CellphoneForm from "../forms/CellphoneForm";
 import selectProfileInfo from "../utils/selectProfileInfo";
 import useDialog from "../hooks/useDialog";
-
-interface EditProfileInfoModalProps {
-  title: string;
-  content: ReactElement | undefined;
-}
+import EditProfileModal from "./EditProfileModal";
+import { EditProfile } from "../types/editProfile";
 
 export default function ProfileContainer(): ReactElement {
-  const [editProfileInfoModal, setEditProfileInfoModal] =
-    useState<EditProfileInfoModalProps>({
+  const [editProfileInfo, setEditProfileInfo] =
+    useState<EditProfile>({
       title: "",
       content: undefined,
     });
@@ -67,10 +63,11 @@ export default function ProfileContainer(): ReactElement {
 
   return (
     <>
-      <Modal open={isOpen} onClose={closeDialog}>
-        <Modal.Header title={editProfileInfoModal.title} />
-        {editProfileInfoModal.content}
-      </Modal>
+      <EditProfileModal
+        open={isOpen}
+        onClose={closeDialog}
+        {...editProfileInfo}
+      />
       <div className="flex flex-col gap-4">
         <PageHeader title="Perfil" />
         <div className="flex justify-center">
@@ -84,7 +81,7 @@ export default function ProfileContainer(): ReactElement {
                 isLoading={isFetching}
                 onEdit={() => {
                   openDialog();
-                  setEditProfileInfoModal({
+                  setEditProfileInfo({
                     title: "Alterar email",
                     content: (
                       <EmailForm
@@ -101,7 +98,7 @@ export default function ProfileContainer(): ReactElement {
                 isLoading={isFetching}
                 onEdit={() => {
                   openDialog();
-                  setEditProfileInfoModal({
+                  setEditProfileInfo({
                     title: "Alterar senha",
                     content: <PasswordForm handleCloseModal={closeDialog} />,
                   });
@@ -116,7 +113,7 @@ export default function ProfileContainer(): ReactElement {
                 isLoading={isFetching}
                 onEdit={() => {
                   openDialog();
-                  setEditProfileInfoModal({
+                  setEditProfileInfo({
                     title: "Alterar nome completo",
                     content: (
                       <FullNameForm
@@ -133,7 +130,7 @@ export default function ProfileContainer(): ReactElement {
                 isLoading={isFetching}
                 onEdit={() => {
                   openDialog();
-                  setEditProfileInfoModal({
+                  setEditProfileInfo({
                     title: "Alterar endereço",
                     content: (
                       <AddressForm
@@ -150,7 +147,7 @@ export default function ProfileContainer(): ReactElement {
                 isLoading={isFetching}
                 onEdit={() => {
                   openDialog();
-                  setEditProfileInfoModal({
+                  setEditProfileInfo({
                     title: "Alterar data de nascimento",
                     content: (
                       <BirthDateForm
@@ -169,7 +166,7 @@ export default function ProfileContainer(): ReactElement {
                 isLoading={isFetching}
                 onEdit={() => {
                   openDialog();
-                  setEditProfileInfoModal({
+                  setEditProfileInfo({
                     title: "Alterar CPF",
                     content: (
                       <CpfForm
@@ -186,7 +183,7 @@ export default function ProfileContainer(): ReactElement {
                 isLoading={isFetching}
                 onEdit={() => {
                   openDialog();
-                  setEditProfileInfoModal({
+                  setEditProfileInfo({
                     title: "Alterar matrícula",
                     content: (
                       <CodeForm
@@ -203,7 +200,7 @@ export default function ProfileContainer(): ReactElement {
                 isLoading={isFetching}
                 onEdit={() => {
                   openDialog();
-                  setEditProfileInfoModal({
+                  setEditProfileInfo({
                     title: "Alterar celular",
                     content: (
                       <CellphoneForm

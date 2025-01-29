@@ -3,27 +3,24 @@ import { baseUrl } from "@/domains/global/constants/requests";
 import { BLANK } from "@/domains/global/constants/text";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
+import { Dialog } from "@/domains/global/types/components";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { ReactElement } from "react";
+import { DisableUser } from "../types/disableUser";
 
-interface DisableUserModalProperties {
-  open: boolean;
-  onClose: () => void;
-  userName: string;
-  userId: string;
-}
+interface DisableUserModalProps extends Dialog, DisableUser {}
 
 export default function DisableUserModal({
   open,
   onClose,
   userId,
   userName,
-}: DisableUserModalProperties): ReactElement {
+}: DisableUserModalProps): ReactElement {
   const { safeFetch } = useSafeFetch();
   const { showSuccessSnackbar } = useSnackbar();
   const queryClient = useQueryClient();
 
-  async function updateProfileInfo() {
+  async function disableUser() {
     await safeFetch({
       path: `${baseUrl}/users/${userId}`,
       method: "DELETE",
@@ -31,7 +28,7 @@ export default function DisableUserModal({
   }
 
   const { mutate, isPending } = useMutation({
-    mutationFn: updateProfileInfo,
+    mutationFn: disableUser,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
       showSuccessSnackbar({
@@ -56,8 +53,6 @@ export default function DisableUserModal({
       </Modal.Body>
       <Modal.Footer
         labelPrimaryBtn="Desativar"
-        labelSecondaryBtn="Cancelar"
-        onClickSecondaryBtn={onClose}
         onClickPrimaryBtn={mutate}
         primaryBtnState={isPending ? "loading" : "red"}
       />

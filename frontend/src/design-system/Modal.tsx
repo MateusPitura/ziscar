@@ -5,10 +5,11 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogDescription
+  DialogDescription,
 } from "@/components/ui/dialog";
 import Button, { ButtonState } from "./Button";
-import { Childrenable } from "@/domains/global/types/Components";
+import { Childrenable } from "@/domains/global/types/components";
+import { DialogClose } from "@radix-ui/react-dialog";
 
 interface ContainerProps extends Childrenable {
   open: boolean;
@@ -36,7 +37,7 @@ function Header({ title }: HeaderProps): ReactElement {
         <span className="text-light-onSurface text-title-large">{title}</span>
       </DialogTitle>
       {/* DialogDescription corrige warning de acessibilidade */}
-      <DialogDescription/>
+      <DialogDescription />
     </DialogHeader>
   );
 }
@@ -49,7 +50,7 @@ interface FooterProps {
   onClickPrimaryBtn?: () => void;
   labelPrimaryBtn: string;
   onClickSecondaryBtn?: () => void;
-  labelSecondaryBtn: string;
+  labelSecondaryBtn?: string;
   primaryBtnState?: ButtonState;
 }
 
@@ -57,16 +58,22 @@ function Footer({
   onClickPrimaryBtn,
   labelPrimaryBtn,
   onClickSecondaryBtn,
-  labelSecondaryBtn,
+  labelSecondaryBtn = 'Cancelar',
   primaryBtnState,
 }: FooterProps): ReactElement {
   return (
     <DialogFooter className="flex px-6 pb-6 pt-2">
-      <Button
-        variant="secondary"
-        onClick={onClickSecondaryBtn}
-        label={labelSecondaryBtn}
-      />
+      {onClickSecondaryBtn ? (
+        <Button
+          variant="secondary"
+          onClick={onClickSecondaryBtn}
+          label={labelSecondaryBtn}
+        />
+      ) : (
+        <DialogClose asChild>
+          <Button variant="secondary" label={labelSecondaryBtn} />
+        </DialogClose>
+      )}
       <Button
         variant="primary"
         onClick={onClickPrimaryBtn}

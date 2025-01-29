@@ -11,7 +11,9 @@ const BirthDateSchema = z.object({
     .date({
       errorMap: (issue, { defaultError }) => ({
         message:
-          issue.code === "invalid_date" ? "Data de nascimento inválida" : defaultError,
+          issue.code === "invalid_date"
+            ? "Data de nascimento inválida"
+            : defaultError,
       }),
     })
     .min(new Date("1900-01-01"), { message: "Data de nascimento inválida" })
@@ -44,23 +46,16 @@ export default function BirthDateForm({
       defaultValues={defaultValues}
       schema={BirthDateSchema}
     >
-      <BirthDateFormContent
-        handleCloseModal={handleCloseModal}
-        isPending={isPending}
-      />
+      <BirthDateFormContent isPending={isPending} />
     </Form>
   );
 }
 
 interface BirthDateFormContentProps {
-  handleCloseModal: () => void;
   isPending: boolean;
 }
 
-function BirthDateFormContent({
-  handleCloseModal,
-  isPending,
-}: BirthDateFormContentProps) {
+function BirthDateFormContent({ isPending }: BirthDateFormContentProps) {
   const {
     formState: { isDirty },
   } = useFormContext();
@@ -82,8 +77,6 @@ function BirthDateFormContent({
       <Modal.Footer
         primaryBtnState={primaryBtnState}
         labelPrimaryBtn="Alterar"
-        labelSecondaryBtn="Cancelar"
-        onClickSecondaryBtn={handleCloseModal}
       />
     </>
   );

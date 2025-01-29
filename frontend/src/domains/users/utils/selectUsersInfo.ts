@@ -1,4 +1,4 @@
-import { User } from "@/domains/global/types/User";
+import { User } from "@/domains/global/types/user";
 import { applyMask } from "@/domains/global/utils/applyMask";
 
 export default function selectUsersInfo(data: User[]): User[] {

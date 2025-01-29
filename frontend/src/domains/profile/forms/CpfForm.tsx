@@ -38,20 +38,16 @@ export default function CpfForm({
       defaultValues={defaultValues}
       schema={SchemaCpfForm}
     >
-      <CpfFormContent
-        handleCloseModal={handleCloseModal}
-        isPending={isPending}
-      />
+      <CpfFormContent isPending={isPending} />
     </Form>
   );
 }
 
 interface CpfFormContentProps {
-  handleCloseModal: () => void;
   isPending: boolean;
 }
 
-function CpfFormContent({ handleCloseModal, isPending }: CpfFormContentProps) {
+function CpfFormContent({ isPending }: CpfFormContentProps) {
   const {
     formState: { isDirty },
   } = useFormContext();
@@ -74,8 +70,6 @@ function CpfFormContent({ handleCloseModal, isPending }: CpfFormContentProps) {
       <Modal.Footer
         primaryBtnState={primaryBtnState}
         labelPrimaryBtn="Alterar"
-        labelSecondaryBtn="Cancelar"
-        onClickSecondaryBtn={handleCloseModal}
       />
     </>
   );

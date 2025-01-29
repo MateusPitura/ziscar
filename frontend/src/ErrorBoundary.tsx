@@ -1,5 +1,5 @@
 import React, { ErrorInfo } from "react";
-import { Childrenable } from "./domains/global/types/Components";
+import { Childrenable } from "./domains/global/types/components";
 
 interface GlobalErrorBoundaryState {
   hasError: boolean;

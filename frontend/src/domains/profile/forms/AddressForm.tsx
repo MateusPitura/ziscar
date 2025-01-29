@@ -60,21 +60,16 @@ export default function AddressForm({
       schema={SchemaAddressForm}
       defaultValues={defaultValues}
     >
-      <AddressFormContent
-        handleCloseModal={handleCloseModal}
-        isPending={isPending}
-      />
+      <AddressFormContent isPending={isPending} />
     </Form>
   );
 }
 
 interface AddressFormContentProps {
-  handleCloseModal: () => void;
   isPending: boolean;
 }
 
 function AddressFormContent({
-  handleCloseModal,
   isPending,
 }: AddressFormContentProps): ReactElement {
   const [currentValidCep, setCurrentValidCep] = useState("");
@@ -171,8 +166,6 @@ function AddressFormContent({
       </Modal.Body>
       <Modal.Footer
         labelPrimaryBtn="Alterar"
-        labelSecondaryBtn="Cancelar"
-        onClickSecondaryBtn={handleCloseModal}
         primaryBtnState={primaryBtnState}
       />
     </>
