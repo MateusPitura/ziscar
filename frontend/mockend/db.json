@@ -2,12 +2,12 @@
   "users": [
     {
       "id": "1",
-      "fullName": "Mateus Mateus",
-      "email": "mateus@email.co",
+      "fullName": "Mateus",
+      "email": "mateus@email.com",
       "cellphone": "00000000000",
       "code": "1111111111",
-      "password": "232321212121212121212aA!",
-      "birthDate": "2025-01-03T00:00:00.000Z",
+      "password": "aaaaaaaaaa11A.!",
+      "birthDate": "2025-01-28T00:00:00.000Z",
       "address": {
         "cep": "01153000",
         "street": "Rua Vitorino Carmilo",
@@ -17,7 +17,9 @@
         "state": "SP",
         "complement": "Casa"
       },
-      "cpf": "19222424034"
+      "cpf": "19222424034",
+      "category": "Administrador",
+      "isActive": true
     },
     {
       "id": "2",
@@ -36,7 +38,21 @@
         "state": null,
         "complement": null
       },
-      "password": "1111111111111a1A!"
+      "password": "1111111111111a1A!",
+      "category": "Financeiro",
+      "isActive": true
+    }
+  ],
+  "userDashboard": [
+    {
+      "id": "1",
+      "label": "Total de usuários",
+      "value": "24"
+    },
+    {
+      "id": "2",
+      "label": "Total de vendas",
+      "value": "R$100.000,00"
     }
   ]
 }
