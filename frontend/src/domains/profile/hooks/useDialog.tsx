@@ -16,5 +16,9 @@ export default function useDialog() {
     setIsOpen((prev) => !prev);
   }, []);
 
-  return { isOpen, setIsOpen, openDialog, closeDialog, toggleDialog };
+  const handleOpen = useCallback((state: boolean) => {
+    setIsOpen(state);
+  }, []);
+
+  return { isOpen, handleOpen, openDialog, closeDialog, toggleDialog };
 }
