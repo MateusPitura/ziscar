@@ -1,6 +1,6 @@
 import Form from "@/design-system/Form";
+import Choice from "@/design-system/Form/Choice";
 import Input from "@/design-system/Form/Input";
-import Radio from "@/design-system/Form/Radio";
 import SideSheet from "@/design-system/SideSheet";
 import useCustomFormContext from "@/domains/global/hooks/useCustomFormContext";
 import { ReactElement } from "react";
@@ -8,10 +8,8 @@ import { z } from "zod";
 
 const SchemaFilterUsersForm = z.object({
   name: z.string().optional(),
-  orderBy: z
-    .enum(["name", "email"], { message: "Opção inválida" })
-    .optional(),
-  category: z.enum(["active", "inactive"]).optional(),
+  orderBy: z.enum(["name", "email"], { message: "Opção inválida" }).optional(),
+  category: z.string().array().optional(),
 });
 
 type FilterUsersFormInputs = z.infer<typeof SchemaFilterUsersForm>;
@@ -44,14 +42,17 @@ function FilterUsersFormContent(): ReactElement {
         <span className="text-label-medium text-light-onSurface">
           Ordenar por
         </span>
-        <Radio<FilterUsersFormInputs> name="orderBy">
-          <Radio.Item label="Nome" value="name" />
-          <Radio.Item label="Email" value="email" />
-        </Radio>
+        <Choice<FilterUsersFormInputs> name="orderBy">
+          <Choice.Radio label="Nome" value="name" />
+          <Choice.Radio label="Email" value="email" />
+        </Choice>
         <span className="text-label-medium text-light-onSurface">
           Categoria
         </span>
-        <Input<FilterUsersFormInputs> name="category" label="Categoria" />
+        <Choice<FilterUsersFormInputs> name="category">
+          <Choice.Checkbox label="Ativo" value="active" />
+          <Choice.Checkbox label="Inativo" value="inactive" />
+        </Choice>
       </SideSheet.Body>
       <SideSheet.Footer
         primaryLabel="Aplicar"

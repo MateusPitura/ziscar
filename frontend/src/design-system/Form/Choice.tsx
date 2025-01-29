@@ -44,7 +44,7 @@ interface RadioProperties {
   value: string;
 }
 
-function Item({ label, name, ...props }: RadioProperties): ReactNode {
+function Radio({ label, name, ...props }: RadioProperties): ReactNode {
   const { register } = useFormContext();
 
   if (!name) return;
@@ -65,6 +65,26 @@ function Item({ label, name, ...props }: RadioProperties): ReactNode {
   );
 }
 
-const Radio = Object.assign(Container, { Item });
+type CheckboxProperties = RadioProperties;
 
-export default Radio;
+function Checkbox({ label, name, ...props }: CheckboxProperties): ReactNode {
+  const { register } = useFormContext();
+
+  if (!name) return;
+
+  return (
+    <label className="flex gap-2 items-center cursor-pointer hover:opacity-50">
+      <input
+        type="checkbox"
+        {...register(name)}
+        className="col-start-1 row-start-1 shrink-0 w-4 h-4 border-2 accent-light-primary disabled:border-neutral-300 cursor-pointer"
+        {...props}
+      />
+      <div className="text-body-large text-light-onSurface">{label}</div>
+    </label>
+  );
+}
+
+const Choice = Object.assign(Container, { Radio, Checkbox });
+
+export default Choice;
