@@ -50,7 +50,7 @@ interface FooterProps {
   labelPrimaryBtn: string;
   onClickSecondaryBtn?: () => void;
   labelSecondaryBtn: string;
-  primaryBtnState: ButtonState;
+  primaryBtnState?: ButtonState;
 }
 
 function Footer({

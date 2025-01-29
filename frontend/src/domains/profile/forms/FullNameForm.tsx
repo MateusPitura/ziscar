@@ -1,10 +1,10 @@
 import { useMemo, type ReactElement } from "react";
 import { z } from "zod";
 import useUpdateProfileInfo from "../hooks/useUpdateProfileInfo";
-import Form from "@/domains/global/components/Form";
-import Input from "@/design-system/Input";
+import Input from "@/design-system/Form/Input";
 import Modal from "@/design-system/Modal";
 import { useFormContext } from "react-hook-form";
+import Form from "@/design-system/Form";
 
 const SchemaFullNameForm = z.object({
   fullName: z

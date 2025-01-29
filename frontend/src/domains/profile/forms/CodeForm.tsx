@@ -1,10 +1,10 @@
-import Form from "@/domains/global/components/Form";
+import Form from "@/design-system/Form";
 import { z } from "zod";
 import useUpdateProfileInfo from "../hooks/useUpdateProfileInfo";
 import { useMemo } from "react";
 import { useFormContext } from "react-hook-form";
 import Modal from "@/design-system/Modal";
-import Input from "@/design-system/Input";
+import Input from "@/design-system/Form/Input";
 
 const SchemaCodeForm = z.object({
   code: z.string().optional(),

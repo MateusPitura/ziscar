@@ -1,0 +1,70 @@
+import { Childrenable } from "@/domains/global/types/Components";
+import {
+  Children,
+  cloneElement,
+  ReactNode,
+  useMemo,
+  type ReactElement,
+} from "react";
+import { FieldValues, useFormContext, useFormState } from "react-hook-form";
+import ErrorLabel from "./ErrorLabel";
+
+interface ContainerProps<T extends FieldValues> extends Childrenable {
+  name: keyof T & string;
+}
+
+function Container<T extends FieldValues>({
+  name,
+  children,
+}: ContainerProps<T>): ReactElement {
+  const enhancedChildren = useMemo(
+    () =>
+      Children.map(children, (child) => {
+        return cloneElement(child as ReactElement, { name });
+      }),
+    [children, name]
+  );
+
+  const { errors } = useFormState({
+    name,
+  });
+
+  return (
+    <div className="flex flex-col gap-2">
+      {enhancedChildren}
+      <ErrorLabel errors={errors} name={name} />
+    </div>
+  );
+}
+
+interface RadioProperties {
+  label: string;
+  name?: string;
+  required?: boolean;
+  value: string;
+}
+
+function Item({ label, name, ...props }: RadioProperties): ReactNode {
+  const { register } = useFormContext();
+
+  if (!name) return;
+
+  return (
+    <label className="flex gap-2 items-start cursor-pointer hover:opacity-50">
+      <div className="grid place-items-center mt-1">
+        <input
+          type="radio"
+          {...register(name)}
+          className="peer col-start-1 row-start-1 appearance-none shrink-0 w-4 h-4 border-2 border-light-primary rounded-full disabled:border-neutral-300 cursor-pointer"
+          {...props}
+        />
+        <div className="col-start-1 row-start-1 w-2 h-2 rounded-full peer-checked:bg-light-primary peer-checked:peer-disabled:bg-neutral-300" />
+      </div>
+      <div className="text-body-large text-light-onSurface">{label}</div>
+    </label>
+  );
+}
+
+const Radio = Object.assign(Container, { Item });
+
+export default Radio;

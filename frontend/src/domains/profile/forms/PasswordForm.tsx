@@ -1,12 +1,12 @@
-import Input from "@/design-system/Input";
+import Input from "@/design-system/Form/Input";
 import Modal from "@/design-system/Modal";
-import Form from "@/domains/global/components/Form";
 import { useMemo, useState, type ReactElement } from "react";
 import { useFormContext } from "react-hook-form";
 import { z } from "zod";
 import useUpdateProfileInfo from "../hooks/useUpdateProfileInfo";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
+import Form from "@/design-system/Form";
 
 const SchemaPasswordForm = z
   .object({

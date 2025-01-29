@@ -1,9 +1,9 @@
 import { ReactElement, useEffect, useMemo, useState } from "react";
 import { z } from "zod";
 import useUpdateProfileInfo from "../hooks/useUpdateProfileInfo";
-import Form from "@/domains/global/components/Form";
+import Form from "@/design-system/Form";
 import Modal from "@/design-system/Modal";
-import Input from "@/design-system/Input";
+import Input from "@/design-system/Form/Input";
 import { useFormContext } from "react-hook-form";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import { useQuery } from "@tanstack/react-query";

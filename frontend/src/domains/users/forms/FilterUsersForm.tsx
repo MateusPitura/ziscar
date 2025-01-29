@@ -1,13 +1,14 @@
-import Input from "@/design-system/Input";
+import Form from "@/design-system/Form";
+import Input from "@/design-system/Form/Input";
+import Radio from "@/design-system/Form/Radio";
 import SideSheet from "@/design-system/SideSheet";
-import Form from "@/domains/global/components/Form";
 import useCustomFormContext from "@/domains/global/hooks/useCustomFormContext";
 import { ReactElement } from "react";
 import { z } from "zod";
 
 const SchemaFilterUsersForm = z.object({
   name: z.string().optional(),
-  orderBy: z.enum(["name", "email"]).optional(),
+  orderBy: z.enum(["name", "email"], { message: 'Opções inválidas'}).optional(),
   category: z.enum(["active", "inactive"]).optional(),
 });
 
@@ -40,7 +41,10 @@ function FilterUsersFormContent(): ReactElement {
         <span className="text-label-medium text-light-onSurface">
           Ordenar por
         </span>
-        <Input<FilterUsersFormInputs> name="orderBy" label="Ordenar por" />
+        <Radio<FilterUsersFormInputs> name="orderBy">
+          <Radio.Item label="Nome" value="name"/>
+          <Radio.Item label="Email" value="email"/>
+        </Radio>
         <span className="text-label-medium text-light-onSurface">
           Categoria
         </span>

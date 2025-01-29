@@ -1,6 +1,5 @@
 import { Mask } from "@/domains/global/types/Mask";
 import { applyMask } from "@/domains/global/utils/applyMask";
-import classNames from "classnames";
 import { useEffect, type ReactElement } from "react";
 import {
   FieldValues,
@@ -8,7 +7,8 @@ import {
   useFormState,
   useWatch,
 } from "react-hook-form";
-import Button from "./Button";
+import Button from "../Button";
+import ErrorLabel from "./ErrorLabel";
 
 interface InputProperties<T extends FieldValues> {
   name: keyof T & string;
@@ -75,13 +75,7 @@ export default function Input<T extends FieldValues>({
           />
         )}
       </div>
-      <span
-        className={classNames("text-body-small text-light-error p-1", {
-          invisible: !errors[name],
-        })}
-      >
-        {errors[name]?.message?.toString() ?? "Campo inválido"}
-      </span>
+      <ErrorLabel errors={errors} name={name} />
     </label>
   );
 }

@@ -8,7 +8,7 @@ import {
 } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ZodObject, ZodType } from "zod";
-import { Childrenable } from "../types/Components";
+import { Childrenable } from "@/domains/global/types/Components";
 
 interface FormProperties<T extends FieldValues> extends Childrenable {
   onSubmit: (data: T) => void;
