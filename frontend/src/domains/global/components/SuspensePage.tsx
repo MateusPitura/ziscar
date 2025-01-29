@@ -1,13 +1,13 @@
 import { Suspense, type ReactElement } from "react";
-import LoadingSpinner from "./LoadingSpinner";
 import { Childrenable } from "../types/Components";
+import Spinner from "@/design-system/Spinner";
 
 export default function SuspensePage({ children }: Childrenable): ReactElement {
   return (
     <Suspense
       fallback={
         <div className="flex justify-center items-center h-full">
-          <LoadingSpinner />
+          <Spinner />
         </div>
       }
     >

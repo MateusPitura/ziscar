@@ -7,7 +7,7 @@ import Button, { ButtonState } from "./Button";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import NavigateNextOutlinedIcon from "@mui/icons-material/NavigateNextOutlined";
 import NavigateBeforeOutlinedIcon from "@mui/icons-material/NavigateBeforeOutlined";
-import LoadingSpinner from "@/domains/global/components/LoadingSpinner";
+import Spinner from "@/design-system/Spinner";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { Popover } from "./Popover";
@@ -146,7 +146,7 @@ function Body({ children, isEmpty, isLoading }: BodyProps) {
     return (
       <div className="flex-1 bg-light-surfaceContainerLowest overflow-y-auto flex items-center justify-center">
         {isLoading ? (
-          <LoadingSpinner />
+          <Spinner />
         ) : (
           <span className="text-light-onSurface text-body-medium">
             Nenhum item encontrado

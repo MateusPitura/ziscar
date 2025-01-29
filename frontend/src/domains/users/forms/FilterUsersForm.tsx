@@ -8,7 +8,9 @@ import { z } from "zod";
 
 const SchemaFilterUsersForm = z.object({
   name: z.string().optional(),
-  orderBy: z.enum(["name", "email"], { message: 'Opções inválidas'}).optional(),
+  orderBy: z
+    .enum(["name", "email"], { message: "Opção inválida" })
+    .optional(),
   category: z.enum(["active", "inactive"]).optional(),
 });
 
@@ -22,6 +24,7 @@ export default function FilterUsersForm(): ReactElement {
         console.log("🌠 data", data);
       }}
       className="flex-1 flex flex-col"
+      defaultValues={{ orderBy: "name" }}
     >
       <FilterUsersFormContent />
     </Form>
@@ -42,8 +45,8 @@ function FilterUsersFormContent(): ReactElement {
           Ordenar por
         </span>
         <Radio<FilterUsersFormInputs> name="orderBy">
-          <Radio.Item label="Nome" value="name"/>
-          <Radio.Item label="Email" value="email"/>
+          <Radio.Item label="Nome" value="name" />
+          <Radio.Item label="Email" value="email" />
         </Radio>
         <span className="text-label-medium text-light-onSurface">
           Categoria
