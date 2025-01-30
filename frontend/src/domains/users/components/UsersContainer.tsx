@@ -3,7 +3,7 @@ import { useState, type ReactElement } from "react";
 import PersonAddOutlinedIcon from "@mui/icons-material/PersonAddOutlined";
 import { useNavigate } from "react-router-dom";
 import DashBoard from "./DashBoard";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import { baseUrl } from "@/domains/global/constants/requests";
 import { DashBoard as DashBoardProps } from "@/domains/global/types/dashBoard";
@@ -15,6 +15,7 @@ import DisableUserModal from "./DisableUserModal";
 import UsersFilterForm from "../forms/UsersFilterForm";
 import useDialog from "@/domains/profile/hooks/useDialog";
 import { DisableUser } from "../types/disableUser";
+import useSnackbar from "@/domains/global/hooks/useSnackbar";
 
 export default function UsersContainer(): ReactElement {
   const [disableUserInfo, setDisableUserInfo] = useState<DisableUser>({
@@ -25,28 +26,27 @@ export default function UsersContainer(): ReactElement {
   const [currentPage, setCurrentPage] = useState(1);
 
   const { isOpen, closeDialog, openDialog } = useDialog();
-
+  const { showSuccessSnackbar } = useSnackbar();
   const navigate = useNavigate();
+  const { safeFetch } = useSafeFetch();
 
   function handleUsersFilter(value: string) {
     setUsersFilter(value);
   }
 
-  const { safeFetch } = useSafeFetch();
-
   async function getDashBoardInfo(): Promise<DashBoardProps[]> {
-    return await safeFetch({ path: `${baseUrl}/userDashboard` });
+    return await safeFetch({ path: `${baseUrl}/usersDashboard` });
   }
 
   const { data: dashBoardInfo, isFetching: isFetchingDatashBoardInfo } =
     useQuery({
-      queryKey: ["user-dashboard"],
+      queryKey: ["users-dashboard"],
       queryFn: getDashBoardInfo,
     });
 
   async function getUsersInfo(page: number, filter: string): Promise<User[]> {
     return await safeFetch({
-      path: `${baseUrl}/users?page=${page}&${filter}`,
+      path: `${baseUrl}/users?page=${page}${filter && "&" + filter}`,
     });
   }
 
@@ -54,6 +54,28 @@ export default function UsersContainer(): ReactElement {
     queryKey: ["users", currentPage, usersFilter] as const,
     queryFn: ({ queryKey }) => getUsersInfo(queryKey[1], queryKey[2]),
     select: selectUsersInfo,
+  });
+
+  async function generatePdf() {
+    return await safeFetch({
+      path: `${baseUrl}/usersPdf`,
+      method: "POST",
+      body: {
+        filter: usersFilter,
+        url: "https://example.com/", // TODO: ao implementar o back seria enviado apenas o filter
+      },
+    });
+  }
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: generatePdf,
+    onSuccess: (data) => {
+      showSuccessSnackbar({
+        title: "PDF gerado com sucesso",
+        actionLabel: "Abrir",
+        onActionClick: () => window.open(data.url, "_blank"),
+      });
+    },
   });
 
   return (
@@ -129,7 +151,9 @@ export default function UsersContainer(): ReactElement {
             currentStartItem={currentPage}
             onNavigateCallback={setCurrentPage}
             totalItems={usersInfo?.length}
-            onExportPdfCallback={() => {}}
+            onExportPdfCallback={mutate}
+            exportPdfBtnState={isPending ? "loading" : undefined}
+            isLoading={isFetchingUsersInfo}
           />
         </Table>
       </div>

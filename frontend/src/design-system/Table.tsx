@@ -19,6 +19,7 @@ import { CustomFormProvider } from "@/domains/global/contexts/CustomFormContext"
 import { Childrenable } from "@/domains/global/types/components";
 import useDialog from "@/domains/profile/hooks/useDialog";
 import { ITEMS_PER_PAGE } from "@/domains/global/constants/requests";
+import Loading from "./Loading";
 
 function Container({ children }: Childrenable): ReactElement {
   return (
@@ -174,25 +175,23 @@ interface FooterProps {
   onExportPdfCallback?: () => void;
   exportPdfBtnState?: ButtonState;
   onNavigateCallback?: Dispatch<SetStateAction<number>>;
-  navBeforeBtnState?: ButtonState;
-  navNextBtnState?: ButtonState;
   currentStartItem?: number;
   totalItems?: number;
   itemsPerPage?: number;
+  isLoading?: boolean;
 }
 
 function Footer({
   className,
   currentStartItem = 1,
   itemsPerPage = ITEMS_PER_PAGE,
+  totalItems,
   onExportPdfCallback,
   onExportSpreadSheetCallback,
   onNavigateCallback,
-  totalItems,
+  isLoading,
   exportPdfBtnState,
-  exportSpreadSheetBtnState,
-  navBeforeBtnState,
-  navNextBtnState,
+  exportSpreadSheetBtnState
 }: FooterProps) {
   const pageOffset = (currentStartItem - 1) * itemsPerPage; // 0, 20, 40 etc.
 
@@ -208,7 +207,7 @@ function Footer({
 
   function handleBefore() {
     if (onNavigateCallback) {
-      onNavigateCallback((prev) => (prev === 1 ? 1 : prev - 1)); // Don't allow to navigate to previous page if it's the first one  
+      onNavigateCallback((prev) => (prev === 1 ? 1 : prev - 1)); // Don't allow to navigate to previous page if it's the first one
     }
   }
 
@@ -226,7 +225,7 @@ function Footer({
           label="Exportar como planilha"
           iconRight={<FileDownloadOutlinedIcon />}
           onClick={onExportSpreadSheetCallback}
-          state={exportSpreadSheetBtnState}
+          state={isLoading ? "loading" : exportSpreadSheetBtnState}
         />
       )}
       {onExportPdfCallback && (
@@ -235,31 +234,38 @@ function Footer({
           label="Exportar como PDF"
           iconRight={<FileDownloadOutlinedIcon />}
           onClick={onExportPdfCallback}
-          state={exportPdfBtnState}
+          state={isLoading ? "loading" : exportPdfBtnState}
         />
       )}
-      {currentStartItem && totalItems && itemsPerPage && (
-        <div>
-          <span className="text-light-onTertiaryContainer text-body-large">
+      <Loading
+        isLoading={!!isLoading}
+        className="text-light-onTertiaryContainer text-body-large"
+      >
+        {totalItems && (
+          <>
             {`${pageOffset + 1}`}
             {`-${lastPage ? totalItems : pageOffset + itemsPerPage}`}
             {` de ${totalItems}`}
-          </span>
-        </div>
-      )}
+          </>
+        )}
+      </Loading>
       <Button
         variant="tertiary"
         iconLeft={<NavigateBeforeOutlinedIcon />}
         onClick={handleBefore}
         state={
-          navBeforeBtnState || currentStartItem === 1 ? "disabled" : undefined
+          isLoading
+            ? "loading"
+            : currentStartItem === 1
+            ? "disabled"
+            : undefined
         }
       />
       <Button
         variant="tertiary"
         iconLeft={<NavigateNextOutlinedIcon />}
         onClick={handleNext}
-        state={navNextBtnState || lastPage ? "disabled" : undefined}
+        state={isLoading ? "loading" : lastPage ? "disabled" : undefined}
       />
     </Row>
   );
