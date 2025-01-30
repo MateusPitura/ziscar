@@ -1,5 +1,5 @@
 import Table from "@/design-system/Table";
-import { useState, type ReactNode } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import DisableUserModal from "./DisableUserModal";
 import { DisableUser } from "../types/disableUser";
 import useDialog from "@/domains/profile/hooks/useDialog";
@@ -12,35 +12,45 @@ import selectUsersInfo from "../utils/selectUsersInfo";
 import UsersFilterForm from "../forms/UsersFilterForm";
 import Button from "@/design-system/Button";
 import { useNavigate } from "react-router-dom";
+import useGlobalContext from "@/domains/global/hooks/useGlobalContext";
+import formatFilters from "@/domains/global/utils/formatFilters";
 
 export default function UsersTable(): ReactNode {
   const [disableUserInfo, setDisableUserInfo] = useState<DisableUser>({
     userName: "",
     userId: "",
   });
-  const [usersFilter, setUsersFilter] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
 
   const { isOpen, closeDialog, openDialog } = useDialog();
-  const { showSuccessSnackbar } = useSnackbar();
-  const { safeFetch } = useSafeFetch();
-  const navigate = useNavigate();
 
-  function handleUsersFilter(value: string) {
-    setUsersFilter(value);
+  const { safeFetch } = useSafeFetch();
+
+  const { usersFilter, handleUsersFilter } = useGlobalContext();
+  
+  function handleChangePage(page: number) {
+    handleUsersFilter({ page });
   }
 
-  async function getUsersInfo(page: number, filter: string): Promise<User[]> {
+  const filterFormatted = useMemo(() => {
+    if (usersFilter) {
+      return formatFilters(usersFilter);
+    }
+    return "";
+  }, [usersFilter]);
+
+  async function getUsersInfo(filter?: string): Promise<User[]> {
     return await safeFetch({
-      path: `${baseUrl}/users?page=${page}${filter && "&" + filter}`,
+      path: `${baseUrl}/users?${filter}`,
     });
   }
-
+  
   const { data: usersInfo, isFetching: isFetchingUsersInfo } = useQuery({
-    queryKey: ["users", currentPage, usersFilter] as const,
-    queryFn: ({ queryKey }) => getUsersInfo(queryKey[1], queryKey[2]),
+    queryKey: ["users", filterFormatted],
+    queryFn: ({ queryKey }) => getUsersInfo(queryKey[1]),
     select: selectUsersInfo,
   });
+  
+  const { showSuccessSnackbar } = useSnackbar();
 
   async function generatePdf() {
     return await safeFetch({
@@ -64,6 +74,8 @@ export default function UsersTable(): ReactNode {
     },
   });
 
+  const navigate = useNavigate();
+
   return (
     <>
       <DisableUserModal
@@ -71,9 +83,7 @@ export default function UsersTable(): ReactNode {
         open={isOpen}
         onClose={closeDialog}
       />
-      <Table.Filter
-        formComponent={<UsersFilterForm setUsersFilter={handleUsersFilter} />}
-      />
+      <Table.Filter form={<UsersFilterForm />} />
       <Table>
         <Table.Header>
           <Table.Head label="ID" />
@@ -118,9 +128,9 @@ export default function UsersTable(): ReactNode {
           ))}
         </Table.Body>
         <Table.Footer
-          currentStartItem={currentPage}
-          onNavigateCallback={setCurrentPage}
+          currentStartItem={usersFilter?.page}
           totalItems={usersInfo?.length}
+          onNavigateCallback={handleChangePage}
           onExportPdfCallback={mutate}
           exportPdfBtnState={isPending ? "loading" : undefined}
           isLoading={isFetchingUsersInfo}

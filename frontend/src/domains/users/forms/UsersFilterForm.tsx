@@ -2,44 +2,17 @@ import Form from "@/design-system/Form";
 import Choice from "@/design-system/Form/Choice";
 import Input from "@/design-system/Form/Input";
 import SideSheet from "@/design-system/SideSheet";
-import { ReactElement } from "react";
+import useGlobalContext from "@/domains/global/hooks/useGlobalContext";
+import { memo, ReactElement } from "react";
+import { defaultValues } from "../constants/usersFilter";
 import { useFormContext } from "react-hook-form";
-import { z } from "zod";
+import { SchemaUsersFilterForm, UsersFilterFormInputs } from "../schemas/usersFilters";
 
-const SchemaUsersFilterForm = z.object({
-  name: z.string().optional(),
-  orderBy: z.string().optional(),
-  category: z.string().array().optional(),
-});
+function UsersFilterForm(): ReactElement {
+  const { usersFilter, handleUsersFilter } = useGlobalContext();
 
-type UsersFilterFormInputs = z.infer<typeof SchemaUsersFilterForm>;
-
-interface UsersFiltersFormProps {
-  setUsersFilter: (value: string) => void;
-}
-
-const defaultValues: UsersFilterFormInputs = {
-  name: "",
-  orderBy: "",
-  category: [],
-};
-
-export default function UsersFilterForm({
-  setUsersFilter,
-}: UsersFiltersFormProps): ReactElement {
   function handleSubmit(data: UsersFilterFormInputs) {
-    const filters = [];
-    if (data.name) {
-      filters.push(`fullName=${data.name}`);
-    }
-    if (data.orderBy) {
-      filters.push(`orderBy=${data.orderBy}`);
-    }
-    if (data.category?.length) {
-      filters.push(`category=${data.category?.join(",")}`);
-    }
-    const filter = filters.join("&");
-    setUsersFilter(filter);
+    handleUsersFilter(data);
   }
 
   return (
@@ -47,7 +20,7 @@ export default function UsersFilterForm({
       schema={SchemaUsersFilterForm}
       onSubmit={handleSubmit}
       className="flex-1 flex flex-col"
-      defaultValues={defaultValues}
+      defaultValues={usersFilter}
     >
       <UsersFilterFormContent />
     </Form>
@@ -55,7 +28,13 @@ export default function UsersFilterForm({
 }
 
 function UsersFilterFormContent(): ReactElement {
-  const { reset } = useFormContext();
+  const { reset } = useFormContext()
+  const { handleUsersFilter } = useGlobalContext();
+
+  function handleReset(){
+    handleUsersFilter(defaultValues)
+    reset(defaultValues)
+  }
 
   return (
     <>
@@ -82,8 +61,10 @@ function UsersFilterFormContent(): ReactElement {
       <SideSheet.Footer
         primaryLabel="Aplicar"
         secondaryLabel="Limpar"
-        onSecondaryCallback={() => reset(defaultValues)}
+        onSecondaryCallback={handleReset}
       />
     </>
   );
 }
+
+export default memo(UsersFilterForm);

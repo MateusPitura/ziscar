@@ -1,11 +1,5 @@
 import classNames from "classnames";
-import {
-  Children,
-  Dispatch,
-  SetStateAction,
-  type ReactElement,
-  type ReactNode,
-} from "react";
+import { Children, type ReactElement, type ReactNode } from "react";
 import Button, { ButtonState } from "./Button";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import NavigateNextOutlinedIcon from "@mui/icons-material/NavigateNextOutlined";
@@ -174,7 +168,7 @@ interface FooterProps {
   exportSpreadSheetBtnState?: ButtonState;
   onExportPdfCallback?: () => void;
   exportPdfBtnState?: ButtonState;
-  onNavigateCallback?: Dispatch<SetStateAction<number>>;
+  onNavigateCallback?: (page: number) => void;
   currentStartItem?: number;
   totalItems?: number;
   itemsPerPage?: number;
@@ -191,7 +185,7 @@ function Footer({
   onNavigateCallback,
   isLoading,
   exportPdfBtnState,
-  exportSpreadSheetBtnState
+  exportSpreadSheetBtnState,
 }: FooterProps) {
   const pageOffset = (currentStartItem - 1) * itemsPerPage; // 0, 20, 40 etc.
 
@@ -201,13 +195,13 @@ function Footer({
 
   function handleNext() {
     if (onNavigateCallback) {
-      onNavigateCallback((prev) => (lastPage ? prev : prev + 1)); // Don't allow to navigate to next page if it's the last one
+      onNavigateCallback(lastPage ? currentStartItem : currentStartItem + 1); // Don't allow to navigate to next page if it's the last one
     }
   }
 
   function handleBefore() {
     if (onNavigateCallback) {
-      onNavigateCallback((prev) => (prev === 1 ? 1 : prev - 1)); // Don't allow to navigate to previous page if it's the first one
+      onNavigateCallback(currentStartItem === 1 ? 1 : currentStartItem - 1); // Don't allow to navigate to previous page if it's the first one
     }
   }
 
@@ -274,7 +268,7 @@ function Footer({
 interface FilterProps {
   onFilterCallback?: () => void;
   filterBtnState?: ButtonState;
-  formComponent: ReactNode;
+  form: ReactNode;
 }
 
 function Filter(props: FilterProps) {
@@ -290,7 +284,7 @@ type FilterContentProps = FilterProps;
 function FilterContent({
   onFilterCallback,
   filterBtnState,
-  formComponent,
+  form,
 }: FilterContentProps) {
   const { isOpen, handleOpen } = useDialog();
 
@@ -309,7 +303,7 @@ function FilterContent({
       </SideSheet.Trigger>
       <SideSheet.Content>
         <SideSheet.Header label="Filtros" />
-        {formComponent}
+        {form}
       </SideSheet.Content>
     </SideSheet>
   );
