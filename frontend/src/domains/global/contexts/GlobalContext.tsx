@@ -26,10 +26,7 @@ function GlobalProvider({ children }: Childrenable) {
     id: "2",
   });
 
-  const [usersFilter, setUsersFilter] = useState<UsersFilter>({
-    page: 1,
-    ...defaultValues,
-  });
+  const [usersFilter, setUsersFilter] = useState<UsersFilter>(defaultValues);
 
   const handleUsersFilter = useCallback((value: Partial<UsersFilter>) => {
     setUsersFilter((prev) => ({

@@ -6,13 +6,16 @@ import useGlobalContext from "@/domains/global/hooks/useGlobalContext";
 import { memo, ReactElement } from "react";
 import { defaultValues } from "../constants/usersFilter";
 import { useFormContext } from "react-hook-form";
-import { SchemaUsersFilterForm, UsersFilterFormInputs } from "../schemas/usersFilters";
+import {
+  SchemaUsersFilterForm,
+  UsersFilterFormInputs,
+} from "../schemas/usersFilters";
 
 function UsersFilterForm(): ReactElement {
   const { usersFilter, handleUsersFilter } = useGlobalContext();
 
   function handleSubmit(data: UsersFilterFormInputs) {
-    handleUsersFilter(data);
+    handleUsersFilter({ page: 1, ...data });
   }
 
   return (
@@ -28,12 +31,12 @@ function UsersFilterForm(): ReactElement {
 }
 
 function UsersFilterFormContent(): ReactElement {
-  const { reset } = useFormContext()
+  const { reset } = useFormContext();
   const { handleUsersFilter } = useGlobalContext();
 
-  function handleReset(){
-    handleUsersFilter(defaultValues)
-    reset(defaultValues)
+  function handleReset() {
+    handleUsersFilter(defaultValues);
+    reset(defaultValues);
   }
 
   return (
