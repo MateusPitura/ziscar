@@ -39,7 +39,7 @@ export default function UsersFilterForm({
       filters.push(`category=${data.category?.join(",")}`);
     }
     if (!filters.length) return;
-    const filter = `?${filters.join("&")}`;
+    const filter = filters.join("&");
     setUsersFilter(filter);
   }
 

@@ -1,7 +1,10 @@
 import classNames from "classnames";
 import {
-  Children, type ReactElement,
-  type ReactNode
+  Children,
+  Dispatch,
+  SetStateAction,
+  type ReactElement,
+  type ReactNode,
 } from "react";
 import Button, { ButtonState } from "./Button";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
@@ -15,6 +18,7 @@ import SideSheet from "./SideSheet";
 import { CustomFormProvider } from "@/domains/global/contexts/CustomFormContext";
 import { Childrenable } from "@/domains/global/types/components";
 import useDialog from "@/domains/profile/hooks/useDialog";
+import { ITEMS_PER_PAGE } from "@/domains/global/constants/requests";
 
 function Container({ children }: Childrenable): ReactElement {
   return (
@@ -169,29 +173,45 @@ interface FooterProps {
   exportSpreadSheetBtnState?: ButtonState;
   onExportPdfCallback?: () => void;
   exportPdfBtnState?: ButtonState;
-  onNavigateBeforeCallback?: () => void;
+  onNavigateCallback?: Dispatch<SetStateAction<number>>;
   navBeforeBtnState?: ButtonState;
-  onNavigateNextCallback?: () => void;
   navNextBtnState?: ButtonState;
   currentStartItem?: number;
   totalItems?: number;
-  itemsCurrentPage?: number;
+  itemsPerPage?: number;
 }
 
 function Footer({
   className,
-  currentStartItem,
-  itemsCurrentPage,
+  currentStartItem = 1,
+  itemsPerPage = ITEMS_PER_PAGE,
   onExportPdfCallback,
   onExportSpreadSheetCallback,
-  onNavigateBeforeCallback,
-  onNavigateNextCallback,
+  onNavigateCallback,
   totalItems,
   exportPdfBtnState,
   exportSpreadSheetBtnState,
   navBeforeBtnState,
   navNextBtnState,
 }: FooterProps) {
+  const pageOffset = (currentStartItem - 1) * itemsPerPage; // 0, 20, 40 etc.
+
+  const lastPage =
+    (totalItems && totalItems < pageOffset + itemsPerPage) || // 21-30 de 30
+    pageOffset + itemsPerPage === totalItems; // 21-40 de 40
+
+  function handleNext() {
+    if (onNavigateCallback) {
+      onNavigateCallback((prev) => (lastPage ? prev : prev + 1)); // Don't allow to navigate to next page if it's the last one
+    }
+  }
+
+  function handleBefore() {
+    if (onNavigateCallback) {
+      onNavigateCallback((prev) => (prev === 1 ? 1 : prev - 1)); // Don't allow to navigate to previous page if it's the first one  
+    }
+  }
+
   return (
     <Row
       className={classNames(
@@ -218,29 +238,29 @@ function Footer({
           state={exportPdfBtnState}
         />
       )}
-      <div>
-        <span className="text-light-onTertiaryContainer text-body-large">
-          {currentStartItem && `${currentStartItem}`}
-          {itemsCurrentPage && `-${itemsCurrentPage}`}
-          {totalItems && ` de ${totalItems}`}
-        </span>
-      </div>
-      {onNavigateBeforeCallback && (
-        <Button
-          variant="tertiary"
-          iconLeft={<NavigateBeforeOutlinedIcon />}
-          onClick={onNavigateBeforeCallback}
-          state={navBeforeBtnState}
-        />
+      {currentStartItem && totalItems && itemsPerPage && (
+        <div>
+          <span className="text-light-onTertiaryContainer text-body-large">
+            {`${pageOffset + 1}`}
+            {`-${lastPage ? totalItems : pageOffset + itemsPerPage}`}
+            {` de ${totalItems}`}
+          </span>
+        </div>
       )}
-      {onNavigateNextCallback && (
-        <Button
-          variant="tertiary"
-          iconLeft={<NavigateNextOutlinedIcon />}
-          onClick={onNavigateNextCallback}
-          state={navNextBtnState}
-        />
-      )}
+      <Button
+        variant="tertiary"
+        iconLeft={<NavigateBeforeOutlinedIcon />}
+        onClick={handleBefore}
+        state={
+          navBeforeBtnState || currentStartItem === 1 ? "disabled" : undefined
+        }
+      />
+      <Button
+        variant="tertiary"
+        iconLeft={<NavigateNextOutlinedIcon />}
+        onClick={handleNext}
+        state={navNextBtnState || lastPage ? "disabled" : undefined}
+      />
     </Row>
   );
 }
@@ -266,7 +286,7 @@ function FilterContent({
   filterBtnState,
   formComponent,
 }: FilterContentProps) {
-  const { isOpen, handleOpen } = useDialog()
+  const { isOpen, handleOpen } = useDialog();
 
   return (
     <SideSheet open={isOpen} onOpenChange={handleOpen}>

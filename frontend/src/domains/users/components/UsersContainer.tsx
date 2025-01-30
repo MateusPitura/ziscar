@@ -17,12 +17,12 @@ import useDialog from "@/domains/profile/hooks/useDialog";
 import { DisableUser } from "../types/disableUser";
 
 export default function UsersContainer(): ReactElement {
-  const [disableUserInfo, setDisableUserInfo] =
-    useState<DisableUser>({
-      userName: "",
-      userId: "",
-    });
+  const [disableUserInfo, setDisableUserInfo] = useState<DisableUser>({
+    userName: "",
+    userId: "",
+  });
   const [usersFilter, setUsersFilter] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
 
   const { isOpen, closeDialog, openDialog } = useDialog();
 
@@ -44,13 +44,15 @@ export default function UsersContainer(): ReactElement {
       queryFn: getDashBoardInfo,
     });
 
-  async function getUsersInfo(filter: string): Promise<User[]> {
-    return await safeFetch({ path: `${baseUrl}/users${filter}` });
+  async function getUsersInfo(page: number, filter: string): Promise<User[]> {
+    return await safeFetch({
+      path: `${baseUrl}/users?page=${page}&${filter}`,
+    });
   }
 
   const { data: usersInfo, isFetching: isFetchingUsersInfo } = useQuery({
-    queryKey: ["users", usersFilter],
-    queryFn: ({ queryKey }) => getUsersInfo(queryKey[1]),
+    queryKey: ["users", currentPage, usersFilter] as const,
+    queryFn: ({ queryKey }) => getUsersInfo(queryKey[1], queryKey[2]),
     select: selectUsersInfo,
   });
 
@@ -78,9 +80,7 @@ export default function UsersContainer(): ReactElement {
           ))}
         </DashBoard>
         <Table.Filter
-          formComponent={
-            <UsersFilterForm setUsersFilter={handleUsersFilter} />
-          }
+          formComponent={<UsersFilterForm setUsersFilter={handleUsersFilter} />}
         />
         <Table>
           <Table.Header>
@@ -126,13 +126,10 @@ export default function UsersContainer(): ReactElement {
             ))}
           </Table.Body>
           <Table.Footer
-            currentStartItem={1}
-            itemsCurrentPage={10}
+            currentStartItem={currentPage}
+            onNavigateCallback={setCurrentPage}
             totalItems={usersInfo?.length}
-            onNavigateBeforeCallback={() => {}}
-            onNavigateNextCallback={() => {}}
             onExportPdfCallback={() => {}}
-            onExportSpreadSheetCallback={() => {}}
           />
         </Table>
       </div>
