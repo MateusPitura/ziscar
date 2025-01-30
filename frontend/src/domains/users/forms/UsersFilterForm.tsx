@@ -8,7 +8,7 @@ import { z } from "zod";
 
 const SchemaUsersFilterForm = z.object({
   name: z.string().optional(),
-  orderBy: z.enum(["name", "email"], { message: "Opção inválida" }).optional(),
+  orderBy: z.string().optional(),
   category: z.string().array().optional(),
 });
 
@@ -20,7 +20,7 @@ interface UsersFiltersFormProps {
 
 const defaultValues: UsersFilterFormInputs = {
   name: "",
-  orderBy: "name",
+  orderBy: "",
   category: [],
 };
 
@@ -38,7 +38,6 @@ export default function UsersFilterForm({
     if (data.category?.length) {
       filters.push(`category=${data.category?.join(",")}`);
     }
-    if (!filters.length) return;
     const filter = filters.join("&");
     setUsersFilter(filter);
   }
