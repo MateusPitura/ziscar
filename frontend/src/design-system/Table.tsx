@@ -189,9 +189,7 @@ function Footer({
 }: FooterProps) {
   const pageOffset = (currentStartItem - 1) * itemsPerPage; // 0, 20, 40 etc.
 
-  const lastPage =
-    (totalItems && totalItems < pageOffset + itemsPerPage) || // 21-30 de 30
-    pageOffset + itemsPerPage === totalItems; // 21-40 de 40
+  const lastPage = totalItems && totalItems <= pageOffset + itemsPerPage; // 21-30 de 30 ou 21-40 de 40
 
   function handleNext() {
     if (onNavigateCallback) {
@@ -259,7 +257,13 @@ function Footer({
         variant="tertiary"
         iconLeft={<NavigateNextOutlinedIcon />}
         onClick={handleNext}
-        state={isLoading ? "loading" : lastPage ? "disabled" : undefined}
+        state={
+          isLoading
+            ? "loading"
+            : lastPage || !totalItems
+            ? "disabled"
+            : undefined
+        }
       />
     </Row>
   );
