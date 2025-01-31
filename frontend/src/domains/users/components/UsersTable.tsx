@@ -1,8 +1,5 @@
 import Table from "@/design-system/Table";
 import { useMemo, useState, type ReactNode } from "react";
-import DisableUserModal from "./DisableUserModal";
-import { DisableUser } from "../types/disableUser";
-import useDialog from "@/domains/global/hooks/useDialog";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import { baseUrl } from "@/domains/global/constants/requests";
@@ -10,10 +7,12 @@ import { User } from "@/domains/global/types/user";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import selectUsersInfo from "../utils/selectUsersInfo";
 import UsersFilterForm from "../forms/UsersFilterForm";
-import Button from "@/design-system/Button";
-import { useNavigate } from "react-router-dom";
 import useGlobalContext from "@/domains/global/hooks/useGlobalContext";
 import formatFilters from "@/domains/global/utils/formatFilters";
+import UsersTableActions from "./UsersTableActions";
+import { DisableUser } from "../types/disableUser";
+import DisableUserModal from "./DisableUserModal";
+import useDialog from "@/domains/global/hooks/useDialog";
 
 export default function UsersTable(): ReactNode {
   const [disableUserInfo, setDisableUserInfo] = useState<DisableUser>({
@@ -22,11 +21,14 @@ export default function UsersTable(): ReactNode {
   });
 
   const dialog = useDialog();
-
   const { safeFetch } = useSafeFetch();
-
   const { usersFilter, handleUsersFilter } = useGlobalContext();
-
+  
+  function handleDisableUserInfo(user: DisableUser) {
+    dialog.openDialog();
+    setDisableUserInfo(user);
+  }
+  
   function handleChangePage(page: number) {
     handleUsersFilter({ page });
   }
@@ -74,8 +76,6 @@ export default function UsersTable(): ReactNode {
     },
   });
 
-  const navigate = useNavigate();
-
   return (
     <>
       <DisableUserModal {...disableUserInfo} {...dialog} />
@@ -101,23 +101,11 @@ export default function UsersTable(): ReactNode {
               <Table.Cell label={user.cellphone} />
               <Table.Cell label={user.isActive ? "Ativo" : "Inativo"} />
               <Table.Action>
-                <Button
-                  variant="tertiary"
-                  fullWidth
-                  label="Editar"
-                  onClick={() => navigate(`/users/${user.id}`)}
-                />
-                <Button
-                  variant="tertiary"
-                  fullWidth
-                  label="Desativar"
-                  onClick={() => {
-                    dialog.openDialog();
-                    setDisableUserInfo({
-                      userName: user.fullName,
-                      userId: user.id,
-                    });
-                  }}
+                <UsersTableActions
+                  isActive={user.isActive}
+                  userId={user.id}
+                  fullName={user.fullName}
+                  handleDisableUserInfo={handleDisableUserInfo}
                 />
               </Table.Action>
             </Table.Row>

@@ -22,7 +22,8 @@ export default function DisableUserModal({
   async function disableUser() {
     await safeFetch({
       path: `${baseUrl}/users/${userId}`,
-      method: "DELETE",
+      method: "PATCH",
+      body: { isActive: false },
     });
   }
 
