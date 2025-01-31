@@ -275,10 +275,10 @@ interface FilterProps {
 }
 
 function Filter({ onFilterCallback, filterBtnState, form }: FilterProps) {
-  const props = useDialog();
+  const dialog = useDialog();
 
   return (
-    <SideSheet {...props}>
+    <SideSheet {...dialog}>
       <SideSheet.Trigger>
         <div className="flex justify-end">
           <Button

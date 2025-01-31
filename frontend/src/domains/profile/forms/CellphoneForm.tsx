@@ -4,6 +4,7 @@ import useUpdateProfileInfo from "../hooks/useUpdateProfileInfo";
 import Modal from "@/design-system/Modal";
 import Input from "@/design-system/Form/Input";
 import { removeMask } from "@/domains/global/utils/removeMask";
+import useDialogContext from "@/domains/global/hooks/useDialogContext";
 
 const SchemaCellphoneForm = z.object({
   cellphone: z
@@ -15,16 +16,14 @@ const SchemaCellphoneForm = z.object({
 type CellphoneFormInputs = z.infer<typeof SchemaCellphoneForm>;
 
 interface CellphoneFormProps {
-  handleCloseModal: () => void;
   defaultValues: Partial<CellphoneFormInputs>;
 }
 
-export default function CellphoneForm({
-  handleCloseModal,
-  defaultValues,
-}: CellphoneFormProps) {
+export default function CellphoneForm({ defaultValues }: CellphoneFormProps) {
+  const { closeDialog } = useDialogContext();
+
   const { mutate, isPending } = useUpdateProfileInfo<CellphoneFormInputs>({
-    onSuccessSubmit: handleCloseModal,
+    onSuccessSubmit: closeDialog,
     snackbarTitle: "Celular atualizado com sucesso",
   });
 

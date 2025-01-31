@@ -4,6 +4,7 @@ import { z } from "zod";
 import useUpdateProfileInfo from "../hooks/useUpdateProfileInfo";
 import Modal from "@/design-system/Modal";
 import Form from "@/design-system/Form";
+import useDialogContext from "@/domains/global/hooks/useDialogContext";
 
 const SchemaEmailForm = z.object({
   email: z.string().email({ message: "Email inválido" }),
@@ -12,16 +13,16 @@ const SchemaEmailForm = z.object({
 type EmailFormInputs = z.infer<typeof SchemaEmailForm>;
 
 interface EmailFormProps {
-  handleCloseModal: () => void;
   defaultValues: Partial<EmailFormInputs>;
 }
 
 export default function EmailForm({
-  handleCloseModal,
   defaultValues,
 }: EmailFormProps): ReactElement {
+  const { closeDialog } = useDialogContext()
+
   const { mutate, isPending } = useUpdateProfileInfo<EmailFormInputs>({
-    onSuccessSubmit: handleCloseModal,
+    onSuccessSubmit: closeDialog,
     snackbarTitle: "Email atualizado com sucesso",
   });
 

@@ -3,6 +3,9 @@ export interface Childrenable {
 }
 
 export interface Dialog {
-  open: boolean;
-  onClose: () => void;
+  isOpen: boolean;
+  openDialog: () => void;
+  closeDialog: () => void;
+  toggleDialog: () => void;
+  handleOpen: (state: boolean) => void;
 }

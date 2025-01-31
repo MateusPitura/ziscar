@@ -5,6 +5,7 @@ import Input from "@/design-system/Form/Input";
 import Modal from "@/design-system/Modal";
 import { validateCpf } from "@/domains/global/utils/validateCpf";
 import { removeMask } from "@/domains/global/utils/removeMask";
+import useDialogContext from "@/domains/global/hooks/useDialogContext";
 
 const SchemaCpfForm = z.object({
   cpf: z
@@ -17,16 +18,16 @@ const SchemaCpfForm = z.object({
 type CpfFormInputs = z.infer<typeof SchemaCpfForm>;
 
 interface CpfFormProps {
-  handleCloseModal: () => void;
   defaultValues: Partial<CpfFormInputs>;
 }
 
 export default function CpfForm({
-  handleCloseModal,
   defaultValues,
 }: CpfFormProps) {
+  const { closeDialog } = useDialogContext()
+
   const { isPending, mutate } = useUpdateProfileInfo<CpfFormInputs>({
-    onSuccessSubmit: handleCloseModal,
+    onSuccessSubmit: closeDialog,
     snackbarTitle: "CPF atualizado com sucesso",
   });
 

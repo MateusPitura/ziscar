@@ -4,6 +4,7 @@ import useUpdateProfileInfo from "../hooks/useUpdateProfileInfo";
 import Input from "@/design-system/Form/Input";
 import Modal from "@/design-system/Modal";
 import Form from "@/design-system/Form";
+import useDialogContext from "@/domains/global/hooks/useDialogContext";
 
 const SchemaFullNameForm = z.object({
   fullName: z
@@ -14,16 +15,16 @@ const SchemaFullNameForm = z.object({
 type FullNameFormInputs = z.infer<typeof SchemaFullNameForm>;
 
 interface FullNameFormProperties {
-  handleCloseModal: () => void;
   defaultValues: Partial<FullNameFormInputs>;
 }
 
 export default function FullNameForm({
   defaultValues,
-  handleCloseModal,
 }: FullNameFormProperties): ReactElement {
+  const { closeDialog } = useDialogContext();
+
   const { mutate, isPending } = useUpdateProfileInfo<FullNameFormInputs>({
-    onSuccessSubmit: handleCloseModal,
+    onSuccessSubmit: closeDialog,
     snackbarTitle: "Nome completo atualizado com sucesso",
   });
 

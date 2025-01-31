@@ -3,6 +3,7 @@ import { z } from "zod";
 import useUpdateProfileInfo from "../hooks/useUpdateProfileInfo";
 import Modal from "@/design-system/Modal";
 import Input from "@/design-system/Form/Input";
+import useDialogContext from "@/domains/global/hooks/useDialogContext";
 
 const SchemaCodeForm = z.object({
   code: z.string().optional(),
@@ -11,16 +12,14 @@ const SchemaCodeForm = z.object({
 type CodeFormInputs = z.infer<typeof SchemaCodeForm>;
 
 interface CodeFormProps {
-  handleCloseModal: () => void;
   defaultValues: Partial<CodeFormInputs>;
 }
 
-export default function CodeForm({
-  handleCloseModal,
-  defaultValues,
-}: CodeFormProps) {
+export default function CodeForm({ defaultValues }: CodeFormProps) {
+  const { closeDialog } = useDialogContext();
+
   const { mutate, isPending } = useUpdateProfileInfo<CodeFormInputs>({
-    onSuccessSubmit: handleCloseModal,
+    onSuccessSubmit: closeDialog,
     snackbarTitle: "Matrícula atualizada com sucesso",
   });
 

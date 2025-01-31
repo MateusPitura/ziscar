@@ -6,6 +6,7 @@ import useUpdateProfileInfo from "../hooks/useUpdateProfileInfo";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
 import Form from "@/design-system/Form";
+import useDialogContext from "@/domains/global/hooks/useDialogContext";
 
 const SchemaPasswordForm = z
   .object({
@@ -27,22 +28,18 @@ const SchemaPasswordForm = z
 
 type PasswordFormInputs = z.infer<typeof SchemaPasswordForm>;
 
-interface PasswordFormProps {
-  handleCloseModal: () => void;
-}
-
 const defaultValues: PasswordFormInputs = {
   newPassword: "",
   confirmPassword: "",
 };
 
-export default function PasswordForm({
-  handleCloseModal,
-}: PasswordFormProps): ReactElement {
+export default function PasswordForm(): ReactElement {
+  const { closeDialog } = useDialogContext()
+
   const { mutate, isPending } = useUpdateProfileInfo<{
     password: PasswordFormInputs["newPassword"];
   }>({
-    onSuccessSubmit: handleCloseModal,
+    onSuccessSubmit: closeDialog,
     snackbarTitle: "Senha atualizada com sucesso",
     shouldInvalidateQuery: false,
   });

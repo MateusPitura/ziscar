@@ -3,6 +3,7 @@ import useUpdateProfileInfo from "../hooks/useUpdateProfileInfo";
 import Form from "@/design-system/Form";
 import Modal from "@/design-system/Modal";
 import Input from "@/design-system/Form/Input";
+import useDialogContext from "@/domains/global/hooks/useDialogContext";
 
 const BirthDateSchema = z.object({
   birthDate: z.coerce
@@ -25,16 +26,14 @@ interface BirthDateFormInputs {
 }
 
 interface BirthDateFormProps {
-  handleCloseModal: () => void;
   defaultValues: Partial<BirthDateFormInputs>;
 }
 
-export default function BirthDateForm({
-  handleCloseModal,
-  defaultValues,
-}: BirthDateFormProps) {
+export default function BirthDateForm({ defaultValues }: BirthDateFormProps) {
+  const { closeDialog } = useDialogContext();
+
   const { mutate, isPending } = useUpdateProfileInfo<BirthDateFormInputs>({
-    onSuccessSubmit: handleCloseModal,
+    onSuccessSubmit: closeDialog,
     snackbarTitle: "Data de nascimento atualizada com sucesso",
   });
 

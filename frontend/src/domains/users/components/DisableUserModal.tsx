@@ -11,10 +11,9 @@ import { DisableUser } from "../types/disableUser";
 interface DisableUserModalProps extends Dialog, DisableUser {}
 
 export default function DisableUserModal({
-  open,
-  onClose,
   userId,
   userName,
+  ...dialog
 }: DisableUserModalProps): ReactElement {
   const { safeFetch } = useSafeFetch();
   const { showSuccessSnackbar } = useSnackbar();
@@ -34,12 +33,12 @@ export default function DisableUserModal({
       showSuccessSnackbar({
         title: `Usuário ${userName} desativado com sucesso`,
       });
-      onClose();
+      dialog.closeDialog();
     },
   });
 
   return (
-    <Modal open={open} onClose={onClose}>
+    <Modal {...dialog}>
       <Modal.Header title="Desativar usuário" />
       <Modal.Body>
         <span className="text-body-medium text-light-onSurface">

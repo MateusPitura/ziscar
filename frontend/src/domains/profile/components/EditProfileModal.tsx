@@ -6,13 +6,12 @@ import { EditProfile } from "../types/editProfile";
 interface EditProfileModalProps extends Dialog, EditProfile {}
 
 export default function EditProfileModal({
-  content,
-  onClose,
-  open,
   title,
+  content,
+  ...dialog
 }: EditProfileModalProps): ReactNode {
   return (
-    <Modal open={open} onClose={onClose}>
+    <Modal {...dialog}>
       <Modal.Header title={title} />
       {content}
     </Modal>

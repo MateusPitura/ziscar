@@ -10,6 +10,7 @@ import { useQuery } from "@tanstack/react-query";
 import Button from "@/design-system/Button";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import { removeMask } from "@/domains/global/utils/removeMask";
+import useDialogContext from "@/domains/global/hooks/useDialogContext";
 
 interface ViaCepAddress {
   logradouro?: string;
@@ -35,18 +36,18 @@ const SchemaAddressForm = z.object({
 type AddressFormInputs = z.infer<typeof SchemaAddressForm>;
 
 interface AddressFormProps {
-  handleCloseModal: () => void;
   defaultValues: Partial<AddressFormInputs>;
 }
 
 export default function AddressForm({
-  handleCloseModal,
   defaultValues,
 }: AddressFormProps): ReactElement {
+  const { closeDialog } = useDialogContext();
+
   const { mutate, isPending } = useUpdateProfileInfo<{
     address: AddressFormInputs;
   }>({
-    onSuccessSubmit: handleCloseModal,
+    onSuccessSubmit: closeDialog,
     snackbarTitle: "Endereço atualizado com sucesso",
   });
 
@@ -74,11 +75,7 @@ function AddressFormContent({
 }: AddressFormContentProps): ReactElement {
   const [currentValidCep, setCurrentValidCep] = useState("");
 
-  const {
-    setValue,
-    trigger,
-    getValues,
-  } = useFormContext();
+  const { setValue, trigger, getValues } = useFormContext();
 
   const { safeFetch } = useSafeFetch();
 

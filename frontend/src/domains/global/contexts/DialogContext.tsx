@@ -1,14 +1,13 @@
 import { createContext } from "react";
-import { Childrenable } from "../types/components";
-import { DialogProps } from "../types/dialog";
+import { Childrenable, Dialog } from "../types/components";
 
-const DialogContext = createContext<DialogProps | null>(null);
+const DialogContext = createContext<Dialog | null>(null);
 
-interface DialogProviderProps extends DialogProps, Childrenable {}
+interface DialogProviderProps extends Dialog, Childrenable {}
 
-function DialogProvider({ children, ...props }: DialogProviderProps) {
+function DialogProvider({ children, ...dialog }: DialogProviderProps) {
   return (
-    <DialogContext.Provider value={props}>{children}</DialogContext.Provider>
+    <DialogContext.Provider value={dialog}>{children}</DialogContext.Provider>
   );
 }
 

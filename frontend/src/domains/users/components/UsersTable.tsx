@@ -21,7 +21,7 @@ export default function UsersTable(): ReactNode {
     userId: "",
   });
 
-  const { isOpen, closeDialog, openDialog } = useDialog();
+  const dialog = useDialog();
 
   const { safeFetch } = useSafeFetch();
 
@@ -78,11 +78,7 @@ export default function UsersTable(): ReactNode {
 
   return (
     <>
-      <DisableUserModal
-        {...disableUserInfo}
-        open={isOpen}
-        onClose={closeDialog}
-      />
+      <DisableUserModal {...disableUserInfo} {...dialog} />
       <Table.Filter form={<UsersFilterForm />} />
       <Table>
         <Table.Header>
@@ -116,7 +112,7 @@ export default function UsersTable(): ReactNode {
                   fullWidth
                   label="Desativar"
                   onClick={() => {
-                    openDialog();
+                    dialog.openDialog();
                     setDisableUserInfo({
                       userName: user.fullName,
                       userId: user.id,

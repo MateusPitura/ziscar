@@ -1,6 +1,6 @@
 import { useMemo, type ReactElement } from "react";
 import {
-  Dialog,
+  Dialog as DialogShadcn,
   DialogContent,
   DialogFooter,
   DialogHeader,
@@ -8,22 +8,22 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import Button, { ButtonState } from "./Button";
-import { Childrenable } from "@/domains/global/types/components";
+import { Childrenable, Dialog } from "@/domains/global/types/components";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { useFormContext } from "react-hook-form";
+import { DialogProvider } from "@/domains/global/contexts/DialogContext";
 
-interface ContainerProps extends Childrenable {
-  open: boolean;
-  onClose: () => void;
-}
+interface ContainerProps extends Dialog, Childrenable {}
 
-function Container({ open, onClose, children }: ContainerProps): ReactElement {
+function Container({ children, ...dialog }: ContainerProps): ReactElement {
   return (
-    <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="bg-light-surfaceContainerLowest p-0 gap-0">
-        {children}
-      </DialogContent>
-    </Dialog>
+    <DialogProvider {...dialog}>
+      <DialogShadcn open={dialog.isOpen} onOpenChange={dialog.handleOpen}>
+        <DialogContent className="bg-light-surfaceContainerLowest p-0 gap-0">
+          {children}
+        </DialogContent>
+      </DialogShadcn>
+    </DialogProvider>
   );
 }
 

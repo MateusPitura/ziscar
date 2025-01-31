@@ -10,22 +10,19 @@ import {
 import Button, { ButtonState } from "./Button";
 import classNames from "classnames";
 import { DialogDescription } from "@/components/ui/dialog";
-import { Childrenable } from "@/domains/global/types/components";
+import { Childrenable, Dialog } from "@/domains/global/types/components";
 import { useFormContext } from "react-hook-form";
 import { DialogProvider } from "@/domains/global/contexts/DialogContext";
-import { DialogProps } from "@/domains/global/types/dialog";
 
-interface ContainerProps extends DialogProps, Childrenable {}
+interface ContainerProps extends Dialog, Childrenable {}
 
 function Container({
   children,
-  isOpen,
-  handleOpen,
-  ...props
+  ...dialog
 }: ContainerProps): ReactElement {
   return (
-    <DialogProvider isOpen={isOpen} handleOpen={handleOpen} {...props}>
-      <Sheet open={isOpen} onOpenChange={handleOpen}>
+    <DialogProvider {...dialog}>
+      <Sheet open={dialog.isOpen} onOpenChange={dialog.handleOpen}>
         {children}
         {/* DialogDescription corrige warning de acessibilidade */}
         <DialogDescription />
