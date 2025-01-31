@@ -1,7 +1,6 @@
 import Input from "@/design-system/Form/Input";
 import Modal from "@/design-system/Modal";
-import { useMemo, useState, type ReactElement } from "react";
-import { useFormContext } from "react-hook-form";
+import { useState, type ReactElement } from "react";
 import { z } from "zod";
 import useUpdateProfileInfo from "../hooks/useUpdateProfileInfo";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
@@ -75,15 +74,6 @@ export function PasswordFormContent({
     confirmPassword: false,
   });
 
-  const {
-    formState: { isDirty },
-  } = useFormContext();
-
-  const primaryBtnState = useMemo(() => {
-    if (isPending) return "loading";
-    if (!isDirty) return "disabled";
-  }, [isPending, isDirty]);
-
   function handleShowPassword(field: keyof typeof showPassword) {
     setShowPassword((prevState) => ({
       ...prevState,
@@ -125,7 +115,8 @@ export function PasswordFormContent({
       </Modal.Body>
       <Modal.Footer
         labelPrimaryBtn="Alterar"
-        primaryBtnState={primaryBtnState}
+        primaryBtnState={isPending ? "loading" : undefined}
+        dirty
       />
     </>
   );

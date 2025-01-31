@@ -1,8 +1,6 @@
 import Form from "@/design-system/Form";
 import { z } from "zod";
 import useUpdateProfileInfo from "../hooks/useUpdateProfileInfo";
-import { useMemo } from "react";
-import { useFormContext } from "react-hook-form";
 import Modal from "@/design-system/Modal";
 import Input from "@/design-system/Form/Input";
 import { removeMask } from "@/domains/global/utils/removeMask";
@@ -46,15 +44,6 @@ interface CellphoneFormContentProps {
 }
 
 function CellphoneFormContent({ isPending }: CellphoneFormContentProps) {
-  const {
-    formState: { isDirty },
-  } = useFormContext();
-
-  const primaryBtnState = useMemo(() => {
-    if (isPending) return "loading";
-    if (!isDirty) return "disabled";
-  }, [isPending, isDirty]);
-
   return (
     <>
       <Modal.Body>
@@ -67,7 +56,8 @@ function CellphoneFormContent({ isPending }: CellphoneFormContentProps) {
       </Modal.Body>
       <Modal.Footer
         labelPrimaryBtn="Alterar"
-        primaryBtnState={primaryBtnState}
+        primaryBtnState={isPending ? "loading" : undefined}
+        dirty
       />
     </>
   );

@@ -1,4 +1,4 @@
-import type { ReactElement } from "react";
+import { useMemo, type ReactElement } from "react";
 import {
   Dialog,
   DialogContent,
@@ -10,6 +10,7 @@ import {
 import Button, { ButtonState } from "./Button";
 import { Childrenable } from "@/domains/global/types/components";
 import { DialogClose } from "@radix-ui/react-dialog";
+import { useFormContext } from "react-hook-form";
 
 interface ContainerProps extends Childrenable {
   open: boolean;
@@ -52,15 +53,31 @@ interface FooterProps {
   onClickSecondaryBtn?: () => void;
   labelSecondaryBtn?: string;
   primaryBtnState?: ButtonState;
+  secondaryBtnState?: ButtonState;
+  dirty?: boolean;
 }
 
 function Footer({
   onClickPrimaryBtn,
   labelPrimaryBtn,
   onClickSecondaryBtn,
-  labelSecondaryBtn = 'Cancelar',
+  labelSecondaryBtn = "Cancelar",
   primaryBtnState,
+  dirty,
+  secondaryBtnState,
 }: FooterProps): ReactElement {
+  const formContext = useFormContext();
+
+  const isDirty = useMemo(() => {
+    if (!formContext || !dirty) return false;
+    return formContext.formState.isDirty;
+  }, [dirty, formContext]);
+
+  const primaryBtnStateParsed = useMemo(() => {
+    if (primaryBtnState) return primaryBtnState;
+    if (!isDirty) return "disabled";
+  }, [primaryBtnState, isDirty]);
+
   return (
     <DialogFooter className="flex px-6 pb-6 pt-2">
       {onClickSecondaryBtn ? (
@@ -68,17 +85,22 @@ function Footer({
           variant="secondary"
           onClick={onClickSecondaryBtn}
           label={labelSecondaryBtn}
+          state={secondaryBtnState}
         />
       ) : (
         <DialogClose asChild>
-          <Button variant="secondary" label={labelSecondaryBtn} />
+          <Button
+            variant="quaternary"
+            label={labelSecondaryBtn}
+            state={secondaryBtnState}
+          />
         </DialogClose>
       )}
       <Button
         variant="primary"
         onClick={onClickPrimaryBtn}
         label={labelPrimaryBtn}
-        state={primaryBtnState}
+        state={primaryBtnStateParsed}
         type="submit"
       />
     </DialogFooter>

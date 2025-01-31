@@ -1,9 +1,8 @@
-import { useMemo, type ReactElement } from "react";
+import { type ReactElement } from "react";
 import { z } from "zod";
 import useUpdateProfileInfo from "../hooks/useUpdateProfileInfo";
 import Input from "@/design-system/Form/Input";
 import Modal from "@/design-system/Modal";
-import { useFormContext } from "react-hook-form";
 import Form from "@/design-system/Form";
 
 const SchemaFullNameForm = z.object({
@@ -46,15 +45,6 @@ interface FullNameFormContentProps {
 function FullNameFormContent({
   isPending,
 }: FullNameFormContentProps): ReactElement {
-  const {
-    formState: { isDirty },
-  } = useFormContext();
-
-  const primaryBtnState = useMemo(() => {
-    if (isPending) return "loading";
-    if (!isDirty) return "disabled";
-  }, [isPending, isDirty]);
-
   return (
     <>
       <Modal.Body>
@@ -66,7 +56,8 @@ function FullNameFormContent({
       </Modal.Body>
       <Modal.Footer
         labelPrimaryBtn="Alterar"
-        primaryBtnState={primaryBtnState}
+        primaryBtnState={isPending ? "loading" : undefined}
+        dirty
       />
     </>
   );

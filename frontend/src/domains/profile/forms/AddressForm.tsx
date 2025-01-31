@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useMemo, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import { z } from "zod";
 import useUpdateProfileInfo from "../hooks/useUpdateProfileInfo";
 import Form from "@/design-system/Form";
@@ -75,7 +75,6 @@ function AddressFormContent({
   const [currentValidCep, setCurrentValidCep] = useState("");
 
   const {
-    formState: { isDirty },
     setValue,
     trigger,
     getValues,
@@ -121,11 +120,6 @@ function AddressFormContent({
     }
   }, [cepInfo]);
 
-  const primaryBtnState = useMemo(() => {
-    if (isPending || isFetching) return "loading";
-    if (!isDirty) return "disabled";
-  }, [isPending, isDirty, isFetching]);
-
   function handleOnSubmitCepField(
     event: React.KeyboardEvent<HTMLInputElement>
   ) {
@@ -166,7 +160,8 @@ function AddressFormContent({
       </Modal.Body>
       <Modal.Footer
         labelPrimaryBtn="Alterar"
-        primaryBtnState={primaryBtnState}
+        primaryBtnState={isPending || isFetching ? "loading" : undefined}
+        dirty
       />
     </>
   );

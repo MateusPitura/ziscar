@@ -3,8 +3,6 @@ import { z } from "zod";
 import useUpdateProfileInfo from "../hooks/useUpdateProfileInfo";
 import Input from "@/design-system/Form/Input";
 import Modal from "@/design-system/Modal";
-import { useFormContext } from "react-hook-form";
-import { useMemo } from "react";
 import { validateCpf } from "@/domains/global/utils/validateCpf";
 import { removeMask } from "@/domains/global/utils/removeMask";
 
@@ -48,15 +46,6 @@ interface CpfFormContentProps {
 }
 
 function CpfFormContent({ isPending }: CpfFormContentProps) {
-  const {
-    formState: { isDirty },
-  } = useFormContext();
-
-  const primaryBtnState = useMemo(() => {
-    if (isPending) return "loading";
-    if (!isDirty) return "disabled";
-  }, [isPending, isDirty]);
-
   return (
     <>
       <Modal.Body>
@@ -68,7 +57,8 @@ function CpfFormContent({ isPending }: CpfFormContentProps) {
         />
       </Modal.Body>
       <Modal.Footer
-        primaryBtnState={primaryBtnState}
+        primaryBtnState={isPending ? "loading" : undefined}
+        dirty
         labelPrimaryBtn="Alterar"
       />
     </>
