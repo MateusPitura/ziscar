@@ -26,7 +26,7 @@ export default function UsersTable(): ReactNode {
   const { safeFetch } = useSafeFetch();
 
   const { usersFilter, handleUsersFilter } = useGlobalContext();
-  
+
   function handleChangePage(page: number) {
     handleUsersFilter({ page });
   }
@@ -43,13 +43,13 @@ export default function UsersTable(): ReactNode {
       path: `${baseUrl}/users?${filter}`,
     });
   }
-  
+
   const { data: usersInfo, isFetching: isFetchingUsersInfo } = useQuery({
     queryKey: ["users", filterFormatted],
     queryFn: ({ queryKey }) => getUsersInfo(queryKey[1]),
     select: selectUsersInfo,
   });
-  
+
   const { showSuccessSnackbar } = useSnackbar();
 
   async function generatePdf() {

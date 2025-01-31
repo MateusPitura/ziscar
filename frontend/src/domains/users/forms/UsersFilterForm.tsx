@@ -65,6 +65,7 @@ function UsersFilterFormContent(): ReactElement {
         primaryLabel="Aplicar"
         secondaryLabel="Limpar"
         onSecondaryCallback={handleReset}
+        dirty
       />
     </>
   );

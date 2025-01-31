@@ -1,5 +1,4 @@
-import type { ReactElement } from "react";
-
+import { useMemo, type ReactElement } from "react";
 import {
   Sheet,
   SheetClose,
@@ -8,10 +7,11 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import Button from "./Button";
+import Button, { ButtonState } from "./Button";
 import classNames from "classnames";
 import { DialogDescription } from "@/components/ui/dialog";
 import { Childrenable } from "@/domains/global/types/components";
+import { useFormContext } from "react-hook-form";
 
 interface ContainerProps extends Childrenable {
   open?: boolean;
@@ -76,15 +76,33 @@ interface FooterProps {
   onSecondaryCallback?: () => void;
   onPrimaryCallback?: () => void;
   className?: string;
+  dirty?: boolean;
+  primaryBtnState?: ButtonState;
+  secondaryBtnState?: ButtonState;
 }
 
 function Footer({
   primaryLabel,
-  secondaryLabel = 'Cancelar',
+  secondaryLabel = "Cancelar",
   onPrimaryCallback,
   onSecondaryCallback,
   className,
+  dirty,
+  primaryBtnState,
+  secondaryBtnState,
 }: FooterProps): ReactElement {
+  const formContext = useFormContext();
+
+  const isDirty = useMemo(() => {
+    if (!formContext || !dirty) return false;
+    return formContext.formState.isDirty;
+  }, [dirty, formContext]);
+
+  const primaryBtnStateParsed = useMemo(() => {
+    if (primaryBtnState) return primaryBtnState;
+    if (!isDirty) return "disabled";
+  }, [primaryBtnState, isDirty]);
+
   return (
     <div
       className={classNames(
@@ -92,16 +110,26 @@ function Footer({
         className
       )}
     >
-      <Button label={primaryLabel} onClick={onPrimaryCallback} type="submit" />
+      <Button
+        label={primaryLabel}
+        onClick={onPrimaryCallback}
+        type="submit"
+        state={primaryBtnStateParsed}
+      />
       {onSecondaryCallback ? (
         <Button
           label={secondaryLabel}
           variant="quaternary"
           onClick={onSecondaryCallback}
+          state={secondaryBtnState}
         />
       ) : (
         <SheetClose asChild>
-          <Button label={secondaryLabel} variant="quaternary" />
+          <Button
+            label={secondaryLabel}
+            variant="quaternary"
+            state={secondaryBtnState}
+          />
         </SheetClose>
       )}
     </div>
