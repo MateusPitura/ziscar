@@ -12,23 +12,25 @@ import classNames from "classnames";
 import { DialogDescription } from "@/components/ui/dialog";
 import { Childrenable } from "@/domains/global/types/components";
 import { useFormContext } from "react-hook-form";
+import { DialogProvider } from "@/domains/global/contexts/DialogContext";
+import { DialogProps } from "@/domains/global/types/dialog";
 
-interface ContainerProps extends Childrenable {
-  open?: boolean;
-  onOpenChange?: (state: boolean) => void;
-}
+interface ContainerProps extends DialogProps, Childrenable {}
 
 function Container({
   children,
-  onOpenChange,
-  open,
+  isOpen,
+  handleOpen,
+  ...props
 }: ContainerProps): ReactElement {
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
-      {children}
-      {/* DialogDescription corrige warning de acessibilidade */}
-      <DialogDescription />
-    </Sheet>
+    <DialogProvider isOpen={isOpen} handleOpen={handleOpen} {...props}>
+      <Sheet open={isOpen} onOpenChange={handleOpen}>
+        {children}
+        {/* DialogDescription corrige warning de acessibilidade */}
+        <DialogDescription />
+      </Sheet>
+    </DialogProvider>
   );
 }
 

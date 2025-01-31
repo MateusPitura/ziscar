@@ -10,12 +10,15 @@ import {
   SchemaUsersFilterForm,
   UsersFilterFormInputs,
 } from "../schemas/usersFilters";
+import useDialogContext from "@/domains/global/hooks/useDialogContext";
 
 function UsersFilterForm(): ReactElement {
   const { usersFilter, handleUsersFilter } = useGlobalContext();
+  const { closeDialog } = useDialogContext();
 
   function handleSubmit(data: UsersFilterFormInputs) {
     handleUsersFilter({ page: 1, ...data });
+    closeDialog();
   }
 
   return (
@@ -33,10 +36,12 @@ function UsersFilterForm(): ReactElement {
 function UsersFilterFormContent(): ReactElement {
   const { reset } = useFormContext();
   const { handleUsersFilter } = useGlobalContext();
+  const { closeDialog } = useDialogContext();
 
   function handleReset() {
     handleUsersFilter(defaultValues);
     reset(defaultValues);
+    closeDialog();
   }
 
   return (

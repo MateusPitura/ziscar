@@ -2,7 +2,7 @@ import Table from "@/design-system/Table";
 import { useMemo, useState, type ReactNode } from "react";
 import DisableUserModal from "./DisableUserModal";
 import { DisableUser } from "../types/disableUser";
-import useDialog from "@/domains/profile/hooks/useDialog";
+import useDialog from "@/domains/global/hooks/useDialog";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import { baseUrl } from "@/domains/global/constants/requests";

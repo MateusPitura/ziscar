@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useCallback } from "react";
+import { DialogProps } from "../types/dialog";
 
-export default function useDialog() {
+export default function useDialog(): DialogProps {
   const [isOpen, setIsOpen] = useState(false);
 
   const openDialog = useCallback(() => {

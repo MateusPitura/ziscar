@@ -16,7 +16,7 @@ import CpfForm from "../forms/CpfForm";
 import CodeForm from "../forms/CodeForm";
 import CellphoneForm from "../forms/CellphoneForm";
 import selectProfileInfo from "../utils/selectProfileInfo";
-import useDialog from "../hooks/useDialog";
+import useDialog from "../../global/hooks/useDialog";
 import EditProfileModal from "./EditProfileModal";
 import { EditProfile } from "../types/editProfile";
 

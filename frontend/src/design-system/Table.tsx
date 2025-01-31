@@ -9,9 +9,8 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { Popover } from "./Popover";
 import SideSheet from "./SideSheet";
-import { CustomFormProvider } from "@/domains/global/contexts/CustomFormContext";
 import { Childrenable } from "@/domains/global/types/components";
-import useDialog from "@/domains/profile/hooks/useDialog";
+import useDialog from "@/domains/global/hooks/useDialog";
 import { ITEMS_PER_PAGE } from "@/domains/global/constants/requests";
 import Loading from "./Loading";
 
@@ -275,25 +274,11 @@ interface FilterProps {
   form: ReactNode;
 }
 
-function Filter(props: FilterProps) {
-  return (
-    <CustomFormProvider>
-      <FilterContent {...props} />
-    </CustomFormProvider>
-  );
-}
-
-type FilterContentProps = FilterProps;
-
-function FilterContent({
-  onFilterCallback,
-  filterBtnState,
-  form,
-}: FilterContentProps) {
-  const { isOpen, handleOpen } = useDialog();
+function Filter({ onFilterCallback, filterBtnState, form }: FilterProps) {
+  const props = useDialog();
 
   return (
-    <SideSheet open={isOpen} onOpenChange={handleOpen}>
+    <SideSheet {...props}>
       <SideSheet.Trigger>
         <div className="flex justify-end">
           <Button
