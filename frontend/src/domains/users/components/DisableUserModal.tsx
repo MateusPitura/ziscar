@@ -7,6 +7,7 @@ import { Dialog } from "@/domains/global/types/components";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { ReactElement } from "react";
 import { DisableUser } from "../types/disableUser";
+import useGlobalContext from "@/domains/global/hooks/useGlobalContext";
 
 interface DisableUserModalProps extends Dialog, DisableUser {}
 
@@ -18,6 +19,7 @@ export default function DisableUserModal({
   const { safeFetch } = useSafeFetch();
   const { showSuccessSnackbar } = useSnackbar();
   const queryClient = useQueryClient();
+  const { handleUsersFilter } = useGlobalContext();
 
   async function disableUser() {
     await safeFetch({
@@ -30,6 +32,7 @@ export default function DisableUserModal({
   const { mutate, isPending } = useMutation({
     mutationFn: disableUser,
     onSuccess: () => {
+      handleUsersFilter({ page: 1 });
       queryClient.invalidateQueries({ queryKey: ["users"] });
       showSuccessSnackbar({
         title: `Usuário ${userName} desativado com sucesso`,
