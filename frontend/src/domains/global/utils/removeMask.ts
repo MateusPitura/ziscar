@@ -1,4 +1,4 @@
-import { Mask } from "../types/Mask";
+import { Mask } from "../types/mask";
 
 export function removeMask(
   value: string | undefined,

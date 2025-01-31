@@ -1,4 +1,4 @@
-import { Mask } from "@/domains/global/types/Mask";
+import { Mask } from "@/domains/global/types/mask";
 import { applyMask } from "@/domains/global/utils/applyMask";
 import { useEffect, type ReactElement } from "react";
 import {
