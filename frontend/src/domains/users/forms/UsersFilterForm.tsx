@@ -45,7 +45,7 @@ function UsersFilterFormContent(): ReactElement {
         <span className="text-label-medium text-light-onSurface">
           Buscar por
         </span>
-        <Input<UsersFilterFormInputs> name="name" label="Nome" />
+        <Input<UsersFilterFormInputs> name="fullName" label="Nome completo" />
         <span className="text-label-medium text-light-onSurface">
           Ordenar por
         </span>

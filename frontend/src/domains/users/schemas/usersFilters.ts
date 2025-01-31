@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const SchemaUsersFilterForm = z.object({
-  name: z.string().optional(),
+  fullName: z.string().optional(),
   orderBy: z.string().optional(),
   category: z.string().array().optional(),
 });

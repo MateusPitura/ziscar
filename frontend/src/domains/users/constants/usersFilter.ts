@@ -1,6 +1,6 @@
 export const defaultValues = {
   page: 1,
-  name: "",
+  fullName: "",
   orderBy: "",
   category: [],
 };
