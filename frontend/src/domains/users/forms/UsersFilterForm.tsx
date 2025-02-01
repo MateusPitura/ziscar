@@ -26,7 +26,7 @@ function UsersFilterForm(): ReactElement {
       schema={SchemaUsersFilterForm}
       onSubmit={handleSubmit}
       className="flex-1 flex flex-col"
-      defaultValues={usersFilter}
+      defaultValues={{ ...usersFilter }}
     >
       <UsersFilterFormContent />
     </Form>

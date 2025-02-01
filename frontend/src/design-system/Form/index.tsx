@@ -12,7 +12,7 @@ import { Childrenable } from "@/domains/global/types/components";
 
 interface FormProperties<T extends FieldValues> extends Childrenable {
   onSubmit: (data: T) => void;
-  defaultValues?: DefaultValues<T>;
+  defaultValues: DefaultValues<T>;
   schema: ZodType;
   className?: string;
 }
@@ -29,9 +29,10 @@ export default function Form<T extends FieldValues>({
      * This function is necessary because if some default value is undefined or
      * null RHF replace it for an empty string, and this cause isDirty to fire
      * So if the initial value already is a empty string this works fine
-     * But if the schema has some ZodEffect, like .refine() in object, the if statement
-     * will be false, in this cause you need to pass defaultValues with empty strings
-     * It don't cover the case where the default value should be an array
+     * But it don't cover some cases:
+     * - The schema has a ZodEffect, like .refine() in object. Ensure that objets
+     * itself isn't {} ou null/undefined and it's props aren't null/undefined
+     * - The default should be an array. Ensure that a empty array is setted
      */
     const defaultValuesCopy = Object.assign({}, defaultValues);
 
