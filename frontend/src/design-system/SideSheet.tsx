@@ -11,8 +11,8 @@ import Button, { ButtonState } from "./Button";
 import classNames from "classnames";
 import { DialogDescription } from "@/components/ui/dialog";
 import { Childrenable, Dialog } from "@/domains/global/types/components";
-import { useFormContext } from "react-hook-form";
 import { DialogProvider } from "@/domains/global/contexts/DialogContext";
+import useDirty from "@/domains/global/hooks/useDirty";
 
 interface ContainerProps extends Dialog, Childrenable {}
 
@@ -90,12 +90,7 @@ function Footer({
   primaryBtnState,
   secondaryBtnState,
 }: FooterProps): ReactElement {
-  const formContext = useFormContext();
-
-  const isDirty = useMemo(() => {
-    if (!formContext || !dirty) return false;
-    return formContext.formState.isDirty;
-  }, [dirty, formContext]);
+  const { isDirty } = useDirty({ dirty });
 
   const primaryBtnStateParsed = useMemo(() => {
     if (primaryBtnState) return primaryBtnState;

@@ -10,8 +10,8 @@ import {
 import Button, { ButtonState } from "./Button";
 import { Childrenable, Dialog } from "@/domains/global/types/components";
 import { DialogClose } from "@radix-ui/react-dialog";
-import { useFormContext } from "react-hook-form";
 import { DialogProvider } from "@/domains/global/contexts/DialogContext";
+import useDirty from "@/domains/global/hooks/useDirty";
 
 interface ContainerProps extends Dialog, Childrenable {}
 
@@ -66,12 +66,7 @@ function Footer({
   dirty,
   secondaryBtnState,
 }: FooterProps): ReactElement {
-  const formContext = useFormContext();
-
-  const isDirty = useMemo(() => {
-    if (!formContext || !dirty) return false;
-    return formContext.formState.isDirty;
-  }, [dirty, formContext]);
+  const { isDirty } = useDirty({ dirty });
 
   const primaryBtnStateParsed = useMemo(() => {
     if (primaryBtnState) return primaryBtnState;

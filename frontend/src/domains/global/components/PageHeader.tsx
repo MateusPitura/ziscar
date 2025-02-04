@@ -1,5 +1,6 @@
 import Button from "@/design-system/Button";
-import type { ReactElement } from "react";
+import { useMemo, type ReactElement } from "react";
+import useDirty from "../hooks/useDirty";
 
 interface PageHeaderProperties {
   title: string;
@@ -8,7 +9,7 @@ interface PageHeaderProperties {
   primaryBtnIconRigth?: ReactElement;
   secondaryButtonLabel?: string;
   onClickSecondaryBtn?: () => void;
-  primaryBtnFormId?: string;
+  dirty?: boolean;
 }
 
 export default function PageHeader({
@@ -18,29 +19,35 @@ export default function PageHeader({
   onClickPrimaryBtn,
   secondaryButtonLabel,
   onClickSecondaryBtn,
-  primaryBtnFormId,
+  dirty,
 }: PageHeaderProperties): ReactElement {
+  const { isDirty } = useDirty({ dirty });
+
+  const primaryBtnStateParsed = useMemo(() => {
+    if (!isDirty) return "disabled";
+  }, [isDirty]);
+
   return (
     <div className="w-full p-4 flex">
       <span className="text-headline-large text-light-onSurface flex-1">
         {title}
       </span>
       <div className="flex">
-        {onClickSecondaryBtn && (
+        {secondaryButtonLabel && (
           <Button
             variant="quaternary"
             onClick={onClickSecondaryBtn}
             label={secondaryButtonLabel}
           />
         )}
-        {onClickPrimaryBtn && (
+        {primaryButtonLabel && (
           <Button
             variant="primary"
             onClick={onClickPrimaryBtn}
             label={primaryButtonLabel}
             iconRight={primaryBtnIconRigth}
-            type={primaryBtnFormId ? "submit" : "button"}
-            formId={primaryBtnFormId}
+            type="submit"
+            state={primaryBtnStateParsed}
           />
         )}
       </div>

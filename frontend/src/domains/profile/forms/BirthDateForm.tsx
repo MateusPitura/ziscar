@@ -9,9 +9,9 @@ const BirthDateSchema = s.object({
   birthDate: s.birthDate(),
 });
 
-interface BirthDateFormInputs {
+type BirthDateFormInputs = Omit<s.infer<typeof BirthDateSchema>, "birthDate"> & {
   birthDate: string;
-}
+};
 
 interface BirthDateFormProps {
   defaultValues: Partial<BirthDateFormInputs>;
