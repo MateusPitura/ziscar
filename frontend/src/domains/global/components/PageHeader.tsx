@@ -8,6 +8,7 @@ interface PageHeaderProperties {
   primaryBtnIconRigth?: ReactElement;
   secondaryButtonLabel?: string;
   onClickSecondaryBtn?: () => void;
+  primaryBtnFormId?: string;
 }
 
 export default function PageHeader({
@@ -17,6 +18,7 @@ export default function PageHeader({
   onClickPrimaryBtn,
   secondaryButtonLabel,
   onClickSecondaryBtn,
+  primaryBtnFormId,
 }: PageHeaderProperties): ReactElement {
   return (
     <div className="w-full p-4 flex">
@@ -37,6 +39,8 @@ export default function PageHeader({
             onClick={onClickPrimaryBtn}
             label={primaryButtonLabel}
             iconRight={primaryBtnIconRigth}
+            type={primaryBtnFormId ? "submit" : "button"}
+            formId={primaryBtnFormId}
           />
         )}
       </div>

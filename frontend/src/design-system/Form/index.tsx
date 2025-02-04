@@ -15,6 +15,7 @@ interface FormProperties<T extends FieldValues> extends Childrenable {
   defaultValues: DefaultValues<T>;
   schema: ZodType;
   className?: string;
+  id?: string;
 }
 
 export default function Form<T extends FieldValues>({
@@ -23,6 +24,7 @@ export default function Form<T extends FieldValues>({
   defaultValues,
   schema,
   className,
+  id
 }: FormProperties<T>): ReactElement {
   const safeDefaultValues = useMemo(() => {
     /**
@@ -68,6 +70,7 @@ export default function Form<T extends FieldValues>({
         onSubmit={methods.handleSubmit(safeOnSubmit)}
         noValidate
         className={className}
+        id={id}
       >
         {children}
       </form>

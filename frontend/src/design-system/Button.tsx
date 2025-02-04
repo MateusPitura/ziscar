@@ -14,6 +14,7 @@ interface PrimitiveButtonProps {
   iconRight?: ReactNode;
   padding?: "default" | "none";
   type?: "submit" | "button";
+  formId?: string;
 }
 
 function PrimitiveButton(
@@ -27,6 +28,7 @@ function PrimitiveButton(
     label,
     iconLeft,
     iconRight,
+    formId,
     ...props
   }: PrimitiveButtonProps,
   ref: React.Ref<HTMLButtonElement>
@@ -47,6 +49,7 @@ function PrimitiveButton(
       disabled={state === "disabled" || state === "loading"}
       type={type}
       ref={ref}
+      form={formId}
       {...props}
     >
       {iconLeft && <div className="flex flex-1 justify-center">{iconLeft}</div>}
