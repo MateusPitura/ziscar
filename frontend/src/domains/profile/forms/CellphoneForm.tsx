@@ -1,19 +1,16 @@
 import Form from "@/design-system/Form";
-import { z } from "zod";
 import useUpdateProfileInfo from "../hooks/useUpdateProfileInfo";
 import Modal from "@/design-system/Modal";
 import Input from "@/design-system/Form/Input";
 import { removeMask } from "@/domains/global/utils/removeMask";
 import useDialogContext from "@/domains/global/hooks/useDialogContext";
+import { s } from "@/domains/global/schemas";
 
-const SchemaCellphoneForm = z.object({
-  cellphone: z
-    .string()
-    .regex(/^\(?\d{2}\)?\s?\d{5}-\d{4}$/, "Celular inválido")
-    .transform((cellphone) => removeMask(cellphone, "CELLPHONE")),
+const SchemaCellphoneForm = s.object({
+  cellphone: s.cellphone().transform((cellphone) => removeMask(cellphone, "CELLPHONE")),
 });
 
-type CellphoneFormInputs = z.infer<typeof SchemaCellphoneForm>;
+type CellphoneFormInputs = s.infer<typeof SchemaCellphoneForm>;
 
 interface CellphoneFormProps {
   defaultValues: Partial<CellphoneFormInputs>;

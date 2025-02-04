@@ -1,16 +1,16 @@
 import Input from "@/design-system/Form/Input";
 import { type ReactElement } from "react";
-import { z } from "zod";
 import useUpdateProfileInfo from "../hooks/useUpdateProfileInfo";
 import Modal from "@/design-system/Modal";
 import Form from "@/design-system/Form";
 import useDialogContext from "@/domains/global/hooks/useDialogContext";
+import { s } from "@/domains/global/schemas";
 
-const SchemaEmailForm = z.object({
-  email: z.string().email({ message: "Email inválido" }),
+const SchemaEmailForm = s.object({
+  email: s.email(),
 });
 
-type EmailFormInputs = z.infer<typeof SchemaEmailForm>;
+type EmailFormInputs = s.infer<typeof SchemaEmailForm>;
 
 interface EmailFormProps {
   defaultValues: Partial<EmailFormInputs>;

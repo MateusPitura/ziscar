@@ -1,18 +1,16 @@
 import { type ReactElement } from "react";
-import { z } from "zod";
 import useUpdateProfileInfo from "../hooks/useUpdateProfileInfo";
 import Input from "@/design-system/Form/Input";
 import Modal from "@/design-system/Modal";
 import Form from "@/design-system/Form";
 import useDialogContext from "@/domains/global/hooks/useDialogContext";
+import { s } from "@/domains/global/schemas";
 
-const SchemaFullNameForm = z.object({
-  fullName: z
-    .string()
-    .regex(/^[a-zA-Z\s]+$/, { message: "Nome completo inválido" }),
+const SchemaFullNameForm = s.object({
+  fullName: s.fullName()
 });
 
-type FullNameFormInputs = z.infer<typeof SchemaFullNameForm>;
+type FullNameFormInputs = s.infer<typeof SchemaFullNameForm>;
 
 interface FullNameFormProperties {
   defaultValues: Partial<FullNameFormInputs>;

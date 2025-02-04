@@ -1,5 +1,4 @@
 import { ReactElement, useEffect, useState } from "react";
-import { z } from "zod";
 import useUpdateProfileInfo from "../hooks/useUpdateProfileInfo";
 import Form from "@/design-system/Form";
 import Modal from "@/design-system/Modal";
@@ -11,6 +10,7 @@ import Button from "@/design-system/Button";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import { removeMask } from "@/domains/global/utils/removeMask";
 import useDialogContext from "@/domains/global/hooks/useDialogContext";
+import { s } from "@/domains/global/schemas";
 
 interface ViaCepAddress {
   logradouro?: string;
@@ -20,20 +20,11 @@ interface ViaCepAddress {
   erro?: boolean;
 }
 
-const SchemaAddressForm = z.object({
-  cep: z
-    .string()
-    .regex(/^\d{5}-?\d{3}$/, "CEP inválido")
-    .transform((cep) => removeMask(cep, "CEP")),
-  street: z.string().nullable(),
-  number: z.string().nonempty({ message: "Número inválido" }),
-  neighborhood: z.string().nullable(),
-  city: z.string().nullable(),
-  state: z.string().nullable(),
-  complement: z.string().nullable(),
+const SchemaAddressForm = s.addressSchema().extend({
+  cep: s.cep().transform((cep) => removeMask(cep, "CEP")),
 });
 
-type AddressFormInputs = z.infer<typeof SchemaAddressForm>;
+type AddressFormInputs = s.infer<typeof SchemaAddressForm>;
 
 interface AddressFormProps {
   defaultValues: Partial<AddressFormInputs>;

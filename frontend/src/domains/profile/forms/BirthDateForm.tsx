@@ -1,24 +1,12 @@
-import { z } from "zod";
 import useUpdateProfileInfo from "../hooks/useUpdateProfileInfo";
 import Form from "@/design-system/Form";
 import Modal from "@/design-system/Modal";
 import Input from "@/design-system/Form/Input";
 import useDialogContext from "@/domains/global/hooks/useDialogContext";
+import { s } from "@/domains/global/schemas";
 
-const BirthDateSchema = z.object({
-  birthDate: z.coerce
-    .date({
-      errorMap: (issue, { defaultError }) => ({
-        message:
-          issue.code === "invalid_date"
-            ? "Data de nascimento inválida"
-            : defaultError,
-      }),
-    })
-    .min(new Date("1900-01-01"), { message: "Data de nascimento inválida" })
-    .refine((date) => date < new Date(), {
-      message: "Data de nascimento inválida",
-    }),
+const BirthDateSchema = s.object({
+  birthDate: s.birthDate(),
 });
 
 interface BirthDateFormInputs {
@@ -60,6 +48,7 @@ function BirthDateFormContent({ isPending }: BirthDateFormContentProps) {
           name="birthDate"
           label="Data de nascimento"
           type="date"
+          required
         />
       </Modal.Body>
       <Modal.Footer

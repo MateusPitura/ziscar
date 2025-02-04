@@ -1,21 +1,16 @@
 import Form from "@/design-system/Form";
-import { z } from "zod";
 import useUpdateProfileInfo from "../hooks/useUpdateProfileInfo";
 import Input from "@/design-system/Form/Input";
 import Modal from "@/design-system/Modal";
-import { validateCpf } from "@/domains/global/utils/validateCpf";
 import { removeMask } from "@/domains/global/utils/removeMask";
 import useDialogContext from "@/domains/global/hooks/useDialogContext";
+import { s } from "@/domains/global/schemas";
 
-const SchemaCpfForm = z.object({
-  cpf: z
-    .string()
-    .nonempty({ message: "CPF inválido" })
-    .refine((cpf) => validateCpf(cpf), { message: "CPF inválido" })
-    .transform((cpf) => removeMask(cpf, "CPF")),
+const SchemaCpfForm = s.object({
+  cpf: s.cpf().transform((cpf) => removeMask(cpf, "CPF")),
 });
 
-type CpfFormInputs = z.infer<typeof SchemaCpfForm>;
+type CpfFormInputs = s.infer<typeof SchemaCpfForm>;
 
 interface CpfFormProps {
   defaultValues: Partial<CpfFormInputs>;
@@ -53,6 +48,7 @@ function CpfFormContent({ isPending }: CpfFormContentProps) {
           label="CPF"
           mask="CPF"
           maxLength={14}
+          required
         />
       </Modal.Body>
       <Modal.Footer

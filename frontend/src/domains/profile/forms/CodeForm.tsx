@@ -1,15 +1,15 @@
 import Form from "@/design-system/Form";
-import { z } from "zod";
 import useUpdateProfileInfo from "../hooks/useUpdateProfileInfo";
 import Modal from "@/design-system/Modal";
 import Input from "@/design-system/Form/Input";
 import useDialogContext from "@/domains/global/hooks/useDialogContext";
+import { s } from "@/domains/global/schemas";
 
-const SchemaCodeForm = z.object({
-  code: z.string().optional(),
+const SchemaCodeForm = s.object({
+  code: s.string('default', 'optional'),
 });
 
-type CodeFormInputs = z.infer<typeof SchemaCodeForm>;
+type CodeFormInputs = s.infer<typeof SchemaCodeForm>;
 
 interface CodeFormProps {
   defaultValues: Partial<CodeFormInputs>;

@@ -1,32 +1,15 @@
 import Input from "@/design-system/Form/Input";
 import Modal from "@/design-system/Modal";
 import { useState, type ReactElement } from "react";
-import { z } from "zod";
 import useUpdateProfileInfo from "../hooks/useUpdateProfileInfo";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
 import Form from "@/design-system/Form";
 import useDialogContext from "@/domains/global/hooks/useDialogContext";
+import { s } from "@/domains/global/schemas";
+import { passwordSchema } from "@/domains/global/schemas/schemas";
 
-const SchemaPasswordForm = z
-  .object({
-    newPassword: z
-      .string()
-      .min(11, { message: "Ao menos 11 caracteres" })
-      .regex(/[a-z]/, { message: "Ao menos uma letra minúscula" })
-      .regex(/[A-Z]/, { message: "Ao menos uma letra maiúscula" })
-      .regex(/\d/, { message: "Ao menos um número" })
-      .regex(/[@$!%*?&]/, {
-        message: "Ao menos um caractere especial",
-      }),
-    confirmPassword: z.string(),
-  })
-  .refine((data) => data.newPassword === data.confirmPassword, {
-    message: "As senhas não são iguais",
-    path: ["confirmPassword"],
-  });
-
-type PasswordFormInputs = z.infer<typeof SchemaPasswordForm>;
+type PasswordFormInputs = s.infer<typeof passwordSchema>;
 
 const defaultValues: PasswordFormInputs = {
   newPassword: "",
@@ -51,7 +34,7 @@ export default function PasswordForm(): ReactElement {
   return (
     <Form<PasswordFormInputs>
       onSubmit={handleSubmit}
-      schema={SchemaPasswordForm}
+      schema={passwordSchema}
       defaultValues={defaultValues}
     >
       <PasswordFormContent isPending={isPending} />
