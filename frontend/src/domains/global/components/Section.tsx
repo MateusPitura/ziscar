@@ -8,11 +8,7 @@ function Container({ children }: Childrenable) {
 }
 
 function Group({ children }: Childrenable) {
-  return (
-    <div className="bg-light-surfaceContainerLowest rounded-md overflow-hidden">
-      {children}
-    </div>
-  );
+  return <div className="rounded-md overflow-hidden">{children}</div>;
 }
 
 interface SectionTitleProps {
@@ -48,7 +44,7 @@ interface SectionRowProps {
 
 function Row({ label, value, onEdit, isLoading = false }: SectionRowProps) {
   return (
-    <div className="p-4 border-b flex last:border-none">
+    <div className="bg-light-surfaceContainerLowest p-4 border-b flex last:border-none">
       <div className="w-full flex items-center">
         <span className="text-light-onSurface flex-1 text-body-large">
           {label}
@@ -70,6 +66,14 @@ function Row({ label, value, onEdit, isLoading = false }: SectionRowProps) {
   );
 }
 
-const Section = Object.assign(Container, { Title, Group, Header, Row });
+function Body({ children }: Childrenable) {
+  return (
+    <div className="bg-light-surfaceContainerLowest p-4 flex">
+      {children}
+    </div>
+  );
+}
+
+const Section = Object.assign(Container, { Title, Group, Header, Row, Body });
 
 export default Section;

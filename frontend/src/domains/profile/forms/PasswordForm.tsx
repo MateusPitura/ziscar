@@ -34,7 +34,7 @@ const defaultValues: PasswordFormInputs = {
 };
 
 export default function PasswordForm(): ReactElement {
-  const { closeDialog } = useDialogContext()
+  const { closeDialog } = useDialogContext();
 
   const { mutate, isPending } = useUpdateProfileInfo<{
     password: PasswordFormInputs["newPassword"];

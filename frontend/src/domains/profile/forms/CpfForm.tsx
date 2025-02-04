@@ -21,10 +21,8 @@ interface CpfFormProps {
   defaultValues: Partial<CpfFormInputs>;
 }
 
-export default function CpfForm({
-  defaultValues,
-}: CpfFormProps) {
-  const { closeDialog } = useDialogContext()
+export default function CpfForm({ defaultValues }: CpfFormProps) {
+  const { closeDialog } = useDialogContext();
 
   const { isPending, mutate } = useUpdateProfileInfo<CpfFormInputs>({
     onSuccessSubmit: closeDialog,

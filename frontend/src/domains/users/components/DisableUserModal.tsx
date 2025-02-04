@@ -9,7 +9,7 @@ import type { ReactElement } from "react";
 import { DisableUser } from "../types/disableUser";
 import useGlobalContext from "@/domains/global/hooks/useGlobalContext";
 
-interface DisableUserModalProps extends Dialog, DisableUser {}
+interface DisableUserModalProps extends DisableUser, Dialog {}
 
 export default function DisableUserModal({
   userId,

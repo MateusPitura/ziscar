@@ -19,7 +19,7 @@ interface EmailFormProps {
 export default function EmailForm({
   defaultValues,
 }: EmailFormProps): ReactElement {
-  const { closeDialog } = useDialogContext()
+  const { closeDialog } = useDialogContext();
 
   const { mutate, isPending } = useUpdateProfileInfo<EmailFormInputs>({
     onSuccessSubmit: closeDialog,
