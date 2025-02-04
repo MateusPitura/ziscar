@@ -5,4 +5,11 @@ export const defaultValues = {
   cpf: "",
   code: "",
   birthDate: "",
+  cep: "",
+  street: "",
+  number: "",
+  neighborhood: "",
+  city: "",
+  state: "",
+  complement: "",
 };

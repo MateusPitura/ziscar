@@ -2,6 +2,7 @@ import Button from "@/design-system/Button";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import Loading from "@/design-system/Loading";
 import { Childrenable } from "../types/components";
+import classNames from "classnames";
 
 function Container({ children }: Childrenable) {
   return <div className="flex flex-col gap-4 w-[56rem]">{children}</div>;
@@ -66,9 +67,18 @@ function Row({ label, value, onEdit, isLoading = false }: SectionRowProps) {
   );
 }
 
-function Body({ children }: Childrenable) {
+interface SectionBodyProps extends Childrenable {
+  className?: string;
+}
+
+function Body({ children, className }: SectionBodyProps) {
   return (
-    <div className="bg-light-surfaceContainerLowest p-4 flex">
+    <div
+      className={classNames(
+        "bg-light-surfaceContainerLowest p-4 flex",
+        className
+      )}
+    >
       {children}
     </div>
   );

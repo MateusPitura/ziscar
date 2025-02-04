@@ -7,8 +7,9 @@ import type { ReactElement } from "react";
 import { useNavigate } from "react-router-dom";
 import { defaultValues } from "../constants/newUserDefaultValues";
 import { removeMask } from "@/domains/global/utils/removeMask";
+import AddressFields from "@/domains/global/components/AddressFields";
 
-const SchemNewUserForm = s.object({
+const SchemNewUserForm = s.addressSchema().extend({
   fullName: s.fullName(),
   email: s.email(),
   cellphone: s
@@ -45,37 +46,37 @@ export default function NewUsersContainer(): ReactElement {
             <Section.Title title="Informações pessoais" />
             <Section.Group>
               <Section.Header title="Dados" />
-              <Section.Body>
-                <div className="grid grid-cols-2 flex-1 gap-4">
-                  <Input<NewUserFormInputs>
-                    name="fullName"
-                    label="Nome completo"
-                    required
-                  />
-                  <Input<NewUserFormInputs>
-                    name="email"
-                    label="Email"
-                    required
-                  />
-                  <Input<NewUserFormInputs>
-                    name="cellphone"
-                    label="Celular"
-                    mask="CELLPHONE"
-                    required
-                  />
-                  <Input<NewUserFormInputs>
-                    name="cpf"
-                    label="CPF"
-                    required
-                    mask="CPF"
-                  />
-                  <Input<NewUserFormInputs> name="code" label="Matrícula" />
-                  <Input<NewUserFormInputs>
-                    name="birthDate"
-                    label="Data de nascimento"
-                    type="date"
-                  />
-                </div>
+              <Section.Body className="grid grid-cols-2 flex-1 gap-4">
+                <Input<NewUserFormInputs>
+                  name="fullName"
+                  label="Nome completo"
+                  required
+                />
+                <Input<NewUserFormInputs> name="email" label="Email" required />
+                <Input<NewUserFormInputs>
+                  name="cellphone"
+                  label="Celular"
+                  mask="CELLPHONE"
+                  required
+                />
+                <Input<NewUserFormInputs>
+                  name="cpf"
+                  label="CPF"
+                  required
+                  mask="CPF"
+                />
+                <Input<NewUserFormInputs> name="code" label="Matrícula" />
+                <Input<NewUserFormInputs>
+                  name="birthDate"
+                  label="Data de nascimento"
+                  type="date"
+                />
+              </Section.Body>
+            </Section.Group>
+            <Section.Group>
+              <Section.Header title="Endereço" />
+              <Section.Body className="grid grid-cols-2 flex-1 gap-4">
+                <AddressFields<NewUserFormInputs> />
               </Section.Body>
             </Section.Group>
           </Section>
