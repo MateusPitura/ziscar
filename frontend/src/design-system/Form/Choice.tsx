@@ -25,16 +25,7 @@ function Container<T extends FieldValues>({
     [children, name]
   );
 
-  const { errors } = useFormState({
-    name,
-  });
-
-  return (
-    <div className="flex flex-col gap-2">
-      {enhancedChildren}
-      <ErrorLabel errors={errors} name={name} />
-    </div>
-  );
+  return <>{enhancedChildren}</>;
 }
 
 interface RadioProperties {
@@ -46,6 +37,10 @@ interface RadioProperties {
 
 function Radio({ label, name, ...props }: RadioProperties): ReactNode {
   const { register } = useFormContext();
+
+  const { errors } = useFormState({
+    name,
+  });
 
   if (!name) return;
 
@@ -61,6 +56,7 @@ function Radio({ label, name, ...props }: RadioProperties): ReactNode {
         <div className="col-start-1 row-start-1 w-2 h-2 rounded-full peer-checked:bg-light-primary peer-checked:peer-disabled:bg-neutral-300" />
       </div>
       <div className="text-body-large text-light-onSurface">{label}</div>
+      <ErrorLabel errors={errors} name={name} />
     </label>
   );
 }

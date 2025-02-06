@@ -5,6 +5,7 @@ import { FieldValues, useFormContext } from "react-hook-form";
 import useSafeFetch from "../hooks/useSafeFetch";
 import useSnackbar from "../hooks/useSnackbar";
 import { useQuery } from "@tanstack/react-query";
+import formatInputPrefix from "../utils/formatInputPrefix";
 
 interface ViaCepAddress {
   logradouro?: string;
@@ -14,7 +15,13 @@ interface ViaCepAddress {
   erro?: boolean;
 }
 
-export default function AddressFields<T extends FieldValues>(): ReactNode {
+interface AddressFieldsProps {
+  inputNamePrefix?: string;
+}
+
+export default function AddressFields<T extends FieldValues>({
+  inputNamePrefix,
+}: AddressFieldsProps): ReactNode {
   const [currentValidCep, setCurrentValidCep] = useState("");
 
   const { setValue, trigger, getValues } = useFormContext();
@@ -23,9 +30,9 @@ export default function AddressFields<T extends FieldValues>(): ReactNode {
   const { showErrorSnackbar } = useSnackbar();
 
   async function fillAddress() {
-    const isValid = await trigger("cep");
+    const isValid = await trigger(formatInputPrefix("cep", inputNamePrefix));
     if (isValid) {
-      const cep = getValues("cep");
+      const cep = getValues(formatInputPrefix("cep", inputNamePrefix));
       setCurrentValidCep(cep);
     }
   }
@@ -51,10 +58,18 @@ export default function AddressFields<T extends FieldValues>(): ReactNode {
       return;
     }
     if (cepInfo) {
-      setValue("street", cepInfo.logradouro);
-      setValue("neighborhood", cepInfo.bairro);
-      setValue("city", cepInfo.localidade);
-      setValue("state", cepInfo.uf, { shouldDirty: true });
+      setValue(
+        formatInputPrefix("street", inputNamePrefix),
+        cepInfo.logradouro
+      );
+      setValue(
+        formatInputPrefix("neighborhood", inputNamePrefix),
+        cepInfo.bairro
+      );
+      setValue(formatInputPrefix("city", inputNamePrefix), cepInfo.localidade);
+      setValue(formatInputPrefix("state", inputNamePrefix), cepInfo.uf, {
+        shouldDirty: true,
+      });
     }
   }, [cepInfo]);
 
@@ -73,7 +88,13 @@ export default function AddressFields<T extends FieldValues>(): ReactNode {
         className="flex items-center justify-between gap-1"
         onKeyDown={handleOnSubmitCepField}
       >
-        <Input<T> label="CEP" name="cep" mask="CEP" maxLength={9} required />
+        <Input<T>
+          label="CEP"
+          name={formatInputPrefix("cep", inputNamePrefix)}
+          mask="CEP"
+          maxLength={9}
+          required
+        />
         <Button
           variant="quaternary"
           label="Preencher automaticamente"
@@ -82,12 +103,31 @@ export default function AddressFields<T extends FieldValues>(): ReactNode {
           state={isFetching ? "loading" : undefined}
         />
       </div>
-      <Input<T> label="Número" name="number" required />
-      <Input<T> label="Rua" name="street" />
-      <Input<T> label="Bairro" name="neighborhood" />
-      <Input<T> label="Cidade" name="city" />
-      <Input<T> label="Estado" name="state" />
-      <Input<T> label="Complemento" name="complement" />
+      <Input<T>
+        label="Número"
+        name={formatInputPrefix("number", inputNamePrefix)}
+        required
+      />
+      <Input<T>
+        label="Rua"
+        name={formatInputPrefix("street", inputNamePrefix)}
+      />
+      <Input<T>
+        label="Bairro"
+        name={formatInputPrefix("neighborhood", inputNamePrefix)}
+      />
+      <Input<T>
+        label="Cidade"
+        name={formatInputPrefix("city", inputNamePrefix)}
+      />
+      <Input<T>
+        label="Estado"
+        name={formatInputPrefix("state", inputNamePrefix)}
+      />
+      <Input<T>
+        label="Complemento"
+        name={formatInputPrefix("complement", inputNamePrefix)}
+      />
     </>
   );
 }

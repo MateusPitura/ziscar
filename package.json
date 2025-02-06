@@ -18,5 +18,8 @@
   },
   "homepage": "https://github.com/MateusPitura/projeto-de-software#readme",
   "description": "",
-  "workspaces": ["/backend", "/frontend"]
+  "workspaces": [
+    "/backend",
+    "/frontend"
+  ]
 }

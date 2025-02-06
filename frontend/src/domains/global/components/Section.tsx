@@ -75,7 +75,7 @@ function Body({ children, className }: SectionBodyProps) {
   return (
     <div
       className={classNames(
-        "bg-light-surfaceContainerLowest p-4 flex",
+        "bg-light-surfaceContainerLowest p-4 grid grid-cols-2 gap-4",
         className
       )}
     >

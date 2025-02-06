@@ -1,9 +1,9 @@
-import { z } from "zod";
+import { s } from "@/domains/global/schemas";
 
-export const SchemaUsersFilterForm = z.object({
-  fullName: z.string().optional(),
-  orderBy: z.string().optional(),
-  category: z.string().array().optional(),
+export const SchemaUsersFilterForm = s.object({
+  fullName: s.string('default', 'optional'),
+  orderBy: s.string('default', 'optional'),
+  category: s.string('default', 'optional').array(),
 });
 
-export type UsersFilterFormInputs = z.infer<typeof SchemaUsersFilterForm>;
+export type UsersFilterFormInputs = s.infer<typeof SchemaUsersFilterForm>;

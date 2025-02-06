@@ -46,25 +46,31 @@ function UsersFilterFormContent(): ReactElement {
 
   return (
     <>
-      <SideSheet.Body className="flex flex-col gap-2">
+      <SideSheet.Body className="flex flex-col gap-4">
         <span className="text-label-medium text-light-onSurface">
           Buscar por
         </span>
-        <Input<UsersFilterFormInputs> name="fullName" label="Nome completo" />
+        <Input<UsersFilterFormInputs>
+          name="fullName"
+          label="Nome completo"
+          hideErrorLabel
+        />
         <span className="text-label-medium text-light-onSurface">
           Ordenar por
         </span>
-        <Choice<UsersFilterFormInputs> name="orderBy">
-          <Choice.Radio label="Nome" value="name" />
-          <Choice.Radio label="Email" value="email" />
-        </Choice>
-        <span className="text-label-medium text-light-onSurface">
-          Categoria
-        </span>
-        <Choice<UsersFilterFormInputs> name="category">
-          <Choice.Checkbox label="Ativo" value="active" />
-          <Choice.Checkbox label="Inativo" value="inactive" />
-        </Choice>
+        <div className="flex flex-col gap-2">
+          <Choice<UsersFilterFormInputs> name="orderBy">
+            <Choice.Radio label="Nome" value="name" />
+            <Choice.Radio label="Email" value="email" />
+          </Choice>
+        </div>
+        <span className="text-label-medium text-light-onSurface">Status</span>
+        <div className="flex flex-col gap-2">
+          <Choice<UsersFilterFormInputs> name="category">
+            <Choice.Checkbox label="Ativo" value="active" />
+            <Choice.Checkbox label="Inativo" value="inactive" />
+          </Choice>
+        </div>
       </SideSheet.Body>
       <SideSheet.Footer
         primaryLabel="Aplicar"
