@@ -20,6 +20,7 @@ interface InputProperties<T extends FieldValues> {
   type?: string;
   maxLength?: number;
   required?: boolean;
+  hideErrorLabel?: boolean;
 }
 
 export default function Input<T extends FieldValues>({
@@ -32,6 +33,7 @@ export default function Input<T extends FieldValues>({
   type = "text",
   maxLength,
   required,
+  hideErrorLabel,
 }: InputProperties<T>): ReactElement {
   const { register, setValue } = useFormContext();
   const { errors } = useFormState({
@@ -56,10 +58,10 @@ export default function Input<T extends FieldValues>({
           <span className="text-light-error text-body-medium">*</span>
         )}
       </div>
-      <div className="border-light-outline border-2 rounded-md flex items-center px-1 gap-1">
+      <div className="border-light-outline border-2 rounded-md flex items-center gap-1 overflow-hidden">
         <input
           {...register(name)}
-          className="text-body-large text-light-onSurface bg-transparent p-1 caret-light-primary flex-1 h-10"
+          className="text-body-large text-light-onSurface bg-transparent p-1 px-2 caret-light-primary flex-1 h-10"
           autoComplete="on"
           placeholder={placeholder}
           type={type}
@@ -75,7 +77,7 @@ export default function Input<T extends FieldValues>({
           />
         )}
       </div>
-      <ErrorLabel errors={errors} name={name} />
+      {hideErrorLabel || <ErrorLabel errors={errors} name={name} />}
     </label>
   );
 }
