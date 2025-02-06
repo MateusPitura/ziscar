@@ -50,7 +50,7 @@ export default function UsersTableActions({
         variant="tertiary"
         fullWidth
         label="Editar"
-        onClick={() => navigate(`/users/${userId}`)}
+        onClick={() => navigate(`/users/edit/${userId}`)}
       />
       <Button
         variant="tertiary"

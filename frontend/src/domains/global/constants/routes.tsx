@@ -22,7 +22,8 @@ const Vehicles = lazy(
   () => import("@/domains/vehicles/components/VehiclesPage")
 );
 const Users = lazy(() => import("@/domains/users/components/UsersPage"));
-const NewUsers = lazy(() => import("@/domains/users/components/NewUsersPage"));
+const NewUser = lazy(() => import("@/domains/users/components/NewUsersPage"));
+const EditUser = lazy(() => import("@/domains/users/components/EditUserPage"));
 const Profile = lazy(() => import("@/domains/profile/components/ProfilePage"));
 const Branches = lazy(
   () => import("@/domains/branches/components/BranchesPage")
@@ -43,7 +44,12 @@ export const routes: RouteGroup[] = [
       },
       {
         path: "/users/new",
-        entryPage: <NewUsers />,
+        entryPage: <NewUser />,
+        shouldDisplay: false,
+      },
+      {
+        path: "/users/edit/:id",
+        entryPage: <EditUser />,
         shouldDisplay: false,
       },
       {
