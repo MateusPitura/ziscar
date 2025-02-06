@@ -6,6 +6,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import { baseUrl } from "@/domains/global/constants/requests";
+import { queryKeys } from "@/domains/global/types/queryKeys";
 
 interface UsersTableActionsProperties {
   isActive?: boolean;
@@ -36,7 +37,7 @@ export default function UsersTableActions({
   const { mutate, isPending } = useMutation({
     mutationFn: enableUser,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["users"] });
+      queryClient.invalidateQueries({ queryKey: [queryKeys.USERS] });
       showSuccessSnackbar({
         title: `Usuário ${fullName} ativado com sucesso`,
       });

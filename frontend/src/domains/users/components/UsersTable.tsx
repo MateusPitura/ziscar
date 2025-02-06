@@ -13,6 +13,7 @@ import UsersTableActions from "./UsersTableActions";
 import { DisableUser } from "../types/disableUser";
 import DisableUserModal from "./DisableUserModal";
 import useDialog from "@/domains/global/hooks/useDialog";
+import { queryKeys } from "@/domains/global/types/queryKeys";
 
 export default function UsersTable(): ReactNode {
   const [disableUserInfo, setDisableUserInfo] = useState<DisableUser>({
@@ -47,7 +48,7 @@ export default function UsersTable(): ReactNode {
   }
 
   const { data: usersInfo, isFetching: isFetchingUsersInfo } = useQuery({
-    queryKey: ["users", filterFormatted],
+    queryKey: [queryKeys.USERS, filterFormatted],
     queryFn: ({ queryKey }) => getUsersInfo(queryKey[1]),
     select: selectUsersInfo,
   });

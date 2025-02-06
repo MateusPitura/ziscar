@@ -6,6 +6,7 @@ import useSafeFetch from "../hooks/useSafeFetch";
 import useSnackbar from "../hooks/useSnackbar";
 import { useQuery } from "@tanstack/react-query";
 import formatInputPrefix from "../utils/formatInputPrefix";
+import { queryKeys } from "../types/queryKeys";
 
 interface ViaCepAddress {
   logradouro?: string;
@@ -44,7 +45,7 @@ export default function AddressFields<T extends FieldValues>({
   }
 
   const { data: cepInfo, isFetching } = useQuery({
-    queryKey: ["cepApi", currentValidCep],
+    queryKey: [queryKeys.CEP_API, currentValidCep],
     queryFn: ({ queryKey }) => getCepInfo(queryKey[1]),
     enabled: !!currentValidCep,
   });

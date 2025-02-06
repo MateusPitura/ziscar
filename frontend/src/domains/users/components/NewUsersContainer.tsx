@@ -17,6 +17,7 @@ import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import { baseUrl } from "@/domains/global/constants/requests";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import AddressFields from "@/domains/global/components/AddressFields";
+import { queryKeys } from "@/domains/global/types/queryKeys";
 
 const SchemNewUserForm = s.object({
   fullName: s.fullName(),
@@ -41,7 +42,7 @@ export default function NewUsersContainer(): ReactElement {
   const navigate = useNavigate();
   const { safeFetch } = useSafeFetch();
   const { showSuccessSnackbar } = useSnackbar();
-  const isFetching = useIsFetching({ queryKey: ["cepApi"] });
+  const isFetching = useIsFetching({ queryKey: [queryKeys.CEP_API] });
   const queryClient = useQueryClient();
 
   async function createUser(data: NewUserFormInputs) {
@@ -61,7 +62,7 @@ export default function NewUsersContainer(): ReactElement {
         title: "Usuário criado com sucesso",
       });
       navigate("/users");
-      queryClient.invalidateQueries({ queryKey: ["users"] });
+      queryClient.invalidateQueries({ queryKey: [queryKeys.USERS] });
     },
   });
 

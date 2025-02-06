@@ -2,6 +2,7 @@ import { baseUrl } from "@/domains/global/constants/requests";
 import useGlobalContext from "@/domains/global/hooks/useGlobalContext";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
+import { queryKeys } from "@/domains/global/types/queryKeys";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface UseUpdateProfileInfoProperties {
@@ -32,7 +33,7 @@ export default function useUpdateProfileInfo<T>({
     mutationFn: updateProfileInfo,
     onSuccess: () => {
       if (shouldInvalidateQuery) {
-        queryClient.invalidateQueries({ queryKey: ["profileInfo"] });
+        queryClient.invalidateQueries({ queryKey: [queryKeys.PROFILE_INFO] });
       }
       showSuccessSnackbar({
         title: snackbarTitle,

@@ -19,6 +19,7 @@ import selectProfileInfo from "../utils/selectProfileInfo";
 import useDialog from "../../global/hooks/useDialog";
 import EditProfileModal from "./EditProfileModal";
 import { EditProfile } from "../types/editProfile";
+import { queryKeys } from "@/domains/global/types/queryKeys";
 
 export default function ProfileContainer(): ReactElement {
   const [editProfileInfo, setEditProfileInfo] = useState<EditProfile>({
@@ -37,7 +38,7 @@ export default function ProfileContainer(): ReactElement {
   }
 
   const { data: profileInfo, isFetching } = useQuery({
-    queryKey: ["profileInfo"],
+    queryKey: [queryKeys.PROFILE_INFO],
     queryFn: getProfileInfo,
     select: selectProfileInfo,
   });

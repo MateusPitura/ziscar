@@ -8,6 +8,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { ReactElement } from "react";
 import { DisableUser } from "../types/disableUser";
 import useGlobalContext from "@/domains/global/hooks/useGlobalContext";
+import { queryKeys } from "@/domains/global/types/queryKeys";
 
 interface DisableUserModalProps extends DisableUser, Dialog {}
 
@@ -33,7 +34,7 @@ export default function DisableUserModal({
     mutationFn: disableUser,
     onSuccess: () => {
       handleUsersFilter({ page: 1 });
-      queryClient.invalidateQueries({ queryKey: ["users"] });
+      queryClient.invalidateQueries({ queryKey: [queryKeys.USERS] });
       showSuccessSnackbar({
         title: `Usuário ${userName} desativado com sucesso`,
       });

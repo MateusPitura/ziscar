@@ -4,6 +4,7 @@ import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import { useQuery } from "@tanstack/react-query";
 import type { ReactNode } from "react";
 import { DashBoard as DashBoardProps } from "@/domains/global/types/dashBoard";
+import { queryKeys } from "@/domains/global/types/queryKeys";
 
 export default function UsersDashBoard(): ReactNode {
   const { safeFetch } = useSafeFetch();
@@ -14,7 +15,7 @@ export default function UsersDashBoard(): ReactNode {
 
   const { data: dashBoardInfo, isFetching: isFetchingDatashBoardInfo } =
     useQuery({
-      queryKey: ["users-dashboard"],
+      queryKey: [queryKeys.USERS_DASHBOARD],
       queryFn: getDashBoardInfo,
     });
 
