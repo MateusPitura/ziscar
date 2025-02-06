@@ -51,12 +51,9 @@ export default function Form<T extends FieldValues>({
 
   const safeOnSubmit = useCallback(
     (data: Record<string, unknown>) => {
-      const dataCopy = Object.assign({}, data);
-      Object.keys(dataCopy).forEach((key) => {
-        if (dataCopy[key] === "") {
-          dataCopy[key] = null;
-        }
-      });
+      const dataString = JSON.stringify(data);
+      const dataFormatted = dataString.replace(/""/g, "null");
+      const dataCopy = JSON.parse(dataFormatted);
       onSubmit(dataCopy as T);
     },
     [onSubmit]
