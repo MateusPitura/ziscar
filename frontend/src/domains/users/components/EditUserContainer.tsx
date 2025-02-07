@@ -8,7 +8,7 @@ import {
   useMutation,
   useQuery,
 } from "@tanstack/react-query";
-import type { ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { UserFormInputs } from "../schemas/users";
 import UserForm from "./UserForm";
@@ -46,7 +46,7 @@ export default function EditUserContainer(): ReactNode {
     });
   }
 
-  const { mutate, isPending } = useMutation({
+  const { mutate, isPending, isSuccess } = useMutation({
     mutationFn: editUser,
     onSuccess: async () => {
       showSuccessSnackbar({
@@ -55,12 +55,19 @@ export default function EditUserContainer(): ReactNode {
       queryClient.invalidateQueries({
         queryKey: [queryKeys.USERS],
       });
-      queryClient.invalidateQueries({
-        queryKey: [queryKeys.USER],
-      });
       navigate("/users");
     },
   });
+
+  useEffect(() => {
+    return () => {
+      if (isSuccess) {
+        queryClient.invalidateQueries({
+          queryKey: [queryKeys.USER],
+        });
+      }
+    };
+  }, [isSuccess, queryClient]);
 
   if (isFetching) {
     return (
