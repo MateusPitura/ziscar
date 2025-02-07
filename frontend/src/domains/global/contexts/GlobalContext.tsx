@@ -4,7 +4,7 @@ import { ClientLogged } from "../types/client";
 import { Childrenable } from "../types/components";
 import { Pageable } from "../types/filters";
 import { defaultValues } from "@/domains/users/constants/usersFilter";
-import { UsersFilterFormInputs } from "@/domains/users/schemas/usersFilters";
+import { UsersFilterFormInputs } from "@/domains/users/schemas/users";
 
 interface UsersFilter extends UsersFilterFormInputs, Pageable {}
 

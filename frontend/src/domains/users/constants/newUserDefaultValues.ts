@@ -1,4 +1,6 @@
-export const defaultValues = {
+import { UserFormInputs } from "../schemas/users";
+
+export const defaultValues: UserFormInputs = {
   fullName: "",
   email: "",
   cellphone: "",
@@ -14,4 +16,5 @@ export const defaultValues = {
     state: "",
     complement: "",
   },
+  category: "admin",
 };

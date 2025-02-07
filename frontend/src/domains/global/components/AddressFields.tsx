@@ -16,13 +16,13 @@ interface ViaCepAddress {
   erro?: boolean;
 }
 
-interface AddressFieldsProps {
-  inputNamePrefix?: string;
+interface AddressFieldsProps<T extends FieldValues> {
+  inputNamePrefix?: keyof T & string;
 }
 
 export default function AddressFields<T extends FieldValues>({
   inputNamePrefix,
-}: AddressFieldsProps): ReactNode {
+}: AddressFieldsProps<T>): ReactNode {
   const [currentValidCep, setCurrentValidCep] = useState("");
 
   const { setValue, trigger, getValues } = useFormContext();

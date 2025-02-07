@@ -9,6 +9,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ZodObject, ZodType } from "zod";
 import { Childrenable } from "@/domains/global/types/components";
+import { DevTool } from "@hookform/devtools";
 
 interface FormProperties<T extends FieldValues> extends Childrenable {
   onSubmit: (data: T) => void;
@@ -68,6 +69,7 @@ export default function Form<T extends FieldValues>({
       >
         {children}
       </form>
+      <DevTool control={methods.control} />
     </FormProvider>
   );
 }

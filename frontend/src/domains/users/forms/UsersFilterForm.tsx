@@ -9,7 +9,7 @@ import { useFormContext } from "react-hook-form";
 import {
   SchemaUsersFilterForm,
   UsersFilterFormInputs,
-} from "../schemas/usersFilters";
+} from "../schemas/users";
 import useDialogContext from "@/domains/global/hooks/useDialogContext";
 
 function UsersFilterForm(): ReactElement {

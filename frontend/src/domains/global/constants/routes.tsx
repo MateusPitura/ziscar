@@ -48,7 +48,7 @@ export const routes: RouteGroup[] = [
         shouldDisplay: false,
       },
       {
-        path: "/users/edit/:id",
+        path: "/users/edit/:userId",
         entryPage: <EditUser />,
         shouldDisplay: false,
       },
