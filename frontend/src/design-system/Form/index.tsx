@@ -16,6 +16,7 @@ interface FormProperties<T extends FieldValues> extends Childrenable {
   defaultValues: DefaultValues<T>;
   schema: ZodType;
   className?: string;
+  onlyDirty?: boolean;
 }
 
 function getDirtyValues(
@@ -43,6 +44,7 @@ export default function Form<T extends FieldValues>({
   defaultValues,
   schema,
   className,
+  onlyDirty,
 }: FormProperties<T>): ReactElement {
   const safeDefaultValues = useMemo(() => {
     /**
@@ -71,13 +73,15 @@ export default function Form<T extends FieldValues>({
 
   const safeOnSubmit = useCallback(
     (data: Record<string, unknown>) => {
-      const dirtyValues = getDirtyValues(methods.formState.dirtyFields, data);
-      const dataString = JSON.stringify(dirtyValues);
+      const values = onlyDirty
+        ? getDirtyValues(methods.formState.dirtyFields, data)
+        : data;
+      const dataString = JSON.stringify(values);
       const dataFormatted = dataString.replace(/""/g, "null");
       const dataCopy = JSON.parse(dataFormatted);
       onSubmit(dataCopy as T);
     },
-    [onSubmit, methods.formState.dirtyFields]
+    [onSubmit, methods.formState.dirtyFields, onlyDirty]
   );
 
   return (

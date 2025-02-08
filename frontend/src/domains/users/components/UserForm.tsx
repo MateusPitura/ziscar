@@ -14,6 +14,7 @@ interface UserFormProperties {
   isPending: boolean;
   headerPrimaryBtnLabel: string;
   headerTitle: string;
+  onlyDirty?: boolean;
 }
 
 export default function UserForm({
@@ -22,6 +23,7 @@ export default function UserForm({
   isPending,
   headerPrimaryBtnLabel,
   headerTitle,
+  onlyDirty
 }: UserFormProperties): ReactNode {
   const navigate = useNavigate();
 
@@ -32,6 +34,7 @@ export default function UserForm({
         defaultValues={defaultValues}
         onSubmit={onSubmit}
         className="gap-4 flex flex-col"
+        onlyDirty={onlyDirty}
       >
         <PageHeader
           title={headerTitle}
