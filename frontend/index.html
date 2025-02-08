@@ -36,7 +36,29 @@
     </script>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div
+        style="
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+        "
+      >
+        <div
+          style="
+            width: 2.5rem;
+            height: 2.5rem;
+            border-width: 0.25rem;
+            border-color: #904b40;
+            border-style: solid;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            border-top-color: transparent;
+          "
+        ></div>
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

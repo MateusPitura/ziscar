@@ -44,7 +44,13 @@ body {
 }
 
 /* Input */
-
 input:focus {
   outline: none; /* Remove a borda de foco */
+}
+
+/* HTML Loading */
+@keyframes spin {
+  to {
+      transform: rotate(360deg);
+  }
 }
