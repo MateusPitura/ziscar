@@ -11,8 +11,10 @@ export default function RoutesGroup({
 }: RoutesGroupProps): ReactElement {
   return (
     <div className="flex flex-col gap-2">
-      {label && (
+      {label ? (
         <span className="text-label-medium text-light-outline">{label}</span>
+      ) : (
+        <span className="text-label-medium text-light-outline text-center invisible">-</span>
       )}
       {children}
     </div>
