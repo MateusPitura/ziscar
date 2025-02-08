@@ -1,28 +1,22 @@
 import { User } from "@/domains/global/types/user";
 import { applyMask } from "@/domains/global/utils/applyMask";
 
-export default function selectProfileInfo(data: User): User {
-  const baseData = {
-    ...data,
-    cpf: applyMask(data?.cpf, "CPF"),
-    cellphone: applyMask(data?.cellphone, "CELLPHONE"),
-  };
-
-  if (!data?.address) {
-    return baseData;
-  }
-
-  const cep = applyMask(data?.address?.cep, "CEP");
-
-  if (!cep) {
-    return baseData;
-  }
-
+export default function selectProfileInfo(data: User): Omit<User, "id"> {
   return {
-    ...baseData,
+    fullName: data.fullName,
+    email: data.email,
+    cellphone: applyMask(data.cellphone, "CELLPHONE") ?? "",
+    cpf: applyMask(data.cpf, "CPF") ?? "",
+    code: data.code ?? "",
+    birthDate: data.birthDate,
     address: {
-      ...data?.address,
-      cep,
+      cep: applyMask(data.address?.cep, "CEP") ?? "",
+      number: data.address?.number ?? "",
+      street: data.address?.street ?? "",
+      complement: data.address?.complement ?? "",
+      neighborhood: data.address?.neighborhood ?? "",
+      city: data.address?.city ?? "",
+      state: data.address?.state ?? "",
     },
   };
 }

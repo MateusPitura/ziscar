@@ -1,4 +1,4 @@
-import { useCallback, useMemo, type ReactElement } from "react";
+import { useCallback, type ReactElement } from "react";
 import {
   DefaultValues,
   FieldValues,
@@ -7,7 +7,7 @@ import {
   UseFormReturn,
 } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ZodObject, ZodType } from "zod";
+import { ZodType } from "zod";
 import { Childrenable } from "@/domains/global/types/components";
 import { DevTool } from "@hookform/devtools";
 
@@ -46,28 +46,9 @@ export default function Form<T extends FieldValues>({
   className,
   onlyDirty,
 }: FormProperties<T>): ReactElement {
-  const safeDefaultValues = useMemo(() => {
-    /**
-     * This function is necessary because if some default value is undefined or
-     * null RHF replace it for an empty string, and this cause isDirty to fire
-     * So if the initial value already is a empty string this works fine
-     * But it don't cover some cases:
-     * - The schema has a ZodEffect, like .refine() in object. Ensure that objets
-     * itself isn't {} ou null/undefined and it's props aren't null/undefined
-     * - The default should be an array. Ensure that a empty array is setted
-     */
-    const defaultValuesCopy = Object.assign({}, defaultValues);
-
-    if (schema instanceof ZodObject) {
-      Object.keys(schema.shape).forEach((key) => {
-        defaultValuesCopy[key] = defaultValuesCopy[key] ?? "";
-      });
-    }
-    return defaultValuesCopy;
-  }, [defaultValues, schema]);
 
   const methods: UseFormReturn<T> = useForm<T>({
-    defaultValues: safeDefaultValues,
+    defaultValues,
     resolver: zodResolver(schema),
   });
 

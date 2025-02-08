@@ -40,6 +40,7 @@ export default function AddressForm({
       onSubmit={handleSubmit}
       schema={SchemaAddressForm}
       defaultValues={defaultValues}
+      onlyDirty
     >
       <AddressFormContent isPending={isPending} />
     </Form>

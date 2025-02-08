@@ -61,13 +61,17 @@ export default function AddressFields<T extends FieldValues>({
     if (cepInfo) {
       setValue(
         formatInputPrefix("street", inputNamePrefix),
-        cepInfo.logradouro
+        cepInfo.logradouro,
+        { shouldDirty: true }
       );
       setValue(
         formatInputPrefix("neighborhood", inputNamePrefix),
-        cepInfo.bairro
+        cepInfo.bairro,
+        { shouldDirty: true }
       );
-      setValue(formatInputPrefix("city", inputNamePrefix), cepInfo.localidade);
+      setValue(formatInputPrefix("city", inputNamePrefix), cepInfo.localidade, {
+        shouldDirty: true,
+      });
       setValue(formatInputPrefix("state", inputNamePrefix), cepInfo.uf, {
         shouldDirty: true,
       });

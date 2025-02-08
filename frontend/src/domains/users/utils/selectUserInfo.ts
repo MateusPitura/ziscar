@@ -7,8 +7,8 @@ export default function selectUserInfo(data: User): UserFormInputs {
   return {
     fullName: data.fullName,
     email: data.email,
-    cellphone: applyMask(data.cellphone ?? "", "CELLPHONE"),
-    cpf: applyMask(data.cpf ?? "", "CPF"),
+    cellphone: applyMask(data.cellphone, "CELLPHONE") ?? "",
+    cpf: applyMask(data.cpf, "CPF") ?? "",
     code: data.code ?? "",
     birthDate: data.birthDate
       ? safeFormat({
@@ -18,7 +18,7 @@ export default function selectUserInfo(data: User): UserFormInputs {
       : "",
     category: data.category ?? "",
     address: {
-      cep: applyMask(data.address?.cep ?? "", "CEP"),
+      cep: applyMask(data.address?.cep, "CEP") ?? "",
       number: data.address?.number ?? "",
       street: data.address?.street ?? "",
       complement: data.address?.complement ?? "",
