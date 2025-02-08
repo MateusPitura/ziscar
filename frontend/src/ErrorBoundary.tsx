@@ -26,10 +26,13 @@ class GlobalErrorBoundary extends React.Component<
   render() {
     if (this.state.hasError) {
       return (
-        // TODO: customizar mensagem de erro
-        <div>
-          <h1>Something went wrong.</h1>
-          <p>{this.state.error?.message}</p>
+        <div className="flex flex-col gap-4 justify-center items-center h-screen">
+          <span className="text-light-primary text-display-large">
+            Algo deu errado
+          </span>
+          <span className="text-light-onSurface text-headline-large">
+            Por favor, recarregue a página e tente novamente
+          </span>
         </div>
       );
     }
