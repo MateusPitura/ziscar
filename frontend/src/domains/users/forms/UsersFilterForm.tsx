@@ -6,10 +6,7 @@ import useGlobalContext from "@/domains/global/hooks/useGlobalContext";
 import { memo, ReactElement } from "react";
 import { defaultValues } from "../constants/usersFilter";
 import { useFormContext } from "react-hook-form";
-import {
-  SchemaUsersFilterForm,
-  UsersFilterFormInputs,
-} from "../schemas/users";
+import { SchemaUsersFilterForm, UsersFilterFormInputs } from "../schemas/users";
 import useDialogContext from "@/domains/global/hooks/useDialogContext";
 
 function UsersFilterForm(): ReactElement {
@@ -27,6 +24,7 @@ function UsersFilterForm(): ReactElement {
       onSubmit={handleSubmit}
       className="flex-1 flex flex-col"
       defaultValues={{ ...usersFilter }}
+      removeEmptyString={false}
     >
       <UsersFilterFormContent />
     </Form>

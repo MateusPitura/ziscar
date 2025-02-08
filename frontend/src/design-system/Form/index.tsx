@@ -17,6 +17,7 @@ interface FormProperties<T extends FieldValues> extends Childrenable {
   schema: ZodType;
   className?: string;
   onlyDirty?: boolean;
+  removeEmptyString?: boolean;
 }
 
 function getDirtyValues(
@@ -45,8 +46,8 @@ export default function Form<T extends FieldValues>({
   schema,
   className,
   onlyDirty,
+  removeEmptyString = true,
 }: FormProperties<T>): ReactElement {
-
   const methods: UseFormReturn<T> = useForm<T>({
     defaultValues,
     resolver: zodResolver(schema),
@@ -54,15 +55,18 @@ export default function Form<T extends FieldValues>({
 
   const safeOnSubmit = useCallback(
     (data: Record<string, unknown>) => {
-      const values = onlyDirty
-        ? getDirtyValues(methods.formState.dirtyFields, data)
-        : data;
-      const dataString = JSON.stringify(values);
-      const dataFormatted = dataString.replace(/""/g, "null");
-      const dataCopy = JSON.parse(dataFormatted);
-      onSubmit(dataCopy as T);
+      let valueCopy = Object.assign({}, data);
+      if (onlyDirty) {
+        valueCopy = getDirtyValues(methods.formState.dirtyFields, data);
+      }
+      if (removeEmptyString) {
+        const valuesString = JSON.stringify(valueCopy);
+        const valuesFormatted = valuesString.replace(/""/g, "null");
+        valueCopy = JSON.parse(valuesFormatted);
+      }
+      onSubmit(valueCopy as T);
     },
-    [onSubmit, methods.formState.dirtyFields, onlyDirty]
+    [onSubmit, methods.formState.dirtyFields, onlyDirty, removeEmptyString]
   );
 
   return (
