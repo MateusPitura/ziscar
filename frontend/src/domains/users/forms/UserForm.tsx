@@ -6,7 +6,7 @@ import PageHeader from "@/domains/global/components/PageHeader";
 import Section from "@/domains/global/components/Section";
 import type { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
-import { SchemUserForm, UserFormInputs } from "../schemas/users";
+import { SchemaUserForm, UserFormInputs } from "../schemas/users";
 
 interface UserFormProperties {
   defaultValues: Partial<UserFormInputs>;
@@ -30,7 +30,7 @@ export default function UserForm({
   return (
     <div className="flex flex-col gap-4">
       <Form<UserFormInputs>
-        schema={SchemUserForm}
+        schema={SchemaUserForm}
         defaultValues={defaultValues}
         onSubmit={onSubmit}
         className="gap-4 flex flex-col"

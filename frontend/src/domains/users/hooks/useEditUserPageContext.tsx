@@ -9,4 +9,6 @@ export default function useEditUserPageContext() {
       "useEditUserPageContext must be used within a EditUserPageContextProvider"
     );
   }
+
+  return context;
 }

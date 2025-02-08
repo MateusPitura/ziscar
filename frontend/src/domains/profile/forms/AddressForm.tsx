@@ -9,7 +9,7 @@ import { s } from "@/domains/global/schemas";
 import AddressFields from "@/domains/global/components/AddressFields";
 import { queryKeys } from "@/domains/global/types/queryKeys";
 
-const SchemaAddressForm = s.addressSchema().extend({
+const SchemaAddressForm = s.SchemaAddress.extend({
   cep: s.cep().transform((cep) => removeMask(cep, "CEP")),
 });
 

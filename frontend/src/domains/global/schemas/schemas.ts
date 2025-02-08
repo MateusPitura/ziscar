@@ -60,7 +60,7 @@ export const password = () =>
       message: "Ao menos um caractere especial",
     });
 
-export const passwordSchema = object({
+export const SchemaPassword = object({
   newPassword: password(),
   confirmPassword: string(),
 }).refine((data) => data.newPassword === data.confirmPassword, {
@@ -75,16 +75,15 @@ export const fullName = () =>
 
 export const cep = () => string(9).regex(/^\d{5}-?\d{3}$/, "CEP inválido");
 
-export const addressSchema = () =>
-  object({
-    cep: cep(),
-    street: string("default", "optional"),
-    number: string(),
-    neighborhood: string("default", "optional"),
-    city: string("default", "optional"),
-    state: string("default", "optional"),
-    complement: string("default", "optional"),
-  });
+export const SchemaAddress = object({
+  cep: cep(),
+  street: string("default", "optional"),
+  number: string(),
+  neighborhood: string("default", "optional"),
+  city: string("default", "optional"),
+  state: string("default", "optional"),
+  complement: string("default", "optional"),
+});
 
 export const birthDate = () =>
   date()

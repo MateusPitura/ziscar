@@ -71,12 +71,14 @@ export default function Input<T extends FieldValues>({
           required={required}
         />
         {iconRight && (
-          <Button
-            variant="tertiary"
-            iconLeft={iconRight}
-            padding="none"
-            onClick={onClickIconRight}
-          />
+          <div className="px-2">
+            <Button
+              variant="tertiary"
+              iconLeft={iconRight}
+              padding="none"
+              onClick={onClickIconRight}
+            />
+          </div>
         )}
       </div>
       {hideErrorLabel || <ErrorLabel errors={errors} name={name} />}

@@ -9,4 +9,6 @@ export default function useSignPageContext() {
       "useSignPageContext must be used within a SignPageProvider"
     );
   }
+
+  return context;
 }

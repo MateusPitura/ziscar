@@ -122,6 +122,11 @@ export const openRoutes: RouteGroup[] = [
         shouldDisplay: false,
       },
       {
+        path: "/sign/:token",
+        entryPage: <Sign />,
+        shouldDisplay: false,
+      },
+      {
         path: "*",
         entryPage: <NotFound />,
         shouldDisplay: false,

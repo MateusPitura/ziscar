@@ -1,26 +1,32 @@
 import { Childrenable } from "@/domains/global/types/components";
 import { createContext, useMemo, useState, ReactNode } from "react";
 
+type Step =
+  | "SIGN_IN"
+  | "SIGN_UP"
+  | "FORGOT_PASSWORD"
+  | "NEW_PASSWORD";
+
 interface SignPageContextValues {
-  example: boolean;
-  handleExample: (value: boolean) => void;
+  step: Step;
+  handleStep: (step: Step) => void;
 }
 
 const SignPageContext = createContext<SignPageContextValues | null>(null);
 
 function SignPageProvider({ children }: Childrenable): ReactNode {
-  const [example, setExample] = useState<boolean>(false);
+  const [step, setStep] = useState<Step>("SIGN_IN");
 
-  function handleExample(value: boolean) {
-    setExample(value);
+  function handleStep(step: Step) {
+    setStep(step);
   }
 
   const valuesMemoized = useMemo(
     () => ({
-      example,
-      handleExample,
+      step,
+      handleStep,
     }),
-    [example]
+    [step]
   );
 
   return (

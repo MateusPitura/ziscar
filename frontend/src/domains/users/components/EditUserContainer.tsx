@@ -11,7 +11,7 @@ import {
 import { useEffect, type ReactNode } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { UserFormInputs } from "../schemas/users";
-import UserForm from "./UserForm";
+import UserForm from "../forms/UserForm";
 import { User } from "@/domains/global/types/user";
 import selectUserInfo from "../utils/selectUserInfo";
 import Spinner from "@/design-system/Spinner";
