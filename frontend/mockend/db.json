@@ -18,7 +18,7 @@
         "complement": "Casa"
       },
       "cpf": "19222424034",
-      "category": "Administrador",
+      "category": "finance",
       "isActive": true
     },
     {
@@ -39,7 +39,7 @@
         "complement": null
       },
       "password": "1111111111111a1A!",
-      "category": "Financeiro",
+      "category": "admin",
       "isActive": true
     }
   ],
