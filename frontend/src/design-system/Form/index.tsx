@@ -1,4 +1,4 @@
-import { useCallback, type ReactElement } from "react";
+import { lazy, useCallback, type ReactElement } from "react";
 import {
   DefaultValues,
   FieldValues,
@@ -9,7 +9,10 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ZodType } from "zod";
 import { Childrenable } from "@/domains/global/types/components";
-import { DevTool } from "@hookform/devtools";
+
+const DevTool = import.meta.env.DEV
+  ? lazy(() => import("@/domains/global/components/HookFormDevTool"))
+  : () => null;
 
 interface FormProperties<T extends FieldValues> extends Childrenable {
   onSubmit: (data: T) => void;
@@ -78,7 +81,7 @@ export default function Form<T extends FieldValues>({
       >
         {children}
       </form>
-      <DevTool control={methods.control} />
+      {import.meta.env.DEV && <DevTool control={methods.control} />}
     </FormProvider>
   );
 }
