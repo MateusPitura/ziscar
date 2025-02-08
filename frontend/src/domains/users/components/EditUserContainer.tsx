@@ -30,19 +30,17 @@ export default function EditUserContainer(): ReactNode {
     });
   }
 
-  const { data, isFetching } = useQuery({
+  const { data: userData, isFetching } = useQuery({
     queryKey: [queryKeys.USER, userId],
     queryFn: getUser,
     select: selectUserInfo,
   });
 
   async function editUser(data: UserFormInputs) {
-    const dataFormatted = data;
-
     await safeFetch({
       path: `${baseUrl}/users/${userId}`,
       method: "PATCH",
-      body: dataFormatted,
+      body: data,
     });
   }
 
@@ -50,7 +48,7 @@ export default function EditUserContainer(): ReactNode {
     mutationFn: editUser,
     onSuccess: async () => {
       showSuccessSnackbar({
-        title: `Usuário ${data?.fullName} atualizado com sucesso`,
+        title: `Usuário ${userData?.fullName} atualizado com sucesso`,
       });
       queryClient.invalidateQueries({
         queryKey: [queryKeys.USERS],
@@ -78,9 +76,9 @@ export default function EditUserContainer(): ReactNode {
   }
 
   return (
-    data && (
+    userData && (
       <UserForm
-        defaultValues={data}
+        defaultValues={userData}
         onSubmit={mutate}
         isPending={isPending || !!isFetchingCep}
         headerPrimaryBtnLabel="Alterar"

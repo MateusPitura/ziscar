@@ -18,6 +18,25 @@ interface FormProperties<T extends FieldValues> extends Childrenable {
   className?: string;
 }
 
+function getDirtyValues(
+  dirtyFields: Record<string, unknown> | boolean,
+  allValues: Record<string, unknown>
+): Record<string, unknown> {
+  if (dirtyFields === true || Array.isArray(dirtyFields)) return allValues;
+  return Object.fromEntries(
+    Object.keys(dirtyFields).map((key) => [
+      key,
+      getDirtyValues(
+        (dirtyFields as Record<string, unknown>)[key] as Record<
+          string,
+          unknown
+        >,
+        allValues[key] as Record<string, unknown>
+      ),
+    ])
+  );
+}
+
 export default function Form<T extends FieldValues>({
   children,
   onSubmit,
@@ -52,12 +71,13 @@ export default function Form<T extends FieldValues>({
 
   const safeOnSubmit = useCallback(
     (data: Record<string, unknown>) => {
-      const dataString = JSON.stringify(data);
+      const dirtyValues = getDirtyValues(methods.formState.dirtyFields, data);
+      const dataString = JSON.stringify(dirtyValues);
       const dataFormatted = dataString.replace(/""/g, "null");
       const dataCopy = JSON.parse(dataFormatted);
       onSubmit(dataCopy as T);
     },
-    [onSubmit]
+    [onSubmit, methods.formState.dirtyFields]
   );
 
   return (
