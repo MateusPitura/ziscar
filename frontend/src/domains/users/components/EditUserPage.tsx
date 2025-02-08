@@ -1,11 +1,11 @@
 import type { ReactNode } from "react";
-import { EditUserPageContextProvider } from "../contexts/EditUserPageContext";
+import { EditUserPageProvider } from "../contexts/EditUserPageContext";
 import EditUserContainer from "./EditUserContainer";
 
 export default function EditUserPage(): ReactNode {
   return (
-    <EditUserPageContextProvider>
+    <EditUserPageProvider>
       <EditUserContainer />
-    </EditUserPageContextProvider>
+    </EditUserPageProvider>
   );
 }

@@ -1,12 +1,13 @@
 import { Route, Routes, BrowserRouter } from "react-router-dom";
-import { routes } from "@/domains/global/constants/routes";
-import PageLayout from "@/domains/global/components/PageLayout";
+import { closeRoutes, openRoutes } from "@/domains/global/constants/routes";
+import ClosePageLayout from "@/domains/global/components/ClosePageLayout";
 import { GlobalProvider } from "./domains/global/contexts/GlobalContext";
 import SuspensePage from "./domains/global/components/SuspensePage";
 import Snackbar from "./design-system/Snackbar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import GlobalErrorBoundary from "./ErrorBoundary";
+import OpenPageLayout from "./domains/global/components/OpenPageLayout";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -27,8 +28,23 @@ export default function App() {
           <GlobalProvider>
             <QueryClientProvider client={queryClient}>
               <Routes>
-                <Route element={<PageLayout />}>
-                  {routes.map((group) =>
+                <Route element={<OpenPageLayout />}>
+                  {openRoutes.map((group) =>
+                    group.routes.map((route) => (
+                      <Route
+                        key={route.path}
+                        path={route.path}
+                        element={
+                          <SuspensePage key={route.path}>
+                            {route.entryPage}
+                          </SuspensePage>
+                        }
+                      />
+                    ))
+                  )}
+                </Route>
+                <Route element={<ClosePageLayout />}>
+                  {closeRoutes.map((group) =>
                     group.routes.map((route) => (
                       <Route
                         key={route.path}

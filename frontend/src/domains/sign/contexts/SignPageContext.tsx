@@ -1,16 +1,14 @@
 import { Childrenable } from "@/domains/global/types/components";
 import { createContext, useMemo, useState, ReactNode } from "react";
 
-interface EditUserPageContextValues {
+interface SignPageContextValues {
   example: boolean;
   handleExample: (value: boolean) => void;
 }
 
-const EditUserPageContext = createContext<EditUserPageContextValues | null>(
-  null
-);
+const SignPageContext = createContext<SignPageContextValues | null>(null);
 
-function EditUserPageProvider({ children }: Childrenable): ReactNode {
+function SignPageProvider({ children }: Childrenable): ReactNode {
   const [example, setExample] = useState<boolean>(false);
 
   function handleExample(value: boolean) {
@@ -26,10 +24,10 @@ function EditUserPageProvider({ children }: Childrenable): ReactNode {
   );
 
   return (
-    <EditUserPageContext.Provider value={valuesMemoized}>
+    <SignPageContext.Provider value={valuesMemoized}>
       {children}
-    </EditUserPageContext.Provider>
+    </SignPageContext.Provider>
   );
 }
 
-export { EditUserPageContext, EditUserPageProvider };
+export { SignPageContext, SignPageProvider };

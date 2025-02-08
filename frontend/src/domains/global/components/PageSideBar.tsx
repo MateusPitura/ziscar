@@ -1,7 +1,7 @@
 import { memo, useEffect, useState, type ReactElement } from "react";
 import Button from "@/design-system/Button";
 import RoutesGroup from "@/domains/global/components/RoutesGroup";
-import { routes } from "@/domains/global/constants/routes";
+import { closeRoutes } from "@/domains/global/constants/routes";
 import { useLocation, useNavigate } from "react-router-dom";
 import classNames from "classnames";
 
@@ -16,7 +16,7 @@ function PageSideBar({ isOpen }: PageSideBarProps): ReactElement {
   const location = useLocation();
 
   useEffect(() => {
-    setActivePath(`/${location.pathname.split('/')[1]}`);
+    setActivePath(`/${location.pathname.split("/")[1]}`);
   }, [location]);
 
   return (
@@ -28,30 +28,34 @@ function PageSideBar({ isOpen }: PageSideBarProps): ReactElement {
         }
       )}
     >
-      {routes.map((group) => (
-        <RoutesGroup
-          key={group.groupName}
-          label={isOpen ? group.groupName : undefined}
-        >
-          {group.routes.map(
-            (route) =>
-              route.shouldDisplay && (
-                <Button
-                  key={route.path}
-                  padding={isOpen ? "default" : "none"}
-                  label={isOpen ? route.displayName : undefined}
-                  state={activePath === route.path ? "active" : undefined}
-                  variant="quaternary"
-                  iconLeft={route.icon}
-                  onClick={() => {
-                    navigate(route.path);
-                  }}
-                  fullWidth
-                />
-              )
-          )}
-        </RoutesGroup>
-      ))}
+      {closeRoutes.map((group) => {
+        if (!group.shoudDisplay) return null;
+
+        return (
+          <RoutesGroup
+            key={group.groupName}
+            label={isOpen ? group.groupName : undefined}
+          >
+            {group.routes.map(
+              (route) =>
+                route.shouldDisplay && (
+                  <Button
+                    key={route.path}
+                    padding={isOpen ? "default" : "none"}
+                    label={isOpen ? route.displayName : undefined}
+                    state={activePath === route.path ? "active" : undefined}
+                    variant="quaternary"
+                    iconLeft={route.icon}
+                    onClick={() => {
+                      navigate(route.path);
+                    }}
+                    fullWidth
+                  />
+                )
+            )}
+          </RoutesGroup>
+        );
+      })}
     </div>
   );
 }

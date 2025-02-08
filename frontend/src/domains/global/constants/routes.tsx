@@ -15,6 +15,7 @@ interface Route {
 
 interface RouteGroup {
   groupName: string;
+  shoudDisplay?: boolean;
   routes: Route[];
 }
 
@@ -31,9 +32,12 @@ const Branches = lazy(
 const Audit = lazy(() => import("@/domains/audit/components/AuditPage"));
 const NotFound = lazy(() => import("@/domains/global/components/NotFoundPage"));
 
-export const routes: RouteGroup[] = [
+const Sign = lazy(() => import("@/domains/sign/components/SignPage"));
+
+export const closeRoutes: RouteGroup[] = [
   {
     groupName: "Cadastros",
+    shoudDisplay: true,
     routes: [
       {
         path: "/users",
@@ -70,6 +74,7 @@ export const routes: RouteGroup[] = [
   },
   {
     groupName: "Configurações",
+    shoudDisplay: true,
     routes: [
       {
         path: "/",
@@ -82,6 +87,7 @@ export const routes: RouteGroup[] = [
   },
   {
     groupName: "Outros",
+    shoudDisplay: true,
     routes: [
       {
         path: "/audit",
@@ -89,6 +95,31 @@ export const routes: RouteGroup[] = [
         icon: <VerifiedUserOutlinedIcon />,
         entryPage: <Audit />,
         shouldDisplay: true,
+      },
+    ],
+  },
+  {
+    groupName: "*",
+    shoudDisplay: false,
+    routes: [
+      {
+        path: "*",
+        entryPage: <NotFound />,
+        shouldDisplay: false,
+      },
+    ],
+  },
+];
+
+export const openRoutes: RouteGroup[] = [
+  {
+    groupName: "*",
+    shoudDisplay: false,
+    routes: [
+      {
+        path: "/sign",
+        entryPage: <Sign />,
+        shouldDisplay: false,
       },
       {
         path: "*",
