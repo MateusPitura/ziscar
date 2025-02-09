@@ -3,6 +3,7 @@ import SignCard from "./SignCard";
 import NewPasswordForm from "../forms/NewPasswordForm";
 import SignInForm from "../forms/SignInForm";
 import useSignPageContext from "../hooks/useSignPageContext";
+import SignUpForm from "../forms/SignUpForm";
 
 export default function SignContainer(): ReactNode {
   const { step } = useSignPageContext();
@@ -13,6 +14,13 @@ export default function SignContainer(): ReactNode {
         return (
           <SignCard title="Criar nova senha">
             <NewPasswordForm />
+          </SignCard>
+        );
+      }
+      case "SIGN_UP": {
+        return (
+          <SignCard title="Criar conta">
+            <SignUpForm />
           </SignCard>
         );
       }

@@ -5,6 +5,7 @@ import InputPassword from "@/design-system/Form/InputPassword";
 import { s } from "@/domains/global/schemas";
 import { type ReactNode } from "react";
 import SignCard from "../components/SignCard";
+import useSignPageContext from "../hooks/useSignPageContext";
 
 const SchemaSignInForm = s.object({
   email: s.email(),
@@ -14,6 +15,8 @@ const SchemaSignInForm = s.object({
 type SignInFormInputs = s.infer<typeof SchemaSignInForm>;
 
 export default function SignInForm(): ReactNode {
+  const { handleStep } = useSignPageContext();
+
   return (
     <Form<SignInFormInputs>
       schema={SchemaSignInForm}
@@ -41,6 +44,7 @@ export default function SignInForm(): ReactNode {
         fullWidth
         textAlign="center"
         variant="secondary"
+        onClick={() => handleStep("SIGN_UP")}
       />
     </Form>
   );
