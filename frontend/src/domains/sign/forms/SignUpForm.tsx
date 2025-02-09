@@ -50,7 +50,7 @@ export default function SignUpForm(): ReactNode {
           required
         />
       </div>
-      <SignCard.Footer label="Criar" />
+      <SignCard.Footer label="Criar" cancelBtn />
     </Form>
   );
 }
