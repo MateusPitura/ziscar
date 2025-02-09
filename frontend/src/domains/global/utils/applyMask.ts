@@ -13,6 +13,8 @@ export function applyMask(
       return applyCellphoneMask(value);
     case "CEP":
       return applyCepMask(value);
+    case "CNPJ":
+      return applyCnpjMask(value);
     default:
       return value;
   }
@@ -50,4 +52,23 @@ function applyCepMask(value: string): string {
   const digits = value?.replace(/\D/g, "");
 
   return digits?.replace(/(\d{5})(\d{1,3}).*/, "$1-$2");
+}
+
+function applyCnpjMask(value: string): string {
+  const digits = value.replace(/\D/g, "");
+
+  if (digits.length <= 2) {
+    return digits;
+  } else if (digits.length <= 5) {
+    return digits.replace(/(\d{2})(\d{1,3})/, "$1.$2");
+  } else if (digits.length <= 8) {
+    return digits.replace(/(\d{2})(\d{3})(\d{1,3})/, "$1.$2.$3");
+  } else if (digits.length <= 12) {
+    return digits.replace(/(\d{2})(\d{3})(\d{3})(\d{1,4})/, "$1.$2.$3/$4");
+  } else {
+    return digits.replace(
+      /(\d{2})(\d{3})(\d{3})(\d{4})(\d{1,2}).*/,
+      "$1.$2.$3/$4-$5"
+    );
+  }
 }

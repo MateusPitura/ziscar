@@ -8,24 +8,15 @@ export function removeMask(
 
   switch (mask) {
     case "CPF":
-      return removeCpfMask(value);
     case "CELLPHONE":
-      return removeCellphoneMask(value);
     case "CEP":
-      return removeCepMask(value);
+    case "CNPJ":
+      return removeNonDigit(value);
     default:
       return value;
   }
 }
 
-function removeCpfMask(value: string): string {
-  return value.replace(/\D/g, '');
-}
-
-function removeCellphoneMask(value: string): string {
-  return value.replace(/\D/g, '');
-}
-
-function removeCepMask(value: string): string {
-  return value.replace(/\D/g, '');
+function removeNonDigit(value: string): string {
+  return value.replace(/\D/g, "");
 }

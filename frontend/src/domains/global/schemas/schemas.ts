@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { validateCpf } from "../utils/validateCpf";
+import { validateCnpj } from "../utils/validateCnpj";
 
 // BASE SCHEMAS
 
@@ -92,6 +93,9 @@ export const birthDate = () =>
 
 export const cpf = () =>
   string(14).refine((cpf) => validateCpf(cpf), { message: "CPF inválido" });
+
+export const cnpj = () =>
+  string(18).refine((cnpj) => validateCnpj(cnpj), { message: "CNPJ inválido" });
 
 export const cellphone = () =>
   string(15).regex(/^\(?\d{2}\)?\s?\d{5}-\d{4}$/, "Celular inválido");

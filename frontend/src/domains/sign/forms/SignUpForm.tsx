@@ -3,10 +3,11 @@ import Input from "@/design-system/Form/Input";
 import { s } from "@/domains/global/schemas";
 import type { ReactNode } from "react";
 import SignCard from "../components/SignCard";
+import { removeMask } from "@/domains/global/utils/removeMask";
 
 const SchemaSignUpForm = s.object({
   branchName: s.string(),
-  cnpj: s.string(),
+  cnpj: s.cnpj().transform((cnpj) => removeMask(cnpj, "CNPJ")),
   userName: s.fullName(),
   userEmail: s.email(),
 });
@@ -32,7 +33,12 @@ export default function SignUpForm(): ReactNode {
           label="Nome da filial"
           required
         />
-        <Input<SignUpFormInputs> name="cnpj" label="CNPJ" required />
+        <Input<SignUpFormInputs>
+          name="cnpj"
+          label="CNPJ"
+          required
+          mask="CNPJ"
+        />
         <Input<SignUpFormInputs>
           name="userName"
           label="Nome do usuário"
