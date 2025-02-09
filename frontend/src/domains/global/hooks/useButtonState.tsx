@@ -1,6 +1,6 @@
 import { ButtonState } from "@/design-system/Button";
 import { useMemo } from "react";
-import { useFormState } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 
 interface UseButtonProperties {
   dirty?: boolean;
@@ -11,10 +11,11 @@ export default function useButtonState({
   dirty = true,
   buttonState,
 }: UseButtonProperties): ButtonState | undefined {
-  const { isDirty } = useFormState();
+  const formContext = useFormContext();
 
   return useMemo(() => {
+    if (!formContext) return buttonState;
     if (buttonState) return buttonState;
-    if (dirty && !isDirty) return "disabled";
-  }, [buttonState, isDirty, dirty]);
+    if (dirty && !formContext.formState.isDirty) return "disabled";
+  }, [buttonState, formContext, dirty]);
 }
