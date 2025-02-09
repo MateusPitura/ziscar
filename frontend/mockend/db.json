@@ -61,5 +61,28 @@
       "filter": "",
       "url": "https://example.com/"
     }
+  ],
+  "signIn": [
+    {
+      "id": "1",
+      "user": "marcos@email.com",
+      "password": "token);token);AA!1"
+    }
+  ],
+  "forgetPassword": [
+    {
+      "id": "1",
+      "email": "marcos@gmail.com"
+    }
+  ],
+  "signUp": [
+    {
+      "id": "1",
+      "organizationName": "Marcos Veículos",
+      "cnpj": "12345678901234",
+      "userName": "Marcos",
+      "userEmail": "marcos@email.com",
+      "password": "token);token);AA!1"
+    }
   ]
 }
