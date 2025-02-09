@@ -1,11 +1,7 @@
 import { Childrenable } from "@/domains/global/types/components";
 import { createContext, useMemo, useState, ReactNode } from "react";
 
-type Step =
-  | "SIGN_IN"
-  | "SIGN_UP"
-  | "FORGOT_PASSWORD"
-  | "NEW_PASSWORD";
+type Step = "SIGN_IN" | "SIGN_UP" | "NEW_PASSWORD";
 
 interface SignPageContextValues {
   step: Step;
