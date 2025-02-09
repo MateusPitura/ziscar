@@ -1,4 +1,4 @@
-import { useMemo, type ReactElement } from "react";
+import { type ReactElement } from "react";
 import {
   Sheet,
   SheetClose,
@@ -12,14 +12,11 @@ import classNames from "classnames";
 import { DialogDescription } from "@/components/ui/dialog";
 import { Childrenable, Dialog } from "@/domains/global/types/components";
 import { DialogProvider } from "@/domains/global/contexts/DialogContext";
-import useDirty from "@/domains/global/hooks/useDirty";
+import useButtonState from "@/domains/global/hooks/useButtonState";
 
 interface ContainerProps extends Dialog, Childrenable {}
 
-function Container({
-  children,
-  ...dialog
-}: ContainerProps): ReactElement {
+function Container({ children, ...dialog }: ContainerProps): ReactElement {
   return (
     <DialogProvider {...dialog}>
       <Sheet open={dialog.isOpen} onOpenChange={dialog.handleOpen}>
@@ -90,12 +87,10 @@ function Footer({
   primaryBtnState,
   secondaryBtnState,
 }: FooterProps): ReactElement {
-  const { isDirty } = useDirty({ dirty });
-
-  const primaryBtnStateParsed = useMemo(() => {
-    if (primaryBtnState) return primaryBtnState;
-    if (!isDirty) return "disabled";
-  }, [primaryBtnState, isDirty]);
+  const primaryBtnStateParsed = useButtonState({
+    dirty,
+    buttonState: primaryBtnState,
+  });
 
   return (
     <div

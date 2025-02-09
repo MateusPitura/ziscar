@@ -1,6 +1,6 @@
 import Button, { ButtonState } from "@/design-system/Button";
-import { useMemo, type ReactElement } from "react";
-import useDirty from "../hooks/useDirty";
+import { type ReactElement } from "react";
+import useButtonState from "../hooks/useButtonState";
 
 interface PageHeaderProperties {
   title: string;
@@ -23,12 +23,10 @@ export default function PageHeader({
   dirty,
   primaryBtnState,
 }: PageHeaderProperties): ReactElement {
-  const { isDirty } = useDirty({ dirty });
-
-  const primaryBtnStateParsed = useMemo(() => {
-    if (primaryBtnState) return primaryBtnState;
-    if (!isDirty) return "disabled";
-  }, [primaryBtnState, isDirty]);
+  const primaryBtnStateParsed = useButtonState({
+    dirty,
+    buttonState: primaryBtnState,
+  });
 
   return (
     <div className="w-full p-4 flex">

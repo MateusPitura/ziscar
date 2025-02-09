@@ -1,7 +1,7 @@
 import Button, { ButtonState } from "@/design-system/Button";
-import useDirty from "@/domains/global/hooks/useDirty";
+import useButtonState from "@/domains/global/hooks/useButtonState";
 import { Childrenable } from "@/domains/global/types/components";
-import { useMemo, type ReactNode } from "react";
+import { type ReactNode } from "react";
 
 interface ContainerProps extends Childrenable {
   title: string;
@@ -29,12 +29,9 @@ function Footer({
   variant = "primary",
   primaryBtnState,
 }: ButtonProps): ReactNode {
-  const { isDirty } = useDirty({ dirty: true });
-
-  const primaryBtnStateParsed = useMemo(() => {
-    if (primaryBtnState) return primaryBtnState;
-    if (!isDirty) return "disabled";
-  }, [primaryBtnState, isDirty]);
+  const primaryBtnStateParsed = useButtonState({
+    buttonState: primaryBtnState,
+  });
 
   return (
     <Button

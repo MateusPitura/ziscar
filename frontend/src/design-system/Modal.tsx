@@ -1,4 +1,4 @@
-import { useMemo, type ReactElement } from "react";
+import { type ReactElement } from "react";
 import {
   Dialog as DialogShadcn,
   DialogContent,
@@ -11,7 +11,7 @@ import Button, { ButtonState } from "./Button";
 import { Childrenable, Dialog } from "@/domains/global/types/components";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { DialogProvider } from "@/domains/global/contexts/DialogContext";
-import useDirty from "@/domains/global/hooks/useDirty";
+import useButtonState from "@/domains/global/hooks/useButtonState";
 
 interface ContainerProps extends Dialog, Childrenable {}
 
@@ -66,12 +66,10 @@ function Footer({
   dirty,
   secondaryBtnState,
 }: FooterProps): ReactElement {
-  const { isDirty } = useDirty({ dirty });
-
-  const primaryBtnStateParsed = useMemo(() => {
-    if (primaryBtnState) return primaryBtnState;
-    if (!isDirty) return "disabled";
-  }, [primaryBtnState, isDirty]);
+  const primaryBtnStateParsed = useButtonState({
+    dirty,
+    buttonState: primaryBtnState,
+  });
 
   return (
     <DialogFooter className="flex px-6 pb-6 pt-2">
