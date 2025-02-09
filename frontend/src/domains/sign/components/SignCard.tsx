@@ -2,7 +2,6 @@ import Button, { ButtonState } from "@/design-system/Button";
 import useButtonState from "@/domains/global/hooks/useButtonState";
 import { Childrenable } from "@/domains/global/types/components";
 import { type ReactNode } from "react";
-import useSignPageContext from "../hooks/useSignPageContext";
 
 interface ContainerProps extends Childrenable {
   title: string;
@@ -23,20 +22,20 @@ interface ButtonProps {
   label: string;
   variant?: "primary" | "secondary";
   primaryBtnState?: ButtonState;
-  cancelBtn?: boolean;
+  secondaryBtnLabel?: string;
+  onClickSecondaryBtn?: () => void;
 }
 
 function Footer({
   label,
   variant = "primary",
   primaryBtnState,
-  cancelBtn = false,
+  secondaryBtnLabel,
+  onClickSecondaryBtn,
 }: ButtonProps): ReactNode {
   const primaryBtnStateParsed = useButtonState({
     buttonState: primaryBtnState,
   });
-
-  const { handleStep } = useSignPageContext();
 
   return (
     <div className="flex flex-col gap-2">
@@ -48,13 +47,13 @@ function Footer({
         fullWidth
         type="submit"
       />
-      {cancelBtn && (
+      {secondaryBtnLabel && (
         <div className="flex-1 flex justify-center">
           <Button
-            label="Cancelar"
+            label={secondaryBtnLabel}
             textAlign="center"
             variant="quaternary"
-            onClick={() => handleStep("SIGN_IN")}
+            onClick={onClickSecondaryBtn}
           />
         </div>
       )}

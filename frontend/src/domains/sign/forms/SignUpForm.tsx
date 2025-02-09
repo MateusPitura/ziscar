@@ -4,6 +4,7 @@ import { s } from "@/domains/global/schemas";
 import type { ReactNode } from "react";
 import SignCard from "../components/SignCard";
 import { removeMask } from "@/domains/global/utils/removeMask";
+import useSignPageContext from "../hooks/useSignPageContext";
 
 const SchemaSignUpForm = s.object({
   branchName: s.string(),
@@ -15,6 +16,8 @@ const SchemaSignUpForm = s.object({
 type SignUpFormInputs = s.infer<typeof SchemaSignUpForm>;
 
 export default function SignUpForm(): ReactNode {
+  const { handleStep } = useSignPageContext();
+
   return (
     <Form<SignUpFormInputs>
       schema={SchemaSignUpForm}
@@ -50,7 +53,11 @@ export default function SignUpForm(): ReactNode {
           required
         />
       </div>
-      <SignCard.Footer label="Criar" cancelBtn />
+      <SignCard.Footer
+        label="Criar"
+        secondaryBtnLabel="Cancelar"
+        onClickSecondaryBtn={() => handleStep("SIGN_IN")}
+      />
     </Form>
   );
 }

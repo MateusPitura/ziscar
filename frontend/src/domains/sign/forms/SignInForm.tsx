@@ -46,14 +46,11 @@ export default function SignInForm(): ReactNode {
               onClick={dialog.openDialog}
             />
           </div>
-          <SignCard.Footer label="Entrar" />
         </div>
-        <Button
-          label="Criar conta"
-          fullWidth
-          textAlign="center"
-          variant="secondary"
-          onClick={() => handleStep("SIGN_UP")}
+        <SignCard.Footer
+          label="Entrar"
+          secondaryBtnLabel="Criar conta"
+          onClickSecondaryBtn={() => handleStep("SIGN_UP")}
         />
       </Form>
     </>
