@@ -7,7 +7,7 @@ export default function ForgetPasswordModal({ ...dialog }: Dialog): ReactNode {
   return (
     <Modal {...dialog}>
       <Modal.Header title="Recuperar senha" />
-      <ForgetPasswordForm closeDialog={dialog.closeDialog} />
+      <ForgetPasswordForm />
     </Modal>
   );
 }

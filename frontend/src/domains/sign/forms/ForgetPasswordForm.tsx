@@ -10,13 +10,7 @@ const SchemaForgetPasswordForm = s.object({
 
 type ForgetPasswordFormInputs = s.infer<typeof SchemaForgetPasswordForm>;
 
-interface ForgetPasswordFormProperties {
-  closeDialog: () => void;
-}
-
-export default function ForgetPasswordForm({
-  closeDialog,
-}: ForgetPasswordFormProperties): ReactNode {
+export default function ForgetPasswordForm(): ReactNode {
   return (
     <Form<ForgetPasswordFormInputs>
       defaultValues={{ email: "" }}
@@ -37,9 +31,7 @@ export default function ForgetPasswordForm({
       </Modal.Body>
       <Modal.Footer
         labelPrimaryBtn="Enviar"
-        labelSecondaryBtn="Cancelar"
         dirty
-        onClickSecondaryBtn={closeDialog}
       />
     </Form>
   );

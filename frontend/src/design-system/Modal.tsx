@@ -75,7 +75,7 @@ function Footer({
     <DialogFooter className="flex px-6 pb-6 pt-2">
       {onClickSecondaryBtn ? (
         <Button
-          variant="secondary"
+          variant="quaternary"
           onClick={onClickSecondaryBtn}
           label={labelSecondaryBtn}
           state={secondaryBtnState}
