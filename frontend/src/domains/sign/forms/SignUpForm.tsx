@@ -5,6 +5,10 @@ import type { ReactNode } from "react";
 import SignCard from "../components/SignCard";
 import { removeMask } from "@/domains/global/utils/removeMask";
 import useSignPageContext from "../hooks/useSignPageContext";
+import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
+import { baseUrl } from "@/domains/global/constants/requests";
+import { useMutation } from "@tanstack/react-query";
+import useSnackbar from "@/domains/global/hooks/useSnackbar";
 
 const SchemaSignUpForm = s.object({
   branchName: s.string(),
@@ -17,6 +21,26 @@ type SignUpFormInputs = s.infer<typeof SchemaSignUpForm>;
 
 export default function SignUpForm(): ReactNode {
   const { handleStep } = useSignPageContext();
+  const { safeFetch } = useSafeFetch();
+  const { showSuccessSnackbar } = useSnackbar();
+
+  async function handleSignUp(data: SignUpFormInputs) {
+    await safeFetch({
+      path: `${baseUrl}/signUp`,
+      method: "POST",
+      body: data,
+    });
+  }
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: handleSignUp,
+    onSuccess: () => {
+      showSuccessSnackbar({
+        title: "Confira seu email",
+        description: "Enviaremos um email para confirmar seu cadastro",
+      });
+    },
+  });
 
   return (
     <Form<SignUpFormInputs>
@@ -27,7 +51,7 @@ export default function SignUpForm(): ReactNode {
         userName: "",
         userEmail: "",
       }}
-      onSubmit={() => {}}
+      onSubmit={mutate}
       className="flex-1 flex flex-col"
     >
       <div className="flex-1">
@@ -57,6 +81,7 @@ export default function SignUpForm(): ReactNode {
         label="Criar"
         secondaryBtnLabel="Cancelar"
         onClickSecondaryBtn={() => handleStep("SIGN_IN")}
+        primaryBtnState={isPending ? "loading" : undefined}
       />
     </Form>
   );
