@@ -44,7 +44,7 @@ export default function SignInForm(): ReactNode {
     onError: (error) => {
       if (error.message === "Failed to sign in") {
         showErrorSnackbar({
-          title: "Erro ao fazer login",
+          title: "Erro ao acessar",
           description: "Email ou senha inválidos",
         });
       }
