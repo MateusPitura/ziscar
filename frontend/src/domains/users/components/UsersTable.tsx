@@ -24,22 +24,24 @@ export default function UsersTable(): ReactNode {
   const dialog = useDialog();
   const { safeFetch } = useSafeFetch();
   const { usersFilter, handleUsersFilter } = useGlobalContext();
-  
+  const { userLogged } = useGlobalContext();
+
   function handleDisableUserInfo(user: DisableUser) {
     dialog.openDialog();
     setDisableUserInfo(user);
   }
-  
+
   function handleChangePage(page: number) {
     handleUsersFilter({ page });
   }
 
   const filterFormatted = useMemo(() => {
-    if (usersFilter) {
-      return formatFilters(usersFilter);
+    const userFilter = { ...usersFilter, notUserId: userLogged?.id }; // TODO: no backend deveria manter todos o usuário menos o usuário logado
+    if (userFilter) {
+      return formatFilters(userFilter);
     }
     return "";
-  }, [usersFilter]);
+  }, [usersFilter, userLogged]);
 
   async function getUsersInfo(filter?: string): Promise<User[]> {
     return await safeFetch({
