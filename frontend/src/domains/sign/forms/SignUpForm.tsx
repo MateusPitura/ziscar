@@ -37,7 +37,7 @@ export default function SignUpForm(): ReactNode {
     onSuccess: () => {
       showSuccessSnackbar({
         title: "Confira seu email",
-        description: "Enviaremos um email para confirmar seu cadastro",
+        description: "Enviaremos um email para definir a senha",
       });
     },
   });
