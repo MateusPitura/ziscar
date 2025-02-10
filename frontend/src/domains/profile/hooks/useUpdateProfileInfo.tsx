@@ -34,6 +34,13 @@ export default function useUpdateProfileInfo<T>({
     onSuccess: () => {
       if (shouldInvalidateQuery) {
         queryClient.invalidateQueries({ queryKey: [queryKeys.PROFILE_INFO] });
+        queryClient.invalidateQueries({ queryKey: [queryKeys.USERS] });
+        queryClient.invalidateQueries({
+          queryKey: [queryKeys.USER, userLogged?.id],
+        });
+        queryClient.invalidateQueries({
+          queryKey: [queryKeys.USERS_DASHBOARD],
+        });
       }
       showSuccessSnackbar({
         title: snackbarTitle,

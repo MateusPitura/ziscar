@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "npm run --workspace=frontend dev & npm run --workspace=frontend mockend",
+    "start": "npm run --workspace=frontend mockend & npm run --workspace=frontend dev",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

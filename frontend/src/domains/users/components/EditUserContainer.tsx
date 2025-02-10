@@ -53,6 +53,9 @@ export default function EditUserContainer(): ReactNode {
       queryClient.invalidateQueries({
         queryKey: [queryKeys.USERS],
       });
+      queryClient.invalidateQueries({
+        queryKey: [queryKeys.USERS_DASHBOARD],
+      });
       navigate("/users");
     },
   });
