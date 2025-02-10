@@ -6,29 +6,44 @@ import SignCard from "../components/SignCard";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import { s } from "@/domains/global/schemas";
 import { useMutation } from "@tanstack/react-query";
-import { useNavigate, useParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { baseUrl } from "@/domains/global/constants/requests";
 import InputPassword from "@/design-system/Form/InputPassword";
+import useSnackbar from "@/domains/global/hooks/useSnackbar";
+import useSignPageContext from "../hooks/useSignPageContext";
 
 type NewPasswordFormInputs = s.infer<typeof SchemaPassword>;
 
 export default function NewPasswordForm(): ReactNode {
   const { safeFetch } = useSafeFetch();
-  const { token } = useParams();
-  const navigate = useNavigate();
+  const { showSuccessSnackbar } = useSnackbar();
+  const { handleStep } = useSignPageContext();
 
-  async function handleSingin(data: NewPasswordFormInputs) {
+  const [searchParams] = useSearchParams();
+  let token: string | null = null;
+  if (searchParams.has("token")) {
+    token = searchParams.get("token");
+  }
+
+  async function handleNewPassword(data: NewPasswordFormInputs) {
     await safeFetch({
-      path: `${baseUrl}/sign/${token}`,
-      method: "PATCH",
-      body: { password: data.newPassword },
+      path: `${baseUrl}/newPassword`,
+      method: "POST",
+      body: {
+        password: data.newPassword,
+        token,
+      },
     });
   }
 
   const { mutate, isPending } = useMutation({
-    mutationFn: handleSingin,
+    mutationFn: handleNewPassword,
     onSuccess: () => {
-      navigate("/sign");
+      handleStep("SIGN_IN");
+      showSuccessSnackbar({
+        title: "Senha definida com sucesso",
+        description: "Acesse com a nova senha",
+      });
     },
   });
 

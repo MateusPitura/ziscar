@@ -69,12 +69,6 @@
       "password": "token);token);AA!1"
     }
   ],
-  "forgetPassword": [
-    {
-      "id": "1",
-      "email": "marcos@gmail.com"
-    }
-  ],
   "signUp": [
     {
       "id": "1",
@@ -83,6 +77,19 @@
       "userName": "Marcos",
       "userEmail": "marcos@email.com",
       "password": "token);token);AA!1"
+    }
+  ],
+  "forgetPassword": [
+    {
+      "id": "1",
+      "email": "marcos@gmail.com"
+    }
+  ],
+  "newPassword": [
+    {
+      "id": "1",
+      "password": "token);token);AA!1",
+      "token": "98djslkd9"
     }
   ]
 }
