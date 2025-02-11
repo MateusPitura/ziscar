@@ -117,10 +117,12 @@ export default function UsersTable(): ReactNode {
         <Table.Footer
           currentStartItem={usersFilter?.page}
           totalItems={usersInfo?.length}
-          onNavigateCallback={handleChangePage}
-          onExportPdfCallback={mutate}
-          exportPdfBtnState={isPending ? "loading" : undefined}
+          onClickNavigateBtn={handleChangePage}
+          onClickPdfBtn={mutate}
+          pdfBtnState={isPending ? "loading" : undefined}
           isLoading={isFetchingUsersInfo}
+          resourceExportBtn="users"
+          actionExportBtn="read"
         />
       </Table>
     </>

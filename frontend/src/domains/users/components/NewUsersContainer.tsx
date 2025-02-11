@@ -49,6 +49,8 @@ export default function NewUsersContainer(): ReactElement {
       isPending={isPending || !!isFetching}
       headerPrimaryBtnLabel="Criar"
       headerTitle="Novo usuário"
+      resource="users"
+      action="create"
     />
   );
 }

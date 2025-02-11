@@ -5,7 +5,6 @@ import {
   Tooltip as TooltipShadcn,
 } from "@/components/ui/tooltip";
 import { Childrenable } from "@/domains/global/types/components";
-import { TooltipArrow } from "@radix-ui/react-tooltip";
 
 import type { ReactNode } from "react";
 
@@ -28,7 +27,6 @@ export default function Tooltip({
           className="bg-light-outline border-light-outline text-light-onPrimary"
           disabled
         >
-          <TooltipArrow className="fill-light-outline" />
           <span className="text-label-medium">{content}</span>
         </TooltipContent>
       </TooltipShadcn>

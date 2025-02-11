@@ -1,7 +1,7 @@
 import Button, { ButtonState } from "@/design-system/Button";
 import { type ReactElement } from "react";
 import useButtonState from "../hooks/useButtonState";
-import CheckPermission from "./CheckPermission";
+import { Action, Resource } from "../types/user";
 
 interface PageHeaderProperties {
   title: string;
@@ -12,6 +12,8 @@ interface PageHeaderProperties {
   onClickSecondaryBtn?: () => void;
   primaryBtnState?: ButtonState;
   dirty?: boolean;
+  primaryBtnResource?: Resource;
+  primaryBtnAction?: Action;
 }
 
 export default function PageHeader({
@@ -19,10 +21,12 @@ export default function PageHeader({
   primaryButtonLabel,
   primaryBtnIconRigth,
   onClickPrimaryBtn,
+  primaryBtnState,
+  primaryBtnResource,
+  primaryBtnAction,
   secondaryButtonLabel,
   onClickSecondaryBtn,
   dirty,
-  primaryBtnState,
 }: PageHeaderProperties): ReactElement {
   const primaryBtnStateParsed = useButtonState({
     dirty,
@@ -43,16 +47,16 @@ export default function PageHeader({
           />
         )}
         {primaryButtonLabel && (
-          <CheckPermission resource="users" action="create">
-            <Button
-              variant="primary"
-              onClick={onClickPrimaryBtn}
-              label={primaryButtonLabel}
-              iconRight={primaryBtnIconRigth}
-              type="submit"
-              state={primaryBtnStateParsed}
-            />
-          </CheckPermission>
+          <Button
+            variant="primary"
+            onClick={onClickPrimaryBtn}
+            label={primaryButtonLabel}
+            iconRight={primaryBtnIconRigth}
+            type="submit"
+            state={primaryBtnStateParsed}
+            resource={primaryBtnResource}
+            action={primaryBtnAction}
+          />
         )}
       </div>
     </div>

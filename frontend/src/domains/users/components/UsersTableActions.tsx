@@ -51,6 +51,8 @@ export default function UsersTableActions({
         fullWidth
         label="Editar"
         onClick={() => navigate(`/users/edit/${userId}`)}
+        resource="users"
+        action="update"
       />
       <Button
         variant="tertiary"
@@ -62,6 +64,8 @@ export default function UsersTableActions({
             userId: userId,
           })
         }
+        resource="users"
+        action="delete"
       />
     </>
   ) : (
@@ -71,6 +75,8 @@ export default function UsersTableActions({
       label="Ativar"
       onClick={mutate}
       state={isPending ? "loading" : undefined}
+      resource="users"
+      action="delete"
     />
   );
 }

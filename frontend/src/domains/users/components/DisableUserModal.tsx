@@ -59,6 +59,8 @@ export default function DisableUserModal({
         labelPrimaryBtn="Desativar"
         onClickPrimaryBtn={mutate}
         primaryBtnState={isPending ? "loading" : "red"}
+        primaryBtResource="users"
+        primaryBtnAction="delete"
       />
     </Modal>
   );

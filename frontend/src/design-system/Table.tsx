@@ -13,6 +13,7 @@ import { Childrenable } from "@/domains/global/types/components";
 import useDialog from "@/domains/global/hooks/useDialog";
 import { ITEMS_PER_PAGE } from "@/domains/global/constants/requests";
 import Loading from "./Loading";
+import { Action as UserAction, Resource } from "@/domains/global/types/user";
 
 function Container({ children }: Childrenable): ReactElement {
   return (
@@ -163,15 +164,17 @@ function Body({ children, isEmpty, isLoading }: BodyProps) {
 
 interface FooterProps {
   className?: string;
-  onExportSpreadSheetCallback?: () => void;
-  exportSpreadSheetBtnState?: ButtonState;
-  onExportPdfCallback?: () => void;
-  exportPdfBtnState?: ButtonState;
-  onNavigateCallback?: (page: number) => void;
+  onClickSpreadSheetBtn?: () => void;
+  spreadSheetBtnState?: ButtonState;
+  onClickPdfBtn?: () => void;
+  pdfBtnState?: ButtonState;
+  onClickNavigateBtn?: (page: number) => void;
   currentStartItem?: number;
   totalItems?: number;
   itemsPerPage?: number;
   isLoading?: boolean;
+  resourceExportBtn?: Resource;
+  actionExportBtn?: UserAction;
 }
 
 function Footer({
@@ -179,26 +182,28 @@ function Footer({
   currentStartItem = 1,
   itemsPerPage = ITEMS_PER_PAGE,
   totalItems,
-  onExportPdfCallback,
-  onExportSpreadSheetCallback,
-  onNavigateCallback,
+  onClickPdfBtn,
+  onClickSpreadSheetBtn,
+  onClickNavigateBtn,
   isLoading,
-  exportPdfBtnState,
-  exportSpreadSheetBtnState,
+  pdfBtnState,
+  spreadSheetBtnState,
+  actionExportBtn,
+  resourceExportBtn
 }: FooterProps) {
   const pageOffset = (currentStartItem - 1) * itemsPerPage; // 0, 20, 40 etc.
 
   const lastPage = totalItems && totalItems <= pageOffset + itemsPerPage; // 21-30 de 30 ou 21-40 de 40
 
   function handleNext() {
-    if (onNavigateCallback) {
-      onNavigateCallback(lastPage ? currentStartItem : currentStartItem + 1); // Don't allow to navigate to next page if it's the last one
+    if (onClickNavigateBtn) {
+      onClickNavigateBtn(lastPage ? currentStartItem : currentStartItem + 1); // Don't allow to navigate to next page if it's the last one
     }
   }
 
   function handleBefore() {
-    if (onNavigateCallback) {
-      onNavigateCallback(currentStartItem === 1 ? 1 : currentStartItem - 1); // Don't allow to navigate to previous page if it's the first one
+    if (onClickNavigateBtn) {
+      onClickNavigateBtn(currentStartItem === 1 ? 1 : currentStartItem - 1); // Don't allow to navigate to previous page if it's the first one
     }
   }
 
@@ -210,22 +215,26 @@ function Footer({
       )}
       gridColumns={1}
     >
-      {onExportSpreadSheetCallback && (
+      {onClickSpreadSheetBtn && (
         <Button
           variant="quaternary"
           label="Exportar como planilha"
           iconRight={<FileDownloadOutlinedIcon />}
-          onClick={onExportSpreadSheetCallback}
-          state={isLoading ? "loading" : exportSpreadSheetBtnState}
+          onClick={onClickSpreadSheetBtn}
+          state={isLoading ? "loading" : spreadSheetBtnState}
+          resource={resourceExportBtn}
+          action={actionExportBtn}
         />
       )}
-      {onExportPdfCallback && (
+      {onClickPdfBtn && (
         <Button
           variant="quaternary"
           label="Exportar como PDF"
           iconRight={<FileDownloadOutlinedIcon />}
-          onClick={onExportPdfCallback}
-          state={isLoading ? "loading" : exportPdfBtnState}
+          onClick={onClickPdfBtn}
+          state={isLoading ? "loading" : pdfBtnState}
+          resource={resourceExportBtn}
+          action={actionExportBtn}
         />
       )}
       <Loading

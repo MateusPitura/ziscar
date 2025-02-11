@@ -7,6 +7,7 @@ import Section from "@/domains/global/components/Section";
 import type { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import { SchemaUserForm, UserFormInputs } from "../schemas/users";
+import { Resource, Action } from "@/domains/global/types/user";
 
 interface UserFormProperties {
   defaultValues: Partial<UserFormInputs>;
@@ -15,6 +16,8 @@ interface UserFormProperties {
   headerPrimaryBtnLabel: string;
   headerTitle: string;
   onlyDirty?: boolean;
+  resource?: Resource;
+  action?: Action;
 }
 
 export default function UserForm({
@@ -23,7 +26,9 @@ export default function UserForm({
   isPending,
   headerPrimaryBtnLabel,
   headerTitle,
-  onlyDirty
+  onlyDirty,
+  resource,
+  action,
 }: UserFormProperties): ReactNode {
   const navigate = useNavigate();
 
@@ -43,6 +48,8 @@ export default function UserForm({
           onClickSecondaryBtn={() => navigate("/users")}
           primaryBtnState={isPending ? "loading" : undefined}
           dirty
+          primaryBtnResource={resource}
+          primaryBtnAction={action}
         />
         <div className="flex justify-center">
           <Section>

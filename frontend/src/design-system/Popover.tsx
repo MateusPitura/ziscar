@@ -28,6 +28,7 @@ function Content({
     <PopoverContent
       className={classNames("bg-light-surface", className)}
       {...props}
+      onOpenAutoFocus={(e) => e.preventDefault()}
     >
       {children}
     </PopoverContent>

@@ -87,6 +87,8 @@ export default function EditUserContainer(): ReactNode {
         headerPrimaryBtnLabel="Alterar"
         headerTitle="Alterar usuário"
         onlyDirty
+        resource="users"
+        action="update"
       />
     )
   );

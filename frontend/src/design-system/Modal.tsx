@@ -12,6 +12,7 @@ import { Childrenable, Dialog } from "@/domains/global/types/components";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { DialogProvider } from "@/domains/global/contexts/DialogContext";
 import useButtonState from "@/domains/global/hooks/useButtonState";
+import { Action, Resource } from "@/domains/global/types/user";
 
 interface ContainerProps extends Dialog, Childrenable {}
 
@@ -50,9 +51,11 @@ function Body({ children }: Childrenable): ReactElement {
 interface FooterProps {
   onClickPrimaryBtn?: () => void;
   labelPrimaryBtn: string;
+  primaryBtnState?: ButtonState;
+  primaryBtResource?: Resource;
+  primaryBtnAction?: Action;
   onClickSecondaryBtn?: () => void;
   labelSecondaryBtn?: string;
-  primaryBtnState?: ButtonState;
   secondaryBtnState?: ButtonState;
   dirty?: boolean;
 }
@@ -60,11 +63,13 @@ interface FooterProps {
 function Footer({
   onClickPrimaryBtn,
   labelPrimaryBtn,
+  primaryBtnState,
+  primaryBtResource,
+  primaryBtnAction,
   onClickSecondaryBtn,
   labelSecondaryBtn = "Cancelar",
-  primaryBtnState,
-  dirty,
   secondaryBtnState,
+  dirty,
 }: FooterProps): ReactElement {
   const primaryBtnStateParsed = useButtonState({
     dirty,
@@ -95,6 +100,8 @@ function Footer({
         label={labelPrimaryBtn}
         state={primaryBtnStateParsed}
         type="submit"
+        resource={primaryBtResource}
+        action={primaryBtnAction}
       />
     </DialogFooter>
   );

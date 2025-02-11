@@ -15,6 +15,8 @@ export default function UsersContainer(): ReactElement {
         primaryButtonLabel="Adicionar usuário"
         onClickPrimaryBtn={() => navigate("/users/new")}
         primaryBtnIconRigth={<PersonAddOutlinedIcon />}
+        primaryBtnResource="users"
+        primaryBtnAction="create"
       />
       <UsersDashBoard />
       <UsersTable />
