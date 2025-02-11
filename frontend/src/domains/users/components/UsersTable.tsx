@@ -95,6 +95,8 @@ export default function UsersTable(): ReactNode {
         <Table.Body
           isLoading={isFetchingUsersInfo}
           isEmpty={!usersInfo?.length}
+          resource="users"
+          action="read"
         >
           {usersInfo?.map((user) => (
             <Table.Row key={user.id}>

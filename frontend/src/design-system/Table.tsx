@@ -14,6 +14,8 @@ import useDialog from "@/domains/global/hooks/useDialog";
 import { ITEMS_PER_PAGE } from "@/domains/global/constants/requests";
 import Loading from "./Loading";
 import { Action as UserAction, Resource } from "@/domains/global/types/user";
+import useCheckPermission from "@/domains/global/hooks/useCheckPermission";
+import formatDeniedMessage from "@/domains/global/utils/formatDeniedMessage";
 
 function Container({ children }: Childrenable): ReactElement {
   return (
@@ -138,9 +140,13 @@ function Head({ label, className, action = false, colSpan }: HeadProps) {
 interface BodyProps extends Childrenable {
   isEmpty?: boolean;
   isLoading?: boolean;
+  resource?: Resource;
+  action?: UserAction;
 }
 
-function Body({ children, isEmpty, isLoading }: BodyProps) {
+function Body({ children, isEmpty, isLoading, action, resource }: BodyProps) {
+  const hasPermission = useCheckPermission(resource, action);
+
   if (isLoading || isEmpty) {
     return (
       <div className="flex-1 bg-light-surfaceContainerLowest overflow-y-auto flex items-center justify-center">
@@ -148,7 +154,9 @@ function Body({ children, isEmpty, isLoading }: BodyProps) {
           <Spinner />
         ) : (
           <span className="text-light-onSurface text-body-medium">
-            Nenhum item encontrado
+            {hasPermission
+              ? "Nenhum item encontrado"
+              : formatDeniedMessage({ resource, action })}
           </span>
         )}
       </div>
@@ -189,7 +197,7 @@ function Footer({
   pdfBtnState,
   spreadSheetBtnState,
   actionExportBtn,
-  resourceExportBtn
+  resourceExportBtn,
 }: FooterProps) {
   const pageOffset = (currentStartItem - 1) * itemsPerPage; // 0, 20, 40 etc.
 
