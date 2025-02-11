@@ -31,7 +31,7 @@ export default function SignInForm(): ReactNode {
   async function handleSignIn(data: SignInFormInputs) {
     await safeFetch({
       path: `${baseUrl}/signIn`,
-      method: "POST",
+      method: "post",
       body: data,
     });
   }

@@ -1,1 +1,1 @@
-export type Mask = "CELLPHONE" | "CPF" | "CEP" | 'CNPJ';
+export type Mask = "cellphone" | "cpf" | "cep" | 'cnpj';

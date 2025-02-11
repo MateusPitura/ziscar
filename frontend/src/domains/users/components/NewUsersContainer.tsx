@@ -25,7 +25,7 @@ export default function NewUsersContainer(): ReactElement {
 
     await safeFetch({
       path: `${baseUrl}/users`,
-      method: "POST",
+      method: "post",
       body: dataFormatted,
     });
   }

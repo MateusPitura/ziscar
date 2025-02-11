@@ -29,7 +29,7 @@ export default function UsersTableActions({
   async function enableUser() {
     await safeFetch({
       path: `${baseUrl}/users/${userId}`,
-      method: "PATCH",
+      method: "patch",
       body: { isActive: true },
     });
   }

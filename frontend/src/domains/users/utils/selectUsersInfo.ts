@@ -7,7 +7,7 @@ export default function selectUsersInfo(data: User[]): User[] {
   for (const user of data) {
     itemsFiltered.push({
       ...user,
-      cellphone: applyMask(user?.cellphone, "CELLPHONE"),
+      cellphone: applyMask(user?.cellphone, "cellphone"),
     });
   }
 

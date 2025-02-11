@@ -1,6 +1,10 @@
 import { Address } from "./address";
 
-export type UserLogged = Pick<User, "id">;
+export type UserLogged = Pick<User, "id" | "permissions">;
+
+export type Resource = "users";
+
+export type Action = "create" | "read" | "update" | "delete";
 
 export interface User {
   id: string;
@@ -12,5 +16,6 @@ export interface User {
   birthDate?: string;
   address?: Address;
   isActive?: boolean;
-  category?: string;
+  category?: "admin" | "finance" | "seller";
+  permissions: Record<Resource, Record<Action, boolean>>;
 }

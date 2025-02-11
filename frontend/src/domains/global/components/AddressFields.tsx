@@ -94,9 +94,9 @@ export default function AddressFields<T extends FieldValues>({
         onKeyDown={handleOnSubmitCepField}
       >
         <Input<T>
-          label="CEP"
+          label="cep"
           name={formatInputPrefix("cep", inputNamePrefix)}
-          mask="CEP"
+          mask="cep"
           maxLength={9}
           required
         />

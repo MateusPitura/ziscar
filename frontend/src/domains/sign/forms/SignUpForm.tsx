@@ -12,7 +12,7 @@ import useSnackbar from "@/domains/global/hooks/useSnackbar";
 
 const SchemaSignUpForm = s.object({
   branchName: s.string(),
-  cnpj: s.cnpj().transform((cnpj) => removeMask(cnpj, "CNPJ")),
+  cnpj: s.cnpj().transform((cnpj) => removeMask(cnpj, "cnpj")),
   userName: s.fullName(),
   userEmail: s.email(),
 });
@@ -27,7 +27,7 @@ export default function SignUpForm(): ReactNode {
   async function handleSignUp(data: SignUpFormInputs) {
     await safeFetch({
       path: `${baseUrl}/signUp`,
-      method: "POST",
+      method: "post",
       body: data,
     });
   }
@@ -64,7 +64,7 @@ export default function SignUpForm(): ReactNode {
           name="cnpj"
           label="CNPJ"
           required
-          mask="CNPJ"
+          mask="cnpj"
         />
         <Input<SignUpFormInputs>
           name="userName"

@@ -7,7 +7,7 @@ import useDialogContext from "@/domains/global/hooks/useDialogContext";
 import { s } from "@/domains/global/schemas";
 
 const SchemaCellphoneForm = s.object({
-  cellphone: s.cellphone().transform((cellphone) => removeMask(cellphone, "CELLPHONE")),
+  cellphone: s.cellphone().transform((cellphone) => removeMask(cellphone, "cellphone")),
 });
 
 type CellphoneFormInputs = s.infer<typeof SchemaCellphoneForm>;
@@ -46,7 +46,7 @@ function CellphoneFormContent({ isPending }: CellphoneFormContentProps) {
         <Input<CellphoneFormInputs>
           name="cellphone"
           label="Matrícula"
-          mask="CELLPHONE"
+          mask="cellphone"
           maxLength={15}
         />
       </Modal.Body>

@@ -39,7 +39,7 @@ export default function EditUserContainer(): ReactNode {
   async function editUser(data: UserFormInputs) {
     await safeFetch({
       path: `${baseUrl}/users/${userId}`,
-      method: "PATCH",
+      method: "patch",
       body: data,
     });
   }

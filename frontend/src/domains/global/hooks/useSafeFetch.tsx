@@ -4,7 +4,7 @@ import useGlobalContext from "./useGlobalContext";
 
 interface Request {
   path: string;
-  method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+  method?: "get" | "post" | "put" | "patch" | "delete";
   body?: unknown;
 }
 
@@ -14,7 +14,7 @@ export default function useSafeFetch() {
   const { showErrorSnackbar } = useSnackbar();
 
   const safeFetch = useCallback(
-    async ({ path, method = "GET", body }: Request) => {
+    async ({ path, method = "get", body }: Request) => {
       try {
         const response = await fetch(path, {
           method,
@@ -23,7 +23,7 @@ export default function useSafeFetch() {
             // "User-Logged": JSON.stringify(userLogged), // TODO: não enviar informações sensíveis no header, é barrado pelo viaCep. Colocar no JWT
             // "Client-Logged": JSON.stringify(clientLogged),
           },
-          body: method != "GET" ? JSON.stringify(body) : undefined,
+          body: method != "get" ? JSON.stringify(body) : undefined,
         });
         if (!response.ok) {
           const content = await response.text();

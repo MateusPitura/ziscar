@@ -60,7 +60,7 @@ export default function UsersTable(): ReactNode {
   async function generatePdf() {
     return await safeFetch({
       path: `${baseUrl}/usersPdf`,
-      method: "POST",
+      method: "post",
       body: {
         filter: usersFilter,
         url: "https://example.com/", // TODO: ao implementar o back seria enviado apenas o filter

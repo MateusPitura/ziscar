@@ -7,10 +7,10 @@ export function removeMask(
   if (!value) return value;
 
   switch (mask) {
-    case "CPF":
-    case "CELLPHONE":
-    case "CEP":
-    case "CNPJ":
+    case "cpf":
+    case "cellphone":
+    case "cep":
+    case "cnpj":
       return removeNonDigit(value);
     default:
       return value;

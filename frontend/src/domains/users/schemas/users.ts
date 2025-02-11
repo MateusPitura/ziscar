@@ -14,13 +14,13 @@ export const SchemaUserForm = s.object({
   email: s.email(),
   cellphone: s
     .cellphone()
-    .transform((cellhpone) => removeMask(cellhpone, "CELLPHONE")),
-  cpf: s.cpf().transform((cpf) => removeMask(cpf, "CPF")),
+    .transform((cellhpone) => removeMask(cellhpone, "cellphone")),
+  cpf: s.cpf().transform((cpf) => removeMask(cpf, "cpf")),
   code: s.string("default", "optional"),
   birthDate: s.birthDate(),
   category: s.string(),
   address: s.SchemaAddress.extend({
-    cep: s.cep().transform((cep) => removeMask(cep, "CEP")),
+    cep: s.cep().transform((cep) => removeMask(cep, "cep")),
   }),
 });
 

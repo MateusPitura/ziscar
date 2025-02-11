@@ -7,13 +7,13 @@ export function applyMask(
   if (!value) return value;
 
   switch (mask) {
-    case "CPF":
+    case "cpf":
       return applyCpfMask(value);
-    case "CELLPHONE":
+    case "cellphone":
       return applyCellphoneMask(value);
-    case "CEP":
+    case "cep":
       return applyCepMask(value);
-    case "CNPJ":
+    case "cnpj":
       return applyCnpjMask(value);
     default:
       return value;

@@ -10,7 +10,7 @@ import AddressFields from "@/domains/global/components/AddressFields";
 import { queryKeys } from "@/domains/global/types/queryKeys";
 
 const SchemaAddressForm = s.SchemaAddress.extend({
-  cep: s.cep().transform((cep) => removeMask(cep, "CEP")),
+  cep: s.cep().transform((cep) => removeMask(cep, "cep")),
 });
 
 type AddressFormInputs = s.infer<typeof SchemaAddressForm>;

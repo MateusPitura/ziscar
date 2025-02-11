@@ -20,6 +20,14 @@ const GlobalContext = createContext<GlobalContextValues | null>(null);
 function GlobalProvider({ children }: Childrenable) {
   const [userLogged] = useState<UserLogged | undefined>({
     id: "1",
+    permissions: {
+      users: {
+        read: true,
+        create: true,
+        update: true,
+        delete: true,
+      },
+    },
   });
 
   const [clientLogged] = useState<ClientLogged | undefined>({

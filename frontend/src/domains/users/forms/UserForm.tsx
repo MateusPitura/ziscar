@@ -59,14 +59,14 @@ export default function UserForm({
                 <Input<UserFormInputs>
                   name="cellphone"
                   label="Celular"
-                  mask="CELLPHONE"
+                  mask="cellphone"
                   required
                 />
                 <Input<UserFormInputs>
                   name="cpf"
                   label="CPF"
                   required
-                  mask="CPF"
+                  mask="cpf"
                 />
                 <Input<UserFormInputs> name="code" label="Matrícula" />
                 <Input<UserFormInputs>

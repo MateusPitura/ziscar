@@ -23,7 +23,7 @@ export default function ForgetPasswordForm(): ReactNode {
   async function handleForgetPassword(data: ForgetPasswordFormInputs) {
     await safeFetch({
       path: `${baseUrl}/forgetPassword`,
-      method: "POST",
+      method: "post",
       body: data,
     });
   }
