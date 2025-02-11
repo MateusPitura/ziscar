@@ -3,7 +3,7 @@
     {
       "id": "1",
       "fullName": "Mateus",
-      "email": "mateus@email.com",
+      "email": "fernando@email.com",
       "cellphone": "00000000000",
       "code": "1111111111",
       "password": "aaaaaaaaaa11A.!",
@@ -19,7 +19,15 @@
       },
       "cpf": "19222424034",
       "category": "finance",
-      "isActive": true
+      "isActive": true,
+      "permissions": {
+        "users": {
+          "read": true,
+          "create": true,
+          "update": true,
+          "delete": true
+        }
+      }
     },
     {
       "id": "2",

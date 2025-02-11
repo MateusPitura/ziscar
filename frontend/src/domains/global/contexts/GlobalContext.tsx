@@ -22,10 +22,10 @@ function GlobalProvider({ children }: Childrenable) {
     id: "1",
     permissions: {
       users: {
-        read: true,
-        create: true,
-        update: true,
-        delete: true,
+        read: false,
+        create: false,
+        update: false,
+        delete: false,
       },
     },
   });

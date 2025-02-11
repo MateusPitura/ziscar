@@ -1,6 +1,7 @@
 import Button, { ButtonState } from "@/design-system/Button";
 import { type ReactElement } from "react";
 import useButtonState from "../hooks/useButtonState";
+import CheckPermission from "./CheckPermission";
 
 interface PageHeaderProperties {
   title: string;
@@ -42,14 +43,16 @@ export default function PageHeader({
           />
         )}
         {primaryButtonLabel && (
-          <Button
-            variant="primary"
-            onClick={onClickPrimaryBtn}
-            label={primaryButtonLabel}
-            iconRight={primaryBtnIconRigth}
-            type="submit"
-            state={primaryBtnStateParsed}
-          />
+          <CheckPermission resource="users" action="create">
+            <Button
+              variant="primary"
+              onClick={onClickPrimaryBtn}
+              label={primaryButtonLabel}
+              iconRight={primaryBtnIconRigth}
+              type="submit"
+              state={primaryBtnStateParsed}
+            />
+          </CheckPermission>
         )}
       </div>
     </div>
