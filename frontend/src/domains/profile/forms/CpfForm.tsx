@@ -7,7 +7,7 @@ import useDialogContext from "@/domains/global/hooks/useDialogContext";
 import { s } from "@/domains/global/schemas";
 
 const SchemaCpfForm = s.object({
-  cpf: s.cpf().transform((cpf) => removeMask(cpf, "CPF")),
+  cpf: s.cpf().transform((cpf) => removeMask(cpf, "cpf")),
 });
 
 type CpfFormInputs = s.infer<typeof SchemaCpfForm>;
@@ -46,7 +46,7 @@ function CpfFormContent({ isPending }: CpfFormContentProps) {
         <Input<CpfFormInputs>
           name="cpf"
           label="CPF"
-          mask="CPF"
+          mask="cpf"
           maxLength={14}
           required
         />
