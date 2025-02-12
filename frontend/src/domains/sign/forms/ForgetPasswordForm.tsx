@@ -18,11 +18,10 @@ type ForgetPasswordFormInputs = s.infer<typeof SchemaForgetPasswordForm>;
 export default function ForgetPasswordForm(): ReactNode {
   const { safeFetch } = useSafeFetch();
   const { showSuccessSnackbar } = useSnackbar();
-  const { closeDialog } = useDialogContext()
+  const { closeDialog } = useDialogContext();
 
   async function handleForgetPassword(data: ForgetPasswordFormInputs) {
-    await safeFetch({
-      path: `${baseUrl}/forgetPassword`,
+    await safeFetch(`${baseUrl}/forgetPassword`, {
       method: "post",
       body: data,
     });
@@ -35,7 +34,7 @@ export default function ForgetPasswordForm(): ReactNode {
         title: "Confira seu email",
         description: "Enviaremos um email para definir a senha",
       });
-      closeDialog()
+      closeDialog();
     },
   });
 

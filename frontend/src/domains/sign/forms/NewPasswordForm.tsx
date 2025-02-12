@@ -26,8 +26,7 @@ export default function NewPasswordForm(): ReactNode {
   }
 
   async function handleNewPassword(data: NewPasswordFormInputs) {
-    await safeFetch({
-      path: `${baseUrl}/newPassword`,
+    await safeFetch(`${baseUrl}/newPassword`, {
       method: "post",
       body: {
         password: data.newPassword,

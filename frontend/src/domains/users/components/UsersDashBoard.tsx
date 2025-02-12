@@ -10,7 +10,10 @@ export default function UsersDashBoard(): ReactNode {
   const { safeFetch } = useSafeFetch();
 
   async function getDashBoardInfo(): Promise<DashBoardProps[]> {
-    return await safeFetch({ path: `${baseUrl}/usersDashboard` });
+    return await safeFetch(`${baseUrl}/usersDashboard`, {
+      resource: "users",
+      action: "read",
+    });
   }
 
   const { data: dashBoardInfo, isFetching: isFetchingDatashBoardInfo } =

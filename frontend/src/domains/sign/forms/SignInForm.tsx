@@ -29,8 +29,7 @@ export default function SignInForm(): ReactNode {
   const { showErrorSnackbar } = useSnackbar();
 
   async function handleSignIn(data: SignInFormInputs) {
-    await safeFetch({
-      path: `${baseUrl}/signIn`,
+    await safeFetch(`${baseUrl}/signIn`, {
       method: "post",
       body: data,
     });
@@ -42,7 +41,8 @@ export default function SignInForm(): ReactNode {
       navigate("/");
     },
     onError: (error) => {
-      if (error.message === "Failed to sign in") { // TODO: Dependendo de como retorne do back não precise disso
+      if (error.message === "Failed to sign in") {
+        // TODO: Dependendo de como retorne do back não precise disso
         showErrorSnackbar({
           title: "Erro ao acessar",
           description: "Email ou senha inválidos",

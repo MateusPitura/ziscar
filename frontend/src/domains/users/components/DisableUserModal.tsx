@@ -23,10 +23,11 @@ export default function DisableUserModal({
   const { handleUsersFilter } = useGlobalContext();
 
   async function disableUser() {
-    await safeFetch({
-      path: `${baseUrl}/users/${userId}`,
+    await safeFetch(`${baseUrl}/users/${userId}`, {
       method: "patch",
       body: { isActive: false },
+      resource: "users",
+      action: "delete",
     });
   }
 

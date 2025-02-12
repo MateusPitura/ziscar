@@ -39,9 +39,7 @@ export default function AddressFields<T extends FieldValues>({
   }
 
   async function getCepInfo(cep: string): Promise<ViaCepAddress | undefined> {
-    return await safeFetch({
-      path: `https://viacep.com.br/ws/${cep}/json/`,
-    });
+    return await safeFetch(`https://viacep.com.br/ws/${cep}/json/`);
   }
 
   const { data: cepInfo, isFetching } = useQuery({

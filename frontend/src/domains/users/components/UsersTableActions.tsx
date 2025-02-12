@@ -27,10 +27,11 @@ export default function UsersTableActions({
   const queryClient = useQueryClient();
 
   async function enableUser() {
-    await safeFetch({
-      path: `${baseUrl}/users/${userId}`,
+    await safeFetch(`${baseUrl}/users/${userId}`, {
       method: "patch",
       body: { isActive: true },
+      resource: "users",
+      action: "delete",
     });
   }
 

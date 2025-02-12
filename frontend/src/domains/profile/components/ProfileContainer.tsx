@@ -34,10 +34,7 @@ export default function ProfileContainer(): ReactElement {
   const { safeFetch } = useSafeFetch();
 
   async function getProfileInfo(): Promise<User> {
-    return await safeFetch(`${baseUrl}/users/${userLogged?.id}`, {
-      resource: "users",
-      action: "read",
-    }); // TODO: Ao implementar o back-end criar uma request que não precise de id, pegar o id automaticamente
+    return await safeFetch(`${baseUrl}/users/${userLogged?.id}`); // TODO: Ao implementar o back-end criar uma request que não precise de id, pegar o id automaticamente
   }
 
   const { data: profileInfo, isFetching } = useQuery({

@@ -22,11 +22,13 @@ export default function useUpdateProfileInfo<T>({
   const queryClient = useQueryClient();
 
   async function updateProfileInfo(data: T) {
-    await safeFetch({
-      path: `${baseUrl}/users/${userLogged?.id}`, //  TODO: Ao implementar o back-end criar uma request que não precise de id, pegar o id automaticamente
-      method: "patch",
-      body: data,
-    });
+    await safeFetch(
+      `${baseUrl}/users/${userLogged?.id}`, //  TODO: Ao implementar o back-end criar uma request que não precise de id, pegar o id automaticamente
+      {
+        method: "patch",
+        body: data,
+      }
+    );
   }
 
   const { mutate, isPending } = useMutation({

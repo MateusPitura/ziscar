@@ -23,10 +23,11 @@ export default function NewUsersContainer(): ReactElement {
   async function createUser(data: UserFormInputs) {
     const dataFormatted = { ...data, isActive: true };
 
-    await safeFetch({
-      path: `${baseUrl}/users`,
+    await safeFetch(`${baseUrl}/users`, {
       method: "post",
       body: dataFormatted,
+      resource: "users",
+      action: "create",
     });
   }
 

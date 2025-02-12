@@ -19,7 +19,7 @@ export default function useSafeFetch() {
   const safeFetch = useCallback(
     async (
       path: string,
-      { method = "get", body, resource, action }: Request
+      { method = "get", body, resource, action }: Request = {}
     ) => {
       try {
         const hasPermission = checkPermission(userLogged, resource, action);

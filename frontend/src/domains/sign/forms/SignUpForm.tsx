@@ -25,8 +25,7 @@ export default function SignUpForm(): ReactNode {
   const { showSuccessSnackbar } = useSnackbar();
 
   async function handleSignUp(data: SignUpFormInputs) {
-    await safeFetch({
-      path: `${baseUrl}/signUp`,
+    await safeFetch(`${baseUrl}/signUp`, {
       method: "post",
       body: data,
     });
