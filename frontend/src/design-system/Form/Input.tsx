@@ -48,7 +48,7 @@ export default function Input<T extends FieldValues>({
         shouldDirty: true,
       });
     }
-  }, [value]);
+  }, [value, mask, name]);
 
   return (
     <label className="flex flex-col">

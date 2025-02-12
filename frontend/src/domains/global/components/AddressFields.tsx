@@ -74,7 +74,7 @@ export default function AddressFields<T extends FieldValues>({
         shouldDirty: true,
       });
     }
-  }, [cepInfo]);
+  }, [cepInfo, inputNamePrefix]);
 
   function handleOnSubmitCepField(
     event: React.KeyboardEvent<HTMLInputElement>
