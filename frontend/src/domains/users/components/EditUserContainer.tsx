@@ -25,8 +25,9 @@ export default function EditUserContainer(): ReactNode {
   const { userId } = useParams();
 
   async function getUser(): Promise<User> {
-    return await safeFetch({
-      path: `${baseUrl}/users/${userId}`,
+    return await safeFetch(`${baseUrl}/users/${userId}`, {
+      resource: 'users',
+      action: 'read'
     });
   }
 
@@ -37,10 +38,11 @@ export default function EditUserContainer(): ReactNode {
   });
 
   async function editUser(data: UserFormInputs) {
-    await safeFetch({
-      path: `${baseUrl}/users/${userId}`,
+    await safeFetch(`${baseUrl}/users/${userId}`, {
       method: "patch",
       body: data,
+      resource: 'users',
+      action: 'update'
     });
   }
 

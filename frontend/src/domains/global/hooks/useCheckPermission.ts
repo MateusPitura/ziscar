@@ -1,5 +1,7 @@
 import useGlobalContext from "./useGlobalContext";
 import { Action, Resource } from "../types/user";
+import { useMemo } from "react";
+import checkPermission from "../utils/checkPermission";
 
 export default function useCheckPermission(
   resource?: Resource,
@@ -7,11 +9,9 @@ export default function useCheckPermission(
 ): boolean {
   const { userLogged } = useGlobalContext();
 
-  if (!resource || !action) return true;
+  const hasPermission = useMemo(() => {
+    return checkPermission(userLogged, resource, action);
+  }, [userLogged, resource, action]);
 
-  if (userLogged?.permissions[resource][action]) {
-    return true;
-  }
-
-  return false;
+  return hasPermission;
 }

@@ -1,21 +1,35 @@
 import { useCallback } from "react";
 import useSnackbar from "./useSnackbar";
+import { Action, Resource } from "../types/user";
+import formatDeniedMessage from "../utils/formatDeniedMessage";
 import useGlobalContext from "./useGlobalContext";
+import checkPermission from "../utils/checkPermission";
 
 interface Request {
-  path: string;
   method?: "get" | "post" | "put" | "patch" | "delete";
   body?: unknown;
+  resource?: Resource;
+  action?: Action;
 }
 
 export default function useSafeFetch() {
-  const { userLogged, clientLogged } = useGlobalContext();
-
+  const { userLogged } = useGlobalContext();
   const { showErrorSnackbar } = useSnackbar();
 
   const safeFetch = useCallback(
-    async ({ path, method = "get", body }: Request) => {
+    async (
+      path: string,
+      { method = "get", body, resource, action }: Request
+    ) => {
       try {
+        const hasPermission = checkPermission(userLogged, resource, action);
+        if (!hasPermission) {
+          if (method !== "get") {
+            throw new Error(formatDeniedMessage({ resource, action }));
+          }
+          return null;
+        }
+
         const response = await fetch(path, {
           method,
           headers: {
@@ -42,7 +56,7 @@ export default function useSafeFetch() {
         throw error;
       }
     },
-    [showErrorSnackbar, userLogged, clientLogged]
+    [showErrorSnackbar, userLogged]
   );
 
   return { safeFetch };

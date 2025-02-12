@@ -44,8 +44,9 @@ export default function UsersTable(): ReactNode {
   }, [usersFilter, userLogged]);
 
   async function getUsersInfo(filter?: string): Promise<User[]> {
-    return await safeFetch({
-      path: `${baseUrl}/users?${filter}`,
+    return await safeFetch(`${baseUrl}/users?${filter}`, {
+      resource: "users",
+      action: "read",
     });
   }
 
@@ -58,13 +59,14 @@ export default function UsersTable(): ReactNode {
   const { showSuccessSnackbar } = useSnackbar();
 
   async function generatePdf() {
-    return await safeFetch({
-      path: `${baseUrl}/usersPdf`,
+    return await safeFetch(`${baseUrl}/usersPdf`, {
       method: "post",
       body: {
         filter: usersFilter,
         url: "https://example.com/", // TODO: ao implementar o back seria enviado apenas o filter
       },
+      resource: "users",
+      action: "read",
     });
   }
 
