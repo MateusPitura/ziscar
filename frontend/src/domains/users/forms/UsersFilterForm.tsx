@@ -4,10 +4,11 @@ import Input from "@/design-system/Form/Input";
 import SideSheet from "@/design-system/SideSheet";
 import useGlobalContext from "@/domains/global/hooks/useGlobalContext";
 import { memo, ReactElement } from "react";
-import { defaultValues } from "../constants/usersFilter";
+import { userFilterDefaultValues } from "../constants";
 import { useFormContext } from "react-hook-form";
-import { SchemaUsersFilterForm, UsersFilterFormInputs } from "../schemas/users";
+import { SchemaUsersFilterForm } from "../schemas";
 import useDialogContext from "@/domains/global/hooks/useDialogContext";
+import { UsersFilterFormInputs } from "../types";
 
 function UsersFilterForm(): ReactElement {
   const { usersFilter, handleUsersFilter } = useGlobalContext();
@@ -37,8 +38,8 @@ function UsersFilterFormContent(): ReactElement {
   const { closeDialog } = useDialogContext();
 
   function handleReset() {
-    handleUsersFilter(defaultValues);
-    reset(defaultValues);
+    handleUsersFilter(userFilterDefaultValues);
+    reset(userFilterDefaultValues);
     closeDialog();
   }
 

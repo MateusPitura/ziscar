@@ -1,6 +1,6 @@
-import { UserFormInputs } from "../schemas/users";
+import { UserFormInputs } from "../types";
 
-export const defaultValues: UserFormInputs = {
+export const userDefaultValues: UserFormInputs = {
   fullName: "",
   email: "",
   cellphone: "",
@@ -17,4 +17,11 @@ export const defaultValues: UserFormInputs = {
     complement: "",
   },
   category: "admin",
+};
+
+export const userFilterDefaultValues = {
+  page: 1,
+  fullName: "",
+  orderBy: "",
+  category: [],
 };

@@ -10,7 +10,7 @@ import UsersFilterForm from "../forms/UsersFilterForm";
 import useGlobalContext from "@/domains/global/hooks/useGlobalContext";
 import formatFilters from "@/domains/global/utils/formatFilters";
 import UsersTableActions from "./UsersTableActions";
-import { DisableUser } from "../types/disableUser";
+import { DisableUser } from "../types";
 import DisableUserModal from "./DisableUserModal";
 import useDialog from "@/domains/global/hooks/useDialog";
 

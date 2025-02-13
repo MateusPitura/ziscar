@@ -7,8 +7,6 @@ export const SchemaUsersFilterForm = s.object({
   category: s.string("default", "optional").array(),
 });
 
-export type UsersFilterFormInputs = s.infer<typeof SchemaUsersFilterForm>;
-
 export const SchemaUserForm = s.object({
   fullName: s.fullName(),
   email: s.email(),
@@ -23,10 +21,3 @@ export const SchemaUserForm = s.object({
     cep: s.cep().transform((cep) => removeMask(cep, "cep")),
   }),
 });
-
-export type UserFormInputs = Omit<
-  s.infer<typeof SchemaUserForm>,
-  "birthDate"
-> & {
-  birthDate: string;
-};

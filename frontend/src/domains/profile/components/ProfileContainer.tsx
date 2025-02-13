@@ -17,7 +17,7 @@ import CellphoneForm from "../forms/CellphoneForm";
 import selectProfileInfo from "../utils/selectProfileInfo";
 import useDialog from "../../global/hooks/useDialog";
 import EditProfileModal from "./EditProfileModal";
-import { EditProfile } from "../types/editProfile";
+import { EditProfile } from "../types";
 import { BASE_URL } from "@/domains/global/constants";
 
 export default function ProfileContainer(): ReactElement {

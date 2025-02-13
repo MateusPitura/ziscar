@@ -6,8 +6,9 @@ import PageHeader from "@/domains/global/components/PageHeader";
 import Section from "@/domains/global/components/Section";
 import type { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
-import { SchemaUserForm, UserFormInputs } from "../schemas/users";
+import { SchemaUserForm } from "../schemas";
 import { Action, Resource } from "@/domains/global/types/model";
+import { UserFormInputs } from "../types";
 
 interface UserFormProperties {
   defaultValues: Partial<UserFormInputs>;

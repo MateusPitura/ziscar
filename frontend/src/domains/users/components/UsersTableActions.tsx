@@ -1,7 +1,7 @@
 import Button from "@/design-system/Button";
 import { type ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
-import { DisableUser } from "../types/disableUser";
+import { DisableUser } from "../types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";

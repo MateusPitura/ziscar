@@ -8,12 +8,12 @@ import {
 } from "@tanstack/react-query";
 import { useEffect, type ReactNode } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { UserFormInputs } from "../schemas/users";
 import UserForm from "../forms/UserForm";
 import selectUserInfo from "../utils/selectUserInfo";
 import Spinner from "@/design-system/Spinner";
 import { BASE_URL } from "@/domains/global/constants";
 import { User } from "@/domains/global/types/model";
+import { UserFormInputs } from "../types";
 
 export default function EditUserContainer(): ReactNode {
   const { safeFetch } = useSafeFetch();

@@ -1,6 +1,5 @@
 import type { ReactElement } from "react";
 import { useNavigate } from "react-router-dom";
-import { defaultValues } from "../constants/newUserDefaultValues";
 import {
   useIsFetching,
   useMutation,
@@ -9,8 +8,9 @@ import {
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import UserForm from "../forms/UserForm";
-import { UserFormInputs } from "../schemas/users";
+import { UserFormInputs } from "../types";
 import { BASE_URL } from "@/domains/global/constants";
+import { userDefaultValues } from "../constants";
 
 export default function NewUsersContainer(): ReactElement {
   const { safeFetch } = useSafeFetch();
@@ -44,7 +44,7 @@ export default function NewUsersContainer(): ReactElement {
 
   return (
     <UserForm
-      defaultValues={defaultValues}
+      defaultValues={userDefaultValues}
       onSubmit={mutate}
       isPending={isPending || !!isFetching}
       headerPrimaryBtnLabel="Criar"

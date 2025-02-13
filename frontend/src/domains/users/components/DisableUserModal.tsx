@@ -4,7 +4,7 @@ import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { ReactElement } from "react";
-import { DisableUser } from "../types/disableUser";
+import { DisableUser } from "../types";
 import useGlobalContext from "@/domains/global/hooks/useGlobalContext";
 import { Dialog } from "@/domains/global/types";
 
