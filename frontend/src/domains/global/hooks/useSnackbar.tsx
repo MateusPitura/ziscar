@@ -2,19 +2,29 @@ import Button from "@/design-system/Button";
 import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@radix-ui/react-toast";
 import { useCallback } from "react";
+import { Action, Resource } from "../types/user";
 
 interface ShowSnackbarProps {
   title: string;
   description?: string;
   actionLabel?: string;
   onActionClick?: () => void;
+  actionBtnResource?: Resource;
+  actionBtnAction?: Action;
 }
 
 export default function useSnackbar() {
   const { toast } = useToast();
 
   const showSuccessSnackbar = useCallback(
-    ({ title, description, onActionClick, actionLabel }: ShowSnackbarProps) => {
+    ({
+      title,
+      description,
+      onActionClick,
+      actionLabel,
+      actionBtnResource,
+      actionBtnAction,
+    }: ShowSnackbarProps) => {
       toast({
         title,
         description,
@@ -25,6 +35,8 @@ export default function useSnackbar() {
               label={actionLabel}
               padding="none"
               onClick={onActionClick}
+              resource={actionBtnResource}
+              action={actionBtnAction}
             />
           </ToastAction>
         ),
@@ -34,7 +46,14 @@ export default function useSnackbar() {
   );
 
   const showErrorSnackbar = useCallback(
-    ({ title, description, onActionClick, actionLabel }: ShowSnackbarProps) => {
+    ({
+      title,
+      description,
+      onActionClick,
+      actionLabel,
+      actionBtnResource,
+      actionBtnAction,
+    }: ShowSnackbarProps) => {
       toast({
         variant: "destructive",
         title,
@@ -47,6 +66,8 @@ export default function useSnackbar() {
               label={actionLabel}
               padding="none"
               onClick={onActionClick}
+              resource={actionBtnResource}
+              action={actionBtnAction}
             />
           </ToastAction>
         ),

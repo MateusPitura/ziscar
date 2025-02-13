@@ -77,6 +77,8 @@ export default function UsersTable(): ReactNode {
         title: "PDF gerado com sucesso",
         actionLabel: "Abrir",
         onActionClick: () => window.open(data.url, "_blank"),
+        actionBtnResource: 'users',
+        actionBtnAction: 'read'
       });
     },
   });

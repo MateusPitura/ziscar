@@ -21,49 +21,47 @@ const queryClient = new QueryClient({
 
 export default function App() {
   return (
-    <>
-      <Snackbar />
-      <GlobalErrorBoundary>
-        <BrowserRouter>
-          <GlobalProvider>
-            <QueryClientProvider client={queryClient}>
-              <Routes>
-                <Route element={<OpenPageLayout />}>
-                  {openRoutes.map((group) =>
-                    group.routes.map((route) => (
-                      <Route
-                        key={route.path}
-                        path={route.path}
-                        element={
-                          <SuspensePage key={route.path}>
-                            {route.entryPage}
-                          </SuspensePage>
-                        }
-                      />
-                    ))
-                  )}
-                </Route>
-                <Route element={<ClosePageLayout />}>
-                  {closeRoutes.map((group) =>
-                    group.routes.map((route) => (
-                      <Route
-                        key={route.path}
-                        path={route.path}
-                        element={
-                          <SuspensePage key={route.path}>
-                            {route.entryPage}
-                          </SuspensePage>
-                        }
-                      />
-                    ))
-                  )}
-                </Route>
-              </Routes>
-              <ReactQueryDevtools />
-            </QueryClientProvider>
-          </GlobalProvider>
-        </BrowserRouter>
-      </GlobalErrorBoundary>
-    </>
+    <GlobalErrorBoundary>
+      <BrowserRouter>
+        <GlobalProvider>
+          <QueryClientProvider client={queryClient}>
+            <Snackbar />
+            <Routes>
+              <Route element={<OpenPageLayout />}>
+                {openRoutes.map((group) =>
+                  group.routes.map((route) => (
+                    <Route
+                      key={route.path}
+                      path={route.path}
+                      element={
+                        <SuspensePage key={route.path}>
+                          {route.entryPage}
+                        </SuspensePage>
+                      }
+                    />
+                  ))
+                )}
+              </Route>
+              <Route element={<ClosePageLayout />}>
+                {closeRoutes.map((group) =>
+                  group.routes.map((route) => (
+                    <Route
+                      key={route.path}
+                      path={route.path}
+                      element={
+                        <SuspensePage key={route.path}>
+                          {route.entryPage}
+                        </SuspensePage>
+                      }
+                    />
+                  ))
+                )}
+              </Route>
+            </Routes>
+            <ReactQueryDevtools />
+          </QueryClientProvider>
+        </GlobalProvider>
+      </BrowserRouter>
+    </GlobalErrorBoundary>
   );
 }
