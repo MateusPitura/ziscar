@@ -1,15 +1,33 @@
 import Loading from "@/design-system/Loading";
 import { Childrenable } from "@/domains/global/types/components";
 import type { ReactElement } from "react";
+import { Action, Resource } from "../types/user";
+import useCheckPermission from "../hooks/useCheckPermission";
+import formatDeniedMessage from "../utils/formatDeniedMessage";
 
 interface ContainerProperties extends Childrenable {
   isLoading: boolean;
+  resource: Resource;
+  action: Action;
 }
 
-function Container({ children, isLoading }: ContainerProperties): ReactElement {
+function Container({
+  children,
+  isLoading,
+  action,
+  resource,
+}: ContainerProperties): ReactElement {
+  const hasPermission = useCheckPermission(resource, action);
+
   return (
     <div className="flex gap-4 overflow-x-auto">
-      {isLoading ? <Card isLoading={true} /> : children}
+      {!hasPermission ? (
+        <Card label={formatDeniedMessage({ resource, action })} value="-" />
+      ) : isLoading ? (
+        <Card isLoading={true} />
+      ) : (
+        children
+      )}
     </div>
   );
 }

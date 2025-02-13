@@ -5,12 +5,9 @@ import { useQuery } from "@tanstack/react-query";
 import type { ReactNode } from "react";
 import { DashBoard as DashBoardProps } from "@/domains/global/types/dashBoard";
 import { queryKeys } from "@/domains/global/types/queryKeys";
-import formatDeniedMessage from "@/domains/global/utils/formatDeniedMessage";
-import useCheckPermission from "@/domains/global/hooks/useCheckPermission";
 
 export default function UsersDashBoard(): ReactNode {
   const { safeFetch } = useSafeFetch();
-  const hasPermission = useCheckPermission("users", "read");
 
   async function getDashBoardInfo(): Promise<DashBoardProps[]> {
     return await safeFetch(`${baseUrl}/usersDashboard`, {
@@ -26,13 +23,11 @@ export default function UsersDashBoard(): ReactNode {
     });
 
   return (
-    <DashBoard isLoading={isFetchingDatashBoardInfo}>
-      {!hasPermission && (
-        <DashBoard.Card
-          label={formatDeniedMessage({ resource: "users", action: "read" })}
-          value={"-"}
-        />
-      )}
+    <DashBoard
+      isLoading={isFetchingDatashBoardInfo}
+      resource="users"
+      action="read"
+    >
       {dashBoardInfo?.map((item) => (
         <DashBoard.Card key={item.id} label={item.label} value={item.value} />
       ))}
