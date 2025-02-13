@@ -1,10 +1,10 @@
-import { Childrenable } from "@/domains/global/types/components";
+import { Childrenable } from "@/domains/global/types";
 import {
-  Children,
-  cloneElement,
-  ReactNode,
-  useMemo,
-  type ReactElement,
+    Children,
+    cloneElement,
+    ReactNode,
+    useMemo,
+    type ReactElement,
 } from "react";
 import { FieldValues, useFormContext, useFormState } from "react-hook-form";
 import ErrorLabel from "./ErrorLabel";

@@ -1,9 +1,9 @@
 import classNames from "classnames";
 import { forwardRef, ReactNode } from "react";
 import Tooltip from "./Tooltip";
-import { Action, Resource } from "@/domains/global/types/user";
 import useCheckPermission from "@/domains/global/hooks/useCheckPermission";
 import formatDeniedMessage from "@/domains/global/utils/formatDeniedMessage";
+import { Resource, Action } from "@/domains/global/types/model";
 
 export type ButtonState = "active" | "disabled" | "red" | "loading";
 

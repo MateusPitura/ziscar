@@ -1,6 +1,6 @@
 import { Suspense, type ReactElement } from "react";
-import { Childrenable } from "../types/components";
 import Spinner from "@/design-system/Spinner";
+import { Childrenable } from "../types";
 
 export default function SuspensePage({ children }: Childrenable): ReactElement {
   return (

@@ -1,9 +1,9 @@
 import Loading from "@/design-system/Loading";
-import { Childrenable } from "@/domains/global/types/components";
+import { Childrenable } from "@/domains/global/types";
 import type { ReactElement } from "react";
-import { Action, Resource } from "../types/user";
 import useCheckPermission from "../hooks/useCheckPermission";
 import formatDeniedMessage from "../utils/formatDeniedMessage";
+import { Resource, Action } from "../types/model";
 
 interface ContainerProperties extends Childrenable {
   isLoading: boolean;

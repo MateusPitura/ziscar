@@ -7,7 +7,7 @@ import Section from "@/domains/global/components/Section";
 import type { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import { SchemaUserForm, UserFormInputs } from "../schemas/users";
-import { Resource, Action } from "@/domains/global/types/user";
+import { Action, Resource } from "@/domains/global/types/model";
 
 interface UserFormProperties {
   defaultValues: Partial<UserFormInputs>;

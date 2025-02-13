@@ -1,4 +1,4 @@
-import { Action, Resource } from "../types/user";
+import { Action, Resource } from "../types/model";
 
 const actionFormatted: Record<Action, string> = {
   create: "criar",

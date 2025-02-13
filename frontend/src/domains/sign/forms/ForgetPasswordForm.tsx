@@ -1,7 +1,7 @@
 import Form from "@/design-system/Form";
 import Input from "@/design-system/Form/Input";
 import Modal from "@/design-system/Modal";
-import { baseUrl } from "@/domains/global/constants/requests";
+import { BASE_URL } from "@/domains/global/constants";
 import useDialogContext from "@/domains/global/hooks/useDialogContext";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
@@ -21,7 +21,7 @@ export default function ForgetPasswordForm(): ReactNode {
   const { closeDialog } = useDialogContext();
 
   async function handleForgetPassword(data: ForgetPasswordFormInputs) {
-    await safeFetch(`${baseUrl}/forgetPassword`, {
+    await safeFetch(`${BASE_URL}/forgetPassword`, {
       method: "post",
       body: data,
     });

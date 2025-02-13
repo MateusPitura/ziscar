@@ -1,10 +1,8 @@
 import { createContext, useCallback, useMemo, useState } from "react";
-import { UserLogged } from "../types/user";
-import { ClientLogged } from "../types/client";
-import { Childrenable } from "../types/components";
-import { Pageable } from "../types/filters";
 import { defaultValues } from "@/domains/users/constants/usersFilter";
 import { UsersFilterFormInputs } from "@/domains/users/schemas/users";
+import { Childrenable, Pageable } from "../types";
+import { ClientLogged, UserLogged } from "../types/model";
 
 interface UsersFilter extends UsersFilterFormInputs, Pageable {}
 

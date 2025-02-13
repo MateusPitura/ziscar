@@ -1,4 +1,4 @@
-import { User } from "@/domains/global/types/user";
+import { User } from "@/domains/global/types/model";
 import { UserFormInputs } from "../schemas/users";
 import { applyMask } from "@/domains/global/utils/applyMask";
 import safeFormat from "@/domains/global/utils/safeFormat";

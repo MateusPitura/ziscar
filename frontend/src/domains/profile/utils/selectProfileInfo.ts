@@ -1,4 +1,4 @@
-import { User } from "@/domains/global/types/user";
+import { User } from "@/domains/global/types/model";
 import { applyMask } from "@/domains/global/utils/applyMask";
 
 export default function selectProfileInfo(data: User): Omit<User, "id" | 'permissions'> {

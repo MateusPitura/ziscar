@@ -1,7 +1,7 @@
 import PageHeader from "@/domains/global/components/PageHeader";
 import Section from "@/domains/global/components/Section";
 import { useMemo, useState, type ReactElement } from "react";
-import { User } from "@/domains/global/types/user";
+import { User } from "@/domains/global/types/model";
 import useGlobalContext from "@/domains/global/hooks/useGlobalContext";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import safeFormat from "@/domains/global/utils/safeFormat";
@@ -10,7 +10,6 @@ import PasswordForm from "../forms/PasswordForm";
 import { useQuery } from "@tanstack/react-query";
 import FullNameForm from "../forms/FullNameForm";
 import AddressForm from "../forms/AddressForm";
-import { baseUrl } from "@/domains/global/constants/requests";
 import BirthDateForm from "../forms/BirthDateForm";
 import CpfForm from "../forms/CpfForm";
 import CodeForm from "../forms/CodeForm";
@@ -19,7 +18,7 @@ import selectProfileInfo from "../utils/selectProfileInfo";
 import useDialog from "../../global/hooks/useDialog";
 import EditProfileModal from "./EditProfileModal";
 import { EditProfile } from "../types/editProfile";
-import { queryKeys } from "@/domains/global/types/queryKeys";
+import { BASE_URL } from "@/domains/global/constants";
 
 export default function ProfileContainer(): ReactElement {
   const [editProfileInfo, setEditProfileInfo] = useState<EditProfile>({
@@ -34,11 +33,11 @@ export default function ProfileContainer(): ReactElement {
   const { safeFetch } = useSafeFetch();
 
   async function getProfileInfo(): Promise<User> {
-    return await safeFetch(`${baseUrl}/users/${userLogged?.id}`); // TODO: Ao implementar o back-end criar uma request que não precise de id, pegar o id automaticamente
+    return await safeFetch(`${BASE_URL}/users/${userLogged?.id}`); // TODO: Ao implementar o back-end criar uma request que não precise de id, pegar o id automaticamente
   }
 
   const { data: profileInfo, isFetching } = useQuery({
-    queryKey: [queryKeys.PROFILE_INFO],
+    queryKey: ['profileInfo'],
     queryFn: getProfileInfo,
     select: selectProfileInfo,
   });

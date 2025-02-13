@@ -1,4 +1,3 @@
-import { Mask } from "@/domains/global/types/mask";
 import { applyMask } from "@/domains/global/utils/applyMask";
 import { useEffect, type ReactElement } from "react";
 import {
@@ -9,6 +8,7 @@ import {
 } from "react-hook-form";
 import Button from "../Button";
 import ErrorLabel from "./ErrorLabel";
+import { Mask } from "@/domains/global/types";
 
 interface InputProperties<T extends FieldValues> {
   name: keyof T & string;

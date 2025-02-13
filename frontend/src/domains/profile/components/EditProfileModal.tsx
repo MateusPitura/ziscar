@@ -1,5 +1,5 @@
 import Modal from "@/design-system/Modal";
-import { Dialog } from "@/domains/global/types/components";
+import { Dialog } from "@/domains/global/types";
 import type { ReactNode } from "react";
 import { EditProfile } from "../types/editProfile";
 

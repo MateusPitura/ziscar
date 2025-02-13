@@ -7,23 +7,22 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
-import { baseUrl } from "@/domains/global/constants/requests";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
-import { queryKeys } from "@/domains/global/types/queryKeys";
 import UserForm from "../forms/UserForm";
 import { UserFormInputs } from "../schemas/users";
+import { BASE_URL } from "@/domains/global/constants";
 
 export default function NewUsersContainer(): ReactElement {
   const { safeFetch } = useSafeFetch();
   const { showSuccessSnackbar } = useSnackbar();
-  const isFetching = useIsFetching({ queryKey: [queryKeys.CEP_API] });
+  const isFetching = useIsFetching({ queryKey: ["cepApi"] });
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   async function createUser(data: UserFormInputs) {
     const dataFormatted = { ...data, isActive: true };
 
-    await safeFetch(`${baseUrl}/users`, {
+    await safeFetch(`${BASE_URL}/users`, {
       method: "post",
       body: dataFormatted,
       resource: "users",
@@ -38,8 +37,8 @@ export default function NewUsersContainer(): ReactElement {
         title: "Usuário criado com sucesso",
       });
       navigate("/users");
-      queryClient.invalidateQueries({ queryKey: [queryKeys.USERS] });
-      queryClient.invalidateQueries({ queryKey: [queryKeys.USERS_DASHBOARD] });
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+      queryClient.invalidateQueries({ queryKey: ["usersDashboard"] });
     },
   });
 

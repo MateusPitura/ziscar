@@ -2,7 +2,7 @@ import Button from "@/design-system/Button";
 import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@radix-ui/react-toast";
 import { useCallback } from "react";
-import { Action, Resource } from "../types/user";
+import { Resource, Action } from "../types/model";
 
 interface ShowSnackbarProps {
   title: string;

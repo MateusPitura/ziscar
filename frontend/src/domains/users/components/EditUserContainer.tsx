@@ -1,7 +1,5 @@
-import { baseUrl } from "@/domains/global/constants/requests";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
-import { queryKeys } from "@/domains/global/types/queryKeys";
 import {
   useIsFetching,
   useQueryClient,
@@ -12,37 +10,38 @@ import { useEffect, type ReactNode } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { UserFormInputs } from "../schemas/users";
 import UserForm from "../forms/UserForm";
-import { User } from "@/domains/global/types/user";
 import selectUserInfo from "../utils/selectUserInfo";
 import Spinner from "@/design-system/Spinner";
+import { BASE_URL } from "@/domains/global/constants";
+import { User } from "@/domains/global/types/model";
 
 export default function EditUserContainer(): ReactNode {
   const { safeFetch } = useSafeFetch();
   const { showSuccessSnackbar } = useSnackbar();
-  const isFetchingCep = useIsFetching({ queryKey: [queryKeys.CEP_API] });
+  const isFetchingCep = useIsFetching({ queryKey: ["cepApi"] });
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { userId } = useParams();
 
   async function getUser(): Promise<User> {
-    return await safeFetch(`${baseUrl}/users/${userId}`, {
-      resource: 'users',
-      action: 'read'
+    return await safeFetch(`${BASE_URL}/users/${userId}`, {
+      resource: "users",
+      action: "read",
     });
   }
 
   const { data: userData, isFetching } = useQuery({
-    queryKey: [queryKeys.USER, userId],
+    queryKey: ["user", userId],
     queryFn: getUser,
     select: selectUserInfo,
   });
 
   async function editUser(data: UserFormInputs) {
-    await safeFetch(`${baseUrl}/users/${userId}`, {
+    await safeFetch(`${BASE_URL}/users/${userId}`, {
       method: "patch",
       body: data,
-      resource: 'users',
-      action: 'update'
+      resource: "users",
+      action: "update",
     });
   }
 
@@ -53,10 +52,10 @@ export default function EditUserContainer(): ReactNode {
         title: `Usuário ${userData?.fullName} atualizado com sucesso`,
       });
       queryClient.invalidateQueries({
-        queryKey: [queryKeys.USERS],
+        queryKey: ["users"],
       });
       queryClient.invalidateQueries({
-        queryKey: [queryKeys.USERS_DASHBOARD],
+        queryKey: ["usersDashboard"],
       });
       navigate("/users");
     },
@@ -66,7 +65,7 @@ export default function EditUserContainer(): ReactNode {
     return () => {
       if (isSuccess) {
         queryClient.invalidateQueries({
-          queryKey: [queryKeys.USER],
+          queryKey: ["user"],
         });
       }
     };

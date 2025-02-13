@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { Childrenable, Dialog } from "../types/components";
+import { Dialog, Childrenable } from "../types";
 
 const DialogContext = createContext<Dialog | null>(null);
 

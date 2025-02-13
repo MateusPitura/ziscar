@@ -1,9 +1,9 @@
 import { useCallback } from "react";
 import useSnackbar from "./useSnackbar";
-import { Action, Resource } from "../types/user";
 import formatDeniedMessage from "../utils/formatDeniedMessage";
 import useGlobalContext from "./useGlobalContext";
 import checkPermission from "../utils/checkPermission";
+import { Resource, Action } from "../types/model";
 
 interface Request {
   method?: "get" | "post" | "put" | "patch" | "delete";

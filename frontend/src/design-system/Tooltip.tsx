@@ -1,10 +1,10 @@
 import {
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-  Tooltip as TooltipShadcn,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+    Tooltip as TooltipShadcn,
 } from "@/components/ui/tooltip";
-import { Childrenable } from "@/domains/global/types/components";
+import { Childrenable } from "@/domains/global/types";
 
 import type { ReactNode } from "react";
 

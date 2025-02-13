@@ -9,13 +9,13 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { Popover } from "./Popover";
 import SideSheet from "./SideSheet";
-import { Childrenable } from "@/domains/global/types/components";
+import { Childrenable } from "@/domains/global/types";
 import useDialog from "@/domains/global/hooks/useDialog";
-import { ITEMS_PER_PAGE } from "@/domains/global/constants/requests";
 import Loading from "./Loading";
-import { Action as UserAction, Resource } from "@/domains/global/types/user";
 import useCheckPermission from "@/domains/global/hooks/useCheckPermission";
 import formatDeniedMessage from "@/domains/global/utils/formatDeniedMessage";
+import { ITEMS_PER_PAGE } from "@/domains/global/constants";
+import { Resource, Action as ActionProp } from "@/domains/global/types/model";
 
 function Container({ children }: Childrenable): ReactElement {
   return (
@@ -141,7 +141,7 @@ interface BodyProps extends Childrenable {
   isEmpty?: boolean;
   isLoading?: boolean;
   resource?: Resource;
-  action?: UserAction;
+  action?: ActionProp;
 }
 
 function Body({ children, isEmpty, isLoading, action, resource }: BodyProps) {
@@ -182,7 +182,7 @@ interface FooterProps {
   itemsPerPage?: number;
   isLoading?: boolean;
   resourceExportBtn?: Resource;
-  actionExportBtn?: UserAction;
+  actionExportBtn?: ActionProp;
 }
 
 function Footer({

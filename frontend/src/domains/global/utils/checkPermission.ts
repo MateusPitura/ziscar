@@ -1,4 +1,4 @@
-import { Action, Resource, UserLogged } from "../types/user";
+import { UserLogged, Resource, Action } from "../types/model";
 
 export default function checkPermission(
   userLogged?: UserLogged,

@@ -1,7 +1,7 @@
 import Modal from "@/design-system/Modal";
-import { Dialog } from "@/domains/global/types/components";
 import type { ReactNode } from "react";
 import ForgetPasswordForm from "../forms/ForgetPasswordForm";
+import { Dialog } from "@/domains/global/types";
 
 export default function ForgetPasswordModal({ ...dialog }: Dialog): ReactNode {
   return (

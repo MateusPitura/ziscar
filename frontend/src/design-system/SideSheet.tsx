@@ -10,9 +10,9 @@ import {
 import Button, { ButtonState } from "./Button";
 import classNames from "classnames";
 import { DialogDescription } from "@/components/ui/dialog";
-import { Childrenable, Dialog } from "@/domains/global/types/components";
 import { DialogProvider } from "@/domains/global/contexts/DialogContext";
 import useButtonState from "@/domains/global/hooks/useButtonState";
+import { Childrenable, Dialog } from "@/domains/global/types";
 
 interface ContainerProps extends Dialog, Childrenable {}
 

@@ -1,4 +1,4 @@
-import { Mask } from "../types/mask";
+import { Mask } from "../types";
 
 export function applyMask(
   value: string | undefined,

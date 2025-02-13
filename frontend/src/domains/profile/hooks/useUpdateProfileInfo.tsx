@@ -1,8 +1,7 @@
-import { baseUrl } from "@/domains/global/constants/requests";
+import { BASE_URL } from "@/domains/global/constants";
 import useGlobalContext from "@/domains/global/hooks/useGlobalContext";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
-import { queryKeys } from "@/domains/global/types/queryKeys";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface UseUpdateProfileInfoProperties {
@@ -23,7 +22,7 @@ export default function useUpdateProfileInfo<T>({
 
   async function updateProfileInfo(data: T) {
     await safeFetch(
-      `${baseUrl}/users/${userLogged?.id}`, //  TODO: Ao implementar o back-end criar uma request que não precise de id, pegar o id automaticamente
+      `${BASE_URL}/users/${userLogged?.id}`, //  TODO: Ao implementar o back-end criar uma request que não precise de id, pegar o id automaticamente
       {
         method: "patch",
         body: data,
@@ -35,13 +34,13 @@ export default function useUpdateProfileInfo<T>({
     mutationFn: updateProfileInfo,
     onSuccess: () => {
       if (shouldInvalidateQuery) {
-        queryClient.invalidateQueries({ queryKey: [queryKeys.PROFILE_INFO] });
-        queryClient.invalidateQueries({ queryKey: [queryKeys.USERS] });
+        queryClient.invalidateQueries({ queryKey: ["profileInfo"] });
+        queryClient.invalidateQueries({ queryKey: ["users"] });
         queryClient.invalidateQueries({
-          queryKey: [queryKeys.USER, userLogged?.id],
+          queryKey: ["user", userLogged?.id],
         });
         queryClient.invalidateQueries({
-          queryKey: [queryKeys.USERS_DASHBOARD],
+          queryKey: ["usersDashboard"],
         });
       }
       showSuccessSnackbar({

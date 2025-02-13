@@ -5,7 +5,6 @@ import Form from "@/design-system/Form";
 import useDialogContext from "@/domains/global/hooks/useDialogContext";
 import { s } from "@/domains/global/schemas";
 import { SchemaPassword } from "@/domains/global/schemas/schemas";
-import { defaultValues } from "@/domains/global/constants/passwordDefaultValues";
 import InputPassword from "@/design-system/Form/InputPassword";
 
 type PasswordFormInputs = s.infer<typeof SchemaPassword>;
@@ -29,7 +28,10 @@ export default function PasswordForm(): ReactElement {
     <Form<PasswordFormInputs>
       onSubmit={handleSubmit}
       schema={SchemaPassword}
-      defaultValues={defaultValues}
+      defaultValues={{
+        confirmPassword: '',
+        newPassword: '',
+      }}
     >
       <PasswordFormContent isPending={isPending} />
     </Form>

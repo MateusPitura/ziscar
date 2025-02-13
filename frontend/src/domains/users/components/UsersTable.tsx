@@ -2,8 +2,8 @@ import Table from "@/design-system/Table";
 import { useMemo, useState, type ReactNode } from "react";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
-import { baseUrl } from "@/domains/global/constants/requests";
-import { User } from "@/domains/global/types/user";
+import { BASE_URL } from "@/domains/global/constants";
+import { User } from "@/domains/global/types/model";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import selectUsersInfo from "../utils/selectUsersInfo";
 import UsersFilterForm from "../forms/UsersFilterForm";
@@ -13,7 +13,6 @@ import UsersTableActions from "./UsersTableActions";
 import { DisableUser } from "../types/disableUser";
 import DisableUserModal from "./DisableUserModal";
 import useDialog from "@/domains/global/hooks/useDialog";
-import { queryKeys } from "@/domains/global/types/queryKeys";
 
 export default function UsersTable(): ReactNode {
   const [disableUserInfo, setDisableUserInfo] = useState<DisableUser>({
@@ -44,14 +43,14 @@ export default function UsersTable(): ReactNode {
   }, [usersFilter, userLogged]);
 
   async function getUsersInfo(filter?: string): Promise<User[]> {
-    return await safeFetch(`${baseUrl}/users?${filter}`, {
+    return await safeFetch(`${BASE_URL}/users?${filter}`, {
       resource: "users",
       action: "read",
     });
   }
 
   const { data: usersInfo, isFetching: isFetchingUsersInfo } = useQuery({
-    queryKey: [queryKeys.USERS, filterFormatted],
+    queryKey: ['users', filterFormatted],
     queryFn: ({ queryKey }) => getUsersInfo(queryKey[1]),
     select: selectUsersInfo,
   });
@@ -59,7 +58,7 @@ export default function UsersTable(): ReactNode {
   const { showSuccessSnackbar } = useSnackbar();
 
   async function generatePdf() {
-    return await safeFetch(`${baseUrl}/usersPdf`, {
+    return await safeFetch(`${BASE_URL}/usersPdf`, {
       method: "post",
       body: {
         filter: usersFilter,
@@ -77,8 +76,8 @@ export default function UsersTable(): ReactNode {
         title: "PDF gerado com sucesso",
         actionLabel: "Abrir",
         onActionClick: () => window.open(data.url, "_blank"),
-        actionBtnResource: 'users',
-        actionBtnAction: 'read'
+        actionBtnResource: "users",
+        actionBtnAction: "read",
       });
     },
   });

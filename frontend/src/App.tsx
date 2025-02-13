@@ -8,6 +8,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import GlobalErrorBoundary from "./ErrorBoundary";
 import OpenPageLayout from "./domains/global/components/OpenPageLayout";
+import { QueryKeys } from "./domains/global/types";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -18,6 +19,12 @@ const queryClient = new QueryClient({
     },
   },
 });
+
+declare module '@tanstack/react-query' {
+  interface Register {
+    queryKey: QueryKeys
+  }
+}
 
 export default function App() {
   return (

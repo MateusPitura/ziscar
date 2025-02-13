@@ -1,4 +1,4 @@
-import { Childrenable } from "@/domains/global/types/components";
+import { Childrenable } from "@/domains/global/types";
 import { createContext, useMemo, useState } from "react";
 
 interface AuditPageContextValues {

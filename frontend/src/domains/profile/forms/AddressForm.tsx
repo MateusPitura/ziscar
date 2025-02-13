@@ -7,7 +7,7 @@ import { removeMask } from "@/domains/global/utils/removeMask";
 import useDialogContext from "@/domains/global/hooks/useDialogContext";
 import { s } from "@/domains/global/schemas";
 import AddressFields from "@/domains/global/components/AddressFields";
-import { queryKeys } from "@/domains/global/types/queryKeys";
+
 
 const SchemaAddressForm = s.SchemaAddress.extend({
   cep: s.cep().transform((cep) => removeMask(cep, "cep")),
@@ -54,7 +54,7 @@ interface AddressFormContentProps {
 function AddressFormContent({
   isPending,
 }: AddressFormContentProps): ReactElement {
-  const isFetching = useIsFetching({ queryKey: [queryKeys.CEP_API] });
+  const isFetching = useIsFetching({ queryKey: ['cepApi'] });
 
   return (
     <>

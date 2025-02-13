@@ -1,11 +1,11 @@
 import type { ReactElement } from "react";
 import {
-  Popover as PopoverShadcn,
-  PopoverContent,
-  PopoverTrigger,
+    Popover as PopoverShadcn,
+    PopoverContent,
+    PopoverTrigger,
 } from "@/components/ui/popover";
 import classNames from "classnames";
-import { Childrenable } from "@/domains/global/types/components";
+import { Childrenable } from "@/domains/global/types";
 
 function Container({ children }: Childrenable): ReactElement {
   return <PopoverShadcn>{children}</PopoverShadcn>;

@@ -9,10 +9,10 @@ import useSignPageContext from "../hooks/useSignPageContext";
 import useDialog from "@/domains/global/hooks/useDialog";
 import ForgetPasswordModal from "../components/ForgetPasswordModal";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
-import { baseUrl } from "@/domains/global/constants/requests";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
+import { BASE_URL } from "@/domains/global/constants";
 
 const SchemaSignInForm = s.object({
   email: s.email(),
@@ -29,7 +29,7 @@ export default function SignInForm(): ReactNode {
   const { showErrorSnackbar } = useSnackbar();
 
   async function handleSignIn(data: SignInFormInputs) {
-    await safeFetch(`${baseUrl}/signIn`, {
+    await safeFetch(`${BASE_URL}/signIn`, {
       method: "post",
       body: data,
     });

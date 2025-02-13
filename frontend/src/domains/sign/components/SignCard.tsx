@@ -1,6 +1,6 @@
 import Button, { ButtonState } from "@/design-system/Button";
 import useButtonState from "@/domains/global/hooks/useButtonState";
-import { Childrenable } from "@/domains/global/types/components";
+import { Childrenable } from "@/domains/global/types";
 import { type ReactNode } from "react";
 
 interface ContainerProps extends Childrenable {
