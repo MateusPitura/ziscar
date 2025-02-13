@@ -1,10 +1,10 @@
 import Form from "@/design-system/Form";
 import useUpdateProfileInfo from "../hooks/useUpdateProfileInfo";
-import Modal from "@/design-system/Modal";
 import Input from "@/design-system/Form/Input";
 import { removeMask } from "@/domains/global/utils/removeMask";
 import useDialogContext from "@/domains/global/hooks/useDialogContext";
 import { s } from "@/domains/global/schemas";
+import Dialog from "@/design-system/Dialog";
 
 const SchemaCellphoneForm = s.object({
   cellphone: s.cellphone().transform((cellphone) => removeMask(cellphone, "cellphone")),
@@ -42,15 +42,15 @@ interface CellphoneFormContentProps {
 function CellphoneFormContent({ isPending }: CellphoneFormContentProps) {
   return (
     <>
-      <Modal.Body>
+      <Dialog.Body>
         <Input<CellphoneFormInputs>
           name="cellphone"
           label="Matrícula"
           mask="cellphone"
           maxLength={15}
         />
-      </Modal.Body>
-      <Modal.Footer
+      </Dialog.Body>
+      <Dialog.Footer
         labelPrimaryBtn="Alterar"
         primaryBtnState={isPending ? "loading" : undefined}
         dirty
