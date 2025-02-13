@@ -1,4 +1,4 @@
-import Modal from "@/design-system/Modal";
+import Dialog from "@/design-system/Dialog";
 import { BASE_URL, BLANK } from "@/domains/global/constants";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
@@ -6,9 +6,9 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { ReactElement } from "react";
 import { DisableUser } from "../types";
 import useGlobalContext from "@/domains/global/hooks/useGlobalContext";
-import { Dialog } from "@/domains/global/types";
+import { DialogProps } from "@/domains/global/types";
 
-interface DisableUserModalProps extends DisableUser, Dialog {}
+interface DisableUserModalProps extends DisableUser, DialogProps {}
 
 export default function DisableUserModal({
   userId,
@@ -42,9 +42,9 @@ export default function DisableUserModal({
   });
 
   return (
-    <Modal {...dialog}>
-      <Modal.Header title="Desativar usuário" />
-      <Modal.Body>
+    <Dialog {...dialog}>
+      <Dialog.Header title="Desativar usuário" />
+      <Dialog.Body>
         <span className="text-body-medium text-light-onSurface">
           Tem certeza que deseja desativar o usuário
           <span className="font-bold">
@@ -53,14 +53,14 @@ export default function DisableUserModal({
           </span>
           ? Ao desativar ele não poderá mais acessar o sistema
         </span>
-      </Modal.Body>
-      <Modal.Footer
+      </Dialog.Body>
+      <Dialog.Footer
         labelPrimaryBtn="Desativar"
         onClickPrimaryBtn={mutate}
         primaryBtnState={isPending ? "loading" : "red"}
         primaryBtResource="users"
         primaryBtnAction="delete"
       />
-    </Modal>
+    </Dialog>
   );
 }

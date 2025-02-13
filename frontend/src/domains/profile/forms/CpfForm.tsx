@@ -1,10 +1,10 @@
 import Form from "@/design-system/Form";
 import useUpdateProfileInfo from "../hooks/useUpdateProfileInfo";
 import Input from "@/design-system/Form/Input";
-import Modal from "@/design-system/Modal";
 import { removeMask } from "@/domains/global/utils/removeMask";
 import useDialogContext from "@/domains/global/hooks/useDialogContext";
 import { s } from "@/domains/global/schemas";
+import Dialog from "@/design-system/Dialog";
 
 const SchemaCpfForm = s.object({
   cpf: s.cpf().transform((cpf) => removeMask(cpf, "cpf")),
@@ -42,7 +42,7 @@ interface CpfFormContentProps {
 function CpfFormContent({ isPending }: CpfFormContentProps) {
   return (
     <>
-      <Modal.Body>
+      <Dialog.Body>
         <Input<CpfFormInputs>
           name="cpf"
           label="CPF"
@@ -50,8 +50,8 @@ function CpfFormContent({ isPending }: CpfFormContentProps) {
           maxLength={14}
           required
         />
-      </Modal.Body>
-      <Modal.Footer
+      </Dialog.Body>
+      <Dialog.Footer
         primaryBtnState={isPending ? "loading" : undefined}
         dirty
         labelPrimaryBtn="Alterar"

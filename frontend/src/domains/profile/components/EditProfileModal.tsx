@@ -1,9 +1,9 @@
-import Modal from "@/design-system/Modal";
-import { Dialog } from "@/domains/global/types";
+import Dialog from "@/design-system/Dialog";
 import type { ReactNode } from "react";
 import { EditProfile } from "../types";
+import { DialogProps } from "@/domains/global/types";
 
-interface EditProfileModalProps extends Dialog, EditProfile {}
+interface EditProfileModalProps extends DialogProps, EditProfile {}
 
 export default function EditProfileModal({
   title,
@@ -11,9 +11,9 @@ export default function EditProfileModal({
   ...dialog
 }: EditProfileModalProps): ReactNode {
   return (
-    <Modal {...dialog}>
-      <Modal.Header title={title} />
+    <Dialog {...dialog}>
+      <Dialog.Header title={title} />
       {content}
-    </Modal>
+    </Dialog>
   );
 }

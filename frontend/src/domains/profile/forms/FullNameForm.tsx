@@ -1,10 +1,10 @@
 import { type ReactElement } from "react";
 import useUpdateProfileInfo from "../hooks/useUpdateProfileInfo";
 import Input from "@/design-system/Form/Input";
-import Modal from "@/design-system/Modal";
 import Form from "@/design-system/Form";
 import useDialogContext from "@/domains/global/hooks/useDialogContext";
 import { s } from "@/domains/global/schemas";
+import Dialog from "@/design-system/Dialog";
 
 const SchemaFullNameForm = s.object({
   fullName: s.fullName()
@@ -46,14 +46,14 @@ function FullNameFormContent({
 }: FullNameFormContentProps): ReactElement {
   return (
     <>
-      <Modal.Body>
+      <Dialog.Body>
         <Input<FullNameFormInputs>
           name="fullName"
           label="Nome completo"
           required
         />
-      </Modal.Body>
-      <Modal.Footer
+      </Dialog.Body>
+      <Dialog.Footer
         labelPrimaryBtn="Alterar"
         primaryBtnState={isPending ? "loading" : undefined}
         dirty

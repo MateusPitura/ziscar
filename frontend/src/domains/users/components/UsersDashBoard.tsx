@@ -3,7 +3,7 @@ import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import { useQuery } from "@tanstack/react-query";
 import type { ReactNode } from "react";
 import { BASE_URL } from "@/domains/global/constants";
-import { DashBoard as DashBoardProps } from "@/domains/global/types";
+import { DashBoardProps } from "@/domains/global/types";
 
 
 export default function UsersDashBoard(): ReactNode {

@@ -1,4 +1,3 @@
-import Modal from "@/design-system/Modal";
 import { type ReactElement } from "react";
 import useUpdateProfileInfo from "../hooks/useUpdateProfileInfo";
 import Form from "@/design-system/Form";
@@ -6,6 +5,7 @@ import useDialogContext from "@/domains/global/hooks/useDialogContext";
 import { s } from "@/domains/global/schemas";
 import { SchemaPassword } from "@/domains/global/schemas/schemas";
 import InputPassword from "@/design-system/Form/InputPassword";
+import Dialog from "@/design-system/Dialog";
 
 type PasswordFormInputs = s.infer<typeof SchemaPassword>;
 
@@ -47,7 +47,7 @@ function PasswordFormContent({
 }: PasswordFormContentProps): ReactElement {
   return (
     <>
-      <Modal.Body>
+      <Dialog.Body>
         <InputPassword<PasswordFormInputs>
           label="Nova senha"
           name="newPassword"
@@ -58,8 +58,8 @@ function PasswordFormContent({
           name="confirmPassword"
           required
         />
-      </Modal.Body>
-      <Modal.Footer
+      </Dialog.Body>
+      <Dialog.Footer
         labelPrimaryBtn="Alterar"
         primaryBtnState={isPending ? "loading" : undefined}
         dirty

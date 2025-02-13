@@ -1,10 +1,10 @@
 import Input from "@/design-system/Form/Input";
 import { type ReactElement } from "react";
 import useUpdateProfileInfo from "../hooks/useUpdateProfileInfo";
-import Modal from "@/design-system/Modal";
 import Form from "@/design-system/Form";
 import useDialogContext from "@/domains/global/hooks/useDialogContext";
 import { s } from "@/domains/global/schemas";
+import Dialog from "@/design-system/Dialog";
 
 const SchemaEmailForm = s.object({
   email: s.email(),
@@ -44,10 +44,10 @@ interface EmailFormContentProps {
 function EmailFormContent({ isPending }: EmailFormContentProps): ReactElement {
   return (
     <>
-      <Modal.Body>
+      <Dialog.Body>
         <Input<EmailFormInputs> name="email" label="Email" required />
-      </Modal.Body>
-      <Modal.Footer
+      </Dialog.Body>
+      <Dialog.Footer
         labelPrimaryBtn="Alterar"
         primaryBtnState={isPending ? "loading" : undefined}
         dirty

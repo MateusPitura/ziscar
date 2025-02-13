@@ -11,10 +11,10 @@ import Button, { ButtonState } from "./Button";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { DialogProvider } from "@/domains/global/contexts/DialogContext";
 import useButtonState from "@/domains/global/hooks/useButtonState";
-import { Childrenable, Dialog } from "@/domains/global/types";
+import { Childrenable, DialogProps } from "@/domains/global/types";
 import { Resource, Action } from "@/domains/global/types/model";
 
-interface ContainerProps extends Dialog, Childrenable {}
+interface ContainerProps extends DialogProps, Childrenable {}
 
 function Container({ children, ...dialog }: ContainerProps): ReactElement {
   return (
@@ -107,6 +107,6 @@ function Footer({
   );
 }
 
-const Modal = Object.assign(Container, { Header, Body, Footer });
+const Dialog = Object.assign(Container, { Header, Body, Footer });
 
-export default Modal;
+export default Dialog;

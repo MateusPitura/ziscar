@@ -1,12 +1,12 @@
 import { ReactElement } from "react";
 import useUpdateProfileInfo from "../hooks/useUpdateProfileInfo";
 import Form from "@/design-system/Form";
-import Modal from "@/design-system/Modal";
 import { useIsFetching } from "@tanstack/react-query";
 import { removeMask } from "@/domains/global/utils/removeMask";
 import useDialogContext from "@/domains/global/hooks/useDialogContext";
 import { s } from "@/domains/global/schemas";
 import AddressFields from "@/domains/global/components/AddressFields";
+import Dialog from "@/design-system/Dialog";
 
 
 const SchemaAddressForm = s.SchemaAddress.extend({
@@ -58,10 +58,10 @@ function AddressFormContent({
 
   return (
     <>
-      <Modal.Body>
+      <Dialog.Body>
         <AddressFields<AddressFormInputs> />
-      </Modal.Body>
-      <Modal.Footer
+      </Dialog.Body>
+      <Dialog.Footer
         labelPrimaryBtn="Alterar"
         primaryBtnState={isPending || isFetching ? "loading" : undefined}
         dirty

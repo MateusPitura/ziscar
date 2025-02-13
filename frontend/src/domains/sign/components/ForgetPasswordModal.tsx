@@ -1,13 +1,13 @@
-import Modal from "@/design-system/Modal";
+import Dialog from "@/design-system/Dialog";
 import type { ReactNode } from "react";
 import ForgetPasswordForm from "../forms/ForgetPasswordForm";
-import { Dialog } from "@/domains/global/types";
+import { DialogProps } from "@/domains/global/types";
 
-export default function ForgetPasswordModal({ ...dialog }: Dialog): ReactNode {
+export default function ForgetPasswordModal({ ...dialog }: DialogProps): ReactNode {
   return (
-    <Modal {...dialog}>
-      <Modal.Header title="Recuperar senha" />
+    <Dialog {...dialog}>
+      <Dialog.Header title="Recuperar senha" />
       <ForgetPasswordForm />
-    </Modal>
+    </Dialog>
   );
 }

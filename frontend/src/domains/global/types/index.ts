@@ -2,7 +2,11 @@ export interface Childrenable {
   children?: React.ReactNode;
 }
 
-export interface Dialog {
+export interface Pageable {
+  page: number;
+}
+
+export interface DialogProps {
   isOpen: boolean;
   openDialog: () => void;
   closeDialog: () => void;
@@ -10,14 +14,10 @@ export interface Dialog {
   handleOpen: (state: boolean) => void;
 }
 
-export interface DashBoard {
+export interface DashBoardProps {
   id: string;
   label: string;
   value: string;
-}
-
-export interface Pageable {
-  page: number;
 }
 
 export type Mask = "cellphone" | "cpf" | "cep" | "cnpj";

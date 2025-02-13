@@ -1,6 +1,6 @@
+import Dialog from "@/design-system/Dialog";
 import Form from "@/design-system/Form";
 import Input from "@/design-system/Form/Input";
-import Modal from "@/design-system/Modal";
 import { BASE_URL } from "@/domains/global/constants";
 import useDialogContext from "@/domains/global/hooks/useDialogContext";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
@@ -44,7 +44,7 @@ export default function ForgetPasswordForm(): ReactNode {
       schema={SchemaForgetPasswordForm}
       onSubmit={mutate}
     >
-      <Modal.Body>
+      <Dialog.Body>
         <div className="flex flex-col gap-4">
           <span className="text-body-large text-light-onSurface">
             Insira seu email para enviarmos as instruções para recuperar a senha
@@ -55,8 +55,8 @@ export default function ForgetPasswordForm(): ReactNode {
             required
           />
         </div>
-      </Modal.Body>
-      <Modal.Footer
+      </Dialog.Body>
+      <Dialog.Footer
         labelPrimaryBtn="Enviar"
         dirty
         primaryBtnState={isPending ? "loading" : undefined}

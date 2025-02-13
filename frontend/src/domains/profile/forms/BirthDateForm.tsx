@@ -1,6 +1,6 @@
+import Dialog from "@/design-system/Dialog";
 import useUpdateProfileInfo from "../hooks/useUpdateProfileInfo";
 import Form from "@/design-system/Form";
-import Modal from "@/design-system/Modal";
 import Input from "@/design-system/Form/Input";
 import useDialogContext from "@/domains/global/hooks/useDialogContext";
 import { s } from "@/domains/global/schemas";
@@ -43,15 +43,15 @@ interface BirthDateFormContentProps {
 function BirthDateFormContent({ isPending }: BirthDateFormContentProps) {
   return (
     <>
-      <Modal.Body>
+      <Dialog.Body>
         <Input<BirthDateFormInputs>
           name="birthDate"
           label="Data de nascimento"
           type="date"
           required
         />
-      </Modal.Body>
-      <Modal.Footer
+      </Dialog.Body>
+      <Dialog.Footer
         primaryBtnState={isPending ? "loading" : undefined}
         dirty
         labelPrimaryBtn="Alterar"

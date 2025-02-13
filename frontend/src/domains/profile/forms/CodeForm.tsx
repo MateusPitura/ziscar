@@ -1,9 +1,9 @@
 import Form from "@/design-system/Form";
 import useUpdateProfileInfo from "../hooks/useUpdateProfileInfo";
-import Modal from "@/design-system/Modal";
 import Input from "@/design-system/Form/Input";
 import useDialogContext from "@/domains/global/hooks/useDialogContext";
 import { s } from "@/domains/global/schemas";
+import Dialog from "@/design-system/Dialog";
 
 const SchemaCodeForm = s.object({
   code: s.string('default', 'optional'),
@@ -41,10 +41,10 @@ interface CodeFormContentProps {
 function CodeFormContent({ isPending }: CodeFormContentProps) {
   return (
     <>
-      <Modal.Body>
+      <Dialog.Body>
         <Input<CodeFormInputs> name="code" label="Matrícula" />
-      </Modal.Body>
-      <Modal.Footer
+      </Dialog.Body>
+      <Dialog.Footer
         labelPrimaryBtn="Alterar"
         primaryBtnState={isPending ? "loading" : undefined}
         dirty

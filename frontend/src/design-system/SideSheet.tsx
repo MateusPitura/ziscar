@@ -12,9 +12,9 @@ import classNames from "classnames";
 import { DialogDescription } from "@/components/ui/dialog";
 import { DialogProvider } from "@/domains/global/contexts/DialogContext";
 import useButtonState from "@/domains/global/hooks/useButtonState";
-import { Childrenable, Dialog } from "@/domains/global/types";
+import { Childrenable, DialogProps } from "@/domains/global/types";
 
-interface ContainerProps extends Dialog, Childrenable {}
+interface ContainerProps extends DialogProps, Childrenable {}
 
 function Container({ children, ...dialog }: ContainerProps): ReactElement {
   return (
