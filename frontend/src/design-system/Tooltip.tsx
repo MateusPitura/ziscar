@@ -19,7 +19,7 @@ export default function Tooltip({
   disabled,
 }: TooltipProperties): ReactNode {
   return (
-    <TooltipProvider>
+    <TooltipProvider disableHoverableContent>
       <TooltipShadcn open={disabled ? false : undefined}>
         <TooltipTrigger asChild>{children}</TooltipTrigger>
         <TooltipContent

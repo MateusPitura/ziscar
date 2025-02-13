@@ -2,11 +2,11 @@ import Loading from "@/design-system/Loading";
 import { Childrenable } from "@/domains/global/types/components";
 import type { ReactElement } from "react";
 
-interface DashBoardProperties extends Childrenable {
+interface ContainerProperties extends Childrenable {
   isLoading: boolean;
 }
 
-function DashBoard({ children, isLoading }: DashBoardProperties): ReactElement {
+function Container({ children, isLoading }: ContainerProperties): ReactElement {
   return (
     <div className="flex gap-4 overflow-x-auto">
       {isLoading ? <Card isLoading={true} /> : children}
@@ -36,10 +36,6 @@ function Card({ label, value, isLoading }: CardProperties) {
   );
 }
 
-Object.assign(DashBoard, { Card });
+const DashBoard = Object.assign(Container, { Card });
 
-type DashBoardType = typeof DashBoard & {
-  Card: typeof Card;
-};
-
-export default DashBoard as DashBoardType;
+export default DashBoard;
