@@ -1,4 +1,4 @@
-import { ButtonState } from "@/design-system/Button";
+import { ButtonState } from "@/design-system/types";
 import { useMemo } from "react";
 import { useFormContext } from "react-hook-form";
 

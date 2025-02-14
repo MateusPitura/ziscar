@@ -7,12 +7,13 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import Button, { ButtonState } from "./Button";
+import Button from "./Button";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { DialogProvider } from "@/domains/global/contexts/DialogContext";
 import useButtonState from "@/domains/global/hooks/useButtonState";
 import { Childrenable, DialogProps } from "@/domains/global/types";
 import { Resource, Action } from "@/domains/global/types/model";
+import { ButtonState } from "./types";
 
 interface ContainerProps extends DialogProps, Childrenable {}
 

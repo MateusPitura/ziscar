@@ -7,12 +7,13 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import Button, { ButtonState } from "./Button";
+import Button from "./Button";
 import classNames from "classnames";
 import { DialogDescription } from "@/components/ui/dialog";
 import { DialogProvider } from "@/domains/global/contexts/DialogContext";
 import useButtonState from "@/domains/global/hooks/useButtonState";
 import { Childrenable, DialogProps } from "@/domains/global/types";
+import { ButtonState } from "./types";
 
 interface ContainerProps extends DialogProps, Childrenable {}
 

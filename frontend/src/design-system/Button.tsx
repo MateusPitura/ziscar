@@ -4,8 +4,7 @@ import Tooltip from "./Tooltip";
 import useCheckPermission from "@/domains/global/hooks/useCheckPermission";
 import formatDeniedMessage from "@/domains/global/utils/formatDeniedMessage";
 import { Resource, Action } from "@/domains/global/types/model";
-
-export type ButtonState = "active" | "disabled" | "red" | "loading";
+import { ButtonState } from "./types";
 
 interface BaseButtonProps {
   state?: ButtonState;
@@ -76,62 +75,33 @@ const BaseButton = forwardRef(
   }
 );
 
-interface SafeButtonProps extends BaseButtonProps {
-  resource?: Resource;
-  action?: Action;
-}
-
-const SafeButton = forwardRef(
-  (
-    { resource, action, onClick, className, ...props }: SafeButtonProps,
-    ref: React.Ref<HTMLButtonElement>
-  ) => {
-    const hasPermission = useCheckPermission(resource, action);
-
-    return (
-      <Tooltip
-        content={formatDeniedMessage({ resource, action })}
-        disabled={hasPermission}
-      >
-        <div
-          className={classNames({
-            "cursor-not-allowed opacity-50": !hasPermission,
-          })}
-        >
-          <BaseButton
-            {...props}
-            ref={ref}
-            onClick={hasPermission ? onClick : () => {}}
-            className={classNames(className, {
-              "pointer-events-none": !hasPermission,
-            })}
-          />
-        </div>
-      </Tooltip>
-    );
-  }
-);
-
-interface ButtonProps
-  extends Omit<BaseButtonProps, "className">,
-    SafeButtonProps {
+interface ButtonVariantProps extends BaseButtonProps {
   variant?: "primary" | "secondary" | "tertiary" | "quaternary";
 }
 
-const Button = forwardRef(
+const ButtonVariant = forwardRef(
   (
-    { variant = "primary", state = undefined, ...props }: ButtonProps,
+    {
+      variant = "primary",
+      state = undefined,
+      className,
+      ...props
+    }: ButtonVariantProps,
     ref: React.Ref<HTMLButtonElement>
   ) => {
     switch (variant) {
       case "primary":
         return (
-          <SafeButton
-            className={classNames("bg-light-primary text-light-onPrimary", {
-              "bg-light-secondary": state === "active",
-              "!bg-light-error": state === "red",
-              "!bg-neutral-300": state === "disabled" || state === "loading",
-            })}
+          <BaseButton
+            className={classNames(
+              "bg-light-primary text-light-onPrimary",
+              className,
+              {
+                "bg-light-secondary": state === "active",
+                "!bg-light-error": state === "red",
+                "!bg-neutral-300": state === "disabled" || state === "loading",
+              }
+            )}
             state={state}
             ref={ref}
             {...props}
@@ -139,9 +109,10 @@ const Button = forwardRef(
         );
       case "secondary":
         return (
-          <SafeButton
+          <BaseButton
             className={classNames(
               "border-light-primary border-2 text-light-primary",
+              className,
               {
                 "bg-light-primaryContainer": state === "active",
                 "!border-light-error !text-light-error": state === "red",
@@ -156,8 +127,8 @@ const Button = forwardRef(
         );
       case "tertiary":
         return (
-          <SafeButton
-            className={classNames("text-light-onSurface", {
+          <BaseButton
+            className={classNames("text-light-onSurface", className, {
               "text-light-primary": state === "active",
               "!text-light-error": state === "red",
               "text-neutral-300": state === "disabled" || state === "loading",
@@ -169,8 +140,8 @@ const Button = forwardRef(
         );
       case "quaternary":
         return (
-          <SafeButton
-            className={classNames("text-light-primary", {
+          <BaseButton
+            className={classNames("text-light-primary", className, {
               "bg-light-primaryContainer": state === "active",
               "!text-light-error": state === "red",
               "text-neutral-300": state === "disabled" || state === "loading",
@@ -181,6 +152,36 @@ const Button = forwardRef(
           />
         );
     }
+  }
+);
+
+interface ButtonProps extends ButtonVariantProps {
+  resource?: Resource;
+  action?: Action;
+}
+
+const Button = forwardRef(
+  (
+    { resource, action, onClick, state, ...props }: ButtonProps,
+    ref: React.Ref<HTMLButtonElement>
+  ) => {
+    const hasPermission = useCheckPermission(resource, action);
+
+    return (
+      <Tooltip
+        content={formatDeniedMessage({ resource, action })}
+        disabled={hasPermission}
+      >
+        <div className={classNames({ "cursor-not-allowed": !hasPermission })}>
+          <ButtonVariant
+            {...props}
+            ref={ref}
+            onClick={hasPermission ? onClick : () => {}}
+            state={hasPermission ? state : "disabled"}
+          />
+        </div>
+      </Tooltip>
+    );
   }
 );
 

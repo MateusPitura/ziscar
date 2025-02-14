@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import { Children, type ReactElement, type ReactNode } from "react";
-import Button, { ButtonState } from "./Button";
+import Button from "./Button";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import NavigateNextOutlinedIcon from "@mui/icons-material/NavigateNextOutlined";
 import NavigateBeforeOutlinedIcon from "@mui/icons-material/NavigateBeforeOutlined";
@@ -16,6 +16,7 @@ import useCheckPermission from "@/domains/global/hooks/useCheckPermission";
 import formatDeniedMessage from "@/domains/global/utils/formatDeniedMessage";
 import { ITEMS_PER_PAGE } from "@/domains/global/constants";
 import { Resource, Action as ActionProp } from "@/domains/global/types/model";
+import { ButtonState } from "./types";
 
 function Container({ children }: Childrenable): ReactElement {
   return (

@@ -1,7 +1,8 @@
-import Button, { ButtonState } from "@/design-system/Button";
+import Button from "@/design-system/Button";
 import { type ReactElement } from "react";
 import useButtonState from "../hooks/useButtonState";
 import { Resource, Action } from "../types/model";
+import { ButtonState } from "@/design-system/types";
 
 interface PageHeaderProperties {
   title: string;

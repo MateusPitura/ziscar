@@ -1,0 +1,1 @@
+export type ButtonState = "active" | "disabled" | "red" | "loading";
