@@ -1,0 +1,42 @@
+version: "3.8"
+services:
+  postgres:
+    image: postgres:16
+    container_name: pds_db
+    restart: always
+    env_file: .env
+    environment:
+      - POSTGRES_USES=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    ports:
+      - "${DB_PORT}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  # backend:
+  #   build:
+  #     context: ./backend
+  #     dockerfile: ../backend.Dockerfile
+  #   container_name: nest_backend
+  #   restart: always
+  #   depends_on:
+  #     - postgres
+  #   environment:
+  #     DATABASE_URL: postgres://user:password@postgres:5432/mydb
+  #   ports:
+  #     - "3000:3000"
+
+  # frontend:
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: ../frontend.Dockerfile
+  #   container_name: react_frontend
+  #   restart: always
+  #   depends_on:
+  #     - backend
+  #   ports:
+  #     - "3001:3001"
+
+volumes:
+  pgdata:
