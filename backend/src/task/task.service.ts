@@ -1,57 +1,93 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { FindAllDto, TaskDto, TaskStatusEnum } from './task.dto';
-import { v4 } from 'uuid';
+import { TaskEntity } from 'src/db/entities/task.entity';
+import { FindOptionsWhere, Like, Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class TaskService {
-  private tasks: TaskDto[] = [];
+  constructor(
+    @InjectRepository(TaskEntity)
+    private readonly taskRepository: Repository<TaskEntity>,
+  ) {}
 
-  create(task: TaskDto) {
-    task.id = v4();
-    task.status = TaskStatusEnum.TO_DO;
-    this.tasks.push(task);
+  async create(task: TaskDto) {
+    const taskToSave: TaskEntity = {
+      title: task.title,
+      description: task.description,
+      status: TaskStatusEnum.TO_DO,
+      expirationDate: task.expirationDate,
+    };
+
+    const createdTask = await this.taskRepository.save(taskToSave);
+
+    return this.mapEntityToDto(createdTask);
   }
 
-  findById(id: string) {
-    const foundTask = this.tasks.find((task) => task.id === id);
-
-    if (foundTask) {
-      return foundTask;
-    }
-
-    throw new NotFoundException(`Task with id ${id} not found`);
-  }
-
-  update(task: TaskDto) {
-    const id = this.tasks.findIndex((t) => t.id === task.id);
-
-    if (id === -1) {
-      throw new NotFoundException(`Task with id ${task.id} not found`);
-    }
-
-    this.tasks[id] = task;
-  }
-
-  delete(id: string) {
-    const foundTask = this.tasks.find((task) => task.id === id);
+  async findById(id: string): Promise<TaskDto> {
+    const foundTask = await this.taskRepository.findOne({ where: { id } });
 
     if (!foundTask) {
       throw new NotFoundException(`Task with id ${id} not found`);
     }
 
-    this.tasks = this.tasks.filter((task) => task.id !== id);
+    return this.mapEntityToDto(foundTask);
   }
 
-  findAll(params: FindAllDto): TaskDto[] {
-    return this.tasks.filter((task) => {
-      let match = true;
-      if (params.title !== undefined && !task.title.includes(params.title)) {
-        match = false;
-      }
-      if (params.status !== undefined && !task.status.includes(params.status)) {
-        match = false;
-      }
-      return match;
+  async update(id: string, task: TaskDto) {
+    const foundTask = await this.taskRepository.findOne({
+      where: { id: task.id },
     });
+
+    if (!foundTask) {
+      throw new NotFoundException(`Task with id ${task.id} not found`);
+    }
+
+    const taskToUpdate = this.mapDtoToEntity(task);
+
+    await this.taskRepository.update({ id }, taskToUpdate);
+  }
+
+  async delete(id: string) {
+    const foundTask = await this.taskRepository.delete(id);
+
+    if (foundTask.affected === 0) {
+      throw new NotFoundException(`Task with id ${id} not found`);
+    }
+  }
+
+  async findAll(params: FindAllDto): Promise<TaskDto[]> {
+    const searchParams: FindOptionsWhere<TaskEntity> = {};
+
+    if (params.title) {
+      searchParams.title = Like(`%${params.title}%`);
+    }
+
+    if (params.status) {
+      searchParams.status = params.status;
+    }
+
+    const tasks = await this.taskRepository.find({ where: searchParams });
+
+    return tasks.map((task) => this.mapEntityToDto(task));
+  }
+
+  private mapEntityToDto(task: TaskEntity): TaskDto {
+    return {
+      id: task.id as string,
+      title: task.title,
+      description: task.description,
+      status: TaskStatusEnum[task.status] as TaskStatusEnum,
+      expirationDate: task.expirationDate,
+    };
+  }
+
+  private mapDtoToEntity(taskDto: TaskDto): Partial<TaskEntity> {
+    return {
+      title: taskDto.title,
+      description: taskDto.description,
+      status: taskDto.status?.toString(),
+      expirationDate: taskDto.expirationDate,
+    };
   }
 }

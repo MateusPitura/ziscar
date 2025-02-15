@@ -9,7 +9,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { FindAllDto, TaskDto } from './task.dto';
+import { FindAllDto, TaskDto, TaskRouteParams } from './task.dto';
 import { TaskService } from './task.service';
 import { AuthGuard } from 'src/auth/auth.guard';
 
@@ -19,27 +19,27 @@ export class TaskController {
   constructor(private readonly taskService: TaskService) {}
 
   @Post()
-  create(@Body() task: TaskDto) {
-    this.taskService.create(task);
+  async create(@Body() task: TaskDto) {
+    await this.taskService.create(task);
   }
 
   @Get('/:id')
-  findById(@Param('id') id: string) {
-    return this.taskService.findById(id);
+  async findById(@Param('id') id: string) {
+    return await this.taskService.findById(id);
   }
 
-  @Put()
-  update(@Body() task: TaskDto) {
-    this.taskService.update(task);
+  @Put('/:id')
+  async update(@Param() params: TaskRouteParams, @Body() task: TaskDto) {
+    await this.taskService.update(params.id, task);
   }
 
   @Delete('/:id')
-  delete(@Param('id') id: string) {
-    this.taskService.delete(id);
+  async delete(@Param('id') id: string) {
+    await this.taskService.delete(id);
   }
 
   @Get()
-  findAll(@Query() params: FindAllDto): TaskDto[] {
-    return this.taskService.findAll(params);
+  async findAll(@Query() params: FindAllDto): Promise<TaskDto[]> {
+    return await this.taskService.findAll(params);
   }
 }

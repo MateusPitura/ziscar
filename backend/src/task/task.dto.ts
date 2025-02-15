@@ -36,3 +36,8 @@ export interface FindAllDto {
   title: string;
   status: string;
 }
+
+export class TaskRouteParams {
+  @IsUUID()
+  id: string;
+}
