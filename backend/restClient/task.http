@@ -1,17 +1,32 @@
-###
-GET http://localhost:3000/task/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJuYW1lIjoibWF0ZXVzIiwiaWF0IjoxNzM5NjM2OTIwLCJleHAiOjE3Mzk2NDA1MjB9.xzfZbwY54Ful-bjeTxhi2q-AelcDWQ9pJbEGOvzIw6o HTTP/1.1
+@BASE_URL = http://localhost:3000
+
+# @name auth_request
+POST {{BASE_URL}}/auth/login HTTP/1.1
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJuYW1lIjoibWF0ZXVzIiwiaWF0IjoxNzM5NjM2OTIwLCJleHAiOjE3Mzk2NDA1MjB9.xzfZbwY54Ful-bjeTxhi2q-AelcDWQ9pJbEGOvzIw6o
+
+{
+    "username": "{{username}}",
+    "password": "{{password}}"
+}
 
 ###
-GET http://localhost:3000/task?title=T HTTP/1.1
-content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJuYW1lIjoibWF0ZXVzIiwiaWF0IjoxNzM5NjM2OTIwLCJleHAiOjE3Mzk2NDA1MjB9.xzfZbwY54Ful-bjeTxhi2q-AelcDWQ9pJbEGOvzIw6o
+
+@token = {{auth_request.response.body.token}}
 
 ###
-POST http://localhost:3000/task HTTP/1.1
+GET {{BASE_URL}}/task/8d99d7c6-d47b-4705-986b-7eb0cc00ec2a HTTP/1.1
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJuYW1lIjoibWF0ZXVzIiwiaWF0IjoxNzM5NjM2OTIwLCJleHAiOjE3Mzk2NDA1MjB9.xzfZbwY54Ful-bjeTxhi2q-AelcDWQ9pJbEGOvzIw6o
+Authorization: Bearer {{token}}
+
+###
+GET {{BASE_URL}}/task?title=T HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{token}}
+
+###
+POST {{BASE_URL}}/task HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{token}}
 
 {
     "title": "Task 01",
@@ -20,9 +35,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJuY
 }
 
 ###
-PUT http://localhost:3000/task/b4537ce0-be4e-480b-a900-43062a464783 HTTP/1.1
+PUT {{BASE_URL}}/task/b4537ce0-be4e-480b-a900-43062a464783 HTTP/1.1
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJuYW1lIjoibWF0ZXVzIiwiaWF0IjoxNzM5NjM2OTIwLCJleHAiOjE3Mzk2NDA1MjB9.xzfZbwY54Ful-bjeTxhi2q-AelcDWQ9pJbEGOvzIw6o
+Authorization: Bearer {{token}}
 
 {
     "description": "Task 02",
@@ -31,6 +46,6 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJuY
 }
 
 ###
-DELETE http://localhost:3000/task/b4537ce0-be4e-480b-a900-43062a464783 HTTP/1.1
+DELETE {{BASE_URL}}/task/b4537ce0-be4e-480b-a900-43062a464783 HTTP/1.1
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJuYW1lIjoibWF0ZXVzIiwiaWF0IjoxNzM5NjM2OTIwLCJleHAiOjE3Mzk2NDA1MjB9.xzfZbwY54Ful-bjeTxhi2q-AelcDWQ9pJbEGOvzIw6o
+Authorization: Bearer {{token}}

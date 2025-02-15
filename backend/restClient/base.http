@@ -1,0 +1,14 @@
+@BASE_URL = http://localhost:3000
+
+# @name auth_request
+POST {{BASE_URL}}/auth/login HTTP/1.1
+content-type: application/json
+
+{
+    "username": "{{username}}",
+    "password": "{{password}}"
+}
+
+###
+
+@token = {{auth_request.response.body.token}}
