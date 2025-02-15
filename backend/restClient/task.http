@@ -1,0 +1,49 @@
+# @name auth_request
+POST {{BASE_URL}}/auth/login HTTP/1.1
+content-type: application/json
+
+{
+    "username": "{{USERNAME}}",
+    "password": "{{PASSWORD}}"
+}
+
+###
+
+@token = {{auth_request.response.body.token}}
+
+###
+GET {{BASE_URL}}/task/8d99d7c6-d47b-4705-986b-7eb0cc00ec2a HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{token}}
+
+###
+GET {{BASE_URL}}/task?title=T HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{token}}
+
+###
+POST {{BASE_URL}}/task HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "title": "Task 01",
+    "description": "Task 01",
+    "expirationDate": "2024-01-01"
+}
+
+###
+PUT {{BASE_URL}}/task/b4537ce0-be4e-480b-a900-43062a464783 HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "description": "Task 02",
+    "expirationDate": "2025-01-01",
+    "title": "Task 02"
+}
+
+###
+DELETE {{BASE_URL}}/task/b4537ce0-be4e-480b-a900-43062a464783 HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{token}}
