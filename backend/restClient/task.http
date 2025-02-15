@@ -1,14 +1,17 @@
 ###
 GET http://localhost:3000/task/1 HTTP/1.1
 content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI4MDEwNTQwYy1mMzc2LTQzMjktOTNiZC04OGVlNDRhZWM1ZDciLCJ1c2VybmFtZSI6Im1hdGV1cyIsImlhdCI6MTczOTU3OTAwOSwiZXhwIjoxNzM5NTgyNjA5fQ.bIbtuAmcEpIAQn1Lbp3HwwE6giOrwAeiIvrjqv7OL5E
 
 ###
-GET http://localhost:3000/task?title=Mateus HTTP/1.1
+GET http://localhost:3000/task HTTP/1.1
 content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI4MDEwNTQwYy1mMzc2LTQzMjktOTNiZC04OGVlNDRhZWM1ZDciLCJ1c2VybmFtZSI6Im1hdGV1cyIsImlhdCI6MTczOTU3OTAwOSwiZXhwIjoxNzM5NTgyNjA5fQ.bIbtuAmcEpIAQn1Lbp3HwwE6giOrwAeiIvrjqv7OL5E
 
 ###
 POST http://localhost:3000/task HTTP/1.1
 content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI4MDEwNTQwYy1mMzc2LTQzMjktOTNiZC04OGVlNDRhZWM1ZDciLCJ1c2VybmFtZSI6Im1hdGV1cyIsImlhdCI6MTczOTU3OTAwOSwiZXhwIjoxNzM5NTgyNjA5fQ.bIbtuAmcEpIAQn1Lbp3HwwE6giOrwAeiIvrjqv7OL5E
 
 {
     "id": "1",
