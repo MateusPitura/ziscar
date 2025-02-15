@@ -1,5 +1,5 @@
 ###
-GET http://localhost:3000/task/1 HTTP/1.1
+GET http://localhost:3000/task/d6634544-46b9-43b3-8fe1-7a04f010951d HTTP/1.1
 content-type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI4MDEwNTQwYy1mMzc2LTQzMjktOTNiZC04OGVlNDRhZWM1ZDciLCJ1c2VybmFtZSI6Im1hdGV1cyIsImlhdCI6MTczOTU3OTAwOSwiZXhwIjoxNzM5NTgyNjA5fQ.bIbtuAmcEpIAQn1Lbp3HwwE6giOrwAeiIvrjqv7OL5E
 
@@ -14,25 +14,24 @@ content-type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI4MDEwNTQwYy1mMzc2LTQzMjktOTNiZC04OGVlNDRhZWM1ZDciLCJ1c2VybmFtZSI6Im1hdGV1cyIsImlhdCI6MTczOTU3OTAwOSwiZXhwIjoxNzM5NTgyNjA5fQ.bIbtuAmcEpIAQn1Lbp3HwwE6giOrwAeiIvrjqv7OL5E
 
 {
-    "id": "1",
-    "title": "Mateus",
-    "description": "description",
-    "status": "available",
-    "expirationDate": "2024-01-01"
+    "title": "Task",
+    "description": "Task 01",
+    "expirationDate": "2025-01-01"
 }
 
 ###
 PUT http://localhost:3000/task HTTP/1.1
 content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI4MDEwNTQwYy1mMzc2LTQzMjktOTNiZC04OGVlNDRhZWM1ZDciLCJ1c2VybmFtZSI6Im1hdGV1cyIsImlhdCI6MTczOTU3OTAwOSwiZXhwIjoxNzM5NTgyNjA5fQ.bIbtuAmcEpIAQn1Lbp3HwwE6giOrwAeiIvrjqv7OL5E
 
 {
-    "id": "1",
-    "title": "Enrick",
-    "description": "description",
-    "status": "available",
-    "expirationDate": "2024-01-01"
+    "id": "d6634544-46b9-43b3-8fe1-7a04f010951d",
+    "title": "Task",
+    "description": "Task 02",
+    "expirationDate": "2025-01-01"
 }
 
 ###
-DELETE http://localhost:3000/task/1 HTTP/1.1
+DELETE http://localhost:3000/task/d6634544-46b9-43b3-8fe1-7a04f010951d HTTP/1.1
 content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI4MDEwNTQwYy1mMzc2LTQzMjktOTNiZC04OGVlNDRhZWM1ZDciLCJ1c2VybmFtZSI6Im1hdGV1cyIsImlhdCI6MTczOTU3OTAwOSwiZXhwIjoxNzM5NTgyNjA5fQ.bIbtuAmcEpIAQn1Lbp3HwwE6giOrwAeiIvrjqv7OL5E
