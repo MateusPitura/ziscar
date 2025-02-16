@@ -77,7 +77,6 @@ model Role {
 
 enum Resources {
   USERS
-  AUDIT
 }
 
 enum Actions {
