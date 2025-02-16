@@ -12,21 +12,22 @@ content-type: application/json
 @token = {{auth_request.response.body.token}}
 
 ###
-POST {{BASE_URL}}/user HTTP/1.1
+POST {{BASE_URL}}/questions HTTP/1.1
 content-type: application/json
+Authorization: Bearer {{token}}
 
 {
-    "email": "pitura5@gmail.com",
-    "password": "admin"
+    "title": "title",
+    "body": "body"
 }
 
 ###
-GET {{BASE_URL}}/user/7 HTTP/1.1
+GET {{BASE_URL}}/user/6 HTTP/1.1
 content-type: application/json
 Authorization: Bearer {{token}}
 
 ###
-GET {{BASE_URL}}/user HTTP/1.1
+GET {{BASE_URL}}/questions HTTP/1.1
 content-type: application/json
 Authorization: Bearer {{token}}
 

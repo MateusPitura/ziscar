@@ -21,6 +21,9 @@ export class UserService {
   ): Promise<User | null> {
     return this.prisma.user.findUnique({
       where: userWhereUniqueInput,
+      include: {
+        questions: true,
+      },
     });
   }
 
@@ -38,6 +41,13 @@ export class UserService {
       cursor,
       where,
       orderBy,
+      include: {
+        questions: {
+          select: {
+            id: true,
+          },
+        },
+      },
     });
   }
 

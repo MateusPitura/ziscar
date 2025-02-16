@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   UseGuards,
@@ -23,8 +24,14 @@ export class UserController {
 
   @UseGuards(AuthGuard)
   @Get('/:id')
-  async getUser(@Param('id') id: string): Promise<User | null> {
-    return this.userService.user({ id: Number(id) });
+  async getUser(@Param('id', ParseIntPipe) id: number): Promise<User | null> {
+    return this.userService.user({ id });
+  }
+
+  @UseGuards(AuthGuard)
+  @Get()
+  async getUsers(): Promise<User[]> {
+    return this.userService.users({});
   }
 
   @Patch('/:id')
