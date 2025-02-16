@@ -1,0 +1,94 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Client {
+  id           Int            @id @default(autoincrement())
+  createAt     DateTime       @default(now())
+  updateAt     DateTime       @updatedAt
+  isActive     Boolean        @default(true)
+  organization Organization[]
+  user         User[]
+}
+
+model Address {
+  id           Int            @id @default(autoincrement())
+  cep          String         @db.VarChar(8)
+  number       String         @db.VarChar(128)
+  street       String?        @db.VarChar(128)
+  city         String?        @db.VarChar(128)
+  state        String?        @db.VarChar(128)
+  neighborhood String?        @db.VarChar(128)
+  complement   String?        @db.VarChar(128)
+  organization Organization[]
+  user         User[]
+}
+
+model Organization {
+  id        Int      @id @default(autoincrement())
+  createAt  DateTime @default(now())
+  updateAt  DateTime @updatedAt
+  isActive  Boolean  @default(true)
+  cnpj      String   @unique @db.VarChar(14)
+  name      String   @db.VarChar(128)
+  addressId Int
+  address   Address? @relation(fields: [addressId], references: [id])
+  clientId  Int
+  client    Client   @relation(fields: [clientId], references: [id])
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  createAt  DateTime  @default(now())
+  updateAt  DateTime  @updatedAt
+  isActive  Boolean   @default(true)
+  fullName  String    @db.VarChar(128)
+  email     String    @unique @db.VarChar(128)
+  password  String    @db.VarChar(128)
+  cpf       String?   @unique @db.VarChar(11)
+  birthDate DateTime?
+  code      String?   @unique @db.VarChar(128)
+  cellPhone String?   @db.VarChar(11)
+  addressId Int?      @unique
+  address   Address?  @relation(fields: [addressId], references: [id])
+  clientId  Int
+  client    Client    @relation(fields: [clientId], references: [id])
+  roleId    Int
+  role      Role      @relation(fields: [roleId], references: [id])
+}
+
+enum Roles {
+  ADMIN
+  FINANCE
+  SALES
+}
+
+model Role {
+  id          Int          @id @default(autoincrement())
+  name        Roles
+  user        User[]
+  permissions Permission[]
+}
+
+enum Resources {
+  USERS
+}
+
+enum Actions {
+  CREATE
+  READ
+  UPDATE
+  DELETE
+}
+
+model Permission {
+  id       Int       @id @default(autoincrement())
+  resource Resources
+  action   Actions
+  roles    Role[]
+}
