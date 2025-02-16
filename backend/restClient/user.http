@@ -1,8 +1,38 @@
+# @name auth_request
+POST {{BASE_URL}}/auth/signin HTTP/1.1
+content-type: application/json
+
+{
+    "email": "{{USERNAME}}",
+    "password": "{{PASSWORD}}"
+}
+
+###
+
+@token = {{auth_request.response.body.token}}
+
 ###
 POST {{BASE_URL}}/user HTTP/1.1
 content-type: application/json
 
 {
-    "email": "mateus@gmail.com",
+    "email": "pitura5@gmail.com",
     "password": "admin"
 }
+
+###
+GET {{BASE_URL}}/user/6 HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{token}}
+
+###
+PATCH {{BASE_URL}}/user/5 HTTP/1.1
+content-type: application/json
+
+{
+    "email": "pitura5@gmail.com"
+}
+
+###
+DELETE {{BASE_URL}}/user/5 HTTP/1.1
+content-type: application/json
