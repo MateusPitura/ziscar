@@ -36,7 +36,7 @@ model Organization {
   isActive  Boolean  @default(true)
   cnpj      String   @unique @db.VarChar(14)
   name      String   @db.VarChar(128)
-  addressId Int
+  addressId Int?
   address   Address? @relation(fields: [addressId], references: [id])
   clientId  Int
   client    Client   @relation(fields: [clientId], references: [id])
