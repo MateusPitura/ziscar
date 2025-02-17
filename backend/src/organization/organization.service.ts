@@ -1,11 +1,14 @@
 import { ConflictException, Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/database/prisma.service';
 import { OrganizationCreateInDto } from './organization.dto';
 import { Prisma } from '@prisma/client';
+import { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
+import { TransactionHost } from '@nestjs-cls/transactional';
 
 @Injectable()
 export class OrganizationService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly databaseService: TransactionHost<TransactionalAdapterPrisma>,
+  ) {}
 
   async create(organizationCreateInDto: OrganizationCreateInDto) {
     const cnpjAlreadyExist = await this.findUniqueOrganization({
@@ -18,7 +21,7 @@ export class OrganizationService {
       );
     }
 
-    return await this.prismaService.organization.create({
+    return await this.databaseService.tx.organization.create({
       data: {
         ...organizationCreateInDto,
       },
@@ -28,7 +31,7 @@ export class OrganizationService {
   async findUniqueOrganization(
     organizationWhereUniqueInput: Prisma.OrganizationWhereUniqueInput,
   ) {
-    return await this.prismaService.organization.findUnique({
+    return await this.databaseService.tx.organization.findUnique({
       where: organizationWhereUniqueInput,
     });
   }
