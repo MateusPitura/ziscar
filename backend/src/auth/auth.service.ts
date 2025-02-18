@@ -2,16 +2,18 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { AuthSigninInDto, AuthSigninOutDto, AuthSignupInDto } from './auth.dto';
 import { compareSync } from 'bcrypt';
-import { PrismaService } from 'src/database/prisma.service';
 import { ClientService } from 'src/client/client.service';
 import { OrganizationService } from 'src/organization/organization.service';
 import { UserService } from 'src/user/user.service';
+import { Transactional, TransactionHost } from '@nestjs-cls/transactional';
+import { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
+import { ADMIN_ROLE_ID } from 'prisma/seed';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
-    private readonly prismaService: PrismaService,
+    private readonly databaseService: TransactionHost<TransactionalAdapterPrisma>,
     private readonly clientService: ClientService,
     private readonly organizationService: OrganizationService,
     private readonly userService: UserService,
@@ -21,7 +23,7 @@ export class AuthService {
     email,
     password,
   }: AuthSigninInDto): Promise<AuthSigninOutDto> {
-    const user = await this.prismaService.user.findUnique({
+    const user = await this.databaseService.tx.user.findUnique({
       where: {
         email,
       },
@@ -48,6 +50,7 @@ export class AuthService {
     };
   }
 
+  @Transactional()
   async signUp({ cnpj, name, email, fullName, password }: AuthSignupInDto) {
     const { id } = await this.clientService.create();
 
@@ -62,10 +65,7 @@ export class AuthService {
       fullName,
       password,
       clientId: id,
-      roleId: 1,
+      roleId: ADMIN_ROLE_ID,
     });
-
-    // TODO: precisa de uma seed para as roles e permission
-    // TODO: caso uma dê errado precisa dar rollback nas outras
   }
 }

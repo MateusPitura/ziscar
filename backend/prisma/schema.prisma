@@ -70,7 +70,7 @@ enum Roles {
 
 model Role {
   id          Int          @id @default(autoincrement())
-  name        Roles
+  name        Roles        @unique
   user        User[]
   permissions Permission[]
 }
