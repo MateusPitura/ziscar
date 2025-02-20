@@ -12,15 +12,7 @@ export class UserService {
   ) {}
 
   async create(createUserInDto: UserCreateInDto) {
-    const emailAlreadyExist = await this.findUniqueUser({
-      email: createUserInDto.email,
-    });
-
-    if (emailAlreadyExist) {
-      throw new ConflictException(
-        `Email '${createUserInDto.email}' already exists`,
-      );
-    }
+    await this.verifyEmail(createUserInDto.email);
 
     const salt = await genSalt(10);
     createUserInDto.password = hashSync(createUserInDto.password, salt);
@@ -28,6 +20,16 @@ export class UserService {
     return await this.databaseService.tx.user.create({
       data: createUserInDto,
     });
+  }
+
+  async verifyEmail(email: string) {
+    const emailAlreadyExist = await this.findUniqueUser({
+      email,
+    });
+
+    if (emailAlreadyExist) {
+      throw new ConflictException(`Email '${email}' already exists`);
+    }
   }
 
   async findUniqueUser(userWhereUniqueInput: Prisma.UserWhereUniqueInput) {

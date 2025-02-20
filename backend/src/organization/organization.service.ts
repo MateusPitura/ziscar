@@ -11,21 +11,23 @@ export class OrganizationService {
   ) {}
 
   async create(organizationCreateInDto: OrganizationCreateInDto) {
-    const cnpjAlreadyExist = await this.findUniqueOrganization({
-      cnpj: organizationCreateInDto.cnpj,
-    });
-
-    if (cnpjAlreadyExist) {
-      throw new ConflictException(
-        `CNPJ '${organizationCreateInDto.cnpj}' already exists`,
-      );
-    }
+    await this.verifyCnpj(organizationCreateInDto.cnpj);
 
     return await this.databaseService.tx.organization.create({
       data: {
         ...organizationCreateInDto,
       },
     });
+  }
+
+  async verifyCnpj(cnpj: string) {
+    const cnpjAlreadyExist = await this.findUniqueOrganization({
+      cnpj,
+    });
+
+    if (cnpjAlreadyExist) {
+      throw new ConflictException(`CNPJ '${cnpj}' already exists`);
+    }
   }
 
   async findUniqueOrganization(

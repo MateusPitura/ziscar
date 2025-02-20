@@ -7,8 +7,23 @@ export class AuthSigninInDto {
 }
 
 export class AuthSigninOutDto {
-  token: string;
+  userId: string;
+  clinicId: string;
 }
 
-export type AuthSignupInDto = Omit<UserCreateInDto, 'clientId' | 'roleId'> &
+export type AuthVerifyAccountInDto = Omit<
+  UserCreateInDto,
+  'clientId' | 'roleId' | 'password'
+> &
   OrganizationCreateInDto;
+
+export type AuthVerifyAccountOutDto = AuthVerifyAccountInDto;
+
+export type AuthSignupInDto = Omit<
+  Omit<UserCreateInDto, 'roleId'> & OrganizationCreateInDto,
+  'clientId'
+>;
+
+export interface AuthRequest extends Request {
+  authToken: AuthSigninOutDto | AuthVerifyAccountInDto;
+}

@@ -1,6 +1,20 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { AuthSigninInDto, AuthSignupInDto } from './auth.dto';
+import {
+  AuthRequest,
+  AuthSigninInDto,
+  AuthSignupInDto,
+  AuthVerifyAccountInDto,
+} from './auth.dto';
+import { AuthGuard } from './auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -12,9 +26,23 @@ export class AuthController {
     return await this.authService.signIn(authSigninInDto);
   }
 
-  @Post('signup')
+  @Post('createPassword')
   @HttpCode(HttpStatus.CREATED)
-  async signUp(@Body() authSignupInDto: AuthSignupInDto) {
-    return await this.authService.signUp(authSignupInDto);
+  @UseGuards(AuthGuard)
+  async singUp(
+    @Req() req: AuthRequest,
+    @Body() authSignupInDto: Pick<AuthSignupInDto, 'password'>,
+  ) {
+    const signUpPayload = {
+      ...(req.authToken as AuthVerifyAccountInDto),
+      ...authSignupInDto,
+    };
+    return await this.authService.signUp(signUpPayload);
+  }
+
+  @Post('signup')
+  @HttpCode(HttpStatus.OK)
+  async verifyAccount(@Body() authSignupInDto: AuthVerifyAccountInDto) {
+    return await this.authService.verifyAccount(authSignupInDto);
   }
 }

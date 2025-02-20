@@ -4,12 +4,12 @@ import { UserModule } from './user/user.module';
 import { DatabaseModule } from './database/database.module';
 import { ConfigModule } from '@nestjs/config';
 import { ClientModule } from './client/client.module';
-import { OrganizationService } from './organization/organization.service';
 import { OrganizationModule } from './organization/organization.module';
 import { ClsModule } from 'nestjs-cls';
 import { ClsPluginTransactional } from '@nestjs-cls/transactional';
 import { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
 import { PrismaService } from './database/prisma.service';
+import { EmailModule } from './email/email.module';
 
 @Module({
   imports: [
@@ -19,6 +19,7 @@ import { PrismaService } from './database/prisma.service';
     DatabaseModule,
     ClientModule,
     OrganizationModule,
+    EmailModule,
     ClsModule.forRoot({
       plugins: [
         new ClsPluginTransactional({
@@ -30,6 +31,5 @@ import { PrismaService } from './database/prisma.service';
       ],
     }),
   ],
-  providers: [OrganizationService],
 })
 export class AppModule {}
