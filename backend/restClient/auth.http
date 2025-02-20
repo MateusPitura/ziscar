@@ -16,18 +16,35 @@ POST {{BASE_URL}}/auth/signup HTTP/1.1
 content-type: application/json
 
 {
-    "cnpj": "12345678901236",
+    "cnpj": "12345678901237",
     "name": "Mateus Veículos",
-    "email": "mateuspitura+001@gmail.com",
+    "email": "mateus@email.com",
     "fullName": "mateus"
 }
 
 ###
 POST {{BASE_URL}}/auth/createPassword HTTP/1.1
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbnBqIjoiMTIzNDU2Nzg5MDEyMzYiLCJuYW1lIjoiTWF0ZXVzIFZlw61jdWxvcyIsImVtYWlsIjoibWF0ZXVzcGl0dXJhKzAwMUBnbWFpbC5jb20iLCJmdWxsTmFtZSI6Im1hdGV1cyIsImlhdCI6MTc0MDAxMjMzOSwiZXhwIjoxNzQwMDE1OTM5fQ.ZHfQJTS-c0lkth26BDtwsWLBY4CE0-uppRGq946PMck
+Authorization: Bearer your-token
 
 
 {
-    "password": "teste"
+    "password": "teste1"
+}
+
+###
+POST {{BASE_URL}}/auth/forgetPassword HTTP/1.1
+content-type: application/json
+
+{
+    "email": "mateus@email.com"
+}
+
+###
+POST {{BASE_URL}}/auth/resetPassword HTTP/1.1
+content-type: application/json
+Authorization: Bearer your-token
+
+{
+    "password": "teste2"
 }

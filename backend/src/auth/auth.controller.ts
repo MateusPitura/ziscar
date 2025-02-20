@@ -11,8 +11,11 @@ import { AuthService } from './auth.service';
 import {
   AuthRequest,
   AuthSigninInDto,
-  AuthSignupInDto,
-  AuthVerifyAccountInDto,
+  AuthVerifyCreateAccountInDto,
+  AuthPasswordInDto,
+  AuthVerifyCreateAccountOutDto,
+  AuthVerifyResetPasswordOutDto,
+  AuthVerifyResetPasswordInDto,
 } from './auth.dto';
 import { AuthGuard } from './auth.guard';
 
@@ -21,7 +24,6 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('signin')
-  @HttpCode(HttpStatus.OK)
   async signIn(@Body() authSigninInDto: AuthSigninInDto) {
     return await this.authService.signIn(authSigninInDto);
   }
@@ -29,20 +31,45 @@ export class AuthController {
   @Post('createPassword')
   @HttpCode(HttpStatus.CREATED)
   @UseGuards(AuthGuard)
-  async singUp(
+  async createAccount(
     @Req() req: AuthRequest,
-    @Body() authSignupInDto: Pick<AuthSignupInDto, 'password'>,
+    @Body() authPasswordInDto: AuthPasswordInDto,
   ) {
-    const signUpPayload = {
-      ...(req.authToken as AuthVerifyAccountInDto),
-      ...authSignupInDto,
+    const createAccountPayload = {
+      ...(req.authToken as AuthVerifyCreateAccountOutDto),
+      ...authPasswordInDto,
     };
-    return await this.authService.signUp(signUpPayload);
+    return await this.authService.createAccount(createAccountPayload);
+  }
+
+  @Post('resetPassword')
+  @UseGuards(AuthGuard)
+  async resetPassword(
+    @Req() req: AuthRequest,
+    @Body() authPasswordInDto: AuthPasswordInDto,
+  ) {
+    const resetPasswordPayload = {
+      ...(req.authToken as AuthVerifyResetPasswordOutDto),
+      ...authPasswordInDto,
+    };
+    return await this.authService.resetPassword(resetPasswordPayload);
+  }
+
+  @Post('forgetPassword')
+  async forgetPassword(
+    @Body() authVerifyResetPasswordInDto: AuthVerifyResetPasswordInDto,
+  ) {
+    return await this.authService.verifyResetPassword(
+      authVerifyResetPasswordInDto,
+    );
   }
 
   @Post('signup')
-  @HttpCode(HttpStatus.OK)
-  async verifyAccount(@Body() authSignupInDto: AuthVerifyAccountInDto) {
-    return await this.authService.verifyAccount(authSignupInDto);
+  async verifyCreateAccount(
+    @Body() authVerifyCreateAccountInDto: AuthVerifyCreateAccountInDto,
+  ) {
+    return await this.authService.verifyCreateAccount(
+      authVerifyCreateAccountInDto,
+    );
   }
 }

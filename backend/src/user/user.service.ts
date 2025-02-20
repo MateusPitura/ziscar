@@ -14,8 +14,9 @@ export class UserService {
   async create(createUserInDto: UserCreateInDto) {
     await this.verifyEmail(createUserInDto.email);
 
-    const salt = await genSalt(10);
-    createUserInDto.password = hashSync(createUserInDto.password, salt);
+    createUserInDto.password = await this.encryptPassword(
+      createUserInDto.password,
+    );
 
     return await this.databaseService.tx.user.create({
       data: createUserInDto,
@@ -32,11 +33,30 @@ export class UserService {
     }
   }
 
-  async findUniqueUser(userWhereUniqueInput: Prisma.UserWhereUniqueInput) {
+  async findUniqueUser(
+    userWhereUniqueInput: Prisma.UserWhereUniqueInput,
+    select?: Prisma.UserSelect,
+  ) {
     return await this.databaseService.tx.user.findUnique({
       where: userWhereUniqueInput,
-      omit: {
-        password: true,
+      select,
+    });
+  }
+
+  private async encryptPassword(password: string) {
+    const salt = await genSalt(10);
+    return hashSync(password, salt);
+  }
+
+  async changePassword(email: string, password: string) {
+    const encryptedPassword = await this.encryptPassword(password);
+
+    return await this.databaseService.tx.user.update({
+      where: {
+        email,
+      },
+      data: {
+        password: encryptedPassword,
       },
     });
   }

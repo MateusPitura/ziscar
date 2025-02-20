@@ -11,19 +11,32 @@ export class AuthSigninOutDto {
   clinicId: string;
 }
 
-export type AuthVerifyAccountInDto = Omit<
-  UserCreateInDto,
-  'clientId' | 'roleId' | 'password'
-> &
-  OrganizationCreateInDto;
+export type AuthVerifyCreateAccountInDto = Omit<
+  Omit<UserCreateInDto, 'roleId' | 'password'> & OrganizationCreateInDto,
+  'clientId'
+>;
 
-export type AuthVerifyAccountOutDto = AuthVerifyAccountInDto;
+export type AuthVerifyCreateAccountOutDto = AuthVerifyCreateAccountInDto;
 
-export type AuthSignupInDto = Omit<
+export type AuthCreateAccountInDto = Omit<
   Omit<UserCreateInDto, 'roleId'> & OrganizationCreateInDto,
   'clientId'
 >;
 
+export type AuthVerifyResetPasswordInDto = Pick<UserCreateInDto, 'email'>;
+
+export type AuthVerifyResetPasswordOutDto = AuthVerifyResetPasswordInDto;
+
+export type AuthResetPasswordInDto = Pick<
+  UserCreateInDto,
+  'email' | 'password'
+>;
+
+export type AuthPasswordInDto = Pick<UserCreateInDto, 'password'>;
+
 export interface AuthRequest extends Request {
-  authToken: AuthSigninOutDto | AuthVerifyAccountInDto;
+  authToken:
+    | AuthSigninOutDto
+    | AuthVerifyCreateAccountInDto
+    | AuthVerifyResetPasswordOutDto;
 }

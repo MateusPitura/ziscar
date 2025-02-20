@@ -5,7 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { AuthSigninOutDto, AuthVerifyAccountInDto } from './auth.dto';
+import { AuthRequest } from './auth.dto';
 import { Request } from 'express';
 
 @Injectable()
@@ -23,7 +23,7 @@ export class AuthGuard implements CanActivate {
 
     try {
       const payload = await this.jwtService.verifyAsync<
-        AuthSigninOutDto | AuthVerifyAccountInDto
+        AuthRequest['authToken']
       >(token, {
         secret: process.env.JWT_SECRET,
       });
