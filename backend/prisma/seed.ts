@@ -1,6 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-
-export const ADMIN_ROLE_ID = 1;
+import { ADMIN_ROLE_ID } from 'src/types';
 
 const prisma = new PrismaClient();
 

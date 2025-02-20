@@ -17,7 +17,7 @@ import { OrganizationService } from 'src/organization/organization.service';
 import { UserService } from 'src/user/user.service';
 import { Transactional } from '@nestjs-cls/transactional';
 import { EmailService } from 'src/email/email.service';
-import { ADMIN_ROLE_ID } from 'prisma/seed';
+import { ADMIN_ROLE_ID } from 'src/types';
 
 @Injectable()
 export class AuthService {
