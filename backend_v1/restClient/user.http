@@ -1,8 +1,0 @@
-###
-POST {{BASE_URL}}/user HTTP/1.1
-content-type: application/json
-
-{
-    "username": "mateus",
-    "password": "admin"
-}
