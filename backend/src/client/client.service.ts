@@ -1,16 +1,15 @@
-import { TransactionHost } from '@nestjs-cls/transactional';
-import { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
 import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../database/prisma.service';
 
 @Injectable()
 export class ClientService {
-  constructor(
-    private readonly databaseService: TransactionHost<TransactionalAdapterPrisma>,
-  ) {}
+  constructor(private readonly databaseService: PrismaService) {}
 
   async create() {
-    return await this.databaseService.tx.client.create({
+    const client = await this.databaseService.client.create({
       data: {},
     });
+
+    return { clientId: client.id };
   }
 }

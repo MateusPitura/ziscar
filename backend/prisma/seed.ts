@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { ADMIN_ROLE_ID } from 'src/types';
+import { ADMIN_ROLE_ID } from '../src/types';
 
 const prisma = new PrismaClient();
 

@@ -3,11 +3,10 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { DatabaseModule } from 'src/database/database.module';
-import { OrganizationModule } from 'src/organization/organization.module';
-import { UserModule } from 'src/user/user.module';
-import { ClientModule } from 'src/client/client.module';
-import { EmailModule } from 'src/email/email.module';
+import { OrganizationModule } from '../organization/organization.module';
+import { UserModule } from '../user/user.module';
+import { ClientModule } from '../client/client.module';
+import { EmailModule } from '../email/email.module';
 
 @Module({
   imports: [
@@ -21,7 +20,6 @@ import { EmailModule } from 'src/email/email.module';
       }),
       inject: [ConfigService],
     }),
-    DatabaseModule,
     OrganizationModule,
     UserModule,
     ClientModule,
