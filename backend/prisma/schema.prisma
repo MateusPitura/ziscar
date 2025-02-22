@@ -52,7 +52,7 @@ model User {
   password  String    @db.VarChar(128)
   cpf       String?   @unique @db.VarChar(11)
   birthDate DateTime?
-  code      String?   @unique @db.VarChar(128)
+  code      String?   @db.VarChar(128)
   cellPhone String?   @db.VarChar(11)
   addressId Int?      @unique
   address   Address?  @relation(fields: [addressId], references: [id])
