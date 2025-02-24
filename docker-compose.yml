@@ -6,13 +6,27 @@ services:
     restart: always
     env_file: .env
     environment:
-      - POSTGRES_USES=${DB_USER}
+      - POSTGRES_USER=${DB_USERNAME}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=${DB_NAME}
     ports:
       - "${DB_PORT}:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+
+  test_postgres:
+    image: postgres:16
+    container_name: test_pds_db
+    restart: always
+    env_file: .env
+    environment:
+      - POSTGRES_USER=${TEST_DB_USERNAME}
+      - POSTGRES_PASSWORD=${TEST_DB_PASSWORD}
+      - POSTGRES_DB=${TEST_DB_NAME}
+    ports:
+      - "${TEST_DB_PORT}:5432"
+    volumes:
+      - test-pgdata:/var/lib/postgresql/data
 
   # backend:
   #   build:
@@ -40,3 +54,4 @@ services:
 
 volumes:
   pgdata:
+  test-pgdata:

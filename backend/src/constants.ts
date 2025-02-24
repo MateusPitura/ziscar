@@ -1,0 +1,7 @@
+export const ITEMS_PER_PAGE = 20;
+
+export const SEED_ROLE_ADMIN_ID = 1;
+
+export const POPULATE_USER_DEFAULT_ID = 150;
+export const POPULATE_ORGANIZATION_DEFAULT_ID = 443;
+export const POPULATE_CLIENT_DEFAULT_ID = 145;
