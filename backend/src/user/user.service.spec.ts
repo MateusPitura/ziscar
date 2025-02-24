@@ -21,7 +21,7 @@ describe('UserService', () => {
     await prismaService.transaction(async (transaction) => {
       const user = await userService.create(
         {
-          email: 'testuser+001@email.com',
+          email: 'testuser+002@email.com',
           password: 'admin',
           fullName: 'Test User',
           clientId: POPULATE_CLIENT_DEFAULT_ID,
@@ -40,7 +40,7 @@ describe('UserService', () => {
     await prismaService.transaction(async (transaction) => {
       await userService.create(
         {
-          email: 'testuser+001@email.com',
+          email: 'testuser+002@email.com',
           password: 'admin',
           fullName: 'Test User',
           clientId: POPULATE_CLIENT_DEFAULT_ID,
@@ -52,7 +52,7 @@ describe('UserService', () => {
       await expect(
         userService.create(
           {
-            email: 'testuser+001@email.com',
+            email: 'testuser+002@email.com',
             password: 'admin',
             fullName: 'Test User',
             clientId: POPULATE_CLIENT_DEFAULT_ID,

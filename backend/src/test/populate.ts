@@ -35,7 +35,7 @@ async function seed() {
       data: {
         id: POPULATE_USER_DEFAULT_ID,
         fullName: 'Test User',
-        email: 'testuser+002@email.com',
+        email: 'testuser+001@email.com',
         password: 'admin',
         clientId: POPULATE_CLIENT_DEFAULT_ID,
         roleId: SEED_ROLE_ADMIN_ID,
