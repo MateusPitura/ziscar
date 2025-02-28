@@ -4,8 +4,8 @@ import {
   POPULATE_ORGANIZATION_DEFAULT,
   POPULATE_USER_DEFAULT,
   SEED_ROLE_ADMIN_ID,
-} from '../constants';
-import { encryptPassword } from '../user/user.utils';
+} from '../src/constants';
+import { encryptPassword } from '../src/user/user.utils';
 import { faker } from '@faker-js/faker';
 
 const prisma = new PrismaClient();

@@ -17,7 +17,7 @@ function setup() {
   execSync('ts-node ./prisma/seed.ts');
 
   console.log('🌠 Running populate...');
-  execSync('ts-node ./src/test/populate.ts');
+  execSync('ts-node ./prisma/populate.ts');
 
   console.log('🌠 Successfully set up database');
 }
