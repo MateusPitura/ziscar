@@ -1,10 +1,12 @@
 import { PrismaClient } from '@prisma/client';
 import {
   POPULATE_CLIENT_DEFAULT_ID,
-  POPULATE_ORGANIZATION_DEFAULT_ID,
-  POPULATE_USER_DEFAULT_ID,
+  POPULATE_ORGANIZATION_DEFAULT,
+  POPULATE_USER_DEFAULT,
   SEED_ROLE_ADMIN_ID,
 } from '../constants';
+import { encryptPassword } from '../user/user.utils';
+import { faker } from '@faker-js/faker';
 
 const prisma = new PrismaClient();
 
@@ -22,9 +24,7 @@ async function seed() {
   promises.push(
     prisma.organization.create({
       data: {
-        id: POPULATE_ORGANIZATION_DEFAULT_ID,
-        name: 'Organization Test',
-        cnpj: '12345678901234',
+        ...POPULATE_ORGANIZATION_DEFAULT,
         clientId: POPULATE_CLIENT_DEFAULT_ID,
       },
     }),
@@ -33,13 +33,28 @@ async function seed() {
   promises.push(
     prisma.user.create({
       data: {
-        id: POPULATE_USER_DEFAULT_ID,
-        fullName: 'Test User',
-        email: 'testuser+001@email.com',
-        password: 'admin',
+        ...POPULATE_USER_DEFAULT,
+        password: await encryptPassword(POPULATE_USER_DEFAULT.password),
         clientId: POPULATE_CLIENT_DEFAULT_ID,
         roleId: SEED_ROLE_ADMIN_ID,
       },
+    }),
+  );
+
+  const usersPromise = Array.from({ length: 30 }, async (_, index) => ({
+    fullName: faker.person.fullName(),
+    email: faker.internet.email(),
+    isActive: index > 5,
+    password: await encryptPassword(faker.internet.password()),
+    clientId: POPULATE_CLIENT_DEFAULT_ID,
+    roleId: SEED_ROLE_ADMIN_ID,
+  }));
+
+  const users = await Promise.all(usersPromise);
+
+  promises.push(
+    prisma.user.createMany({
+      data: users,
     }),
   );
 

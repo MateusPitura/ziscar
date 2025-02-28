@@ -20,24 +20,41 @@ content-type: application/json
 #     "password": "admin"
 # }
 
-# ###
-# GET {{BASE_URL}}/user/7 HTTP/1.1
-# content-type: application/json
-# Authorization: Bearer {{token}}
+###
+GET {{BASE_URL}}/user/1 HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{token}}
 
-# ###
-# GET {{BASE_URL}}/user HTTP/1.1
-# content-type: application/json
-# Authorization: Bearer {{token}}
+###
+GET {{BASE_URL}}/user?page=1&fullName=john&orderBy=email&status=active HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{token}}
 
-# ###
-# PATCH {{BASE_URL}}/user/5 HTTP/1.1
-# content-type: application/json
+###
+PATCH {{BASE_URL}}/user/1 HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{token}}
 
-# {
-#     "email": "pitura5@gmail.com"
-# }
+{
+    "cpf": "11111111111"
+}
 
-# ###
-# DELETE {{BASE_URL}}/user/5 HTTP/1.1
-# content-type: application/json
+###
+PATCH {{BASE_URL}}/user/7 HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "address": {
+        "cep": "12345676"
+    }
+}
+
+###
+PATCH {{BASE_URL}}/user/7 HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "isActive": true
+}

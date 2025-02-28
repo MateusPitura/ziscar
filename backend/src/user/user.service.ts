@@ -1,63 +1,156 @@
 import { ConflictException, Injectable } from '@nestjs/common';
+import { UserUpdateInDto, UserCreateInDto, UserFindAllInDto } from './user.dto';
 import { Prisma } from '@prisma/client';
-import { UserCreateInDto } from './user.dto';
-import { genSalt, hashSync } from 'bcrypt';
-import { TransactionHost } from '@nestjs-cls/transactional';
-import { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
+import { ITEMS_PER_PAGE } from '../constants';
+import { PrismaService } from '../database/prisma.service';
+import { Transaction } from 'src/types';
+import { encryptPassword } from './user.utils';
+import { SELECT_USER } from './user.constants';
+
+type VerifyDuplicatedKeys = Pick<Prisma.UserGetPayload<null>, 'email' | 'cpf'>;
 
 @Injectable()
 export class UserService {
-  constructor(
-    private readonly databaseService: TransactionHost<TransactionalAdapterPrisma>,
-  ) {}
+  constructor(private readonly prismaService: PrismaService) {}
 
-  async create(createUserInDto: UserCreateInDto) {
-    await this.verifyEmail(createUserInDto.email);
+  async create(createUserInDto: UserCreateInDto, transaction?: Transaction) {
+    const database = transaction || this.prismaService;
+
+    await this.verifyDuplicated({ email: createUserInDto.email }, transaction);
 
     createUserInDto.password = await this.encryptPassword(
       createUserInDto.password,
     );
 
-    return await this.databaseService.tx.user.create({
+    const user = await database.user.create({
       data: createUserInDto,
     });
+
+    return { userId: user.id };
   }
 
-  async verifyEmail(email: string) {
-    const emailAlreadyExist = await this.findUniqueUser({
-      email,
-    });
+  async fetch(userFindAllInDto: UserFindAllInDto, select?: Prisma.UserSelect) {
+    const { page = 1 } = userFindAllInDto;
+    const skip = (page - 1) * ITEMS_PER_PAGE;
 
-    if (emailAlreadyExist) {
-      throw new ConflictException(`Email '${email}' already exists`);
+    const findManyWhere = {
+      where: {
+        isActive: true,
+      },
+    };
+    const orderBy = userFindAllInDto?.orderBy;
+    if (orderBy) {
+      findManyWhere['orderBy'] = [
+        {
+          [orderBy as string]: 'asc',
+        },
+      ];
     }
+    const searchByFullName = userFindAllInDto?.fullName;
+    if (searchByFullName) {
+      findManyWhere.where['fullName'] = {
+        contains: searchByFullName.toLocaleLowerCase(),
+        mode: 'insensitive',
+      };
+    }
+    const status = userFindAllInDto?.status;
+    if (status === 'inactive') {
+      findManyWhere.where['isActive'] = false;
+    }
+
+    const [users, total] = await Promise.all([
+      this.prismaService.user.findMany({
+        skip,
+        take: ITEMS_PER_PAGE,
+        select,
+        ...findManyWhere,
+      }),
+      this.prismaService.user.count(findManyWhere),
+    ]);
+
+    return {
+      total,
+      users,
+    };
   }
 
-  async findUniqueUser(
-    userWhereUniqueInput: Prisma.UserWhereUniqueInput,
-    select?: Prisma.UserSelect,
+  async get(
+    userWhereUniqueInput: Partial<Prisma.UserWhereUniqueInput>,
+    select: Prisma.UserSelect,
+    transaction?: Transaction,
   ) {
-    return await this.databaseService.tx.user.findUnique({
-      where: userWhereUniqueInput,
+    const database = transaction || this.prismaService;
+    return await database.user.findFirst({
+      where: userWhereUniqueInput as Prisma.UserWhereUniqueInput,
       select,
     });
   }
 
-  private async encryptPassword(password: string) {
-    const salt = await genSalt(10);
-    return hashSync(password, salt);
+  async update(
+    userWhereUniqueInput: Prisma.UserWhereUniqueInput,
+    userUpdateInDto: UserUpdateInDto,
+    transaction?: Transaction,
+  ) {
+    const database = transaction || this.prismaService;
+
+    await this.verifyDuplicated(
+      {
+        email: userUpdateInDto.email as string,
+        cpf: userUpdateInDto.cpf as string,
+      },
+      transaction,
+    );
+
+    const { address, ...rest } = userUpdateInDto;
+
+    const updatePayload = {
+      ...rest,
+    };
+    if (address) {
+      updatePayload['address'] = {
+        upsert: {
+          create: {
+            ...address,
+            cep: address.cep || '',
+            number: address.number || '',
+          },
+          update: address,
+        },
+      };
+    }
+
+    if (userUpdateInDto.password) {
+      updatePayload['password'] = await this.encryptPassword(
+        userUpdateInDto.password as string,
+      );
+    }
+
+    return await database.user.update({
+      where: userWhereUniqueInput,
+      data: updatePayload,
+      select: SELECT_USER,
+    });
   }
 
-  async changePassword(email: string, password: string) {
-    const encryptedPassword = await this.encryptPassword(password);
+  async verifyDuplicated(
+    properties: Partial<Record<keyof VerifyDuplicatedKeys, string>>,
+    transaction?: Transaction,
+  ) {
+    const whereClause: Record<string, string>[] = [];
+    for (const [key, value] of Object.entries(properties)) {
+      if (!value) continue;
+      whereClause.push({ [key]: value });
+    }
 
-    return await this.databaseService.tx.user.update({
-      where: {
-        email,
-      },
-      data: {
-        password: encryptedPassword,
-      },
-    });
+    const user = await this.get({ OR: whereClause }, { id: true }, transaction);
+
+    if (user) {
+      const keysFormatted = Object.keys(properties).join(' or ');
+      throw new ConflictException(`Property ${keysFormatted} already exists`);
+    }
+  }
+
+  async encryptPassword(password: string) {
+    return encryptPassword(password);
   }
 }

@@ -17,9 +17,9 @@ content-type: application/json
 
 {
     "cnpj": "12345678901237",
-    "name": "Mateus Veículos",
-    "email": "mateus@email.com",
-    "fullName": "mateus"
+    "name": "Wayne Enterprises",
+    "email": "john.doe@email.com",
+    "fullName": "John Doe"
 }
 
 ###
@@ -29,7 +29,7 @@ Authorization: Bearer your-token
 
 
 {
-    "password": "teste1"
+    "password": "123456"
 }
 
 ###
@@ -37,7 +37,7 @@ POST {{BASE_URL}}/auth/forgetPassword HTTP/1.1
 content-type: application/json
 
 {
-    "email": "mateus@email.com"
+    "email": "john.doe@email.com"
 }
 
 ###
@@ -46,5 +46,5 @@ content-type: application/json
 Authorization: Bearer your-token
 
 {
-    "password": "teste2"
+    "password": "123456"
 }

@@ -1,10 +1,10 @@
 import { execSync } from 'child_process';
 import { config } from 'dotenv';
 
-config({ path: '.env.test', override: true });
+config({ path: '.env.test.local', override: true });
 
 module.exports = () => {
-  console.log('\n🌠 Setting up test database...');
+  console.log('\n🌠 Setting up database...');
 
   console.log('🌠 Resetting database and applying migrations...');
   execSync('npx prisma migrate reset --force');
@@ -18,5 +18,5 @@ module.exports = () => {
   console.log('🌠 Running populate...');
   execSync('ts-node ./src/test/populate.ts');
 
-  console.log('🌠 Successfully set up test database');
+  console.log('🌠 Successfully set up database');
 };

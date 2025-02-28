@@ -12,12 +12,11 @@ import {
   AuthVerifyResetPasswordInDto,
 } from './auth.dto';
 import { compareSync } from 'bcrypt';
-import { ClientService } from 'src/client/client.service';
-import { OrganizationService } from 'src/organization/organization.service';
-import { UserService } from 'src/user/user.service';
-import { Transactional } from '@nestjs-cls/transactional';
-import { EmailService } from 'src/email/email.service';
-import { ADMIN_ROLE_ID } from 'src/types';
+import { ClientService } from '../client/client.service';
+import { OrganizationService } from '../organization/organization.service';
+import { UserService } from '../user/user.service';
+import { EmailService } from '../email/email.service';
+import { SEED_ROLE_ADMIN_ID } from '../constants';
 
 @Injectable()
 export class AuthService {
@@ -30,7 +29,7 @@ export class AuthService {
   ) {}
 
   async signIn({ email, password }: AuthSigninInDto) {
-    const user = await this.userService.findUniqueUser(
+    const user = await this.userService.get(
       { email },
       {
         id: true,
@@ -55,7 +54,6 @@ export class AuthService {
     };
   }
 
-  @Transactional()
   async createAccount({
     cnpj,
     name,
@@ -63,25 +61,29 @@ export class AuthService {
     fullName,
     password,
   }: AuthCreateAccountInDto) {
-    const { id } = await this.clientService.create();
+    const { clientId } = await this.clientService.create();
 
     await this.organizationService.create({
       cnpj,
       name,
-      clientId: id,
+      clientId,
     });
 
     await this.userService.create({
       email,
       fullName,
       password,
-      clientId: id,
-      roleId: ADMIN_ROLE_ID,
+      clientId,
+      roleId: SEED_ROLE_ADMIN_ID,
     });
+
+    return true;
   }
 
   async resetPassword({ email, password }: AuthResetPasswordInDto) {
-    await this.userService.changePassword(email, password);
+    await this.userService.update({ email }, { password });
+
+    return true;
   }
 
   async verifyCreateAccount({
@@ -89,7 +91,7 @@ export class AuthService {
     email,
     ...rest
   }: AuthVerifyCreateAccountInDto) {
-    await this.userService.verifyEmail(email);
+    // await this.userService.verifyEmail(email);
     await this.organizationService.verifyCnpj(cnpj);
 
     const token = this.jwtService.sign({
@@ -103,21 +105,25 @@ export class AuthService {
       title: 'Confirme sua conta',
       body: `${token}`,
     });
+
+    return true;
   }
 
   async verifyResetPassword({ email }: AuthVerifyResetPasswordInDto) {
-    const userEmail = await this.userService.findUniqueUser({ email });
+    const user = await this.userService.get({ email }, { id: true });
 
-    if (userEmail) {
-      const token = this.jwtService.sign({ email });
-
-      await this.emailService.sendEmail({
-        to: email,
-        title: 'Redefina sua senha',
-        body: `${token}`,
-      });
-    } else {
+    if (!user) {
       throw new NotFoundException();
     }
+
+    const token = this.jwtService.sign({ email });
+
+    await this.emailService.sendEmail({
+      to: email,
+      title: 'Redefina sua senha',
+      body: `${token}`,
+    });
+
+    return true;
   }
 }
