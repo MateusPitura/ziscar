@@ -1,13 +1,12 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { UserUpdateInDto, UserCreateInDto, UserFindAllInDto } from './user.dto';
 import { Prisma } from '@prisma/client';
 import { ITEMS_PER_PAGE } from '../constants';
 import { PrismaService } from '../database/prisma.service';
-import { Transaction } from 'src/types';
+import { GetCallback, Transaction } from 'src/types';
 import { encryptPassword } from './user.utils';
 import { SELECT_USER } from './user.constants';
-
-type VerifyDuplicatedKeys = Pick<Prisma.UserGetPayload<null>, 'email' | 'cpf'>;
+import { verifyDuplicated } from '../utils/verifyDuplicated';
 
 @Injectable()
 export class UserService {
@@ -81,7 +80,7 @@ export class UserService {
   ) {
     const database = transaction || this.prismaService;
     return await database.user.findFirst({
-      where: userWhereUniqueInput as Prisma.UserWhereUniqueInput,
+      where: userWhereUniqueInput,
       select,
     });
   }
@@ -133,21 +132,14 @@ export class UserService {
   }
 
   async verifyDuplicated(
-    properties: Partial<Record<keyof VerifyDuplicatedKeys, string>>,
+    properties: Partial<Record<'email' | 'cpf', string>>,
     transaction?: Transaction,
   ) {
-    const whereClause: Record<string, string>[] = [];
-    for (const [key, value] of Object.entries(properties)) {
-      if (!value) continue;
-      whereClause.push({ [key]: value });
-    }
-
-    const user = await this.get({ OR: whereClause }, { id: true }, transaction);
-
-    if (user) {
-      const keysFormatted = Object.keys(properties).join(' or ');
-      throw new ConflictException(`Property ${keysFormatted} already exists`);
-    }
+    await verifyDuplicated(
+      properties,
+      this.get.bind(this) as GetCallback,
+      transaction,
+    );
   }
 
   async encryptPassword(password: string) {

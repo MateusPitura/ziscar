@@ -7,3 +7,9 @@ export type Transaction = Omit<
 > & {
   rollback: () => void;
 };
+
+export type GetCallback = (
+  entityWhereUniqueInput: Partial<Record<'OR', Record<string, string>[]>>,
+  select: { id: boolean },
+  transaction?: Transaction,
+) => Promise<{ id: string } | null>;

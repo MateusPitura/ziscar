@@ -17,6 +17,8 @@ import { OrganizationService } from '../organization/organization.service';
 import { UserService } from '../user/user.service';
 import { EmailService } from '../email/email.service';
 import { SEED_ROLE_ADMIN_ID } from '../constants';
+import { PrismaService } from 'src/database/prisma.service';
+import { Transaction } from 'src/types';
 
 @Injectable()
 export class AuthService {
@@ -26,9 +28,10 @@ export class AuthService {
     private readonly organizationService: OrganizationService,
     private readonly userService: UserService,
     private readonly emailService: EmailService,
+    private readonly prismaService: PrismaService,
   ) {}
 
-  async signIn({ email, password }: AuthSigninInDto) {
+  async signIn({ email, password }: AuthSigninInDto, transaction: Transaction) {
     const user = await this.userService.get(
       { email },
       {
@@ -36,6 +39,7 @@ export class AuthService {
         clientId: true,
         password: true,
       },
+      transaction,
     );
 
     if (!user || !compareSync(password, user.password)) {
@@ -61,23 +65,31 @@ export class AuthService {
     fullName,
     password,
   }: AuthCreateAccountInDto) {
-    const { clientId } = await this.clientService.create();
+    await this.prismaService.transaction(async (transaction) => {
+      const { clientId } = await this.clientService.create(transaction);
 
-    await this.organizationService.create({
-      cnpj,
-      name,
-      clientId,
+      await this.organizationService.create(
+        {
+          cnpj,
+          name,
+          clientId,
+        },
+        transaction,
+      );
+
+      await this.userService.create(
+        {
+          email,
+          fullName,
+          password,
+          clientId,
+          roleId: SEED_ROLE_ADMIN_ID,
+        },
+        transaction,
+      );
+
+      return true;
     });
-
-    await this.userService.create({
-      email,
-      fullName,
-      password,
-      clientId,
-      roleId: SEED_ROLE_ADMIN_ID,
-    });
-
-    return true;
   }
 
   async resetPassword({ email, password }: AuthResetPasswordInDto) {
@@ -91,8 +103,10 @@ export class AuthService {
     email,
     ...rest
   }: AuthVerifyCreateAccountInDto) {
-    // await this.userService.verifyEmail(email);
-    await this.organizationService.verifyCnpj(cnpj);
+    await Promise.all([
+      this.userService.verifyDuplicated({ email }),
+      this.organizationService.verifyDuplicated({ cnpj }),
+    ]);
 
     const token = this.jwtService.sign({
       cnpj,

@@ -1,9 +1,10 @@
 import { execSync } from 'child_process';
 import { config } from 'dotenv';
 
-config({ path: '.env.test.local', override: true });
+const path = process.env.NODE_ENV === 'test' ? '.env.test.local' : '.env';
+config({ path, override: true });
 
-module.exports = () => {
+function setup() {
   console.log('\n🌠 Setting up database...');
 
   console.log('🌠 Resetting database and applying migrations...');
@@ -19,4 +20,6 @@ module.exports = () => {
   execSync('ts-node ./src/test/populate.ts');
 
   console.log('🌠 Successfully set up database');
-};
+}
+
+setup();

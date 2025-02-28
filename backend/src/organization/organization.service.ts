@@ -1,16 +1,23 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { OrganizationCreateInDto } from './organization.dto';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../database/prisma.service';
+import { GetCallback, Transaction } from '../types';
+import { verifyDuplicated } from '../utils/verifyDuplicated';
 
 @Injectable()
 export class OrganizationService {
-  constructor(private readonly databaseService: PrismaService) {}
+  constructor(private readonly prismaService: PrismaService) {}
 
-  async create(organizationCreateInDto: OrganizationCreateInDto) {
-    await this.verifyCnpj(organizationCreateInDto.cnpj);
+  async create(
+    organizationCreateInDto: OrganizationCreateInDto,
+    transaction: Transaction,
+  ) {
+    const database = transaction || this.prismaService;
 
-    const organization = await this.databaseService.organization.create({
+    await this.verifyDuplicated({ cnpj: organizationCreateInDto.cnpj });
+
+    const organization = await database.organization.create({
       data: {
         ...organizationCreateInDto,
       },
@@ -21,26 +28,26 @@ export class OrganizationService {
     };
   }
 
-  async verifyCnpj(cnpj: string) {
-    const organization = await this.findOne(
-      {
-        cnpj,
-      },
-      { id: true },
-    );
-
-    if (organization) {
-      throw new ConflictException(`CNPJ '${cnpj}' already exists`);
-    }
-  }
-
-  async findOne(
+  async get(
     organizationWhereUniqueInput: Prisma.OrganizationWhereUniqueInput,
     select: Prisma.OrganizationSelect,
+    transaction?: Transaction,
   ) {
-    return await this.databaseService.organization.findUnique({
+    const database = transaction || this.prismaService;
+    return await database.organization.findFirst({
       where: organizationWhereUniqueInput,
       select,
     });
+  }
+
+  async verifyDuplicated(
+    properties: Partial<Record<'cnpj', string>>,
+    transaction?: Transaction,
+  ) {
+    await verifyDuplicated(
+      properties,
+      this.get.bind(this) as GetCallback,
+      transaction,
+    );
   }
 }
