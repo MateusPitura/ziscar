@@ -17,8 +17,8 @@ import { OrganizationService } from '../organization/organization.service';
 import { UserService } from '../user/user.service';
 import { EmailService } from '../email/email.service';
 import { SEED_ROLE_ADMIN_ID } from '../constants';
-import { PrismaService } from 'src/database/prisma.service';
-import { Transaction } from 'src/types';
+import { PrismaService } from '../database/prisma.service';
+import { Transaction } from '../types';
 
 @Injectable()
 export class AuthService {
@@ -31,7 +31,10 @@ export class AuthService {
     private readonly prismaService: PrismaService,
   ) {}
 
-  async signIn({ email, password }: AuthSigninInDto, transaction: Transaction) {
+  async signIn(
+    { email, password }: AuthSigninInDto,
+    transaction?: Transaction,
+  ) {
     const user = await this.userService.get(
       { email },
       {
