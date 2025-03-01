@@ -90,8 +90,11 @@ export class AuthService {
     return true;
   }
 
-  async resetPassword({ email, password }: AuthResetPasswordInDto) {
-    await this.userService.update({ email }, { password });
+  async resetPassword(
+    { email, password }: AuthResetPasswordInDto,
+    transaction?: Transaction,
+  ) {
+    await this.userService.update({ email }, { password }, transaction);
 
     return true;
   }

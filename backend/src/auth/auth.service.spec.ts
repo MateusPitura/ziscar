@@ -123,4 +123,20 @@ describe('AuthService', () => {
       transaction.rollback();
     });
   });
+
+  it('should reset password', async () => {
+    await prismaService.transaction(async (transaction) => {
+      const spy = jest.spyOn(authService['userService'], 'encryptPassword');
+
+      const response = await authService.resetPassword({
+        email: POPULATE_USER_DEFAULT.email,
+        password: '123456',
+      });
+
+      expect(response).toBeTruthy();
+      expect(spy).toHaveBeenCalledWith('123456');
+
+      transaction.rollback();
+    });
+  });
 });
