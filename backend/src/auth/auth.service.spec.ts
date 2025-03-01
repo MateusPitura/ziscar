@@ -10,14 +10,15 @@ import {
   POPULATE_ORGANIZATION_DEFAULT,
   POPULATE_USER_DEFAULT,
 } from '../constants';
-import { ConflictException, UnauthorizedException } from '@nestjs/common';
-import { SendEmailInDto } from '../email/email.dto';
+import {
+  ConflictException,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 
 describe('AuthService', () => {
   let authService: AuthService;
   let prismaService: PrismaService;
-
-  let mailman: SendEmailInDto;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -31,9 +32,7 @@ describe('AuthService', () => {
         {
           provide: EmailService,
           useValue: {
-            sendEmail: jest.fn((data: SendEmailInDto) => {
-              mailman = data;
-            }),
+            sendEmail: jest.fn(),
           },
         },
         {
@@ -141,6 +140,8 @@ describe('AuthService', () => {
   });
 
   it('should verify create account', async () => {
+    const spy = jest.spyOn(authService['emailService'], 'sendEmail');
+
     await authService.verifyCreateAccount({
       cnpj: '12345678901235',
       email: 'jane.doe@email.com',
@@ -148,9 +149,11 @@ describe('AuthService', () => {
       name: 'Wayne Enterprises',
     });
 
-    expect(mailman).toHaveProperty('to', 'jane.doe@email.com');
-    expect(mailman).toHaveProperty('title', 'Confirme sua conta');
-    expect(mailman).toHaveProperty('body', '');
+    expect(spy).toHaveBeenCalledWith({
+      to: 'jane.doe@email.com',
+      title: 'Confirme sua conta',
+      body: '',
+    });
   });
 
   it('should not verify create account due to duplicated email', async () => {
@@ -175,5 +178,25 @@ describe('AuthService', () => {
     ).rejects.toThrow(ConflictException);
   });
 
-  // falta o teste do verify reset password
+  it('should verify reset password', async () => {
+    const spy = jest.spyOn(authService['emailService'], 'sendEmail');
+
+    await authService.verifyResetPassword({
+      email: POPULATE_USER_DEFAULT.email,
+    });
+
+    expect(spy).toHaveBeenCalledWith({
+      to: POPULATE_USER_DEFAULT.email,
+      title: 'Redefina sua senha',
+      body: '',
+    });
+  });
+
+  it('should not verify reset password due to email that not exist', async () => {
+    await expect(
+      authService.verifyResetPassword({
+        email: 'jane.doe@email.com',
+      }),
+    ).rejects.toThrow(NotFoundException);
+  });
 });
