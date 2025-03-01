@@ -3,9 +3,13 @@ import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { PrismaService } from '../database/prisma.service';
 import { JwtService } from '@nestjs/jwt';
+import { POPULATE_USER_DEFAULT } from '../constants';
+import { SELECT_USER } from './user.constants';
 
 describe('UserController', () => {
-  let controller: UserController;
+  let userController: UserController;
+  let userService: UserService;
+  let prismaService: PrismaService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -13,10 +17,35 @@ describe('UserController', () => {
       providers: [UserService, PrismaService, JwtService],
     }).compile();
 
-    controller = module.get<UserController>(UserController);
+    userController = module.get<UserController>(UserController);
+    prismaService = module.get<PrismaService>(PrismaService);
+    userService = module.get<UserService>(UserService);
   });
 
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
+  it('should find one user by id', async () => {
+    const user = await userController.get(POPULATE_USER_DEFAULT.id.toString());
+
+    for (const key in SELECT_USER) {
+      expect(user).toHaveProperty(key);
+    }
+  });
+
+  it('should update user email and return the same properties of get user', async () => {
+    await prismaService.transaction(async (transaction) => {
+      Reflect.set(userService, 'prismaService', transaction);
+      Reflect.set(userController, 'userService', userService);
+
+      const user = await userController.update(
+        POPULATE_USER_DEFAULT.id.toString(),
+        {
+          email: 'jane.doe@email.com',
+        },
+      );
+      for (const key in SELECT_USER) {
+        expect(user).toHaveProperty(key);
+      }
+
+      transaction.rollback();
+    });
   });
 });
