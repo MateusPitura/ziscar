@@ -4,7 +4,7 @@ import { UserService } from './user.service';
 import { PrismaService } from '../database/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { POPULATE_USER_DEFAULT } from '../constants';
-import { SELECT_USER } from './user.constants';
+import { GET_USER } from './user.constants';
 
 describe('UserController', () => {
   let userController: UserController;
@@ -25,7 +25,7 @@ describe('UserController', () => {
   it('should find one user by id', async () => {
     const user = await userController.get(POPULATE_USER_DEFAULT.id.toString());
 
-    for (const key in SELECT_USER) {
+    for (const key in GET_USER) {
       expect(user).toHaveProperty(key);
     }
   });
@@ -41,7 +41,7 @@ describe('UserController', () => {
           email: 'jane.doe@email.com',
         },
       );
-      for (const key in SELECT_USER) {
+      for (const key in GET_USER) {
         expect(user).toHaveProperty(key);
       }
 

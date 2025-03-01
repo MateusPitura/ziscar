@@ -10,7 +10,7 @@ import {
 import { UserService } from './user.service';
 import { UserFindAllInDto, UserUpdateInDto } from './user.dto';
 import { AuthGuard } from '../auth/auth.guard';
-import { SELECT_USER } from './user.constants';
+import { FETCH_USER, GET_USER } from './user.constants';
 
 @Controller('user')
 @UseGuards(AuthGuard)
@@ -24,18 +24,12 @@ export class UserController {
 
   @Get()
   async fetch(@Query() query: UserFindAllInDto) {
-    return await this.userService.fetch(query, {
-      id: true,
-      fullName: true,
-      email: true,
-      roleId: true,
-      isActive: true,
-    });
+    return await this.userService.fetch(query, FETCH_USER);
   }
 
   @Get(':id')
   async get(@Param('id') id: string) {
-    return await this.userService.get({ id: +id }, SELECT_USER);
+    return await this.userService.get({ id: +id }, GET_USER);
   }
 
   @Patch(':id')

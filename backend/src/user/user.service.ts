@@ -5,7 +5,7 @@ import { ITEMS_PER_PAGE } from '../constants';
 import { PrismaService } from '../database/prisma.service';
 import { GetCallback, Transaction } from 'src/types';
 import { encryptPassword } from './user.utils';
-import { SELECT_USER } from './user.constants';
+import { GET_USER } from './user.constants';
 import { verifyDuplicated } from '../utils/verifyDuplicated';
 
 @Injectable()
@@ -127,7 +127,7 @@ export class UserService {
     return await database.user.update({
       where: userWhereUniqueInput,
       data: updatePayload,
-      select: SELECT_USER,
+      select: GET_USER,
     });
   }
 
