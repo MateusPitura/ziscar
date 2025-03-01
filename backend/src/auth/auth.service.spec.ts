@@ -11,10 +11,13 @@ import {
   POPULATE_USER_DEFAULT,
 } from '../constants';
 import { ConflictException, UnauthorizedException } from '@nestjs/common';
+import { SendEmailInDto } from '../email/email.dto';
 
 describe('AuthService', () => {
   let authService: AuthService;
   let prismaService: PrismaService;
+
+  let mailman: SendEmailInDto;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -28,18 +31,15 @@ describe('AuthService', () => {
         {
           provide: EmailService,
           useValue: {
-            sendEmail: jest.fn(),
+            sendEmail: jest.fn((data: SendEmailInDto) => {
+              mailman = data;
+            }),
           },
         },
         {
           provide: JwtService,
           useValue: {
-            sign: jest
-              .fn()
-              .mockReturnValue(
-                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30',
-              ),
-            verify: jest.fn().mockReturnValue({ id: 1 }),
+            sign: jest.fn().mockReturnValue(''),
           },
         },
       ],
@@ -139,4 +139,41 @@ describe('AuthService', () => {
       transaction.rollback();
     });
   });
+
+  it('should verify create account', async () => {
+    await authService.verifyCreateAccount({
+      cnpj: '12345678901235',
+      email: 'jane.doe@email.com',
+      fullName: 'Jane Doe',
+      name: 'Wayne Enterprises',
+    });
+
+    expect(mailman).toHaveProperty('to', 'jane.doe@email.com');
+    expect(mailman).toHaveProperty('title', 'Confirme sua conta');
+    expect(mailman).toHaveProperty('body', '');
+  });
+
+  it('should not verify create account due to duplicated email', async () => {
+    await expect(
+      authService.verifyCreateAccount({
+        cnpj: '12345678901235',
+        email: POPULATE_USER_DEFAULT.email,
+        fullName: 'Jane Doe',
+        name: 'Wayne Enterprises',
+      }),
+    ).rejects.toThrow(ConflictException);
+  });
+
+  it('should not verify create account due to duplicated CNPJ', async () => {
+    await expect(
+      authService.verifyCreateAccount({
+        cnpj: POPULATE_ORGANIZATION_DEFAULT.cnpj,
+        email: 'jane.doe@email.com',
+        fullName: 'Jane Doe',
+        name: 'Wayne Enterprises',
+      }),
+    ).rejects.toThrow(ConflictException);
+  });
+
+  // falta o teste do verify reset password
 });

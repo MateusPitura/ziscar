@@ -7,7 +7,6 @@ import { OrganizationModule } from '../organization/organization.module';
 import { UserModule } from '../user/user.module';
 import { ClientModule } from '../client/client.module';
 import { EmailModule } from '../email/email.module';
-import { DatabaseModule } from '../database/database.module';
 
 @Module({
   imports: [
@@ -25,7 +24,6 @@ import { DatabaseModule } from '../database/database.module';
     UserModule,
     ClientModule,
     EmailModule,
-    DatabaseModule,
   ],
   controllers: [AuthController],
   providers: [AuthService],
