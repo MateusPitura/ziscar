@@ -3,17 +3,25 @@ import { ClientService } from './client.service';
 import { PrismaService } from '../database/prisma.service';
 
 describe('ClientService', () => {
-  let service: ClientService;
+  let clientService: ClientService;
+  let prismaService: PrismaService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [ClientService, PrismaService],
     }).compile();
 
-    service = module.get<ClientService>(ClientService);
+    clientService = module.get<ClientService>(ClientService);
+    prismaService = module.get<PrismaService>(PrismaService);
   });
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
+  it('should create client', async () => {
+    await prismaService.transaction(async (transaction) => {
+      const response = await clientService.create(transaction);
+
+      expect(response).toHaveProperty('clientId');
+
+      transaction.rollback();
+    });
   });
 });
