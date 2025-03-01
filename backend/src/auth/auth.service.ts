@@ -61,38 +61,33 @@ export class AuthService {
     };
   }
 
-  async createAccount({
-    cnpj,
-    name,
-    email,
-    fullName,
-    password,
-  }: AuthCreateAccountInDto) {
-    await this.prismaService.transaction(async (transaction) => {
-      const { clientId } = await this.clientService.create(transaction);
+  async createAccount(
+    { cnpj, name, email, fullName, password }: AuthCreateAccountInDto,
+    transaction?: Transaction,
+  ) {
+    const { clientId } = await this.clientService.create(transaction);
 
-      await this.organizationService.create(
-        {
-          cnpj,
-          name,
-          clientId,
-        },
-        transaction,
-      );
+    await this.organizationService.create(
+      {
+        cnpj,
+        name,
+        clientId,
+      },
+      transaction,
+    );
 
-      await this.userService.create(
-        {
-          email,
-          fullName,
-          password,
-          clientId,
-          roleId: SEED_ROLE_ADMIN_ID,
-        },
-        transaction,
-      );
+    await this.userService.create(
+      {
+        email,
+        fullName,
+        password,
+        clientId,
+        roleId: SEED_ROLE_ADMIN_ID,
+      },
+      transaction,
+    );
 
-      return true;
-    });
+    return true;
   }
 
   async resetPassword({ email, password }: AuthResetPasswordInDto) {

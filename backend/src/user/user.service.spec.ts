@@ -28,9 +28,9 @@ describe('UserService', () => {
 
       const user = await userService.create(
         {
-          email: 'testuser+000@email.com',
-          password: 'admin',
-          fullName: 'Test User0',
+          email: 'jane.doe@email.com',
+          password: '123456',
+          fullName: 'Jane Doe',
           clientId: POPULATE_CLIENT_DEFAULT_ID,
           roleId: SEED_ROLE_ADMIN_ID,
         },
@@ -39,7 +39,7 @@ describe('UserService', () => {
 
       expect(user).toHaveProperty('userId');
 
-      expect(spy).toHaveBeenCalledWith('admin');
+      expect(spy).toHaveBeenCalledWith('123456');
 
       transaction.rollback();
     });

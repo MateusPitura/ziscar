@@ -11,7 +11,7 @@ export class OrganizationService {
 
   async create(
     organizationCreateInDto: OrganizationCreateInDto,
-    transaction: Transaction,
+    transaction?: Transaction,
   ) {
     const database = transaction || this.prismaService;
 

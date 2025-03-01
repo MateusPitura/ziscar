@@ -6,8 +6,11 @@ import { ClientService } from '../client/client.service';
 import { OrganizationService } from '../organization/organization.service';
 import { UserService } from '../user/user.service';
 import { PrismaService } from '../database/prisma.service';
-import { POPULATE_USER_DEFAULT } from '../constants';
-import { UnauthorizedException } from '@nestjs/common';
+import {
+  POPULATE_ORGANIZATION_DEFAULT,
+  POPULATE_USER_DEFAULT,
+} from '../constants';
+import { ConflictException, UnauthorizedException } from '@nestjs/common';
 
 describe('AuthService', () => {
   let authService: AuthService;
@@ -62,5 +65,62 @@ describe('AuthService', () => {
         password: 'wrongpassword',
       }),
     ).rejects.toThrow(UnauthorizedException);
+  });
+
+  it('should create account', async () => {
+    await prismaService.transaction(async (transaction) => {
+      const response = await authService.createAccount(
+        {
+          cnpj: '12345678901235',
+          name: 'Wayne Enterprises',
+          email: 'jane.doe@email.com',
+          fullName: 'Jane Doe',
+          password: '123456',
+        },
+        transaction,
+      );
+
+      expect(response).toBeTruthy();
+
+      transaction.rollback();
+    });
+  });
+
+  it('should not create account due to duplicated email', async () => {
+    await prismaService.transaction(async (transaction) => {
+      await expect(
+        authService.createAccount(
+          {
+            cnpj: '12345678901235',
+            name: 'Wayne Enterprises',
+            email: POPULATE_USER_DEFAULT.email,
+            fullName: 'Jane Doe',
+            password: '123456',
+          },
+          transaction,
+        ),
+      ).rejects.toThrow(ConflictException);
+
+      transaction.rollback();
+    });
+  });
+
+  it('should not create account due to duplicated CNPJ', async () => {
+    await prismaService.transaction(async (transaction) => {
+      await expect(
+        authService.createAccount(
+          {
+            cnpj: POPULATE_ORGANIZATION_DEFAULT.cnpj,
+            name: 'Wayne Enterprises',
+            email: 'jane.doe@email.com',
+            fullName: 'Jane Doe',
+            password: '123456',
+          },
+          transaction,
+        ),
+      ).rejects.toThrow(ConflictException);
+
+      transaction.rollback();
+    });
   });
 });

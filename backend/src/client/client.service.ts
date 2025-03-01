@@ -6,7 +6,7 @@ import { Transaction } from '../types';
 export class ClientService {
   constructor(private readonly databaseService: PrismaService) {}
 
-  async create(transaction: Transaction) {
+  async create(transaction?: Transaction) {
     const database = transaction || this.databaseService;
 
     const client = await database.client.create({
