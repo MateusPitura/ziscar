@@ -4,28 +4,48 @@ import { Prisma } from '@prisma/client';
 import { ITEMS_PER_PAGE } from '../constants';
 import { PrismaService } from '../database/prisma.service';
 import { GetCallback, Transaction } from 'src/types';
-import { encryptPassword } from './user.utils';
+import { encryptPassword, generateRandomPassword } from './user.utils';
 import { GET_USER } from './user.constants';
 import { verifyDuplicated } from '../utils/verifyDuplicated';
+import { EmailService } from '../email/email.service';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly emailService: EmailService,
+    private readonly jwtService: JwtService,
+  ) {}
 
   async create(createUserInDto: UserCreateInDto, transaction?: Transaction) {
     const database = transaction || this.prismaService;
 
     await this.verifyDuplicated({ email: createUserInDto.email });
 
-    createUserInDto.password = await this.encryptPassword(
-      createUserInDto.password,
-    );
+    const { address, ...rest } = createUserInDto;
 
-    const user = await database.user.create({
-      data: createUserInDto,
+    const createPayload = {
+      ...rest,
+      password: this.generateRandomPassword(),
+    };
+    if (address) {
+      createPayload['address'] = {
+        create: address,
+      };
+    }
+
+    await database.user.create({
+      data: createPayload,
     });
 
-    return { userId: user.id };
+    const token = this.jwtService.sign({ email: createUserInDto.email });
+
+    void this.emailService.sendEmail({
+      to: createUserInDto.email,
+      title: 'Confirme a criação da sua conta',
+      body: `${token}`,
+    });
   }
 
   async fetch(userFindAllInDto: UserFindAllInDto, select?: Prisma.UserSelect) {
@@ -129,5 +149,9 @@ export class UserService {
 
   async encryptPassword(password: string) {
     return encryptPassword(password);
+  }
+
+  generateRandomPassword() {
+    return generateRandomPassword();
   }
 }

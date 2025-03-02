@@ -8,7 +8,7 @@ export class AuthSigninInDto {
 
 export class AuthSigninOutDto {
   userId: string;
-  clinicId: string;
+  clientId: number;
 }
 
 export type AuthVerifyCreateAccountInDto = Omit<

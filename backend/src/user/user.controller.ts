@@ -6,21 +6,33 @@ import {
   Param,
   UseGuards,
   Query,
+  Post,
+  Req,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { UserFindAllInDto, UserUpdateInDto } from './user.dto';
+import { UserCreateInDto, UserFindAllInDto, UserUpdateInDto } from './user.dto';
 import { AuthGuard } from '../auth/auth.guard';
 import { FETCH_USER, GET_USER } from './user.constants';
+import { AuthRequest, AuthSigninOutDto } from '../auth/auth.dto';
 
 @Controller('user')
 @UseGuards(AuthGuard)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  // @Post()
-  // create(@Body() createUserDto: CreateUserDto) {
-  //   return this.userService.create(createUserDto);
-  // }
+  @Post()
+  create(
+    @Req() req: AuthRequest,
+    @Body() userCreateInDto: Omit<UserCreateInDto, 'clientId'>,
+  ) {
+    const { clientId } = req.authToken as AuthSigninOutDto;
+
+    const createUserPayload = {
+      ...userCreateInDto,
+      clientId,
+    };
+    return this.userService.create(createUserPayload);
+  }
 
   @Get()
   async fetch(@Query() query: UserFindAllInDto) {
