@@ -61,13 +61,14 @@ export class AuthService {
     };
   }
 
-  async createAccount(
-    { cnpj, name, email, fullName, password }: AuthCreateAccountInDto,
-    externalTx?: Transaction,
-  ) {
-    await this.prismaService.transaction(async (internalTx) => {
-      const transaction = externalTx || internalTx;
-
+  async createAccount({
+    cnpj,
+    name,
+    email,
+    fullName,
+    password,
+  }: AuthCreateAccountInDto) {
+    await this.prismaService.transaction(async (transaction) => {
       const { clientId } = await this.clientService.create(transaction);
 
       await this.organizationService.create(

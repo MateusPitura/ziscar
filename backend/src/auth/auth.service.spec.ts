@@ -68,16 +68,19 @@ describe('AuthService', () => {
 
   it('should create account', async () => {
     await prismaService.transaction(async (transaction) => {
-      const response = await authService.createAccount(
-        {
-          cnpj: '12345678901235',
-          name: 'Wayne Enterprises',
-          email: 'jane.doe@email.com',
-          fullName: 'Jane Doe',
-          password: '123456',
-        },
-        transaction,
-      );
+      jest
+        .spyOn(prismaService, 'transaction')
+        .mockImplementation(async (callback) => {
+          await callback(transaction);
+        });
+
+      const response = await authService.createAccount({
+        cnpj: '12345678901235',
+        name: 'Wayne Enterprises',
+        email: 'jane.doe@email.com',
+        fullName: 'Jane Doe',
+        password: '123456',
+      });
 
       expect(response).toBeTruthy();
 
