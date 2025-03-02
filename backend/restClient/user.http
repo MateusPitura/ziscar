@@ -19,7 +19,11 @@ Authorization: Bearer {{token}}
 {
     "fullName": "John Doe",
     "email": "john.doe@email.com",
-    "roleId": 1
+    "roleId": 1,
+    "address": {
+        "cep": "12345678",
+        "number": "123"
+    }
 }
 
 ###

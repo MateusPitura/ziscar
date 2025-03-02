@@ -24,7 +24,7 @@ export class UserService {
 
     await this.verifyDuplicated({ email: createUserInDto.email });
 
-    const { address, ...rest } = createUserInDto;
+    const { address, clientId, roleId, ...rest } = createUserInDto;
 
     const createPayload = {
       ...rest,
@@ -37,7 +37,19 @@ export class UserService {
     }
 
     await database.user.create({
-      data: createPayload,
+      data: {
+        ...createPayload,
+        client: {
+          connect: {
+            id: clientId,
+          },
+        },
+        role: {
+          connect: {
+            id: roleId,
+          },
+        },
+      },
     });
 
     const token = this.jwtService.sign({ email: createUserInDto.email });

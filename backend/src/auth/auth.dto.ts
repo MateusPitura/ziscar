@@ -5,7 +5,7 @@ export type AuthSigninInDto = Pick<UserCreateInDto, 'email'> &
   UserPasswordInDto;
 
 export class AuthSigninOutDto {
-  userId: string;
+  userId: number;
   clientId: number;
 }
 

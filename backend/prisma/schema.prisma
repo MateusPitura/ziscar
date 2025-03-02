@@ -36,10 +36,10 @@ model Organization {
   isActive  Boolean  @default(true)
   cnpj      String   @unique @db.VarChar(14)
   name      String   @db.VarChar(128)
-  addressId Int?
-  address   Address? @relation(fields: [addressId], references: [id])
+  addressId Int?     @unique
+  address   Address? @relation(fields: [addressId], references: [id], onDelete: SetNull)
   clientId  Int
-  client    Client   @relation(fields: [clientId], references: [id])
+  client    Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
 }
 
 model User {
@@ -55,9 +55,9 @@ model User {
   code      String?   @db.VarChar(128)
   cellPhone String?   @db.VarChar(11)
   addressId Int?      @unique
-  address   Address?  @relation(fields: [addressId], references: [id])
+  address   Address?  @relation(fields: [addressId], references: [id], onDelete: SetNull)
   clientId  Int
-  client    Client    @relation(fields: [clientId], references: [id])
+  client    Client    @relation(fields: [clientId], references: [id], onDelete: Cascade)
   roleId    Int
   role      Role      @relation(fields: [roleId], references: [id])
 }

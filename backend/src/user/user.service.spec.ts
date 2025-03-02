@@ -39,7 +39,7 @@ describe('UserService', () => {
     prismaService = module.get<PrismaService>(PrismaService);
   });
 
-  it('should create an user', async () => {
+  it('should create an user with minimal data', async () => {
     await prismaService.transaction(async (transaction) => {
       Reflect.set(userService, 'prismaService', transaction);
 
@@ -74,6 +74,79 @@ describe('UserService', () => {
         roleId: SEED_ROLE_ADMIN_ID,
       }),
     ).rejects.toThrow(ConflictException);
+  });
+
+  it('should create an user with full data and minimal address', async () => {
+    await prismaService.transaction(async (transaction) => {
+      Reflect.set(userService, 'prismaService', transaction);
+
+      const spyEncryptPassword = jest.spyOn(userService, 'encryptPassword');
+      const spyGenerateRandomPassword = jest.spyOn(
+        userService,
+        'generateRandomPassword',
+      );
+
+      expect(
+        await userService.create({
+          fullName: 'Jane Doe',
+          email: 'jane.doe@email.com',
+          cpf: '11111111111',
+          birthDate: new Date(),
+          code: 'ABCDEF',
+          cellPhone: '42988884444',
+          address: {
+            cep: '12345678',
+            number: '123',
+          },
+          clientId: POPULATE_CLIENT_DEFAULT_ID,
+          roleId: SEED_ROLE_ADMIN_ID,
+        }),
+      ).toBeTruthy();
+
+      expect(spyEncryptPassword).toHaveBeenCalled();
+      expect(spyGenerateRandomPassword).toHaveBeenCalled();
+
+      transaction.rollback();
+    });
+  });
+
+  it('should create an user with full data and full address', async () => {
+    await prismaService.transaction(async (transaction) => {
+      Reflect.set(userService, 'prismaService', transaction);
+
+      const spyEncryptPassword = jest.spyOn(userService, 'encryptPassword');
+      const spyGenerateRandomPassword = jest.spyOn(
+        userService,
+        'generateRandomPassword',
+      );
+
+      expect(
+        await userService.create({
+          fullName: 'Jane Doe',
+          email: 'jane.doe@email.com',
+          cpf: '11111111111',
+          birthDate: new Date(),
+          code: 'ABCDEF',
+          cellPhone: '42988884444',
+          address: {
+            cep: '12345678',
+            number: '123',
+            street: 'Broadway',
+            city: 'New York',
+            state: 'NY',
+            neighborhood: 'Manhattan',
+            complement: 'Apt 123',
+          },
+          clientId: POPULATE_CLIENT_DEFAULT_ID,
+          roleId: SEED_ROLE_ADMIN_ID,
+        }),
+      ).toBeTruthy();
+
+      expect(spyEncryptPassword).toHaveBeenCalled();
+      expect(spyGenerateRandomPassword).toHaveBeenCalled();
+
+      transaction.rollback();
+    });
   });
 
   it('should update user email', async () => {

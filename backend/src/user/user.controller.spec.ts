@@ -3,9 +3,15 @@ import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { PrismaService } from '../database/prisma.service';
 import { JwtService } from '@nestjs/jwt';
-import { ITEMS_PER_PAGE, POPULATE_USER_DEFAULT } from '../constants';
+import {
+  ITEMS_PER_PAGE,
+  POPULATE_CLIENT_DEFAULT_ID,
+  POPULATE_USER_DEFAULT,
+  SEED_ROLE_ADMIN_ID,
+} from '../constants';
 import { FETCH_USER, GET_USER } from './user.constants';
 import { EmailService } from '../email/email.service';
+import { AuthRequest } from 'src/auth/auth.dto';
 
 describe('UserController', () => {
   let userController: UserController;
@@ -25,12 +31,40 @@ describe('UserController', () => {
             sendEmail: jest.fn(),
           },
         },
+        {
+          provide: JwtService,
+          useValue: {
+            sign: jest.fn().mockReturnValue(''),
+          },
+        },
       ],
     }).compile();
 
     userController = module.get<UserController>(UserController);
     prismaService = module.get<PrismaService>(PrismaService);
     userService = module.get<UserService>(UserService);
+  });
+
+  it('should create an user', async () => {
+    await prismaService.transaction(async (transaction) => {
+      Reflect.set(userService, 'prismaService', transaction);
+
+      const request = new Request('http://localhost:3000') as AuthRequest;
+      request.authToken = {
+        userId: POPULATE_USER_DEFAULT.id,
+        clientId: POPULATE_CLIENT_DEFAULT_ID,
+      };
+
+      expect(
+        await userController.create(request, {
+          email: 'jane.doe@email.com',
+          fullName: 'Jane Doe',
+          roleId: SEED_ROLE_ADMIN_ID,
+        }),
+      ).toBeTruthy();
+
+      transaction.rollback();
+    });
   });
 
   it('should find one user by id', async () => {
