@@ -4,10 +4,10 @@ import { Transaction } from '../types';
 
 @Injectable()
 export class ClientService {
-  constructor(private readonly databaseService: PrismaService) {}
+  constructor(private readonly prismaService: PrismaService) {}
 
   async create(transaction?: Transaction) {
-    const database = transaction || this.databaseService;
+    const database = transaction || this.prismaService;
 
     const client = await database.client.create({
       data: {},

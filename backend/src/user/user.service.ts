@@ -15,7 +15,7 @@ export class UserService {
   async create(createUserInDto: UserCreateInDto, transaction?: Transaction) {
     const database = transaction || this.prismaService;
 
-    await this.verifyDuplicated({ email: createUserInDto.email }, transaction);
+    await this.verifyDuplicated({ email: createUserInDto.email });
 
     createUserInDto.password = await this.encryptPassword(
       createUserInDto.password,
@@ -76,10 +76,8 @@ export class UserService {
   async get(
     userWhereUniqueInput: Partial<Prisma.UserWhereUniqueInput>,
     select: Prisma.UserSelect,
-    transaction?: Transaction,
   ) {
-    const database = transaction || this.prismaService;
-    return await database.user.findFirst({
+    return await this.prismaService.user.findFirst({
       where: userWhereUniqueInput,
       select,
     });
@@ -88,17 +86,11 @@ export class UserService {
   async update(
     userWhereUniqueInput: Prisma.UserWhereUniqueInput,
     userUpdateInDto: UserUpdateInDto,
-    transaction?: Transaction,
   ) {
-    const database = transaction || this.prismaService;
-
-    await this.verifyDuplicated(
-      {
-        email: userUpdateInDto.email as string,
-        cpf: userUpdateInDto.cpf as string,
-      },
-      transaction,
-    );
+    await this.verifyDuplicated({
+      email: userUpdateInDto.email as string,
+      cpf: userUpdateInDto.cpf as string,
+    });
 
     const { address, ...rest } = userUpdateInDto;
 
@@ -124,22 +116,15 @@ export class UserService {
       );
     }
 
-    return await database.user.update({
+    return await this.prismaService.user.update({
       where: userWhereUniqueInput,
       data: updatePayload,
       select: GET_USER,
     });
   }
 
-  async verifyDuplicated(
-    properties: Partial<Record<'email' | 'cpf', string>>,
-    transaction?: Transaction,
-  ) {
-    await verifyDuplicated(
-      properties,
-      this.get.bind(this) as GetCallback,
-      transaction,
-    );
+  async verifyDuplicated(properties: Partial<Record<'email' | 'cpf', string>>) {
+    await verifyDuplicated(properties, this.get.bind(this) as GetCallback);
   }
 
   async encryptPassword(password: string) {

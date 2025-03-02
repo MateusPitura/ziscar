@@ -31,23 +31,14 @@ export class OrganizationService {
   async get(
     organizationWhereUniqueInput: Prisma.OrganizationWhereUniqueInput,
     select: Prisma.OrganizationSelect,
-    transaction?: Transaction,
   ) {
-    const database = transaction || this.prismaService;
-    return await database.organization.findFirst({
+    return await this.prismaService.organization.findFirst({
       where: organizationWhereUniqueInput,
       select,
     });
   }
 
-  async verifyDuplicated(
-    properties: Partial<Record<'cnpj', string>>,
-    transaction?: Transaction,
-  ) {
-    await verifyDuplicated(
-      properties,
-      this.get.bind(this) as GetCallback,
-      transaction,
-    );
+  async verifyDuplicated(properties: Partial<Record<'cnpj', string>>) {
+    await verifyDuplicated(properties, this.get.bind(this) as GetCallback);
   }
 }

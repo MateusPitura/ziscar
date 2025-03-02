@@ -22,14 +22,13 @@ describe('OrganizationService', () => {
 
   it('should create an organization', async () => {
     await prismaService.transaction(async (transaction) => {
-      const user = await organizationService.create(
-        {
-          name: 'Wayne Enterprises',
-          cnpj: '12345678901235',
-          clientId: POPULATE_CLIENT_DEFAULT_ID,
-        },
-        transaction,
-      );
+      Reflect.set(organizationService, 'prismaService', transaction);
+
+      const user = await organizationService.create({
+        name: 'Wayne Enterprises',
+        cnpj: '12345678901235',
+        clientId: POPULATE_CLIENT_DEFAULT_ID,
+      });
 
       expect(user).toHaveProperty('organizationId');
 

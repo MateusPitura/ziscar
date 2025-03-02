@@ -17,7 +17,9 @@ describe('ClientService', () => {
 
   it('should create client', async () => {
     await prismaService.transaction(async (transaction) => {
-      const response = await clientService.create(transaction);
+      Reflect.set(clientService, 'prismaService', transaction);
+
+      const response = await clientService.create();
 
       expect(response).toHaveProperty('clientId');
 

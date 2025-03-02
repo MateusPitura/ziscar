@@ -17,7 +17,6 @@ import { OrganizationService } from '../organization/organization.service';
 import { UserService } from '../user/user.service';
 import { EmailService } from '../email/email.service';
 import { SEED_ROLE_ADMIN_ID } from '../constants';
-import { Transaction } from '../types';
 import { PrismaService } from '../database/prisma.service';
 
 @Injectable()
@@ -31,10 +30,7 @@ export class AuthService {
     private readonly prismaService: PrismaService,
   ) {}
 
-  async signIn(
-    { email, password }: AuthSigninInDto,
-    transaction?: Transaction,
-  ) {
+  async signIn({ email, password }: AuthSigninInDto) {
     const user = await this.userService.get(
       { email },
       {
@@ -42,7 +38,6 @@ export class AuthService {
         clientId: true,
         password: true,
       },
-      transaction,
     );
 
     if (!user || !compareSync(password, user.password)) {
@@ -95,11 +90,8 @@ export class AuthService {
     return true;
   }
 
-  async resetPassword(
-    { email, password }: AuthResetPasswordInDto,
-    transaction?: Transaction,
-  ) {
-    await this.userService.update({ email }, { password }, transaction);
+  async resetPassword({ email, password }: AuthResetPasswordInDto) {
+    await this.userService.update({ email }, { password });
 
     return true;
   }

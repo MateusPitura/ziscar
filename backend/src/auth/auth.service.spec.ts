@@ -19,6 +19,7 @@ import {
 describe('AuthService', () => {
   let authService: AuthService;
   let prismaService: PrismaService;
+  let userService: UserService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -46,6 +47,7 @@ describe('AuthService', () => {
 
     authService = module.get<AuthService>(AuthService);
     prismaService = module.get<PrismaService>(PrismaService);
+    userService = module.get<UserService>(UserService);
   });
 
   it('should signin', async () => {
@@ -114,15 +116,13 @@ describe('AuthService', () => {
 
   it('should reset password', async () => {
     await prismaService.transaction(async (transaction) => {
+      Reflect.set(userService, 'prismaService', transaction);
       const spy = jest.spyOn(authService['userService'], 'encryptPassword');
 
-      const response = await authService.resetPassword(
-        {
-          email: POPULATE_USER_DEFAULT.email,
-          password: '123456',
-        },
-        transaction,
-      );
+      const response = await authService.resetPassword({
+        email: POPULATE_USER_DEFAULT.email,
+        password: '123456',
+      });
 
       expect(response).toBeTruthy();
       expect(spy).toHaveBeenCalledWith('123456');

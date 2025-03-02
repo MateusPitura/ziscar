@@ -24,18 +24,17 @@ describe('UserService', () => {
 
   it('should create an user', async () => {
     await prismaService.transaction(async (transaction) => {
+      Reflect.set(userService, 'prismaService', transaction);
+
       const spy = jest.spyOn(userService, 'encryptPassword');
 
-      const user = await userService.create(
-        {
-          email: 'jane.doe@email.com',
-          password: '123456',
-          fullName: 'Jane Doe',
-          clientId: POPULATE_CLIENT_DEFAULT_ID,
-          roleId: SEED_ROLE_ADMIN_ID,
-        },
-        transaction,
-      );
+      const user = await userService.create({
+        email: 'jane.doe@email.com',
+        password: '123456',
+        fullName: 'Jane Doe',
+        clientId: POPULATE_CLIENT_DEFAULT_ID,
+        roleId: SEED_ROLE_ADMIN_ID,
+      });
 
       expect(user).toHaveProperty('userId');
 
@@ -59,6 +58,8 @@ describe('UserService', () => {
 
   it('should update user email', async () => {
     await prismaService.transaction(async (transaction) => {
+      Reflect.set(userService, 'prismaService', transaction);
+
       expect(
         await userService.update(
           {
@@ -67,7 +68,6 @@ describe('UserService', () => {
           {
             email: 'jane.doe@email.com',
           },
-          transaction,
         ),
       ).toBeTruthy();
 
@@ -90,6 +90,8 @@ describe('UserService', () => {
 
   it('should update user cpf', async () => {
     await prismaService.transaction(async (transaction) => {
+      Reflect.set(userService, 'prismaService', transaction);
+
       expect(
         await userService.update(
           {
@@ -98,7 +100,6 @@ describe('UserService', () => {
           {
             cpf: '11111111111',
           },
-          transaction,
         ),
       ).toBeTruthy();
 
@@ -108,6 +109,8 @@ describe('UserService', () => {
 
   it('should not update user with cpf that already exist', async () => {
     await prismaService.transaction(async (transaction) => {
+      Reflect.set(userService, 'prismaService', transaction);
+
       await userService.update(
         {
           id: POPULATE_USER_DEFAULT.id,
@@ -115,7 +118,6 @@ describe('UserService', () => {
         {
           cpf: '11111111111',
         },
-        transaction,
       );
 
       await expect(
@@ -126,7 +128,6 @@ describe('UserService', () => {
           {
             cpf: '11111111111',
           },
-          transaction,
         ),
       ).rejects.toThrow(ConflictException);
 
@@ -136,6 +137,8 @@ describe('UserService', () => {
 
   it('should update user password', async () => {
     await prismaService.transaction(async (transaction) => {
+      Reflect.set(userService, 'prismaService', transaction);
+
       const spy = jest.spyOn(userService, 'encryptPassword');
 
       expect(
@@ -146,7 +149,6 @@ describe('UserService', () => {
           {
             password: '123456',
           },
-          transaction,
         ),
       ).toBeTruthy();
 
@@ -158,6 +160,8 @@ describe('UserService', () => {
 
   it('should create user address', async () => {
     await prismaService.transaction(async (transaction) => {
+      Reflect.set(userService, 'prismaService', transaction);
+
       const user = await userService.update(
         {
           id: POPULATE_USER_DEFAULT.id,
@@ -168,7 +172,6 @@ describe('UserService', () => {
             number: '123',
           },
         },
-        transaction,
       );
 
       expect(user).toHaveProperty('address.cep', '12345676');
@@ -180,6 +183,8 @@ describe('UserService', () => {
 
   it('should update user address', async () => {
     await prismaService.transaction(async (transaction) => {
+      Reflect.set(userService, 'prismaService', transaction);
+
       await userService.update(
         {
           id: POPULATE_USER_DEFAULT.id,
@@ -190,7 +195,6 @@ describe('UserService', () => {
             number: '123',
           },
         },
-        transaction,
       );
 
       const user = await userService.update(
@@ -202,7 +206,6 @@ describe('UserService', () => {
             street: 'Broadway',
           },
         },
-        transaction,
       );
 
       expect(user).toHaveProperty('address.cep', '12345676');
@@ -215,6 +218,8 @@ describe('UserService', () => {
 
   it('should disable user', async () => {
     await prismaService.transaction(async (transaction) => {
+      Reflect.set(userService, 'prismaService', transaction);
+
       expect(
         await userService.update(
           {
@@ -223,7 +228,6 @@ describe('UserService', () => {
           {
             isActive: false,
           },
-          transaction,
         ),
       ).toBeTruthy();
 
