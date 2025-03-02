@@ -23,7 +23,7 @@ content-type: application/json
 }
 
 ###
-POST {{BASE_URL}}/auth/createPassword HTTP/1.1
+POST {{BASE_URL}}/auth/create-password HTTP/1.1
 content-type: application/json
 Authorization: Bearer your-token
 
@@ -33,7 +33,7 @@ Authorization: Bearer your-token
 }
 
 ###
-POST {{BASE_URL}}/auth/forgetPassword HTTP/1.1
+POST {{BASE_URL}}/auth/forget-password HTTP/1.1
 content-type: application/json
 
 {
@@ -41,7 +41,7 @@ content-type: application/json
 }
 
 ###
-POST {{BASE_URL}}/auth/resetPassword HTTP/1.1
+POST {{BASE_URL}}/auth/reset-password HTTP/1.1
 content-type: application/json
 Authorization: Bearer your-token
 

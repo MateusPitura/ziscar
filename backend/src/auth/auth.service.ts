@@ -1,7 +1,7 @@
 import {
   Injectable,
   NotFoundException,
-  UnauthorizedException,
+  UnauthorizedException
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import {
@@ -112,7 +112,7 @@ export class AuthService {
       ...rest,
     });
 
-    await this.emailService.sendEmail({
+    void this.emailService.sendEmail({
       to: email,
       title: 'Confirme sua conta',
       body: `${token}`,
@@ -130,7 +130,7 @@ export class AuthService {
 
     const token = this.jwtService.sign({ email });
 
-    await this.emailService.sendEmail({
+    void this.emailService.sendEmail({
       to: email,
       title: 'Redefina sua senha',
       body: `${token}`,
