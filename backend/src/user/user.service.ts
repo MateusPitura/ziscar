@@ -28,7 +28,7 @@ export class UserService {
 
     const createPayload = {
       ...rest,
-      password: this.generateRandomPassword(),
+      password: await this.encryptPassword(this.generateRandomPassword()),
     };
     if (address) {
       createPayload['address'] = {
