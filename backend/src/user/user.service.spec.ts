@@ -8,6 +8,8 @@ import {
   POPULATE_USER_DEFAULT,
   SEED_ROLE_ADMIN_ID,
 } from '../constants';
+import { EmailService } from '../email/email.service';
+import { JwtService } from '@nestjs/jwt';
 
 describe('UserService', () => {
   let userService: UserService;
@@ -15,7 +17,22 @@ describe('UserService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [UserService, PrismaService],
+      providers: [
+        UserService,
+        PrismaService,
+        {
+          provide: EmailService,
+          useValue: {
+            sendEmail: jest.fn(),
+          },
+        },
+        {
+          provide: JwtService,
+          useValue: {
+            sign: jest.fn().mockReturnValue(''),
+          },
+        },
+      ],
     }).compile();
 
     userService = module.get<UserService>(UserService);
@@ -26,19 +43,23 @@ describe('UserService', () => {
     await prismaService.transaction(async (transaction) => {
       Reflect.set(userService, 'prismaService', transaction);
 
-      const spy = jest.spyOn(userService, 'encryptPassword');
+      const spyEncryptPassword = jest.spyOn(userService, 'encryptPassword');
+      const spyGenerateRandomPassword = jest.spyOn(
+        userService,
+        'generateRandomPassword',
+      );
 
-      const user = await userService.create({
-        email: 'jane.doe@email.com',
-        password: '123456',
-        fullName: 'Jane Doe',
-        clientId: POPULATE_CLIENT_DEFAULT_ID,
-        roleId: SEED_ROLE_ADMIN_ID,
-      });
+      expect(
+        await userService.create({
+          email: 'jane.doe@email.com',
+          fullName: 'Jane Doe',
+          clientId: POPULATE_CLIENT_DEFAULT_ID,
+          roleId: SEED_ROLE_ADMIN_ID,
+        }),
+      ).toBeTruthy();
 
-      expect(user).toHaveProperty('userId');
-
-      expect(spy).toHaveBeenCalledWith('123456');
+      expect(spyEncryptPassword).toHaveBeenCalled();
+      expect(spyGenerateRandomPassword).toHaveBeenCalled();
 
       transaction.rollback();
     });
@@ -48,7 +69,6 @@ describe('UserService', () => {
     await expect(
       userService.create({
         email: POPULATE_USER_DEFAULT.email,
-        password: '123456',
         fullName: 'John Doe',
         clientId: POPULATE_CLIENT_DEFAULT_ID,
         roleId: SEED_ROLE_ADMIN_ID,

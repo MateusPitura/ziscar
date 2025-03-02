@@ -53,7 +53,7 @@ describe('AuthController', () => {
     expect(response).toHaveProperty('token');
   });
 
-  it('should verify create account and create account', async () => {
+  it('should create an account', async () => {
     await prismaService.transaction(async (transaction) => {
       jest
         .spyOn(prismaService, 'transaction')
@@ -61,25 +61,14 @@ describe('AuthController', () => {
           await callback(transaction);
         });
 
-      const createAccountPayload = {
-        cnpj: '12345678901235',
-        email: 'jane.doe@email.com',
-        fullName: 'Jane Doe',
-        name: 'Wayne Enterprises',
-      };
-
       expect(
-        await authController.verifyCreateAccount(createAccountPayload),
+        await authController.createAccount({
+          cnpj: '12345678901235',
+          email: 'jane.doe@email.com',
+          fullName: 'Jane Doe',
+          name: 'Wayne Enterprises',
+        }),
       ).toBeTruthy();
-
-      const request = new Request('http://localhost:3000') as AuthRequest;
-      request.authToken = createAccountPayload;
-
-      const response = await authController.createAccount(request, {
-        password: '123456',
-      });
-
-      expect(response).toBeTruthy();
 
       transaction.rollback();
     });

@@ -5,6 +5,7 @@ import { PrismaService } from '../database/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { ITEMS_PER_PAGE, POPULATE_USER_DEFAULT } from '../constants';
 import { FETCH_USER, GET_USER } from './user.constants';
+import { EmailService } from '../email/email.service';
 
 describe('UserController', () => {
   let userController: UserController;
@@ -14,7 +15,17 @@ describe('UserController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UserController],
-      providers: [UserService, PrismaService, JwtService],
+      providers: [
+        UserService,
+        PrismaService,
+        JwtService,
+        {
+          provide: EmailService,
+          useValue: {
+            sendEmail: jest.fn(),
+          },
+        },
+      ],
     }).compile();
 
     userController = module.get<UserController>(UserController);

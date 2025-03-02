@@ -3,7 +3,7 @@ import { UserUpdateInDto, UserCreateInDto, UserFindAllInDto } from './user.dto';
 import { Prisma } from '@prisma/client';
 import { ITEMS_PER_PAGE } from '../constants';
 import { PrismaService } from '../database/prisma.service';
-import { GetCallback, Transaction } from 'src/types';
+import { GetCallback, Transaction } from '../types';
 import { encryptPassword } from './user.utils';
 import { GET_USER } from './user.constants';
 import { verifyDuplicated } from '../utils/verifyDuplicated';
@@ -47,6 +47,8 @@ export class UserService {
       title: 'Confirme a criação da sua conta',
       body: `${token}`,
     });
+
+    return true;
   }
 
   async fetch(userFindAllInDto: UserFindAllInDto, select?: Prisma.UserSelect) {

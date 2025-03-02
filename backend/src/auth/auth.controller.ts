@@ -20,9 +20,7 @@ export class AuthController {
   }
 
   @Post('sign-up')
-  async verifyCreateAccount(
-    @Body() authCreateAccountInDto: AuthCreateAccountInDto,
-  ) {
+  async createAccount(@Body() authCreateAccountInDto: AuthCreateAccountInDto) {
     return await this.authService.createAccount(authCreateAccountInDto);
   }
 

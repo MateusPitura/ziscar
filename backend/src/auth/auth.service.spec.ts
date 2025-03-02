@@ -81,7 +81,6 @@ describe('AuthService', () => {
         name: 'Wayne Enterprises',
         email: 'jane.doe@email.com',
         fullName: 'Jane Doe',
-        password: '123456',
       });
 
       expect(response).toBeTruthy();
@@ -97,7 +96,6 @@ describe('AuthService', () => {
         name: 'Wayne Enterprises',
         email: POPULATE_USER_DEFAULT.email,
         fullName: 'Jane Doe',
-        password: '123456',
       }),
     ).rejects.toThrow(ConflictException);
   });
@@ -109,7 +107,6 @@ describe('AuthService', () => {
         name: 'Wayne Enterprises',
         email: 'jane.doe@email.com',
         fullName: 'Jane Doe',
-        password: '123456',
       }),
     ).rejects.toThrow(ConflictException);
   });
@@ -129,45 +126,6 @@ describe('AuthService', () => {
 
       transaction.rollback();
     });
-  });
-
-  it('should verify create account', async () => {
-    const spy = jest.spyOn(authService['emailService'], 'sendEmail');
-
-    await authService.verifyCreateAccount({
-      cnpj: '12345678901235',
-      email: 'jane.doe@email.com',
-      fullName: 'Jane Doe',
-      name: 'Wayne Enterprises',
-    });
-
-    expect(spy).toHaveBeenCalledWith({
-      to: 'jane.doe@email.com',
-      title: 'Confirme sua conta',
-      body: '',
-    });
-  });
-
-  it('should fail in verify create account due to duplicated email', async () => {
-    await expect(
-      authService.verifyCreateAccount({
-        cnpj: '12345678901235',
-        email: POPULATE_USER_DEFAULT.email,
-        fullName: 'Jane Doe',
-        name: 'Wayne Enterprises',
-      }),
-    ).rejects.toThrow(ConflictException);
-  });
-
-  it('should fail in verify create account due to duplicated CNPJ', async () => {
-    await expect(
-      authService.verifyCreateAccount({
-        cnpj: POPULATE_ORGANIZATION_DEFAULT.cnpj,
-        email: 'jane.doe@email.com',
-        fullName: 'Jane Doe',
-        name: 'Wayne Enterprises',
-      }),
-    ).rejects.toThrow(ConflictException);
   });
 
   it('should verify reset password', async () => {
