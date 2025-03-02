@@ -18,6 +18,7 @@ import { UserService } from '../user/user.service';
 import { EmailService } from '../email/email.service';
 import { SEED_ROLE_ADMIN_ID } from '../constants';
 import { Transaction } from '../types';
+import { PrismaService } from '../database/prisma.service';
 
 @Injectable()
 export class AuthService {
@@ -27,6 +28,7 @@ export class AuthService {
     private readonly organizationService: OrganizationService,
     private readonly userService: UserService,
     private readonly emailService: EmailService,
+    private readonly prismaService: PrismaService,
   ) {}
 
   async signIn(
@@ -61,29 +63,33 @@ export class AuthService {
 
   async createAccount(
     { cnpj, name, email, fullName, password }: AuthCreateAccountInDto,
-    transaction?: Transaction,
+    externalTx?: Transaction,
   ) {
-    const { clientId } = await this.clientService.create(transaction);
+    await this.prismaService.transaction(async (internalTx) => {
+      const transaction = externalTx || internalTx;
 
-    await this.organizationService.create(
-      {
-        cnpj,
-        name,
-        clientId,
-      },
-      transaction,
-    );
+      const { clientId } = await this.clientService.create(transaction);
 
-    await this.userService.create(
-      {
-        email,
-        fullName,
-        password,
-        clientId,
-        roleId: SEED_ROLE_ADMIN_ID,
-      },
-      transaction,
-    );
+      await this.organizationService.create(
+        {
+          cnpj,
+          name,
+          clientId,
+        },
+        transaction,
+      );
+
+      await this.userService.create(
+        {
+          email,
+          fullName,
+          password,
+          clientId,
+          roleId: SEED_ROLE_ADMIN_ID,
+        },
+        transaction,
+      );
+    });
 
     return true;
   }

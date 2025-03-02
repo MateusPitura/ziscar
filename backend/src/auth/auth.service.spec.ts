@@ -86,51 +86,40 @@ describe('AuthService', () => {
   });
 
   it('should not create account due to duplicated email', async () => {
-    await prismaService.transaction(async (transaction) => {
-      await expect(
-        authService.createAccount(
-          {
-            cnpj: '12345678901235',
-            name: 'Wayne Enterprises',
-            email: POPULATE_USER_DEFAULT.email,
-            fullName: 'Jane Doe',
-            password: '123456',
-          },
-          transaction,
-        ),
-      ).rejects.toThrow(ConflictException);
-
-      transaction.rollback();
-    });
+    await expect(
+      authService.createAccount({
+        cnpj: '12345678901235',
+        name: 'Wayne Enterprises',
+        email: POPULATE_USER_DEFAULT.email,
+        fullName: 'Jane Doe',
+        password: '123456',
+      }),
+    ).rejects.toThrow(ConflictException);
   });
 
   it('should not create account due to duplicated CNPJ', async () => {
-    await prismaService.transaction(async (transaction) => {
-      await expect(
-        authService.createAccount(
-          {
-            cnpj: POPULATE_ORGANIZATION_DEFAULT.cnpj,
-            name: 'Wayne Enterprises',
-            email: 'jane.doe@email.com',
-            fullName: 'Jane Doe',
-            password: '123456',
-          },
-          transaction,
-        ),
-      ).rejects.toThrow(ConflictException);
-
-      transaction.rollback();
-    });
+    await expect(
+      authService.createAccount({
+        cnpj: POPULATE_ORGANIZATION_DEFAULT.cnpj,
+        name: 'Wayne Enterprises',
+        email: 'jane.doe@email.com',
+        fullName: 'Jane Doe',
+        password: '123456',
+      }),
+    ).rejects.toThrow(ConflictException);
   });
 
   it('should reset password', async () => {
     await prismaService.transaction(async (transaction) => {
       const spy = jest.spyOn(authService['userService'], 'encryptPassword');
 
-      const response = await authService.resetPassword({
-        email: POPULATE_USER_DEFAULT.email,
-        password: '123456',
-      });
+      const response = await authService.resetPassword(
+        {
+          email: POPULATE_USER_DEFAULT.email,
+          password: '123456',
+        },
+        transaction,
+      );
 
       expect(response).toBeTruthy();
       expect(spy).toHaveBeenCalledWith('123456');
@@ -156,7 +145,7 @@ describe('AuthService', () => {
     });
   });
 
-  it('should not verify create account due to duplicated email', async () => {
+  it('should fail in verify create account due to duplicated email', async () => {
     await expect(
       authService.verifyCreateAccount({
         cnpj: '12345678901235',
@@ -167,7 +156,7 @@ describe('AuthService', () => {
     ).rejects.toThrow(ConflictException);
   });
 
-  it('should not verify create account due to duplicated CNPJ', async () => {
+  it('should fail in verify create account due to duplicated CNPJ', async () => {
     await expect(
       authService.verifyCreateAccount({
         cnpj: POPULATE_ORGANIZATION_DEFAULT.cnpj,
@@ -192,7 +181,7 @@ describe('AuthService', () => {
     });
   });
 
-  it('should not verify reset password due to email that not exist', async () => {
+  it('should fail in verify reset password due to email that not exist', async () => {
     await expect(
       authService.verifyResetPassword({
         email: 'jane.doe@email.com',

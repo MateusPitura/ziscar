@@ -46,22 +46,15 @@ describe('UserService', () => {
   });
 
   it('should not create an user with the same email', async () => {
-    await prismaService.transaction(async (transaction) => {
-      await expect(
-        userService.create(
-          {
-            email: POPULATE_USER_DEFAULT.email,
-            password: '123456',
-            fullName: 'John Doe',
-            clientId: POPULATE_CLIENT_DEFAULT_ID,
-            roleId: SEED_ROLE_ADMIN_ID,
-          },
-          transaction,
-        ),
-      ).rejects.toThrow(ConflictException);
-
-      transaction.rollback();
-    });
+    await expect(
+      userService.create({
+        email: POPULATE_USER_DEFAULT.email,
+        password: '123456',
+        fullName: 'John Doe',
+        clientId: POPULATE_CLIENT_DEFAULT_ID,
+        roleId: SEED_ROLE_ADMIN_ID,
+      }),
+    ).rejects.toThrow(ConflictException);
   });
 
   it('should update user email', async () => {
@@ -83,21 +76,16 @@ describe('UserService', () => {
   });
 
   it('should not update user with email that already exist', async () => {
-    await prismaService.transaction(async (transaction) => {
-      await expect(
-        userService.update(
-          {
-            id: POPULATE_USER_DEFAULT.id,
-          },
-          {
-            email: POPULATE_USER_DEFAULT.email,
-          },
-          transaction,
-        ),
-      ).rejects.toThrow(ConflictException);
-
-      transaction.rollback();
-    });
+    await expect(
+      userService.update(
+        {
+          id: POPULATE_USER_DEFAULT.id,
+        },
+        {
+          email: POPULATE_USER_DEFAULT.email,
+        },
+      ),
+    ).rejects.toThrow(ConflictException);
   });
 
   it('should update user cpf', async () => {

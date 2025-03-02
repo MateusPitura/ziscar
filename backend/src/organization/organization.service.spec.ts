@@ -38,20 +38,13 @@ describe('OrganizationService', () => {
   });
 
   it('should not create an organization with the same CNPJ', async () => {
-    await prismaService.transaction(async (transaction) => {
-      await expect(
-        organizationService.create(
-          {
-            name: 'Wayne Enterprises',
-            cnpj: POPULATE_ORGANIZATION_DEFAULT.cnpj,
-            clientId: POPULATE_CLIENT_DEFAULT_ID,
-          },
-          transaction,
-        ),
-      ).rejects.toThrow(ConflictException);
-
-      transaction.rollback();
-    });
+    await expect(
+      organizationService.create({
+        name: 'Wayne Enterprises',
+        cnpj: POPULATE_ORGANIZATION_DEFAULT.cnpj,
+        clientId: POPULATE_CLIENT_DEFAULT_ID,
+      }),
+    ).rejects.toThrow(ConflictException);
   });
 
   it('should find one organization by id', async () => {

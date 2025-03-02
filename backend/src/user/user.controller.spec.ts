@@ -33,7 +33,6 @@ describe('UserController', () => {
   it('should update user email and return the same properties of get user', async () => {
     await prismaService.transaction(async (transaction) => {
       Reflect.set(userService, 'prismaService', transaction);
-      Reflect.set(userController, 'userService', userService);
 
       const user = await userController.update(
         POPULATE_USER_DEFAULT.id.toString(),
@@ -41,6 +40,7 @@ describe('UserController', () => {
           email: 'jane.doe@email.com',
         },
       );
+
       for (const key in GET_USER) {
         expect(user).toHaveProperty(key);
       }

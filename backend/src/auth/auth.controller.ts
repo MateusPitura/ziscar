@@ -28,7 +28,7 @@ export class AuthController {
     return await this.authService.signIn(authSigninInDto);
   }
 
-  @Post('createPassword')
+  @Post('create-password')
   @HttpCode(HttpStatus.CREATED)
   @UseGuards(AuthGuard)
   async createAccount(
@@ -42,7 +42,16 @@ export class AuthController {
     return await this.authService.createAccount(createAccountPayload);
   }
 
-  @Post('resetPassword')
+  @Post('signup')
+  async verifyCreateAccount(
+    @Body() authVerifyCreateAccountInDto: AuthVerifyCreateAccountInDto,
+  ) {
+    return await this.authService.verifyCreateAccount(
+      authVerifyCreateAccountInDto,
+    );
+  }
+
+  @Post('reset-password')
   @UseGuards(AuthGuard)
   async resetPassword(
     @Req() req: AuthRequest,
@@ -55,21 +64,12 @@ export class AuthController {
     return await this.authService.resetPassword(resetPasswordPayload);
   }
 
-  @Post('forgetPassword')
+  @Post('forget-password')
   async forgetPassword(
     @Body() authVerifyResetPasswordInDto: AuthVerifyResetPasswordInDto,
   ) {
     return await this.authService.verifyResetPassword(
       authVerifyResetPasswordInDto,
-    );
-  }
-
-  @Post('signup')
-  async verifyCreateAccount(
-    @Body() authVerifyCreateAccountInDto: AuthVerifyCreateAccountInDto,
-  ) {
-    return await this.authService.verifyCreateAccount(
-      authVerifyCreateAccountInDto,
     );
   }
 }
