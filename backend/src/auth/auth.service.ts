@@ -7,7 +7,6 @@ import { JwtService } from '@nestjs/jwt';
 import {
   AuthSigninInDto,
   AuthCreateAccountInDto,
-  AuthVerifyCreateAccountInDto,
   AuthResetPasswordInDto,
   AuthVerifyResetPasswordInDto,
 } from './auth.dto';
@@ -18,6 +17,7 @@ import { UserService } from '../user/user.service';
 import { EmailService } from '../email/email.service';
 import { SEED_ROLE_ADMIN_ID } from '../constants';
 import { PrismaService } from '../database/prisma.service';
+import { generateRandomPassword } from '../utils/generateRandomPassword';
 
 @Injectable()
 export class AuthService {
@@ -56,13 +56,7 @@ export class AuthService {
     };
   }
 
-  async createAccount({
-    cnpj,
-    name,
-    email,
-    fullName,
-    password,
-  }: AuthCreateAccountInDto) {
+  async createAccount({ cnpj, name, email, fullName }: AuthCreateAccountInDto) {
     await this.prismaService.transaction(async (transaction) => {
       const { clientId } = await this.clientService.create(transaction);
 
@@ -79,7 +73,6 @@ export class AuthService {
         {
           email,
           fullName,
-          password,
           clientId,
           roleId: SEED_ROLE_ADMIN_ID,
         },
@@ -92,31 +85,6 @@ export class AuthService {
 
   async resetPassword({ email, password }: AuthResetPasswordInDto) {
     await this.userService.update({ email }, { password });
-
-    return true;
-  }
-
-  async verifyCreateAccount({
-    cnpj,
-    email,
-    ...rest
-  }: AuthVerifyCreateAccountInDto) {
-    await Promise.all([
-      this.userService.verifyDuplicated({ email }),
-      this.organizationService.verifyDuplicated({ cnpj }),
-    ]);
-
-    const token = this.jwtService.sign({
-      cnpj,
-      email,
-      ...rest,
-    });
-
-    void this.emailService.sendEmail({
-      to: email,
-      title: 'Confirme sua conta',
-      body: `${token}`,
-    });
 
     return true;
   }
@@ -137,5 +105,9 @@ export class AuthService {
     });
 
     return true;
+  }
+
+  generateRandomPassword() {
+    return generateRandomPassword();
   }
 }

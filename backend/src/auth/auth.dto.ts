@@ -1,25 +1,16 @@
-import { OrganizationCreateInDto } from 'src/organization/organization.dto';
-import { UserCreateInDto } from 'src/user/user.dto';
+import { OrganizationCreateInDto } from '../organization/organization.dto';
+import { UserCreateInDto, UserPasswordInDto } from '../user/user.dto';
 
-export class AuthSigninInDto {
-  email: string;
-  password: string;
-}
+export type AuthSigninInDto = Pick<UserCreateInDto, 'email'> &
+  UserPasswordInDto;
 
 export class AuthSigninOutDto {
   userId: string;
   clientId: number;
 }
 
-export type AuthVerifyCreateAccountInDto = Omit<
-  Omit<UserCreateInDto, 'roleId' | 'password'> & OrganizationCreateInDto,
-  'clientId'
->;
-
-export type AuthVerifyCreateAccountOutDto = AuthVerifyCreateAccountInDto;
-
 export type AuthCreateAccountInDto = Omit<
-  Omit<UserCreateInDto, 'roleId'> & OrganizationCreateInDto,
+  Pick<UserCreateInDto, 'email' | 'fullName'> & OrganizationCreateInDto,
   'clientId'
 >;
 
@@ -27,16 +18,8 @@ export type AuthVerifyResetPasswordInDto = Pick<UserCreateInDto, 'email'>;
 
 export type AuthVerifyResetPasswordOutDto = AuthVerifyResetPasswordInDto;
 
-export type AuthResetPasswordInDto = Pick<
-  UserCreateInDto,
-  'email' | 'password'
->;
-
-export type AuthPasswordInDto = Pick<UserCreateInDto, 'password'>;
+export type AuthResetPasswordInDto = AuthSigninInDto;
 
 export interface AuthRequest extends Request {
-  authToken:
-    | AuthSigninOutDto
-    | AuthVerifyCreateAccountInDto
-    | AuthVerifyResetPasswordOutDto;
+  authToken: AuthSigninOutDto | AuthVerifyResetPasswordOutDto;
 }

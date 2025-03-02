@@ -22,8 +22,12 @@ export class UserCreateInDto {
   roleId: number;
 }
 
+export class UserPasswordInDto {
+  password: string;
+}
+
 export type UserUpdateInDto = Prisma.UserUpdateInput & {
-  address?: Prisma.AddressUpdateInput | Prisma.AddressCreateInput; // mudar essa tipagem
+  address?: Prisma.AddressUpdateInput | Prisma.AddressCreateInput;
 };
 
 export class UserFindAllInDto {

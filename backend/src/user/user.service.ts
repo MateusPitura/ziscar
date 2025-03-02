@@ -4,11 +4,12 @@ import { Prisma } from '@prisma/client';
 import { ITEMS_PER_PAGE } from '../constants';
 import { PrismaService } from '../database/prisma.service';
 import { GetCallback, Transaction } from 'src/types';
-import { encryptPassword, generateRandomPassword } from './user.utils';
+import { encryptPassword } from './user.utils';
 import { GET_USER } from './user.constants';
 import { verifyDuplicated } from '../utils/verifyDuplicated';
 import { EmailService } from '../email/email.service';
 import { JwtService } from '@nestjs/jwt';
+import { generateRandomPassword } from '../utils/generateRandomPassword';
 
 @Injectable()
 export class UserService {
