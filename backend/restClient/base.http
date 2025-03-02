@@ -1,5 +1,5 @@
 # @name auth_request
-POST {{BASE_URL}}/auth/signin HTTP/1.1
+POST {{BASE_URL}}/auth/sign-in HTTP/1.1
 content-type: application/json
 
 {

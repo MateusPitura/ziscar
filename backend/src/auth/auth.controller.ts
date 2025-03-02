@@ -23,7 +23,7 @@ import { AuthGuard } from './auth.guard';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('signin')
+  @Post('sign-in')
   async signIn(@Body() authSigninInDto: AuthSigninInDto) {
     return await this.authService.signIn(authSigninInDto);
   }
@@ -42,7 +42,7 @@ export class AuthController {
     return await this.authService.createAccount(createAccountPayload);
   }
 
-  @Post('signup')
+  @Post('sign-up')
   async verifyCreateAccount(
     @Body() authVerifyCreateAccountInDto: AuthVerifyCreateAccountInDto,
   ) {
