@@ -3,13 +3,13 @@ import { UserService } from './user.service';
 import { PrismaService } from '../database/prisma.service';
 import { ConflictException } from '@nestjs/common';
 import {
-  ITEMS_PER_PAGE,
   POPULATE_CLIENT_DEFAULT_ID,
   POPULATE_USER_DEFAULT,
   SEED_ROLE_ADMIN_ID,
 } from '../constants';
 import { EmailService } from '../email/email.service';
 import { JwtService } from '@nestjs/jwt';
+import { ITEMS_PER_PAGE } from '@shared/constants';
 
 describe('UserService', () => {
   let userService: UserService;

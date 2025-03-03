@@ -14,9 +14,9 @@ import useDialog from "@/domains/global/hooks/useDialog";
 import Loading from "./Loading";
 import useCheckPermission from "@/domains/global/hooks/useCheckPermission";
 import formatDeniedMessage from "@/domains/global/utils/formatDeniedMessage";
-import { ITEMS_PER_PAGE } from "@/domains/global/constants";
 import { Resource, Action as ActionProp } from "@/domains/global/types/model";
 import { ButtonState } from "./types";
+import { ITEMS_PER_PAGE } from '@shared/constants'
 
 function Container({ children }: Childrenable): ReactElement {
   return (

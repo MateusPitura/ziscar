@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { UserUpdateInDto, UserCreateInDto, UserFindAllInDto } from './user.dto';
 import { Prisma } from '@prisma/client';
-import { ITEMS_PER_PAGE } from '../constants';
 import { PrismaService } from '../database/prisma.service';
 import { GetCallback, Transaction } from '../types';
 import { encryptPassword } from './user.utils';
-import { GET_USER } from './user.constants';
+import { GET_USER } from './user.constant';
 import { verifyDuplicated } from '../utils/verifyDuplicated';
 import { EmailService } from '../email/email.service';
 import { JwtService } from '@nestjs/jwt';
 import { generateRandomPassword } from '../utils/generateRandomPassword';
+import { ITEMS_PER_PAGE } from '@shared/constants';
 
 @Injectable()
 export class UserService {

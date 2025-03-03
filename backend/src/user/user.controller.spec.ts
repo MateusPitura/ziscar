@@ -4,14 +4,14 @@ import { UserService } from './user.service';
 import { PrismaService } from '../database/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import {
-  ITEMS_PER_PAGE,
   POPULATE_CLIENT_DEFAULT_ID,
   POPULATE_USER_DEFAULT,
   SEED_ROLE_ADMIN_ID,
 } from '../constants';
-import { FETCH_USER, GET_USER } from './user.constants';
+import { FETCH_USER, GET_USER } from './user.constant';
 import { EmailService } from '../email/email.service';
 import { AuthRequest } from 'src/auth/auth.dto';
+import { ITEMS_PER_PAGE } from '@shared/constants';
 
 describe('UserController', () => {
   let userController: UserController;
