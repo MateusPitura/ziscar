@@ -1,4 +1,4 @@
-import { UserFormInputs } from "../types";
+import { UserFormInputs, UsersFilterFormInputs } from "../types";
 
 export const userDefaultValues: UserFormInputs = {
   fullName: "",
@@ -16,12 +16,11 @@ export const userDefaultValues: UserFormInputs = {
     state: "",
     complement: "",
   },
-  category: "admin",
+  category: "",
 };
 
-export const userFilterDefaultValues = {
-  page: 1,
+export const userFilterDefaultValues: UsersFilterFormInputs = {
   fullName: "",
-  orderBy: "",
+  orderBy: "fullName",
   category: [],
 };

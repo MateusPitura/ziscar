@@ -3,7 +3,7 @@ import useUpdateProfileInfo from "../hooks/useUpdateProfileInfo";
 import Form from "@/design-system/Form";
 import Input from "@/design-system/Form/Input";
 import useDialogContext from "@/domains/global/hooks/useDialogContext";
-import { s } from "@/domains/global/schemas";
+import { s } from "@shared/safeZod";
 
 const BirthDateSchema = s.object({
   birthDate: s.birthDate(),

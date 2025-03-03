@@ -1,4 +1,4 @@
-import { s } from "@/domains/global/schemas";
+import { s } from "@shared/safeZod";
 import { SchemaUserForm, SchemaUsersFilterForm } from "../schemas";
 
 export interface DisableUser {

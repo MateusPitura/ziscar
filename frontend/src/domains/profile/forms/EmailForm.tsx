@@ -3,7 +3,7 @@ import { type ReactElement } from "react";
 import useUpdateProfileInfo from "../hooks/useUpdateProfileInfo";
 import Form from "@/design-system/Form";
 import useDialogContext from "@/domains/global/hooks/useDialogContext";
-import { s } from "@/domains/global/schemas";
+import { s } from "@shared/safeZod";
 import Dialog from "@/design-system/Dialog";
 
 const SchemaEmailForm = s.object({

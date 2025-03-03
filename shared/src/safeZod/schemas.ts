@@ -5,15 +5,20 @@ import { removeMask } from "../utils/removeMask";
 
 export type infer<T extends z.ZodTypeAny> = z.infer<T>;
 
+export const list = z.enum;
+
+export const boolean = z.boolean;
+
 export const object = <T extends z.ZodRawShape>(shape: T) =>
   z.object(shape).strict();
-export const list = z.enum;
-export const boolean = z.boolean;
+
+export const empty = () => z.literal("");
 
 export function string(maxChars: number = 128) {
   return z
     .string({ required_error: "Campo obrigatório" })
-    .max(maxChars, { message: `Máximo de ${maxChars} caracteres` });
+    .max(maxChars, { message: `Máximo de ${maxChars} caracteres` })
+    .nonempty({ message: "Campo obrigatório" });
 }
 
 export const number = () =>
@@ -43,7 +48,7 @@ export const fullName = () =>
 
 export const cep = () =>
   string(9)
-    .transform((cpf) => removeMask(cpf))
+    .transform((cep) => removeMask(cep))
     .refine((cep) => /^\d{8}$/.test(cep), "CEP inválido");
 
 export const birthDate = () =>
@@ -63,7 +68,7 @@ export const cnpj = () =>
 
 export const cellphone = () =>
   string(15)
-    .transform((cpf) => removeMask(cpf))
+    .transform((cellphone) => removeMask(cellphone))
     .refine((cep) => /^\d{11}$/.test(cep), "Celular inválido");
 
 export const password = () =>
@@ -84,9 +89,20 @@ export const SchemaPassword = object({
   path: ["confirmPassword"],
 });
 
-export const SchemaAddress = object({
+export const SchemaBaseAddress = object({
   cep: cep(),
   number: string(),
+});
+
+export const SchemaAddressEmpty = SchemaBaseAddress.extend({
+  street: string().or(empty()),
+  neighborhood: string().or(empty()),
+  city: string().or(empty()),
+  state: string().or(empty()),
+  complement: string().or(empty()),
+});
+
+export const SchemaAddressOptional = SchemaBaseAddress.extend({
   street: string().optional(),
   neighborhood: string().optional(),
   city: string().optional(),

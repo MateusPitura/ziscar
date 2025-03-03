@@ -1,10 +1,7 @@
 import { createContext, useCallback, useMemo, useState } from "react";
 import { userFilterDefaultValues } from "@/domains/users/constants";
-import { Childrenable, Pageable } from "../types";
+import { Childrenable, UsersFilter } from "../types";
 import { ClientLogged, UserLogged } from "../types/model";
-import { UsersFilterFormInputs } from "@/domains/users/types";
-
-interface UsersFilter extends UsersFilterFormInputs, Pageable {}
 
 interface GlobalContextValues {
   userLogged?: UserLogged;
@@ -32,7 +29,10 @@ function GlobalProvider({ children }: Childrenable) {
     id: "2",
   });
 
-  const [usersFilter, setUsersFilter] = useState<UsersFilter>(userFilterDefaultValues);
+  const [usersFilter, setUsersFilter] = useState<UsersFilter>({
+    page: 1,
+    ...userFilterDefaultValues,
+  });
 
   const handleUsersFilter = useCallback((value: Partial<UsersFilter>) => {
     setUsersFilter((prev) => ({

@@ -2,16 +2,13 @@ import { ReactElement } from "react";
 import useUpdateProfileInfo from "../hooks/useUpdateProfileInfo";
 import Form from "@/design-system/Form";
 import { useIsFetching } from "@tanstack/react-query";
-import { removeMask } from "@/domains/global/utils/removeMask";
 import useDialogContext from "@/domains/global/hooks/useDialogContext";
-import { s } from "@/domains/global/schemas";
+import { s } from "@shared/safeZod";
 import AddressFields from "@/domains/global/components/AddressFields";
 import Dialog from "@/design-system/Dialog";
 
 
-const SchemaAddressForm = s.SchemaAddress.extend({
-  cep: s.cep().transform((cep) => removeMask(cep, "cep")),
-});
+const SchemaAddressForm = s.SchemaAddressEmpty;
 
 type AddressFormInputs = s.infer<typeof SchemaAddressForm>;
 

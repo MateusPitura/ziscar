@@ -2,11 +2,11 @@ import Form from "@/design-system/Form";
 import useUpdateProfileInfo from "../hooks/useUpdateProfileInfo";
 import Input from "@/design-system/Form/Input";
 import useDialogContext from "@/domains/global/hooks/useDialogContext";
-import { s } from "@/domains/global/schemas";
+import { s } from "@shared/safeZod";
 import Dialog from "@/design-system/Dialog";
 
 const SchemaCodeForm = s.object({
-  code: s.string('default', 'optional'),
+  code: s.string().or(s.empty()),
 });
 
 type CodeFormInputs = s.infer<typeof SchemaCodeForm>;

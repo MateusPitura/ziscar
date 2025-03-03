@@ -2,7 +2,7 @@ import Button from "@/design-system/Button";
 import Form from "@/design-system/Form";
 import Input from "@/design-system/Form/Input";
 import InputPassword from "@/design-system/Form/InputPassword";
-import { s } from "@/domains/global/schemas";
+import { s } from "@shared/safeZod";
 import { type ReactNode } from "react";
 import SignCard from "../components/SignCard";
 import useSignPageContext from "../hooks/useSignPageContext";

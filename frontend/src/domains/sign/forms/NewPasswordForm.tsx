@@ -1,9 +1,8 @@
 import Form from "@/design-system/Form";
-import { SchemaPassword } from "@/domains/global/schemas/schemas";
 import type { ReactNode } from "react";
 import SignCard from "../components/SignCard";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
-import { s } from "@/domains/global/schemas";
+import { s } from "@shared/safeZod";
 import { useMutation } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 import InputPassword from "@/design-system/Form/InputPassword";
@@ -11,7 +10,7 @@ import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import useSignPageContext from "../hooks/useSignPageContext";
 import { BASE_URL } from "@/domains/global/constants";
 
-type NewPasswordFormInputs = s.infer<typeof SchemaPassword>;
+type NewPasswordFormInputs = s.infer<typeof s.SchemaPassword>;
 
 export default function NewPasswordForm(): ReactNode {
   const { safeFetch } = useSafeFetch();
@@ -51,7 +50,7 @@ export default function NewPasswordForm(): ReactNode {
         confirmPassword: "",
         newPassword: "",
       }}
-      schema={SchemaPassword}
+      schema={s.SchemaPassword}
       onSubmit={mutate}
       className="flex-1 flex flex-col"
     >

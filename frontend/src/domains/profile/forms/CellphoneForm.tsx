@@ -1,13 +1,12 @@
 import Form from "@/design-system/Form";
 import useUpdateProfileInfo from "../hooks/useUpdateProfileInfo";
 import Input from "@/design-system/Form/Input";
-import { removeMask } from "@/domains/global/utils/removeMask";
 import useDialogContext from "@/domains/global/hooks/useDialogContext";
-import { s } from "@/domains/global/schemas";
+import { s } from "@shared/safeZod";
 import Dialog from "@/design-system/Dialog";
 
 const SchemaCellphoneForm = s.object({
-  cellphone: s.cellphone().transform((cellphone) => removeMask(cellphone, "cellphone")),
+  cellphone: s.cellphone(),
 });
 
 type CellphoneFormInputs = s.infer<typeof SchemaCellphoneForm>;

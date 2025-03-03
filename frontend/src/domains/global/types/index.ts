@@ -1,3 +1,5 @@
+import { UsersFilterFormInputs } from "@/domains/users/types";
+
 export interface Childrenable {
   children?: React.ReactNode;
 }
@@ -26,3 +28,5 @@ export type QueryKeys = [
   "cepApi" | "profileInfo" | "users" | "user" | "usersDashboard",
   ...ReadonlyArray<unknown>
 ];
+
+export interface UsersFilter extends UsersFilterFormInputs, Pageable {}

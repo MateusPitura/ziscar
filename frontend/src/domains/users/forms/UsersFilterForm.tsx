@@ -3,14 +3,14 @@ import Choice from "@/design-system/Form/Choice";
 import Input from "@/design-system/Form/Input";
 import SideSheet from "@/design-system/SideSheet";
 import useGlobalContext from "@/domains/global/hooks/useGlobalContext";
-import { memo, ReactElement } from "react";
+import { memo, ReactElement, ReactNode } from "react";
 import { userFilterDefaultValues } from "../constants";
 import { useFormContext } from "react-hook-form";
 import { SchemaUsersFilterForm } from "../schemas";
 import useDialogContext from "@/domains/global/hooks/useDialogContext";
 import { UsersFilterFormInputs } from "../types";
 
-function UsersFilterForm(): ReactElement {
+function UsersFilterForm(): ReactNode {
   const { usersFilter, handleUsersFilter } = useGlobalContext();
   const { closeDialog } = useDialogContext();
 
@@ -24,7 +24,11 @@ function UsersFilterForm(): ReactElement {
       schema={SchemaUsersFilterForm}
       onSubmit={handleSubmit}
       className="flex-1 flex flex-col"
-      defaultValues={{ ...usersFilter }}
+      defaultValues={{
+        fullName: usersFilter?.fullName || "",
+        orderBy: usersFilter?.orderBy || "fullName",
+        category: usersFilter?.category || [],
+      }}
       removeEmptyString={false}
     >
       <UsersFilterFormContent />
@@ -58,14 +62,14 @@ function UsersFilterFormContent(): ReactElement {
           Ordenar por
         </span>
         <div className="flex flex-col gap-2">
-          <Choice<UsersFilterFormInputs> name="orderBy">
-            <Choice.Radio label="Nome" value="name" />
+          <Choice<UsersFilterFormInputs> name="orderBy" hideErrorLabel>
+            <Choice.Radio label="Nome" value="fullName" />
             <Choice.Radio label="Email" value="email" />
           </Choice>
         </div>
         <span className="text-label-medium text-light-onSurface">Status</span>
         <div className="flex flex-col gap-2">
-          <Choice<UsersFilterFormInputs> name="category">
+          <Choice<UsersFilterFormInputs> name="category" hideErrorLabel>
             <Choice.Checkbox label="Ativo" value="active" />
             <Choice.Checkbox label="Inativo" value="inactive" />
           </Choice>

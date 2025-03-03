@@ -1,9 +1,8 @@
 import Form from "@/design-system/Form";
 import Input from "@/design-system/Form/Input";
-import { s } from "@/domains/global/schemas";
+import { s } from "@shared/safeZod";
 import type { ReactNode } from "react";
 import SignCard from "../components/SignCard";
-import { removeMask } from "@/domains/global/utils/removeMask";
 import useSignPageContext from "../hooks/useSignPageContext";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import { useMutation } from "@tanstack/react-query";
@@ -12,7 +11,7 @@ import { BASE_URL } from "@/domains/global/constants";
 
 const SchemaSignUpForm = s.object({
   branchName: s.string(),
-  cnpj: s.cnpj().transform((cnpj) => removeMask(cnpj, "cnpj")),
+  cnpj: s.cnpj(),
   userName: s.fullName(),
   userEmail: s.email(),
 });

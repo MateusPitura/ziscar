@@ -2,12 +2,11 @@ import { type ReactElement } from "react";
 import useUpdateProfileInfo from "../hooks/useUpdateProfileInfo";
 import Form from "@/design-system/Form";
 import useDialogContext from "@/domains/global/hooks/useDialogContext";
-import { s } from "@/domains/global/schemas";
-import { SchemaPassword } from "@/domains/global/schemas/schemas";
+import { s } from "@shared/safeZod";
 import InputPassword from "@/design-system/Form/InputPassword";
 import Dialog from "@/design-system/Dialog";
 
-type PasswordFormInputs = s.infer<typeof SchemaPassword>;
+type PasswordFormInputs = s.infer<typeof s.SchemaPassword>;
 
 export default function PasswordForm(): ReactElement {
   const { closeDialog } = useDialogContext();
@@ -27,7 +26,7 @@ export default function PasswordForm(): ReactElement {
   return (
     <Form<PasswordFormInputs>
       onSubmit={handleSubmit}
-      schema={SchemaPassword}
+      schema={s.SchemaPassword}
       defaultValues={{
         confirmPassword: '',
         newPassword: '',

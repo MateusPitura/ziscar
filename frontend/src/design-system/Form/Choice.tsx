@@ -1,28 +1,30 @@
 import { Childrenable } from "@/domains/global/types";
 import {
-    Children,
-    cloneElement,
-    ReactNode,
-    useMemo,
-    type ReactElement,
+  Children,
+  cloneElement,
+  ReactNode,
+  useMemo,
+  type ReactElement,
 } from "react";
 import { FieldValues, useFormContext, useFormState } from "react-hook-form";
 import ErrorLabel from "./ErrorLabel";
 
 interface ContainerProps<T extends FieldValues> extends Childrenable {
   name: keyof T & string;
+  hideErrorLabel?: boolean;
 }
 
 function Container<T extends FieldValues>({
-  name,
   children,
+  name,
+  hideErrorLabel
 }: ContainerProps<T>): ReactElement {
   const enhancedChildren = useMemo(
     () =>
       Children.map(children, (child) => {
-        return cloneElement(child as ReactElement, { name });
+        return cloneElement(child as ReactElement, { name, hideErrorLabel });
       }),
-    [children, name]
+    [children, name, hideErrorLabel]
   );
 
   return <>{enhancedChildren}</>;
@@ -33,9 +35,10 @@ interface RadioProperties {
   name?: string;
   required?: boolean;
   value: string;
+  hideErrorLabel?: boolean;
 }
 
-function Radio({ label, name, ...props }: RadioProperties): ReactNode {
+function Radio({ label, name, hideErrorLabel, ...props }: RadioProperties): ReactNode {
   const { register } = useFormContext();
 
   const { errors } = useFormState({
@@ -56,16 +59,20 @@ function Radio({ label, name, ...props }: RadioProperties): ReactNode {
         <div className="col-start-1 row-start-1 w-2 h-2 rounded-full peer-checked:bg-light-primary peer-checked:peer-disabled:bg-neutral-300" />
       </div>
       <div className="text-body-large text-light-onSurface">{label}</div>
-      <ErrorLabel errors={errors} name={name} />
+      {hideErrorLabel || <ErrorLabel errors={errors} name={name} />}
     </label>
   );
 }
 
 type CheckboxProperties = RadioProperties;
 
-function Checkbox({ label, name, ...props }: CheckboxProperties): ReactNode {
+function Checkbox({ label, name, hideErrorLabel, ...props }: CheckboxProperties): ReactNode {
   const { register } = useFormContext();
 
+  const { errors } = useFormState({
+    name,
+  });
+  
   if (!name) return;
 
   return (
@@ -77,6 +84,7 @@ function Checkbox({ label, name, ...props }: CheckboxProperties): ReactNode {
         {...props}
       />
       <div className="text-body-large text-light-onSurface">{label}</div>
+      {hideErrorLabel || <ErrorLabel errors={errors} name={name} />}
     </label>
   );
 }

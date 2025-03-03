@@ -5,7 +5,7 @@ import { BASE_URL } from "@/domains/global/constants";
 import useDialogContext from "@/domains/global/hooks/useDialogContext";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
-import { s } from "@/domains/global/schemas";
+import { s } from "@shared/safeZod";
 import { useMutation } from "@tanstack/react-query";
 import type { ReactNode } from "react";
 

@@ -51,6 +51,7 @@ export default function NewUsersContainer(): ReactElement {
       headerTitle="Novo usuário"
       resource="users"
       action="create"
+      onlyDirty
     />
   );
 }

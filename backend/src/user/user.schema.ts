@@ -8,7 +8,7 @@ const SchemaUserPostInDto = s.object({
   birthDate: s.birthDate().optional(),
   code: s.string().optional(),
   cellPhone: s.cellphone().optional(),
-  address: s.SchemaAddress.optional(),
+  address: s.SchemaAddressOptional.optional(),
   roleId: s.id(),
 });
 
@@ -27,7 +27,7 @@ const SchemaUserFindManyInDto = SchemaUserFetchInDto;
 
 const SchemaUserPatchInDto = SchemaUserPostInDto.partial().extend({
   password: s.password().optional(),
-  address: s.SchemaAddress.partial().optional(),
+  address: s.SchemaAddressOptional.partial().optional(),
   isActive: s.boolean().optional(),
 });
 

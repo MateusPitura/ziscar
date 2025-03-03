@@ -1,23 +1,18 @@
-import { s } from "@/domains/global/schemas";
-import { removeMask } from "@/domains/global/utils/removeMask";
+import { s } from "@shared/safeZod";
 
 export const SchemaUsersFilterForm = s.object({
-  fullName: s.string("default", "optional"),
-  orderBy: s.string("default", "optional"),
-  category: s.string("default", "optional").array(),
+  fullName: s.string().or(s.empty()),
+  orderBy: s.list(["fullName", "email"]),
+  category: s.list(["active", "inactive"]).array(),
 });
 
 export const SchemaUserForm = s.object({
   fullName: s.fullName(),
   email: s.email(),
-  cellphone: s
-    .cellphone()
-    .transform((cellhpone) => removeMask(cellhpone, "cellphone")),
-  cpf: s.cpf().transform((cpf) => removeMask(cpf, "cpf")),
-  code: s.string("default", "optional"),
+  cellphone: s.cellphone(),
+  cpf: s.cpf(),
+  code: s.string().or(s.empty()),
   birthDate: s.birthDate(),
   category: s.string(),
-  address: s.SchemaAddress.extend({
-    cep: s.cep().transform((cep) => removeMask(cep, "cep")),
-  }),
+  address: s.SchemaAddressEmpty,
 });
