@@ -56,7 +56,7 @@ describe('UserController', () => {
       };
 
       expect(
-        await userController.create(request, {
+        await userController.post(request, {
           email: 'jane.doe@email.com',
           fullName: 'Jane Doe',
           roleId: SEED_ROLE_ADMIN_ID,
@@ -68,7 +68,7 @@ describe('UserController', () => {
   });
 
   it('should find one user by id', async () => {
-    const user = await userController.get(POPULATE_USER_DEFAULT.id.toString());
+    const user = await userController.get({ id: POPULATE_USER_DEFAULT.id });
 
     for (const key in GET_USER) {
       expect(user).toHaveProperty(key);
@@ -79,8 +79,8 @@ describe('UserController', () => {
     await prismaService.transaction(async (transaction) => {
       Reflect.set(userService, 'prismaService', transaction);
 
-      const user = await userController.update(
-        POPULATE_USER_DEFAULT.id.toString(),
+      const user = await userController.patch(
+        { id: POPULATE_USER_DEFAULT.id },
         {
           email: 'jane.doe@email.com',
         },

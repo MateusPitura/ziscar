@@ -47,7 +47,7 @@ describe('OrganizationService', () => {
   });
 
   it('should find one organization by id', async () => {
-    const user = await organizationService.get(
+    const user = await organizationService.findOne(
       { id: POPULATE_ORGANIZATION_DEFAULT.id },
       { id: true },
     );

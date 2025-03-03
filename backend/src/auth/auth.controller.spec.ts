@@ -62,7 +62,7 @@ describe('AuthController', () => {
         });
 
       expect(
-        await authController.createAccount({
+        await authController.signUp({
           cnpj: '12345678901235',
           email: 'jane.doe@email.com',
           fullName: 'Jane Doe',

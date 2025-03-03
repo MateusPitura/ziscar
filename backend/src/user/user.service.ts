@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { UserUpdateInDto, UserCreateInDto, UserFindAllInDto } from './user.dto';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../database/prisma.service';
 import { GetCallback, Transaction } from '../types';
@@ -10,6 +9,11 @@ import { EmailService } from '../email/email.service';
 import { JwtService } from '@nestjs/jwt';
 import { generateRandomPassword } from '../utils/generateRandomPassword';
 import { ITEMS_PER_PAGE } from '@shared/constants';
+import {
+  UserCreateInDtoInputs,
+  UserFindManyInDtoInputs,
+  UserUpdateInDtoInputs,
+} from './user.schema';
 
 @Injectable()
 export class UserService {
@@ -19,12 +23,15 @@ export class UserService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async create(createUserInDto: UserCreateInDto, transaction?: Transaction) {
+  async create(
+    userCreateInDto: UserCreateInDtoInputs,
+    transaction?: Transaction,
+  ) {
     const database = transaction || this.prismaService;
 
-    await this.verifyDuplicated({ email: createUserInDto.email });
+    await this.verifyDuplicated({ email: userCreateInDto.email });
 
-    const { address, clientId, roleId, ...rest } = createUserInDto;
+    const { address, clientId, roleId, ...rest } = userCreateInDto;
 
     const createPayload = {
       ...rest,
@@ -52,10 +59,10 @@ export class UserService {
       },
     });
 
-    const token = this.jwtService.sign({ email: createUserInDto.email });
+    const token = this.jwtService.sign({ email: userCreateInDto.email });
 
     void this.emailService.sendEmail({
-      to: createUserInDto.email,
+      to: userCreateInDto.email,
       title: 'Confirme a criação da sua conta',
       body: `${token}`,
     });
@@ -63,8 +70,11 @@ export class UserService {
     return true;
   }
 
-  async fetch(userFindAllInDto: UserFindAllInDto, select?: Prisma.UserSelect) {
-    const { page = 1 } = userFindAllInDto;
+  async findMany(
+    userFindManyInDto: UserFindManyInDtoInputs,
+    select?: Prisma.UserSelect,
+  ) {
+    const { page = 1 } = userFindManyInDto;
     const skip = (page - 1) * ITEMS_PER_PAGE;
 
     const findManyWhere = {
@@ -72,7 +82,7 @@ export class UserService {
         isActive: true,
       },
     };
-    const orderBy = userFindAllInDto?.orderBy;
+    const orderBy = userFindManyInDto?.orderBy;
     if (orderBy) {
       findManyWhere['orderBy'] = [
         {
@@ -80,14 +90,14 @@ export class UserService {
         },
       ];
     }
-    const searchByFullName = userFindAllInDto?.fullName;
+    const searchByFullName = userFindManyInDto?.fullName;
     if (searchByFullName) {
       findManyWhere.where['fullName'] = {
         contains: searchByFullName.toLocaleLowerCase(),
         mode: 'insensitive',
       };
     }
-    const status = userFindAllInDto?.status;
+    const status = userFindManyInDto?.status;
     if (status === 'inactive') {
       findManyWhere.where['isActive'] = false;
     }
@@ -108,8 +118,8 @@ export class UserService {
     };
   }
 
-  async get(
-    userWhereUniqueInput: Partial<Prisma.UserWhereUniqueInput>,
+  async findOne(
+    userWhereUniqueInput: Prisma.UserWhereUniqueInput,
     select: Prisma.UserSelect,
   ) {
     return await this.prismaService.user.findFirst({
@@ -120,11 +130,11 @@ export class UserService {
 
   async update(
     userWhereUniqueInput: Prisma.UserWhereUniqueInput,
-    userUpdateInDto: UserUpdateInDto,
+    userUpdateInDto: UserUpdateInDtoInputs,
   ) {
     await this.verifyDuplicated({
-      email: userUpdateInDto.email as string,
-      cpf: userUpdateInDto.cpf as string,
+      email: userUpdateInDto.email,
+      cpf: userUpdateInDto.cpf,
     });
 
     const { address, ...rest } = userUpdateInDto;
@@ -147,7 +157,7 @@ export class UserService {
 
     if (userUpdateInDto.password) {
       updatePayload['password'] = await this.encryptPassword(
-        userUpdateInDto.password as string,
+        userUpdateInDto.password,
       );
     }
 
@@ -159,7 +169,7 @@ export class UserService {
   }
 
   async verifyDuplicated(properties: Partial<Record<'email' | 'cpf', string>>) {
-    await verifyDuplicated(properties, this.get.bind(this) as GetCallback);
+    await verifyDuplicated(properties, this.findOne.bind(this) as GetCallback);
   }
 
   async encryptPassword(password: string) {

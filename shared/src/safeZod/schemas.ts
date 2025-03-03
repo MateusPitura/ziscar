@@ -5,35 +5,23 @@ import { validateCnpj } from "../utils/validateCnpj";
 export type infer<T extends z.ZodTypeAny> = z.infer<T>;
 
 export const object = z.object;
+export const list = z.enum;
+export const boolean = z.boolean;
 
-export function string(
-  maxChars?: "default" | number,
-  required?: "required"
-): z.ZodString;
-export function string(
-  maxChars?: "default" | number,
-  required?: "optional"
-): z.ZodOptional<z.ZodString>;
-export function string(
-  maxChars: "default" | number = "default",
-  required: "required" | "optional" = "required"
-) {
-  let maxCharsAux = 128;
-  if (typeof maxChars === "number") {
-    maxCharsAux = maxChars;
-  }
-
-  if (required === "required") {
-    return z
-      .string()
-      .max(maxCharsAux, { message: `Máximo de ${maxCharsAux} caracteres` })
-      .nonempty({ message: "Campo obrigatório" }) as z.ZodString;
-  }
+export function string(maxChars: number = 128) {
   return z
-    .string()
-    .max(maxCharsAux, { message: `Máximo de ${maxCharsAux} caracteres` })
-    .optional() as z.ZodOptional<z.ZodString>;
+    .string({ required_error: "Campo obrigatório" })
+    .max(maxChars, { message: `Máximo de ${maxChars} caracteres` });
 }
+
+export const number = () =>
+  z.coerce
+    .number({
+      required_error: "Campo obrigatório",
+      message: "Número inválido",
+    })
+    .int({ message: "Número inválido" })
+    .positive({ message: "Número inválido" });
 
 export const date = () =>
   z.coerce.date({
@@ -41,6 +29,8 @@ export const date = () =>
       message: issue.code === "invalid_date" ? "Data inválida" : defaultError,
     }),
   });
+
+export const id = () => number();
 
 export const email = () => string().email({ message: "Email inválido" });
 
@@ -85,10 +75,10 @@ export const SchemaPassword = object({
 
 export const SchemaAddress = object({
   cep: cep(),
-  street: string("default", "optional"),
   number: string(),
-  neighborhood: string("default", "optional"),
-  city: string("default", "optional"),
-  state: string("default", "optional"),
-  complement: string("default", "optional"),
+  street: string().optional(),
+  neighborhood: string().optional(),
+  city: string().optional(),
+  state: string().optional(),
+  complement: string().optional(),
 });

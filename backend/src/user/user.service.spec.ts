@@ -329,7 +329,7 @@ describe('UserService', () => {
   });
 
   it('should find one user by id', async () => {
-    const user = await userService.get(
+    const user = await userService.findOne(
       { id: POPULATE_USER_DEFAULT.id },
       { id: true },
     );
@@ -338,7 +338,7 @@ describe('UserService', () => {
   });
 
   it('should find many users with pagination', async () => {
-    const result = await userService.fetch({ page: 1 });
+    const result = await userService.findMany({ page: 1 });
 
     expect(result).toHaveProperty('total', 25);
     expect(result.users).toHaveLength(ITEMS_PER_PAGE);
@@ -347,7 +347,7 @@ describe('UserService', () => {
   it('should find many users by full name', async () => {
     const spy = jest.spyOn(prismaService.user, 'findMany');
 
-    await userService.fetch({
+    await userService.findMany({
       fullName: POPULATE_USER_DEFAULT.fullName,
     });
 
@@ -366,7 +366,7 @@ describe('UserService', () => {
   it('should find many users ordered by full name', async () => {
     const spy = jest.spyOn(prismaService.user, 'findMany');
 
-    await userService.fetch({ orderBy: 'fullName' });
+    await userService.findMany({ orderBy: 'fullName' });
 
     expect(spy).toHaveBeenCalledWith(
       expect.objectContaining({ orderBy: [{ fullName: 'asc' }] }),
@@ -374,7 +374,7 @@ describe('UserService', () => {
   });
 
   it('should find many users by status igual to inactive', async () => {
-    const result = await userService.fetch({ status: 'inactive' });
+    const result = await userService.findMany({ status: 'inactive' });
 
     expect(result).toHaveProperty('total', 6);
   });
@@ -382,7 +382,7 @@ describe('UserService', () => {
   it('should find many users with many filters', async () => {
     const spy = jest.spyOn(prismaService.user, 'findMany');
 
-    await userService.fetch({
+    await userService.findMany({
       page: 1,
       status: 'active',
       fullName: POPULATE_USER_DEFAULT.fullName,

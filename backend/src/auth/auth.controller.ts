@@ -1,36 +1,46 @@
 import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import {
-  AuthRequest,
-  AuthSigninInDto,
-  AuthVerifyResetPasswordOutDto,
-  AuthVerifyResetPasswordInDto,
-  AuthCreateAccountInDto,
-} from './auth.dto';
+import { AuthRequest, AuthResetPasswordOutDto } from './auth.dto';
 import { AuthGuard } from './auth.guard';
-import { UserPasswordInDto } from '../user/user.dto';
+import {
+  AuthForgetPasswordInDtoInputs,
+  AuthSignInInDtoInputs,
+  AuthSignUpInDtoInputs,
+  PasswordInputs,
+  SchemaAuthForgetPasswordInDto,
+  SchemaAuthSigInInDto,
+  SchemaAuthSignUpInDto,
+  SchemaPassword,
+} from './auth.schema';
+import { ZodPipe } from 'src/utils/ZodPipe';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('sign-in')
-  async signIn(@Body() authSigninInDto: AuthSigninInDto) {
+  async signIn(
+    @Body(new ZodPipe(SchemaAuthSigInInDto))
+    authSigninInDto: AuthSignInInDtoInputs,
+  ) {
     return await this.authService.signIn(authSigninInDto);
   }
 
   @Post('sign-up')
-  async createAccount(@Body() authCreateAccountInDto: AuthCreateAccountInDto) {
-    return await this.authService.createAccount(authCreateAccountInDto);
+  async signUp(
+    @Body(new ZodPipe(SchemaAuthSignUpInDto))
+    authSignUpInDto: AuthSignUpInDtoInputs,
+  ) {
+    return await this.authService.signUp(authSignUpInDto);
   }
 
   @Post('reset-password')
   @UseGuards(AuthGuard)
   async resetPassword(
     @Req() req: AuthRequest,
-    @Body() { password }: UserPasswordInDto,
+    @Body(new ZodPipe(SchemaPassword)) { password }: PasswordInputs,
   ) {
-    const { email } = req.authToken as AuthVerifyResetPasswordOutDto;
+    const { email } = req.authToken as AuthResetPasswordOutDto;
     return await this.authService.resetPassword({
       email,
       password,
@@ -39,10 +49,9 @@ export class AuthController {
 
   @Post('forget-password')
   async forgetPassword(
-    @Body() authVerifyResetPasswordInDto: AuthVerifyResetPasswordInDto,
+    @Body(new ZodPipe(SchemaAuthForgetPasswordInDto))
+    authForgetPasswordInDto: AuthForgetPasswordInDtoInputs,
   ) {
-    return await this.authService.verifyResetPassword(
-      authVerifyResetPasswordInDto,
-    );
+    return await this.authService.forgetPassword(authForgetPasswordInDto);
   }
 }

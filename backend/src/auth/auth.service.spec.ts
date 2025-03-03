@@ -76,7 +76,7 @@ describe('AuthService', () => {
           await callback(transaction);
         });
 
-      const response = await authService.createAccount({
+      const response = await authService.signUp({
         cnpj: '12345678901235',
         name: 'Wayne Enterprises',
         email: 'jane.doe@email.com',
@@ -91,7 +91,7 @@ describe('AuthService', () => {
 
   it('should not create account due to duplicated email', async () => {
     await expect(
-      authService.createAccount({
+      authService.signUp({
         cnpj: '12345678901235',
         name: 'Wayne Enterprises',
         email: POPULATE_USER_DEFAULT.email,
@@ -102,7 +102,7 @@ describe('AuthService', () => {
 
   it('should not create account due to duplicated CNPJ', async () => {
     await expect(
-      authService.createAccount({
+      authService.signUp({
         cnpj: POPULATE_ORGANIZATION_DEFAULT.cnpj,
         name: 'Wayne Enterprises',
         email: 'jane.doe@email.com',
@@ -131,7 +131,7 @@ describe('AuthService', () => {
   it('should verify reset password', async () => {
     const spy = jest.spyOn(authService['emailService'], 'sendEmail');
 
-    await authService.verifyResetPassword({
+    await authService.forgetPassword({
       email: POPULATE_USER_DEFAULT.email,
     });
 
@@ -144,7 +144,7 @@ describe('AuthService', () => {
 
   it('should fail in verify reset password due to email that not exist', async () => {
     await expect(
-      authService.verifyResetPassword({
+      authService.forgetPassword({
         email: 'jane.doe@email.com',
       }),
     ).rejects.toThrow(NotFoundException);

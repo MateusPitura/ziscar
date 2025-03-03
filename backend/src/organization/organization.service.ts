@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { OrganizationCreateInDto } from './organization.dto';
+import { OrganizationCreateInDtoInputs } from './organization.schema';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../database/prisma.service';
 import { GetCallback, Transaction } from '../types';
@@ -10,7 +10,7 @@ export class OrganizationService {
   constructor(private readonly prismaService: PrismaService) {}
 
   async create(
-    organizationCreateInDto: OrganizationCreateInDto,
+    organizationCreateInDto: OrganizationCreateInDtoInputs,
     transaction?: Transaction,
   ) {
     const database = transaction || this.prismaService;
@@ -28,7 +28,7 @@ export class OrganizationService {
     };
   }
 
-  async get(
+  async findOne(
     organizationWhereUniqueInput: Prisma.OrganizationWhereUniqueInput,
     select: Prisma.OrganizationSelect,
   ) {
@@ -39,6 +39,6 @@ export class OrganizationService {
   }
 
   async verifyDuplicated(properties: Partial<Record<'cnpj', string>>) {
-    await verifyDuplicated(properties, this.get.bind(this) as GetCallback);
+    await verifyDuplicated(properties, this.findOne.bind(this) as GetCallback);
   }
 }

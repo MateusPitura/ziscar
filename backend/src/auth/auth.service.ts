@@ -4,12 +4,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import {
-  AuthSigninInDto,
-  AuthCreateAccountInDto,
-  AuthResetPasswordInDto,
-  AuthVerifyResetPasswordInDto,
-} from './auth.dto';
+import { AuthResetPasswordOutDto, AuthSigninOutDto } from './auth.dto';
 import { compareSync } from 'bcrypt';
 import { ClientService } from '../client/client.service';
 import { OrganizationService } from '../organization/organization.service';
@@ -18,6 +13,12 @@ import { EmailService } from '../email/email.service';
 import { SEED_ROLE_ADMIN_ID } from '../constants';
 import { PrismaService } from '../database/prisma.service';
 import { generateRandomPassword } from '../utils/generateRandomPassword';
+import {
+  AuthForgetPasswordInDtoInputs,
+  AuthResetPasswordInDtoInputs,
+  AuthSignInInDtoInputs,
+  AuthSignUpInDtoInputs,
+} from './auth.schema';
 
 @Injectable()
 export class AuthService {
@@ -30,8 +31,8 @@ export class AuthService {
     private readonly prismaService: PrismaService,
   ) {}
 
-  async signIn({ email, password }: AuthSigninInDto) {
-    const user = await this.userService.get(
+  async signIn({ email, password }: AuthSignInInDtoInputs) {
+    const user = await this.userService.findOne(
       { email },
       {
         id: true,
@@ -44,7 +45,7 @@ export class AuthService {
       throw new UnauthorizedException();
     }
 
-    const payload = {
+    const payload: AuthSigninOutDto = {
       clientId: user.clientId,
       userId: user.id,
     };
@@ -56,7 +57,7 @@ export class AuthService {
     };
   }
 
-  async createAccount({ cnpj, name, email, fullName }: AuthCreateAccountInDto) {
+  async signUp({ cnpj, name, email, fullName }: AuthSignUpInDtoInputs) {
     await this.prismaService.transaction(async (transaction) => {
       const { clientId } = await this.clientService.create(transaction);
 
@@ -83,20 +84,23 @@ export class AuthService {
     return true;
   }
 
-  async resetPassword({ email, password }: AuthResetPasswordInDto) {
+  async resetPassword({ email, password }: AuthResetPasswordInDtoInputs) {
     await this.userService.update({ email }, { password });
 
     return true;
   }
 
-  async verifyResetPassword({ email }: AuthVerifyResetPasswordInDto) {
-    const user = await this.userService.get({ email }, { id: true });
+  async forgetPassword({ email }: AuthForgetPasswordInDtoInputs) {
+    const user = await this.userService.findOne({ email }, { id: true });
 
     if (!user) {
       throw new NotFoundException();
     }
 
-    const token = this.jwtService.sign({ email });
+    const payload: AuthResetPasswordOutDto = {
+      email,
+    };
+    const token = this.jwtService.sign(payload);
 
     void this.emailService.sendEmail({
       to: email,
