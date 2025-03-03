@@ -4,7 +4,8 @@ import { validateCnpj } from "../utils/validateCnpj";
 
 export type infer<T extends z.ZodTypeAny> = z.infer<T>;
 
-export const object = z.object;
+export const object = <T extends z.ZodRawShape>(shape: T) =>
+  z.object(shape).strict();
 export const list = z.enum;
 export const boolean = z.boolean;
 
