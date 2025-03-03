@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { OrganizationCreateInDtoInputs } from './organization.schema';
+import { OrganizationCreateInDto } from './organization.schema';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../database/prisma.service';
 import { GetCallback, Transaction } from '../types';
@@ -10,7 +10,7 @@ export class OrganizationService {
   constructor(private readonly prismaService: PrismaService) {}
 
   async create(
-    organizationCreateInDto: OrganizationCreateInDtoInputs,
+    organizationCreateInDto: OrganizationCreateInDto,
     transaction?: Transaction,
   ) {
     const database = transaction || this.prismaService;

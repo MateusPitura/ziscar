@@ -10,7 +10,7 @@ import {
 } from '../constants';
 import { FETCH_USER, GET_USER } from './user.constant';
 import { EmailService } from '../email/email.service';
-import { AuthRequest } from 'src/auth/auth.dto';
+import { AuthRequest } from 'src/auth/auth.type';
 import { ITEMS_PER_PAGE } from '@shared/constants';
 
 describe('UserController', () => {

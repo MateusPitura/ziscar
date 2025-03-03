@@ -1,4 +1,4 @@
-export class SendEmailInDto {
+export interface SendEmail {
   to: string;
   title: string;
   body: string;

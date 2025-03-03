@@ -12,17 +12,9 @@ import {
 import { UserService } from './user.service';
 import { AuthGuard } from '../auth/auth.guard';
 import { FETCH_USER, GET_USER } from './user.constant';
-import { AuthRequest, AuthSigninOutDto } from '../auth/auth.dto';
-import { ZodPipe } from 'src/utils/ZodPipe';
-import {
-  UserPostInDtoInputs,
-  SchemaUserPostInDto,
-  SchemaUserFetchInDto,
-  UserFetchInDtoInputs,
-  SchemaUserPatchInDto,
-  UserPatchInDtoInputs,
-} from './user.schema';
-import { ParamInputs, SchemaParam } from 'src/schemas';
+import { AuthRequest, AuthSignin } from '../auth/auth.type';
+import { UserPostInDto, UserFetchInDto, UserPatchInDto } from './user.schema';
+import { ParamInputs } from 'src/schemas';
 
 @Controller('user')
 @UseGuards(AuthGuard)
@@ -30,12 +22,8 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
-  post(
-    @Req() req: AuthRequest,
-    @Body(new ZodPipe(SchemaUserPostInDto))
-    userPostInDto: UserPostInDtoInputs,
-  ) {
-    const { clientId } = req.authToken as AuthSigninOutDto;
+  post(@Req() req: AuthRequest, @Body() userPostInDto: UserPostInDto) {
+    const { clientId } = req.authToken as AuthSignin;
 
     const createUserPayload = {
       ...userPostInDto,
@@ -45,23 +33,19 @@ export class UserController {
   }
 
   @Get()
-  async fetch(
-    @Query(new ZodPipe(SchemaUserFetchInDto))
-    userFetchInDto: UserFetchInDtoInputs,
-  ) {
+  async fetch(@Query() userFetchInDto: UserFetchInDto) {
     return await this.userService.findMany(userFetchInDto, FETCH_USER);
   }
 
   @Get(':id')
-  async get(@Param(new ZodPipe(SchemaParam)) { id }: ParamInputs) {
+  async get(@Param() { id }: ParamInputs) {
     return await this.userService.findOne({ id: +id }, GET_USER);
   }
 
   @Patch(':id')
   async patch(
-    @Param(new ZodPipe(SchemaParam)) { id }: ParamInputs,
-    @Body(new ZodPipe(SchemaUserPatchInDto))
-    userPatchInDto: UserPatchInDtoInputs,
+    @Param() { id }: ParamInputs,
+    @Body() userPatchInDto: UserPatchInDto,
   ) {
     return await this.userService.update({ id: +id }, userPatchInDto);
   }

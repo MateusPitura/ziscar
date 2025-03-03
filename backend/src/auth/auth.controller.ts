@@ -1,36 +1,25 @@
 import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { AuthRequest, AuthResetPasswordOutDto } from './auth.dto';
+import { AuthRequest, AuthResetPassword } from './auth.type';
 import { AuthGuard } from './auth.guard';
 import {
-  AuthForgetPasswordInDtoInputs,
-  AuthSignInInDtoInputs,
-  AuthSignUpInDtoInputs,
-  PasswordInputs,
-  SchemaAuthForgetPasswordInDto,
-  SchemaAuthSigInInDto,
-  SchemaAuthSignUpInDto,
-  SchemaPassword,
+  AuthForgetPasswordInDto,
+  AuthSignInInDto,
+  AuthSignUpInDto,
+  PasswordInDto,
 } from './auth.schema';
-import { ZodPipe } from 'src/utils/ZodPipe';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('sign-in')
-  async signIn(
-    @Body(new ZodPipe(SchemaAuthSigInInDto))
-    authSigninInDto: AuthSignInInDtoInputs,
-  ) {
+  async signIn(@Body() authSigninInDto: AuthSignInInDto) {
     return await this.authService.signIn(authSigninInDto);
   }
 
   @Post('sign-up')
-  async signUp(
-    @Body(new ZodPipe(SchemaAuthSignUpInDto))
-    authSignUpInDto: AuthSignUpInDtoInputs,
-  ) {
+  async signUp(@Body() authSignUpInDto: AuthSignUpInDto) {
     return await this.authService.signUp(authSignUpInDto);
   }
 
@@ -38,9 +27,9 @@ export class AuthController {
   @UseGuards(AuthGuard)
   async resetPassword(
     @Req() req: AuthRequest,
-    @Body(new ZodPipe(SchemaPassword)) { password }: PasswordInputs,
+    @Body() { password }: PasswordInDto,
   ) {
-    const { email } = req.authToken as AuthResetPasswordOutDto;
+    const { email } = req.authToken as AuthResetPassword;
     return await this.authService.resetPassword({
       email,
       password,
@@ -49,8 +38,7 @@ export class AuthController {
 
   @Post('forget-password')
   async forgetPassword(
-    @Body(new ZodPipe(SchemaAuthForgetPasswordInDto))
-    authForgetPasswordInDto: AuthForgetPasswordInDtoInputs,
+    @Body() authForgetPasswordInDto: AuthForgetPasswordInDto,
   ) {
     return await this.authService.forgetPassword(authForgetPasswordInDto);
   }

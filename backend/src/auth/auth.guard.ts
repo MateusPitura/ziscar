@@ -5,7 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { AuthRequest } from './auth.dto';
+import { AuthRequest } from './auth.type';
 import { Request } from 'express';
 
 @Injectable()

@@ -1,11 +1,12 @@
 import { s } from '@shared/safeZod';
+import { createZodDto } from 'nestjs-zod';
 
-export const SchemaOrganizationCreateInDto = s.object({
+const SchemaOrganizationCreateInDto = s.object({
   name: s.string(),
   cnpj: s.cnpj(),
   clientId: s.id(),
 });
 
-export type OrganizationCreateInDtoInputs = s.infer<
-  typeof SchemaOrganizationCreateInDto
->;
+export class OrganizationCreateInDto extends createZodDto(
+  SchemaOrganizationCreateInDto,
+) {}

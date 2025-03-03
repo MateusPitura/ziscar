@@ -8,7 +8,7 @@ import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../database/prisma.service';
 import { EmailService } from '../email/email.service';
 import { POPULATE_USER_DEFAULT } from '../constants';
-import { AuthRequest } from './auth.dto';
+import { AuthRequest } from './auth.type';
 
 describe('AuthController', () => {
   let authController: AuthController;

@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { validateCpf } from "../utils/validateCpf";
 import { validateCnpj } from "../utils/validateCnpj";
+import { removeMask } from "../utils/removeMask";
 
 export type infer<T extends z.ZodTypeAny> = z.infer<T>;
 
@@ -40,7 +41,10 @@ export const fullName = () =>
     message: "Nome completo inválido",
   });
 
-export const cep = () => string(9).regex(/^\d{5}-?\d{3}$/, "CEP inválido");
+export const cep = () =>
+  string(9)
+    .transform((cpf) => removeMask(cpf))
+    .refine((cep) => /^\d{8}$/.test(cep), "CEP inválido");
 
 export const birthDate = () =>
   date()
@@ -48,13 +52,19 @@ export const birthDate = () =>
     .max(new Date(), { message: "Data de nascimento inválida" });
 
 export const cpf = () =>
-  string(14).refine((cpf) => validateCpf(cpf), { message: "CPF inválido" });
+  string(14)
+    .transform((cpf) => removeMask(cpf))
+    .refine((cpf) => validateCpf(cpf), { message: "CPF inválido" });
 
 export const cnpj = () =>
-  string(18).refine((cnpj) => validateCnpj(cnpj), { message: "CNPJ inválido" });
+  string(18)
+    .transform((cnpj) => removeMask(cnpj))
+    .refine((cnpj) => validateCnpj(cnpj), { message: "CNPJ inválido" });
 
 export const cellphone = () =>
-  string(15).regex(/^\(?\d{2}\)?\s?\d{5}-\d{4}$/, "Celular inválido");
+  string(15)
+    .transform((cpf) => removeMask(cpf))
+    .refine((cep) => /^\d{11}$/.test(cep), "Celular inválido");
 
 export const password = () =>
   string()

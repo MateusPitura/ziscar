@@ -6,6 +6,8 @@ import { ConfigModule } from '@nestjs/config';
 import { ClientModule } from './client/client.module';
 import { OrganizationModule } from './organization/organization.module';
 import { EmailModule } from './email/email.module';
+import { APP_PIPE } from '@nestjs/core';
+import { ZodValidationPipe } from 'nestjs-zod';
 
 @Module({
   imports: [
@@ -16,6 +18,12 @@ import { EmailModule } from './email/email.module';
     ClientModule,
     OrganizationModule,
     EmailModule,
+  ],
+  providers: [
+    {
+      provide: APP_PIPE,
+      useClass: ZodValidationPipe,
+    },
   ],
 })
 export class AppModule {}

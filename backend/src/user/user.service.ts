@@ -10,9 +10,9 @@ import { JwtService } from '@nestjs/jwt';
 import { generateRandomPassword } from '../utils/generateRandomPassword';
 import { ITEMS_PER_PAGE } from '@shared/constants';
 import {
-  UserCreateInDtoInputs,
-  UserFindManyInDtoInputs,
-  UserUpdateInDtoInputs,
+  UserCreateInDto,
+  UserFindManyInDto,
+  UserUpdateInDto,
 } from './user.schema';
 
 @Injectable()
@@ -23,10 +23,7 @@ export class UserService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async create(
-    userCreateInDto: UserCreateInDtoInputs,
-    transaction?: Transaction,
-  ) {
+  async create(userCreateInDto: UserCreateInDto, transaction?: Transaction) {
     const database = transaction || this.prismaService;
 
     await this.verifyDuplicated({ email: userCreateInDto.email });
@@ -71,7 +68,7 @@ export class UserService {
   }
 
   async findMany(
-    userFindManyInDto: UserFindManyInDtoInputs,
+    userFindManyInDto: UserFindManyInDto,
     select?: Prisma.UserSelect,
   ) {
     const { page = 1 } = userFindManyInDto;
@@ -130,7 +127,7 @@ export class UserService {
 
   async update(
     userWhereUniqueInput: Prisma.UserWhereUniqueInput,
-    userUpdateInDto: UserUpdateInDtoInputs,
+    userUpdateInDto: UserUpdateInDto,
   ) {
     await this.verifyDuplicated({
       email: userUpdateInDto.email,

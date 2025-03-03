@@ -1,6 +1,7 @@
 import { s } from '@shared/safeZod';
+import { createZodDto } from 'nestjs-zod';
 
-export const SchemaUserPostInDto = s.object({
+const SchemaUserPostInDto = s.object({
   fullName: s.fullName(),
   email: s.email(),
   cpf: s.cpf().optional(),
@@ -11,20 +12,20 @@ export const SchemaUserPostInDto = s.object({
   roleId: s.id(),
 });
 
-export const SchemaUserCreateInDto = SchemaUserPostInDto.extend({
+const SchemaUserCreateInDto = SchemaUserPostInDto.extend({
   clientId: s.id(),
 });
 
-export const SchemaUserFetchInDto = s.object({
+const SchemaUserFetchInDto = s.object({
   page: s.number().optional(),
   status: s.list(['active', 'inactive']).optional(),
   fullName: s.fullName().optional(),
   orderBy: s.list(['fullName', 'email']).optional(),
 });
 
-export const SchemaUserFindManyInDto = SchemaUserFetchInDto;
+const SchemaUserFindManyInDto = SchemaUserFetchInDto;
 
-export const SchemaUserPatchInDto = SchemaUserPostInDto.partial().extend({
+const SchemaUserPatchInDto = SchemaUserPostInDto.partial().extend({
   password: s.password().optional(),
   address: s.SchemaAddress.partial().optional(),
   isActive: s.boolean().optional(),
@@ -32,9 +33,9 @@ export const SchemaUserPatchInDto = SchemaUserPostInDto.partial().extend({
 
 export const SchemaUserUpdateInDto = SchemaUserPatchInDto;
 
-export type UserPostInDtoInputs = s.infer<typeof SchemaUserPostInDto>;
-export type UserCreateInDtoInputs = s.infer<typeof SchemaUserCreateInDto>;
-export type UserFetchInDtoInputs = s.infer<typeof SchemaUserFetchInDto>;
-export type UserFindManyInDtoInputs = s.infer<typeof SchemaUserFindManyInDto>;
-export type UserPatchInDtoInputs = s.infer<typeof SchemaUserPatchInDto>;
-export type UserUpdateInDtoInputs = s.infer<typeof SchemaUserUpdateInDto>;
+export class UserPostInDto extends createZodDto(SchemaUserPostInDto) {}
+export class UserCreateInDto extends createZodDto(SchemaUserCreateInDto) {}
+export class UserFetchInDto extends createZodDto(SchemaUserFetchInDto) {}
+export class UserFindManyInDto extends createZodDto(SchemaUserFindManyInDto) {}
+export class UserPatchInDto extends createZodDto(SchemaUserPatchInDto) {}
+export class UserUpdateInDto extends createZodDto(SchemaUserUpdateInDto) {}
