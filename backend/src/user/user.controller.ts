@@ -8,6 +8,7 @@ import {
   Query,
   Post,
   Req,
+  ForbiddenException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { AuthGuard } from '../auth/auth.guard';
@@ -51,7 +52,11 @@ export class UserController {
   }
 
   @Get(':id')
-  async get(@Param() { id }: ParamInputs) {
+  async get(@Req() req: AuthRequest, @Param() { id }: ParamInputs) {
+    const { userId } = req.authToken as AuthSignin;
+    if (userId == id) {
+      throw new ForbiddenException('Use a rota /me para acessar seus dados');
+    }
     return await this.userService.findOne(
       { isActive: true, id: +id },
       GET_USER,
@@ -69,9 +74,14 @@ export class UserController {
 
   @Patch(':id')
   async patch(
+    @Req() req: AuthRequest,
     @Param() { id }: ParamInputs,
     @Body() userPatchInDto: UserPatchInDto,
   ) {
+    const { userId } = req.authToken as AuthSignin;
+    if (userId == id) {
+      throw new ForbiddenException('Use a rota /me para atualizar seus dados');
+    }
     return await this.userService.update({ id: +id }, userPatchInDto);
   }
 }

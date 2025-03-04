@@ -12,7 +12,7 @@ import { FETCH_USER, GET_USER } from './user.constant';
 import { EmailService } from '../email/email.service';
 import { AuthRequest } from 'src/auth/auth.type';
 import { ITEMS_PER_PAGE, SEED_ROLE_SALES_ID } from '@shared/constants';
-import { NotFoundException } from '@nestjs/common';
+import { ForbiddenException, NotFoundException } from '@nestjs/common';
 
 describe('UserController', () => {
   let userController: UserController;
@@ -83,8 +83,14 @@ describe('UserController', () => {
   });
 
   it('should not find inactive user', async () => {
+    const request = new Request('http://localhost:3000') as AuthRequest;
+    request.authToken = {
+      userId: POPULATE_USER_DEFAULT.id,
+      clientId: POPULATE_CLIENT_DEFAULT_ID,
+    };
+
     await expect(
-      userController.get({ id: POPULATE_USER_INACTIVE.id }),
+      userController.get(request, { id: POPULATE_USER_INACTIVE.id }),
     ).rejects.toThrow(NotFoundException);
   });
 
@@ -101,18 +107,47 @@ describe('UserController', () => {
   });
 
   it('should find one user by id', async () => {
-    const user = await userController.get({ id: POPULATE_USER_DEFAULT.id });
+    const request = new Request('http://localhost:3000') as AuthRequest;
+    request.authToken = {
+      userId: 1,
+      clientId: POPULATE_CLIENT_DEFAULT_ID,
+    };
+
+    const user = await userController.get(request, {
+      id: POPULATE_USER_DEFAULT.id,
+    });
 
     for (const key in GET_USER) {
       expect(user).toHaveProperty(key);
     }
   });
 
+  it('should not allow find user by id equal to signed id', async () => {
+    const request = new Request('http://localhost:3000') as AuthRequest;
+    request.authToken = {
+      userId: POPULATE_USER_DEFAULT.id,
+      clientId: POPULATE_CLIENT_DEFAULT_ID,
+    };
+
+    await expect(
+      userController.get(request, {
+        id: POPULATE_USER_DEFAULT.id,
+      }),
+    ).rejects.toThrow(ForbiddenException);
+  });
+
   it('should update user email and return the same properties of get user', async () => {
     await prismaService.transaction(async (transaction) => {
       Reflect.set(userService, 'prismaService', transaction);
 
+      const request = new Request('http://localhost:3000') as AuthRequest;
+      request.authToken = {
+        userId: 1,
+        clientId: POPULATE_CLIENT_DEFAULT_ID,
+      };
+
       const user = await userController.patch(
+        request,
         { id: POPULATE_USER_DEFAULT.id },
         {
           email: 'jane.doe@email.com',
@@ -122,6 +157,30 @@ describe('UserController', () => {
       for (const key in GET_USER) {
         expect(user).toHaveProperty(key);
       }
+
+      transaction.rollback();
+    });
+  });
+
+  it('should not allow update user email by id equal to signed id', async () => {
+    await prismaService.transaction(async (transaction) => {
+      Reflect.set(userService, 'prismaService', transaction);
+
+      const request = new Request('http://localhost:3000') as AuthRequest;
+      request.authToken = {
+        userId: POPULATE_USER_DEFAULT.id,
+        clientId: POPULATE_CLIENT_DEFAULT_ID,
+      };
+
+      await expect(
+        userController.patch(
+          request,
+          { id: POPULATE_USER_DEFAULT.id },
+          {
+            email: 'jane.doe@email.com',
+          },
+        ),
+      ).rejects.toThrow(ForbiddenException);
 
       transaction.rollback();
     });
