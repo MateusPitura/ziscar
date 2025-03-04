@@ -20,6 +20,7 @@ import {
 } from './auth.schema';
 import { SEED_ROLE_SALES_ID } from '@shared/constants';
 import { Response } from 'express';
+import { COOKIE_JWT_NAME } from 'src/constants';
 
 @Injectable()
 export class AuthService {
@@ -53,12 +54,17 @@ export class AuthService {
 
     const token = this.jwtService.sign(payload);
 
-    res.cookie('jwt', token, {
+    res.cookie(COOKIE_JWT_NAME, token, {
       httpOnly: true,
       secure: false, // TODO: Habilitar no HTTPS
       sameSite: 'lax',
     });
 
+    return res.json(true);
+  }
+
+  signOut(res: Response) {
+    res.clearCookie(COOKIE_JWT_NAME);
     return res.json(true);
   }
 

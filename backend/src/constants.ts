@@ -1,3 +1,5 @@
+export const COOKIE_JWT_NAME = 'jwt';
+
 export const POPULATE_USER_DEFAULT = {
   id: 150,
   fullName: 'John Doe',

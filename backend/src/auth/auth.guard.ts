@@ -7,6 +7,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { AuthRequest } from './auth.type';
 import { Request } from 'express';
+import { COOKIE_JWT_NAME } from 'src/constants';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -16,7 +17,7 @@ export class AuthGuard implements CanActivate {
     const request = context.switchToHttp().getRequest<Request>();
 
     try {
-      const token = request.cookies['jwt'] as string;
+      const token = request.cookies[COOKIE_JWT_NAME] as string;
 
       if (!token) {
         throw new UnauthorizedException('Não foi possível autenticar');

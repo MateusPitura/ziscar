@@ -29,6 +29,12 @@ export class AuthController {
     return await this.authService.signIn(authSigninInDto, res);
   }
 
+  @HttpCode(HttpStatus.OK)
+  @Post('sign-out')
+  signOut(@Res() res: Response) {
+    return this.authService.signOut(res);
+  }
+
   @Post('sign-up')
   async signUp(@Body() authSignUpInDto: AuthSignUpInDto) {
     return await this.authService.signUp(authSignUpInDto);
