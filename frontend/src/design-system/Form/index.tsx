@@ -1,10 +1,10 @@
 import { lazy, useCallback, type ReactElement } from "react";
 import {
-    DefaultValues,
-    FieldValues,
-    FormProvider,
-    useForm,
-    UseFormReturn,
+  DefaultValues,
+  FieldValues,
+  FormProvider,
+  useForm,
+  UseFormReturn,
 } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ZodType } from "zod";
@@ -81,7 +81,11 @@ export default function Form<T extends FieldValues>({
       >
         {children}
       </form>
-      {import.meta.env.DEV && <DevTool control={methods.control} />}
+      {import.meta.env.DEV && (
+        <DevTool
+          control={(methods as UseFormReturn<FieldValues, unknown>).control}
+        />
+      )}
     </FormProvider>
   );
 }
