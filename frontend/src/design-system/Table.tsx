@@ -202,7 +202,7 @@ function Footer({
 }: FooterProps) {
   const pageOffset = (currentStartItem - 1) * itemsPerPage; // 0, 20, 40 etc.
 
-  const lastPage = totalItems && totalItems <= pageOffset + itemsPerPage; // 21-30 de 30 ou 21-40 de 40
+  const lastPage = totalItems && totalItems <= pageOffset + itemsPerPage; // 21-30 of 30 or 21-40 of 40
 
   function handleNext() {
     if (onClickNavigateBtn) {

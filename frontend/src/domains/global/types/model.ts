@@ -17,7 +17,7 @@ export type Resource = "users";
 
 export type Action = "create" | "read" | "update" | "delete";
 
-export interface User {
+export interface User { // TODO: tentar pegar isso do front
     id: string;
     fullName: string;
     email: string;
