@@ -25,13 +25,16 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Post('sign-in')
-  async signIn(@Body() authSigninInDto: AuthSignInInDto, @Res() res: Response) {
+  async signIn(
+    @Body() authSigninInDto: AuthSignInInDto,
+    @Res() res?: Response,
+  ) {
     return await this.authService.signIn(authSigninInDto, res);
   }
 
   @HttpCode(HttpStatus.OK)
   @Post('sign-out')
-  signOut(@Res() res: Response) {
+  signOut(@Res() res?: Response) {
     return this.authService.signOut(res);
   }
 

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../database/prisma.service';
 import { GetCallback, Transaction } from '../types';
@@ -123,11 +123,21 @@ export class UserService {
   async findOne(
     userWhereUniqueInput: Prisma.UserWhereUniqueInput,
     select: Prisma.UserSelect,
+    onlyActive: boolean = true,
   ) {
-    return await this.prismaService.user.findFirst({
+    if (onlyActive) {
+      userWhereUniqueInput['isActive'] = true;
+    }
+    const user = await this.prismaService.user.findFirst({
       where: userWhereUniqueInput,
       select,
     });
+
+    if (onlyActive && !user) {
+      throw new NotFoundException('Usuário não encontrado');
+    }
+
+    return user;
   }
 
   async update(
@@ -139,7 +149,7 @@ export class UserService {
       cpf: userUpdateInDto.cpf,
     });
 
-    const { address, ...rest } = userUpdateInDto;
+    const { address, roleId, ...rest } = userUpdateInDto;
 
     const updatePayload = {
       ...rest,
@@ -163,11 +173,29 @@ export class UserService {
       );
     }
 
-    return await this.prismaService.user.update({
-      where: userWhereUniqueInput,
-      data: updatePayload,
-      select: GET_USER,
-    });
+    if (roleId) {
+      updatePayload['role'] = {
+        connect: {
+          id: roleId,
+        },
+      };
+    }
+
+    try {
+      const user = await this.prismaService.user.update({
+        where: {
+          isActive: !userUpdateInDto.isActive,
+          ...userWhereUniqueInput,
+        },
+        data: updatePayload,
+        select: GET_USER,
+      });
+      return user;
+    } catch (error) {
+      if ((error as Record<string, string>)?.code === 'P2025') {
+        throw new NotFoundException('Usuário não encontrado');
+      }
+    }
   }
 
   async verifyDuplicated(properties: Partial<Record<'email' | 'cpf', string>>) {

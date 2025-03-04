@@ -11,10 +11,10 @@ export async function verifyDuplicated(
     whereClause.push({ [key]: value });
   }
 
-  const entity = await getCallback({ OR: whereClause }, { id: true });
+  const entity = await getCallback({ OR: whereClause }, { id: true }, false);
 
   if (entity) {
-    const keysFormatted = Object.keys(properties).join(' or ');
+    const keysFormatted = Object.keys(properties).join(' ou ');
     throw new ConflictException(`Propriedade ${keysFormatted} já existe`);
   }
 }

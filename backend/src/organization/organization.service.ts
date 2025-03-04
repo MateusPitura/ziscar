@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { OrganizationCreateInDto } from './organization.schema';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../database/prisma.service';
@@ -31,11 +31,19 @@ export class OrganizationService {
   async findOne(
     organizationWhereUniqueInput: Prisma.OrganizationWhereUniqueInput,
     select: Prisma.OrganizationSelect,
+    onlyActive: boolean = true,
   ) {
-    return await this.prismaService.organization.findFirst({
+    if (onlyActive) {
+      organizationWhereUniqueInput['isActive'] = true;
+    }
+    const organization = await this.prismaService.organization.findFirst({
       where: organizationWhereUniqueInput,
       select,
     });
+    if (onlyActive && !organization) {
+      throw new NotFoundException('Organização não encontrada');
+    }
+    return organization;
   }
 
   async verifyDuplicated(properties: Partial<Record<'cnpj', string>>) {

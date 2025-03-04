@@ -4,8 +4,9 @@ import { PrismaService } from '../database/prisma.service';
 import {
   POPULATE_CLIENT_DEFAULT_ID,
   POPULATE_ORGANIZATION_DEFAULT,
+  POPULATE_ORGANIZATION_INACTIVE,
 } from '../constants';
-import { ConflictException } from '@nestjs/common';
+import { ConflictException, NotFoundException } from '@nestjs/common';
 
 describe('OrganizationService', () => {
   let organizationService: OrganizationService;
@@ -26,7 +27,7 @@ describe('OrganizationService', () => {
 
       const user = await organizationService.create({
         name: 'Wayne Enterprises',
-        cnpj: '12345678901235',
+        cnpj: '12345678901236',
         clientId: POPULATE_CLIENT_DEFAULT_ID,
       });
 
@@ -46,10 +47,39 @@ describe('OrganizationService', () => {
     ).rejects.toThrow(ConflictException);
   });
 
+  it('should not create an organization with a CNPJ of an inactive organization', async () => {
+    await expect(
+      organizationService.create({
+        name: 'Stark Industries',
+        cnpj: POPULATE_ORGANIZATION_INACTIVE.cnpj,
+        clientId: POPULATE_CLIENT_DEFAULT_ID,
+      }),
+    ).rejects.toThrow(ConflictException);
+  });
+
   it('should find one organization by id', async () => {
     const user = await organizationService.findOne(
       { id: POPULATE_ORGANIZATION_DEFAULT.id },
       { id: true },
+    );
+
+    expect(user).toHaveProperty('id');
+  });
+
+  it('should not find an inactive organization by id', async () => {
+    await expect(
+      organizationService.findOne(
+        { id: POPULATE_ORGANIZATION_INACTIVE.id },
+        { id: true },
+      ),
+    ).rejects.toThrow(NotFoundException);
+  });
+
+  it('should find an inactive organization by id', async () => {
+    const user = await organizationService.findOne(
+      { id: POPULATE_ORGANIZATION_INACTIVE.id },
+      { id: true },
+      false,
     );
 
     expect(user).toHaveProperty('id');

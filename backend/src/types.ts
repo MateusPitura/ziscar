@@ -11,5 +11,5 @@ export type Transaction = Omit<
 export type GetCallback = (
   entityWhereUniqueInput: Partial<Record<'OR', Record<string, string>[]>>,
   select: { id: boolean },
-  transaction?: Transaction,
+  onlyActive: boolean,
 ) => Promise<{ id: string } | null>;

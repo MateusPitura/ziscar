@@ -44,15 +44,21 @@ export class UserController {
   @Get('/me')
   async getMe(@Req() req: AuthRequest) {
     const { userId } = req.authToken as AuthSignin;
-    return await this.userService.findOne({ id: +userId }, GET_USER);
+    return await this.userService.findOne(
+      { isActive: true, id: +userId },
+      GET_USER,
+    );
   }
 
   @Get(':id')
   async get(@Param() { id }: ParamInputs) {
-    return await this.userService.findOne({ id: +id }, GET_USER);
+    return await this.userService.findOne(
+      { isActive: true, id: +id },
+      GET_USER,
+    );
   }
 
-  @Patch(':id')
+  @Patch('/me')
   async patchMe(
     @Req() req: AuthRequest,
     @Body() userPatchInDto: UserPatchInDto,

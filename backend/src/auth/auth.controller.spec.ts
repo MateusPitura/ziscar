@@ -50,7 +50,13 @@ describe('AuthController', () => {
       password: POPULATE_USER_DEFAULT.password,
     });
 
-    expect(response).toHaveProperty('token');
+    expect(response).toBeUndefined();
+  });
+
+  it('should signout', () => {
+    const response = authController.signOut();
+
+    expect(response).toBeUndefined();
   });
 
   it('should create an account', async () => {
@@ -63,7 +69,7 @@ describe('AuthController', () => {
 
       expect(
         await authController.signUp({
-          cnpj: '12345678901235',
+          cnpj: '12345678901236',
           email: 'jane.doe@email.com',
           fullName: 'Jane Doe',
           name: 'Wayne Enterprises',

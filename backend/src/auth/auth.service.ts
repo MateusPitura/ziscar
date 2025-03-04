@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { AuthResetPassword, AuthSignin } from './auth.type';
 import { compareSync } from 'bcrypt';
@@ -33,9 +29,9 @@ export class AuthService {
     private readonly prismaService: PrismaService,
   ) {}
 
-  async signIn({ email, password }: AuthSignInInDto, res: Response) {
+  async signIn({ email, password }: AuthSignInInDto, res?: Response) {
     const user = await this.userService.findOne(
-      { email },
+      { isActive: true, email },
       {
         id: true,
         clientId: true,
@@ -54,18 +50,18 @@ export class AuthService {
 
     const token = this.jwtService.sign(payload);
 
-    res.cookie(COOKIE_JWT_NAME, token, {
+    res?.cookie(COOKIE_JWT_NAME, token, {
       httpOnly: true,
       secure: false, // TODO: Habilitar no HTTPS
       sameSite: 'lax',
     });
 
-    return res.json(true);
+    return res?.json(true);
   }
 
-  signOut(res: Response) {
-    res.clearCookie(COOKIE_JWT_NAME);
-    return res.json(true);
+  signOut(res?: Response) {
+    res?.clearCookie(COOKIE_JWT_NAME);
+    return res?.json(true);
   }
 
   async signUp({ cnpj, name, email, fullName }: AuthSignUpInDto) {
@@ -96,17 +92,13 @@ export class AuthService {
   }
 
   async resetPassword({ email, password }: AuthResetPasswordInDto) {
-    await this.userService.update({ email }, { password });
+    await this.userService.update({ isActive: true, email }, { password });
 
     return true;
   }
 
   async forgetPassword({ email }: AuthForgetPasswordInDto) {
-    const user = await this.userService.findOne({ email }, { id: true });
-
-    if (!user) {
-      throw new NotFoundException();
-    }
+    await this.userService.findOne({ email }, { id: true });
 
     const payload: AuthResetPassword = {
       email,

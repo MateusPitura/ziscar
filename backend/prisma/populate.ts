@@ -2,7 +2,9 @@ import { PrismaClient } from '@prisma/client';
 import {
   POPULATE_CLIENT_DEFAULT_ID,
   POPULATE_ORGANIZATION_DEFAULT,
+  POPULATE_ORGANIZATION_INACTIVE,
   POPULATE_USER_DEFAULT,
+  POPULATE_USER_INACTIVE,
 } from '../src/constants';
 import { encryptPassword } from '../src/user/user.utils';
 import { faker } from '@faker-js/faker';
@@ -22,22 +24,36 @@ async function seed() {
   const promises: Promise<unknown>[] = [];
 
   promises.push(
-    prisma.organization.create({
-      data: {
-        ...POPULATE_ORGANIZATION_DEFAULT,
-        clientId: POPULATE_CLIENT_DEFAULT_ID,
-      },
+    prisma.organization.createMany({
+      data: [
+        {
+          ...POPULATE_ORGANIZATION_DEFAULT,
+          clientId: POPULATE_CLIENT_DEFAULT_ID,
+        },
+        {
+          ...POPULATE_ORGANIZATION_INACTIVE,
+          clientId: POPULATE_CLIENT_DEFAULT_ID,
+        },
+      ],
     }),
   );
 
   promises.push(
-    prisma.user.create({
-      data: {
-        ...POPULATE_USER_DEFAULT,
-        password: await encryptPassword(POPULATE_USER_DEFAULT.password),
-        clientId: POPULATE_CLIENT_DEFAULT_ID,
-        roleId: SEED_ROLE_SALES_ID,
-      },
+    prisma.user.createMany({
+      data: [
+        {
+          ...POPULATE_USER_DEFAULT,
+          password: await encryptPassword(POPULATE_USER_DEFAULT.password),
+          clientId: POPULATE_CLIENT_DEFAULT_ID,
+          roleId: SEED_ROLE_SALES_ID,
+        },
+        {
+          ...POPULATE_USER_INACTIVE,
+          password: await encryptPassword(POPULATE_USER_INACTIVE.password),
+          clientId: POPULATE_CLIENT_DEFAULT_ID,
+          roleId: SEED_ROLE_SALES_ID,
+        },
+      ],
     }),
   );
 

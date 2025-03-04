@@ -6,11 +6,13 @@ import { JwtService } from '@nestjs/jwt';
 import {
   POPULATE_CLIENT_DEFAULT_ID,
   POPULATE_USER_DEFAULT,
+  POPULATE_USER_INACTIVE,
 } from '../constants';
 import { FETCH_USER, GET_USER } from './user.constant';
 import { EmailService } from '../email/email.service';
 import { AuthRequest } from 'src/auth/auth.type';
 import { ITEMS_PER_PAGE, SEED_ROLE_SALES_ID } from '@shared/constants';
+import { NotFoundException } from '@nestjs/common';
 
 describe('UserController', () => {
   let userController: UserController;
@@ -66,6 +68,38 @@ describe('UserController', () => {
     });
   });
 
+  it('should find signed user', async () => {
+    const request = new Request('http://localhost:3000') as AuthRequest;
+    request.authToken = {
+      userId: POPULATE_USER_DEFAULT.id,
+      clientId: POPULATE_CLIENT_DEFAULT_ID,
+    };
+
+    const user = await userController.getMe(request);
+
+    for (const key in GET_USER) {
+      expect(user).toHaveProperty(key);
+    }
+  });
+
+  it('should not find inactive user', async () => {
+    await expect(
+      userController.get({ id: POPULATE_USER_INACTIVE.id }),
+    ).rejects.toThrow(NotFoundException);
+  });
+
+  it('should not find signed inactive user', async () => {
+    const request = new Request('http://localhost:3000') as AuthRequest;
+    request.authToken = {
+      userId: POPULATE_USER_INACTIVE.id,
+      clientId: POPULATE_CLIENT_DEFAULT_ID,
+    };
+
+    await expect(userController.getMe(request)).rejects.toThrow(
+      NotFoundException,
+    );
+  });
+
   it('should find one user by id', async () => {
     const user = await userController.get({ id: POPULATE_USER_DEFAULT.id });
 
@@ -93,10 +127,38 @@ describe('UserController', () => {
     });
   });
 
+  it('should update user signed user', async () => {
+    await prismaService.transaction(async (transaction) => {
+      Reflect.set(userService, 'prismaService', transaction);
+
+      const request = new Request('http://localhost:3000') as AuthRequest;
+      request.authToken = {
+        userId: POPULATE_USER_DEFAULT.id,
+        clientId: POPULATE_CLIENT_DEFAULT_ID,
+      };
+
+      const user = await userController.patchMe(request, {
+        email: 'jane.doe@email.com',
+      });
+
+      for (const key in GET_USER) {
+        expect(user).toHaveProperty(key);
+      }
+
+      transaction.rollback();
+    });
+  });
+
   it('should find many users with many filters', async () => {
     const spy = jest.spyOn(prismaService.user, 'findMany');
 
-    await userController.fetch({
+    const request = new Request('http://localhost:3000') as AuthRequest;
+    request.authToken = {
+      userId: POPULATE_USER_DEFAULT.id,
+      clientId: POPULATE_CLIENT_DEFAULT_ID,
+    };
+
+    await userController.fetch(request, {
       page: 1,
       status: 'active',
       fullName: POPULATE_USER_DEFAULT.fullName,
@@ -112,6 +174,9 @@ describe('UserController', () => {
           mode: 'insensitive',
         },
         isActive: true,
+        NOT: {
+          id: POPULATE_USER_DEFAULT.id,
+        },
       },
       orderBy: [{ fullName: 'asc' }],
       select: FETCH_USER,

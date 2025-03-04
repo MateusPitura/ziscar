@@ -7,8 +7,11 @@ import { OrganizationService } from '../organization/organization.service';
 import { UserService } from '../user/user.service';
 import { PrismaService } from '../database/prisma.service';
 import {
+  FRONTEND_URL,
   POPULATE_ORGANIZATION_DEFAULT,
+  POPULATE_ORGANIZATION_INACTIVE,
   POPULATE_USER_DEFAULT,
+  POPULATE_USER_INACTIVE,
 } from '../constants';
 import {
   ConflictException,
@@ -56,7 +59,21 @@ describe('AuthService', () => {
       password: POPULATE_USER_DEFAULT.password,
     });
 
-    expect(response).toHaveProperty('token');
+    expect(response).toBeUndefined();
+  });
+
+  it('should not signin an inactive user', async () => {
+    await expect(
+      authService.signIn({
+        email: POPULATE_USER_INACTIVE.email,
+        password: POPULATE_USER_INACTIVE.password,
+      }),
+    ).rejects.toThrow(NotFoundException);
+  });
+
+  it('should sign out', () => {
+    const response = authService.signOut();
+    expect(response).toBeUndefined();
   });
 
   it('should not signin due to wrong password', async () => {
@@ -77,7 +94,7 @@ describe('AuthService', () => {
         });
 
       const response = await authService.signUp({
-        cnpj: '12345678901235',
+        cnpj: '12345678901236',
         name: 'Wayne Enterprises',
         email: 'jane.doe@email.com',
         fullName: 'Jane Doe',
@@ -92,9 +109,20 @@ describe('AuthService', () => {
   it('should not create account due to duplicated email', async () => {
     await expect(
       authService.signUp({
-        cnpj: '12345678901235',
+        cnpj: '12345678901236',
         name: 'Wayne Enterprises',
         email: POPULATE_USER_DEFAULT.email,
+        fullName: 'Jane Doe',
+      }),
+    ).rejects.toThrow(ConflictException);
+  });
+
+  it('should not create account due to duplicated email of an inactive user', async () => {
+    await expect(
+      authService.signUp({
+        cnpj: '12345678901236',
+        name: 'Wayne Enterprises',
+        email: POPULATE_USER_INACTIVE.email,
         fullName: 'Jane Doe',
       }),
     ).rejects.toThrow(ConflictException);
@@ -104,6 +132,17 @@ describe('AuthService', () => {
     await expect(
       authService.signUp({
         cnpj: POPULATE_ORGANIZATION_DEFAULT.cnpj,
+        name: 'Wayne Enterprises',
+        email: 'jane.doe@email.com',
+        fullName: 'Jane Doe',
+      }),
+    ).rejects.toThrow(ConflictException);
+  });
+
+  it('should not create account due to duplicated CNPJ of an inactive user', async () => {
+    await expect(
+      authService.signUp({
+        cnpj: POPULATE_ORGANIZATION_INACTIVE.cnpj,
         name: 'Wayne Enterprises',
         email: 'jane.doe@email.com',
         fullName: 'Jane Doe',
@@ -128,6 +167,21 @@ describe('AuthService', () => {
     });
   });
 
+  it('should not reset password of an inactive user', async () => {
+    await prismaService.transaction(async (transaction) => {
+      Reflect.set(userService, 'prismaService', transaction);
+
+      await expect(
+        authService.resetPassword({
+          email: POPULATE_USER_INACTIVE.email,
+          password: '123456',
+        }),
+      ).rejects.toThrow(NotFoundException);
+
+      transaction.rollback();
+    });
+  });
+
   it('should verify reset password', async () => {
     const spy = jest.spyOn(authService['emailService'], 'sendEmail');
 
@@ -138,7 +192,7 @@ describe('AuthService', () => {
     expect(spy).toHaveBeenCalledWith({
       to: POPULATE_USER_DEFAULT.email,
       title: 'Redefina sua senha',
-      body: '',
+      body: `${FRONTEND_URL}/sign?token=`,
     });
   });
 
@@ -146,6 +200,14 @@ describe('AuthService', () => {
     await expect(
       authService.forgetPassword({
         email: 'jane.doe@email.com',
+      }),
+    ).rejects.toThrow(NotFoundException);
+  });
+
+  it('should fail in verify reset password due to email of an inactive user', async () => {
+    await expect(
+      authService.forgetPassword({
+        email: POPULATE_USER_INACTIVE.email,
       }),
     ).rejects.toThrow(NotFoundException);
   });
