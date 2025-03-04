@@ -15,6 +15,6 @@ export async function verifyDuplicated(
 
   if (entity) {
     const keysFormatted = Object.keys(properties).join(' or ');
-    throw new ConflictException(`Property ${keysFormatted} already exists`);
+    throw new ConflictException(`Propriedade ${keysFormatted} já existe`);
   }
 }

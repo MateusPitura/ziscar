@@ -4,11 +4,11 @@ import SignCard from "../components/SignCard";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import { s } from "@shared/safeZod";
 import { useMutation } from "@tanstack/react-query";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import InputPassword from "@/design-system/Form/InputPassword";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
-import useSignPageContext from "../hooks/useSignPageContext";
 import { BASE_URL } from "@/domains/global/constants";
+import useSignPageContext from "../hooks/useSignPageContext";
 
 type NewPasswordFormInputs = s.infer<typeof s.SchemaPassword>;
 
@@ -16,6 +16,7 @@ export default function NewPasswordForm(): ReactNode {
   const { safeFetch } = useSafeFetch();
   const { showSuccessSnackbar } = useSnackbar();
   const { handleStep } = useSignPageContext();
+  const navigate = useNavigate();
 
   const [searchParams] = useSearchParams();
   let token: string | null = null;
@@ -36,6 +37,7 @@ export default function NewPasswordForm(): ReactNode {
   const { mutate, isPending } = useMutation({
     mutationFn: handleNewPassword,
     onSuccess: () => {
+      navigate("/sign");
       handleStep("SIGN_IN");
       showSuccessSnackbar({
         title: "Senha definida com sucesso",

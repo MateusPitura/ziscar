@@ -10,10 +10,10 @@ import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import { BASE_URL } from "@/domains/global/constants";
 
 const SchemaSignUpForm = s.object({
-  branchName: s.string(),
+  name: s.string(),
   cnpj: s.cnpj(),
-  userName: s.fullName(),
-  userEmail: s.email(),
+  fullName: s.fullName(),
+  email: s.email(),
 });
 
 type SignUpFormInputs = s.infer<typeof SchemaSignUpForm>;
@@ -44,17 +44,17 @@ export default function SignUpForm(): ReactNode {
     <Form<SignUpFormInputs>
       schema={SchemaSignUpForm}
       defaultValues={{
-        branchName: "",
+        name: "",
         cnpj: "",
-        userName: "",
-        userEmail: "",
+        fullName: "",
+        email: "",
       }}
       onSubmit={mutate}
       className="flex-1 flex flex-col"
     >
       <div className="flex-1">
         <Input<SignUpFormInputs>
-          name="branchName"
+          name="name"
           label="Nome da filial"
           required
         />
@@ -65,12 +65,12 @@ export default function SignUpForm(): ReactNode {
           mask="cnpj"
         />
         <Input<SignUpFormInputs>
-          name="userName"
+          name="fullName"
           label="Nome do usuário"
           required
         />
         <Input<SignUpFormInputs>
-          name="userEmail"
+          name="email"
           label="Email do usuário"
           required
         />

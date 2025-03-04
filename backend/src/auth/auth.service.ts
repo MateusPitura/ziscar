@@ -20,7 +20,7 @@ import {
 } from './auth.schema';
 import { SEED_ROLE_SALES_ID } from '@shared/constants';
 import { Response } from 'express';
-import { COOKIE_JWT_NAME } from 'src/constants';
+import { COOKIE_JWT_NAME, FRONTEND_URL } from 'src/constants';
 
 @Injectable()
 export class AuthService {
@@ -116,7 +116,7 @@ export class AuthService {
     void this.emailService.sendEmail({
       to: email,
       title: 'Redefina sua senha',
-      body: `${token}`,
+      body: `${FRONTEND_URL}/sign?token=${token}`,
     });
 
     return true;

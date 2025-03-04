@@ -14,6 +14,7 @@ import {
   UserFindManyInDto,
   UserUpdateInDto,
 } from './user.schema';
+import { FRONTEND_URL } from 'src/constants';
 
 @Injectable()
 export class UserService {
@@ -61,7 +62,7 @@ export class UserService {
     void this.emailService.sendEmail({
       to: userCreateInDto.email,
       title: 'Confirme a criação da sua conta',
-      body: `${token}`,
+      body: `${FRONTEND_URL}/sign?token=${token}`,
     });
 
     return true;

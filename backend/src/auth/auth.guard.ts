@@ -15,9 +15,14 @@ export class AuthGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<Request>();
+    const body = request.body as Record<string, string>;
 
     try {
-      const token = request.cookies[COOKIE_JWT_NAME] as string;
+      const token = (request.cookies[COOKIE_JWT_NAME] as string) || body?.token;
+
+      if (body?.token) {
+        delete body.token;
+      }
 
       if (!token) {
         throw new UnauthorizedException('Não foi possível autenticar');
