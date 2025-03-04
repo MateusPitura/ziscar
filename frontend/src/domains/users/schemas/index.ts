@@ -1,7 +1,7 @@
 import { s } from "@shared/safeZod";
 
 export const SchemaUsersFilterForm = s.object({
-  fullName: s.string().or(s.empty()),
+  fullName: s.fullName().or(s.empty()),
   orderBy: s.list(["fullName", "email"]),
   status: s.list(["active", "inactive"]),
 });

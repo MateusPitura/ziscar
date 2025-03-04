@@ -33,8 +33,12 @@ export class UserController {
   }
 
   @Get()
-  async fetch(@Query() userFetchInDto: UserFetchInDto) {
-    return await this.userService.findMany(userFetchInDto, FETCH_USER);
+  async fetch(
+    @Req() req: AuthRequest,
+    @Query() userFetchInDto: UserFetchInDto,
+  ) {
+    const { userId } = req.authToken as AuthSignin;
+    return await this.userService.findMany(userFetchInDto, +userId, FETCH_USER);
   }
 
   @Get('/me')
@@ -46,6 +50,15 @@ export class UserController {
   @Get(':id')
   async get(@Param() { id }: ParamInputs) {
     return await this.userService.findOne({ id: +id }, GET_USER);
+  }
+
+  @Patch(':id')
+  async patchMe(
+    @Req() req: AuthRequest,
+    @Body() userPatchInDto: UserPatchInDto,
+  ) {
+    const { userId } = req.authToken as AuthSignin;
+    return await this.userService.update({ id: +userId }, userPatchInDto);
   }
 
   @Patch(':id')

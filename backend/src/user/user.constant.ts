@@ -15,6 +15,7 @@ export const FETCH_USER = {
   id: true,
   fullName: true,
   email: true,
+  cellPhone: true,
   roleId: true,
   isActive: true,
 };

@@ -56,7 +56,6 @@ function UsersFilterFormContent(): ReactElement {
         <Input<UsersFilterFormInputs>
           name="fullName"
           label="Nome completo"
-          hideErrorLabel
         />
         <span className="text-label-medium text-light-onSurface">
           Ordenar por

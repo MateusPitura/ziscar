@@ -8,7 +8,7 @@ export default function selectUsersInfo(payload: PageablePayload<User>): Pageabl
   for (const user of payload.data) {
     itemsFiltered.push({
       ...user,
-      cellphone: applyMask(user?.cellPhone, "cellphone"),
+      cellPhone: applyMask(user?.cellPhone, "cellphone"),
     });
   }
 

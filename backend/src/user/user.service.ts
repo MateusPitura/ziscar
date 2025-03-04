@@ -70,6 +70,7 @@ export class UserService {
 
   async findMany(
     userFindManyInDto: UserFindManyInDto,
+    userId: number,
     select?: Prisma.UserSelect,
   ) {
     const { page = 1 } = userFindManyInDto;
@@ -78,6 +79,9 @@ export class UserService {
     const findManyWhere = {
       where: {
         isActive: true,
+        NOT: {
+          id: userId,
+        },
       },
     };
     const orderBy = userFindManyInDto?.orderBy;
