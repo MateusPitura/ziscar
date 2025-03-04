@@ -34,7 +34,7 @@ interface RadioProperties {
   label: string;
   name?: string;
   required?: boolean;
-  value: string;
+  value: string | number;
   hideErrorLabel?: boolean;
 }
 

@@ -18,7 +18,7 @@
         "complement": "Casa"
       },
       "cpf": "19222424034",
-      "category": "finance",
+      "category": 2,
       "isActive": true,
       "permissions": {
         "users": {
@@ -47,7 +47,7 @@
         "complement": null
       },
       "password": "1111111111111a1A!",
-      "category": "admin",
+      "category": 1,
       "isActive": true
     }
   ],

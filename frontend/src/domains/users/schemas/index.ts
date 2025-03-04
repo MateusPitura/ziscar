@@ -3,7 +3,7 @@ import { s } from "@shared/safeZod";
 export const SchemaUsersFilterForm = s.object({
   fullName: s.string().or(s.empty()),
   orderBy: s.list(["fullName", "email"]),
-  category: s.list(["active", "inactive"]).array(),
+  status: s.list(["active", "inactive"]),
 });
 
 export const SchemaUserForm = s.object({

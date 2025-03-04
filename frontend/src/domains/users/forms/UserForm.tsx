@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { SchemaUserForm } from "../schemas";
 import { Action, Resource } from "@/domains/global/types/model";
 import { UserFormInputs } from "../types";
+import { SEED_ROLE_ADMIN_ID, SEED_ROLE_SALES_ID } from "@shared/constants";
 
 interface UserFormProperties {
   defaultValues: Partial<UserFormInputs>;
@@ -94,9 +95,11 @@ export default function UserForm({
               <Section.Header title="Categoria" />
               <Section.Body>
                 <Choice<UserFormInputs> name="category">
-                  <Choice.Radio label="Administrativo" value="admin" />
-                  <Choice.Radio label="Vendedor" value="sales" />
-                  <Choice.Radio label="Financeiro" value="finance" />
+                  <Choice.Radio
+                    label="Administrador"
+                    value={SEED_ROLE_ADMIN_ID}
+                  />
+                  <Choice.Radio label="Vendedor" value={SEED_ROLE_SALES_ID} />
                 </Choice>
               </Section.Body>
             </Section.Group>

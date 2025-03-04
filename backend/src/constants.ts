@@ -1,5 +1,3 @@
-export const SEED_ROLE_ADMIN_ID = 1;
-
 export const POPULATE_USER_DEFAULT = {
   id: 150,
   fullName: 'John Doe',

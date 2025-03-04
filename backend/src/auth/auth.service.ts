@@ -10,7 +10,6 @@ import { ClientService } from '../client/client.service';
 import { OrganizationService } from '../organization/organization.service';
 import { UserService } from '../user/user.service';
 import { EmailService } from '../email/email.service';
-import { SEED_ROLE_ADMIN_ID } from '../constants';
 import { PrismaService } from '../database/prisma.service';
 import { generateRandomPassword } from '../utils/generateRandomPassword';
 import {
@@ -19,6 +18,7 @@ import {
   AuthSignInInDto,
   AuthSignUpInDto,
 } from './auth.schema';
+import { SEED_ROLE_SALES_ID } from '@shared/constants';
 
 @Injectable()
 export class AuthService {
@@ -75,7 +75,7 @@ export class AuthService {
           email,
           fullName,
           clientId,
-          roleId: SEED_ROLE_ADMIN_ID,
+          roleId: SEED_ROLE_SALES_ID,
         },
         transaction,
       );

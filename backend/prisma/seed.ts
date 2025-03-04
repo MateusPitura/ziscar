@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { SEED_ROLE_ADMIN_ID } from '../src/constants';
+import { SEED_ROLE_ADMIN_ID, SEED_ROLE_SALES_ID } from '@shared/constants';
 
 const prisma = new PrismaClient();
 
@@ -31,15 +31,26 @@ async function seed() {
     ],
   });
 
-  await prisma.role.create({
-    data: {
-      id: SEED_ROLE_ADMIN_ID,
-      name: 'ADMIN',
-      permissions: {
-        connect: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }],
+  await Promise.all([
+    prisma.role.create({
+      data: {
+        id: SEED_ROLE_ADMIN_ID,
+        name: 'ADMIN',
+        permissions: {
+          connect: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }],
+        },
       },
-    },
-  });
+    }),
+    prisma.role.create({
+      data: {
+        id: SEED_ROLE_SALES_ID,
+        name: 'SALES',
+        permissions: {
+          connect: [{ id: 2 }],
+        },
+      },
+    }),
+  ]);
 
   console.log('🌠 Successfully seeded database');
 }

@@ -6,12 +6,11 @@ import { JwtService } from '@nestjs/jwt';
 import {
   POPULATE_CLIENT_DEFAULT_ID,
   POPULATE_USER_DEFAULT,
-  SEED_ROLE_ADMIN_ID,
 } from '../constants';
 import { FETCH_USER, GET_USER } from './user.constant';
 import { EmailService } from '../email/email.service';
 import { AuthRequest } from 'src/auth/auth.type';
-import { ITEMS_PER_PAGE } from '@shared/constants';
+import { ITEMS_PER_PAGE, SEED_ROLE_SALES_ID } from '@shared/constants';
 
 describe('UserController', () => {
   let userController: UserController;
@@ -59,7 +58,7 @@ describe('UserController', () => {
         await userController.post(request, {
           email: 'jane.doe@email.com',
           fullName: 'Jane Doe',
-          roleId: SEED_ROLE_ADMIN_ID,
+          roleId: SEED_ROLE_SALES_ID,
         }),
       ).toBeTruthy();
 

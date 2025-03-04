@@ -27,7 +27,7 @@ export interface User {
     birthDate?: string;
     address?: Address;
     isActive?: boolean;
-    category?: "admin" | "finance" | "seller";
+    category?: "admin" | "seller";
     permissions: Record<Resource, Record<Action, boolean>>;
 
 }

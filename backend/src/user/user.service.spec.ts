@@ -5,11 +5,10 @@ import { ConflictException } from '@nestjs/common';
 import {
   POPULATE_CLIENT_DEFAULT_ID,
   POPULATE_USER_DEFAULT,
-  SEED_ROLE_ADMIN_ID,
 } from '../constants';
 import { EmailService } from '../email/email.service';
 import { JwtService } from '@nestjs/jwt';
-import { ITEMS_PER_PAGE } from '@shared/constants';
+import { ITEMS_PER_PAGE, SEED_ROLE_SALES_ID } from '@shared/constants';
 
 describe('UserService', () => {
   let userService: UserService;
@@ -54,7 +53,7 @@ describe('UserService', () => {
           email: 'jane.doe@email.com',
           fullName: 'Jane Doe',
           clientId: POPULATE_CLIENT_DEFAULT_ID,
-          roleId: SEED_ROLE_ADMIN_ID,
+          roleId: SEED_ROLE_SALES_ID,
         }),
       ).toBeTruthy();
 
@@ -71,7 +70,7 @@ describe('UserService', () => {
         email: POPULATE_USER_DEFAULT.email,
         fullName: 'John Doe',
         clientId: POPULATE_CLIENT_DEFAULT_ID,
-        roleId: SEED_ROLE_ADMIN_ID,
+        roleId: SEED_ROLE_SALES_ID,
       }),
     ).rejects.toThrow(ConflictException);
   });
@@ -99,7 +98,7 @@ describe('UserService', () => {
             number: '123',
           },
           clientId: POPULATE_CLIENT_DEFAULT_ID,
-          roleId: SEED_ROLE_ADMIN_ID,
+          roleId: SEED_ROLE_SALES_ID,
         }),
       ).toBeTruthy();
 
@@ -138,7 +137,7 @@ describe('UserService', () => {
             complement: 'Apt 123',
           },
           clientId: POPULATE_CLIENT_DEFAULT_ID,
-          roleId: SEED_ROLE_ADMIN_ID,
+          roleId: SEED_ROLE_SALES_ID,
         }),
       ).toBeTruthy();
 

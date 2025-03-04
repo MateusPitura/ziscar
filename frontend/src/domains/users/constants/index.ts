@@ -22,5 +22,5 @@ export const userDefaultValues: UserFormInputs = {
 export const userFilterDefaultValues: UsersFilterFormInputs = {
   fullName: "",
   orderBy: "fullName",
-  category: [],
+  status: 'active',
 };

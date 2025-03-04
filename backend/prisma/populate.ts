@@ -3,10 +3,10 @@ import {
   POPULATE_CLIENT_DEFAULT_ID,
   POPULATE_ORGANIZATION_DEFAULT,
   POPULATE_USER_DEFAULT,
-  SEED_ROLE_ADMIN_ID,
 } from '../src/constants';
 import { encryptPassword } from '../src/user/user.utils';
 import { faker } from '@faker-js/faker';
+import { SEED_ROLE_SALES_ID } from '@shared/constants';
 
 const prisma = new PrismaClient();
 
@@ -36,7 +36,7 @@ async function seed() {
         ...POPULATE_USER_DEFAULT,
         password: await encryptPassword(POPULATE_USER_DEFAULT.password),
         clientId: POPULATE_CLIENT_DEFAULT_ID,
-        roleId: SEED_ROLE_ADMIN_ID,
+        roleId: SEED_ROLE_SALES_ID,
       },
     }),
   );
@@ -47,7 +47,7 @@ async function seed() {
     isActive: index > 5,
     password: await encryptPassword(faker.internet.password()),
     clientId: POPULATE_CLIENT_DEFAULT_ID,
-    roleId: SEED_ROLE_ADMIN_ID,
+    roleId: SEED_ROLE_SALES_ID,
   }));
 
   const users = await Promise.all(usersPromise);

@@ -27,7 +27,7 @@ function UsersFilterForm(): ReactNode {
       defaultValues={{
         fullName: usersFilter?.fullName || "",
         orderBy: usersFilter?.orderBy || "fullName",
-        category: usersFilter?.category || [],
+        status: usersFilter?.status || 'active',
       }}
       removeEmptyString={false}
     >
@@ -69,9 +69,9 @@ function UsersFilterFormContent(): ReactElement {
         </div>
         <span className="text-label-medium text-light-onSurface">Status</span>
         <div className="flex flex-col gap-2">
-          <Choice<UsersFilterFormInputs> name="category" hideErrorLabel>
-            <Choice.Checkbox label="Ativo" value="active" />
-            <Choice.Checkbox label="Inativo" value="inactive" />
+          <Choice<UsersFilterFormInputs> name="status" hideErrorLabel>
+            <Choice.Radio label="Ativo" value={'active'} />
+            <Choice.Radio label="Inativo" value={'inactive'} />
           </Choice>
         </div>
       </SideSheet.Body>
