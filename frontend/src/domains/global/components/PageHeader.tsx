@@ -35,7 +35,7 @@ export default function PageHeader({
   });
 
   return (
-    <div className="w-full p-4 flex">
+    <div className="w-full py-4 flex">
       <span className="text-headline-large text-light-onSurface flex-1">
         {title}
       </span>

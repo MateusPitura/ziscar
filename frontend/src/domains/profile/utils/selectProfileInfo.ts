@@ -5,7 +5,7 @@ export default function selectProfileInfo(data: User): Omit<User, "id" | 'permis
   return {
     fullName: data.fullName,
     email: data.email,
-    cellphone: applyMask(data.cellphone, "cellphone") ?? "",
+    cellPhone: applyMask(data.cellPhone, "cellphone") ?? "",
     cpf: applyMask(data.cpf, "cpf") ?? "",
     code: data.code ?? "",
     birthDate: data.birthDate,

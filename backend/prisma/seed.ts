@@ -1,5 +1,8 @@
 import { PrismaClient } from '@prisma/client';
-import { SEED_ROLE_ADMIN_ID, SEED_ROLE_SALES_ID } from '@shared/constants';
+import {
+  SEED_ROLE_ADMIN_ID,
+  SEED_ROLE_SALES_ID,
+} from '../../shared/src/constants';
 
 const prisma = new PrismaClient();
 
@@ -10,7 +13,7 @@ async function seed() {
     data: [
       {
         id: 1,
-        resource: 'USERS',
+        resource: 'USERS', // TODO: criar tipagem para isso, compartilhado com o front
         action: 'CREATE',
       },
       {

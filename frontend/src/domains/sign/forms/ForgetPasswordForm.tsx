@@ -21,8 +21,8 @@ export default function ForgetPasswordForm(): ReactNode {
   const { closeDialog } = useDialogContext();
 
   async function handleForgetPassword(data: ForgetPasswordFormInputs) {
-    await safeFetch(`${BASE_URL}/forgetPassword`, {
-      method: "post",
+    await safeFetch(`${BASE_URL}/auth/forget-password`, {
+      method: "POST",
       body: data,
     });
   }

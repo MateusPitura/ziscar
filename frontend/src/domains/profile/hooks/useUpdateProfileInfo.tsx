@@ -22,9 +22,9 @@ export default function useUpdateProfileInfo<T>({
 
   async function updateProfileInfo(data: T) {
     await safeFetch(
-      `${BASE_URL}/users/${userLogged?.id}`, //  TODO: Ao implementar o back-end criar uma request que não precise de id, pegar o id automaticamente
+      `${BASE_URL}/user/${userLogged?.id}`, //  TODO: Ao implementar o back-end criar uma request que não precise de id, pegar o id automaticamente
       {
-        method: "patch",
+        method: "PATCH",
         body: data,
       }
     );
@@ -34,8 +34,6 @@ export default function useUpdateProfileInfo<T>({
     mutationFn: updateProfileInfo,
     onSuccess: () => {
       if (shouldInvalidateQuery) {
-        queryClient.invalidateQueries({ queryKey: ["profileInfo"] });
-        queryClient.invalidateQueries({ queryKey: ["users"] });
         queryClient.invalidateQueries({
           queryKey: ["user", userLogged?.id],
         });

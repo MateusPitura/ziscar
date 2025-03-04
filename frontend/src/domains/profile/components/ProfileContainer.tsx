@@ -33,11 +33,11 @@ export default function ProfileContainer(): ReactElement {
   const { safeFetch } = useSafeFetch();
 
   async function getProfileInfo(): Promise<User> {
-    return await safeFetch(`${BASE_URL}/users/${userLogged?.id}`); // TODO: Ao implementar o back-end criar uma request que não precise de id, pegar o id automaticamente
+    return await safeFetch(`${BASE_URL}/user/${userLogged?.id}`); // TODO: Ao implementar o back-end criar uma request que não precise de id, pegar o id automaticamente
   }
 
   const { data: profileInfo, isFetching } = useQuery({
-    queryKey: ['profileInfo'],
+    queryKey: ['user', userLogged?.id],
     queryFn: getProfileInfo,
     select: selectProfileInfo,
   });
@@ -181,7 +181,7 @@ export default function ProfileContainer(): ReactElement {
               />
               <Section.Row
                 label="Celular"
-                value={profileInfo?.cellphone}
+                value={profileInfo?.cellPhone}
                 isLoading={isFetching}
                 onEdit={() => {
                   dialog.openDialog();
@@ -189,7 +189,7 @@ export default function ProfileContainer(): ReactElement {
                     title: "Alterar celular",
                     content: (
                       <CellphoneForm
-                        defaultValues={{ cellphone: profileInfo?.cellphone }}
+                        defaultValues={{ cellPhone: profileInfo?.cellPhone }}
                       />
                     ),
                   });

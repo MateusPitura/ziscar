@@ -6,7 +6,7 @@ import { s } from "@shared/safeZod";
 import Dialog from "@/design-system/Dialog";
 
 const SchemaCellphoneForm = s.object({
-  cellphone: s.cellphone(),
+  cellPhone: s.cellphone(),
 });
 
 type CellphoneFormInputs = s.infer<typeof SchemaCellphoneForm>;
@@ -43,10 +43,11 @@ function CellphoneFormContent({ isPending }: CellphoneFormContentProps) {
     <>
       <Dialog.Body>
         <Input<CellphoneFormInputs>
-          name="cellphone"
-          label="Matrícula"
+          name="cellPhone"
+          label="Celular"
           mask="cellphone"
           maxLength={15}
+          required
         />
       </Dialog.Body>
       <Dialog.Footer

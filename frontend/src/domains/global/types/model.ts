@@ -21,7 +21,7 @@ export interface User {
     id: string;
     fullName: string;
     email: string;
-    cellphone?: string;
+    cellPhone?: string;
     cpf?: string;
     code?: string;
     birthDate?: string;

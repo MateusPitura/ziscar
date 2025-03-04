@@ -26,8 +26,8 @@ export default function UsersTableActions({
   const queryClient = useQueryClient();
 
   async function enableUser() {
-    await safeFetch(`${BASE_URL}/users/${userId}`, {
-      method: "patch",
+    await safeFetch(`${BASE_URL}/user/${userId}`, {
+      method: "PATCH",
       body: { isActive: true },
       resource: "users",
       action: "delete",

@@ -6,7 +6,7 @@ import {
 } from '../src/constants';
 import { encryptPassword } from '../src/user/user.utils';
 import { faker } from '@faker-js/faker';
-import { SEED_ROLE_SALES_ID } from '@shared/constants';
+import { SEED_ROLE_SALES_ID } from '../../shared/src/constants';
 
 const prisma = new PrismaClient();
 

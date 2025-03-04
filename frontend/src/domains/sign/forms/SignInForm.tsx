@@ -29,8 +29,8 @@ export default function SignInForm(): ReactNode {
   const { showErrorSnackbar } = useSnackbar();
 
   async function handleSignIn(data: SignInFormInputs) {
-    await safeFetch(`${BASE_URL}/signIn`, {
-      method: "post",
+    await safeFetch(`${BASE_URL}/auth/sign-in`, {
+      method: "POST",
       body: data,
     });
   }

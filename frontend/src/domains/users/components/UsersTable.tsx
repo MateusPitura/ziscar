@@ -43,14 +43,14 @@ export default function UsersTable(): ReactNode {
   }, [usersFilter, userLogged]);
 
   async function getUsersInfo(filter?: string): Promise<User[]> {
-    return await safeFetch(`${BASE_URL}/users?${filter}`, {
+    return await safeFetch(`${BASE_URL}/user?${filter}`, {
       resource: "users",
       action: "read",
     });
   }
 
   const { data: usersInfo, isFetching: isFetchingUsersInfo } = useQuery({
-    queryKey: ['users', filterFormatted],
+    queryKey: ['user', filterFormatted],
     queryFn: ({ queryKey }) => getUsersInfo(queryKey[1]),
     select: selectUsersInfo,
   });
@@ -59,7 +59,7 @@ export default function UsersTable(): ReactNode {
 
   async function generatePdf() {
     return await safeFetch(`${BASE_URL}/usersPdf`, {
-      method: "post",
+      method: "POST",
       body: {
         filter: usersFilter,
         url: "https://example.com/", // TODO: ao implementar o back seria enviado apenas o filter
@@ -106,7 +106,7 @@ export default function UsersTable(): ReactNode {
               <Table.Cell label={user.id} />
               <Table.Cell label={user.fullName} />
               <Table.Cell label={user.email} />
-              <Table.Cell label={user.cellphone} />
+              <Table.Cell label={user.cellPhone} />
               <Table.Cell label={user.isActive ? "Ativo" : "Inativo"} />
               <Table.Action>
                 <UsersTableActions

@@ -6,7 +6,7 @@ import checkPermission from "../utils/checkPermission";
 import { Resource, Action } from "../types/model";
 
 interface Request {
-  method?: "get" | "post" | "put" | "patch" | "delete";
+  method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
   body?: unknown;
   resource?: Resource;
   action?: Action;
@@ -19,12 +19,12 @@ export default function useSafeFetch() {
   const safeFetch = useCallback(
     async (
       path: string,
-      { method = "get", body, resource, action }: Request = {}
+      { method = "GET", body, resource, action }: Request = {}
     ) => {
       try {
         const hasPermission = checkPermission(userLogged, resource, action);
         if (!hasPermission) {
-          if (method !== "get") {
+          if (method !== "GET") {
             throw new Error(formatDeniedMessage({ resource, action }));
           }
           return null;
@@ -37,7 +37,7 @@ export default function useSafeFetch() {
             // "User-Logged": JSON.stringify(userLogged), // TODO: não enviar informações sensíveis no header, é barrado pelo viaCep. Colocar no JWT
             // "Client-Logged": JSON.stringify(clientLogged),
           },
-          body: method != "get" ? JSON.stringify(body) : undefined,
+          body: method != "GET" ? JSON.stringify(body) : undefined,
         });
         if (!response.ok) {
           const content = await response.text();

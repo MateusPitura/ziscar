@@ -21,8 +21,8 @@ export default function DisableUserModal({
   const { handleUsersFilter } = useGlobalContext();
 
   async function disableUser() {
-    await safeFetch(`${BASE_URL}/users/${userId}`, {
-      method: "patch",
+    await safeFetch(`${BASE_URL}/user/${userId}`, {
+      method: "PATCH",
       body: { isActive: false },
       resource: "users",
       action: "delete",
