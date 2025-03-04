@@ -19,6 +19,7 @@ import {
   AuthSignUpInDto,
 } from './auth.schema';
 import { SEED_ROLE_SALES_ID } from '@shared/constants';
+import { Response } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -31,7 +32,7 @@ export class AuthService {
     private readonly prismaService: PrismaService,
   ) {}
 
-  async signIn({ email, password }: AuthSignInInDto) {
+  async signIn({ email, password }: AuthSignInInDto, res: Response) {
     const user = await this.userService.findOne(
       { email },
       {
@@ -42,7 +43,7 @@ export class AuthService {
     );
 
     if (!user || !compareSync(password, user.password)) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('Email ou senha inválidos');
     }
 
     const payload: AuthSignin = {
@@ -52,9 +53,13 @@ export class AuthService {
 
     const token = this.jwtService.sign(payload);
 
-    return {
-      token,
-    };
+    res.cookie('jwt', token, {
+      httpOnly: true,
+      secure: false, // TODO: Habilitar no HTTPS
+      sameSite: 'lax',
+    });
+
+    return res.json(true);
   }
 
   async signUp({ cnpj, name, email, fullName }: AuthSignUpInDto) {

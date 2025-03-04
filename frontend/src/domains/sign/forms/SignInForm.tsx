@@ -11,7 +11,6 @@ import ForgetPasswordModal from "../components/ForgetPasswordModal";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import { BASE_URL } from "@/domains/global/constants";
 
 const SchemaSignInForm = s.object({
@@ -26,7 +25,6 @@ export default function SignInForm(): ReactNode {
   const dialog = useDialog();
   const { safeFetch } = useSafeFetch();
   const navigate = useNavigate();
-  const { showErrorSnackbar } = useSnackbar();
 
   async function handleSignIn(data: SignInFormInputs) {
     await safeFetch(`${BASE_URL}/auth/sign-in`, {
@@ -39,15 +37,6 @@ export default function SignInForm(): ReactNode {
     mutationFn: handleSignIn,
     onSuccess: () => {
       navigate("/");
-    },
-    onError: (error) => {
-      if (error.message === "Failed to sign in") {
-        // TODO: Dependendo de como retorne do back não precise disso
-        showErrorSnackbar({
-          title: "Erro ao acessar",
-          description: "Email ou senha inválidos",
-        });
-      }
     },
   });
 

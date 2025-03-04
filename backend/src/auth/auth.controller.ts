@@ -5,6 +5,7 @@ import {
   HttpStatus,
   Post,
   Req,
+  Res,
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
@@ -16,6 +17,7 @@ import {
   AuthSignUpInDto,
   PasswordInDto,
 } from './auth.schema';
+import { Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -23,8 +25,8 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Post('sign-in')
-  async signIn(@Body() authSigninInDto: AuthSignInInDto) {
-    return await this.authService.signIn(authSigninInDto);
+  async signIn(@Body() authSigninInDto: AuthSignInInDto, @Res() res: Response) {
+    return await this.authService.signIn(authSigninInDto, res);
   }
 
   @Post('sign-up')

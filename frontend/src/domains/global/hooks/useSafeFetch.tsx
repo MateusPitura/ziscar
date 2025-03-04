@@ -4,6 +4,7 @@ import formatDeniedMessage from "../utils/formatDeniedMessage";
 import useGlobalContext from "./useGlobalContext";
 import checkPermission from "../utils/checkPermission";
 import { Resource, Action } from "../types/model";
+import { useNavigate } from "react-router-dom";
 
 interface Request {
   method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
@@ -15,6 +16,7 @@ interface Request {
 export default function useSafeFetch() {
   const { userLogged } = useGlobalContext();
   const { showErrorSnackbar } = useSnackbar();
+  const navigate = useNavigate();
 
   const safeFetch = useCallback(
     async (
@@ -37,13 +39,14 @@ export default function useSafeFetch() {
             // "User-Logged": JSON.stringify(userLogged), // TODO: não enviar informações sensíveis no header, é barrado pelo viaCep. Colocar no JWT
             // "Client-Logged": JSON.stringify(clientLogged),
           },
-          body: method != "GET" ? JSON.stringify(body) : undefined,
+          body: method !== "GET" ? JSON.stringify(body) : undefined,
+          credentials: 'include'
         });
+        const content = await response.json();
         if (!response.ok) {
-          const content = await response.text();
-          throw new Error(content || "Erro ao realizar a requisição");
+          throw new Error(content.message || "Falha ao realizar a requisição");
         }
-        return await response.json();
+        return content;
       } catch (error) {
         let description = undefined;
         if (error instanceof Error) {
@@ -53,6 +56,9 @@ export default function useSafeFetch() {
           title: "Ocorreu um erro",
           description,
         });
+        if (description === "Não foi possível autenticar") {
+          navigate("/sign");
+        }
         throw error;
       }
     },
