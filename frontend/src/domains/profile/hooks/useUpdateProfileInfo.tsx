@@ -1,5 +1,4 @@
 import { BASE_URL } from "@/domains/global/constants";
-import useGlobalContext from "@/domains/global/hooks/useGlobalContext";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -16,13 +15,12 @@ export default function useUpdateProfileInfo<T>({
   shouldInvalidateQuery = true,
 }: UseUpdateProfileInfoProperties) {
   const { safeFetch } = useSafeFetch();
-  const { userLogged } = useGlobalContext();
   const { showSuccessSnackbar } = useSnackbar();
   const queryClient = useQueryClient();
 
   async function updateProfileInfo(data: T) {
     await safeFetch(
-      `${BASE_URL}/user/${userLogged?.id}`, //  TODO: Ao implementar o back-end criar uma request que não precise de id, pegar o id automaticamente
+      `${BASE_URL}/user/me`,
       {
         method: "PATCH",
         body: data,
@@ -35,7 +33,7 @@ export default function useUpdateProfileInfo<T>({
     onSuccess: () => {
       if (shouldInvalidateQuery) {
         queryClient.invalidateQueries({
-          queryKey: ["user", userLogged?.id],
+          queryKey: ["user/me"],
         });
         queryClient.invalidateQueries({
           queryKey: ["usersDashboard"],

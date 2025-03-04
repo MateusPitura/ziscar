@@ -11,7 +11,6 @@ export type Address = {
 export interface Client {
   id: string;
 }
-export type ClientLogged = Pick<Client, "id">;
 
 export type Resource = "users";
 
@@ -31,4 +30,4 @@ export interface User { // TODO: tentar pegar isso do front
     permissions: Record<Resource, Record<Action, boolean>>;
 
 }
-export type UserLogged = Pick<User, "id" | "permissions">;
+export type UserLogged = Pick<User, "permissions">;

@@ -2,7 +2,6 @@ import PageHeader from "@/domains/global/components/PageHeader";
 import Section from "@/domains/global/components/Section";
 import { useMemo, useState, type ReactElement } from "react";
 import { User } from "@/domains/global/types/model";
-import useGlobalContext from "@/domains/global/hooks/useGlobalContext";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import safeFormat from "@/domains/global/utils/safeFormat";
 import EmailForm from "../forms/EmailForm";
@@ -28,16 +27,14 @@ export default function ProfileContainer(): ReactElement {
 
   const dialog = useDialog();
 
-  const { userLogged } = useGlobalContext();
-
   const { safeFetch } = useSafeFetch();
 
   async function getProfileInfo(): Promise<User> {
-    return await safeFetch(`${BASE_URL}/user/${userLogged?.id}`); // TODO: Ao implementar o back-end criar uma request que não precise de id, pegar o id automaticamente
+    return await safeFetch(`${BASE_URL}/user/me`);
   }
 
   const { data: profileInfo, isFetching } = useQuery({
-    queryKey: ['user', userLogged?.id],
+    queryKey: ["user/me"],
     queryFn: getProfileInfo,
     select: selectProfileInfo,
   });

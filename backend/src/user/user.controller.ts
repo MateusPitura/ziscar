@@ -37,6 +37,12 @@ export class UserController {
     return await this.userService.findMany(userFetchInDto, FETCH_USER);
   }
 
+  @Get('/me')
+  async getMe(@Req() req: AuthRequest) {
+    const { userId } = req.authToken as AuthSignin;
+    return await this.userService.findOne({ id: +userId }, GET_USER);
+  }
+
   @Get(':id')
   async get(@Param() { id }: ParamInputs) {
     return await this.userService.findOne({ id: +id }, GET_USER);
