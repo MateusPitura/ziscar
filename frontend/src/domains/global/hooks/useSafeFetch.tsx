@@ -5,6 +5,7 @@ import useGlobalContext from "./useGlobalContext";
 import checkPermission from "../utils/checkPermission";
 import { Resource, Action } from "../types/model";
 import { useNavigate } from "react-router-dom";
+import { UNAUTHORIZED } from "@shared/constants";
 
 interface Request {
   method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
@@ -61,7 +62,7 @@ export default function useSafeFetch() {
           title: "Ocorreu um erro",
           description,
         });
-        if (description === "Não foi possível autenticar") {
+        if (description === UNAUTHORIZED) {
           navigate("/sign");
         }
         throw error;

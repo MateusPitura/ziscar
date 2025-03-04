@@ -8,6 +8,7 @@ import { JwtService } from '@nestjs/jwt';
 import { AuthRequest } from './auth.type';
 import { Request } from 'express';
 import { COOKIE_JWT_NAME } from 'src/constants';
+import { UNAUTHORIZED } from '@shared/constants';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -25,7 +26,7 @@ export class AuthGuard implements CanActivate {
       }
 
       if (!token) {
-        throw new UnauthorizedException('Não foi possível autenticar');
+        throw new UnauthorizedException(UNAUTHORIZED);
       }
 
       const payload = await this.jwtService.verifyAsync<
@@ -35,7 +36,7 @@ export class AuthGuard implements CanActivate {
       });
       request['authToken'] = payload;
     } catch {
-      throw new UnauthorizedException('Não foi possível autenticar');
+      throw new UnauthorizedException(UNAUTHORIZED);
     }
 
     return true;
