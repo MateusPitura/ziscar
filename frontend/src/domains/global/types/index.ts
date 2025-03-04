@@ -30,3 +30,8 @@ export type QueryKeys = [
 ];
 
 export interface UsersFilter extends UsersFilterFormInputs, Pageable {}
+
+export interface PageablePayload<T> {
+  data: T[];
+  total: number;
+}

@@ -7,7 +7,7 @@ export default function selectUserInfo(data: User): UserFormInputs {
   return {
     fullName: data.fullName,
     email: data.email,
-    cellphone: applyMask(data.cellPhone, "cellphone") ?? "",
+    cellPhone: applyMask(data.cellPhone, "cellphone") ?? "",
     cpf: applyMask(data.cpf, "cpf") ?? "",
     code: data.code ?? "",
     birthDate: data.birthDate
@@ -16,7 +16,7 @@ export default function selectUserInfo(data: User): UserFormInputs {
           format: "yyyy-MM-dd",
         })
       : "",
-    category: data.category ?? "",
+    roleId: data.roleId ?? "",
     address: {
       cep: applyMask(data.address?.cep, "cep") ?? "",
       number: data.address?.number ?? "",

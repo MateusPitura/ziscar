@@ -52,7 +52,7 @@ export default function EditUserContainer(): ReactNode {
         title: `Usuário ${userData?.fullName} atualizado com sucesso`,
       });
       queryClient.invalidateQueries({
-        queryKey: ["users"],
+        queryKey: ["user"],
       });
       queryClient.invalidateQueries({
         queryKey: ["usersDashboard"],

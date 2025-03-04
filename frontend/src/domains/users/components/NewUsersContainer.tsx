@@ -20,11 +20,9 @@ export default function NewUsersContainer(): ReactElement {
   const navigate = useNavigate();
 
   async function createUser(data: UserFormInputs) {
-    const dataFormatted = { ...data, isActive: true };
-
     await safeFetch(`${BASE_URL}/user`, {
       method: "POST",
-      body: dataFormatted,
+      body: data,
       resource: "users",
       action: "create",
     });
@@ -34,10 +32,10 @@ export default function NewUsersContainer(): ReactElement {
     mutationFn: createUser,
     onSuccess: () => {
       showSuccessSnackbar({
-        title: "Usuário criado com sucesso",
+        title: "Confira o email para ativar a conta",
       });
       navigate("/users");
-      queryClient.invalidateQueries({ queryKey: ["users"] });
+      queryClient.invalidateQueries({ queryKey: ["user"] });
       queryClient.invalidateQueries({ queryKey: ["usersDashboard"] });
     },
   });

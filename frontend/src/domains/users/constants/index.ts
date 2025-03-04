@@ -3,7 +3,7 @@ import { UserFormInputs, UsersFilterFormInputs } from "../types";
 export const userDefaultValues: UserFormInputs = {
   fullName: "",
   email: "",
-  cellphone: "",
+  cellPhone: "",
   cpf: "",
   code: "",
   birthDate: "",
@@ -16,7 +16,7 @@ export const userDefaultValues: UserFormInputs = {
     state: "",
     complement: "",
   },
-  category: "",
+  roleId: "",
 };
 
 export const userFilterDefaultValues: UsersFilterFormInputs = {

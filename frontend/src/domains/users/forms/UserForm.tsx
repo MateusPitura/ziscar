@@ -66,7 +66,7 @@ export default function UserForm({
                 />
                 <Input<UserFormInputs> name="email" label="Email" required />
                 <Input<UserFormInputs>
-                  name="cellphone"
+                  name="cellPhone"
                   label="Celular"
                   mask="cellphone"
                   required
@@ -94,7 +94,7 @@ export default function UserForm({
             <Section.Group>
               <Section.Header title="Categoria" />
               <Section.Body>
-                <Choice<UserFormInputs> name="category">
+                <Choice<UserFormInputs> name="roleId">
                   <Choice.Radio
                     label="Administrador"
                     value={SEED_ROLE_ADMIN_ID}

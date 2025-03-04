@@ -9,10 +9,10 @@ export const SchemaUsersFilterForm = s.object({
 export const SchemaUserForm = s.object({
   fullName: s.fullName(),
   email: s.email(),
-  cellphone: s.cellphone(),
+  cellPhone: s.cellphone(),
   cpf: s.cpf(),
   code: s.string().or(s.empty()),
   birthDate: s.birthDate(),
-  category: s.string(),
+  roleId: s.string(),
   address: s.SchemaAddressEmpty,
 });

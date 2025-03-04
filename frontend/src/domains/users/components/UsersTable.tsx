@@ -13,6 +13,7 @@ import UsersTableActions from "./UsersTableActions";
 import { DisableUser } from "../types";
 import DisableUserModal from "./DisableUserModal";
 import useDialog from "@/domains/global/hooks/useDialog";
+import { PageablePayload } from "@/domains/global/types";
 
 export default function UsersTable(): ReactNode {
   const [disableUserInfo, setDisableUserInfo] = useState<DisableUser>({
@@ -23,7 +24,6 @@ export default function UsersTable(): ReactNode {
   const dialog = useDialog();
   const { safeFetch } = useSafeFetch();
   const { usersFilter, handleUsersFilter } = useGlobalContext();
-  const { userLogged } = useGlobalContext();
 
   function handleDisableUserInfo(user: DisableUser) {
     dialog.openDialog();
@@ -35,14 +35,16 @@ export default function UsersTable(): ReactNode {
   }
 
   const filterFormatted = useMemo(() => {
-    const userFilter = { ...usersFilter, notUserId: userLogged?.id }; // TODO: no backend deveria manter todos o usuário menos o usuário logado
+    const userFilter = usersFilter;
     if (userFilter) {
       return formatFilters(userFilter);
     }
     return "";
-  }, [usersFilter, userLogged]);
+  }, [usersFilter]);
 
-  async function getUsersInfo(filter?: string): Promise<User[]> {
+  async function getUsersInfo(
+    filter?: string
+  ): Promise<PageablePayload<User>> {
     return await safeFetch(`${BASE_URL}/user?${filter}`, {
       resource: "users",
       action: "read",
@@ -50,7 +52,7 @@ export default function UsersTable(): ReactNode {
   }
 
   const { data: usersInfo, isFetching: isFetchingUsersInfo } = useQuery({
-    queryKey: ['user', filterFormatted],
+    queryKey: ["user", filterFormatted],
     queryFn: ({ queryKey }) => getUsersInfo(queryKey[1]),
     select: selectUsersInfo,
   });
@@ -97,11 +99,11 @@ export default function UsersTable(): ReactNode {
         </Table.Header>
         <Table.Body
           isLoading={isFetchingUsersInfo}
-          isEmpty={!usersInfo?.length}
+          isEmpty={!usersInfo?.total}
           resource="users"
           action="read"
         >
-          {usersInfo?.map((user) => (
+          {usersInfo?.data.map((user) => (
             <Table.Row key={user.id}>
               <Table.Cell label={user.id} />
               <Table.Cell label={user.fullName} />
@@ -121,7 +123,7 @@ export default function UsersTable(): ReactNode {
         </Table.Body>
         <Table.Footer
           currentStartItem={usersFilter?.page}
-          totalItems={usersInfo?.length}
+          totalItems={usersInfo?.total}
           onClickNavigateBtn={handleChangePage}
           onClickPdfBtn={mutate}
           pdfBtnState={isPending ? "loading" : undefined}

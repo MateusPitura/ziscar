@@ -340,7 +340,7 @@ describe('UserService', () => {
     const result = await userService.findMany({ page: 1 });
 
     expect(result).toHaveProperty('total', 25);
-    expect(result.users).toHaveLength(ITEMS_PER_PAGE);
+    expect(result.data).toHaveLength(ITEMS_PER_PAGE);
   });
 
   it('should find many users by full name', async () => {

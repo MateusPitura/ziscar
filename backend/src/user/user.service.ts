@@ -99,7 +99,7 @@ export class UserService {
       findManyWhere.where['isActive'] = false;
     }
 
-    const [users, total] = await Promise.all([
+    const [data, total] = await Promise.all([
       this.prismaService.user.findMany({
         skip,
         take: ITEMS_PER_PAGE,
@@ -111,7 +111,7 @@ export class UserService {
 
     return {
       total,
-      users,
+      data,
     };
   }
 

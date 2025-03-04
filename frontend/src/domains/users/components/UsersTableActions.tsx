@@ -37,7 +37,7 @@ export default function UsersTableActions({
   const { mutate, isPending } = useMutation({
     mutationFn: enableUser,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['users'] });
+      queryClient.invalidateQueries({ queryKey: ['user'] });
       showSuccessSnackbar({
         title: `Usuário ${fullName} ativado com sucesso`,
       });
