@@ -16,7 +16,7 @@ export default function selectUserInfo(data: User): UserFormInputs {
           format: "yyyy-MM-dd",
         })
       : "",
-    roleId: data.roleId ?? "",
+    roleId: data.roleId?.toString() ?? "",
     address: {
       cep: applyMask(data.address?.cep, "cep") ?? "",
       number: data.address?.number ?? "",
