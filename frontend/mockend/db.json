@@ -1,56 +1,4 @@
 {
-  "users": [
-    {
-      "id": "1",
-      "fullName": "Mateus",
-      "email": "fernando@email.com",
-      "cellphone": "00000000000",
-      "code": "1111111111",
-      "password": "aaaaaaaaaa11A.!",
-      "birthDate": "2025-01-28T00:00:00.000Z",
-      "address": {
-        "cep": "01153000",
-        "street": "Rua Vitorino Carmilo",
-        "number": "111",
-        "neighborhood": "Barra Funda",
-        "city": "São Paulo",
-        "state": "SP",
-        "complement": "Casa"
-      },
-      "cpf": "19222424034",
-      "category": 2,
-      "isActive": true,
-      "permissions": {
-        "users": {
-          "read": true,
-          "create": true,
-          "update": true,
-          "delete": true
-        }
-      }
-    },
-    {
-      "id": "2",
-      "fullName": "João Silva",
-      "email": "joao@email.com",
-      "cellphone": "11111111111",
-      "cpf": "42644376017",
-      "code": "33333333",
-      "birthDate": "2025-01-22T00:00:00.000Z",
-      "address": {
-        "cep": "05407002",
-        "street": null,
-        "number": "123",
-        "neighborhood": null,
-        "city": null,
-        "state": null,
-        "complement": null
-      },
-      "password": "1111111111111a1A!",
-      "category": 1,
-      "isActive": true
-    }
-  ],
   "usersDashboard": [
     {
       "id": "1",
@@ -68,36 +16,6 @@
       "id": "0255",
       "filter": "",
       "url": "https://example.com/"
-    }
-  ],
-  "signIn": [
-    {
-      "id": "1",
-      "user": "marcos@email.com",
-      "password": "token);token);AA!1"
-    }
-  ],
-  "signUp": [
-    {
-      "id": "1",
-      "organizationName": "Marcos Veículos",
-      "cnpj": "12345678901234",
-      "userName": "Marcos",
-      "userEmail": "marcos@email.com",
-      "password": "token);token);AA!1"
-    }
-  ],
-  "forgetPassword": [
-    {
-      "id": "1",
-      "email": "marcos@gmail.com"
-    }
-  ],
-  "newPassword": [
-    {
-      "id": "1",
-      "password": "token);token);AA!1",
-      "token": "98djslkd9"
     }
   ]
 }
