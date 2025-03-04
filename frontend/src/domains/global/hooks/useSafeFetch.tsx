@@ -11,6 +11,7 @@ interface Request {
   body?: unknown;
   resource?: Resource;
   action?: Action;
+  enableCookie?: boolean;
 }
 
 export default function useSafeFetch() {
@@ -21,7 +22,13 @@ export default function useSafeFetch() {
   const safeFetch = useCallback(
     async (
       path: string,
-      { method = "GET", body, resource, action }: Request = {}
+      {
+        method = "GET",
+        body,
+        resource,
+        action,
+        enableCookie = true,
+      }: Request = {}
     ) => {
       try {
         const hasPermission = checkPermission(userLogged, resource, action);
@@ -36,11 +43,9 @@ export default function useSafeFetch() {
           method,
           headers: {
             "Content-Type": "application/json",
-            // "User-Logged": JSON.stringify(userLogged), // TODO: não enviar informações sensíveis no header, é barrado pelo viaCep. Colocar no JWT
-            // "Client-Logged": JSON.stringify(clientLogged),
           },
           body: method !== "GET" ? JSON.stringify(body) : undefined,
-          credentials: 'include'
+          credentials: enableCookie ? "include" : "omit",
         });
         const content = await response.json();
         if (!response.ok) {

@@ -1,20 +1,6 @@
-# @name auth_request
-POST {{BASE_URL}}/auth/sign-in HTTP/1.1
-content-type: application/json
-
-{
-    "email": "{{USERNAME}}",
-    "password": "{{PASSWORD}}"
-}
-
-###
-
-@token = {{auth_request.response.body.token}}
-
 ###
 POST {{BASE_URL}}/user HTTP/1.1
 content-type: application/json
-Authorization: Bearer {{token}}
 
 {
     "fullName": "John Doe",
@@ -29,17 +15,14 @@ Authorization: Bearer {{token}}
 ###
 GET {{BASE_URL}}/user/1 HTTP/1.1
 content-type: application/json
-Authorization: Bearer {{token}}
 
 ###
 GET {{BASE_URL}}/user?page=1&fullName=john&orderBy=email&status=active HTTP/1.1
 content-type: application/json
-Authorization: Bearer {{token}}
 
 ###
 PATCH {{BASE_URL}}/user/1 HTTP/1.1
 content-type: application/json
-Authorization: Bearer {{token}}
 
 {
     "cpf": "11111111111"
@@ -48,7 +31,6 @@ Authorization: Bearer {{token}}
 ###
 PATCH {{BASE_URL}}/user/7 HTTP/1.1
 content-type: application/json
-Authorization: Bearer {{token}}
 
 {
     "address": {
@@ -59,7 +41,6 @@ Authorization: Bearer {{token}}
 ###
 PATCH {{BASE_URL}}/user/7 HTTP/1.1
 content-type: application/json
-Authorization: Bearer {{token}}
 
 {
     "isActive": true

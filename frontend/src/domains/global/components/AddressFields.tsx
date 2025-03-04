@@ -38,11 +38,13 @@ export default function AddressFields<T extends FieldValues>({
   }
 
   async function getCepInfo(cep: string): Promise<ViaCepAddress | undefined> {
-    return await safeFetch(`https://viacep.com.br/ws/${cep}/json/`);
+    return await safeFetch(`https://viacep.com.br/ws/${cep}/json/`, {
+      enableCookie: false,
+    });
   }
 
   const { data: cepInfo, isFetching } = useQuery({
-    queryKey: ['cepApi', currentValidCep],
+    queryKey: ["cepApi", currentValidCep],
     queryFn: ({ queryKey }) => getCepInfo(queryKey[1]),
     enabled: !!currentValidCep,
   });

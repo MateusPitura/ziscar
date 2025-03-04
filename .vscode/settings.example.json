@@ -1,8 +1,6 @@
 {
   "rest-client.environmentVariables": {
     "$shared": {
-      "USERNAME": "username",
-      "PASSWORD": "password",
       "BASE_URL": "http://localhost:3000"
     }
   }
