@@ -70,12 +70,14 @@ export default function UserForm({
                   label="Celular"
                   mask="cellphone"
                   required
+                  maxLength={15}
                 />
                 <Input<UserFormInputs>
                   name="cpf"
                   label="CPF"
                   required
                   mask="cpf"
+                  maxLength={14}
                 />
                 <Input<UserFormInputs> name="code" label="Matrícula" />
                 <Input<UserFormInputs>

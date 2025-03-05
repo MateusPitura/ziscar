@@ -45,10 +45,7 @@ export class UserController {
   @Get('/me')
   async getMe(@Req() req: AuthRequest) {
     const { userId } = req.authToken as AuthSignin;
-    return await this.userService.findOne(
-      { isActive: true, id: +userId },
-      GET_USER,
-    );
+    return await this.userService.findOne({ id: +userId }, GET_USER);
   }
 
   @Get(':id')
@@ -57,10 +54,7 @@ export class UserController {
     if (userId == id) {
       throw new ForbiddenException('Use a rota /me para acessar seus dados');
     }
-    return await this.userService.findOne(
-      { isActive: true, id: +id },
-      GET_USER,
-    );
+    return await this.userService.findOne({ id: +id }, GET_USER);
   }
 
   @Patch('/me')
