@@ -68,12 +68,7 @@ describe('AuthService', () => {
         email: POPULATE_USER_INACTIVE.email,
         password: POPULATE_USER_INACTIVE.password,
       }),
-    ).rejects.toThrow(NotFoundException);
-  });
-
-  it('should sign out', () => {
-    const response = authService.signOut();
-    expect(response).toBeUndefined();
+    ).rejects.toThrow(UnauthorizedException);
   });
 
   it('should not signin due to wrong password', async () => {
@@ -83,6 +78,11 @@ describe('AuthService', () => {
         password: 'wrongpassword',
       }),
     ).rejects.toThrow(UnauthorizedException);
+  });
+
+  it('should sign out', () => {
+    const response = authService.signOut();
+    expect(response).toBeUndefined();
   });
 
   it('should create account', async () => {
@@ -196,19 +196,19 @@ describe('AuthService', () => {
     });
   });
 
-  it('should fail in verify reset password due to email that not exist', async () => {
-    await expect(
-      authService.forgetPassword({
+  it('should not warn in verify reset password due to email that not exist', async () => {
+    expect(
+      await authService.forgetPassword({
         email: 'jane.doe@email.com',
       }),
-    ).rejects.toThrow(NotFoundException);
+    ).toBeTruthy();
   });
 
-  it('should fail in verify reset password due to email of an inactive user', async () => {
-    await expect(
-      authService.forgetPassword({
+  it('should not warn in verify reset password due to email of an inactive user', async () => {
+    expect(
+      await authService.forgetPassword({
         email: POPULATE_USER_INACTIVE.email,
       }),
-    ).rejects.toThrow(NotFoundException);
+    ).toBeTruthy();
   });
 });

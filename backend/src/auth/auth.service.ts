@@ -31,12 +31,14 @@ export class AuthService {
 
   async signIn({ email, password }: AuthSignInInDto, res?: Response) {
     const user = await this.userService.findOne(
-      { isActive: true, email },
+      { email },
       {
         id: true,
         clientId: true,
         password: true,
       },
+      true,
+      false,
     );
 
     if (!user || !compareSync(password, user.password)) {
@@ -98,7 +100,14 @@ export class AuthService {
   }
 
   async forgetPassword({ email }: AuthForgetPasswordInDto) {
-    await this.userService.findOne({ email }, { id: true });
+    const user = await this.userService.findOne(
+      { email },
+      { id: true },
+      true,
+      false,
+    );
+
+    if (!user) return true;
 
     const payload: AuthResetPassword = {
       email,

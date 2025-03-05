@@ -12,4 +12,5 @@ export type GetCallback = (
   entityWhereUniqueInput: Partial<Record<'OR', Record<string, string>[]>>,
   select: { id: boolean },
   onlyActive: boolean,
+  showNotFoundError: boolean,
 ) => Promise<{ id: string } | null>;

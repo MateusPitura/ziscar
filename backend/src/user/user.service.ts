@@ -124,6 +124,7 @@ export class UserService {
     userWhereUniqueInput: Prisma.UserWhereUniqueInput,
     select: Prisma.UserSelect,
     onlyActive: boolean = true,
+    showNotFoundError: boolean = true,
   ) {
     if (onlyActive) {
       userWhereUniqueInput['isActive'] = true;
@@ -133,7 +134,7 @@ export class UserService {
       select,
     });
 
-    if (onlyActive && !user) {
+    if (showNotFoundError && !user) {
       throw new NotFoundException('Usuário não encontrado');
     }
 

@@ -11,7 +11,12 @@ export async function verifyDuplicated(
     whereClause.push({ [key]: value });
   }
 
-  const entity = await getCallback({ OR: whereClause }, { id: true }, false);
+  const entity = await getCallback(
+    { OR: whereClause },
+    { id: true },
+    false,
+    false,
+  );
 
   if (entity) {
     const keysFormatted = Object.keys(properties).join(' ou ');
