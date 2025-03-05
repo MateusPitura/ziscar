@@ -10,7 +10,7 @@ export type Address = {
 
 export type Resource = "users";
 
-export type Action = "create" | "read" | "update" | "delete";
+export type Action = "create" | "read" | "update" | "delete"; // TODO: colocar na shared
 
 export interface User {
     id: string;

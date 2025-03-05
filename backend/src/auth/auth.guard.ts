@@ -19,7 +19,7 @@ export class AuthGuard implements CanActivate {
     const body = request.body as Record<string, string>;
 
     try {
-      const token = (request.cookies[COOKIE_JWT_NAME] as string) || body?.token;
+      const token = body?.token || (request.cookies[COOKIE_JWT_NAME] as string);
 
       if (body?.token) {
         delete body.token;

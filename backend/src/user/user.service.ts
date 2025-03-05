@@ -195,6 +195,7 @@ export class UserService {
       if ((error as Record<string, string>)?.code === 'P2025') {
         throw new NotFoundException('Usuário não encontrado');
       }
+      throw error;
     }
   }
 
