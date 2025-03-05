@@ -3,7 +3,7 @@ import PageTopBar from "./PageTopBar";
 import PageSideBar from "./PageSideBar";
 import { Outlet } from "react-router-dom";
 
-export default function ClosePageLayout(): ReactElement {
+export default function PrivatePageLayout(): ReactElement {
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(true);
 
   function handleToggleSideMenu() {

@@ -1,14 +1,11 @@
-import { Route, Routes, BrowserRouter } from "react-router-dom";
-import { privateRoutes, publicRoutes } from "@/domains/global/constants/routes";
-import ClosePageLayout from "@/domains/global/components/ClosePageLayout";
+import { BrowserRouter } from "react-router-dom";
 import { GlobalProvider } from "./domains/global/contexts/GlobalContext";
-import SuspensePage from "./domains/global/components/SuspensePage";
 import Snackbar from "./design-system/Snackbar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import GlobalErrorBoundary from "./ErrorBoundary";
-import OpenPageLayout from "./domains/global/components/OpenPageLayout";
 import { QueryKeys } from "./domains/global/types";
+import RoutesContainer from "./RoutesContainer";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -20,9 +17,9 @@ const queryClient = new QueryClient({
   },
 });
 
-declare module '@tanstack/react-query' {
+declare module "@tanstack/react-query" {
   interface Register {
-    queryKey: QueryKeys
+    queryKey: QueryKeys;
   }
 }
 
@@ -33,38 +30,7 @@ export default function App() {
         <GlobalProvider>
           <QueryClientProvider client={queryClient}>
             <Snackbar />
-            <Routes>
-              <Route element={<OpenPageLayout />}>
-                {publicRoutes.map((group) =>
-                  group.routes.map((route) => (
-                    <Route
-                      key={route.path}
-                      path={route.path}
-                      element={
-                        <SuspensePage key={route.path}>
-                          {route.entryPage}
-                        </SuspensePage>
-                      }
-                    />
-                  ))
-                )}
-              </Route>
-              <Route element={<ClosePageLayout />}>
-                {privateRoutes.map((group) =>
-                  group.routes.map((route) => (
-                    <Route
-                      key={route.path}
-                      path={route.path}
-                      element={
-                        <SuspensePage key={route.path}>
-                          {route.entryPage}
-                        </SuspensePage>
-                      }
-                    />
-                  ))
-                )}
-              </Route>
-            </Routes>
+            <RoutesContainer />
             <ReactQueryDevtools />
           </QueryClientProvider>
         </GlobalProvider>

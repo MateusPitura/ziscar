@@ -15,6 +15,14 @@
         font-src 'self' data:;
       "
     />
+    <style>
+      /* HTML Loading */
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
     <!-- Git Hub Pages -->
     <script type="text/javascript">
       (function (l) {
@@ -35,7 +43,7 @@
       })(window.location);
     </script>
   </head>
-  <body>
+  <body style="margin: 0;">
     <div id="root">
       <div
         style="
@@ -49,12 +57,13 @@
           style="
             width: 2.5rem;
             height: 2.5rem;
-            border-width: 0.25rem;
+            border-width: 4px;
             border-color: #904b40;
             border-style: solid;
             border-radius: 50%;
             animation: spin 1s linear infinite;
             border-top-color: transparent;
+            box-sizing: border-box;
           "
         ></div>
       </div>

@@ -33,6 +33,7 @@ const Audit = lazy(() => import("@/domains/audit/components/AuditPage"));
 const NotFound = lazy(() => import("@/domains/global/components/NotFoundPage"));
 
 const Sign = lazy(() => import("@/domains/sign/components/SignPage"));
+const NotFondRedirect = lazy(() => import("@/domains/global/components/NotFoundRedirectPage"));
 
 export const privateRoutes: RouteGroup[] = [
   {
@@ -123,7 +124,7 @@ export const publicRoutes: RouteGroup[] = [
       },
       {
         path: "*",
-        entryPage: <NotFound />,
+        entryPage: <NotFondRedirect />,
         shouldDisplay: false,
       },
     ],
