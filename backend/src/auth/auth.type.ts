@@ -8,5 +8,9 @@ export interface AuthResetPassword {
 }
 
 export interface AuthRequest extends Request {
-  authToken: AuthSignin | AuthResetPassword;
+  authToken: AuthSignin;
+}
+
+export interface AuthRequestBodyToken extends Request {
+  authToken: AuthResetPassword;
 }

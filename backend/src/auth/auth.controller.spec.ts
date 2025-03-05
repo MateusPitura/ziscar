@@ -8,7 +8,7 @@ import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../database/prisma.service';
 import { EmailService } from '../email/email.service';
 import { POPULATE_USER_DEFAULT } from '../constants';
-import { AuthRequest } from './auth.type';
+import { AuthRequestBodyToken } from './auth.type';
 
 describe('AuthController', () => {
   let authController: AuthController;
@@ -92,7 +92,9 @@ describe('AuthController', () => {
         await authController.forgetPassword(resetPasswordPayload),
       ).toBeTruthy();
 
-      const request = new Request('http://localhost:3000') as AuthRequest;
+      const request = new Request(
+        'http://localhost:3000',
+      ) as AuthRequestBodyToken;
       request.authToken = resetPasswordPayload;
 
       const response = await authController.resetPassword(request, {

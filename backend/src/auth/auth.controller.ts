@@ -9,8 +9,8 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { AuthRequest, AuthResetPassword } from './auth.type';
-import { AuthGuard } from './auth.guard';
+import { AuthRequestBodyToken } from './auth.type';
+import { AuthGuardBodyToken } from './auth.guard';
 import {
   AuthForgetPasswordInDto,
   AuthSignInInDto,
@@ -44,12 +44,12 @@ export class AuthController {
   }
 
   @Post('reset-password')
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuardBodyToken)
   async resetPassword(
-    @Req() req: AuthRequest,
+    @Req() req: AuthRequestBodyToken,
     @Body() { password }: PasswordInDto,
   ) {
-    const { email } = req.authToken as AuthResetPassword;
+    const { email } = req.authToken;
     return await this.authService.resetPassword({
       email,
       password,
