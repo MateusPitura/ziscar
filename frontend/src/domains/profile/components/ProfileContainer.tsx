@@ -30,11 +30,11 @@ export default function ProfileContainer(): ReactElement {
   const { safeFetch } = useSafeFetch();
 
   async function getProfileInfo(): Promise<User> {
-    return await safeFetch(`${BASE_URL}/user/me`);
+    return await safeFetch(`${BASE_URL}/profile`);
   }
 
   const { data: profileInfo, isFetching } = useQuery({
-    queryKey: ["user/me"],
+    queryKey: ["profile"],
     queryFn: getProfileInfo,
     select: selectProfileInfo,
   });

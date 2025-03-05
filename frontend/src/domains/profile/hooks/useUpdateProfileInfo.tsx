@@ -20,7 +20,7 @@ export default function useUpdateProfileInfo<T>({
 
   async function updateProfileInfo(data: T) {
     await safeFetch(
-      `${BASE_URL}/user/me`,
+      `${BASE_URL}/profile`,
       {
         method: "PATCH",
         body: data,
@@ -33,7 +33,7 @@ export default function useUpdateProfileInfo<T>({
     onSuccess: () => {
       if (shouldInvalidateQuery) {
         queryClient.invalidateQueries({
-          queryKey: ["user/me"],
+          queryKey: ["profile"],
         });
         queryClient.invalidateQueries({
           queryKey: ["usersDashboard"],

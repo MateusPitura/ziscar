@@ -17,7 +17,7 @@ GET {{BASE_URL}}/user/1 HTTP/1.1
 content-type: application/json
 
 ###
-GET {{BASE_URL}}/user/me HTTP/1.1
+GET {{BASE_URL}}/profile HTTP/1.1
 content-type: application/json
 
 ###
@@ -48,4 +48,12 @@ content-type: application/json
 
 {
     "isActive": true
+}
+
+###
+PATCH {{BASE_URL}}/profile HTTP/1.1
+content-type: application/json
+
+{
+    "code": "11111111111"
 }

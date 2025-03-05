@@ -17,12 +17,12 @@ import { AuthRequest, AuthSignin } from '../auth/auth.type';
 import { UserPostInDto, UserFetchInDto, UserPatchInDto } from './user.schema';
 import { ParamInputs } from 'src/schemas';
 
-@Controller('user')
+@Controller()
 @UseGuards(AuthGuard)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post()
+  @Post('user')
   post(@Req() req: AuthRequest, @Body() userPostInDto: UserPostInDto) {
     const { clientId } = req.authToken as AuthSignin;
 
@@ -33,7 +33,7 @@ export class UserController {
     return this.userService.create(createUserPayload);
   }
 
-  @Get()
+  @Get('user')
   async fetch(
     @Req() req: AuthRequest,
     @Query() userFetchInDto: UserFetchInDto,
@@ -42,13 +42,13 @@ export class UserController {
     return await this.userService.findMany(userFetchInDto, +userId, FETCH_USER);
   }
 
-  @Get('/me')
+  @Get('profile')
   async getMe(@Req() req: AuthRequest) {
     const { userId } = req.authToken as AuthSignin;
     return await this.userService.findOne({ id: +userId }, GET_USER);
   }
 
-  @Get(':id')
+  @Get('user/:id')
   async get(@Req() req: AuthRequest, @Param() { id }: ParamInputs) {
     const { userId } = req.authToken as AuthSignin;
     if (userId == id) {
@@ -57,7 +57,7 @@ export class UserController {
     return await this.userService.findOne({ id: +id }, GET_USER);
   }
 
-  @Patch('/me')
+  @Patch('profile')
   async patchMe(
     @Req() req: AuthRequest,
     @Body() userPatchInDto: UserPatchInDto,
@@ -66,7 +66,7 @@ export class UserController {
     return await this.userService.update({ id: +userId }, userPatchInDto);
   }
 
-  @Patch(':id')
+  @Patch('user/:id')
   async patch(
     @Req() req: AuthRequest,
     @Param() { id }: ParamInputs,
