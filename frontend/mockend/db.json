@@ -1,16 +1,4 @@
 {
-  "usersDashboard": [
-    {
-      "id": "1",
-      "label": "Total de usuários",
-      "value": "24"
-    },
-    {
-      "id": "2",
-      "label": "Total de vendas",
-      "value": "R$100.000,00"
-    }
-  ],
   "usersPdf": [
     {
       "id": "0255",

@@ -8,15 +8,11 @@ export type Address = {
   state?: string;
 };
 
-export interface Client {
-  id: string;
-}
-
 export type Resource = "users";
 
 export type Action = "create" | "read" | "update" | "delete";
 
-export interface User { // TODO: tentar pegar isso do front
+export interface User {
     id: string;
     fullName: string;
     email: string;
