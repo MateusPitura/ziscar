@@ -1,5 +1,5 @@
 import { Route, Routes, BrowserRouter } from "react-router-dom";
-import { closeRoutes, openRoutes } from "@/domains/global/constants/routes";
+import { privateRoutes, publicRoutes } from "@/domains/global/constants/routes";
 import ClosePageLayout from "@/domains/global/components/ClosePageLayout";
 import { GlobalProvider } from "./domains/global/contexts/GlobalContext";
 import SuspensePage from "./domains/global/components/SuspensePage";
@@ -35,7 +35,7 @@ export default function App() {
             <Snackbar />
             <Routes>
               <Route element={<OpenPageLayout />}>
-                {openRoutes.map((group) =>
+                {publicRoutes.map((group) =>
                   group.routes.map((route) => (
                     <Route
                       key={route.path}
@@ -50,7 +50,7 @@ export default function App() {
                 )}
               </Route>
               <Route element={<ClosePageLayout />}>
-                {closeRoutes.map((group) =>
+                {privateRoutes.map((group) =>
                   group.routes.map((route) => (
                     <Route
                       key={route.path}

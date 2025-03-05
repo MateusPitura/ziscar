@@ -1,7 +1,7 @@
 import { memo, useEffect, useState, type ReactElement } from "react";
 import Button from "@/design-system/Button";
 import RoutesGroup from "@/domains/global/components/RoutesGroup";
-import { closeRoutes } from "@/domains/global/constants/routes";
+import { privateRoutes } from "@/domains/global/constants/routes";
 import { useLocation, useNavigate } from "react-router-dom";
 import classNames from "classnames";
 
@@ -28,7 +28,7 @@ function PageSideBar({ isOpen }: PageSideBarProps): ReactElement {
         }
       )}
     >
-      {closeRoutes.map((group) => {
+      {privateRoutes.map((group) => {
         if (!group.shoudDisplay) return null;
 
         return (

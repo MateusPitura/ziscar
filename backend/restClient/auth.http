@@ -29,8 +29,8 @@ content-type: application/json
 ###
 POST {{BASE_URL}}/auth/reset-password HTTP/1.1
 content-type: application/json
-Authorization: Bearer your-token
 
 {
-    "password": "123456"
+    "password": "123456",
+    "token": "your-token"
 }

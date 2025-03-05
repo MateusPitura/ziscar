@@ -34,7 +34,7 @@ const NotFound = lazy(() => import("@/domains/global/components/NotFoundPage"));
 
 const Sign = lazy(() => import("@/domains/sign/components/SignPage"));
 
-export const closeRoutes: RouteGroup[] = [
+export const privateRoutes: RouteGroup[] = [
   {
     groupName: "Cadastros",
     shoudDisplay: true,
@@ -111,7 +111,7 @@ export const closeRoutes: RouteGroup[] = [
   },
 ];
 
-export const openRoutes: RouteGroup[] = [
+export const publicRoutes: RouteGroup[] = [
   {
     groupName: "*",
     shoudDisplay: false,
