@@ -5,30 +5,35 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { AuthResetPassword, AuthSignin } from './auth.type';
 import { Request } from 'express';
 import { COOKIE_JWT_NAME } from 'src/constants';
 import { UNAUTHORIZED } from '@shared/constants';
+import { AuthResetPassword, AuthSignin } from './auth.type';
 
 @Injectable()
-export class AuthGuard implements CanActivate {
+abstract class BaseAuthGuard implements CanActivate {
   constructor(private readonly jwtService: JwtService) {}
+
+  abstract getToken(request: Request): string | undefined;
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<Request>();
 
     try {
-      const token = request.cookies[COOKIE_JWT_NAME] as string;
+      const token = this.getToken(request);
 
       if (!token) {
         throw new UnauthorizedException(UNAUTHORIZED);
       }
 
-      const payload = await this.jwtService.verifyAsync<AuthSignin>(token, {
+      const payload = await this.jwtService.verifyAsync<
+        AuthSignin | AuthResetPassword
+      >(token, {
         secret: process.env.JWT_SECRET,
       });
       request['authToken'] = payload;
-    } catch {
+    } catch (error) {
+      console.log('🌠 error: ', error);
       throw new UnauthorizedException(UNAUTHORIZED);
     }
 
@@ -37,33 +42,20 @@ export class AuthGuard implements CanActivate {
 }
 
 @Injectable()
-export class AuthGuardBodyToken implements CanActivate {
-  constructor(private readonly jwtService: JwtService) {}
+export class AuthGuard extends BaseAuthGuard {
+  getToken(request: Request): string | undefined {
+    return request.cookies[COOKIE_JWT_NAME] as string;
+  }
+}
 
-  async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context.switchToHttp().getRequest<Request>();
-
-    try {
-      const body = request.body as Record<string, string>;
-      const token = body?.token;
-
-      if (!token) {
-        throw new UnauthorizedException(UNAUTHORIZED);
-      }
-
+@Injectable()
+export class AuthGuardBodyToken extends BaseAuthGuard {
+  getToken(request: Request): string | undefined {
+    const body = request.body as Record<string, string | undefined>;
+    const token = body?.token;
+    if (token) {
       delete body.token;
-
-      const payload = await this.jwtService.verifyAsync<AuthResetPassword>(
-        token,
-        {
-          secret: process.env.JWT_SECRET,
-        },
-      );
-      request['authToken'] = payload;
-    } catch {
-      throw new UnauthorizedException(UNAUTHORIZED);
     }
-
-    return true;
+    return token;
   }
 }
