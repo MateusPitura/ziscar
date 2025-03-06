@@ -75,7 +75,7 @@ describe('UserController', () => {
       clientId: POPULATE_CLIENT_DEFAULT_ID,
     };
 
-    const user = await userController.getMe(request);
+    const user = await userController.getProfile(request);
 
     for (const key in GET_USER) {
       expect(user).toHaveProperty(key);
@@ -101,7 +101,7 @@ describe('UserController', () => {
       clientId: POPULATE_CLIENT_DEFAULT_ID,
     };
 
-    await expect(userController.getMe(request)).rejects.toThrow(
+    await expect(userController.getProfile(request)).rejects.toThrow(
       NotFoundException,
     );
   });
@@ -196,7 +196,7 @@ describe('UserController', () => {
         clientId: POPULATE_CLIENT_DEFAULT_ID,
       };
 
-      const user = await userController.patchMe(request, {
+      const user = await userController.patchProfile(request, {
         email: 'jane.doe@email.com',
       });
 

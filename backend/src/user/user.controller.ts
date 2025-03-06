@@ -43,7 +43,7 @@ export class UserController {
   }
 
   @Get('profile')
-  async getMe(@Req() req: AuthRequest) {
+  async getProfile(@Req() req: AuthRequest) {
     const { userId } = req.authToken;
     return await this.userService.findOne({ id: +userId }, GET_USER);
   }
@@ -60,7 +60,7 @@ export class UserController {
   }
 
   @Patch('profile')
-  async patchMe(
+  async patchProfile(
     @Req() req: AuthRequest,
     @Body() userPatchInDto: UserPatchInDto,
   ) {
