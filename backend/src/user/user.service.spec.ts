@@ -479,6 +479,27 @@ describe('UserService', () => {
     });
   });
 
+  it('should update user with allowed null values', async () => {
+    await prismaService.transaction(async (transaction) => {
+      Reflect.set(userService, 'prismaService', transaction);
+
+      expect(
+        await userService.update(
+          {
+            id: POPULATE_USER_DEFAULT.id,
+          },
+          {
+            cpf: null,
+            birthDate: null,
+            cellPhone: null,
+          },
+        ),
+      ).toBeTruthy();
+
+      transaction.rollback();
+    });
+  });
+
   it('should find one user by id', async () => {
     const user = await userService.findOne(
       { id: POPULATE_USER_DEFAULT.id },
