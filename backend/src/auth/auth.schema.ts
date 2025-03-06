@@ -1,12 +1,10 @@
 import { s } from '@shared/safeZod';
 import { createZodDto } from 'nestjs-zod';
 
+// TODO: Usar pick aqui e omit em outros lugares
+
 const SchemaPassword = s.object({
   password: s.password(),
-});
-
-const SchemaResetPasswordInDto = SchemaPassword.extend({
-  email: s.email(),
 });
 
 const SchemaAuthSigInInDto = s.object({
@@ -14,8 +12,12 @@ const SchemaAuthSigInInDto = s.object({
   password: s.string(),
 });
 
-const SchemaAuthForgetPasswordInDto = s.object({
+const SchemaResetPasswordInDto = SchemaPassword.extend({
   email: s.email(),
+});
+
+const SchemaAuthForgetPasswordInDto = SchemaAuthSigInInDto.pick({
+  email: true,
 });
 
 const SchemaAuthSignUpInDto = s.object({

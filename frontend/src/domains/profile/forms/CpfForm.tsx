@@ -4,9 +4,10 @@ import Input from "@/design-system/Form/Input";
 import useDialogContext from "@/domains/global/hooks/useDialogContext";
 import { s } from "@shared/safeZod";
 import Dialog from "@/design-system/Dialog";
+import { SchemaUserForm } from "@/domains/users/schemas";
 
-const SchemaCpfForm = s.object({
-  cpf: s.cpf().or(s.empty()),
+const SchemaCpfForm = SchemaUserForm.pick({
+  cpf: true,
 });
 
 type CpfFormInputs = s.infer<typeof SchemaCpfForm>;

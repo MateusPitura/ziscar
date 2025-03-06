@@ -4,10 +4,11 @@ import Form from "@/design-system/Form";
 import Input from "@/design-system/Form/Input";
 import useDialogContext from "@/domains/global/hooks/useDialogContext";
 import { s } from "@shared/safeZod";
+import { SchemaUserForm } from "@/domains/users/schemas";
 
-const BirthDateSchema = s.object({
-  birthDate: s.birthDate().or(s.empty()),
-});
+const BirthDateSchema = SchemaUserForm.pick({
+  birthDate: true,
+})
 
 type BirthDateFormInputs = Omit<s.infer<typeof BirthDateSchema>, "birthDate"> & {
   birthDate: string;

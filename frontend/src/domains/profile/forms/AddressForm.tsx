@@ -51,7 +51,7 @@ interface AddressFormContentProps {
 function AddressFormContent({
   isPending,
 }: AddressFormContentProps): ReactElement {
-  const isFetching = useIsFetching({ queryKey: ['cepApi'] });
+  const isFetching = useIsFetching({ queryKey: ["cepApi"] });
 
   return (
     <>

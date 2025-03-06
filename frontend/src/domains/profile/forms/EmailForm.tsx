@@ -5,9 +5,10 @@ import Form from "@/design-system/Form";
 import useDialogContext from "@/domains/global/hooks/useDialogContext";
 import { s } from "@shared/safeZod";
 import Dialog from "@/design-system/Dialog";
+import { SchemaUserForm } from "@/domains/users/schemas";
 
-const SchemaEmailForm = s.object({
-  email: s.email(),
+const SchemaEmailForm = SchemaUserForm.pick({
+  email: true,
 });
 
 type EmailFormInputs = s.infer<typeof SchemaEmailForm>;

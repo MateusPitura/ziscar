@@ -5,10 +5,11 @@ import Form from "@/design-system/Form";
 import useDialogContext from "@/domains/global/hooks/useDialogContext";
 import { s } from "@shared/safeZod";
 import Dialog from "@/design-system/Dialog";
+import { SchemaUserForm } from "@/domains/users/schemas";
 
-const SchemaFullNameForm = s.object({
-  fullName: s.fullName()
-});
+const SchemaFullNameForm = SchemaUserForm.pick({
+  fullName: true,
+})
 
 type FullNameFormInputs = s.infer<typeof SchemaFullNameForm>;
 

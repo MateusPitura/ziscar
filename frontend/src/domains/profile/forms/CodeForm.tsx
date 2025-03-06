@@ -4,10 +4,11 @@ import Input from "@/design-system/Form/Input";
 import useDialogContext from "@/domains/global/hooks/useDialogContext";
 import { s } from "@shared/safeZod";
 import Dialog from "@/design-system/Dialog";
+import { SchemaUserForm } from "@/domains/users/schemas";
 
-const SchemaCodeForm = s.object({
-  code: s.string().or(s.empty()),
-});
+const SchemaCodeForm = SchemaUserForm.pick({
+  code: true,
+})
 
 type CodeFormInputs = s.infer<typeof SchemaCodeForm>;
 

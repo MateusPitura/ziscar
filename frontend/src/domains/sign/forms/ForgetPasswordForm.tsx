@@ -5,12 +5,13 @@ import { BASE_URL } from "@/domains/global/constants";
 import useDialogContext from "@/domains/global/hooks/useDialogContext";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
+import { SchemaUserForm } from "@/domains/users/schemas";
 import { s } from "@shared/safeZod";
 import { useMutation } from "@tanstack/react-query";
 import type { ReactNode } from "react";
 
-const SchemaForgetPasswordForm = s.object({
-  email: s.email(),
+const SchemaForgetPasswordForm = SchemaUserForm.pick({
+  email: true,
 });
 
 type ForgetPasswordFormInputs = s.infer<typeof SchemaForgetPasswordForm>;
