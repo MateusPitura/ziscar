@@ -1,8 +1,6 @@
 import { s } from '@shared/safeZod';
 import { createZodDto } from 'nestjs-zod';
 
-// TODO: Usar pick aqui e omit em outros lugares
-
 const SchemaPassword = s.object({
   password: s.password(),
 });
