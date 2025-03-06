@@ -7,9 +7,9 @@ import Section from "@/domains/global/components/Section";
 import type { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import { SchemaUserForm } from "../schemas";
-import { Action, Resource } from "@/domains/global/types/model";
 import { UserFormInputs } from "../types";
 import { SEED_ROLE_ADMIN_ID, SEED_ROLE_SALES_ID } from "@shared/constants";
+import { Action, Resource } from "@shared/types";
 
 interface UserFormProperties {
   defaultValues: Partial<UserFormInputs>;

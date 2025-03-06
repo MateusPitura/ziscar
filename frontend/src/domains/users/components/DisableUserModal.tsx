@@ -24,8 +24,8 @@ export default function DisableUserModal({
     await safeFetch(`${BASE_URL}/user/${userId}`, {
       method: "PATCH",
       body: { isActive: false },
-      resource: "users",
-      action: "delete",
+      resource: "USERS",
+      action: "DELETE",
     });
   }
 
@@ -58,8 +58,8 @@ export default function DisableUserModal({
         labelPrimaryBtn="Desativar"
         onClickPrimaryBtn={mutate}
         primaryBtnState={isPending ? "loading" : "red"}
-        primaryBtResource="users"
-        primaryBtnAction="delete"
+        primaryBtResource="USERS"
+        primaryBtnAction="DELETE"
       />
     </Dialog>
   );

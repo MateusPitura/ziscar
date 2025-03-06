@@ -3,8 +3,8 @@ import { forwardRef, ReactNode } from "react";
 import Tooltip from "./Tooltip";
 import useCheckPermission from "@/domains/global/hooks/useCheckPermission";
 import formatDeniedMessage from "@/domains/global/utils/formatDeniedMessage";
-import { Resource, Action } from "@/domains/global/types/model";
 import { ButtonState } from "./types";
+import { Action, Resource } from "@shared/types";
 
 interface BaseButtonProps {
   state?: ButtonState;

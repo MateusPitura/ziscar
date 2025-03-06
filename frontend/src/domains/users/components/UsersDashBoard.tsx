@@ -10,8 +10,8 @@ export default function UsersDashBoard(): ReactNode {
 
   async function getDashBoardInfo(): Promise<DashBoardProps[]> {
     // return await safeFetch(`${BASE_URL}/usersDashboard`, { // TODO: implementar no backend
-    //   resource: "users",
-    //   action: "read",
+    //   resource: "USERS",
+    //   action: "READ",
     // });
     return [
       {
@@ -36,8 +36,8 @@ export default function UsersDashBoard(): ReactNode {
   return (
     <DashBoard
       isLoading={isFetchingDatashBoardInfo}
-      resource="users"
-      action="read"
+      resource="USERS"
+      action="READ"
     >
       {dashBoardInfo?.map((item) => (
         <DashBoard.Card key={item.id} label={item.label} value={item.value} />

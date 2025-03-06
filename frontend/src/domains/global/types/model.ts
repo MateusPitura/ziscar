@@ -1,3 +1,5 @@
+import { Action, Resource } from "@shared/types";
+
 export type Address = {
   cep: string;
   number: string;
@@ -7,10 +9,6 @@ export type Address = {
   city?: string;
   state?: string;
 };
-
-export type Resource = "users";
-
-export type Action = "create" | "read" | "update" | "delete"; // TODO: colocar na shared
 
 export interface User {
     id: string;

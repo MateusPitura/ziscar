@@ -3,7 +3,7 @@ import { Childrenable } from "@/domains/global/types";
 import type { ReactElement } from "react";
 import useCheckPermission from "../hooks/useCheckPermission";
 import formatDeniedMessage from "../utils/formatDeniedMessage";
-import { Resource, Action } from "../types/model";
+import { Action, Resource } from "@shared/types";
 
 interface ContainerProperties extends Childrenable {
   isLoading: boolean;

@@ -13,7 +13,7 @@ async function seed() {
     data: [
       {
         id: 1,
-        resource: 'USERS', // TODO: criar tipagem para isso, compartilhado com o front
+        resource: 'USERS',
         action: 'CREATE',
       },
       {

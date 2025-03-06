@@ -1,10 +1,10 @@
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import {
-  useIsFetching,
-  useQueryClient,
-  useMutation,
-  useQuery,
+    useIsFetching,
+    useQueryClient,
+    useMutation,
+    useQuery,
 } from "@tanstack/react-query";
 import { useEffect, type ReactNode } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -25,8 +25,8 @@ export default function EditUserContainer(): ReactNode {
 
   async function getUser(): Promise<User> {
     return await safeFetch(`${BASE_URL}/user/${userId}`, {
-      resource: "users",
-      action: "read",
+      resource: "USERS",
+      action: "READ",
     });
   }
 
@@ -40,8 +40,8 @@ export default function EditUserContainer(): ReactNode {
     await safeFetch(`${BASE_URL}/user/${userId}`, {
       method: "PATCH",
       body: data,
-      resource: "users",
-      action: "update",
+      resource: "USERS",
+      action: "UPDATE",
     });
   }
 
@@ -85,8 +85,8 @@ export default function EditUserContainer(): ReactNode {
         headerPrimaryBtnLabel="Alterar"
         headerTitle="Alterar usuário"
         onlyDirty
-        resource="users"
-        action="update"
+        resource="USERS"
+        action="UPDATE"
       />
     )
   );

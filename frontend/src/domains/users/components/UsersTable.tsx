@@ -46,8 +46,8 @@ export default function UsersTable(): ReactNode {
     filter?: string
   ): Promise<PageablePayload<User>> {
     return await safeFetch(`${BASE_URL}/user?${filter}`, {
-      resource: "users",
-      action: "read",
+      resource: "USERS",
+      action: "READ",
     });
   }
 
@@ -66,8 +66,8 @@ export default function UsersTable(): ReactNode {
         filter: usersFilter,
         url: "https://example.com/", // TODO: ao implementar o back seria enviado apenas o filter
       },
-      resource: "users",
-      action: "read",
+      resource: "USERS",
+      action: "READ",
     });
   }
 
@@ -78,8 +78,8 @@ export default function UsersTable(): ReactNode {
         title: "PDF gerado com sucesso",
         actionLabel: "Abrir",
         onActionClick: () => window.open(data.url, "_blank"),
-        actionBtnResource: "users",
-        actionBtnAction: "read",
+        actionBtnResource: "USERS",
+        actionBtnAction: "READ",
       });
     },
   });
@@ -100,8 +100,8 @@ export default function UsersTable(): ReactNode {
         <Table.Body
           isLoading={isFetchingUsersInfo}
           isEmpty={!usersInfo?.total}
-          resource="users"
-          action="read"
+          resource="USERS"
+          action="READ"
         >
           {usersInfo?.data.map((user) => (
             <Table.Row key={user.id}>
@@ -128,8 +128,8 @@ export default function UsersTable(): ReactNode {
           onClickPdfBtn={mutate}
           pdfBtnState={isPending ? "loading" : undefined}
           isLoading={isFetchingUsersInfo}
-          resourceExportBtn="users"
-          actionExportBtn="read"
+          resourceExportBtn="USERS"
+          actionExportBtn="READ"
         />
       </Table>
     </>

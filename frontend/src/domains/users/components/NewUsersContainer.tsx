@@ -23,8 +23,8 @@ export default function NewUsersContainer(): ReactElement {
     await safeFetch(`${BASE_URL}/user`, {
       method: "POST",
       body: data,
-      resource: "users",
-      action: "create",
+      resource: "USERS",
+      action: "CREATE",
     });
   }
 
@@ -47,8 +47,8 @@ export default function NewUsersContainer(): ReactElement {
       isPending={isPending || !!isFetching}
       headerPrimaryBtnLabel="Criar"
       headerTitle="Novo usuário"
-      resource="users"
-      action="create"
+      resource="USERS"
+      action="CREATE"
       onlyDirty
     />
   );

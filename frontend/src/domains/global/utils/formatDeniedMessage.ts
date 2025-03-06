@@ -1,14 +1,14 @@
-import { Action, Resource } from "../types/model";
+import { Action, Resource } from "@shared/types";
 
 const actionFormatted: Record<Action, string> = {
-  create: "criar",
-  read: "visualizar",
-  update: "editar",
-  delete: "excluir",
+  CREATE: "criar",
+  READ: "visualizar",
+  UPDATE: "editar",
+  DELETE: "excluir",
 };
 
 const resourceFormatted: Record<Resource, string> = {
-  users: "usuários",
+  USERS: "usuários",
 };
 
 interface FormatDeniedMessageProperties {

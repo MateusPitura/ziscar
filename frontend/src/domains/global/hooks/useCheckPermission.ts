@@ -1,7 +1,7 @@
 import useGlobalContext from "./useGlobalContext";
 import { useMemo } from "react";
 import checkPermission from "../utils/checkPermission";
-import { Resource, Action } from "../types/model";
+import { Action, Resource } from "@shared/types";
 
 export default function useCheckPermission(
   resource?: Resource,

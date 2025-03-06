@@ -3,7 +3,7 @@ import useSnackbar from "./useSnackbar";
 import formatDeniedMessage from "../utils/formatDeniedMessage";
 import useGlobalContext from "./useGlobalContext";
 import checkPermission from "../utils/checkPermission";
-import { Resource, Action } from "../types/model";
+import { Action, Resource } from "@shared/types";
 import { useNavigate } from "react-router-dom";
 import { UNAUTHORIZED } from "@shared/constants";
 
