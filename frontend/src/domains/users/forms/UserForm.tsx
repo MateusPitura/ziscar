@@ -69,13 +69,11 @@ export default function UserForm({
                   name="cellPhone"
                   label="Celular"
                   mask="cellphone"
-                  required
                   maxLength={15}
                 />
                 <Input<UserFormInputs>
                   name="cpf"
                   label="CPF"
-                  required
                   mask="cpf"
                   maxLength={14}
                 />

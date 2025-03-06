@@ -6,9 +6,9 @@ import useDialogContext from "@/domains/global/hooks/useDialogContext";
 import { s } from "@shared/safeZod";
 import AddressFields from "@/domains/global/components/AddressFields";
 import Dialog from "@/design-system/Dialog";
+import { SchemaAddress } from "@/domains/users/schemas";
 
-
-const SchemaAddressForm = s.SchemaAddressEmpty;
+const SchemaAddressForm = SchemaAddress;
 
 type AddressFormInputs = s.infer<typeof SchemaAddressForm>;
 

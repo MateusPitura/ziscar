@@ -6,7 +6,7 @@ import useDialogContext from "@/domains/global/hooks/useDialogContext";
 import { s } from "@shared/safeZod";
 
 const BirthDateSchema = s.object({
-  birthDate: s.birthDate(),
+  birthDate: s.birthDate().or(s.empty()),
 });
 
 type BirthDateFormInputs = Omit<s.infer<typeof BirthDateSchema>, "birthDate"> & {
@@ -48,7 +48,6 @@ function BirthDateFormContent({ isPending }: BirthDateFormContentProps) {
           name="birthDate"
           label="Data de nascimento"
           type="date"
-          required
         />
       </Dialog.Body>
       <Dialog.Footer

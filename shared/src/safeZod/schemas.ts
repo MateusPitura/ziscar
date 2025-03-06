@@ -89,23 +89,7 @@ export const SchemaPassword = object({
   path: ["confirmPassword"],
 });
 
-export const SchemaBaseAddress = object({
+export const SchemaAddress = object({
   cep: cep(),
   number: string(),
-});
-
-export const SchemaAddressEmpty = SchemaBaseAddress.extend({
-  street: string().or(empty()),
-  neighborhood: string().or(empty()),
-  city: string().or(empty()),
-  state: string().or(empty()),
-  complement: string().or(empty()),
-});
-
-export const SchemaAddressOptional = SchemaBaseAddress.extend({
-  street: string().optional(),
-  neighborhood: string().optional(),
-  city: string().optional(),
-  state: string().optional(),
-  complement: string().optional(),
 });

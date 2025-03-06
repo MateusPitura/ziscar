@@ -52,7 +52,9 @@ export class UserController {
   async get(@Req() req: AuthRequest, @Param() { id }: ParamInputs) {
     const { userId } = req.authToken;
     if (userId == id) {
-      throw new ForbiddenException('Use a rota /me para acessar seus dados');
+      throw new ForbiddenException(
+        'Use a rota /profile para acessar seus dados',
+      );
     }
     return await this.userService.findOne({ id: +id }, GET_USER);
   }
@@ -74,7 +76,9 @@ export class UserController {
   ) {
     const { userId } = req.authToken;
     if (userId == id) {
-      throw new ForbiddenException('Use a rota /me para atualizar seus dados');
+      throw new ForbiddenException(
+        'Use a rota /profile para atualizar seus dados',
+      );
     }
     return await this.userService.update({ id: +id }, userPatchInDto);
   }

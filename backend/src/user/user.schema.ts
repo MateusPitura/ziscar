@@ -1,14 +1,22 @@
 import { s } from '@shared/safeZod';
 import { createZodDto } from 'nestjs-zod';
 
+const SchemaAddress = s.SchemaAddress.extend({
+  street: s.string().optional(),
+  neighborhood: s.string().optional(),
+  city: s.string().optional(),
+  state: s.string().optional(),
+  complement: s.string().optional(),
+});
+
 const SchemaUserPostInDto = s.object({
   fullName: s.fullName(),
   email: s.email(),
-  cpf: s.cpf().optional(),
-  birthDate: s.birthDate().optional(),
+  cpf: s.cpf().nullable().optional(),
+  birthDate: s.birthDate().nullable().optional(),
   code: s.string().optional(),
-  cellPhone: s.cellphone().optional(),
-  address: s.SchemaAddressOptional.optional(),
+  cellPhone: s.cellphone().nullable().optional(),
+  address: SchemaAddress.optional(),
   roleId: s.id(),
 });
 
@@ -27,7 +35,7 @@ const SchemaUserFindManyInDto = SchemaUserFetchInDto;
 
 const SchemaUserPatchInDto = SchemaUserPostInDto.partial().extend({
   password: s.password().optional(),
-  address: s.SchemaAddressOptional.partial().optional(),
+  address: SchemaAddress.partial().optional(),
   isActive: s.boolean().optional(),
 });
 

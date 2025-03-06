@@ -6,7 +6,7 @@ import { s } from "@shared/safeZod";
 import Dialog from "@/design-system/Dialog";
 
 const SchemaCpfForm = s.object({
-  cpf: s.cpf(),
+  cpf: s.cpf().or(s.empty()),
 });
 
 type CpfFormInputs = s.infer<typeof SchemaCpfForm>;
@@ -47,7 +47,6 @@ function CpfFormContent({ isPending }: CpfFormContentProps) {
           label="CPF"
           mask="cpf"
           maxLength={14}
-          required
         />
       </Dialog.Body>
       <Dialog.Footer

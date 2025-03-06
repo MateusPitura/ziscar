@@ -27,7 +27,10 @@ export class UserService {
   async create(userCreateInDto: UserCreateInDto, transaction?: Transaction) {
     const database = transaction || this.prismaService;
 
-    await this.verifyDuplicated({ email: userCreateInDto.email });
+    await this.verifyDuplicated({
+      email: userCreateInDto.email,
+      cpf: userCreateInDto.cpf ?? undefined,
+    });
 
     const { address, clientId, roleId, ...rest } = userCreateInDto;
 
@@ -147,7 +150,7 @@ export class UserService {
   ) {
     await this.verifyDuplicated({
       email: userUpdateInDto.email,
-      cpf: userUpdateInDto.cpf,
+      cpf: userUpdateInDto.cpf ?? undefined,
     });
 
     const { address, roleId, ...rest } = userUpdateInDto;

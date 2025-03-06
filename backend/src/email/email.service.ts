@@ -7,10 +7,14 @@ export class EmailService {
   constructor(private readonly mailerService: MailerService) {}
 
   async sendEmail({ body, title, to }: SendEmail) {
-    await this.mailerService.sendMail({
-      to,
-      subject: title,
-      text: body,
-    });
+    try {
+      await this.mailerService.sendMail({
+        to,
+        subject: title,
+        text: body,
+      });
+    } catch {
+      console.log('🌠 Cannot send the email');
+    }
   }
 }

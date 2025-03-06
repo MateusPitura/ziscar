@@ -87,6 +87,18 @@ describe('UserService', () => {
     ).rejects.toThrow(ConflictException);
   });
 
+  it('should not create an user with an cpf of an inactive user', async () => {
+    await expect(
+      userService.create({
+        email: 'jane.doe@email.com',
+        fullName: 'John Doe',
+        cpf: POPULATE_USER_INACTIVE.cpf,
+        clientId: POPULATE_CLIENT_DEFAULT_ID,
+        roleId: SEED_ROLE_SALES_ID,
+      }),
+    ).rejects.toThrow(ConflictException);
+  });
+
   it('should create an user with full data and minimal address', async () => {
     await prismaService.transaction(async (transaction) => {
       Reflect.set(userService, 'prismaService', transaction);

@@ -1,5 +1,13 @@
 import { s } from "@shared/safeZod";
 
+export const SchemaAddress = s.SchemaAddress.extend({
+  street: s.string().or(s.empty()),
+  neighborhood: s.string().or(s.empty()),
+  city: s.string().or(s.empty()),
+  state: s.string().or(s.empty()),
+  complement: s.string().or(s.empty()),
+});
+
 export const SchemaUsersFilterForm = s.object({
   fullName: s.fullName().or(s.empty()),
   orderBy: s.list(["fullName", "email"]),
@@ -9,10 +17,10 @@ export const SchemaUsersFilterForm = s.object({
 export const SchemaUserForm = s.object({
   fullName: s.fullName(),
   email: s.email(),
-  cellPhone: s.cellphone(),
-  cpf: s.cpf(),
+  cellPhone: s.cellphone().or(s.empty()),
+  cpf: s.cpf().or(s.empty()),
   code: s.string().or(s.empty()),
-  birthDate: s.birthDate(),
+  birthDate: s.birthDate().or(s.empty()),
   roleId: s.string(),
-  address: s.SchemaAddressEmpty,
+  address: SchemaAddress,
 });
