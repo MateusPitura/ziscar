@@ -62,22 +62,7 @@ export class UserController {
   @Get('permissions')
   async getPermissions(@Req() req: AuthRequest) {
     const { userId } = req.authToken;
-    return await this.userService.findOne(
-      { id: +userId },
-      {
-        role: {
-          select: {
-            name: true,
-            permissions: {
-              select: {
-                resource: true,
-                action: true,
-              },
-            },
-          },
-        },
-      },
-    );
+    return await this.userService.getPermissions(+userId);
   }
 
   @RoleGuard(Resources.USERS, Actions.READ)

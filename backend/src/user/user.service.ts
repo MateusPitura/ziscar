@@ -3,7 +3,7 @@ import { Prisma } from '@prisma/client';
 import { PrismaService } from '../database/prisma.service';
 import { GetCallback, Transaction } from '../types';
 import { encryptPassword } from './user.utils';
-import { GET_USER } from './user.constant';
+import { GET_USER, PERMISSIONS } from './user.constant';
 import { verifyDuplicated } from '../utils/verifyDuplicated';
 import { EmailService } from '../email/email.service';
 import { JwtService } from '@nestjs/jwt';
@@ -15,6 +15,7 @@ import {
   UserUpdateInDto,
 } from './user.schema';
 import { FRONTEND_URL } from 'src/constants';
+import { Role } from './user.type';
 
 @Injectable()
 export class UserService {
@@ -142,6 +143,37 @@ export class UserService {
     }
 
     return user;
+  }
+
+  async getPermissions(userId: number) {
+    const user = await this.findOne(
+      { id: userId },
+      {
+        role: {
+          select: {
+            name: true,
+            permissions: {
+              select: {
+                resource: true,
+                action: true,
+              },
+            },
+          },
+        },
+      },
+    );
+
+    const role = user?.role as Role;
+    if (!role.permissions) {
+      throw new NotFoundException('Permissões não encontradas');
+    }
+
+    const permissionsFormatted = PERMISSIONS;
+    for (const permission of role.permissions) {
+      permissionsFormatted[permission.resource][permission.action] = true;
+    }
+
+    return permissionsFormatted;
   }
 
   async update(

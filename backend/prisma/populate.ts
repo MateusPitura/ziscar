@@ -8,7 +8,10 @@ import {
 } from '../src/constants';
 import { encryptPassword } from '../src/user/user.utils';
 import { faker } from '@faker-js/faker';
-import { SEED_ROLE_SALES_ID } from '../../shared/src/constants';
+import {
+  SEED_ROLE_ADMIN_ID,
+  SEED_ROLE_SALES_ID,
+} from '../../shared/src/constants';
 
 const prisma = new PrismaClient();
 
@@ -45,13 +48,13 @@ async function seed() {
           ...POPULATE_USER_DEFAULT,
           password: await encryptPassword(POPULATE_USER_DEFAULT.password),
           clientId: POPULATE_CLIENT_DEFAULT_ID,
-          roleId: SEED_ROLE_SALES_ID,
+          roleId: SEED_ROLE_ADMIN_ID,
         },
         {
           ...POPULATE_USER_INACTIVE,
           password: await encryptPassword(POPULATE_USER_INACTIVE.password),
           clientId: POPULATE_CLIENT_DEFAULT_ID,
-          roleId: SEED_ROLE_SALES_ID,
+          roleId: SEED_ROLE_ADMIN_ID,
         },
       ],
     }),

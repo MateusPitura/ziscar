@@ -1,3 +1,5 @@
+import { Action, Resource } from '@shared/types';
+
 export const GET_USER = {
   id: true,
   isActive: true,
@@ -18,4 +20,13 @@ export const FETCH_USER = {
   cellPhone: true,
   roleId: true,
   isActive: true,
+};
+
+export const PERMISSIONS: Record<Resource, Record<Action, boolean>> = {
+  USERS: {
+    CREATE: false,
+    READ: false,
+    UPDATE: false,
+    DELETE: false,
+  },
 };

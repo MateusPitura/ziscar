@@ -186,7 +186,7 @@ describe('UserController', () => {
     });
   });
 
-  it('should update user signed user', async () => {
+  it('should update signed user', async () => {
     await prismaService.transaction(async (transaction) => {
       Reflect.set(userService, 'prismaService', transaction);
 
@@ -240,5 +240,65 @@ describe('UserController', () => {
       orderBy: [{ fullName: 'asc' }],
       select: FETCH_USER,
     });
+  });
+
+  it('should disable user', async () => {
+    await prismaService.transaction(async (transaction) => {
+      Reflect.set(userService, 'prismaService', transaction);
+
+      const request = new Request('http://localhost:3000') as AuthRequest;
+      request.authToken = {
+        userId: 1,
+        clientId: POPULATE_CLIENT_DEFAULT_ID,
+      };
+
+      expect(
+        await userController.disable(
+          request,
+          { id: POPULATE_USER_DEFAULT.id },
+          {
+            isActive: false,
+          },
+        ),
+      ).toBeTruthy();
+
+      transaction.rollback();
+    });
+  });
+
+  it('should not allow disable user by id with id equal to signed id ', async () => {
+    await prismaService.transaction(async (transaction) => {
+      Reflect.set(userService, 'prismaService', transaction);
+
+      const request = new Request('http://localhost:3000') as AuthRequest;
+      request.authToken = {
+        userId: POPULATE_USER_DEFAULT.id,
+        clientId: POPULATE_CLIENT_DEFAULT_ID,
+      };
+
+      await expect(
+        userController.disable(
+          request,
+          { id: POPULATE_USER_DEFAULT.id },
+          {
+            isActive: false,
+          },
+        ),
+      ).rejects.toThrow(ForbiddenException);
+
+      transaction.rollback();
+    });
+  });
+
+  it('should get user permissions', async () => {
+    const request = new Request('http://localhost:3000') as AuthRequest;
+    request.authToken = {
+      userId: POPULATE_USER_DEFAULT.id,
+      clientId: POPULATE_CLIENT_DEFAULT_ID,
+    };
+
+    const permissions = await userController.getPermissions(request);
+
+    expect(permissions).toBeTruthy();
   });
 });

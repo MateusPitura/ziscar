@@ -623,4 +623,19 @@ describe('UserService', () => {
       orderBy: [{ fullName: 'asc' }],
     });
   });
+
+  it('should get user permissions', async () => {
+    const permissions = await userService.getPermissions(
+      POPULATE_USER_DEFAULT.id,
+    );
+
+    expect(permissions).toEqual({
+      USERS: {
+        CREATE: true,
+        READ: true,
+        UPDATE: true,
+        DELETE: true,
+      },
+    });
+  });
 });
