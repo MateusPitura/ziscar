@@ -16,12 +16,15 @@ import { FETCH_USER, GET_USER } from './user.constant';
 import { AuthRequest } from '../auth/auth.type';
 import { UserPostInDto, UserFetchInDto, UserPatchInDto } from './user.schema';
 import { ParamInputs } from 'src/schemas';
+import { Actions, Resources } from '@prisma/client';
+import { RoleGuard } from 'src/auth/role.guard';
 
 @Controller()
 @UseGuards(AuthGuard)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @RoleGuard(Resources.USERS, Actions.CREATE)
   @Post('user')
   post(@Req() req: AuthRequest, @Body() userPostInDto: UserPostInDto) {
     const { clientId } = req.authToken;
@@ -33,6 +36,7 @@ export class UserController {
     return this.userService.create(createUserPayload);
   }
 
+  @RoleGuard(Resources.USERS, Actions.READ)
   @Get('user')
   async fetch(
     @Req() req: AuthRequest,
@@ -48,6 +52,7 @@ export class UserController {
     return await this.userService.findOne({ id: +userId }, GET_USER);
   }
 
+  @RoleGuard(Resources.USERS, Actions.READ)
   @Get('user/:id')
   async get(@Req() req: AuthRequest, @Param() { id }: ParamInputs) {
     const { userId } = req.authToken;
@@ -68,6 +73,7 @@ export class UserController {
     return await this.userService.update({ id: +userId }, userPatchInDto);
   }
 
+  @RoleGuard(Resources.USERS, Actions.UPDATE) // TODO: criar controle para active/inactive
   @Patch('user/:id')
   async patch(
     @Req() req: AuthRequest,

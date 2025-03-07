@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import useSnackbar from "./useSnackbar";
-import formatDeniedMessage from "../utils/formatDeniedMessage";
+import { formatDeniedMessage } from '@shared/utils/formatDeniedMessage';
 import useGlobalContext from "./useGlobalContext";
 import checkPermission from "../utils/checkPermission";
 import { Action, Resource } from "@shared/types";

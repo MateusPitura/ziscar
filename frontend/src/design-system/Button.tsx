@@ -2,9 +2,9 @@ import classNames from "classnames";
 import { forwardRef, ReactNode } from "react";
 import Tooltip from "./Tooltip";
 import useCheckPermission from "@/domains/global/hooks/useCheckPermission";
-import formatDeniedMessage from "@/domains/global/utils/formatDeniedMessage";
 import { ButtonState } from "./types";
 import { Action, Resource } from "@shared/types";
+import { formatDeniedMessage } from '@shared/utils/formatDeniedMessage';
 
 interface BaseButtonProps {
   state?: ButtonState;

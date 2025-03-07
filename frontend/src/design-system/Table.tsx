@@ -13,7 +13,7 @@ import { Childrenable } from "@/domains/global/types";
 import useDialog from "@/domains/global/hooks/useDialog";
 import Loading from "./Loading";
 import useCheckPermission from "@/domains/global/hooks/useCheckPermission";
-import formatDeniedMessage from "@/domains/global/utils/formatDeniedMessage";
+import { formatDeniedMessage } from '@shared/utils/formatDeniedMessage';
 import { Resource, Action as ActionProp } from "@shared/types";
 import { ButtonState } from "./types";
 import { ITEMS_PER_PAGE } from '@shared/constants'

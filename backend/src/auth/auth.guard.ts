@@ -32,8 +32,7 @@ abstract class BaseAuthGuard implements CanActivate {
         secret: process.env.JWT_SECRET,
       });
       request['authToken'] = payload;
-    } catch (error) {
-      console.log('🌠 error: ', error);
+    } catch {
       throw new UnauthorizedException(UNAUTHORIZED);
     }
 

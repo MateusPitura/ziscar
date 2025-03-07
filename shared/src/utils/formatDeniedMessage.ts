@@ -1,4 +1,4 @@
-import { Action, Resource } from "@shared/types";
+import { Action, Resource } from "../types";
 
 const actionFormatted: Record<Action, string> = {
   CREATE: "criar",
@@ -16,7 +16,7 @@ interface FormatDeniedMessageProperties {
   action?: Action;
 }
 
-export default function formatDeniedMessage({
+export function formatDeniedMessage({
   resource,
   action,
 }: FormatDeniedMessageProperties): string {

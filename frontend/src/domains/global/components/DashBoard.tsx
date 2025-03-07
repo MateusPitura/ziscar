@@ -2,7 +2,7 @@ import Loading from "@/design-system/Loading";
 import { Childrenable } from "@/domains/global/types";
 import type { ReactElement } from "react";
 import useCheckPermission from "../hooks/useCheckPermission";
-import formatDeniedMessage from "../utils/formatDeniedMessage";
+import { formatDeniedMessage } from '@shared/utils/formatDeniedMessage';
 import { Action, Resource } from "@shared/types";
 
 interface ContainerProperties extends Childrenable {
