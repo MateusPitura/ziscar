@@ -1,0 +1,9 @@
+{
+    "name": "projeto-de-software",
+    "private": true,
+    "workspaces": ["/backend", "/frontend"],
+    "scripts": {
+      "start": "npm run --workspace=frontend dev & npm run --workspace=backend start"
+    }
+  }
+  
