@@ -33,7 +33,7 @@ content-type: application/json
 }
 
 ###
-PATCH {{BASE_URL}}/user/7 HTTP/1.1
+PATCH {{BASE_URL}}/user/1 HTTP/1.1
 content-type: application/json
 
 {
@@ -43,7 +43,7 @@ content-type: application/json
 }
 
 ###
-PATCH {{BASE_URL}}/user/7 HTTP/1.1
+PATCH {{BASE_URL}}/user/1 HTTP/1.1
 content-type: application/json
 
 {
@@ -55,5 +55,17 @@ PATCH {{BASE_URL}}/profile HTTP/1.1
 content-type: application/json
 
 {
-    "code": "11111111111"
+    "isActive": false
+}
+
+###
+GET {{BASE_URL}}/permissions HTTP/1.1
+content-type: application/json
+
+###
+DELETE {{BASE_URL}}/user/1 HTTP/1.1
+content-type: application/json
+
+{
+    "isActive": false
 }

@@ -27,7 +27,7 @@ export default function UsersTableActions({
 
   async function enableUser() {
     await safeFetch(`${BASE_URL}/user/${userId}`, {
-      method: "PATCH",
+      method: "DELETE",
       body: { isActive: true },
       resource: "USERS",
       action: "DELETE",

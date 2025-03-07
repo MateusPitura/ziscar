@@ -33,17 +33,30 @@ const SchemaUserFetchInDto = s.object({
 
 const SchemaUserFindManyInDto = SchemaUserFetchInDto;
 
-const SchemaUserPatchInDto = SchemaUserPostInDto.partial().extend({
+const SchemaUserUpdateInDto = SchemaUserPostInDto.partial().extend({
   password: s.password().optional(),
   address: SchemaAddress.partial().optional(),
   isActive: s.boolean().optional(),
 });
 
-export const SchemaUserUpdateInDto = SchemaUserPatchInDto;
+const SchemaProfilePatchInDto = SchemaUserUpdateInDto.omit({
+  roleId: true,
+  isActive: true,
+});
+
+const SchemaUserDeleteInDto = s.object({
+  isActive: s.boolean(),
+});
+
+export const SchemaUserPatchInDto = SchemaUserUpdateInDto.omit({
+  isActive: true,
+});
 
 export class UserPostInDto extends createZodDto(SchemaUserPostInDto) {}
 export class UserCreateInDto extends createZodDto(SchemaUserCreateInDto) {}
 export class UserFetchInDto extends createZodDto(SchemaUserFetchInDto) {}
 export class UserFindManyInDto extends createZodDto(SchemaUserFindManyInDto) {}
 export class UserPatchInDto extends createZodDto(SchemaUserPatchInDto) {}
+export class ProfilePatchInDto extends createZodDto(SchemaProfilePatchInDto) {}
+export class UserDeleteInDto extends createZodDto(SchemaUserDeleteInDto) {}
 export class UserUpdateInDto extends createZodDto(SchemaUserUpdateInDto) {}

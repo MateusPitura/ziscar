@@ -9,12 +9,19 @@ import {
   Post,
   Req,
   ForbiddenException,
+  Delete,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { AuthGuard } from '../auth/auth.guard';
 import { FETCH_USER, GET_USER } from './user.constant';
 import { AuthRequest } from '../auth/auth.type';
-import { UserPostInDto, UserFetchInDto, UserPatchInDto } from './user.schema';
+import {
+  UserPostInDto,
+  UserFetchInDto,
+  UserPatchInDto,
+  ProfilePatchInDto,
+  UserDeleteInDto,
+} from './user.schema';
 import { ParamInputs } from 'src/schemas';
 import { Actions, Resources } from '@prisma/client';
 import { RoleGuard } from 'src/auth/role.guard';
@@ -52,6 +59,27 @@ export class UserController {
     return await this.userService.findOne({ id: +userId }, GET_USER);
   }
 
+  @Get('permissions')
+  async getPermissions(@Req() req: AuthRequest) {
+    const { userId } = req.authToken;
+    return await this.userService.findOne(
+      { id: +userId },
+      {
+        role: {
+          select: {
+            name: true,
+            permissions: {
+              select: {
+                resource: true,
+                action: true,
+              },
+            },
+          },
+        },
+      },
+    );
+  }
+
   @RoleGuard(Resources.USERS, Actions.READ)
   @Get('user/:id')
   async get(@Req() req: AuthRequest, @Param() { id }: ParamInputs) {
@@ -67,13 +95,13 @@ export class UserController {
   @Patch('profile')
   async patchProfile(
     @Req() req: AuthRequest,
-    @Body() userPatchInDto: UserPatchInDto,
+    @Body() profilePatchInDto: ProfilePatchInDto,
   ) {
     const { userId } = req.authToken;
-    return await this.userService.update({ id: +userId }, userPatchInDto);
+    return await this.userService.update({ id: +userId }, profilePatchInDto);
   }
 
-  @RoleGuard(Resources.USERS, Actions.UPDATE) // TODO: criar controle para active/inactive
+  @RoleGuard(Resources.USERS, Actions.UPDATE)
   @Patch('user/:id')
   async patch(
     @Req() req: AuthRequest,
@@ -87,5 +115,21 @@ export class UserController {
       );
     }
     return await this.userService.update({ id: +id }, userPatchInDto);
+  }
+
+  @RoleGuard(Resources.USERS, Actions.DELETE)
+  @Delete('user/:id')
+  async disable(
+    @Req() req: AuthRequest,
+    @Param() { id }: ParamInputs,
+    @Body() userDeleteInDto: UserDeleteInDto,
+  ) {
+    const { userId } = req.authToken;
+    if (userId == id) {
+      throw new ForbiddenException(
+        'Você não pode desativar o seu próprio usuário',
+      );
+    }
+    return await this.userService.update({ id: +id }, userDeleteInDto);
   }
 }
