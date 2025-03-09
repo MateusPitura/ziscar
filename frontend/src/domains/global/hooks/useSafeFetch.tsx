@@ -1,11 +1,11 @@
 import { useCallback } from "react";
 import useSnackbar from "./useSnackbar";
 import { formatDeniedMessage } from '@shared/utils/formatDeniedMessage';
-import useGlobalContext from "./useGlobalContext";
 import checkPermission from "../utils/checkPermission";
 import { Action, Resource } from "@shared/types";
 import { useNavigate } from "react-router-dom";
 import { UNAUTHORIZED } from "@shared/constants";
+import usePermissions from "./usePermissions";
 
 interface Request {
   method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
@@ -16,7 +16,7 @@ interface Request {
 }
 
 export default function useSafeFetch() {
-  const { userLogged } = useGlobalContext();
+  const { userPermissions } = usePermissions();
   const { showErrorSnackbar } = useSnackbar();
   const navigate = useNavigate();
 
@@ -32,7 +32,7 @@ export default function useSafeFetch() {
       }: Request = {}
     ) => {
       try {
-        const hasPermission = checkPermission(userLogged, resource, action);
+        const hasPermission = checkPermission(userPermissions, resource, action);
         if (!hasPermission) {
           if (method !== "GET") {
             throw new Error(formatDeniedMessage({ resource, action }));
@@ -68,7 +68,7 @@ export default function useSafeFetch() {
         throw error;
       }
     },
-    [showErrorSnackbar, userLogged]
+    [showErrorSnackbar, userPermissions]
   );
 
   return { safeFetch };

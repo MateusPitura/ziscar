@@ -2,7 +2,6 @@ import Button from "@/design-system/Button";
 import type { ReactElement } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useSafeFetch from "../hooks/useSafeFetch";
 import { BASE_URL } from "../constants";
@@ -14,7 +13,6 @@ interface PageTopBarProps {
 export default function PageTopBar({
   onToggleSideMenu,
 }: PageTopBarProps): ReactElement {
-  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { safeFetch } = useSafeFetch();
 
@@ -29,8 +27,7 @@ export default function PageTopBar({
     onSuccess: () => {
       queryClient.clear();
       localStorage.clear();
-      navigate("/sign");
-      window.location.reload();
+      window.location.href = '/sign';
     }
   });
 

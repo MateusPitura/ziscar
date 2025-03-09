@@ -9,7 +9,7 @@ import useSignPageContext from "../hooks/useSignPageContext";
 import useDialog from "@/domains/global/hooks/useDialog";
 import ForgetPasswordModal from "../components/ForgetPasswordModal";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "@/domains/global/constants";
 
@@ -25,6 +25,7 @@ export default function SignInForm(): ReactNode {
   const dialog = useDialog();
   const { safeFetch } = useSafeFetch();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   async function handleSignIn(data: SignInFormInputs) {
     await safeFetch(`${BASE_URL}/auth/sign-in`, {
@@ -36,6 +37,7 @@ export default function SignInForm(): ReactNode {
   const { mutate, isPending } = useMutation({
     mutationFn: handleSignIn,
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["permissions"] });
       navigate("/");
     },
   });

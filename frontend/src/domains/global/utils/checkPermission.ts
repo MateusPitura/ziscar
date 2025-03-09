@@ -1,12 +1,11 @@
-import { Action, Resource } from "@shared/types";
-import { UserLogged } from "../types/model";
+import { Action, Permissions, Resource } from "@shared/types";
 
 export default function checkPermission(
-  userLogged?: UserLogged,
+  userPermissions?: Permissions,
   resource?: Resource,
   action?: Action
 ): boolean {
   if (!resource || !action) return true;
 
-  return !!userLogged?.permissions[resource][action];
+  return !!userPermissions?.[resource][action];
 }

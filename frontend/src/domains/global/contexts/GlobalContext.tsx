@@ -1,10 +1,8 @@
 import { createContext, useCallback, useMemo, useState } from "react";
 import { userFilterDefaultValues } from "@/domains/users/constants";
 import { Childrenable, UsersFilter } from "../types";
-import { UserLogged } from "../types/model";
 
 interface GlobalContextValues {
-  userLogged?: UserLogged;
   usersFilter?: UsersFilter;
   handleUsersFilter: (value: Partial<UsersFilter>) => void;
 }
@@ -12,17 +10,6 @@ interface GlobalContextValues {
 const GlobalContext = createContext<GlobalContextValues | null>(null);
 
 function GlobalProvider({ children }: Childrenable) {
-  const [userLogged] = useState<UserLogged | undefined>({
-    permissions: {
-      USERS: {
-        READ: true,
-        CREATE: true,
-        UPDATE: true,
-        DELETE: true,
-      },
-    },
-  });
-
   const [usersFilter, setUsersFilter] = useState<UsersFilter>({
     page: 1,
     ...userFilterDefaultValues,
@@ -37,11 +24,10 @@ function GlobalProvider({ children }: Childrenable) {
 
   const valuesMemoized = useMemo(
     () => ({
-      userLogged,
       usersFilter,
       handleUsersFilter,
     }),
-    [userLogged, usersFilter]
+    [usersFilter]
   );
 
   return (

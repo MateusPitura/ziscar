@@ -11,17 +11,15 @@ export type Address = {
 };
 
 export interface User {
-    id: string;
-    fullName: string;
-    email: string;
-    cellPhone?: string;
-    cpf?: string;
-    code?: string;
-    birthDate?: string;
-    address?: Address;
-    isActive?: boolean;
-    roleId?: string;
-    permissions: Record<Resource, Record<Action, boolean>>;
-
+  id: string;
+  fullName: string;
+  email: string;
+  cellPhone?: string;
+  cpf?: string;
+  code?: string;
+  birthDate?: string;
+  address?: Address;
+  isActive?: boolean;
+  roleId?: string;
+  permissions: Record<Resource, Record<Action, boolean>>;
 }
-export type UserLogged = Pick<User, "permissions">;
