@@ -35,16 +35,24 @@ export default function UsersTable(): ReactNode {
   }
 
   const filterFormatted = useMemo(() => {
-    const userFilter = usersFilter;
-    if (userFilter) {
-      return formatFilters(userFilter);
+    if (usersFilter) {
+      return formatFilters(usersFilter);
     }
     return "";
   }, [usersFilter]);
 
-  async function getUsersInfo(
-    filter?: string
-  ): Promise<PageablePayload<User>> {
+  const filterPdfFormatted = useMemo(() => {
+    if (usersFilter) {
+      return formatFilters({
+        fullName: usersFilter.fullName,
+        status: usersFilter.status,
+        orderBy: usersFilter.orderBy,
+      });
+    }
+    return "";
+  }, [usersFilter]);
+
+  async function getUsersInfo(filter?: string): Promise<PageablePayload<User>> {
     return await safeFetch(`${BASE_URL}/user?${filter}`, {
       resource: "USERS",
       action: "READ",
@@ -59,25 +67,31 @@ export default function UsersTable(): ReactNode {
 
   const { showSuccessSnackbar } = useSnackbar();
 
-  async function generatePdf() {
-    return await safeFetch(`${BASE_URL}/usersPdf`, {
+  async function generatePdf(): Promise<Response> {
+    return await safeFetch(`${BASE_URL}/user/pdf?${filterPdfFormatted}`, {
       method: "POST",
-      body: {
-        filter: usersFilter,
-        url: "https://example.com/", // TODO: ao implementar o back seria enviado apenas o filter
-      },
       resource: "USERS",
       action: "READ",
+      isPdf: true,
     });
   }
 
   const { mutate, isPending } = useMutation({
     mutationFn: generatePdf,
-    onSuccess: (data) => {
+    onSuccess: (data: Response) => {
       showSuccessSnackbar({
         title: "PDF gerado com sucesso",
         actionLabel: "Abrir",
-        onActionClick: () => window.open(data.url, "_blank"),
+        onActionClick: async () => {
+          const blob = await data.blob();
+          const url = window.URL.createObjectURL(blob);
+          const element = document.createElement("a");
+          element.href = url;
+          element.download = "user.pdf"
+          document.body.appendChild(element);
+          element.click();
+          document.body.removeChild(element);
+        },
         actionBtnResource: "USERS",
         actionBtnAction: "READ",
       });

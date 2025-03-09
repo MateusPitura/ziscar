@@ -18,6 +18,7 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
+import { PdfService } from 'src/pdf/pdf.service';
 
 describe('AuthService', () => {
   let authService: AuthService;
@@ -43,6 +44,12 @@ describe('AuthService', () => {
           provide: JwtService,
           useValue: {
             sign: jest.fn().mockReturnValue(''),
+          },
+        },
+        {
+          provide: PdfService,
+          useValue: {
+            generatePdf: jest.fn(),
           },
         },
       ],

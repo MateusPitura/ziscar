@@ -10,6 +10,7 @@ import {
 import { EmailService } from '../email/email.service';
 import { JwtService } from '@nestjs/jwt';
 import { ITEMS_PER_PAGE, SEED_ROLE_SALES_ID } from '@shared/constants';
+import { PdfService } from 'src/pdf/pdf.service';
 
 describe('UserService', () => {
   let userService: UserService;
@@ -30,6 +31,12 @@ describe('UserService', () => {
           provide: JwtService,
           useValue: {
             sign: jest.fn().mockReturnValue(''),
+          },
+        },
+        {
+          provide: PdfService,
+          useValue: {
+            generatePdf: jest.fn(),
           },
         },
       ],

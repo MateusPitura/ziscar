@@ -9,6 +9,7 @@ import { PrismaService } from '../database/prisma.service';
 import { EmailService } from '../email/email.service';
 import { POPULATE_USER_DEFAULT } from '../constants';
 import { AuthRequestBodyToken } from './auth.type';
+import { PdfService } from 'src/pdf/pdf.service';
 
 describe('AuthController', () => {
   let authController: AuthController;
@@ -34,6 +35,12 @@ describe('AuthController', () => {
           provide: JwtService,
           useValue: {
             sign: jest.fn().mockReturnValue(''),
+          },
+        },
+        {
+          provide: PdfService,
+          useValue: {
+            generatePdf: jest.fn(),
           },
         },
       ],

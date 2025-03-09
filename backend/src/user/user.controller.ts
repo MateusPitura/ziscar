@@ -10,6 +10,9 @@ import {
   Req,
   ForbiddenException,
   Delete,
+  Res,
+  HttpStatus,
+  HttpCode,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { AuthGuard } from '../auth/auth.guard';
@@ -21,10 +24,12 @@ import {
   UserPatchInDto,
   ProfilePatchInDto,
   UserDeleteInDto,
+  UserPdfInDto,
 } from './user.schema';
 import { ParamInputs } from 'src/schemas';
 import { Actions, Resources } from '@prisma/client';
 import { RoleGuard } from 'src/auth/role.guard';
+import { Response } from 'express';
 
 @Controller()
 @UseGuards(AuthGuard)
@@ -50,7 +55,12 @@ export class UserController {
     @Query() userFetchInDto: UserFetchInDto,
   ) {
     const { userId } = req.authToken;
-    return await this.userService.findMany(userFetchInDto, +userId, FETCH_USER);
+    return await this.userService.findMany(
+      userFetchInDto,
+      +userId,
+      true,
+      FETCH_USER,
+    );
   }
 
   @Get('profile')
@@ -63,6 +73,24 @@ export class UserController {
   async getPermissions(@Req() req: AuthRequest) {
     const { userId } = req.authToken;
     return await this.userService.getPermissions(+userId);
+  }
+
+  @Post('user/pdf')
+  @HttpCode(HttpStatus.OK)
+  async pdf(
+    @Req() req: AuthRequest,
+    @Query() userPdfInDto: UserPdfInDto,
+    @Res() res: Response,
+  ) {
+    const { userId } = req.authToken;
+    const pdfBuffer = await this.userService.generatePdf(userPdfInDto, +userId);
+
+    res.set({
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': 'attachment; filename="report.pdf"',
+    });
+
+    res.send(pdfBuffer);
   }
 
   @RoleGuard(Resources.USERS, Actions.READ)

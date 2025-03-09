@@ -12,10 +12,12 @@ import { ITEMS_PER_PAGE } from '@shared/constants';
 import {
   UserCreateInDto,
   UserFindManyInDto,
+  UserGeneratePdfInDto,
   UserUpdateInDto,
 } from './user.schema';
 import { FRONTEND_URL } from 'src/constants';
 import { Role } from './user.type';
+import { PdfService } from 'src/pdf/pdf.service';
 
 @Injectable()
 export class UserService {
@@ -23,6 +25,7 @@ export class UserService {
     private readonly prismaService: PrismaService,
     private readonly emailService: EmailService,
     private readonly jwtService: JwtService,
+    private readonly pdfService: PdfService,
   ) {}
 
   async create(userCreateInDto: UserCreateInDto, transaction?: Transaction) {
@@ -75,10 +78,15 @@ export class UserService {
   async findMany(
     userFindManyInDto: UserFindManyInDto,
     userId: number,
+    paginate: boolean = true,
     select?: Prisma.UserSelect,
   ) {
-    const { page = 1 } = userFindManyInDto;
-    const skip = (page - 1) * ITEMS_PER_PAGE;
+    const pagination = {};
+    if (paginate) {
+      const { page = 1 } = userFindManyInDto;
+      pagination['skip'] = (page - 1) * ITEMS_PER_PAGE;
+      pagination['take'] = ITEMS_PER_PAGE;
+    }
 
     const findManyWhere = {
       where: {
@@ -110,8 +118,7 @@ export class UserService {
 
     const [data, total] = await Promise.all([
       this.prismaService.user.findMany({
-        skip,
-        take: ITEMS_PER_PAGE,
+        ...pagination,
         select,
         ...findManyWhere,
       }),
@@ -233,6 +240,23 @@ export class UserService {
       }
       throw error;
     }
+  }
+
+  async generatePdf(
+    userGeneratePdfInDto: UserGeneratePdfInDto,
+    userId: number,
+  ) {
+    const users = await this.findMany(userGeneratePdfInDto, userId, false); // TODO: talvez aqui permita buscar o próprio usuário
+
+    if (!users.data) return;
+
+    return await this.pdfService.generatePdf((doc) => {
+      for (const user of users.data) {
+        doc.text(`Nome: ${user.fullName}`);
+        doc.text(`Email: ${user.email}`);
+        doc.text('\n');
+      }
+    });
   }
 
   async verifyDuplicated(properties: Partial<Record<'email' | 'cpf', string>>) {

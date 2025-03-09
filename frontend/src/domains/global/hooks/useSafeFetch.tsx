@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import useSnackbar from "./useSnackbar";
-import { formatDeniedMessage } from '@shared/utils/formatDeniedMessage';
+import { formatDeniedMessage } from "@shared/utils/formatDeniedMessage";
 import checkPermission from "../utils/checkPermission";
 import { Action, Resource } from "@shared/types";
 import { useNavigate } from "react-router-dom";
@@ -13,6 +13,7 @@ interface Request {
   resource?: Resource;
   action?: Action;
   enableCookie?: boolean;
+  isPdf?: boolean;
 }
 
 export default function useSafeFetch() {
@@ -29,10 +30,15 @@ export default function useSafeFetch() {
         resource,
         action,
         enableCookie = true,
+        isPdf = false,
       }: Request = {}
     ) => {
       try {
-        const hasPermission = checkPermission(userPermissions, resource, action);
+        const hasPermission = checkPermission(
+          userPermissions,
+          resource,
+          action
+        );
         if (!hasPermission) {
           if (method !== "GET") {
             throw new Error(formatDeniedMessage({ resource, action }));
@@ -48,7 +54,14 @@ export default function useSafeFetch() {
           body: method !== "GET" ? JSON.stringify(body) : undefined,
           credentials: enableCookie ? "include" : "omit",
         });
-        const content = await response.json();
+
+        let content
+        if (isPdf) {
+          content = response;
+        } else {
+          content = await response.json();
+        }
+
         if (!response.ok) {
           throw new Error(content.message || "Falha ao realizar a requisição");
         }

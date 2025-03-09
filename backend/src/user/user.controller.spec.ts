@@ -13,6 +13,7 @@ import { EmailService } from '../email/email.service';
 import { AuthRequest } from 'src/auth/auth.type';
 import { ITEMS_PER_PAGE, SEED_ROLE_SALES_ID } from '@shared/constants';
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
+import { PdfService } from 'src/pdf/pdf.service';
 
 describe('UserController', () => {
   let userController: UserController;
@@ -36,6 +37,12 @@ describe('UserController', () => {
           provide: JwtService,
           useValue: {
             sign: jest.fn().mockReturnValue(''),
+          },
+        },
+        {
+          provide: PdfService,
+          useValue: {
+            generatePdf: jest.fn(),
           },
         },
       ],
