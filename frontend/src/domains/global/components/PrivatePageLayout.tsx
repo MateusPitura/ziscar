@@ -1,7 +1,7 @@
-import { useState, type ReactElement } from "react";
+import { useEffect, useState, type ReactElement } from "react";
 import PageTopBar from "./PageTopBar";
 import PageSideBar from "./PageSideBar";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import Spinner from "@/design-system/Spinner";
 import useSafeFetch from "../hooks/useSafeFetch";
 import { BASE_URL } from "../constants";
@@ -15,15 +15,22 @@ export default function PrivatePageLayout(): ReactElement {
   }
 
   const { safeFetch } = useSafeFetch();
+  const navigate = useNavigate();
 
   async function getUserPermissions(): Promise<Permissions> {
     return await safeFetch(`${BASE_URL}/permissions`);
   }
 
-  const { data: userPermissions } = useQuery({
+  const { data: userPermissions, isLoading } = useQuery({
     queryKey: ["permissions"],
     queryFn: getUserPermissions,
   });
+
+  useEffect(() => {
+    if (!isLoading && !userPermissions) {
+      navigate("/sign");
+    }
+  }, [isLoading, userPermissions]);
 
   if (!userPermissions) {
     return (

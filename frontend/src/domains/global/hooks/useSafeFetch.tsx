@@ -3,8 +3,6 @@ import useSnackbar from "./useSnackbar";
 import { formatDeniedMessage } from "@shared/utils/formatDeniedMessage";
 import checkPermission from "../utils/checkPermission";
 import { Action, Resource } from "@shared/types";
-import { useNavigate } from "react-router-dom";
-import { UNAUTHORIZED } from "@shared/constants";
 import usePermissions from "./usePermissions";
 
 interface Request {
@@ -19,7 +17,6 @@ interface Request {
 export default function useSafeFetch() {
   const { userPermissions } = usePermissions();
   const { showErrorSnackbar } = useSnackbar();
-  const navigate = useNavigate();
 
   const safeFetch = useCallback(
     async (
@@ -75,9 +72,6 @@ export default function useSafeFetch() {
           title: "Ocorreu um erro",
           description,
         });
-        if (description === UNAUTHORIZED) {
-          navigate("/sign");
-        }
         throw error;
       }
     },
