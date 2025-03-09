@@ -64,7 +64,9 @@ describe('UserController', () => {
     await prismaService.transaction(async (transaction) => {
       Reflect.set(userService, 'prismaService', transaction);
 
-      const request = new Request('http://localhost:3000') as AuthRequest;
+      const request = new Request(
+        'http://localhost:3000',
+      ) as unknown as AuthRequest;
       request.authToken = {
         userId: POPULATE_USER_DEFAULT.id,
         clientId: POPULATE_CLIENT_DEFAULT_ID,
@@ -83,7 +85,9 @@ describe('UserController', () => {
   });
 
   it('should find signed user', async () => {
-    const request = new Request('http://localhost:3000') as AuthRequest;
+    const request = new Request(
+      'http://localhost:3000',
+    ) as unknown as AuthRequest;
     request.authToken = {
       userId: POPULATE_USER_DEFAULT.id,
       clientId: POPULATE_CLIENT_DEFAULT_ID,
@@ -97,7 +101,9 @@ describe('UserController', () => {
   });
 
   it('should not find inactive user', async () => {
-    const request = new Request('http://localhost:3000') as AuthRequest;
+    const request = new Request(
+      'http://localhost:3000',
+    ) as unknown as AuthRequest;
     request.authToken = {
       userId: POPULATE_USER_DEFAULT.id,
       clientId: POPULATE_CLIENT_DEFAULT_ID,
@@ -109,7 +115,9 @@ describe('UserController', () => {
   });
 
   it('should not find signed inactive user', async () => {
-    const request = new Request('http://localhost:3000') as AuthRequest;
+    const request = new Request(
+      'http://localhost:3000',
+    ) as unknown as AuthRequest;
     request.authToken = {
       userId: POPULATE_USER_INACTIVE.id,
       clientId: POPULATE_CLIENT_DEFAULT_ID,
@@ -121,7 +129,9 @@ describe('UserController', () => {
   });
 
   it('should find one user by id', async () => {
-    const request = new Request('http://localhost:3000') as AuthRequest;
+    const request = new Request(
+      'http://localhost:3000',
+    ) as unknown as AuthRequest;
     request.authToken = {
       userId: 1,
       clientId: POPULATE_CLIENT_DEFAULT_ID,
@@ -137,7 +147,9 @@ describe('UserController', () => {
   });
 
   it('should not allow find user by id equal to signed id', async () => {
-    const request = new Request('http://localhost:3000') as AuthRequest;
+    const request = new Request(
+      'http://localhost:3000',
+    ) as unknown as AuthRequest;
     request.authToken = {
       userId: POPULATE_USER_DEFAULT.id,
       clientId: POPULATE_CLIENT_DEFAULT_ID,
@@ -154,7 +166,9 @@ describe('UserController', () => {
     await prismaService.transaction(async (transaction) => {
       Reflect.set(userService, 'prismaService', transaction);
 
-      const request = new Request('http://localhost:3000') as AuthRequest;
+      const request = new Request(
+        'http://localhost:3000',
+      ) as unknown as AuthRequest;
       request.authToken = {
         userId: 1,
         clientId: POPULATE_CLIENT_DEFAULT_ID,
@@ -180,7 +194,9 @@ describe('UserController', () => {
     await prismaService.transaction(async (transaction) => {
       Reflect.set(userService, 'prismaService', transaction);
 
-      const request = new Request('http://localhost:3000') as AuthRequest;
+      const request = new Request(
+        'http://localhost:3000',
+      ) as unknown as AuthRequest;
       request.authToken = {
         userId: POPULATE_USER_DEFAULT.id,
         clientId: POPULATE_CLIENT_DEFAULT_ID,
@@ -204,7 +220,9 @@ describe('UserController', () => {
     await prismaService.transaction(async (transaction) => {
       Reflect.set(userService, 'prismaService', transaction);
 
-      const request = new Request('http://localhost:3000') as AuthRequest;
+      const request = new Request(
+        'http://localhost:3000',
+      ) as unknown as AuthRequest;
       request.authToken = {
         userId: POPULATE_USER_DEFAULT.id,
         clientId: POPULATE_CLIENT_DEFAULT_ID,
@@ -225,7 +243,9 @@ describe('UserController', () => {
   it('should find many users with many filters', async () => {
     const spy = jest.spyOn(prismaService.user, 'findMany');
 
-    const request = new Request('http://localhost:3000') as AuthRequest;
+    const request = new Request(
+      'http://localhost:3000',
+    ) as unknown as AuthRequest;
     request.authToken = {
       userId: POPULATE_USER_DEFAULT.id,
       clientId: POPULATE_CLIENT_DEFAULT_ID,
@@ -260,7 +280,9 @@ describe('UserController', () => {
     await prismaService.transaction(async (transaction) => {
       Reflect.set(userService, 'prismaService', transaction);
 
-      const request = new Request('http://localhost:3000') as AuthRequest;
+      const request = new Request(
+        'http://localhost:3000',
+      ) as unknown as AuthRequest;
       request.authToken = {
         userId: 1,
         clientId: POPULATE_CLIENT_DEFAULT_ID,
@@ -284,7 +306,9 @@ describe('UserController', () => {
     await prismaService.transaction(async (transaction) => {
       Reflect.set(userService, 'prismaService', transaction);
 
-      const request = new Request('http://localhost:3000') as AuthRequest;
+      const request = new Request(
+        'http://localhost:3000',
+      ) as unknown as AuthRequest;
       request.authToken = {
         userId: POPULATE_USER_DEFAULT.id,
         clientId: POPULATE_CLIENT_DEFAULT_ID,
@@ -305,7 +329,9 @@ describe('UserController', () => {
   });
 
   it('should get user permissions', async () => {
-    const request = new Request('http://localhost:3000') as AuthRequest;
+    const request = new Request(
+      'http://localhost:3000',
+    ) as unknown as AuthRequest;
     request.authToken = {
       userId: POPULATE_USER_DEFAULT.id,
       clientId: POPULATE_CLIENT_DEFAULT_ID,
@@ -317,7 +343,9 @@ describe('UserController', () => {
   });
 
   it('should generate pdf', async () => {
-    const request = new Request('http://localhost:3000') as AuthRequest;
+    const request = new Request(
+      'http://localhost:3000',
+    ) as unknown as AuthRequest;
     request.authToken = {
       userId: POPULATE_USER_DEFAULT.id,
       clientId: POPULATE_CLIENT_DEFAULT_ID,
@@ -333,7 +361,9 @@ describe('UserController', () => {
   });
 
   it('should generate sheet', async () => {
-    const request = new Request('http://localhost:3000') as AuthRequest;
+    const request = new Request(
+      'http://localhost:3000',
+    ) as unknown as AuthRequest;
     request.authToken = {
       userId: POPULATE_USER_DEFAULT.id,
       clientId: POPULATE_CLIENT_DEFAULT_ID,

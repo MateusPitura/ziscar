@@ -108,7 +108,7 @@ describe('AuthController', () => {
 
       const request = new Request(
         'http://localhost:3000',
-      ) as AuthRequestBodyToken;
+      ) as unknown as AuthRequestBodyToken;
       request.authToken = resetPasswordPayload;
 
       const response = await authController.resetPassword(request, {
