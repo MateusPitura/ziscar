@@ -14,6 +14,7 @@ model Client {
   isActive     Boolean        @default(true)
   organization Organization[]
   user         User[]
+  audit        Audit[]
 }
 
 model Address {
@@ -60,6 +61,7 @@ model User {
   client    Client    @relation(fields: [clientId], references: [id], onDelete: Cascade)
   roleId    Int
   role      Role      @relation(fields: [roleId], references: [id])
+  audit     Audit[]
 }
 
 enum Roles {
@@ -91,4 +93,23 @@ model Permission {
   resource Resources
   action   Actions
   roles    Role[]
+}
+
+enum Methods {
+  CREATE
+  POST
+  PATCH
+  DELETE
+}
+
+model Audit {
+  id        Int      @id @default(autoincrement())
+  createAt  DateTime @default(now())
+  method    Methods
+  ipAddress String?  @db.VarChar(128)
+  url       String   @db.VarChar(128)
+  userId    Int?
+  user      User?    @relation(fields: [userId], references: [id])
+  clientId  Int?
+  client    Client?  @relation(fields: [clientId], references: [id])
 }

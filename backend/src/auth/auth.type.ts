@@ -1,3 +1,5 @@
+import { Request } from 'express';
+
 export interface AuthSignin {
   userId: number;
   clientId: number;
