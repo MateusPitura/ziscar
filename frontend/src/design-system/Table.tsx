@@ -16,7 +16,7 @@ import useCheckPermission from "@/domains/global/hooks/useCheckPermission";
 import { formatDeniedMessage } from '@shared/utils/formatDeniedMessage';
 import { Resource, Action as ActionProp } from "@shared/types";
 import { ButtonState } from "./types";
-import { ITEMS_PER_PAGE } from '@shared/constants'
+import { ITEMS_PER_PAGE } from '@shared/constants';
 
 function Container({ children }: Childrenable): ReactElement {
   return (
@@ -173,8 +173,8 @@ function Body({ children, isEmpty, isLoading, action, resource }: BodyProps) {
 
 interface FooterProps {
   className?: string;
-  onClickSpreadSheetBtn?: () => void;
-  spreadSheetBtnState?: ButtonState;
+  onClickSheetBtn?: () => void;
+  sheetBtnState?: ButtonState;
   onClickPdfBtn?: () => void;
   pdfBtnState?: ButtonState;
   onClickNavigateBtn?: (page: number) => void;
@@ -192,11 +192,11 @@ function Footer({
   itemsPerPage = ITEMS_PER_PAGE,
   totalItems,
   onClickPdfBtn,
-  onClickSpreadSheetBtn,
+  onClickSheetBtn,
   onClickNavigateBtn,
   isLoading,
   pdfBtnState,
-  spreadSheetBtnState,
+  sheetBtnState,
   actionExportBtn,
   resourceExportBtn,
 }: FooterProps) {
@@ -224,13 +224,13 @@ function Footer({
       )}
       gridColumns={1}
     >
-      {onClickSpreadSheetBtn && (
+      {onClickSheetBtn && (
         <Button
           variant="quaternary"
           label="Exportar como planilha"
           iconRight={<FileDownloadOutlinedIcon />}
-          onClick={onClickSpreadSheetBtn}
-          state={isLoading ? "loading" : spreadSheetBtnState}
+          onClick={onClickSheetBtn}
+          state={isLoading ? "loading" : sheetBtnState}
           resource={resourceExportBtn}
           action={actionExportBtn}
         />

@@ -10,6 +10,7 @@ import { EmailService } from '../email/email.service';
 import { POPULATE_USER_DEFAULT } from '../constants';
 import { AuthRequestBodyToken } from './auth.type';
 import { PdfService } from 'src/pdf/pdf.service';
+import { SheetService } from 'src/sheet/sheet.service';
 
 describe('AuthController', () => {
   let authController: AuthController;
@@ -41,6 +42,12 @@ describe('AuthController', () => {
           provide: PdfService,
           useValue: {
             generatePdf: jest.fn(),
+          },
+        },
+        {
+          provide: SheetService,
+          useValue: {
+            generateSheet: jest.fn(),
           },
         },
       ],

@@ -12,12 +12,13 @@ import { ITEMS_PER_PAGE } from '@shared/constants';
 import {
   UserCreateInDto,
   UserFindManyInDto,
-  UserGeneratePdfInDto,
+  UserGeneratePdfInDto as UserGenerateSheetInDto,
   UserUpdateInDto,
 } from './user.schema';
 import { FRONTEND_URL } from 'src/constants';
 import { Role } from './user.type';
 import { PdfService } from 'src/pdf/pdf.service';
+import { SheetService } from 'src/sheet/sheet.service';
 
 @Injectable()
 export class UserService {
@@ -26,6 +27,7 @@ export class UserService {
     private readonly emailService: EmailService,
     private readonly jwtService: JwtService,
     private readonly pdfService: PdfService,
+    private readonly sheetService: SheetService,
   ) {}
 
   async create(userCreateInDto: UserCreateInDto, transaction?: Transaction) {
@@ -243,7 +245,7 @@ export class UserService {
   }
 
   async generatePdf(
-    userGeneratePdfInDto: UserGeneratePdfInDto,
+    userGeneratePdfInDto: UserGenerateSheetInDto,
     userId: number,
   ) {
     const users = await this.findMany(userGeneratePdfInDto, userId, false); // TODO: talvez aqui permita buscar o próprio usuário
@@ -255,6 +257,22 @@ export class UserService {
         doc.text(`Nome: ${user.fullName}`);
         doc.text(`Email: ${user.email}`);
         doc.text('\n');
+      }
+    });
+  }
+
+  async generateSheet(
+    userGenerateSheetInDto: UserGenerateSheetInDto,
+    userId: number,
+  ) {
+    const users = await this.findMany(userGenerateSheetInDto, userId, false); // TODO: talvez aqui permita buscar o próprio usuário
+
+    if (!users.data) return;
+
+    return await this.sheetService.generateSheet('users', (sheet) => {
+      sheet.addRow(['Name', 'Email']);
+      for (const user of users.data) {
+        sheet.addRow([user.fullName, user.email]);
       }
     });
   }

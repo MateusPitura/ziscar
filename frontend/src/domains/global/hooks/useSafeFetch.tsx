@@ -13,7 +13,7 @@ interface Request {
   resource?: Resource;
   action?: Action;
   enableCookie?: boolean;
-  isPdf?: boolean;
+  isExport?: boolean;
 }
 
 export default function useSafeFetch() {
@@ -30,7 +30,7 @@ export default function useSafeFetch() {
         resource,
         action,
         enableCookie = true,
-        isPdf = false,
+        isExport: isPdf = false,
       }: Request = {}
     ) => {
       try {

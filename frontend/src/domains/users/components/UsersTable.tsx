@@ -14,6 +14,7 @@ import { DisableUser } from "../types";
 import DisableUserModal from "./DisableUserModal";
 import useDialog from "@/domains/global/hooks/useDialog";
 import { PageablePayload } from "@/domains/global/types";
+import handleExportFile from "@/domains/global/utils/handleExportFile";
 
 export default function UsersTable(): ReactNode {
   const [disableUserInfo, setDisableUserInfo] = useState<DisableUser>({
@@ -41,7 +42,7 @@ export default function UsersTable(): ReactNode {
     return "";
   }, [usersFilter]);
 
-  const filterPdfFormatted = useMemo(() => {
+  const filterExportFormatted = useMemo(() => {
     if (usersFilter) {
       return formatFilters({
         fullName: usersFilter.fullName,
@@ -68,29 +69,54 @@ export default function UsersTable(): ReactNode {
   const { showSuccessSnackbar } = useSnackbar();
 
   async function generatePdf(): Promise<Response> {
-    return await safeFetch(`${BASE_URL}/user/pdf?${filterPdfFormatted}`, {
+    return await safeFetch(`${BASE_URL}/user/pdf?${filterExportFormatted}`, {
       method: "POST",
       resource: "USERS",
       action: "READ",
-      isPdf: true,
+      isExport: true,
     });
   }
 
-  const { mutate, isPending } = useMutation({
+  const { mutate: pdfMutate, isPending: isPdfPending } = useMutation({
     mutationFn: generatePdf,
     onSuccess: (data: Response) => {
       showSuccessSnackbar({
         title: "PDF gerado com sucesso",
-        actionLabel: "Abrir",
+        actionLabel: "Baixar",
         onActionClick: async () => {
-          const blob = await data.blob();
-          const url = window.URL.createObjectURL(blob);
-          const element = document.createElement("a");
-          element.href = url;
-          element.download = "user.pdf"
-          document.body.appendChild(element);
-          element.click();
-          document.body.removeChild(element);
+          handleExportFile({
+            data,
+            fileName: "users",
+            type: "pdf",
+          });
+        },
+        actionBtnResource: "USERS",
+        actionBtnAction: "READ",
+      });
+    },
+  });
+
+  async function generateSheet(): Promise<Response> {
+    return await safeFetch(`${BASE_URL}/user/sheet?${filterExportFormatted}`, {
+      method: "POST",
+      resource: "USERS",
+      action: "READ",
+      isExport: true,
+    });
+  }
+
+  const { mutate: mutateSheet, isPending: isSheetPending } = useMutation({
+    mutationFn: generateSheet,
+    onSuccess: (data: Response) => {
+      showSuccessSnackbar({
+        title: "Planilha gerada com sucesso",
+        actionLabel: "Baixar",
+        onActionClick: async () => {
+          handleExportFile({
+            data,
+            fileName: "users",
+            type: "sheet",
+          });
         },
         actionBtnResource: "USERS",
         actionBtnAction: "READ",
@@ -139,8 +165,10 @@ export default function UsersTable(): ReactNode {
           currentStartItem={usersFilter?.page}
           totalItems={usersInfo?.total}
           onClickNavigateBtn={handleChangePage}
-          onClickPdfBtn={mutate}
-          pdfBtnState={isPending ? "loading" : undefined}
+          onClickPdfBtn={pdfMutate}
+          onClickSheetBtn={mutateSheet}
+          pdfBtnState={isPdfPending ? "loading" : undefined}
+          sheetBtnState={isSheetPending ? "loading" : undefined}
           isLoading={isFetchingUsersInfo}
           resourceExportBtn="USERS"
           actionExportBtn="READ"

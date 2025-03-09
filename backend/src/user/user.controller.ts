@@ -25,6 +25,7 @@ import {
   ProfilePatchInDto,
   UserDeleteInDto,
   UserPdfInDto,
+  UserSheetInDto,
 } from './user.schema';
 import { ParamInputs } from 'src/schemas';
 import { Actions, Resources } from '@prisma/client';
@@ -91,6 +92,28 @@ export class UserController {
     });
 
     res.send(pdfBuffer);
+  }
+
+  @Post('user/sheet')
+  @HttpCode(HttpStatus.OK)
+  async sheet(
+    @Req() req: AuthRequest,
+    @Query() userSheetInDto: UserSheetInDto,
+    @Res() res: Response,
+  ) {
+    const { userId } = req.authToken;
+    const sheetBuffer = await this.userService.generateSheet(
+      userSheetInDto,
+      +userId,
+    );
+
+    res.set({
+      'Content-Type':
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      'Content-Disposition': 'attachment; filename="users.xlsx"',
+    });
+
+    res.send(sheetBuffer);
   }
 
   @RoleGuard(Resources.USERS, Actions.READ)

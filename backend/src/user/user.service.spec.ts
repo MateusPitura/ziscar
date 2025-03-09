@@ -11,6 +11,7 @@ import { EmailService } from '../email/email.service';
 import { JwtService } from '@nestjs/jwt';
 import { ITEMS_PER_PAGE, SEED_ROLE_SALES_ID } from '@shared/constants';
 import { PdfService } from 'src/pdf/pdf.service';
+import { SheetService } from 'src/sheet/sheet.service';
 
 describe('UserService', () => {
   let userService: UserService;
@@ -37,6 +38,12 @@ describe('UserService', () => {
           provide: PdfService,
           useValue: {
             generatePdf: jest.fn(),
+          },
+        },
+        {
+          provide: SheetService,
+          useValue: {
+            generateSheet: jest.fn(),
           },
         },
       ],

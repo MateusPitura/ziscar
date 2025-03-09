@@ -9,6 +9,7 @@ import { EmailModule } from './email/email.module';
 import { APP_PIPE } from '@nestjs/core';
 import { ZodValidationPipe } from 'nestjs-zod';
 import { PdfModule } from './pdf/pdf.module';
+import { SheetModule } from './sheet/sheet.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { PdfModule } from './pdf/pdf.module';
     OrganizationModule,
     EmailModule,
     PdfModule,
+    SheetModule,
   ],
   providers: [
     {

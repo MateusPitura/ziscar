@@ -6,6 +6,7 @@ import { EmailModule } from 'src/email/email.module';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { PdfModule } from 'src/pdf/pdf.module';
+import { SheetModule } from 'src/sheet/sheet.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { PdfModule } from 'src/pdf/pdf.module';
       inject: [ConfigService],
     }),
     PdfModule,
+    SheetModule,
   ],
   controllers: [UserController],
   providers: [UserService],

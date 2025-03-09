@@ -37,6 +37,10 @@ const SchemaUserPdfInDto = SchemaUserFetchInDto.omit({ page: true });
 
 const SchemaUserGeneratePdfInDto = SchemaUserPdfInDto;
 
+const SchemaUserSheetInDto = SchemaUserPdfInDto;
+
+const SchemaUserGenerateSheetInDto = SchemaUserSheetInDto;
+
 const SchemaUserUpdateInDto = SchemaUserPostInDto.partial().extend({
   password: s.password().optional(),
   address: SchemaAddress.partial().optional(),
@@ -62,6 +66,10 @@ export class UserFetchInDto extends createZodDto(SchemaUserFetchInDto) {}
 export class UserPdfInDto extends createZodDto(SchemaUserPdfInDto) {}
 export class UserGeneratePdfInDto extends createZodDto(
   SchemaUserGeneratePdfInDto,
+) {}
+export class UserSheetInDto extends createZodDto(SchemaUserSheetInDto) {}
+export class UserGenerateSheetInDto extends createZodDto(
+  SchemaUserGenerateSheetInDto,
 ) {}
 export class UserFindManyInDto extends createZodDto(SchemaUserFindManyInDto) {}
 export class UserPatchInDto extends createZodDto(SchemaUserPatchInDto) {}

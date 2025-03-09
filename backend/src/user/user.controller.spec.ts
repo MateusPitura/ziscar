@@ -14,6 +14,7 @@ import { AuthRequest } from 'src/auth/auth.type';
 import { ITEMS_PER_PAGE, SEED_ROLE_SALES_ID } from '@shared/constants';
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { PdfService } from 'src/pdf/pdf.service';
+import { SheetService } from 'src/sheet/sheet.service';
 
 describe('UserController', () => {
   let userController: UserController;
@@ -43,6 +44,12 @@ describe('UserController', () => {
           provide: PdfService,
           useValue: {
             generatePdf: jest.fn(),
+          },
+        },
+        {
+          provide: SheetService,
+          useValue: {
+            generateSheet: jest.fn(),
           },
         },
       ],

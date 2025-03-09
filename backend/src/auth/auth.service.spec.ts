@@ -19,6 +19,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { PdfService } from 'src/pdf/pdf.service';
+import { SheetService } from 'src/sheet/sheet.service';
 
 describe('AuthService', () => {
   let authService: AuthService;
@@ -50,6 +51,12 @@ describe('AuthService', () => {
           provide: PdfService,
           useValue: {
             generatePdf: jest.fn(),
+          },
+        },
+        {
+          provide: SheetService,
+          useValue: {
+            generateSheet: jest.fn(),
           },
         },
       ],
