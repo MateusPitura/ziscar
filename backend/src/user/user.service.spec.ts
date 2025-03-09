@@ -22,6 +22,8 @@ describe('UserService', () => {
       providers: [
         UserService,
         PrismaService,
+        SheetService,
+        PdfService,
         {
           provide: EmailService,
           useValue: {
@@ -32,18 +34,6 @@ describe('UserService', () => {
           provide: JwtService,
           useValue: {
             sign: jest.fn().mockReturnValue(''),
-          },
-        },
-        {
-          provide: PdfService,
-          useValue: {
-            generatePdf: jest.fn(),
-          },
-        },
-        {
-          provide: SheetService,
-          useValue: {
-            generateSheet: jest.fn(),
           },
         },
       ],
@@ -651,5 +641,35 @@ describe('UserService', () => {
         DELETE: true,
       },
     });
+  });
+
+  it('should generate pdf', async () => {
+    const spy = jest.spyOn(PdfService.prototype, 'generatePdf');
+
+    await userService.generatePdf(
+      {
+        status: 'active',
+        fullName: POPULATE_USER_DEFAULT.fullName,
+        orderBy: 'fullName',
+      },
+      POPULATE_USER_DEFAULT.id,
+    );
+
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('should generate sheet', async () => {
+    const spy = jest.spyOn(SheetService.prototype, 'generateSheet');
+
+    await userService.generateSheet(
+      {
+        status: 'active',
+        fullName: POPULATE_USER_DEFAULT.fullName,
+        orderBy: 'fullName',
+      },
+      POPULATE_USER_DEFAULT.id,
+    );
+
+    expect(spy).toHaveBeenCalled();
   });
 });

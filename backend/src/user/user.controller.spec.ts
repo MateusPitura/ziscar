@@ -315,4 +315,36 @@ describe('UserController', () => {
 
     expect(permissions).toBeTruthy();
   });
+
+  it('should generate pdf', async () => {
+    const request = new Request('http://localhost:3000') as AuthRequest;
+    request.authToken = {
+      userId: POPULATE_USER_DEFAULT.id,
+      clientId: POPULATE_CLIENT_DEFAULT_ID,
+    };
+
+    const response = await userController.pdf(request, {
+      status: 'active',
+      fullName: POPULATE_USER_DEFAULT.fullName,
+      orderBy: 'fullName',
+    });
+
+    expect(response).toBeUndefined();
+  });
+
+  it('should generate sheet', async () => {
+    const request = new Request('http://localhost:3000') as AuthRequest;
+    request.authToken = {
+      userId: POPULATE_USER_DEFAULT.id,
+      clientId: POPULATE_CLIENT_DEFAULT_ID,
+    };
+
+    const response = await userController.sheet(request, {
+      status: 'active',
+      fullName: POPULATE_USER_DEFAULT.fullName,
+      orderBy: 'fullName',
+    });
+
+    expect(response).toBeUndefined();
+  });
 });

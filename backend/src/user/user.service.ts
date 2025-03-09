@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../database/prisma.service';
 import { GetCallback, Transaction } from '../types';
@@ -250,7 +254,9 @@ export class UserService {
   ) {
     const users = await this.findMany(userGeneratePdfInDto, userId, false); // TODO: talvez aqui permita buscar o próprio usuário
 
-    if (!users.data) return;
+    if (!users.data) {
+      throw new BadRequestException('Nenhum dado encontrado');
+    }
 
     return await this.pdfService.generatePdf((doc) => {
       for (const user of users.data) {
@@ -267,7 +273,9 @@ export class UserService {
   ) {
     const users = await this.findMany(userGenerateSheetInDto, userId, false); // TODO: talvez aqui permita buscar o próprio usuário
 
-    if (!users.data) return;
+    if (!users.data) {
+      throw new BadRequestException('Nenhum dado encontrado');
+    }
 
     return await this.sheetService.generateSheet('users', (sheet) => {
       sheet.addRow(['Name', 'Email']);

@@ -81,17 +81,17 @@ export class UserController {
   async pdf(
     @Req() req: AuthRequest,
     @Query() userPdfInDto: UserPdfInDto,
-    @Res() res: Response,
+    @Res() res?: Response,
   ) {
     const { userId } = req.authToken;
     const pdfBuffer = await this.userService.generatePdf(userPdfInDto, +userId);
 
-    res.set({
+    res?.set({
       'Content-Type': 'application/pdf',
       'Content-Disposition': 'attachment; filename="report.pdf"',
     });
 
-    res.send(pdfBuffer);
+    res?.send(pdfBuffer);
   }
 
   @Post('user/sheet')
@@ -99,7 +99,7 @@ export class UserController {
   async sheet(
     @Req() req: AuthRequest,
     @Query() userSheetInDto: UserSheetInDto,
-    @Res() res: Response,
+    @Res() res?: Response,
   ) {
     const { userId } = req.authToken;
     const sheetBuffer = await this.userService.generateSheet(
@@ -107,13 +107,13 @@ export class UserController {
       +userId,
     );
 
-    res.set({
+    res?.set({
       'Content-Type':
         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
       'Content-Disposition': 'attachment; filename="users.xlsx"',
     });
 
-    res.send(sheetBuffer);
+    res?.send(sheetBuffer);
   }
 
   @RoleGuard(Resources.USERS, Actions.READ)
