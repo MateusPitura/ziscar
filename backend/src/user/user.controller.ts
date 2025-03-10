@@ -76,7 +76,7 @@ export class UserController {
     return await this.userService.getPermissions(+userId);
   }
 
-  @Post('user/pdf')
+  @Get('user/pdf')
   @HttpCode(HttpStatus.OK)
   async pdf(
     @Req() req: AuthRequest,
@@ -94,7 +94,7 @@ export class UserController {
     res?.send(pdfBuffer);
   }
 
-  @Post('user/sheet')
+  @Get('user/sheet')
   @HttpCode(HttpStatus.OK)
   async sheet(
     @Req() req: AuthRequest,

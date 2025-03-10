@@ -70,7 +70,7 @@ export default function UsersTable(): ReactNode {
 
   async function generatePdf(): Promise<Response> {
     return await safeFetch(`${BASE_URL}/user/pdf?${filterExportFormatted}`, {
-      method: "POST",
+      method: "GET",
       resource: "USERS",
       action: "READ",
       isExport: true,
@@ -98,7 +98,7 @@ export default function UsersTable(): ReactNode {
 
   async function generateSheet(): Promise<Response> {
     return await safeFetch(`${BASE_URL}/user/sheet?${filterExportFormatted}`, {
-      method: "POST",
+      method: "GET",
       resource: "USERS",
       action: "READ",
       isExport: true,

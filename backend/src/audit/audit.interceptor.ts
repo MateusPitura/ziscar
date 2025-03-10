@@ -17,7 +17,7 @@ export class AuditInterceptor implements NestInterceptor {
     return next.handle().pipe(
       tap(() => {
         const req = context.switchToHttp().getRequest<AuthRequest>();
-        if (req.method !== 'GET') {
+        if (req.method !== 'GET' && !req.url.includes('auth')) {
           const { userId, clientId } = req.authToken || {};
           const ipAddress = req.ip?.replace('::ffff:', '');
 
