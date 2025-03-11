@@ -55,11 +55,12 @@ export class UserController {
     @Req() req: AuthRequest,
     @Query() userFindManyInDto: UserFindManyInDto,
   ) {
-    const { userId } = req.authToken;
+    const { userId, clientId } = req.authToken;
     return await this.userService.findMany({
       userFindManyInDto,
       userId: +userId,
       select: FETCH_USER,
+      clientId,
     });
   }
 
@@ -74,8 +75,8 @@ export class UserController {
 
   @Get('permissions')
   async getPermissions(@Req() req: AuthRequest) {
-    const { userId } = req.authToken;
-    return await this.userService.getPermissions({ userId: +userId });
+    const { userId, clientId } = req.authToken;
+    return await this.userService.getPermissions({ userId: +userId, clientId });
   }
 
   @Get('user/pdf')
@@ -85,10 +86,11 @@ export class UserController {
     @Query() userGeneratePdfInDto: UserGeneratePdfInDto,
     @Res() res?: Response,
   ) {
-    const { userId } = req.authToken;
+    const { userId, clientId } = req.authToken;
     const pdfBuffer = await this.userService.generatePdf({
       userGeneratePdfInDto,
       userId: +userId,
+      clientId,
     });
 
     res?.set({
@@ -101,15 +103,16 @@ export class UserController {
 
   @Get('user/sheet')
   @HttpCode(HttpStatus.OK)
-  async sheet(
+  async generateSheet(
     @Req() req: AuthRequest,
     @Query() userGenerateSheetInDto: UserGenerateSheetInDto,
     @Res() res?: Response,
   ) {
-    const { userId } = req.authToken;
+    const { userId, clientId } = req.authToken;
     const sheetBuffer = await this.userService.generateSheet({
       userGenerateSheetInDto,
       userId: +userId,
+      clientId,
     });
 
     res?.set({
@@ -124,7 +127,7 @@ export class UserController {
   @RoleGuard(Resources.USERS, Actions.READ)
   @Get('user/:id')
   async get(@Req() req: AuthRequest, @Param() { id }: ParamInputs) {
-    const { userId } = req.authToken;
+    const { userId, clientId } = req.authToken;
     if (userId == id) {
       throw new ForbiddenException(
         'Use a rota /profile para acessar seus dados',
@@ -133,6 +136,7 @@ export class UserController {
     return await this.userService.findOne({
       where: { id: +id },
       select: GET_USER,
+      clientId,
     });
   }
 
@@ -141,10 +145,11 @@ export class UserController {
     @Req() req: AuthRequest,
     @Body() profilePatchInDto: ProfilePatchInDto,
   ) {
-    const { userId } = req.authToken;
+    const { userId, clientId } = req.authToken;
     return await this.userService.update({
       where: { id: +userId },
       userUpdateInDto: profilePatchInDto,
+      clientId,
     });
   }
 
@@ -155,7 +160,7 @@ export class UserController {
     @Param() { id }: ParamInputs,
     @Body() userPatchInDto: UserPatchInDto,
   ) {
-    const { userId } = req.authToken;
+    const { userId, clientId } = req.authToken;
     if (userId == id) {
       throw new ForbiddenException(
         'Use a rota /profile para atualizar seus dados',
@@ -164,6 +169,7 @@ export class UserController {
     return await this.userService.update({
       where: { id: +id },
       userUpdateInDto: userPatchInDto,
+      clientId,
     });
   }
 
@@ -174,7 +180,7 @@ export class UserController {
     @Param() { id }: ParamInputs,
     @Body() userDeleteInDto: UserDeleteInDto,
   ) {
-    const { userId } = req.authToken;
+    const { userId, clientId } = req.authToken;
     if (userId == id) {
       throw new ForbiddenException(
         'Você não pode desativar o seu próprio usuário',
@@ -183,6 +189,7 @@ export class UserController {
     return await this.userService.update({
       where: { id: +id },
       userUpdateInDto: userDeleteInDto,
+      clientId,
     });
   }
 }

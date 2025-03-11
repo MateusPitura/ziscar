@@ -52,12 +52,13 @@ export class AuthController {
     @Req() req: AuthRequestBodyToken,
     @Body() { password }: PasswordInDto,
   ) {
-    const { email } = req.authToken;
+    const { email, clientId } = req.authToken;
     return await this.authService.resetPassword({
       authResetPasswordInDto: {
         email,
         password,
       },
+      clientId,
     });
   }
 

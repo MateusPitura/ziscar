@@ -369,7 +369,7 @@ describe('UserController', () => {
       clientId: POPULATE_CLIENT_DEFAULT_ID,
     };
 
-    const response = await userController.sheet(request, {
+    const response = await userController.generateSheet(request, {
       status: 'active',
       fullName: POPULATE_USER_DEFAULT.fullName,
       orderBy: 'fullName',

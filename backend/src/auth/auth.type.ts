@@ -13,6 +13,7 @@ export interface AuthSignin {
 
 export interface AuthResetPassword {
   email: string;
+  clientId: number;
 }
 
 export interface AuthRequest extends Request {
@@ -38,6 +39,7 @@ export interface SignUpInput {
 
 export interface ResetPasswordInput {
   authResetPasswordInDto: AuthResetPasswordInDto;
+  clientId: number;
 }
 
 export interface ForgetPasswordInput {

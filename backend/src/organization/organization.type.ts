@@ -8,6 +8,7 @@ export interface CreateInput {
 }
 
 export interface FindOneInput {
+  clientId?: number;
   where: Prisma.OrganizationWhereUniqueInput;
   select: Prisma.OrganizationSelect;
   onlyActive?: boolean;

@@ -89,6 +89,7 @@ export class UserService {
   async findMany({
     userFindManyInDto,
     userId,
+    clientId,
     paginate = true,
     select,
   }: FindManyInput) {
@@ -102,6 +103,7 @@ export class UserService {
     const findManyWhere = {
       where: {
         isActive: true,
+        clientId: clientId,
         NOT: {
           id: userId,
         },
@@ -143,6 +145,7 @@ export class UserService {
   }
 
   async findOne({
+    clientId,
     where,
     select,
     onlyActive = true,
@@ -151,8 +154,13 @@ export class UserService {
     if (onlyActive) {
       where['isActive'] = true;
     }
+
+    if (clientId) {
+      where['clientId'] = clientId;
+    }
+
     const user = await this.prismaService.user.findFirst({
-      where: where,
+      where,
       select,
     });
 
@@ -163,8 +171,9 @@ export class UserService {
     return user;
   }
 
-  async getPermissions({ userId }: GetPermissionsInput) {
+  async getPermissions({ clientId, userId }: GetPermissionsInput) {
     const user = await this.findOne({
+      clientId,
       where: { id: userId },
       select: {
         role: {
@@ -194,7 +203,7 @@ export class UserService {
     return permissionsFormatted;
   }
 
-  async update({ where, userUpdateInDto }: UpdateInput) {
+  async update({ clientId, where, userUpdateInDto }: UpdateInput) {
     await this.verifyDuplicated({
       email: userUpdateInDto.email,
       cpf: userUpdateInDto.cpf ?? undefined,
@@ -235,6 +244,7 @@ export class UserService {
     try {
       const user = await this.prismaService.user.update({
         where: {
+          clientId,
           isActive: !userUpdateInDto.isActive,
           ...where,
         },
@@ -250,8 +260,13 @@ export class UserService {
     }
   }
 
-  async generatePdf({ userGeneratePdfInDto, userId }: GeneratePdfInput) {
+  async generatePdf({
+    clientId,
+    userGeneratePdfInDto,
+    userId,
+  }: GeneratePdfInput) {
     const users = await this.findMany({
+      clientId,
       userFindManyInDto: userGeneratePdfInDto,
       userId,
       paginate: false,
@@ -270,8 +285,13 @@ export class UserService {
     });
   }
 
-  async generateSheet({ userGenerateSheetInDto, userId }: GenerateSheetInput) {
+  async generateSheet({
+    clientId,
+    userGenerateSheetInDto,
+    userId,
+  }: GenerateSheetInput) {
     const users = await this.findMany({
+      clientId,
       userFindManyInDto: userGenerateSheetInDto,
       userId,
       paginate: false,

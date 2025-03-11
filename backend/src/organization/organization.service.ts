@@ -28,12 +28,17 @@ export class OrganizationService {
     };
   }
 
-  async findOne({ where, select, onlyActive = true }: FindOneInput) {
+  async findOne({ clientId, where, select, onlyActive = true }: FindOneInput) {
     if (onlyActive) {
       where['isActive'] = true;
     }
+
+    if (clientId) {
+      where['clientId'] = clientId;
+    }
+
     const organization = await this.prismaService.organization.findFirst({
-      where: where,
+      where,
       select,
     });
     if (onlyActive && !organization) {

@@ -93,10 +93,14 @@ export class AuthService {
     return true;
   }
 
-  async resetPassword({ authResetPasswordInDto }: ResetPasswordInput) {
+  async resetPassword({
+    clientId,
+    authResetPasswordInDto,
+  }: ResetPasswordInput) {
     await this.userService.update({
       where: { isActive: true, email: authResetPasswordInDto.email },
       userUpdateInDto: { password: authResetPasswordInDto.password },
+      clientId,
     });
 
     return true;
@@ -105,7 +109,7 @@ export class AuthService {
   async forgetPassword({ authForgetPasswordInDto }: ForgetPasswordInput) {
     const user = await this.userService.findOne({
       where: { email: authForgetPasswordInDto.email },
-      select: { id: true },
+      select: { id: true, clientId: true },
       showNotFoundError: false,
     });
 
@@ -113,6 +117,7 @@ export class AuthService {
 
     const payload: AuthResetPassword = {
       email: authForgetPasswordInDto.email,
+      clientId: user.clientId,
     };
     const token = this.jwtService.sign(payload);
 

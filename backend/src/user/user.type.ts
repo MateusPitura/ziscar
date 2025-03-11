@@ -20,11 +20,13 @@ export interface CreateInput {
 export interface FindManyInput {
   userFindManyInDto: UserFindManyInDto;
   userId: number;
+  clientId: number;
   paginate?: boolean;
   select?: Prisma.UserSelect;
 }
 
 export interface FindOneInput {
+  clientId?: number;
   where: Prisma.UserWhereUniqueInput;
   select: Prisma.UserSelect;
   onlyActive?: boolean;
@@ -32,21 +34,25 @@ export interface FindOneInput {
 }
 
 export interface UpdateInput {
+  clientId: number;
   where: Prisma.UserWhereUniqueInput;
   userUpdateInDto: UserUpdateInDto;
 }
 
 export interface GeneratePdfInput {
+  clientId: number;
   userGeneratePdfInDto: UserGeneratePdfInDto;
   userId: number;
 }
 
 export interface GenerateSheetInput {
+  clientId: number;
   userGenerateSheetInDto: UserGenerateSheetInDto;
   userId: number;
 }
 
 export interface GetPermissionsInput {
+  clientId: number;
   userId: number;
 }
 
