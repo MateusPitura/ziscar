@@ -8,6 +8,7 @@ import { UserService } from '../user/user.service';
 import { PrismaService } from '../database/prisma.service';
 import {
   FRONTEND_URL,
+  POPULATE_CLIENT_DEFAULT_ID,
   POPULATE_ORGANIZATION_DEFAULT,
   POPULATE_ORGANIZATION_INACTIVE,
   POPULATE_USER_DEFAULT,
@@ -189,6 +190,7 @@ describe('AuthService', () => {
         authResetPasswordInDto: {
           email: POPULATE_USER_DEFAULT.email,
           password: '123456',
+          clientId: POPULATE_CLIENT_DEFAULT_ID,
         },
       });
 
@@ -208,6 +210,7 @@ describe('AuthService', () => {
           authResetPasswordInDto: {
             email: POPULATE_USER_INACTIVE.email,
             password: '123456',
+            clientId: POPULATE_CLIENT_DEFAULT_ID,
           },
         }),
       ).rejects.toThrow(NotFoundException);
@@ -216,7 +219,7 @@ describe('AuthService', () => {
     });
   });
 
-  it('should verify reset password', async () => {
+  it('should forget password', async () => {
     const spy = jest.spyOn(authService['emailService'], 'sendEmail');
 
     await authService.forgetPassword({
@@ -232,7 +235,7 @@ describe('AuthService', () => {
     });
   });
 
-  it('should not warn in verify reset password due to email that not exist', async () => {
+  it('should not warn in forget password due to email that not exist', async () => {
     expect(
       await authService.forgetPassword({
         authForgetPasswordInDto: {
@@ -242,7 +245,7 @@ describe('AuthService', () => {
     ).toBeTruthy();
   });
 
-  it('should not warn in verify reset password due to email of an inactive user', async () => {
+  it('should not warn in forget password due to email of an inactive user', async () => {
     expect(
       await authService.forgetPassword({
         authForgetPasswordInDto: {

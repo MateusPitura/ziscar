@@ -39,7 +39,6 @@ export interface SignUpInput {
 
 export interface ResetPasswordInput {
   authResetPasswordInDto: AuthResetPasswordInDto;
-  clientId: number;
 }
 
 export interface ForgetPasswordInput {

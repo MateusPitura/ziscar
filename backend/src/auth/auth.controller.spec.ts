@@ -7,7 +7,10 @@ import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../database/prisma.service';
 import { EmailService } from '../email/email.service';
-import { POPULATE_USER_DEFAULT } from '../constants';
+import {
+  POPULATE_CLIENT_DEFAULT_ID,
+  POPULATE_USER_DEFAULT,
+} from '../constants';
 import { AuthRequestBodyToken } from './auth.type';
 import { PdfService } from 'src/pdf/pdf.service';
 import { SheetService } from 'src/sheet/sheet.service';
@@ -100,6 +103,7 @@ describe('AuthController', () => {
 
       const resetPasswordPayload = {
         email: POPULATE_USER_DEFAULT.email,
+        clientId: POPULATE_CLIENT_DEFAULT_ID,
       };
 
       expect(

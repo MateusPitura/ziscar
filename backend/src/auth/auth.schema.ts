@@ -12,6 +12,7 @@ const SchemaAuthSigInInDto = s.object({
 
 const SchemaResetPasswordInDto = SchemaPassword.extend({
   email: s.email(),
+  clientId: s.id(),
 });
 
 const SchemaAuthForgetPasswordInDto = SchemaAuthSigInInDto.pick({

@@ -267,6 +267,7 @@ describe('UserController', () => {
           mode: 'insensitive',
         },
         isActive: true,
+        clientId: POPULATE_CLIENT_DEFAULT_ID,
         NOT: {
           id: POPULATE_USER_DEFAULT.id,
         },

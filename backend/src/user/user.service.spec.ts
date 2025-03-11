@@ -200,6 +200,7 @@ describe('UserService', () => {
           userUpdateInDto: {
             email: 'jane.doe@email.com',
           },
+          clientId: POPULATE_CLIENT_DEFAULT_ID,
         }),
       ).toBeTruthy();
 
@@ -216,6 +217,7 @@ describe('UserService', () => {
         userUpdateInDto: {
           email: POPULATE_USER_DEFAULT.email,
         },
+        clientId: POPULATE_CLIENT_DEFAULT_ID,
       }),
     ).rejects.toThrow(ConflictException);
   });
@@ -229,6 +231,7 @@ describe('UserService', () => {
         userUpdateInDto: {
           email: POPULATE_USER_INACTIVE.email,
         },
+        clientId: POPULATE_CLIENT_DEFAULT_ID,
       }),
     ).rejects.toThrow(ConflictException);
   });
@@ -245,6 +248,7 @@ describe('UserService', () => {
           userUpdateInDto: {
             cpf: '11111111111',
           },
+          clientId: POPULATE_CLIENT_DEFAULT_ID,
         }),
       ).toBeTruthy();
 
@@ -264,6 +268,7 @@ describe('UserService', () => {
           userUpdateInDto: {
             cpf: POPULATE_USER_DEFAULT.cpf,
           },
+          clientId: POPULATE_CLIENT_DEFAULT_ID,
         }),
       ).rejects.toThrow(ConflictException);
 
@@ -283,6 +288,7 @@ describe('UserService', () => {
           userUpdateInDto: {
             cpf: POPULATE_USER_INACTIVE.cpf,
           },
+          clientId: POPULATE_CLIENT_DEFAULT_ID,
         }),
       ).rejects.toThrow(ConflictException);
 
@@ -304,6 +310,7 @@ describe('UserService', () => {
           userUpdateInDto: {
             password: '123456',
           },
+          clientId: POPULATE_CLIENT_DEFAULT_ID,
         }),
       ).toBeTruthy();
 
@@ -327,6 +334,7 @@ describe('UserService', () => {
           userUpdateInDto: {
             password: '123456',
           },
+          clientId: POPULATE_CLIENT_DEFAULT_ID,
         }),
       ).rejects.toThrow(NotFoundException);
 
@@ -350,6 +358,7 @@ describe('UserService', () => {
             number: '123',
           },
         },
+        clientId: POPULATE_CLIENT_DEFAULT_ID,
       });
 
       expect(user).toHaveProperty('address.cep', '12345676');
@@ -374,6 +383,7 @@ describe('UserService', () => {
           },
           roleId: SEED_ROLE_SALES_ID,
         },
+        clientId: POPULATE_CLIENT_DEFAULT_ID,
       });
 
       expect(user).toHaveProperty('address.cep', '12345676');
@@ -398,6 +408,7 @@ describe('UserService', () => {
             number: '123',
           },
         },
+        clientId: POPULATE_CLIENT_DEFAULT_ID,
       });
 
       const user = await userService.update({
@@ -409,6 +420,7 @@ describe('UserService', () => {
             street: 'Broadway',
           },
         },
+        clientId: POPULATE_CLIENT_DEFAULT_ID,
       });
 
       expect(user).toHaveProperty('address.cep', '12345676');
@@ -431,6 +443,7 @@ describe('UserService', () => {
           userUpdateInDto: {
             isActive: false,
           },
+          clientId: POPULATE_CLIENT_DEFAULT_ID,
         }),
       ).toBeTruthy();
 
@@ -450,6 +463,7 @@ describe('UserService', () => {
           userUpdateInDto: {
             isActive: false,
           },
+          clientId: POPULATE_CLIENT_DEFAULT_ID,
         }),
       ).rejects.toThrow(NotFoundException);
 
@@ -469,6 +483,7 @@ describe('UserService', () => {
           userUpdateInDto: {
             isActive: true,
           },
+          clientId: POPULATE_CLIENT_DEFAULT_ID,
         }),
       ).toBeTruthy();
 
@@ -488,6 +503,7 @@ describe('UserService', () => {
           userUpdateInDto: {
             isActive: true,
           },
+          clientId: POPULATE_CLIENT_DEFAULT_ID,
         }),
       ).rejects.toThrow(NotFoundException);
 
@@ -509,6 +525,7 @@ describe('UserService', () => {
             birthDate: null,
             cellPhone: null,
           },
+          clientId: POPULATE_CLIENT_DEFAULT_ID,
         }),
       ).toBeTruthy();
 
@@ -548,6 +565,7 @@ describe('UserService', () => {
     const result = await userService.findMany({
       userFindManyInDto: { page: 1 },
       userId: POPULATE_USER_DEFAULT.id,
+      clientId: POPULATE_CLIENT_DEFAULT_ID,
     });
 
     expect(result).toHaveProperty('total', 24);
@@ -558,6 +576,7 @@ describe('UserService', () => {
     const result = await userService.findMany({
       userFindManyInDto: { page: 1 },
       userId: POPULATE_USER_DEFAULT.id,
+      clientId: POPULATE_CLIENT_DEFAULT_ID,
     });
 
     const signedUser = result.data.find(
@@ -577,6 +596,7 @@ describe('UserService', () => {
         fullName: POPULATE_USER_DEFAULT.fullName,
       },
       userId: POPULATE_USER_DEFAULT.id,
+      clientId: POPULATE_CLIENT_DEFAULT_ID,
     });
 
     expect(spy).toHaveBeenCalledWith(
@@ -597,6 +617,7 @@ describe('UserService', () => {
     await userService.findMany({
       userFindManyInDto: { orderBy: 'fullName' },
       userId: POPULATE_USER_DEFAULT.id,
+      clientId: POPULATE_CLIENT_DEFAULT_ID,
     });
 
     expect(spy).toHaveBeenCalledWith(
@@ -608,6 +629,7 @@ describe('UserService', () => {
     const result = await userService.findMany({
       userFindManyInDto: { status: 'inactive' },
       userId: POPULATE_USER_DEFAULT.id,
+      clientId: POPULATE_CLIENT_DEFAULT_ID,
     });
 
     expect(result).toHaveProperty('total', 7);
@@ -624,17 +646,20 @@ describe('UserService', () => {
         orderBy: 'fullName',
       },
       userId: POPULATE_USER_DEFAULT.id,
+      clientId: POPULATE_CLIENT_DEFAULT_ID,
     });
 
     expect(spy).toHaveBeenCalledWith({
       skip: 0,
       take: ITEMS_PER_PAGE,
+      select: undefined,
       where: {
         fullName: {
           contains: POPULATE_USER_DEFAULT.fullName.toLocaleLowerCase(),
           mode: 'insensitive',
         },
         isActive: true,
+        clientId: POPULATE_CLIENT_DEFAULT_ID,
         NOT: {
           id: POPULATE_USER_DEFAULT.id,
         },
@@ -646,6 +671,7 @@ describe('UserService', () => {
   it('should get user permissions', async () => {
     const permissions = await userService.getPermissions({
       userId: POPULATE_USER_DEFAULT.id,
+      clientId: POPULATE_CLIENT_DEFAULT_ID,
     });
 
     expect(permissions).toEqual({
@@ -668,6 +694,7 @@ describe('UserService', () => {
         orderBy: 'fullName',
       },
       userId: POPULATE_USER_DEFAULT.id,
+      clientId: POPULATE_CLIENT_DEFAULT_ID,
     });
 
     expect(spy).toHaveBeenCalled();
@@ -683,6 +710,7 @@ describe('UserService', () => {
         orderBy: 'fullName',
       },
       userId: POPULATE_USER_DEFAULT.id,
+      clientId: POPULATE_CLIENT_DEFAULT_ID,
     });
 
     expect(spy).toHaveBeenCalled();

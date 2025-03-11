@@ -57,8 +57,8 @@ export class AuthController {
       authResetPasswordInDto: {
         email,
         password,
+        clientId,
       },
-      clientId,
     });
   }
 

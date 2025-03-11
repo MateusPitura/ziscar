@@ -93,14 +93,11 @@ export class AuthService {
     return true;
   }
 
-  async resetPassword({
-    clientId,
-    authResetPasswordInDto,
-  }: ResetPasswordInput) {
+  async resetPassword({ authResetPasswordInDto }: ResetPasswordInput) {
     await this.userService.update({
       where: { isActive: true, email: authResetPasswordInDto.email },
       userUpdateInDto: { password: authResetPasswordInDto.password },
-      clientId,
+      clientId: authResetPasswordInDto.clientId,
     });
 
     return true;
