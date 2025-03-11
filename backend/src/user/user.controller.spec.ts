@@ -251,7 +251,7 @@ describe('UserController', () => {
       clientId: POPULATE_CLIENT_DEFAULT_ID,
     };
 
-    await userController.fetch(request, {
+    await userController.findMany(request, {
       page: 1,
       status: 'active',
       fullName: POPULATE_USER_DEFAULT.fullName,
@@ -351,7 +351,7 @@ describe('UserController', () => {
       clientId: POPULATE_CLIENT_DEFAULT_ID,
     };
 
-    const response = await userController.pdf(request, {
+    const response = await userController.generatePdf(request, {
       status: 'active',
       fullName: POPULATE_USER_DEFAULT.fullName,
       orderBy: 'fullName',

@@ -69,8 +69,10 @@ describe('AuthService', () => {
 
   it('should signin', async () => {
     const response = await authService.signIn({
-      email: POPULATE_USER_DEFAULT.email,
-      password: POPULATE_USER_DEFAULT.password,
+      authSignInInDto: {
+        email: POPULATE_USER_DEFAULT.email,
+        password: POPULATE_USER_DEFAULT.password,
+      },
     });
 
     expect(response).toBeUndefined();
@@ -79,8 +81,10 @@ describe('AuthService', () => {
   it('should not signin an inactive user', async () => {
     await expect(
       authService.signIn({
-        email: POPULATE_USER_INACTIVE.email,
-        password: POPULATE_USER_INACTIVE.password,
+        authSignInInDto: {
+          email: POPULATE_USER_INACTIVE.email,
+          password: POPULATE_USER_INACTIVE.password,
+        },
       }),
     ).rejects.toThrow(UnauthorizedException);
   });
@@ -88,14 +92,16 @@ describe('AuthService', () => {
   it('should not signin due to wrong password', async () => {
     await expect(
       authService.signIn({
-        email: POPULATE_USER_DEFAULT.email,
-        password: 'wrongpassword',
+        authSignInInDto: {
+          email: POPULATE_USER_DEFAULT.email,
+          password: 'wrongpassword',
+        },
       }),
     ).rejects.toThrow(UnauthorizedException);
   });
 
   it('should sign out', () => {
-    const response = authService.signOut();
+    const response = authService.signOut({});
     expect(response).toBeUndefined();
   });
 
@@ -108,10 +114,12 @@ describe('AuthService', () => {
         });
 
       const response = await authService.signUp({
-        cnpj: '12345678901236',
-        name: 'Wayne Enterprises',
-        email: 'jane.doe@email.com',
-        fullName: 'Jane Doe',
+        authSignUpInDto: {
+          cnpj: '12345678901236',
+          name: 'Wayne Enterprises',
+          email: 'jane.doe@email.com',
+          fullName: 'Jane Doe',
+        },
       });
 
       expect(response).toBeTruthy();
@@ -123,10 +131,12 @@ describe('AuthService', () => {
   it('should not create account due to duplicated email', async () => {
     await expect(
       authService.signUp({
-        cnpj: '12345678901236',
-        name: 'Wayne Enterprises',
-        email: POPULATE_USER_DEFAULT.email,
-        fullName: 'Jane Doe',
+        authSignUpInDto: {
+          cnpj: '12345678901236',
+          name: 'Wayne Enterprises',
+          email: POPULATE_USER_DEFAULT.email,
+          fullName: 'Jane Doe',
+        },
       }),
     ).rejects.toThrow(ConflictException);
   });
@@ -134,10 +144,12 @@ describe('AuthService', () => {
   it('should not create account due to duplicated email of an inactive user', async () => {
     await expect(
       authService.signUp({
-        cnpj: '12345678901236',
-        name: 'Wayne Enterprises',
-        email: POPULATE_USER_INACTIVE.email,
-        fullName: 'Jane Doe',
+        authSignUpInDto: {
+          cnpj: '12345678901236',
+          name: 'Wayne Enterprises',
+          email: POPULATE_USER_INACTIVE.email,
+          fullName: 'Jane Doe',
+        },
       }),
     ).rejects.toThrow(ConflictException);
   });
@@ -145,10 +157,12 @@ describe('AuthService', () => {
   it('should not create account due to duplicated CNPJ', async () => {
     await expect(
       authService.signUp({
-        cnpj: POPULATE_ORGANIZATION_DEFAULT.cnpj,
-        name: 'Wayne Enterprises',
-        email: 'jane.doe@email.com',
-        fullName: 'Jane Doe',
+        authSignUpInDto: {
+          cnpj: POPULATE_ORGANIZATION_DEFAULT.cnpj,
+          name: 'Wayne Enterprises',
+          email: 'jane.doe@email.com',
+          fullName: 'Jane Doe',
+        },
       }),
     ).rejects.toThrow(ConflictException);
   });
@@ -156,10 +170,12 @@ describe('AuthService', () => {
   it('should not create account due to duplicated CNPJ of an inactive user', async () => {
     await expect(
       authService.signUp({
-        cnpj: POPULATE_ORGANIZATION_INACTIVE.cnpj,
-        name: 'Wayne Enterprises',
-        email: 'jane.doe@email.com',
-        fullName: 'Jane Doe',
+        authSignUpInDto: {
+          cnpj: POPULATE_ORGANIZATION_INACTIVE.cnpj,
+          name: 'Wayne Enterprises',
+          email: 'jane.doe@email.com',
+          fullName: 'Jane Doe',
+        },
       }),
     ).rejects.toThrow(ConflictException);
   });
@@ -170,12 +186,14 @@ describe('AuthService', () => {
       const spy = jest.spyOn(authService['userService'], 'encryptPassword');
 
       const response = await authService.resetPassword({
-        email: POPULATE_USER_DEFAULT.email,
-        password: '123456',
+        authResetPasswordInDto: {
+          email: POPULATE_USER_DEFAULT.email,
+          password: '123456',
+        },
       });
 
       expect(response).toBeTruthy();
-      expect(spy).toHaveBeenCalledWith('123456');
+      expect(spy).toHaveBeenCalledWith({ password: '123456' });
 
       transaction.rollback();
     });
@@ -187,8 +205,10 @@ describe('AuthService', () => {
 
       await expect(
         authService.resetPassword({
-          email: POPULATE_USER_INACTIVE.email,
-          password: '123456',
+          authResetPasswordInDto: {
+            email: POPULATE_USER_INACTIVE.email,
+            password: '123456',
+          },
         }),
       ).rejects.toThrow(NotFoundException);
 
@@ -200,7 +220,9 @@ describe('AuthService', () => {
     const spy = jest.spyOn(authService['emailService'], 'sendEmail');
 
     await authService.forgetPassword({
-      email: POPULATE_USER_DEFAULT.email,
+      authForgetPasswordInDto: {
+        email: POPULATE_USER_DEFAULT.email,
+      },
     });
 
     expect(spy).toHaveBeenCalledWith({
@@ -213,7 +235,9 @@ describe('AuthService', () => {
   it('should not warn in verify reset password due to email that not exist', async () => {
     expect(
       await authService.forgetPassword({
-        email: 'jane.doe@email.com',
+        authForgetPasswordInDto: {
+          email: 'jane.doe@email.com',
+        },
       }),
     ).toBeTruthy();
   });
@@ -221,7 +245,9 @@ describe('AuthService', () => {
   it('should not warn in verify reset password due to email of an inactive user', async () => {
     expect(
       await authService.forgetPassword({
-        email: POPULATE_USER_INACTIVE.email,
+        authForgetPasswordInDto: {
+          email: POPULATE_USER_INACTIVE.email,
+        },
       }),
     ).toBeTruthy();
   });

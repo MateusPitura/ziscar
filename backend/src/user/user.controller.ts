@@ -20,12 +20,12 @@ import { FETCH_USER, GET_USER } from './user.constant';
 import { AuthRequest } from '../auth/auth.type';
 import {
   UserPostInDto,
-  UserFetchInDto,
   UserPatchInDto,
   ProfilePatchInDto,
   UserDeleteInDto,
-  UserPdfInDto,
-  UserSheetInDto,
+  UserFindManyInDto,
+  UserGeneratePdfInDto,
+  UserGenerateSheetInDto,
 } from './user.schema';
 import { ParamInputs } from 'src/schemas';
 import { Actions, Resources } from '@prisma/client';
@@ -46,45 +46,50 @@ export class UserController {
       ...userPostInDto,
       clientId,
     };
-    return this.userService.create(createUserPayload);
+    return this.userService.create({ userCreateInDto: createUserPayload });
   }
 
   @RoleGuard(Resources.USERS, Actions.READ)
   @Get('user')
-  async fetch(
+  async findMany(
     @Req() req: AuthRequest,
-    @Query() userFetchInDto: UserFetchInDto,
+    @Query() userFindManyInDto: UserFindManyInDto,
   ) {
     const { userId } = req.authToken;
-    return await this.userService.findMany(
-      userFetchInDto,
-      +userId,
-      true,
-      FETCH_USER,
-    );
+    return await this.userService.findMany({
+      userFindManyInDto,
+      userId: +userId,
+      select: FETCH_USER,
+    });
   }
 
   @Get('profile')
   async getProfile(@Req() req: AuthRequest) {
     const { userId } = req.authToken;
-    return await this.userService.findOne({ id: +userId }, GET_USER);
+    return await this.userService.findOne({
+      where: { id: +userId },
+      select: GET_USER,
+    });
   }
 
   @Get('permissions')
   async getPermissions(@Req() req: AuthRequest) {
     const { userId } = req.authToken;
-    return await this.userService.getPermissions(+userId);
+    return await this.userService.getPermissions({ userId: +userId });
   }
 
   @Get('user/pdf')
   @HttpCode(HttpStatus.OK)
-  async pdf(
+  async generatePdf(
     @Req() req: AuthRequest,
-    @Query() userPdfInDto: UserPdfInDto,
+    @Query() userGeneratePdfInDto: UserGeneratePdfInDto,
     @Res() res?: Response,
   ) {
     const { userId } = req.authToken;
-    const pdfBuffer = await this.userService.generatePdf(userPdfInDto, +userId);
+    const pdfBuffer = await this.userService.generatePdf({
+      userGeneratePdfInDto,
+      userId: +userId,
+    });
 
     res?.set({
       'Content-Type': 'application/pdf',
@@ -98,14 +103,14 @@ export class UserController {
   @HttpCode(HttpStatus.OK)
   async sheet(
     @Req() req: AuthRequest,
-    @Query() userSheetInDto: UserSheetInDto,
+    @Query() userGenerateSheetInDto: UserGenerateSheetInDto,
     @Res() res?: Response,
   ) {
     const { userId } = req.authToken;
-    const sheetBuffer = await this.userService.generateSheet(
-      userSheetInDto,
-      +userId,
-    );
+    const sheetBuffer = await this.userService.generateSheet({
+      userGenerateSheetInDto,
+      userId: +userId,
+    });
 
     res?.set({
       'Content-Type':
@@ -125,7 +130,10 @@ export class UserController {
         'Use a rota /profile para acessar seus dados',
       );
     }
-    return await this.userService.findOne({ id: +id }, GET_USER);
+    return await this.userService.findOne({
+      where: { id: +id },
+      select: GET_USER,
+    });
   }
 
   @Patch('profile')
@@ -134,7 +142,10 @@ export class UserController {
     @Body() profilePatchInDto: ProfilePatchInDto,
   ) {
     const { userId } = req.authToken;
-    return await this.userService.update({ id: +userId }, profilePatchInDto);
+    return await this.userService.update({
+      where: { id: +userId },
+      userUpdateInDto: profilePatchInDto,
+    });
   }
 
   @RoleGuard(Resources.USERS, Actions.UPDATE)
@@ -150,7 +161,10 @@ export class UserController {
         'Use a rota /profile para atualizar seus dados',
       );
     }
-    return await this.userService.update({ id: +id }, userPatchInDto);
+    return await this.userService.update({
+      where: { id: +id },
+      userUpdateInDto: userPatchInDto,
+    });
   }
 
   @RoleGuard(Resources.USERS, Actions.DELETE)
@@ -166,6 +180,9 @@ export class UserController {
         'Você não pode desativar o seu próprio usuário',
       );
     }
-    return await this.userService.update({ id: +id }, userDeleteInDto);
+    return await this.userService.update({
+      where: { id: +id },
+      userUpdateInDto: userDeleteInDto,
+    });
   }
 }

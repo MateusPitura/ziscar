@@ -26,21 +26,24 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Post('sign-in')
   async signIn(
-    @Body() authSigninInDto: AuthSignInInDto,
+    @Body() authSignInInDto: AuthSignInInDto,
     @Res() res?: Response,
   ) {
-    return await this.authService.signIn(authSigninInDto, res);
+    return await this.authService.signIn({
+      authSignInInDto,
+      res,
+    });
   }
 
   @HttpCode(HttpStatus.OK)
   @Post('sign-out')
   signOut(@Res() res?: Response) {
-    return this.authService.signOut(res);
+    return this.authService.signOut({ res });
   }
 
   @Post('sign-up')
   async signUp(@Body() authSignUpInDto: AuthSignUpInDto) {
-    return await this.authService.signUp(authSignUpInDto);
+    return await this.authService.signUp({ authSignUpInDto });
   }
 
   @Post('reset-password')
@@ -51,8 +54,10 @@ export class AuthController {
   ) {
     const { email } = req.authToken;
     return await this.authService.resetPassword({
-      email,
-      password,
+      authResetPasswordInDto: {
+        email,
+        password,
+      },
     });
   }
 
@@ -60,6 +65,8 @@ export class AuthController {
   async forgetPassword(
     @Body() authForgetPasswordInDto: AuthForgetPasswordInDto,
   ) {
-    return await this.authService.forgetPassword(authForgetPasswordInDto);
+    return await this.authService.forgetPassword({
+      authForgetPasswordInDto,
+    });
   }
 }

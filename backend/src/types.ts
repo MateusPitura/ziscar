@@ -8,9 +8,17 @@ export type Transaction = Omit<
   rollback: () => void;
 };
 
+interface GetCallbackInput {
+  where: Partial<Record<'OR', Record<string, string>[]>>;
+  select: { id: boolean };
+  onlyActive: boolean;
+  showNotFoundError: boolean;
+}
+
 export type GetCallback = (
-  entityWhereUniqueInput: Partial<Record<'OR', Record<string, string>[]>>,
-  select: { id: boolean },
-  onlyActive: boolean,
-  showNotFoundError: boolean,
+  _: GetCallbackInput,
 ) => Promise<{ id: string } | null>;
+
+export interface EncryptPasswordInput {
+  password: string;
+}

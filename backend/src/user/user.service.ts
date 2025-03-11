@@ -3,9 +3,8 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
 import { PrismaService } from '../database/prisma.service';
-import { GetCallback, Transaction } from '../types';
+import { EncryptPasswordInput, GetCallback } from '../types';
 import { encryptPassword } from './user.utils';
 import { GET_USER, PERMISSIONS } from './user.constant';
 import { verifyDuplicated } from '../utils/verifyDuplicated';
@@ -13,14 +12,18 @@ import { EmailService } from '../email/email.service';
 import { JwtService } from '@nestjs/jwt';
 import { generateRandomPassword } from '../utils/generateRandomPassword';
 import { ITEMS_PER_PAGE } from '@shared/constants';
-import {
-  UserCreateInDto,
-  UserFindManyInDto,
-  UserGeneratePdfInDto as UserGenerateSheetInDto,
-  UserUpdateInDto,
-} from './user.schema';
 import { FRONTEND_URL } from 'src/constants';
-import { Role } from './user.type';
+import {
+  CreateInput,
+  FindManyInput,
+  FindOneInput,
+  GeneratePdfInput,
+  GenerateSheetInput,
+  GetPermissionsInput,
+  Role,
+  UpdateInput,
+  VerifyDuplicatedInput,
+} from './user.type';
 import { PdfService } from 'src/pdf/pdf.service';
 import { SheetService } from 'src/sheet/sheet.service';
 
@@ -34,7 +37,7 @@ export class UserService {
     private readonly sheetService: SheetService,
   ) {}
 
-  async create(userCreateInDto: UserCreateInDto, transaction?: Transaction) {
+  async create({ userCreateInDto, transaction }: CreateInput) {
     const database = transaction || this.prismaService;
 
     await this.verifyDuplicated({
@@ -46,7 +49,9 @@ export class UserService {
 
     const createPayload = {
       ...rest,
-      password: await this.encryptPassword(this.generateRandomPassword()),
+      password: await this.encryptPassword({
+        password: this.generateRandomPassword(),
+      }),
     };
     if (address) {
       createPayload['address'] = {
@@ -81,12 +86,12 @@ export class UserService {
     return true;
   }
 
-  async findMany(
-    userFindManyInDto: UserFindManyInDto,
-    userId: number,
-    paginate: boolean = true,
-    select?: Prisma.UserSelect,
-  ) {
+  async findMany({
+    userFindManyInDto,
+    userId,
+    paginate = true,
+    select,
+  }: FindManyInput) {
     const pagination = {};
     if (paginate) {
       const { page = 1 } = userFindManyInDto;
@@ -137,17 +142,17 @@ export class UserService {
     };
   }
 
-  async findOne(
-    userWhereUniqueInput: Prisma.UserWhereUniqueInput,
-    select: Prisma.UserSelect,
-    onlyActive: boolean = true,
-    showNotFoundError: boolean = true,
-  ) {
+  async findOne({
+    where,
+    select,
+    onlyActive = true,
+    showNotFoundError = true,
+  }: FindOneInput) {
     if (onlyActive) {
-      userWhereUniqueInput['isActive'] = true;
+      where['isActive'] = true;
     }
     const user = await this.prismaService.user.findFirst({
-      where: userWhereUniqueInput,
+      where: where,
       select,
     });
 
@@ -158,10 +163,10 @@ export class UserService {
     return user;
   }
 
-  async getPermissions(userId: number) {
-    const user = await this.findOne(
-      { id: userId },
-      {
+  async getPermissions({ userId }: GetPermissionsInput) {
+    const user = await this.findOne({
+      where: { id: userId },
+      select: {
         role: {
           select: {
             name: true,
@@ -174,7 +179,7 @@ export class UserService {
           },
         },
       },
-    );
+    });
 
     const role = user?.role as Role;
     if (!role.permissions) {
@@ -189,10 +194,7 @@ export class UserService {
     return permissionsFormatted;
   }
 
-  async update(
-    userWhereUniqueInput: Prisma.UserWhereUniqueInput,
-    userUpdateInDto: UserUpdateInDto,
-  ) {
+  async update({ where, userUpdateInDto }: UpdateInput) {
     await this.verifyDuplicated({
       email: userUpdateInDto.email,
       cpf: userUpdateInDto.cpf ?? undefined,
@@ -217,9 +219,9 @@ export class UserService {
     }
 
     if (userUpdateInDto.password) {
-      updatePayload['password'] = await this.encryptPassword(
-        userUpdateInDto.password,
-      );
+      updatePayload['password'] = await this.encryptPassword({
+        password: userUpdateInDto.password,
+      });
     }
 
     if (roleId) {
@@ -234,7 +236,7 @@ export class UserService {
       const user = await this.prismaService.user.update({
         where: {
           isActive: !userUpdateInDto.isActive,
-          ...userWhereUniqueInput,
+          ...where,
         },
         data: updatePayload,
         select: GET_USER,
@@ -248,11 +250,12 @@ export class UserService {
     }
   }
 
-  async generatePdf(
-    userGeneratePdfInDto: UserGenerateSheetInDto,
-    userId: number,
-  ) {
-    const users = await this.findMany(userGeneratePdfInDto, userId, false); // TODO: talvez aqui permita buscar o próprio usuário
+  async generatePdf({ userGeneratePdfInDto, userId }: GeneratePdfInput) {
+    const users = await this.findMany({
+      userFindManyInDto: userGeneratePdfInDto,
+      userId,
+      paginate: false,
+    }); // TODO: talvez aqui permita buscar o próprio usuário
 
     if (!users.data) {
       throw new BadRequestException('Nenhum dado encontrado');
@@ -267,11 +270,12 @@ export class UserService {
     });
   }
 
-  async generateSheet(
-    userGenerateSheetInDto: UserGenerateSheetInDto,
-    userId: number,
-  ) {
-    const users = await this.findMany(userGenerateSheetInDto, userId, false); // TODO: talvez aqui permita buscar o próprio usuário
+  async generateSheet({ userGenerateSheetInDto, userId }: GenerateSheetInput) {
+    const users = await this.findMany({
+      userFindManyInDto: userGenerateSheetInDto,
+      userId,
+      paginate: false,
+    }); // TODO: talvez aqui permita buscar o próprio usuário
 
     if (!users.data) {
       throw new BadRequestException('Nenhum dado encontrado');
@@ -285,12 +289,15 @@ export class UserService {
     });
   }
 
-  async verifyDuplicated(properties: Partial<Record<'email' | 'cpf', string>>) {
-    await verifyDuplicated(properties, this.findOne.bind(this) as GetCallback);
+  async verifyDuplicated({ email, cpf }: VerifyDuplicatedInput) {
+    await verifyDuplicated({
+      properties: { email, cpf },
+      getCallback: this.findOne.bind(this) as GetCallback,
+    });
   }
 
-  async encryptPassword(password: string) {
-    return encryptPassword(password);
+  async encryptPassword({ password }: EncryptPasswordInput) {
+    return encryptPassword({ password });
   }
 
   generateRandomPassword() {

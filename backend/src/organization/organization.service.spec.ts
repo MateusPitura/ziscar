@@ -26,9 +26,11 @@ describe('OrganizationService', () => {
       Reflect.set(organizationService, 'prismaService', transaction);
 
       const user = await organizationService.create({
-        name: 'Wayne Enterprises',
-        cnpj: '12345678901236',
-        clientId: POPULATE_CLIENT_DEFAULT_ID,
+        organizationCreateInDto: {
+          name: 'Wayne Enterprises',
+          cnpj: '12345678901236',
+          clientId: POPULATE_CLIENT_DEFAULT_ID,
+        },
       });
 
       expect(user).toHaveProperty('organizationId');
@@ -40,9 +42,11 @@ describe('OrganizationService', () => {
   it('should not create an organization with the same CNPJ', async () => {
     await expect(
       organizationService.create({
-        name: 'Wayne Enterprises',
-        cnpj: POPULATE_ORGANIZATION_DEFAULT.cnpj,
-        clientId: POPULATE_CLIENT_DEFAULT_ID,
+        organizationCreateInDto: {
+          name: 'Wayne Enterprises',
+          cnpj: POPULATE_ORGANIZATION_DEFAULT.cnpj,
+          clientId: POPULATE_CLIENT_DEFAULT_ID,
+        },
       }),
     ).rejects.toThrow(ConflictException);
   });
@@ -50,37 +54,39 @@ describe('OrganizationService', () => {
   it('should not create an organization with a CNPJ of an inactive organization', async () => {
     await expect(
       organizationService.create({
-        name: 'Stark Industries',
-        cnpj: POPULATE_ORGANIZATION_INACTIVE.cnpj,
-        clientId: POPULATE_CLIENT_DEFAULT_ID,
+        organizationCreateInDto: {
+          name: 'Stark Industries',
+          cnpj: POPULATE_ORGANIZATION_INACTIVE.cnpj,
+          clientId: POPULATE_CLIENT_DEFAULT_ID,
+        },
       }),
     ).rejects.toThrow(ConflictException);
   });
 
   it('should find one organization by id', async () => {
-    const user = await organizationService.findOne(
-      { id: POPULATE_ORGANIZATION_DEFAULT.id },
-      { id: true },
-    );
+    const user = await organizationService.findOne({
+      where: { id: POPULATE_ORGANIZATION_DEFAULT.id },
+      select: { id: true },
+    });
 
     expect(user).toHaveProperty('id');
   });
 
   it('should not find an inactive organization by id', async () => {
     await expect(
-      organizationService.findOne(
-        { id: POPULATE_ORGANIZATION_INACTIVE.id },
-        { id: true },
-      ),
+      organizationService.findOne({
+        where: { id: POPULATE_ORGANIZATION_INACTIVE.id },
+        select: { id: true },
+      }),
     ).rejects.toThrow(NotFoundException);
   });
 
   it('should find an inactive organization by id', async () => {
-    const user = await organizationService.findOne(
-      { id: POPULATE_ORGANIZATION_INACTIVE.id },
-      { id: true },
-      false,
-    );
+    const user = await organizationService.findOne({
+      where: { id: POPULATE_ORGANIZATION_INACTIVE.id },
+      select: { id: true },
+      onlyActive: false,
+    });
 
     expect(user).toHaveProperty('id');
   });

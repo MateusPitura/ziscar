@@ -46,13 +46,17 @@ async function seed() {
       data: [
         {
           ...POPULATE_USER_DEFAULT,
-          password: await encryptPassword(POPULATE_USER_DEFAULT.password),
+          password: await encryptPassword({
+            password: POPULATE_USER_DEFAULT.password,
+          }),
           clientId: POPULATE_CLIENT_DEFAULT_ID,
           roleId: SEED_ROLE_ADMIN_ID,
         },
         {
           ...POPULATE_USER_INACTIVE,
-          password: await encryptPassword(POPULATE_USER_INACTIVE.password),
+          password: await encryptPassword({
+            password: POPULATE_USER_INACTIVE.password,
+          }),
           clientId: POPULATE_CLIENT_DEFAULT_ID,
           roleId: SEED_ROLE_ADMIN_ID,
         },
@@ -64,7 +68,7 @@ async function seed() {
     fullName: faker.person.fullName(),
     email: faker.internet.email(),
     isActive: index > 5,
-    password: await encryptPassword(faker.internet.password()),
+    password: await encryptPassword({ password: faker.internet.password() }),
     clientId: POPULATE_CLIENT_DEFAULT_ID,
     roleId: SEED_ROLE_SALES_ID,
   }));

@@ -1,6 +1,14 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { AuthResetPassword, AuthSignin } from './auth.type';
+import {
+  AuthResetPassword,
+  AuthSignin,
+  ForgetPasswordInput,
+  ResetPasswordInput,
+  SiginInInput,
+  SignOutInput,
+  SignUpInput,
+} from './auth.type';
 import { compareSync } from 'bcrypt';
 import { ClientService } from '../client/client.service';
 import { OrganizationService } from '../organization/organization.service';
@@ -8,14 +16,7 @@ import { UserService } from '../user/user.service';
 import { EmailService } from '../email/email.service';
 import { PrismaService } from '../database/prisma.service';
 import { generateRandomPassword } from '../utils/generateRandomPassword';
-import {
-  AuthForgetPasswordInDto,
-  AuthResetPasswordInDto,
-  AuthSignInInDto,
-  AuthSignUpInDto,
-} from './auth.schema';
 import { SEED_ROLE_SALES_ID } from '@shared/constants';
-import { Response } from 'express';
 import { COOKIE_JWT_NAME, FRONTEND_URL } from 'src/constants';
 
 @Injectable()
@@ -29,19 +30,18 @@ export class AuthService {
     private readonly prismaService: PrismaService,
   ) {}
 
-  async signIn({ email, password }: AuthSignInInDto, res?: Response) {
-    const user = await this.userService.findOne(
-      { email },
-      {
+  async signIn({ authSignInInDto, res }: SiginInInput) {
+    const user = await this.userService.findOne({
+      where: { email: authSignInInDto.email },
+      select: {
         id: true,
         clientId: true,
         password: true,
       },
-      true,
-      false,
-    );
+      showNotFoundError: false,
+    });
 
-    if (!user || !compareSync(password, user.password)) {
+    if (!user || !compareSync(authSignInInDto.password, user.password)) {
       throw new UnauthorizedException('Email ou senha inválidos');
     }
 
@@ -61,61 +61,63 @@ export class AuthService {
     return res?.json(true);
   }
 
-  signOut(res?: Response) {
+  signOut({ res }: SignOutInput) {
     res?.clearCookie(COOKIE_JWT_NAME);
     return res?.json(true);
   }
 
-  async signUp({ cnpj, name, email, fullName }: AuthSignUpInDto) {
+  async signUp({ authSignUpInDto }: SignUpInput) {
     await this.prismaService.transaction(async (transaction) => {
-      const { clientId } = await this.clientService.create(transaction);
+      const { clientId } = await this.clientService.create({ transaction });
 
-      await this.organizationService.create(
-        {
-          cnpj,
-          name,
+      await this.organizationService.create({
+        organizationCreateInDto: {
+          cnpj: authSignUpInDto.cnpj,
+          name: authSignUpInDto.name,
           clientId,
         },
         transaction,
-      );
+      });
 
-      await this.userService.create(
-        {
-          email,
-          fullName,
+      await this.userService.create({
+        userCreateInDto: {
+          email: authSignUpInDto.email,
+          fullName: authSignUpInDto.fullName,
           clientId,
           roleId: SEED_ROLE_SALES_ID,
         },
         transaction,
-      );
+      });
     });
 
     return true;
   }
 
-  async resetPassword({ email, password }: AuthResetPasswordInDto) {
-    await this.userService.update({ isActive: true, email }, { password });
+  async resetPassword({ authResetPasswordInDto }: ResetPasswordInput) {
+    await this.userService.update({
+      where: { isActive: true, email: authResetPasswordInDto.email },
+      userUpdateInDto: { password: authResetPasswordInDto.password },
+    });
 
     return true;
   }
 
-  async forgetPassword({ email }: AuthForgetPasswordInDto) {
-    const user = await this.userService.findOne(
-      { email },
-      { id: true },
-      true,
-      false,
-    );
+  async forgetPassword({ authForgetPasswordInDto }: ForgetPasswordInput) {
+    const user = await this.userService.findOne({
+      where: { email: authForgetPasswordInDto.email },
+      select: { id: true },
+      showNotFoundError: false,
+    });
 
     if (!user) return true;
 
     const payload: AuthResetPassword = {
-      email,
+      email: authForgetPasswordInDto.email,
     };
     const token = this.jwtService.sign(payload);
 
     void this.emailService.sendEmail({
-      to: email,
+      to: authForgetPasswordInDto.email,
       title: 'Redefina sua senha',
       body: `${FRONTEND_URL}/sign?token=${token}`,
     });

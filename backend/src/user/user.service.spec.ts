@@ -55,10 +55,12 @@ describe('UserService', () => {
 
       expect(
         await userService.create({
-          email: 'jane.doe@email.com',
-          fullName: 'Jane Doe',
-          clientId: POPULATE_CLIENT_DEFAULT_ID,
-          roleId: SEED_ROLE_SALES_ID,
+          userCreateInDto: {
+            email: 'jane.doe@email.com',
+            fullName: 'Jane Doe',
+            clientId: POPULATE_CLIENT_DEFAULT_ID,
+            roleId: SEED_ROLE_SALES_ID,
+          },
         }),
       ).toBeTruthy();
 
@@ -72,10 +74,12 @@ describe('UserService', () => {
   it('should not create an user with the same email', async () => {
     await expect(
       userService.create({
-        email: POPULATE_USER_DEFAULT.email,
-        fullName: 'John Doe',
-        clientId: POPULATE_CLIENT_DEFAULT_ID,
-        roleId: SEED_ROLE_SALES_ID,
+        userCreateInDto: {
+          email: POPULATE_USER_DEFAULT.email,
+          fullName: 'John Doe',
+          clientId: POPULATE_CLIENT_DEFAULT_ID,
+          roleId: SEED_ROLE_SALES_ID,
+        },
       }),
     ).rejects.toThrow(ConflictException);
   });
@@ -83,10 +87,12 @@ describe('UserService', () => {
   it('should not create an user with an email of an inactive user', async () => {
     await expect(
       userService.create({
-        email: POPULATE_USER_INACTIVE.email,
-        fullName: 'Tony Stark',
-        clientId: POPULATE_CLIENT_DEFAULT_ID,
-        roleId: SEED_ROLE_SALES_ID,
+        userCreateInDto: {
+          email: POPULATE_USER_INACTIVE.email,
+          fullName: 'Tony Stark',
+          clientId: POPULATE_CLIENT_DEFAULT_ID,
+          roleId: SEED_ROLE_SALES_ID,
+        },
       }),
     ).rejects.toThrow(ConflictException);
   });
@@ -94,11 +100,13 @@ describe('UserService', () => {
   it('should not create an user with an cpf of an inactive user', async () => {
     await expect(
       userService.create({
-        email: 'jane.doe@email.com',
-        fullName: 'John Doe',
-        cpf: POPULATE_USER_INACTIVE.cpf,
-        clientId: POPULATE_CLIENT_DEFAULT_ID,
-        roleId: SEED_ROLE_SALES_ID,
+        userCreateInDto: {
+          email: 'jane.doe@email.com',
+          fullName: 'John Doe',
+          cpf: POPULATE_USER_INACTIVE.cpf,
+          clientId: POPULATE_CLIENT_DEFAULT_ID,
+          roleId: SEED_ROLE_SALES_ID,
+        },
       }),
     ).rejects.toThrow(ConflictException);
   });
@@ -115,18 +123,20 @@ describe('UserService', () => {
 
       expect(
         await userService.create({
-          fullName: 'Jane Doe',
-          email: 'jane.doe@email.com',
-          cpf: '11111111111',
-          birthDate: new Date(),
-          code: 'ABCDEF',
-          cellPhone: '42988884444',
-          address: {
-            cep: '12345678',
-            number: '123',
+          userCreateInDto: {
+            fullName: 'Jane Doe',
+            email: 'jane.doe@email.com',
+            cpf: '11111111111',
+            birthDate: new Date(),
+            code: 'ABCDEF',
+            cellPhone: '42988884444',
+            address: {
+              cep: '12345678',
+              number: '123',
+            },
+            clientId: POPULATE_CLIENT_DEFAULT_ID,
+            roleId: SEED_ROLE_SALES_ID,
           },
-          clientId: POPULATE_CLIENT_DEFAULT_ID,
-          roleId: SEED_ROLE_SALES_ID,
         }),
       ).toBeTruthy();
 
@@ -149,23 +159,25 @@ describe('UserService', () => {
 
       expect(
         await userService.create({
-          fullName: 'Jane Doe',
-          email: 'jane.doe@email.com',
-          cpf: '11111111111',
-          birthDate: new Date(),
-          code: 'ABCDEF',
-          cellPhone: '42988884444',
-          address: {
-            cep: '12345678',
-            number: '123',
-            street: 'Broadway',
-            city: 'New York',
-            state: 'NY',
-            neighborhood: 'Manhattan',
-            complement: 'Apt 123',
+          userCreateInDto: {
+            fullName: 'Jane Doe',
+            email: 'jane.doe@email.com',
+            cpf: '11111111111',
+            birthDate: new Date(),
+            code: 'ABCDEF',
+            cellPhone: '42988884444',
+            address: {
+              cep: '12345678',
+              number: '123',
+              street: 'Broadway',
+              city: 'New York',
+              state: 'NY',
+              neighborhood: 'Manhattan',
+              complement: 'Apt 123',
+            },
+            clientId: POPULATE_CLIENT_DEFAULT_ID,
+            roleId: SEED_ROLE_SALES_ID,
           },
-          clientId: POPULATE_CLIENT_DEFAULT_ID,
-          roleId: SEED_ROLE_SALES_ID,
         }),
       ).toBeTruthy();
 
@@ -181,14 +193,14 @@ describe('UserService', () => {
       Reflect.set(userService, 'prismaService', transaction);
 
       expect(
-        await userService.update(
-          {
+        await userService.update({
+          where: {
             id: POPULATE_USER_DEFAULT.id,
           },
-          {
+          userUpdateInDto: {
             email: 'jane.doe@email.com',
           },
-        ),
+        }),
       ).toBeTruthy();
 
       transaction.rollback();
@@ -197,27 +209,27 @@ describe('UserService', () => {
 
   it('should not update user with email that already exist', async () => {
     await expect(
-      userService.update(
-        {
+      userService.update({
+        where: {
           id: POPULATE_USER_DEFAULT.id,
         },
-        {
+        userUpdateInDto: {
           email: POPULATE_USER_DEFAULT.email,
         },
-      ),
+      }),
     ).rejects.toThrow(ConflictException);
   });
 
   it('should not update user with an email of an inactive user', async () => {
     await expect(
-      userService.update(
-        {
+      userService.update({
+        where: {
           id: POPULATE_USER_DEFAULT.id,
         },
-        {
+        userUpdateInDto: {
           email: POPULATE_USER_INACTIVE.email,
         },
-      ),
+      }),
     ).rejects.toThrow(ConflictException);
   });
 
@@ -226,14 +238,14 @@ describe('UserService', () => {
       Reflect.set(userService, 'prismaService', transaction);
 
       expect(
-        await userService.update(
-          {
+        await userService.update({
+          where: {
             id: POPULATE_USER_DEFAULT.id,
           },
-          {
+          userUpdateInDto: {
             cpf: '11111111111',
           },
-        ),
+        }),
       ).toBeTruthy();
 
       transaction.rollback();
@@ -245,14 +257,14 @@ describe('UserService', () => {
       Reflect.set(userService, 'prismaService', transaction);
 
       await expect(
-        userService.update(
-          {
+        userService.update({
+          where: {
             id: POPULATE_USER_DEFAULT.id,
           },
-          {
+          userUpdateInDto: {
             cpf: POPULATE_USER_DEFAULT.cpf,
           },
-        ),
+        }),
       ).rejects.toThrow(ConflictException);
 
       transaction.rollback();
@@ -264,14 +276,14 @@ describe('UserService', () => {
       Reflect.set(userService, 'prismaService', transaction);
 
       await expect(
-        userService.update(
-          {
+        userService.update({
+          where: {
             id: POPULATE_USER_DEFAULT.id,
           },
-          {
+          userUpdateInDto: {
             cpf: POPULATE_USER_INACTIVE.cpf,
           },
-        ),
+        }),
       ).rejects.toThrow(ConflictException);
 
       transaction.rollback();
@@ -285,17 +297,17 @@ describe('UserService', () => {
       const spy = jest.spyOn(userService, 'encryptPassword');
 
       expect(
-        await userService.update(
-          {
+        await userService.update({
+          where: {
             id: POPULATE_USER_DEFAULT.id,
           },
-          {
+          userUpdateInDto: {
             password: '123456',
           },
-        ),
+        }),
       ).toBeTruthy();
 
-      expect(spy).toHaveBeenCalledWith('123456');
+      expect(spy).toHaveBeenCalledWith({ password: '123456' });
 
       transaction.rollback();
     });
@@ -308,17 +320,17 @@ describe('UserService', () => {
       const spy = jest.spyOn(userService, 'encryptPassword');
 
       await expect(
-        userService.update(
-          {
+        userService.update({
+          where: {
             id: POPULATE_USER_INACTIVE.id,
           },
-          {
+          userUpdateInDto: {
             password: '123456',
           },
-        ),
+        }),
       ).rejects.toThrow(NotFoundException);
 
-      expect(spy).toHaveBeenCalledWith('123456');
+      expect(spy).toHaveBeenCalledWith({ password: '123456' });
 
       transaction.rollback();
     });
@@ -328,17 +340,17 @@ describe('UserService', () => {
     await prismaService.transaction(async (transaction) => {
       Reflect.set(userService, 'prismaService', transaction);
 
-      const user = await userService.update(
-        {
+      const user = await userService.update({
+        where: {
           id: POPULATE_USER_DEFAULT.id,
         },
-        {
+        userUpdateInDto: {
           address: {
             cep: '12345676',
             number: '123',
           },
         },
-      );
+      });
 
       expect(user).toHaveProperty('address.cep', '12345676');
       expect(user).toHaveProperty('address.number', '123');
@@ -351,18 +363,18 @@ describe('UserService', () => {
     await prismaService.transaction(async (transaction) => {
       Reflect.set(userService, 'prismaService', transaction);
 
-      const user = await userService.update(
-        {
+      const user = await userService.update({
+        where: {
           id: POPULATE_USER_DEFAULT.id,
         },
-        {
+        userUpdateInDto: {
           address: {
             cep: '12345676',
             number: '123',
           },
           roleId: SEED_ROLE_SALES_ID,
         },
-      );
+      });
 
       expect(user).toHaveProperty('address.cep', '12345676');
       expect(user).toHaveProperty('address.number', '123');
@@ -376,28 +388,28 @@ describe('UserService', () => {
     await prismaService.transaction(async (transaction) => {
       Reflect.set(userService, 'prismaService', transaction);
 
-      await userService.update(
-        {
+      await userService.update({
+        where: {
           id: POPULATE_USER_DEFAULT.id,
         },
-        {
+        userUpdateInDto: {
           address: {
             cep: '12345676',
             number: '123',
           },
         },
-      );
+      });
 
-      const user = await userService.update(
-        {
+      const user = await userService.update({
+        where: {
           id: POPULATE_USER_DEFAULT.id,
         },
-        {
+        userUpdateInDto: {
           address: {
             street: 'Broadway',
           },
         },
-      );
+      });
 
       expect(user).toHaveProperty('address.cep', '12345676');
       expect(user).toHaveProperty('address.number', '123');
@@ -412,14 +424,14 @@ describe('UserService', () => {
       Reflect.set(userService, 'prismaService', transaction);
 
       expect(
-        await userService.update(
-          {
+        await userService.update({
+          where: {
             id: POPULATE_USER_DEFAULT.id,
           },
-          {
+          userUpdateInDto: {
             isActive: false,
           },
-        ),
+        }),
       ).toBeTruthy();
 
       transaction.rollback();
@@ -431,14 +443,14 @@ describe('UserService', () => {
       Reflect.set(userService, 'prismaService', transaction);
 
       await expect(
-        userService.update(
-          {
+        userService.update({
+          where: {
             id: POPULATE_USER_INACTIVE.id,
           },
-          {
+          userUpdateInDto: {
             isActive: false,
           },
-        ),
+        }),
       ).rejects.toThrow(NotFoundException);
 
       transaction.rollback();
@@ -450,14 +462,14 @@ describe('UserService', () => {
       Reflect.set(userService, 'prismaService', transaction);
 
       expect(
-        await userService.update(
-          {
+        await userService.update({
+          where: {
             id: POPULATE_USER_INACTIVE.id,
           },
-          {
+          userUpdateInDto: {
             isActive: true,
           },
-        ),
+        }),
       ).toBeTruthy();
 
       transaction.rollback();
@@ -469,14 +481,14 @@ describe('UserService', () => {
       Reflect.set(userService, 'prismaService', transaction);
 
       await expect(
-        userService.update(
-          {
+        userService.update({
+          where: {
             id: POPULATE_USER_DEFAULT.id,
           },
-          {
+          userUpdateInDto: {
             isActive: true,
           },
-        ),
+        }),
       ).rejects.toThrow(NotFoundException);
 
       transaction.rollback();
@@ -488,16 +500,16 @@ describe('UserService', () => {
       Reflect.set(userService, 'prismaService', transaction);
 
       expect(
-        await userService.update(
-          {
+        await userService.update({
+          where: {
             id: POPULATE_USER_DEFAULT.id,
           },
-          {
+          userUpdateInDto: {
             cpf: null,
             birthDate: null,
             cellPhone: null,
           },
-        ),
+        }),
       ).toBeTruthy();
 
       transaction.rollback();
@@ -505,45 +517,48 @@ describe('UserService', () => {
   });
 
   it('should find one user by id', async () => {
-    const user = await userService.findOne(
-      { id: POPULATE_USER_DEFAULT.id },
-      { id: true },
-    );
+    const user = await userService.findOne({
+      where: { id: POPULATE_USER_DEFAULT.id },
+      select: { id: true },
+    });
 
     expect(user).toHaveProperty('id');
   });
 
   it('should not find inactive user', async () => {
     await expect(
-      userService.findOne({ id: POPULATE_USER_INACTIVE.id }, { id: true }),
+      userService.findOne({
+        where: { id: POPULATE_USER_INACTIVE.id },
+        select: { id: true },
+      }),
     ).rejects.toThrow(NotFoundException);
   });
 
   it('should find inactive user', async () => {
-    const user = await userService.findOne(
-      { id: POPULATE_USER_INACTIVE.id },
-      { id: true },
-      false,
-    );
+    const user = await userService.findOne({
+      where: { id: POPULATE_USER_INACTIVE.id },
+      select: { id: true },
+      onlyActive: false,
+    });
 
     expect(user).toHaveProperty('id');
   });
 
   it('should find many users with pagination', async () => {
-    const result = await userService.findMany(
-      { page: 1 },
-      POPULATE_USER_DEFAULT.id,
-    );
+    const result = await userService.findMany({
+      userFindManyInDto: { page: 1 },
+      userId: POPULATE_USER_DEFAULT.id,
+    });
 
     expect(result).toHaveProperty('total', 24);
     expect(result.data).toHaveLength(ITEMS_PER_PAGE);
   });
 
   it('should find many users without signed user', async () => {
-    const result = await userService.findMany(
-      { page: 1 },
-      POPULATE_USER_DEFAULT.id,
-    );
+    const result = await userService.findMany({
+      userFindManyInDto: { page: 1 },
+      userId: POPULATE_USER_DEFAULT.id,
+    });
 
     const signedUser = result.data.find(
       (item) => item.id === POPULATE_USER_DEFAULT.id,
@@ -557,12 +572,12 @@ describe('UserService', () => {
   it('should find many users by full name', async () => {
     const spy = jest.spyOn(prismaService.user, 'findMany');
 
-    await userService.findMany(
-      {
+    await userService.findMany({
+      userFindManyInDto: {
         fullName: POPULATE_USER_DEFAULT.fullName,
       },
-      POPULATE_USER_DEFAULT.id,
-    );
+      userId: POPULATE_USER_DEFAULT.id,
+    });
 
     expect(spy).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -579,10 +594,10 @@ describe('UserService', () => {
   it('should find many users ordered by full name', async () => {
     const spy = jest.spyOn(prismaService.user, 'findMany');
 
-    await userService.findMany(
-      { orderBy: 'fullName' },
-      POPULATE_USER_DEFAULT.id,
-    );
+    await userService.findMany({
+      userFindManyInDto: { orderBy: 'fullName' },
+      userId: POPULATE_USER_DEFAULT.id,
+    });
 
     expect(spy).toHaveBeenCalledWith(
       expect.objectContaining({ orderBy: [{ fullName: 'asc' }] }),
@@ -590,10 +605,10 @@ describe('UserService', () => {
   });
 
   it('should find many users by status igual to inactive', async () => {
-    const result = await userService.findMany(
-      { status: 'inactive' },
-      POPULATE_USER_DEFAULT.id,
-    );
+    const result = await userService.findMany({
+      userFindManyInDto: { status: 'inactive' },
+      userId: POPULATE_USER_DEFAULT.id,
+    });
 
     expect(result).toHaveProperty('total', 7);
   });
@@ -601,15 +616,15 @@ describe('UserService', () => {
   it('should find many users with many filters', async () => {
     const spy = jest.spyOn(prismaService.user, 'findMany');
 
-    await userService.findMany(
-      {
+    await userService.findMany({
+      userFindManyInDto: {
         page: 1,
         status: 'active',
         fullName: POPULATE_USER_DEFAULT.fullName,
         orderBy: 'fullName',
       },
-      POPULATE_USER_DEFAULT.id,
-    );
+      userId: POPULATE_USER_DEFAULT.id,
+    });
 
     expect(spy).toHaveBeenCalledWith({
       skip: 0,
@@ -629,9 +644,9 @@ describe('UserService', () => {
   });
 
   it('should get user permissions', async () => {
-    const permissions = await userService.getPermissions(
-      POPULATE_USER_DEFAULT.id,
-    );
+    const permissions = await userService.getPermissions({
+      userId: POPULATE_USER_DEFAULT.id,
+    });
 
     expect(permissions).toEqual({
       USERS: {
@@ -646,14 +661,14 @@ describe('UserService', () => {
   it('should generate pdf', async () => {
     const spy = jest.spyOn(PdfService.prototype, 'generatePdf');
 
-    await userService.generatePdf(
-      {
+    await userService.generatePdf({
+      userGeneratePdfInDto: {
         status: 'active',
         fullName: POPULATE_USER_DEFAULT.fullName,
         orderBy: 'fullName',
       },
-      POPULATE_USER_DEFAULT.id,
-    );
+      userId: POPULATE_USER_DEFAULT.id,
+    });
 
     expect(spy).toHaveBeenCalled();
   });
@@ -661,14 +676,14 @@ describe('UserService', () => {
   it('should generate sheet', async () => {
     const spy = jest.spyOn(SheetService.prototype, 'generateSheet');
 
-    await userService.generateSheet(
-      {
+    await userService.generateSheet({
+      userGenerateSheetInDto: {
         status: 'active',
         fullName: POPULATE_USER_DEFAULT.fullName,
         orderBy: 'fullName',
       },
-      POPULATE_USER_DEFAULT.id,
-    );
+      userId: POPULATE_USER_DEFAULT.id,
+    });
 
     expect(spy).toHaveBeenCalled();
   });

@@ -1,18 +1,18 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { OrganizationCreateInDto } from './organization.schema';
-import { Prisma } from '@prisma/client';
 import { PrismaService } from '../database/prisma.service';
-import { GetCallback, Transaction } from '../types';
+import { GetCallback } from '../types';
 import { verifyDuplicated } from '../utils/verifyDuplicated';
+import {
+  CreateInput,
+  FindOneInput,
+  VerifyDuplicatedInput,
+} from './organization.type';
 
 @Injectable()
 export class OrganizationService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async create(
-    organizationCreateInDto: OrganizationCreateInDto,
-    transaction?: Transaction,
-  ) {
+  async create({ organizationCreateInDto, transaction }: CreateInput) {
     const database = transaction || this.prismaService;
 
     await this.verifyDuplicated({ cnpj: organizationCreateInDto.cnpj });
@@ -28,16 +28,12 @@ export class OrganizationService {
     };
   }
 
-  async findOne(
-    organizationWhereUniqueInput: Prisma.OrganizationWhereUniqueInput,
-    select: Prisma.OrganizationSelect,
-    onlyActive: boolean = true,
-  ) {
+  async findOne({ where, select, onlyActive = true }: FindOneInput) {
     if (onlyActive) {
-      organizationWhereUniqueInput['isActive'] = true;
+      where['isActive'] = true;
     }
     const organization = await this.prismaService.organization.findFirst({
-      where: organizationWhereUniqueInput,
+      where: where,
       select,
     });
     if (onlyActive && !organization) {
@@ -46,7 +42,10 @@ export class OrganizationService {
     return organization;
   }
 
-  async verifyDuplicated(properties: Partial<Record<'cnpj', string>>) {
-    await verifyDuplicated(properties, this.findOne.bind(this) as GetCallback);
+  async verifyDuplicated({ cnpj }: VerifyDuplicatedInput) {
+    await verifyDuplicated({
+      properties: { cnpj },
+      getCallback: this.findOne.bind(this) as GetCallback,
+    });
   }
 }

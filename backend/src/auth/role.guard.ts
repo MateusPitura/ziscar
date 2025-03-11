@@ -34,8 +34,8 @@ class RoleGuardHandler implements CanActivate {
     const request = context.switchToHttp().getRequest<AuthRequest>();
     const { userId } = request.authToken;
 
-    const user = await this.userService.findOne(
-      {
+    const user = await this.userService.findOne({
+      where: {
         id: userId,
         role: {
           permissions: {
@@ -46,12 +46,11 @@ class RoleGuardHandler implements CanActivate {
           },
         },
       },
-      {
+      select: {
         id: true,
       },
-      true,
-      false,
-    );
+      showNotFoundError: false,
+    });
 
     if (!user) {
       throw new ForbiddenException(formatDeniedMessage({ resource, action }));

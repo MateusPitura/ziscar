@@ -24,22 +24,16 @@ const SchemaUserCreateInDto = SchemaUserPostInDto.extend({
   clientId: s.id(),
 });
 
-const SchemaUserFetchInDto = s.object({
+const SchemaUserFindManyInDto = s.object({
   page: s.number().optional(),
   status: s.list(['active', 'inactive']).optional(),
   fullName: s.fullName().optional(),
   orderBy: s.list(['fullName', 'email']).optional(),
 });
 
-const SchemaUserFindManyInDto = SchemaUserFetchInDto;
+const SchemaUserGeneratePdfInDto = SchemaUserFindManyInDto.omit({ page: true });
 
-const SchemaUserPdfInDto = SchemaUserFetchInDto.omit({ page: true });
-
-const SchemaUserGeneratePdfInDto = SchemaUserPdfInDto;
-
-const SchemaUserSheetInDto = SchemaUserPdfInDto;
-
-const SchemaUserGenerateSheetInDto = SchemaUserSheetInDto;
+const SchemaUserGenerateSheetInDto = SchemaUserGeneratePdfInDto;
 
 const SchemaUserUpdateInDto = SchemaUserPostInDto.partial().extend({
   password: s.password().optional(),
@@ -62,12 +56,9 @@ export const SchemaUserPatchInDto = SchemaUserUpdateInDto.omit({
 
 export class UserPostInDto extends createZodDto(SchemaUserPostInDto) {}
 export class UserCreateInDto extends createZodDto(SchemaUserCreateInDto) {}
-export class UserFetchInDto extends createZodDto(SchemaUserFetchInDto) {}
-export class UserPdfInDto extends createZodDto(SchemaUserPdfInDto) {}
 export class UserGeneratePdfInDto extends createZodDto(
   SchemaUserGeneratePdfInDto,
 ) {}
-export class UserSheetInDto extends createZodDto(SchemaUserSheetInDto) {}
 export class UserGenerateSheetInDto extends createZodDto(
   SchemaUserGenerateSheetInDto,
 ) {}
