@@ -54,7 +54,7 @@ export class AuthService {
 
     res?.cookie(COOKIE_JWT_NAME, token, {
       httpOnly: true,
-      secure: false, // TODO: Habilitar no HTTPS
+      secure: true,
       sameSite: 'none',
     });
 
