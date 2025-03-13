@@ -16,7 +16,7 @@ import { UserService } from '../user/user.service';
 import { EmailService } from '../email/email.service';
 import { PrismaService } from '../database/prisma.service';
 import { generateRandomPassword } from '../utils/generateRandomPassword';
-import { SEED_ROLE_SALES_ID } from '@shared/constants';
+import { SEED_ROLE_ADMIN_ID } from '@shared/constants';
 import { COOKIE_JWT_NAME, FRONTEND_URL } from 'src/constants';
 
 @Injectable()
@@ -54,7 +54,7 @@ export class AuthService {
 
     res?.cookie(COOKIE_JWT_NAME, token, {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === 'development' ? false : true,
       sameSite: 'none',
     });
 
@@ -84,7 +84,7 @@ export class AuthService {
           email: authSignUpInDto.email,
           fullName: authSignUpInDto.fullName,
           clientId,
-          roleId: SEED_ROLE_SALES_ID,
+          roleId: SEED_ROLE_ADMIN_ID,
         },
         transaction,
       });

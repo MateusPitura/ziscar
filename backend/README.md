@@ -5,6 +5,7 @@ BACKEND:
 - Execute `docker-compose up --build -d`
 - Execute `npm run prisma:dev`, para preparar o banco para desenvolvimento
 - Execute `npm run test:setup`, para preparar o banco para testes
+- Para testar os endpoints, use `npm run start:dev`, para usar com o frontend faça `npm start`. Isso é necessário para configurar os cookies corretamente
 
 TESTES:
 - Para executar os testes faça `npm run test`
