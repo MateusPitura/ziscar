@@ -40,7 +40,7 @@ export default function PageTopBar({
           iconLeft={<MenuIcon />}
         />
         <span className="text-headline-small text-light-onSurface flex items-center">
-          Projeto de Software
+          Ziscar
         </span>
       </div>
       <div className="flex flex-2 gap-4 items-center">

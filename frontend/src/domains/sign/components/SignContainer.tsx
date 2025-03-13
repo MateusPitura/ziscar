@@ -26,7 +26,7 @@ export default function SignContainer(): ReactNode {
       }
       default:
         return (
-          <SignCard title="Projeto de Software">
+          <SignCard title="Ziscar">
             <SignInForm />
           </SignCard>
         );

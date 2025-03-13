@@ -1,8 +1,8 @@
 version: "3.8"
 services:
-  postgres:
+  ziscar_db:
     image: postgres:16
-    container_name: pds_db
+    container_name: ziscar_db
     restart: always
     env_file: .env
     environment:
@@ -12,11 +12,11 @@ services:
     ports:
       - "${DB_PORT}:5432"
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - db-data:/var/lib/postgresql/data
 
-  test_postgres:
+  test_ziscar_db:
     image: postgres:16
-    container_name: test_pds_db
+    container_name: test_ziscar_db
     restart: always
     env_file: .env
     environment:
@@ -26,7 +26,7 @@ services:
     ports:
       - "${TEST_DB_PORT}:5432"
     volumes:
-      - test-pgdata:/var/lib/postgresql/data
+      - test-db-data:/var/lib/postgresql/data
 
   # backend:
   #   build:
@@ -53,5 +53,5 @@ services:
   #     - "3001:3001"
 
 volumes:
-  pgdata:
-  test-pgdata:
+  db-data:
+  test-db-data:

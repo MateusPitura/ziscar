@@ -11,6 +11,6 @@ export default ({ mode }: { mode: string }) => {
         "@shared": path.resolve(__dirname, "../shared/src"),
       },
     },
-    base: mode === "production" ? "/projeto-de-software" : "/",
+    base: mode === "production" ? "/ziscar" : "/",
   });
 };

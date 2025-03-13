@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://mateuspitura.github.io/projeto-de-software/",
+  "homepage": "https://mateuspitura.github.io/ziscar/",
   "scripts": {
     "predeploy": "tsc -b && vite build --mode production",
     "build": "tsc -b && vite build --mode development",
