@@ -28,29 +28,19 @@ services:
     volumes:
       - test-db-data:/var/lib/postgresql/data
 
-  # backend:
-  #   build:
-  #     context: ./backend
-  #     dockerfile: ../backend.Dockerfile
-  #   container_name: nest_backend
-  #   restart: always
-  #   depends_on:
-  #     - postgres
-  #   environment:
-  #     DATABASE_URL: postgres://user:password@postgres:5432/mydb
-  #   ports:
-  #     - "3000:3000"
-
-  # frontend:
-  #   build:
-  #     context: ./frontend
-  #     dockerfile: ../frontend.Dockerfile
-  #   container_name: react_frontend
-  #   restart: always
-  #   depends_on:
-  #     - backend
-  #   ports:
-  #     - "3001:3001"
+  backend:
+    build:
+      context: .
+      dockerfile: backend.Dockerfile
+    container_name: ziscar_backend
+    restart: always
+    env_file: .env
+    environment:
+      - DATABASE_URL=postgresql://${DB_USERNAME}:${DB_PASSWORD}@ziscar_db:5432/${DB_NAME}?schema=public
+    depends_on:
+      - ziscar_db
+    ports:
+      - "3000:3000"
 
 volumes:
   db-data:
