@@ -21,4 +21,6 @@ RUN npx prisma generate
 EXPOSE 3000
 
 # Run the application
-CMD ["npm", "start"]
+RUN npm run build
+
+CMD ["npm", "run", "start:prod"]
