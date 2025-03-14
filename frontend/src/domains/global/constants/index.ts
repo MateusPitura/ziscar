@@ -1,3 +1,3 @@
 export const BLANK = " ";
 
-export const BASE_URL = "http://localhost:3000";
+export const BASE_URL = "http://164.152.51.188";
