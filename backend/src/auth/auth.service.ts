@@ -54,8 +54,8 @@ export class AuthService {
 
     res?.cookie(COOKIE_JWT_NAME, token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'development' ? false : true,
-      sameSite: 'none',
+      secure: process.env.NODE_ENV === 'production' ? true : false,
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
     });
 
     return res?.json(true);

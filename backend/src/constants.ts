@@ -1,6 +1,9 @@
 export const COOKIE_JWT_NAME = 'jwt';
 
-export const FRONTEND_URL = 'http://localhost:5173';
+export const FRONTEND_URL =
+  process.env.NODE_ENV === 'production'
+    ? 'https://ziscar.me'
+    : 'http://localhost:5173';
 
 export const POPULATE_USER_DEFAULT = {
   id: 150,

@@ -10,9 +10,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ZodType } from "zod";
 import { Childrenable } from "@/domains/global/types";
 
-const DevTool = import.meta.env.DEV
-  ? lazy(() => import("@/domains/global/components/HookFormDevTool"))
-  : () => null;
+const DevTool = import.meta.env.PROD
+  ? () => null
+  : lazy(() => import("@/domains/global/components/HookFormDevTool"));
 
 interface FormProperties<T extends FieldValues> extends Childrenable {
   onSubmit: (data: T) => void;
