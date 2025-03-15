@@ -1,3 +1,3 @@
 export const BLANK = " ";
 
-export const BASE_URL = "http://164.152.51.188";
+export const BASE_URL = "https://pituramateus.cfd";
