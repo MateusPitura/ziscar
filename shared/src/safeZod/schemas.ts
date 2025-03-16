@@ -42,7 +42,7 @@ export const id = () => number();
 export const email = () => string().email({ message: "Email inválido" });
 
 export const fullName = () =>
-  string().regex(/^[a-zA-Z\s]+$/, {
+  string().regex(/^[^0-9]+$/, {
     message: "Nome completo inválido",
   });
 
