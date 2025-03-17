@@ -32,7 +32,8 @@ export default function NewUsersContainer(): ReactElement {
     mutationFn: createUser,
     onSuccess: () => {
       showSuccessSnackbar({
-        title: "Confira o email para ativar a conta",
+        title: "Enviaremos um email para definir a senha",
+        description: "Confira também a caixa de spam",
       });
       navigate("/users");
       queryClient.invalidateQueries({ queryKey: ["user"] });

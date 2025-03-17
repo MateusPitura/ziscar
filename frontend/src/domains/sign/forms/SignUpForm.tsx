@@ -34,8 +34,8 @@ export default function SignUpForm(): ReactNode {
     mutationFn: handleSignUp,
     onSuccess: () => {
       showSuccessSnackbar({
-        title: "Confira seu email",
-        description: "Enviaremos um email para definir a senha",
+        title: "Enviaremos um email para definir a senha",
+        description: "Confira também a caixa de spam",
       });
     },
   });

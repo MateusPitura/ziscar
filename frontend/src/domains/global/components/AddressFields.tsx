@@ -53,7 +53,7 @@ export default function AddressFields<T extends FieldValues>({
     if (cepInfo?.erro) {
       showErrorSnackbar({
         title: "CEP não encontrado",
-        description: "Por favor, insira um CEP válido",
+        description: "Insira um CEP válido",
       });
       return;
     }
