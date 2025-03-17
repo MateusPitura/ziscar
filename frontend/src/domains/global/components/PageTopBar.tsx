@@ -27,7 +27,7 @@ export default function PageTopBar({
     onSuccess: () => {
       queryClient.clear();
       localStorage.clear();
-      window.location.href = '/sign';
+      window.location.href = '/';
     }
   });
 

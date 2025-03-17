@@ -80,7 +80,7 @@ export class UserService {
     void this.emailService.sendEmail({
       to: userCreateInDto.email,
       title: 'Confirme a criação da sua conta',
-      body: `${FRONTEND_URL}/sign?token=${token}`,
+      body: `${FRONTEND_URL}/?token=${token}`,
     });
 
     return true;

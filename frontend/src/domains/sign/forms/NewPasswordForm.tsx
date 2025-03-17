@@ -37,7 +37,7 @@ export default function NewPasswordForm(): ReactNode {
   const { mutate, isPending } = useMutation({
     mutationFn: handleNewPassword,
     onSuccess: () => {
-      navigate("/sign");
+      navigate("/");
       handleStep("SIGN_IN");
       showSuccessSnackbar({
         title: "Senha definida com sucesso",

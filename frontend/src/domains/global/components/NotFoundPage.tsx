@@ -8,7 +8,7 @@ export default function NotFoundPage(): ReactElement {
       <span className="text-light-onSurface text-headline-large">
         A página que você procura não foi encontrada
       </span>
-      <Link to="/sign">
+      <Link to="/">
         <span className="text-light-onSurface text-headline-large">
           Vá para o <span className="text-light-primary underline">login</span>
         </span>

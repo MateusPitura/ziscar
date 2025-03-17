@@ -77,7 +77,7 @@ export const privateRoutes: RouteGroup[] = [
     shoudDisplay: true,
     routes: [
       {
-        path: "/",
+        path: "/profile",
         displayName: "Perfil",
         icon: <SettingsOutlinedIcon />,
         entryPage: <Profile />,
@@ -106,7 +106,7 @@ export const publicRoutes: RouteGroup[] = [
     shoudDisplay: false,
     routes: [
       {
-        path: "/sign",
+        path: "/",
         entryPage: <Sign />,
         shouldDisplay: false,
       },

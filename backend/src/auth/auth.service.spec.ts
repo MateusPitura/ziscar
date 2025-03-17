@@ -231,7 +231,7 @@ describe('AuthService', () => {
     expect(spy).toHaveBeenCalledWith({
       to: POPULATE_USER_DEFAULT.email,
       title: 'Redefina sua senha',
-      body: `${FRONTEND_URL}/sign?token=`,
+      body: `${FRONTEND_URL}/?token=`,
     });
   });
 

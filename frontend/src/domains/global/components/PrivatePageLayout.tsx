@@ -28,7 +28,7 @@ export default function PrivatePageLayout(): ReactElement {
 
   useEffect(() => {
     if (!isLoading && !userPermissions) {
-      navigate("/sign");
+      navigate("/");
     }
   }, [isLoading, userPermissions]);
 

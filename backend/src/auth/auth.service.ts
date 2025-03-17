@@ -121,7 +121,7 @@ export class AuthService {
     void this.emailService.sendEmail({
       to: authForgetPasswordInDto.email,
       title: 'Redefina sua senha',
-      body: `${FRONTEND_URL}/sign?token=${token}`,
+      body: `${FRONTEND_URL}/?token=${token}`,
     });
 
     return true;

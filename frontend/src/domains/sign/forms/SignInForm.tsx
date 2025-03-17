@@ -38,7 +38,7 @@ export default function SignInForm(): ReactNode {
     mutationFn: handleSignIn,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["permissions"] });
-      navigate("/");
+      navigate("/profile");
     },
   });
 
