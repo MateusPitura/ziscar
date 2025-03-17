@@ -5,7 +5,9 @@
   "type": "module",
   "homepage": "https://mateuspitura.github.io/ziscar/",
   "scripts": {
-    "build": "tsc -b && vite build --mode production",
+    "predeploy": "npm run build",
+    "build": "tsc -b && vite build",
+    "deploy": "gh-pages -d dist",
     "dev": "vite",
     "lint": "eslint ."
   },
@@ -48,6 +50,7 @@
     "eslint": "^9.17.0",
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.16",
+    "gh-pages": "^6.3.0",
     "globals": "^15.14.0",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.17",
