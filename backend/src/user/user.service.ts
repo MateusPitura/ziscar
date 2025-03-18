@@ -195,7 +195,7 @@ export class UserService {
       throw new NotFoundException('Permissões não encontradas');
     }
 
-    const permissionsFormatted = PERMISSIONS;
+    const permissionsFormatted = structuredClone(PERMISSIONS);
     for (const permission of role.permissions) {
       permissionsFormatted[permission.resource][permission.action] = true;
     }
