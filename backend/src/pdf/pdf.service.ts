@@ -1,26 +1,27 @@
 import { Injectable } from '@nestjs/common';
-import * as PDFDocument from 'pdfkit';
+import * as puppeteer from 'puppeteer';
+
+interface GeneratePdfProperties {
+  html: string;
+}
 
 @Injectable()
 export class PdfService {
-  async generatePdf(
-    generatePdfCallback: (doc: PDFKit.PDFDocument) => void,
-  ): Promise<Buffer> {
-    const doc = new PDFDocument();
-    const buffers: Buffer[] = [];
-
-    doc.on('data', (chunk: Buffer) => buffers.push(chunk));
-
-    doc.fontSize(14);
-
-    generatePdfCallback(doc);
-
-    doc.end();
-
-    return new Promise((resolve) => {
-      doc.on('end', () => {
-        resolve(Buffer.concat(buffers));
-      });
+  async generatePdf({
+    html,
+  }: GeneratePdfProperties): Promise<Uint8Array<ArrayBufferLike>> {
+    const browser = await puppeteer.launch({
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
+
+    const page = await browser.newPage();
+
+    await page.setContent(html, { waitUntil: 'networkidle0' });
+
+    const pdfBuffer = await page.pdf({ format: 'A4', printBackground: true });
+
+    await browser.close();
+
+    return pdfBuffer;
   }
 }

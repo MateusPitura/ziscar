@@ -276,13 +276,17 @@ export class UserService {
       throw new BadRequestException('Nenhum dado encontrado');
     }
 
-    return await this.pdfService.generatePdf((doc) => {
-      for (const user of users.data) {
-        doc.text(`Nome: ${user.fullName}`);
-        doc.text(`Email: ${user.email}`);
-        doc.text('\n');
-      }
-    });
+    let pdfPayload = '<h1>User Report</h1><div class="users">';
+    for (const user of users.data) {
+      pdfPayload += `
+      <div class="user">
+        <p><strong>Name:</strong> ${user.fullName}</p>
+        <p><strong>Email:</strong> ${user.email}</p>
+      </div>
+    `;
+    }
+    pdfPayload += '</div>';
+    return await this.pdfService.generatePdf({ html: pdfPayload });
   }
 
   async generateSheet({

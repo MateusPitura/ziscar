@@ -98,7 +98,7 @@ export class UserController {
       'Content-Disposition': 'attachment; filename="report.pdf"',
     });
 
-    res?.send(pdfBuffer);
+    res?.end(pdfBuffer);
   }
 
   @Get('user/sheet')
