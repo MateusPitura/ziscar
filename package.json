@@ -4,6 +4,14 @@
   "scripts": {
     "frontend": "cd frontend && npm run dev",
     "backend": "cd backend && npm run start",
-    "start": "npm run frontend & npm run backend"
+    "start": "npm run frontend & npm run backend",
+    "up:db": "docker-compose up --build -d ziscar_db",
+    "down:db": "docker-compose down ziscar_db",
+    "up:test_db": "docker-compose up --build -d test_ziscar_db",
+    "down:test_db": "docker-compose down test_ziscar_db",
+    "up:backend-dev": "docker-compose up --build -d backend_dev",
+    "down:backend-dev": "docker-compose down backend_dev",
+    "up:backend-prod": "docker-compose up --build -d backend_prod",
+    "down:backend-prod": "docker-compose down backend_prod"
   }
 }

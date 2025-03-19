@@ -1,10 +1,9 @@
-version: "3.8"
 services:
   ziscar_db:
     image: postgres:16
     container_name: ziscar_db
-    restart: always
     env_file: .env
+    restart: ${RESTART_POLICY}
     environment:
       - POSTGRES_USER=${DB_USERNAME}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
@@ -17,7 +16,6 @@ services:
   test_ziscar_db:
     image: postgres:16
     container_name: test_ziscar_db
-    restart: always
     env_file: .env
     environment:
       - POSTGRES_USER=${TEST_DB_USERNAME}
@@ -28,17 +26,25 @@ services:
     volumes:
       - test-db-data:/var/lib/postgresql/data
 
-  backend:
+  backend_dev:
     build:
       context: .
       dockerfile: backend.Dockerfile
-    container_name: ziscar_backend
-    restart: always
+    container_name: ziscar_backend_dev
     env_file: .env
     environment:
       - DATABASE_URL=postgresql://${DB_USERNAME}:${DB_PASSWORD}@ziscar_db:5432/${DB_NAME}?schema=public
     depends_on:
       - ziscar_db
+    ports:
+      - "3000:3000"
+
+  backend_prod:
+    build:
+      context: .
+      dockerfile: backend.Dockerfile
+    container_name: ziscar_backend_prod
+    restart: always
     ports:
       - "3000:3000"
 
