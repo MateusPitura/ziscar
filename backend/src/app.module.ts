@@ -11,6 +11,7 @@ import { ZodValidationPipe } from 'nestjs-zod';
 import { PdfModule } from './pdf/pdf.module';
 import { SheetModule } from './sheet/sheet.module';
 import { AuditInterceptor } from './audit/audit.interceptor';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -34,5 +35,6 @@ import { AuditInterceptor } from './audit/audit.interceptor';
       useClass: AuditInterceptor,
     },
   ],
+  controllers: [AppController],
 })
 export class AppModule {}
