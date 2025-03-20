@@ -1,6 +1,9 @@
 # Use the Node.js image
 FROM node:22
 
+ARG APP_ENV
+ENV APP_ENV=$APP_ENV
+
 # Install necessary dependencies for Puppeteer
 RUN apt update && apt install -y \
     ca-certificates \
@@ -63,4 +66,4 @@ EXPOSE 3000
 # Run the application
 RUN npm run build
 
-CMD ["npm", "run", "start:prod"]
+CMD ["sh", "-c", "npm run start:${APP_ENV}"]

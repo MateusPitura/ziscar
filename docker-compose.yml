@@ -30,6 +30,8 @@ services:
     build:
       context: .
       dockerfile: backend.Dockerfile
+      args:
+        - APP_ENV=dev
     container_name: ziscar_backend_dev
     env_file: .env
     environment:
@@ -43,6 +45,8 @@ services:
     build:
       context: .
       dockerfile: backend.Dockerfile
+      args:
+        - APP_ENV=prod
     container_name: ziscar_backend_prod
     restart: always
     ports:
