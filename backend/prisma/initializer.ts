@@ -1,7 +1,7 @@
 import { execSync } from 'child_process';
 import { config } from 'dotenv';
 
-const path = process.env.NODE_ENV === 'test' ? '.env.test.local' : '.env';
+const path = process.env.NODE_ENV === 'test' ? '.env.test' : '.env';
 config({ path, override: true });
 
 function setup() {
