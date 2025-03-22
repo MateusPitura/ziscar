@@ -10,11 +10,11 @@ import { EmailService } from './email.service';
       useFactory: (configService: ConfigService) => {
         return {
           transport: {
-            host: configService.get<string>('EMAIL_HOST'),
-            port: Number(configService.get<string>('EMAIL_PORT')),
-            secure: !!configService.get<string>('EMAIL_SECURE'),
+            host: 'smtp.gmail.com',
+            port: 465,
+            secure: true,
             auth: {
-              user: configService.get<string>('EMAIL_USER'),
+              user: 'systemdigitalcar@gmail.com',
               pass: configService.get<string>('EMAIL_APPPASSWORD'),
             },
           },
