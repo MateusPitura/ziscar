@@ -4,7 +4,7 @@ FROM node:22
 ARG APP_ENV
 ENV APP_ENV=$APP_ENV
 
-# Install necessary dependencies for Puppeteer
+# Install necessary dependencies for Puppeteer (PDF)
 RUN apt update && apt install -y \
     ca-certificates \
     fonts-liberation \

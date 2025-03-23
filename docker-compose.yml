@@ -41,6 +41,14 @@ services:
     ports:
       - "3000:3000"
 
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend.Dockerfile
+    container_name: ziscar_frontend
+    ports:
+      - "5173:5173"
+
   backend_prod:
     build:
       context: .

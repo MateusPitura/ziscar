@@ -1,9 +1,8 @@
 GERAL:
 - Configure os .env do backend e do root
 - Instale a extensão [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) para fazer requisições através dos arquivos .http
-- Inicie o banco de dev com `npm run up:db`
-- Execute `backend/npm run prisma:dev` para preparar o banco para desenvolvimento
-- Inicie o backend através do docker com `npm run up:backend-dev` e o frontend com `frontend/npm run dev`. Ou inicie ambos sem docker com `npm start`
+- Inicie o backend, frontend e banco através do docker com `npm run up:dev`
+- Execute `backend/npm run prisma:dev` para preparar o banco para desenvolvimento, isso irá aplicar migrations, rodar seeds e popular. Use também quando precisar redefinir o banco
 
 TESTES:
 - Execute `backend/npm run test:setup` para preparar o banco para testes
@@ -28,5 +27,5 @@ SHARED:
 
 DEPLOY:
 - O frontend é hospeado no Git Hub Pages, para realizar o deploy da main faça `frontend/npm run deploy`
-- O banco é hospedado em uma VM no OCI. Para fazer o deploy execute `npm run up:db`. Para configurar o banco a primeira vez exeute `backend/npm run prisma:deploy` estando conecta na VM
+- O banco é hospedado em uma VM no OCI. Para fazer o deploy execute `npm run up:db` estando conecta na VM. A primeira vez, execute `backend/npm run prisma:deploy` para preparar o banco para produção, isso irá aplicar migrations e rodar seeds
 - O backend é hospedado em uma VM no OCI. Para fazer o deploy execute `npm run up:backend-prod` estando conectado na VM
