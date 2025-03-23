@@ -4,7 +4,7 @@ import { UserService } from './user.service';
 import { PrismaService } from '../database/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import {
-  POPULATE_CLIENT_DEFAULT_ID,
+  POPULATE_CLIENT_PRIMARY_ID,
   POPULATE_USER_DEFAULT,
   POPULATE_USER_INACTIVE,
 } from '../constants';
@@ -69,7 +69,7 @@ describe('UserController', () => {
       ) as unknown as AuthRequest;
       request.authToken = {
         userId: POPULATE_USER_DEFAULT.id,
-        clientId: POPULATE_CLIENT_DEFAULT_ID,
+        clientId: POPULATE_CLIENT_PRIMARY_ID,
       };
 
       expect(
@@ -90,7 +90,7 @@ describe('UserController', () => {
     ) as unknown as AuthRequest;
     request.authToken = {
       userId: POPULATE_USER_DEFAULT.id,
-      clientId: POPULATE_CLIENT_DEFAULT_ID,
+      clientId: POPULATE_CLIENT_PRIMARY_ID,
     };
 
     const user = await userController.getProfile(request);
@@ -106,7 +106,7 @@ describe('UserController', () => {
     ) as unknown as AuthRequest;
     request.authToken = {
       userId: POPULATE_USER_DEFAULT.id,
-      clientId: POPULATE_CLIENT_DEFAULT_ID,
+      clientId: POPULATE_CLIENT_PRIMARY_ID,
     };
 
     await expect(
@@ -120,7 +120,7 @@ describe('UserController', () => {
     ) as unknown as AuthRequest;
     request.authToken = {
       userId: POPULATE_USER_INACTIVE.id,
-      clientId: POPULATE_CLIENT_DEFAULT_ID,
+      clientId: POPULATE_CLIENT_PRIMARY_ID,
     };
 
     await expect(userController.getProfile(request)).rejects.toThrow(
@@ -134,7 +134,7 @@ describe('UserController', () => {
     ) as unknown as AuthRequest;
     request.authToken = {
       userId: 1,
-      clientId: POPULATE_CLIENT_DEFAULT_ID,
+      clientId: POPULATE_CLIENT_PRIMARY_ID,
     };
 
     const user = await userController.get(request, {
@@ -152,7 +152,7 @@ describe('UserController', () => {
     ) as unknown as AuthRequest;
     request.authToken = {
       userId: POPULATE_USER_DEFAULT.id,
-      clientId: POPULATE_CLIENT_DEFAULT_ID,
+      clientId: POPULATE_CLIENT_PRIMARY_ID,
     };
 
     await expect(
@@ -171,7 +171,7 @@ describe('UserController', () => {
       ) as unknown as AuthRequest;
       request.authToken = {
         userId: 1,
-        clientId: POPULATE_CLIENT_DEFAULT_ID,
+        clientId: POPULATE_CLIENT_PRIMARY_ID,
       };
 
       const user = await userController.patch(
@@ -199,7 +199,7 @@ describe('UserController', () => {
       ) as unknown as AuthRequest;
       request.authToken = {
         userId: POPULATE_USER_DEFAULT.id,
-        clientId: POPULATE_CLIENT_DEFAULT_ID,
+        clientId: POPULATE_CLIENT_PRIMARY_ID,
       };
 
       await expect(
@@ -225,7 +225,7 @@ describe('UserController', () => {
       ) as unknown as AuthRequest;
       request.authToken = {
         userId: POPULATE_USER_DEFAULT.id,
-        clientId: POPULATE_CLIENT_DEFAULT_ID,
+        clientId: POPULATE_CLIENT_PRIMARY_ID,
       };
 
       const user = await userController.patchProfile(request, {
@@ -248,7 +248,7 @@ describe('UserController', () => {
     ) as unknown as AuthRequest;
     request.authToken = {
       userId: POPULATE_USER_DEFAULT.id,
-      clientId: POPULATE_CLIENT_DEFAULT_ID,
+      clientId: POPULATE_CLIENT_PRIMARY_ID,
     };
 
     await userController.findMany(request, {
@@ -267,7 +267,7 @@ describe('UserController', () => {
           mode: 'insensitive',
         },
         isActive: true,
-        clientId: POPULATE_CLIENT_DEFAULT_ID,
+        clientId: POPULATE_CLIENT_PRIMARY_ID,
         NOT: {
           id: POPULATE_USER_DEFAULT.id,
         },
@@ -286,7 +286,7 @@ describe('UserController', () => {
       ) as unknown as AuthRequest;
       request.authToken = {
         userId: 1,
-        clientId: POPULATE_CLIENT_DEFAULT_ID,
+        clientId: POPULATE_CLIENT_PRIMARY_ID,
       };
 
       expect(
@@ -312,7 +312,7 @@ describe('UserController', () => {
       ) as unknown as AuthRequest;
       request.authToken = {
         userId: POPULATE_USER_DEFAULT.id,
-        clientId: POPULATE_CLIENT_DEFAULT_ID,
+        clientId: POPULATE_CLIENT_PRIMARY_ID,
       };
 
       await expect(
@@ -335,7 +335,7 @@ describe('UserController', () => {
     ) as unknown as AuthRequest;
     request.authToken = {
       userId: POPULATE_USER_DEFAULT.id,
-      clientId: POPULATE_CLIENT_DEFAULT_ID,
+      clientId: POPULATE_CLIENT_PRIMARY_ID,
     };
 
     const permissions = await userController.getPermissions(request);
@@ -349,7 +349,7 @@ describe('UserController', () => {
     ) as unknown as AuthRequest;
     request.authToken = {
       userId: POPULATE_USER_DEFAULT.id,
-      clientId: POPULATE_CLIENT_DEFAULT_ID,
+      clientId: POPULATE_CLIENT_PRIMARY_ID,
     };
 
     const response = await userController.generatePdf(request, {
@@ -367,7 +367,7 @@ describe('UserController', () => {
     ) as unknown as AuthRequest;
     request.authToken = {
       userId: POPULATE_USER_DEFAULT.id,
-      clientId: POPULATE_CLIENT_DEFAULT_ID,
+      clientId: POPULATE_CLIENT_PRIMARY_ID,
     };
 
     const response = await userController.generateSheet(request, {

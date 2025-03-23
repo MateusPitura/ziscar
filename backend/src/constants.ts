@@ -31,4 +31,5 @@ export const POPULATE_ORGANIZATION_INACTIVE = {
   cnpj: '12345678901235',
   isActive: false,
 };
-export const POPULATE_CLIENT_DEFAULT_ID = 145;
+export const POPULATE_CLIENT_PRIMARY_ID = 145;
+export const POPULATE_CLIENT_SECONDARY_ID = 154;

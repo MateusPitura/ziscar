@@ -2,7 +2,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { OrganizationService } from './organization.service';
 import { PrismaService } from '../database/prisma.service';
 import {
-  POPULATE_CLIENT_DEFAULT_ID,
+  POPULATE_CLIENT_PRIMARY_ID,
+  POPULATE_CLIENT_SECONDARY_ID,
   POPULATE_ORGANIZATION_DEFAULT,
   POPULATE_ORGANIZATION_INACTIVE,
 } from '../constants';
@@ -29,7 +30,7 @@ describe('OrganizationService', () => {
         organizationCreateInDto: {
           name: 'Wayne Enterprises',
           cnpj: '12345678901236',
-          clientId: POPULATE_CLIENT_DEFAULT_ID,
+          clientId: POPULATE_CLIENT_PRIMARY_ID,
         },
       });
 
@@ -45,7 +46,7 @@ describe('OrganizationService', () => {
         organizationCreateInDto: {
           name: 'Wayne Enterprises',
           cnpj: POPULATE_ORGANIZATION_DEFAULT.cnpj,
-          clientId: POPULATE_CLIENT_DEFAULT_ID,
+          clientId: POPULATE_CLIENT_PRIMARY_ID,
         },
       }),
     ).rejects.toThrow(ConflictException);
@@ -57,7 +58,7 @@ describe('OrganizationService', () => {
         organizationCreateInDto: {
           name: 'Stark Industries',
           cnpj: POPULATE_ORGANIZATION_INACTIVE.cnpj,
-          clientId: POPULATE_CLIENT_DEFAULT_ID,
+          clientId: POPULATE_CLIENT_PRIMARY_ID,
         },
       }),
     ).rejects.toThrow(ConflictException);
@@ -89,5 +90,15 @@ describe('OrganizationService', () => {
     });
 
     expect(user).toHaveProperty('id');
+  });
+
+  it('should not find with outer client id provided', async () => {
+    await expect(
+      organizationService.findOne({
+        where: { id: POPULATE_ORGANIZATION_DEFAULT.id },
+        select: { id: true },
+        clientId: POPULATE_CLIENT_SECONDARY_ID,
+      }),
+    ).rejects.toThrow(NotFoundException);
   });
 });

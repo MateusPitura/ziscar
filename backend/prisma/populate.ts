@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import {
-  POPULATE_CLIENT_DEFAULT_ID,
+  POPULATE_CLIENT_PRIMARY_ID,
+  POPULATE_CLIENT_SECONDARY_ID,
   POPULATE_ORGANIZATION_DEFAULT,
   POPULATE_ORGANIZATION_INACTIVE,
   POPULATE_USER_DEFAULT,
@@ -18,10 +19,15 @@ const prisma = new PrismaClient();
 async function seed() {
   console.log('🌠 Started to populate database');
 
-  await prisma.client.create({
-    data: {
-      id: POPULATE_CLIENT_DEFAULT_ID,
-    },
+  await prisma.client.createMany({
+    data: [
+      {
+        id: POPULATE_CLIENT_PRIMARY_ID,
+      },
+      {
+        id: POPULATE_CLIENT_SECONDARY_ID,
+      },
+    ],
   });
 
   const promises: Promise<unknown>[] = [];
@@ -31,11 +37,11 @@ async function seed() {
       data: [
         {
           ...POPULATE_ORGANIZATION_DEFAULT,
-          clientId: POPULATE_CLIENT_DEFAULT_ID,
+          clientId: POPULATE_CLIENT_PRIMARY_ID,
         },
         {
           ...POPULATE_ORGANIZATION_INACTIVE,
-          clientId: POPULATE_CLIENT_DEFAULT_ID,
+          clientId: POPULATE_CLIENT_PRIMARY_ID,
         },
       ],
     }),
@@ -49,7 +55,7 @@ async function seed() {
           password: await encryptPassword({
             password: POPULATE_USER_DEFAULT.password,
           }),
-          clientId: POPULATE_CLIENT_DEFAULT_ID,
+          clientId: POPULATE_CLIENT_PRIMARY_ID,
           roleId: SEED_ROLE_ADMIN_ID,
         },
         {
@@ -57,7 +63,7 @@ async function seed() {
           password: await encryptPassword({
             password: POPULATE_USER_INACTIVE.password,
           }),
-          clientId: POPULATE_CLIENT_DEFAULT_ID,
+          clientId: POPULATE_CLIENT_PRIMARY_ID,
           roleId: SEED_ROLE_ADMIN_ID,
         },
       ],
@@ -69,7 +75,7 @@ async function seed() {
     email: faker.internet.email(),
     isActive: index > 5,
     password: await encryptPassword({ password: faker.internet.password() }),
-    clientId: POPULATE_CLIENT_DEFAULT_ID,
+    clientId: POPULATE_CLIENT_PRIMARY_ID,
     roleId: SEED_ROLE_SALES_ID,
   }));
 

@@ -8,7 +8,8 @@ import { UserService } from '../user/user.service';
 import { PrismaService } from '../database/prisma.service';
 import {
   FRONTEND_URL,
-  POPULATE_CLIENT_DEFAULT_ID,
+  POPULATE_CLIENT_PRIMARY_ID,
+  POPULATE_CLIENT_SECONDARY_ID,
   POPULATE_ORGANIZATION_DEFAULT,
   POPULATE_ORGANIZATION_INACTIVE,
   POPULATE_USER_DEFAULT,
@@ -190,7 +191,7 @@ describe('AuthService', () => {
         authResetPasswordInDto: {
           email: POPULATE_USER_DEFAULT.email,
           password: '123456',
-          clientId: POPULATE_CLIENT_DEFAULT_ID,
+          clientId: POPULATE_CLIENT_PRIMARY_ID,
         },
       });
 
@@ -210,7 +211,25 @@ describe('AuthService', () => {
           authResetPasswordInDto: {
             email: POPULATE_USER_INACTIVE.email,
             password: '123456',
-            clientId: POPULATE_CLIENT_DEFAULT_ID,
+            clientId: POPULATE_CLIENT_SECONDARY_ID,
+          },
+        }),
+      ).rejects.toThrow(NotFoundException);
+
+      transaction.rollback();
+    });
+  });
+
+  it('should not reset password with outer client id provided', async () => {
+    await prismaService.transaction(async (transaction) => {
+      Reflect.set(userService, 'prismaService', transaction);
+
+      await expect(
+        authService.resetPassword({
+          authResetPasswordInDto: {
+            email: POPULATE_USER_DEFAULT.email,
+            password: '123456',
+            clientId: POPULATE_CLIENT_SECONDARY_ID,
           },
         }),
       ).rejects.toThrow(NotFoundException);

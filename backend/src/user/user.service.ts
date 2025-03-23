@@ -270,6 +270,10 @@ export class UserService {
       userFindManyInDto: userGeneratePdfInDto,
       userId,
       paginate: false,
+      select: {
+        fullName: true,
+        email: true,
+      },
     }); // TODO: talvez aqui permita buscar o próprio usuário
 
     if (!users.data) {
@@ -299,6 +303,10 @@ export class UserService {
       userFindManyInDto: userGenerateSheetInDto,
       userId,
       paginate: false,
+      select: {
+        fullName: true,
+        email: true,
+      },
     }); // TODO: talvez aqui permita buscar o próprio usuário
 
     if (!users.data) {
