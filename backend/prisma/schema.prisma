@@ -55,6 +55,7 @@ model User {
   birthDate DateTime?
   code      String?   @db.VarChar(128)
   cellPhone String?   @db.VarChar(11)
+  jit       String?       
   addressId Int?      @unique
   address   Address?  @relation(fields: [addressId], references: [id], onDelete: SetNull)
   clientId  Int

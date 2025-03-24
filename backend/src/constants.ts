@@ -1,3 +1,6 @@
+import { AuthRequest } from './auth/auth.type';
+import { PERMISSIONS } from './user/user.constant';
+
 export const COOKIE_JWT_NAME = 'jwt';
 
 export const FRONTEND_URL =
@@ -33,3 +36,13 @@ export const POPULATE_ORGANIZATION_INACTIVE = {
 };
 export const POPULATE_CLIENT_PRIMARY_ID = 145;
 export const POPULATE_CLIENT_SECONDARY_ID = 154;
+
+export const AUTH_REQUEST_DEFAULT = {
+  ...new Request('http://localhost:3000'),
+  authToken: {
+    userId: POPULATE_USER_DEFAULT.id,
+    clientId: POPULATE_CLIENT_PRIMARY_ID,
+    jit: '0aaa1cdc-9839-4c3f-879f-b5c037b7af3c',
+    permissions: PERMISSIONS,
+  },
+} as unknown as AuthRequest;

@@ -34,9 +34,12 @@ export interface FindOneInput {
 }
 
 export interface UpdateInput {
-  clientId: number;
+  clientId?: number;
   where: Prisma.UserWhereUniqueInput;
   userUpdateInDto: UserUpdateInDto;
+  select?: Prisma.UserSelect;
+  transaction?: Transaction;
+  showNotFoundError?: boolean;
 }
 
 export interface GeneratePdfInput {

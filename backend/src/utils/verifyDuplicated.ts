@@ -16,6 +16,8 @@ export async function verifyDuplicated({
     whereClause.push({ [key]: value });
   }
 
+  if (!whereClause.length) return;
+
   const entity = await getCallback({
     where: { OR: whereClause },
     select: { id: true },

@@ -13,6 +13,7 @@ TESTES:
 
 BACKEND:
 - As migrations podem ser geradas com `npm run migration:generate` e aplicadas com `npm run migration:run`
+- Para usar transactions, use do método `.transaction` e não do `.$transaction`, que é nativo do Prisma. Esse método sobreescreve a função original e define tratativas para rollback e retries
 
 FRONTEND:
 - Para realizar requisições use o hook `useSafeFetch`, este método irá: mostrar snackbar em caso de erro, validar as permissões do usuário antes de cada request, fazer o stringfy e o parse de objetos

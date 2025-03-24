@@ -5,10 +5,13 @@ import {
   AuthSignInInDto,
   AuthSignUpInDto,
 } from './auth.schema';
+import { Permissions } from '@shared/types';
 
 export interface AuthSignin {
   userId: number;
   clientId: number;
+  jit: string;
+  permissions: Permissions;
 }
 
 export interface AuthResetPassword {

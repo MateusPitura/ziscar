@@ -6,7 +6,7 @@ import {
 import { PrismaService } from '../database/prisma.service';
 import { EncryptPasswordInput, GetCallback } from '../types';
 import { encryptPassword } from './user.utils';
-import { GET_USER, PERMISSIONS } from './user.constant';
+import { GET_PERMISSIONS, GET_USER } from './user.constant';
 import { verifyDuplicated } from '../utils/verifyDuplicated';
 import { EmailService } from '../email/email.service';
 import { JwtService } from '@nestjs/jwt';
@@ -26,6 +26,7 @@ import {
 } from './user.type';
 import { PdfService } from 'src/pdf/pdf.service';
 import { SheetService } from 'src/sheet/sheet.service';
+import handlePermissions from 'src/utils/handlePermissions';
 
 @Injectable()
 export class UserService {
@@ -175,38 +176,25 @@ export class UserService {
     const user = await this.findOne({
       clientId,
       where: { id: userId },
-      select: {
-        role: {
-          select: {
-            name: true,
-            permissions: {
-              select: {
-                resource: true,
-                action: true,
-              },
-            },
-          },
-        },
-      },
+      select: GET_PERMISSIONS,
     });
 
-    const role = user?.role as Role;
-    if (!role.permissions) {
-      throw new NotFoundException('Permissões não encontradas');
-    }
-
-    const permissionsFormatted = structuredClone(PERMISSIONS);
-    for (const permission of role.permissions) {
-      permissionsFormatted[permission.resource][permission.action] = true;
-    }
-
-    return permissionsFormatted;
+    return handlePermissions({ role: user?.role as Role });
   }
 
-  async update({ clientId, where, userUpdateInDto }: UpdateInput) {
+  async update({
+    clientId,
+    where,
+    userUpdateInDto,
+    select = GET_USER,
+    transaction,
+    showNotFoundError = true,
+  }: UpdateInput) {
+    const database = transaction || this.prismaService;
+
     await this.verifyDuplicated({
-      email: userUpdateInDto.email,
-      cpf: userUpdateInDto.cpf ?? undefined,
+      email: userUpdateInDto?.email,
+      cpf: userUpdateInDto?.cpf ?? undefined,
     });
 
     const { address, roleId, ...rest } = userUpdateInDto;
@@ -242,19 +230,22 @@ export class UserService {
     }
 
     try {
-      const user = await this.prismaService.user.update({
+      const user = await database.user.update({
         where: {
           clientId,
           isActive: !userUpdateInDto.isActive,
           ...where,
         },
         data: updatePayload,
-        select: GET_USER,
+        select,
       });
       return user;
     } catch (error) {
-      if ((error as Record<string, string>)?.code === 'P2025') {
-        throw new NotFoundException('Usuário não encontrado');
+      if ((error as Record<'code', string>)?.code === 'P2025') {
+        if (showNotFoundError) {
+          throw new NotFoundException('Usuário não encontrado');
+        }
+        return null;
       }
       throw error;
     }

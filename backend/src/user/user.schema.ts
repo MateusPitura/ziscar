@@ -36,9 +36,10 @@ const SchemaUserGeneratePdfInDto = SchemaUserFindManyInDto.omit({ page: true });
 const SchemaUserGenerateSheetInDto = SchemaUserGeneratePdfInDto;
 
 const SchemaUserUpdateInDto = SchemaUserPostInDto.partial().extend({
-  password: s.password().optional(),
   address: SchemaAddress.partial().optional(),
+  password: s.password().optional(),
   isActive: s.boolean().optional(),
+  jit: s.string(36).optional(),
 });
 
 const SchemaProfilePatchInDto = SchemaUserUpdateInDto.omit({

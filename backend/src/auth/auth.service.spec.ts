@@ -70,14 +70,24 @@ describe('AuthService', () => {
   });
 
   it('should signin', async () => {
-    const response = await authService.signIn({
-      authSignInInDto: {
-        email: POPULATE_USER_DEFAULT.email,
-        password: POPULATE_USER_DEFAULT.password,
-      },
-    });
+    await prismaService.transaction(async (transaction) => {
+      jest
+        .spyOn(prismaService, 'transaction')
+        .mockImplementation(async (callback) => {
+          await callback(transaction);
+        });
 
-    expect(response).toBeUndefined();
+      const response = await authService.signIn({
+        authSignInInDto: {
+          email: POPULATE_USER_DEFAULT.email,
+          password: POPULATE_USER_DEFAULT.password,
+        },
+      });
+
+      expect(response).toBeUndefined();
+
+      transaction.rollback();
+    });
   });
 
   it('should not signin an inactive user', async () => {

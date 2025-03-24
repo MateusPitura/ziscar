@@ -18,6 +18,10 @@ import { PrismaService } from '../database/prisma.service';
 import { generateRandomPassword } from '../utils/generateRandomPassword';
 import { SEED_ROLE_ADMIN_ID } from '@shared/constants';
 import { COOKIE_JWT_NAME, FRONTEND_URL } from 'src/constants';
+import { randomUUID } from 'crypto';
+import handlePermissions from 'src/utils/handlePermissions';
+import { Role } from 'src/user/user.type';
+import { GET_PERMISSIONS } from 'src/user/user.constant';
 
 @Injectable()
 export class AuthService {
@@ -31,34 +35,47 @@ export class AuthService {
   ) {}
 
   async signIn({ authSignInInDto, res }: SiginInInput) {
-    const user = await this.userService.findOne({
-      where: { email: authSignInInDto.email },
-      select: {
-        id: true,
-        clientId: true,
-        password: true,
-      },
-      showNotFoundError: false,
+    await this.prismaService.transaction(async (transaction) => {
+      const jit = randomUUID();
+
+      const user = await this.userService.update({
+        where: { email: authSignInInDto.email },
+        userUpdateInDto: { jit },
+        select: {
+          ...GET_PERMISSIONS,
+          id: true,
+          clientId: true,
+          password: true,
+        },
+        transaction,
+        showNotFoundError: false,
+      });
+
+      if (!user || !compareSync(authSignInInDto.password, user.password)) {
+        throw new UnauthorizedException('Email ou senha inválidos');
+      }
+
+      const permissions = handlePermissions({
+        role: user?.role as Role,
+      });
+
+      const payload: AuthSignin = {
+        clientId: user.clientId,
+        userId: user.id,
+        jit,
+        permissions,
+      };
+
+      const token = this.jwtService.sign(payload);
+
+      res?.cookie(COOKIE_JWT_NAME, token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production' ? true : false,
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      });
+
+      return res?.json(true);
     });
-
-    if (!user || !compareSync(authSignInInDto.password, user.password)) {
-      throw new UnauthorizedException('Email ou senha inválidos');
-    }
-
-    const payload: AuthSignin = {
-      clientId: user.clientId,
-      userId: user.id,
-    };
-
-    const token = this.jwtService.sign(payload);
-
-    res?.cookie(COOKIE_JWT_NAME, token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production' ? true : false,
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-    });
-
-    return res?.json(true);
   }
 
   signOut({ res }: SignOutInput) {

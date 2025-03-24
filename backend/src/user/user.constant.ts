@@ -22,6 +22,20 @@ export const FETCH_USER = {
   isActive: true,
 };
 
+export const GET_PERMISSIONS = {
+  role: {
+    select: {
+      name: true,
+      permissions: {
+        select: {
+          resource: true,
+          action: true,
+        },
+      },
+    },
+  },
+};
+
 export const PERMISSIONS: Permissions = {
   USERS: {
     CREATE: false,
