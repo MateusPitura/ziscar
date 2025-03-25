@@ -9,8 +9,8 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { AuthRequestBodyToken } from './auth.type';
-import { AuthGuardBodyToken } from './auth.guard';
+import { AuthRequest, AuthRequestBodyToken } from './auth.type';
+import { AuthGuard, AuthGuardBodyToken } from './auth.guard';
 import {
   AuthForgetPasswordInDto,
   AuthSignInInDto,
@@ -36,9 +36,11 @@ export class AuthController {
   }
 
   @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthGuard)
   @Post('sign-out')
-  signOut(@Res() res?: Response) {
-    return this.authService.signOut({ res });
+  signOut(@Req() req: AuthRequest, @Res() res?: Response) {
+    const { userId, clientId } = req.authToken;
+    return this.authService.signOut({ userId, clientId, res });
   }
 
   @Post('sign-up')

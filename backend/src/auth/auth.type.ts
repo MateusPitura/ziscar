@@ -33,6 +33,8 @@ export interface SiginInInput {
 }
 
 export interface SignOutInput {
+  clientId: number;
+  userId: number;
   res?: Response;
 }
 

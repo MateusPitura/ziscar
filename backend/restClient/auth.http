@@ -8,6 +8,10 @@ content-type: application/json
 }
 
 ###
+POST {{BASE_URL}}/auth/sign-out HTTP/1.1
+content-type: application/json
+
+###
 POST {{BASE_URL}}/auth/sign-up HTTP/1.1
 content-type: application/json
 

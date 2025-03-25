@@ -39,7 +39,7 @@ const SchemaUserUpdateInDto = SchemaUserPostInDto.partial().extend({
   address: SchemaAddress.partial().optional(),
   password: s.password().optional(),
   isActive: s.boolean().optional(),
-  jit: s.string(36).optional(),
+  jit: s.string(36).nullable().optional(),
 });
 
 const SchemaProfilePatchInDto = SchemaUserUpdateInDto.omit({

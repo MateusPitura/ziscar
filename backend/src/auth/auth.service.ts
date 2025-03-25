@@ -78,8 +78,16 @@ export class AuthService {
     });
   }
 
-  signOut({ res }: SignOutInput) {
+  async signOut({ userId, clientId, res }: SignOutInput) {
+    await this.userService.update({
+      where: { id: userId },
+      userUpdateInDto: { jit: null },
+      showNotFoundError: false,
+      clientId,
+    });
+
     res?.clearCookie(COOKIE_JWT_NAME);
+
     return res?.json(true);
   }
 
@@ -116,6 +124,8 @@ export class AuthService {
       userUpdateInDto: { password: authResetPasswordInDto.password },
       clientId: authResetPasswordInDto.clientId,
     });
+
+    // TODO: aqui preciso ir ao banco e deixar null
 
     return true;
   }
