@@ -229,6 +229,10 @@ export class UserService {
       };
     }
 
+    if (roleId || userUpdateInDto.password || 'isActive' in userUpdateInDto) {
+      updatePayload['jit'] = null;
+    }
+
     try {
       const user = await database.user.update({
         where: {
