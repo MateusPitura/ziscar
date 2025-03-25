@@ -112,8 +112,11 @@ describe('AuthService', () => {
     ).rejects.toThrow(UnauthorizedException);
   });
 
-  it('should sign out', () => {
-    const response = authService.signOut({});
+  it('should sign out', async () => {
+    const response = await authService.signOut({
+      clientId: POPULATE_CLIENT_PRIMARY_ID,
+      userId: POPULATE_USER_DEFAULT.id,
+    });
     expect(response).toBeUndefined();
   });
 

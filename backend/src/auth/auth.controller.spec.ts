@@ -8,6 +8,7 @@ import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../database/prisma.service';
 import { EmailService } from '../email/email.service';
 import {
+  AUTH_REQUEST_DEFAULT,
   POPULATE_CLIENT_PRIMARY_ID,
   POPULATE_USER_DEFAULT,
 } from '../constants';
@@ -70,8 +71,8 @@ describe('AuthController', () => {
     expect(response).toBeUndefined();
   });
 
-  it('should signout', () => {
-    const response = authController.signOut();
+  it('should signout', async () => {
+    const response = await authController.signOut(AUTH_REQUEST_DEFAULT);
 
     expect(response).toBeUndefined();
   });
