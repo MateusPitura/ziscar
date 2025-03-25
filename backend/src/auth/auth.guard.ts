@@ -9,10 +9,14 @@ import { Request } from 'express';
 import { COOKIE_JWT_NAME } from 'src/constants';
 import { UNAUTHORIZED } from '@shared/constants';
 import { AuthResetPassword, AuthSignin } from './auth.type';
+import { UserService } from 'src/user/user.service';
 
 @Injectable()
 abstract class BaseAuthGuard implements CanActivate {
-  constructor(private readonly jwtService: JwtService) {}
+  constructor(
+    private readonly jwtService: JwtService,
+    private readonly userService: UserService,
+  ) {}
 
   abstract getToken(request: Request): string | undefined;
 
@@ -31,6 +35,25 @@ abstract class BaseAuthGuard implements CanActivate {
       >(token, {
         secret: process.env.JWT_SECRET,
       });
+
+      const { clientId, userId, jit } = payload as AuthSignin;
+
+      if (userId) {
+        const user = await this.userService.findOne({
+          select: {
+            jit: true,
+          },
+          where: {
+            id: userId,
+          },
+          clientId,
+        });
+
+        if (jit !== user?.jit) {
+          throw new UnauthorizedException(UNAUTHORIZED);
+        }
+      }
+
       request['authToken'] = payload;
     } catch {
       throw new UnauthorizedException(UNAUTHORIZED);
