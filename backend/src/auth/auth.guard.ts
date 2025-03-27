@@ -19,6 +19,7 @@ abstract class BaseAuthGuard implements CanActivate {
   ) {}
 
   abstract getToken(request: Request): string | undefined;
+  abstract shouldValidateJit(): boolean;
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<Request>();
@@ -36,21 +37,23 @@ abstract class BaseAuthGuard implements CanActivate {
         secret: process.env.JWT_SECRET,
       });
 
-      const { clientId, userId, jit } = payload as AuthSignin;
+      if (this.shouldValidateJit()) {
+        const { clientId, userId, jit } = payload as AuthSignin;
 
-      if (userId) {
-        const user = await this.userService.findOne({
-          select: {
-            jit: true,
-          },
-          where: {
-            id: userId,
-          },
-          clientId,
-        });
+        if (userId) {
+          const user = await this.userService.findOne({
+            select: {
+              jit: true,
+            },
+            where: {
+              id: userId,
+            },
+            clientId,
+          });
 
-        if (jit !== user?.jit) {
-          throw new UnauthorizedException(UNAUTHORIZED);
+          if (jit !== user?.jit) {
+            throw new UnauthorizedException(UNAUTHORIZED);
+          }
         }
       }
 
@@ -68,6 +71,19 @@ export class AuthGuard extends BaseAuthGuard {
   getToken(request: Request): string | undefined {
     return request.cookies[COOKIE_JWT_NAME] as string;
   }
+  shouldValidateJit(): boolean {
+    return true;
+  }
+}
+
+@Injectable()
+export class AuthGuardNoJitValidation extends BaseAuthGuard {
+  getToken(request: Request): string | undefined {
+    return request.cookies[COOKIE_JWT_NAME] as string;
+  }
+  shouldValidateJit(): boolean {
+    return false;
+  }
 }
 
 @Injectable()
@@ -79,5 +95,8 @@ export class AuthGuardBodyToken extends BaseAuthGuard {
       delete body.token;
     }
     return token;
+  }
+  shouldValidateJit(): boolean {
+    return false;
   }
 }
