@@ -2,6 +2,7 @@ import { AuthRequest } from './auth/auth.type';
 import { PERMISSIONS } from './user/user.constant';
 
 export const COOKIE_JWT_NAME = 'jwt';
+export const JWT_EXPIRATION_TIME = 43200; // 12h
 
 export const FRONTEND_URL =
   process.env.NODE_ENV === 'production'

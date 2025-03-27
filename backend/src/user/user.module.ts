@@ -7,6 +7,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { PdfModule } from 'src/pdf/pdf.module';
 import { SheetModule } from 'src/sheet/sheet.module';
+import { JWT_EXPIRATION_TIME } from 'src/constants';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { SheetModule } from 'src/sheet/sheet.module';
       useFactory: (configService: ConfigService) => ({
         secret: configService.get<string>('JWT_SECRET'),
         signOptions: {
-          expiresIn: 3600,
+          expiresIn: JWT_EXPIRATION_TIME,
         },
       }),
       inject: [ConfigService],

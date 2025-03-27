@@ -8,6 +8,7 @@ import { UserModule } from '../user/user.module';
 import { ClientModule } from '../client/client.module';
 import { EmailModule } from '../email/email.module';
 import { DatabaseModule } from 'src/database/database.module';
+import { JWT_EXPIRATION_TIME } from 'src/constants';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { DatabaseModule } from 'src/database/database.module';
       useFactory: (configService: ConfigService) => ({
         secret: configService.get<string>('JWT_SECRET'),
         signOptions: {
-          expiresIn: 3600,
+          expiresIn: JWT_EXPIRATION_TIME,
         },
       }),
       inject: [ConfigService],
