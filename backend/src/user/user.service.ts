@@ -187,11 +187,8 @@ export class UserService {
     where,
     userUpdateInDto,
     select = GET_USER,
-    transaction,
     showNotFoundError = true,
   }: UpdateInput) {
-    const database = transaction || this.prismaService;
-
     await this.verifyDuplicated({
       email: userUpdateInDto?.email,
       cpf: userUpdateInDto?.cpf ?? undefined,
@@ -234,7 +231,7 @@ export class UserService {
     }
 
     try {
-      const user = await database.user.update({
+      const user = await this.prismaService.user.update({
         where: {
           clientId,
           isActive: !userUpdateInDto.isActive,

@@ -38,7 +38,6 @@ export interface UpdateInput {
   where: Prisma.UserWhereUniqueInput;
   userUpdateInDto: UserUpdateInDto;
   select?: Prisma.UserSelect;
-  transaction?: Transaction;
   showNotFoundError?: boolean;
 }
 

@@ -71,11 +71,7 @@ describe('AuthService', () => {
 
   it('should signin', async () => {
     await prismaService.transaction(async (transaction) => {
-      jest
-        .spyOn(prismaService, 'transaction')
-        .mockImplementation(async (callback) => {
-          await callback(transaction);
-        });
+      Reflect.set(userService, 'prismaService', transaction);
 
       const response = await authService.signIn({
         authSignInInDto: {

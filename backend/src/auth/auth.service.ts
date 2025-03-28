@@ -35,47 +35,48 @@ export class AuthService {
   ) {}
 
   async signIn({ authSignInInDto, res }: SiginInInput) {
-    await this.prismaService.transaction(async (transaction) => {
-      const jit = randomUUID();
-
-      const user = await this.userService.update({
-        where: { email: authSignInInDto.email },
-        userUpdateInDto: { jit },
-        select: {
-          ...GET_PERMISSIONS,
-          id: true,
-          clientId: true,
-          password: true,
-        },
-        transaction,
-        showNotFoundError: false,
-      });
-
-      if (!user || !compareSync(authSignInInDto.password, user.password)) {
-        throw new UnauthorizedException('Email ou senha inválidos');
-      }
-
-      const permissions = handlePermissions({
-        role: user?.role as Role,
-      });
-
-      const payload: AuthSignin = {
-        clientId: user.clientId,
-        userId: user.id,
-        jit,
-        permissions,
-      };
-
-      const token = this.jwtService.sign(payload);
-
-      res?.cookie(COOKIE_JWT_NAME, token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production' ? true : false,
-        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-      });
-
-      return res?.json(true);
+    const user = await this.userService.findOne({
+      where: { email: authSignInInDto.email },
+      select: {
+        ...GET_PERMISSIONS,
+        id: true,
+        clientId: true,
+        password: true,
+      },
+      showNotFoundError: false,
     });
+
+    if (!user || !compareSync(authSignInInDto.password, user.password)) {
+      throw new UnauthorizedException('Email ou senha inválidos');
+    }
+
+    const jit = randomUUID();
+
+    await this.userService.update({
+      where: { id: user.id },
+      userUpdateInDto: { jit },
+    });
+
+    const permissions = handlePermissions({
+      role: user?.role as Role,
+    });
+
+    const payload: AuthSignin = {
+      clientId: user.clientId,
+      userId: user.id,
+      jit,
+      permissions,
+    };
+
+    const token = this.jwtService.sign(payload);
+
+    res?.cookie(COOKIE_JWT_NAME, token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production' ? true : false,
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+    });
+
+    return res?.json(true);
   }
 
   async signOut({ userId, clientId, res }: SignOutInput) {
