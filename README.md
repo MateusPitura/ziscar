@@ -1,8 +1,8 @@
 GERAL:
 - Configure os .env do backend (comum e testes) e do root
-- Instale a extensão [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) para fazer requisições através dos arquivos .http
-- Inicie o backend, frontend e banco através do docker com `npm run up:dev`
+- Inicie o banco, backend e frontend com `npm start`
 - Execute `backend/npm run prisma:dev` para preparar o banco para desenvolvimento, isso irá aplicar migrations, rodar seeds e popular. Use também quando precisar redefinir o banco
+- Instale a extensão [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) para testar requisições através dos arquivos .http
 
 TESTES:
 - Execute `backend/npm run test:setup` para preparar o banco para testes
