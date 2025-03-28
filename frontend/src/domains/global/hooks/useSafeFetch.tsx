@@ -27,7 +27,7 @@ export default function useSafeFetch() {
         resource,
         action,
         enableCookie = true,
-        isExport: isPdf = false,
+        isExport = false,
       }: Request = {}
     ) => {
       try {
@@ -53,7 +53,7 @@ export default function useSafeFetch() {
         });
 
         let content
-        if (isPdf) {
+        if (isExport && response.ok) {
           content = response;
         } else {
           content = await response.json();
