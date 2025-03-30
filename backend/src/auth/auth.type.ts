@@ -49,3 +49,8 @@ export interface ResetPasswordInput {
 export interface ForgetPasswordInput {
   authForgetPasswordInDto: AuthForgetPasswordInDto;
 }
+
+export interface CustomizeValidationProperties {
+  shouldValidateJit: boolean;
+  shouldValidateExpirationTime: boolean;
+}

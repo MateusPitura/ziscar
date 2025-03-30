@@ -1,15 +1,28 @@
 import { createContext, useCallback, useMemo, useState } from "react";
 import { userFilterDefaultValues } from "@/domains/users/constants";
 import { Childrenable, UsersFilter } from "../types";
+import { AUTH_CHANNEL_SIGNIN, AUTH_CHANNEL_SIGNOUT } from "../constants";
+import safeNavigate from "../utils/safeNavigate";
 
 interface GlobalContextValues {
   usersFilter?: UsersFilter;
   handleUsersFilter: (value: Partial<UsersFilter>) => void;
+  authChannel: BroadcastChannel;
 }
 
 const GlobalContext = createContext<GlobalContextValues | null>(null);
+const authChannel = new BroadcastChannel("auth");
 
 function GlobalProvider({ children }: Childrenable) {
+
+  authChannel.onmessage = (event) => {
+    if (event?.data?.type === AUTH_CHANNEL_SIGNIN) {
+      safeNavigate('/profile')
+    } else if (event?.data?.type === AUTH_CHANNEL_SIGNOUT) {
+      safeNavigate('/')
+    }
+  };
+
   const [usersFilter, setUsersFilter] = useState<UsersFilter>({
     page: 1,
     ...userFilterDefaultValues,
@@ -26,6 +39,7 @@ function GlobalProvider({ children }: Childrenable) {
     () => ({
       usersFilter,
       handleUsersFilter,
+      authChannel,
     }),
     [usersFilter]
   );

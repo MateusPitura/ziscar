@@ -9,9 +9,10 @@ import useSignPageContext from "../hooks/useSignPageContext";
 import useDialog from "@/domains/global/hooks/useDialog";
 import ForgetPasswordModal from "../components/ForgetPasswordModal";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
-import { BASE_URL } from "@/domains/global/constants";
+import { useMutation } from "@tanstack/react-query";
+import { AUTH_CHANNEL_SIGNIN, BASE_URL } from "@/domains/global/constants";
+import useGlobalContext from "@/domains/global/hooks/useGlobalContext";
+import safeNavigate from "@/domains/global/utils/safeNavigate";
 
 const SchemaSignInForm = s.object({
   email: s.email(),
@@ -24,8 +25,7 @@ export default function SignInForm(): ReactNode {
   const { handleStep } = useSignPageContext();
   const dialog = useDialog();
   const { safeFetch } = useSafeFetch();
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
+  const { authChannel } = useGlobalContext();
 
   async function handleSignIn(data: SignInFormInputs) {
     await safeFetch(`${BASE_URL}/auth/sign-in`, {
@@ -37,8 +37,8 @@ export default function SignInForm(): ReactNode {
   const { mutate, isPending } = useMutation({
     mutationFn: handleSignIn,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["permissions"] });
-      navigate("/profile");
+      safeNavigate('/profile')
+      authChannel.postMessage({ type: AUTH_CHANNEL_SIGNIN });
     },
   });
 

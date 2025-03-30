@@ -8,7 +8,11 @@ import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { COOKIE_JWT_NAME } from 'src/constants';
 import { UNAUTHORIZED } from '@shared/constants';
-import { AuthResetPassword, AuthSignin } from './auth.type';
+import {
+  AuthResetPassword,
+  AuthSignin,
+  CustomizeValidationProperties,
+} from './auth.type';
 import { UserService } from 'src/user/user.service';
 
 @Injectable()
@@ -19,7 +23,7 @@ abstract class BaseAuthGuard implements CanActivate {
   ) {}
 
   abstract getToken(request: Request): string | undefined;
-  abstract shouldValidateJit(): boolean;
+  abstract customizeValidation(): CustomizeValidationProperties;
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<Request>();
@@ -31,13 +35,16 @@ abstract class BaseAuthGuard implements CanActivate {
         throw new UnauthorizedException(UNAUTHORIZED);
       }
 
+      const customValidation = this.customizeValidation();
+
       const payload = await this.jwtService.verifyAsync<
         AuthSignin | AuthResetPassword
       >(token, {
         secret: process.env.JWT_SECRET,
+        ignoreExpiration: customValidation.shouldValidateExpirationTime,
       });
 
-      if (this.shouldValidateJit()) {
+      if (customValidation.shouldValidateJit) {
         const { clientId, userId, jit } = payload as AuthSignin;
 
         if (userId) {
@@ -71,8 +78,11 @@ export class AuthGuard extends BaseAuthGuard {
   getToken(request: Request): string | undefined {
     return request.cookies[COOKIE_JWT_NAME] as string;
   }
-  shouldValidateJit(): boolean {
-    return true;
+  customizeValidation(): CustomizeValidationProperties {
+    return {
+      shouldValidateJit: false,
+      shouldValidateExpirationTime: false,
+    };
   }
 }
 
@@ -81,8 +91,11 @@ export class AuthGuardNoJitValidation extends BaseAuthGuard {
   getToken(request: Request): string | undefined {
     return request.cookies[COOKIE_JWT_NAME] as string;
   }
-  shouldValidateJit(): boolean {
-    return false;
+  customizeValidation(): CustomizeValidationProperties {
+    return {
+      shouldValidateJit: true,
+      shouldValidateExpirationTime: true,
+    };
   }
 }
 
@@ -96,7 +109,10 @@ export class AuthGuardBodyToken extends BaseAuthGuard {
     }
     return token;
   }
-  shouldValidateJit(): boolean {
-    return false;
+  customizeValidation(): CustomizeValidationProperties {
+    return {
+      shouldValidateJit: true,
+      shouldValidateExpirationTime: true,
+    };
   }
 }

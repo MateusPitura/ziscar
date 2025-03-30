@@ -2,9 +2,11 @@ import Button from "@/design-system/Button";
 import type { ReactElement } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import useSafeFetch from "../hooks/useSafeFetch";
-import { BASE_URL } from "../constants";
+import { AUTH_CHANNEL_SIGNOUT, BASE_URL } from "../constants";
+import useGlobalContext from "../hooks/useGlobalContext";
+import safeNavigate from "../utils/safeNavigate";
 
 interface PageTopBarProps {
   onToggleSideMenu: () => void;
@@ -13,8 +15,8 @@ interface PageTopBarProps {
 export default function PageTopBar({
   onToggleSideMenu,
 }: PageTopBarProps): ReactElement {
-  const queryClient = useQueryClient();
   const { safeFetch } = useSafeFetch();
+  const { authChannel } = useGlobalContext();
 
   async function handleSignOut(): Promise<boolean> {
     return await safeFetch(`${BASE_URL}/auth/sign-out`, {
@@ -24,11 +26,10 @@ export default function PageTopBar({
 
   const { mutate, isPending } = useMutation({
     mutationFn: handleSignOut,
-    onSuccess: () => {
-      queryClient.clear();
-      localStorage.clear();
-      window.location.href = '/';
-    }
+    onSettled: () => {
+      safeNavigate("/");
+      authChannel.postMessage({ type: AUTH_CHANNEL_SIGNOUT });
+    },
   });
 
   return (
