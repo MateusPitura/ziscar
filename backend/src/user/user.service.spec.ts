@@ -10,7 +10,11 @@ import {
 } from '../constants';
 import { EmailService } from '../email/email.service';
 import { JwtService } from '@nestjs/jwt';
-import { ITEMS_PER_PAGE, SEED_ROLE_SALES_ID } from '@shared/constants';
+import {
+  ITEMS_PER_PAGE,
+  SEED_ROLE_ADMIN_ID,
+  SEED_ROLE_SALES_ID,
+} from '@shared/constants';
 import { PdfService } from 'src/pdf/pdf.service';
 import { SheetService } from 'src/sheet/sheet.service';
 
@@ -207,6 +211,22 @@ describe('UserService', () => {
 
       transaction.rollback();
     });
+  });
+
+  it('should not verify duplicated if email or cpf is not passed', async () => {
+    const spy = jest.spyOn(userService, 'findOne');
+
+    await userService.update({
+      where: {
+        id: POPULATE_USER_DEFAULT.id,
+      },
+      userUpdateInDto: {
+        code: '123',
+      },
+      clientId: POPULATE_CLIENT_PRIMARY_ID,
+    });
+
+    expect(spy).toHaveBeenCalledTimes(0);
   });
 
   it('should not update user with email that already exist', async () => {
@@ -447,6 +467,75 @@ describe('UserService', () => {
       expect(user).toHaveProperty('address.cep', '12345676');
       expect(user).toHaveProperty('address.number', '123');
       expect(user).toHaveProperty('address.street', 'Broadway');
+
+      transaction.rollback();
+    });
+  });
+
+  it('should set jit to null when update user role', async () => {
+    await prismaService.transaction(async (transaction) => {
+      Reflect.set(userService, 'prismaService', transaction);
+
+      const user = await userService.update({
+        where: {
+          id: POPULATE_USER_DEFAULT.id,
+        },
+        userUpdateInDto: {
+          roleId: SEED_ROLE_ADMIN_ID,
+        },
+        clientId: POPULATE_CLIENT_PRIMARY_ID,
+        select: {
+          jit: true,
+        },
+      });
+
+      expect(user).toHaveProperty('jit', null);
+
+      transaction.rollback();
+    });
+  });
+
+  it('should set jit to null when update user password', async () => {
+    await prismaService.transaction(async (transaction) => {
+      Reflect.set(userService, 'prismaService', transaction);
+
+      const user = await userService.update({
+        where: {
+          id: POPULATE_USER_DEFAULT.id,
+        },
+        userUpdateInDto: {
+          password: '123456',
+        },
+        clientId: POPULATE_CLIENT_PRIMARY_ID,
+        select: {
+          jit: true,
+        },
+      });
+
+      expect(user).toHaveProperty('jit', null);
+
+      transaction.rollback();
+    });
+  });
+
+  it('should set jit to null when update user active status', async () => {
+    await prismaService.transaction(async (transaction) => {
+      Reflect.set(userService, 'prismaService', transaction);
+
+      const user = await userService.update({
+        where: {
+          id: POPULATE_USER_DEFAULT.id,
+        },
+        userUpdateInDto: {
+          isActive: false,
+        },
+        clientId: POPULATE_CLIENT_PRIMARY_ID,
+        select: {
+          jit: true,
+        },
+      });
+
+      expect(user).toHaveProperty('jit', null);
 
       transaction.rollback();
     });

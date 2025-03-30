@@ -69,9 +69,10 @@ describe('AuthService', () => {
     userService = module.get<UserService>(UserService);
   });
 
-  it('should signin', async () => {
+  it('should signin and update jit', async () => {
     await prismaService.transaction(async (transaction) => {
       Reflect.set(userService, 'prismaService', transaction);
+      const spy = jest.spyOn(userService, 'update');
 
       const response = await authService.signIn({
         authSignInInDto: {
@@ -81,12 +82,22 @@ describe('AuthService', () => {
       });
 
       expect(response).toBeUndefined();
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          userUpdateInDto: {
+            jit: expect.any(String) as string,
+          },
+        }),
+      );
 
       transaction.rollback();
     });
   });
 
-  it('should not signin an inactive user', async () => {
+  it('should not signin an inactive user, throw unauthorized and not update jit', async () => {
+    const spy = jest.spyOn(userService, 'update');
+
     await expect(
       authService.signIn({
         authSignInInDto: {
@@ -95,9 +106,13 @@ describe('AuthService', () => {
         },
       }),
     ).rejects.toThrow(UnauthorizedException);
+
+    expect(spy).toHaveBeenCalledTimes(0);
   });
 
-  it('should not signin due to wrong password', async () => {
+  it('should not signin due to wrong password and not update jit', async () => {
+    const spy = jest.spyOn(userService, 'update');
+
     await expect(
       authService.signIn({
         authSignInInDto: {
@@ -106,12 +121,41 @@ describe('AuthService', () => {
         },
       }),
     ).rejects.toThrow(UnauthorizedException);
+
+    expect(spy).toHaveBeenCalledTimes(0);
   });
 
-  it('should sign out', async () => {
+  it('should sign out and set jit to null', async () => {
+    const spy = jest.spyOn(userService, 'update');
+
     const response = await authService.signOut({
       clientId: POPULATE_CLIENT_PRIMARY_ID,
       userId: POPULATE_USER_DEFAULT.id,
+    });
+    expect(response).toBeUndefined();
+
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        userUpdateInDto: {
+          jit: null,
+        },
+      }),
+    );
+  });
+
+  it('should not throw error when sign out with outer client id', async () => {
+    const response = await authService.signOut({
+      clientId: POPULATE_CLIENT_SECONDARY_ID,
+      userId: POPULATE_USER_DEFAULT.id,
+    });
+    expect(response).toBeUndefined();
+  });
+
+  it('should not throw error when sign out with a inactive user', async () => {
+    const response = await authService.signOut({
+      clientId: POPULATE_CLIENT_PRIMARY_ID,
+      userId: POPULATE_USER_INACTIVE.id,
     });
     expect(response).toBeUndefined();
   });
