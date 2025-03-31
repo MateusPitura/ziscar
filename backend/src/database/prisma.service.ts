@@ -11,12 +11,26 @@ interface Error {
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit {
+  private prisma: PrismaClient;
+
+  constructor() {
+    super();
+    if (process.env.NODE_ENV === 'production') {
+      this.prisma = new PrismaClient();
+    } else {
+      if (!global.prisma) {
+        global.prisma = new PrismaClient();
+      }
+      this.prisma = global.prisma as PrismaClient;
+    }
+  }
+
   async onModuleInit() {
-    await this.$connect();
+    await this.prisma.$connect();
   }
 
   async onModuleDestroy() {
-    await this.$disconnect();
+    await this.prisma.$disconnect();
   }
 
   async transaction(actions: (tx: Transaction) => unknown): Promise<void> {
@@ -24,7 +38,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
 
     while (retries < MAX_RETRIES) {
       try {
-        await this.$transaction(
+        await this.prisma.$transaction(
           async (prisma) => {
             const enhancedTx = {
               ...prisma,
