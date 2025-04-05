@@ -8,6 +8,10 @@ const privateRouteElements = privateRoutes.flatMap((group) =>
   group.routes.map((route) => ({
     path: route.path,
     element: <SuspensePage key={route.path}>{route.entryPage}</SuspensePage>,
+    handle: {
+      resource: route.resource,
+      action: route.action,
+    },
   }))
 );
 

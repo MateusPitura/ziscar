@@ -4,6 +4,7 @@ import StoreOutlinedIcon from "@mui/icons-material/StoreOutlined";
 import VerifiedUserOutlinedIcon from "@mui/icons-material/VerifiedUserOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import { lazy, ReactNode } from "react";
+import { Action, Resource } from "@shared/types";
 
 interface Route {
   path: string;
@@ -11,6 +12,8 @@ interface Route {
   icon?: ReactNode;
   entryPage: ReactNode;
   shouldDisplay: boolean;
+  resource?: Resource;
+  action?: Action;
 }
 
 interface RouteGroup {
@@ -45,16 +48,22 @@ export const privateRoutes: RouteGroup[] = [
         icon: <PersonOutlinedIcon />,
         entryPage: <Users />,
         shouldDisplay: true,
+        action: 'READ',
+        resource: 'USERS'
       },
       {
         path: "/users/new",
         entryPage: <NewUser />,
         shouldDisplay: false,
+        action: 'CREATE',
+        resource: 'USERS'
       },
       {
         path: "/users/edit/:userId",
         entryPage: <EditUser />,
         shouldDisplay: false,
+        action: 'UPDATE',
+        resource: 'USERS'
       },
       {
         path: "/vehicles",
