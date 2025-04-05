@@ -17,10 +17,10 @@ BACKEND:
 
 FRONTEND:
 - Para realizar requisições use o hook `useSafeFetch`, este método irá: mostrar snackbar em caso de erro, validar as permissões do usuário antes de cada request, fazer o stringfy e o parse de objetos
-- Para criar rotas modifique o arquivo `routes.tsx`, isso irá automaticamente criar uma rota e também um item no menu lateral. Elas são dividas em dois grupos, rotas privadas e públicas. Ao acessar uma rota privada será feita uma request para buscar as permissões do usuário, caso não tenha irá redirecionar para o signin
+- Para criar rotas modifique o arquivo `routes.tsx`, isso irá automaticamente criar uma rota e também um item no menu lateral. Elas são dividas em dois grupos, rotas privadas e públicas. Ao acessar uma rota privada será feita uma request para buscar as permissões do usuário, caso não retorne corretamente irá redirecionar para o signin, então irá verificar se o usuário possui as permissões necessárias conforme definido para cada rota em `routes.tsx`
 - Para itens de formulário, use o `Form`, por padrão ele irá remover campos com strings vazias `""`. Também sempre forneça o defaultValues, garanta que ao menos uma string vazia `""` seja fornecida e não undefined
 - Para usar um dialog, use do componente `Dialog` e do hook `useDialog`, que fornece um state para controle do dialog é metodos úteis como `close`, `open`, `toggle` e `handle`
-- As queries keys do React Query estão definidas em `global/types/idnex.ts`
+- As queries keys do React Query estão definidas em `global/types/index.ts`
 
 SHARED:
 - O módulo shared pode ser acessado tanto no frontend quanto no backend
