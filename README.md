@@ -2,7 +2,7 @@ GERAL:
 - Configure os .env do backend (comum e testes) e do root
 - Inicie o banco, backend e frontend com `npm start`
 - Execute `backend/npm run prisma:dev` para preparar o banco para desenvolvimento, isso irá aplicar migrations, rodar seeds e popular. Use também quando precisar redefinir o banco
-- Instale a extensão [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) para testar requisições através dos arquivos .http
+- Instale a extensão [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) para testar requisições através dos arquivos `.http`
 
 TESTES:
 - Execute `backend/npm run test:setup` para preparar o banco para testes
@@ -12,13 +12,13 @@ TESTES:
 - Os testes não passam pelo ValidationPipe do Zod, logo os inputs não são validados
 
 BACKEND:
-- As migrations podem ser geradas com `npm run migration:generate` e aplicadas com `npm run migration:run`
+- As migrations podem ser geradas com `backend/npm run migration:generate` e aplicadas com `backend/npm run migration:run`
 - Para usar transactions, use do método `.transaction` e não do `.$transaction`, que é nativo do Prisma. Esse método sobreescreve a função original e define tratativas para rollback e retries
 
 FRONTEND:
-- Para realizar requisições use o hook `useSafeFetch`, este método irá: mostrar snackbar em caso de erro, validar as permissões do usuário antes de cada request, fazer o stringfy e o parse de objetos
+- Para realizar requisições use o hook `useSafeFetch`, este método irá: mostrar snackbar em caso de erro, validar as permissões do usuário antes de cada request, fazer o stringify e o parse de objetos
 - Para criar rotas modifique o arquivo `routes.tsx`, isso irá automaticamente criar uma rota e também um item no menu lateral. Elas são dividas em dois grupos, rotas privadas e públicas. Ao acessar uma rota privada será feita uma request para buscar as permissões do usuário, caso não retorne corretamente irá redirecionar para o signin, então irá verificar se o usuário possui as permissões necessárias conforme definido para cada rota em `routes.tsx`
-- Para itens de formulário, use o `Form`, por padrão ele irá remover campos com strings vazias `""`. Também sempre forneça o defaultValues, garanta que ao menos uma string vazia `""` seja fornecida e não undefined
+- Para itens de formulário, use o `Form`, por padrão ele irá remover campos com strings vazias `""` ao realizar submit. Também sempre forneça o defaultValues, garanta que ao menos uma string vazia `""` seja fornecida e não undefined
 - Para usar um dialog, use do componente `Dialog` e do hook `useDialog`, que fornece um state para controle do dialog é metodos úteis como `close`, `open`, `toggle` e `handle`
 - As queries keys do React Query estão definidas em `global/types/index.ts`
 
@@ -28,5 +28,5 @@ SHARED:
 
 DEPLOY:
 - O frontend é hospeado no Git Hub Pages, para realizar o deploy da main faça `frontend/npm run deploy`
-- O banco é hospedado em uma VM no OCI. Para fazer o deploy execute `npm run up:db` estando conecta na VM. A primeira vez, execute `backend/npm run prisma:deploy` para preparar o banco para produção, isso irá aplicar migrations e rodar seeds
-- O backend é hospedado em uma VM no OCI. Para fazer o deploy execute `npm run up:backend-prod` estando conectado na VM
+- O banco é hospedado em uma VM no OCI. Para fazer o deploy, configure o .env do root e execute `npm run up:db` estando conectado na VM. A primeira vez, execute `backend/npm run prisma:deploy` para preparar o banco para produção, isso irá aplicar migrations e rodar seeds
+- O backend é hospedado em uma VM no OCI. Para fazer o deploy, configure o .env do backend e execute `npm run up:backend` estando conectado na VM
