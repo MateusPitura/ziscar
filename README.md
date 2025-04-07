@@ -28,5 +28,5 @@ SHARED:
 
 DEPLOY:
 - O frontend é hospeado no Git Hub Pages, para realizar o deploy da main faça `frontend/npm run deploy`
-- O banco é hospedado em uma VM no OCI. Para fazer o deploy, configure o .env do root e execute `npm run up:db` estando conectado na VM. A primeira vez, execute `backend/npm run prisma:deploy` para preparar o banco para produção, isso irá aplicar migrations e rodar seeds
-- O backend é hospedado em uma VM no OCI. Para fazer o deploy, configure o .env do backend e execute `npm run up:backend` estando conectado na VM
+- O banco é hospedado em uma VM no OCI. Para fazer o deploy, configure o .env (defina restart policy como `always`) do root e execute o comando de `npm run up:db` estando conectado na VM. A primeira vez, estando conectado a um backend com acesso ao banco em produção, execute `backend/npm run prisma:deploy` para preparar o banco para produção, isso irá aplicar migrations e rodar seeds
+- O backend é hospedado em uma VM no OCI. Para fazer o deploy, configure o .env do backend e execute o comando de `npm run up:backend` estando conectado na VM
