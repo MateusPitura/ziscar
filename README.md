@@ -1,10 +1,11 @@
-GERAL:
-- Configure os .env do backend (comum e testes) e do root
+DEV:
+- Configure `.env` e `backend/.env`
 - Inicie o banco, backend e frontend com `npm start`
 - Execute `backend/npm run prisma:dev` para preparar o banco para desenvolvimento, isso irá aplicar migrations, rodar seeds e popular. Use também quando precisar redefinir o banco
 - Instale a extensão [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) para testar requisições através dos arquivos `.http`
 
 TESTES:
+- Execute `up:test_db` para subir o banco de testes
 - Execute `backend/npm run test:setup` para preparar o banco para testes
 - Para executar os testes faça `backend/npm run test`
 - Um testes não pode interferir no outro, assim a ordem de execução não pode ser um fator determinante. Portanto, o comando `test:setup` deve ser usado para preparar o banco na primeira vez e enquanto criar/modificar os testes, logo usar o comando antes de cada suit de testes não é uma prática recomendada, pois cada testes deve ser capaz de fazer rollback de suas transações e manter o estado inicial do banco
@@ -28,5 +29,5 @@ SHARED:
 
 DEPLOY:
 - O frontend é hospeado no Git Hub Pages, para realizar o deploy da main faça `frontend/npm run deploy`
-- O banco é hospedado em uma VM no OCI. Para fazer o deploy, configure o .env (defina restart policy como `always`) do root e execute o comando de `npm run up:db` estando conectado na VM. A primeira vez, estando conectado a um backend com acesso ao banco em produção, execute `backend/npm run prisma:deploy` para preparar o banco para produção, isso irá aplicar migrations e rodar seeds
-- O backend é hospedado em uma VM no OCI. Para fazer o deploy, configure o .env do backend e execute o comando de `npm run up:backend` estando conectado na VM
+- O banco é hospedado em uma VM no OCI. Para fazer o deploy, configure o `.env` definindo `restart policy` como `always` e execute o comando de `npm run up:db` estando conectado na VM
+- O backend é hospedado em uma VM no OCI. Para fazer o deploy, configure o `backend/.env`, o `.env` com qualquer valor e execute o comando de `npm run up:backend` estando conectado na VM. A primeira vez, estando conectado a um backend com acesso ao banco em produção, execute `backend/npm run prisma:deploy` para preparar o banco para produção, isso irá aplicar migrations e rodar seeds
