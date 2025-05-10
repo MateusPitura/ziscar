@@ -3,7 +3,7 @@ import { GlobalProvider } from "./domains/global/contexts/GlobalContext";
 import Snackbar from "./design-system/Snackbar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import GlobalErrorBoundary from "./ErrorBoundary";
+import ErrorBoundary from "./ErrorBoundary";
 import { QueryKeys } from "./domains/global/types";
 import { router } from "./router";
 
@@ -25,7 +25,7 @@ declare module "@tanstack/react-query" {
 
 export default function App() {
   return (
-    <GlobalErrorBoundary>
+    <ErrorBoundary>
       <GlobalProvider>
         <QueryClientProvider client={queryClient}>
           <Snackbar />
@@ -33,6 +33,6 @@ export default function App() {
           <ReactQueryDevtools />
         </QueryClientProvider>
       </GlobalProvider>
-    </GlobalErrorBoundary>
+    </ErrorBoundary>
   );
 }

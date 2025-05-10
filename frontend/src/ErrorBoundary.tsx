@@ -1,21 +1,21 @@
 import React, { ErrorInfo } from "react";
 import { Childrenable } from "./domains/global/types";
 
-interface GlobalErrorBoundaryState {
+interface ErrorBoundaryState {
   hasError: boolean;
   error: Error | null;
 }
 
-class GlobalErrorBoundary extends React.Component<
+class ErrorBoundary extends React.Component<
   Childrenable,
-  GlobalErrorBoundaryState
+  ErrorBoundaryState
 > {
   constructor(props: Childrenable) {
     super(props);
     this.state = { hasError: false, error: null };
   }
 
-  static getDerivedStateFromError(error: Error): GlobalErrorBoundaryState {
+  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
     return { hasError: true, error };
   }
 
@@ -40,4 +40,4 @@ class GlobalErrorBoundary extends React.Component<
   }
 }
 
-export default GlobalErrorBoundary;
+export default ErrorBoundary;

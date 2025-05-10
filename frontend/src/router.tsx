@@ -3,6 +3,7 @@ import { privateRoutes, publicRoutes } from "./domains/global/constants/routes";
 import SuspensePage from "./domains/global/components/SuspensePage";
 import PrivatePageLayout from "./domains/global/components/PrivatePageLayout";
 import { createBrowserRouter } from "react-router-dom";
+import ErrorBoundary from "./ErrorBoundary";
 
 const privateRouteElements = privateRoutes.flatMap((group) =>
   group.routes.map((route) => ({
@@ -24,11 +25,19 @@ const publicRouteElements = publicRoutes.flatMap((group) =>
 
 export const router = createBrowserRouter([
   {
-    element: <PrivatePageLayout />,
+    element: (
+      <ErrorBoundary>
+        <PrivatePageLayout />
+      </ErrorBoundary>
+    ),
     children: privateRouteElements,
   },
   {
-    element: <PublicPageLayout />,
+    element: (
+      <ErrorBoundary>
+        <PublicPageLayout />
+      </ErrorBoundary>
+    ),
     children: publicRouteElements,
   },
 ]);
