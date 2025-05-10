@@ -52,7 +52,7 @@ export default function useSafeFetch() {
           credentials: enableCookie ? "include" : "omit",
         });
 
-        let content
+        let content;
         if (isExport && response.ok) {
           content = response;
         } else {
@@ -69,7 +69,6 @@ export default function useSafeFetch() {
           description = error.message;
         }
         showErrorSnackbar({
-          title: "Ocorreu um erro",
           description,
         });
         throw error;

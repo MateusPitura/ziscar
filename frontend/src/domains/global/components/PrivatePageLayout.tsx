@@ -48,7 +48,6 @@ export default function PrivatePageLayout(): ReactElement {
 
     if (resource && action && !userPermissions[resource][action]) {
       showErrorSnackbar({
-        title: "Ocorreu um erro",
         description: formatDeniedMessage({ resource, action }),
       });
       navigate("/profile");

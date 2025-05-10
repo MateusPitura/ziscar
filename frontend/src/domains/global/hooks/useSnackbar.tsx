@@ -4,8 +4,16 @@ import { ToastAction } from "@radix-ui/react-toast";
 import { Action, Resource } from "@shared/types";
 import { useCallback } from "react";
 
-interface ShowSnackbarProps {
+interface ShowSuccessSnackbarProps {
   title: string;
+  description?: string;
+  actionLabel?: string;
+  onActionClick?: () => void;
+  actionBtnResource?: Resource;
+  actionBtnAction?: Action;
+}
+
+interface ShowErrorSnackbarProps {
   description?: string;
   actionLabel?: string;
   onActionClick?: () => void;
@@ -24,7 +32,7 @@ export default function useSnackbar() {
       actionLabel,
       actionBtnResource,
       actionBtnAction,
-    }: ShowSnackbarProps) => {
+    }: ShowSuccessSnackbarProps) => {
       toast({
         title,
         description,
@@ -47,16 +55,15 @@ export default function useSnackbar() {
 
   const showErrorSnackbar = useCallback(
     ({
-      title,
       description,
       onActionClick,
       actionLabel,
       actionBtnResource,
       actionBtnAction,
-    }: ShowSnackbarProps) => {
+    }: ShowErrorSnackbarProps) => {
       toast({
         variant: "destructive",
-        title,
+        title: "Ocorreu um erro",
         description,
         action: onActionClick && (
           <ToastAction altText="Action button" asChild>

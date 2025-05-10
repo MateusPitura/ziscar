@@ -52,8 +52,7 @@ export default function AddressFields<T extends FieldValues>({
   useEffect(() => {
     if (cepInfo?.erro) {
       showErrorSnackbar({
-        title: "CEP não encontrado",
-        description: "Insira um CEP válido",
+        description: "CEP não encontrado",
       });
       return;
     }
