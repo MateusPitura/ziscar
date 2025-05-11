@@ -83,7 +83,6 @@ export class AuthService {
     await this.userService.update({
       where: { id: userId },
       userUpdateInDto: { jit: null },
-      showNotFoundError: false,
       clientId,
     });
 
@@ -125,8 +124,6 @@ export class AuthService {
       userUpdateInDto: { password: authResetPasswordInDto.password },
       clientId: authResetPasswordInDto.clientId,
     });
-
-    // TODO: aqui preciso ir ao banco e deixar null
 
     return true;
   }

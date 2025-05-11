@@ -80,21 +80,21 @@ export class AuthGuard extends BaseAuthGuard {
   }
   customizeValidation(): CustomizeValidationProperties {
     return {
-      shouldValidateJit: false,
-      shouldValidateExpirationTime: false,
+      shouldValidateJit: true,
+      shouldValidateExpirationTime: true,
     };
   }
 }
 
 @Injectable()
-export class AuthGuardNoJitValidation extends BaseAuthGuard {
+export class AuthGuardWithoutJit extends BaseAuthGuard {
   getToken(request: Request): string | undefined {
     return request.cookies[COOKIE_JWT_NAME] as string;
   }
   customizeValidation(): CustomizeValidationProperties {
     return {
-      shouldValidateJit: true,
-      shouldValidateExpirationTime: true,
+      shouldValidateJit: false,
+      shouldValidateExpirationTime: false,
     };
   }
 }

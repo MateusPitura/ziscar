@@ -1,18 +1,11 @@
 import DashBoard from "@/domains/global/components/DashBoard";
-// import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import { useQuery } from "@tanstack/react-query";
 import type { ReactNode } from "react";
-// import { BASE_URL } from "@/domains/global/constants";
 import { DashBoardProps } from "@/domains/global/types";
 
 export default function UsersDashBoard(): ReactNode {
-  // const { safeFetch } = useSafeFetch();
-
   async function getDashBoardInfo(): Promise<DashBoardProps[]> {
-    // return await safeFetch(`${BASE_URL}/usersDashboard`, { // TODO: implementar no backend
-    //   resource: "USERS",
-    //   action: "READ",
-    // });
+    // TODO: implementar no backend
     return [
       {
         id: "1",
