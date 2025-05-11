@@ -9,7 +9,7 @@ import {
   SignOutInput,
   SignUpInput,
 } from './auth.type';
-import { compareSync } from 'bcrypt';
+import { compare } from 'bcrypt';
 import { ClientService } from '../client/client.service';
 import { OrganizationService } from '../organization/organization.service';
 import { UserService } from '../user/user.service';
@@ -46,7 +46,7 @@ export class AuthService {
       showNotFoundError: false,
     });
 
-    if (!user || !compareSync(authSignInInDto.password, user.password)) {
+    if (!user || !(await compare(authSignInInDto.password, user.password))) {
       throw new UnauthorizedException('Email ou senha inválidos');
     }
 
