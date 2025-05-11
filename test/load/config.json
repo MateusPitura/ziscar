@@ -1,0 +1,28 @@
+[
+  {
+    "VUS": 5,
+    "STATUS_CODE": 200,
+    "ENDPOINT": "auth/sign-in",
+    "METHOD": "POST",
+    "PAYLOAD": {
+      "email": "${EMAIL}",
+      "password": "${PASSWORD}"
+    },
+    "SKIP": false
+  },
+  {
+    "VUS": 5,
+    "STATUS_CODE": 200,
+    "ENDPOINT": "auth/sign-out",
+    "METHOD": "POST",
+    "PAYLOAD": {},
+    "SKIP": false
+  },
+  {
+    "VUS": 15,
+    "STATUS_CODE": 200,
+    "ENDPOINT": "profile",
+    "METHOD": "GET",
+    "SKIP": false
+  }
+]
