@@ -17,7 +17,7 @@ export function setup() {
   });
 
   check(loginResponse, {
-    "login": (r) => {
+    login: (r) => {
       if (r.status === 200) {
         return true;
       } else {
@@ -37,7 +37,7 @@ export function setup() {
 export default function (data) {
   const url = `${__ENV.BASE_URL}/${__ENV.ENDPOINT}`;
 
-  const token = data.cookies['jwt'][0].Value; // TODO: usar 'jwt' da variável global
+  const token = data.cookies["jwt"][0].Value; // TODO: usar 'jwt' da variável global
 
   const params = {
     headers: {
@@ -54,14 +54,15 @@ export default function (data) {
       response = http.get(url, params);
       break;
     case '"POST"':
-      response = http.post(url, __ENV.PAYLOAD, params);
+      const payload = __ENV.PAYLOAD === "null" ? null : __ENV.PAYLOAD;
+      response = http.post(url, payload, params);
       break;
     default:
       break;
   }
 
   check(response, {
-    "check": (r) => {
+    check: (r) => {
       if (r.status === parseInt(__ENV.STATUS_CODE)) {
         return true;
       } else {

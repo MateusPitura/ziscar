@@ -54,4 +54,7 @@ jq -c '.[]' "$TEMP_CONFIG_FILE" | while read -r test; do
 
   # Run the k6 load test with the extracted variables
   k6 run --env BASE_URL=https://api.ziscar.me --env VUS="$VUS" --env STATUS_CODE="$STATUS_CODE" --env ENDPOINT="$ENDPOINT" --env METHOD="$METHOD" --env PAYLOAD="$PAYLOAD" --env EMAIL="$EMAIL" --env PASSWORD="$PASSWORD" load/main.js --summary-export="load/result/${ENDPOINT}/VUS#${VUS}#DATE#${TIMESTAMP}.json"
+
+  # Wait before the next test
+  sleep 5
 done

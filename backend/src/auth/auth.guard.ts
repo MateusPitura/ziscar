@@ -111,7 +111,7 @@ export class AuthGuardBodyToken extends BaseAuthGuard {
   }
   customizeValidation(): CustomizeValidationProperties {
     return {
-      shouldValidateJit: true,
+      shouldValidateJit: false,
       shouldValidateExpirationTime: true,
     };
   }

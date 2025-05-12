@@ -66,4 +66,7 @@ EXPOSE 3000
 # Run the application
 RUN npm run build
 
+# Prepare database for production
+RUN npm run prisma:deploy
+
 CMD ["sh", "-c", "npm run start:${APP_ENV}"]
