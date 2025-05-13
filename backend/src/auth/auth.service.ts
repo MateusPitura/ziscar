@@ -83,6 +83,7 @@ export class AuthService {
     await this.userService.update({
       where: { id: userId },
       userUpdateInDto: { jit: null },
+      showNotFoundError: false,
       clientId,
     });
 
