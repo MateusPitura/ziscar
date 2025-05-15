@@ -12,7 +12,7 @@ import {
   POPULATE_CLIENT_PRIMARY_ID,
   POPULATE_USER_DEFAULT,
 } from '../constants';
-import { AuthRequestBodyToken } from './auth.type';
+import { AuthRequestResetPassword } from './auth.type';
 import { PdfService } from 'src/pdf/pdf.service';
 import { SheetService } from 'src/sheet/sheet.service';
 
@@ -114,7 +114,7 @@ describe('AuthController', () => {
       const request = {
         ...new Request('http://localhost:3000'),
         authToken: resetPasswordPayload,
-      } as unknown as AuthRequestBodyToken;
+      } as unknown as AuthRequestResetPassword;
 
       const response = await authController.resetPassword(request, {
         password: '1234567',

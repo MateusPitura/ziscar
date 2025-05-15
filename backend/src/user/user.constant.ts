@@ -36,7 +36,7 @@ export const GET_PERMISSIONS = {
   },
 };
 
-export const PERMISSIONS: Permissions = {
+export const DEFAULT_PERMISSIONS: Permissions = {
   USERS: {
     CREATE: false,
     READ: false,

@@ -9,8 +9,8 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { AuthRequest, AuthRequestBodyToken } from './auth.type';
-import { AuthGuardBodyToken, AuthGuardWithoutJit } from './auth.guard';
+import { AuthRequest, AuthRequestResetPassword } from './auth.type';
+import { AuthGuardResetPassword, AuthGuardSignOut } from './auth.guard';
 import {
   AuthForgetPasswordInDto,
   AuthSignInInDto,
@@ -36,7 +36,7 @@ export class AuthController {
   }
 
   @HttpCode(HttpStatus.OK)
-  @UseGuards(AuthGuardWithoutJit)
+  @UseGuards(AuthGuardSignOut)
   @Post('sign-out')
   signOut(@Req() req: AuthRequest, @Res() res?: Response) {
     const { userId, clientId } = req.authToken;
@@ -49,9 +49,9 @@ export class AuthController {
   }
 
   @Post('reset-password')
-  @UseGuards(AuthGuardBodyToken)
+  @UseGuards(AuthGuardResetPassword)
   async resetPassword(
-    @Req() req: AuthRequestBodyToken,
+    @Req() req: AuthRequestResetPassword,
     @Body() { password }: PasswordInDto,
   ) {
     const { email, clientId } = req.authToken;

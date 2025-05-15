@@ -23,7 +23,7 @@ export interface AuthRequest extends Request {
   authToken: AuthSignin;
 }
 
-export interface AuthRequestBodyToken extends Request {
+export interface AuthRequestResetPassword extends Request {
   authToken: AuthResetPassword;
 }
 

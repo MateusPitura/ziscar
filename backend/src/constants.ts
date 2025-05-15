@@ -1,5 +1,5 @@
 import { AuthRequest } from './auth/auth.type';
-import { PERMISSIONS } from './user/user.constant';
+import { DEFAULT_PERMISSIONS } from './user/user.constant';
 
 export const COOKIE_JWT_NAME = 'jwt';
 export const JWT_EXPIRATION_TIME = 43200; // 12h
@@ -44,6 +44,6 @@ export const AUTH_REQUEST_DEFAULT = {
     userId: POPULATE_USER_DEFAULT.id,
     clientId: POPULATE_CLIENT_PRIMARY_ID,
     jit: '0aaa1cdc-9839-4c3f-879f-b5c037b7af3c',
-    permissions: PERMISSIONS,
+    permissions: DEFAULT_PERMISSIONS,
   },
 } as unknown as AuthRequest;

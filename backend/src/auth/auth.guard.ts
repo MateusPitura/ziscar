@@ -47,20 +47,18 @@ abstract class BaseAuthGuard implements CanActivate {
       if (customValidation.shouldValidateJit) {
         const { clientId, userId, jit } = payload as AuthSignin;
 
-        if (userId) {
-          const user = await this.userService.findOne({
-            select: {
-              jit: true,
-            },
-            where: {
-              id: userId,
-            },
-            clientId,
-          });
+        const user = await this.userService.findOne({
+          select: {
+            jit: true,
+          },
+          where: {
+            id: userId,
+          },
+          clientId,
+        });
 
-          if (jit !== user?.jit) {
-            throw new UnauthorizedException(UNAUTHORIZED);
-          }
+        if (jit !== user?.jit) {
+          throw new UnauthorizedException(UNAUTHORIZED);
         }
       }
 
@@ -87,7 +85,7 @@ export class AuthGuard extends BaseAuthGuard {
 }
 
 @Injectable()
-export class AuthGuardWithoutJit extends BaseAuthGuard {
+export class AuthGuardSignOut extends BaseAuthGuard {
   getToken(request: Request): string | undefined {
     return request.cookies[COOKIE_JWT_NAME] as string;
   }
@@ -100,7 +98,7 @@ export class AuthGuardWithoutJit extends BaseAuthGuard {
 }
 
 @Injectable()
-export class AuthGuardBodyToken extends BaseAuthGuard {
+export class AuthGuardResetPassword extends BaseAuthGuard {
   getToken(request: Request): string | undefined {
     const body = request.body as Record<string, string | undefined>;
     const token = body?.token;
