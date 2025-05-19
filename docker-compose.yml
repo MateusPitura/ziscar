@@ -1,11 +1,11 @@
 services:
   ziscar_db:
-    image: postgres:16
+    image: &postgres postgres:16
     container_name: ziscar_db
     env_file: 
       - path: .env
         required: false
-    restart: ${RESTART_POLICY}
+    restart: ${RESTART_POLICY:-no}
     environment:
       - POSTGRES_USER=${DB_USERNAME}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
@@ -16,7 +16,7 @@ services:
       - db-data:/var/lib/postgresql/data
 
   test_ziscar_db:
-    image: postgres:16
+    image: *postgres
     container_name: test_ziscar_db
     environment:
       - POSTGRES_USER=test_user

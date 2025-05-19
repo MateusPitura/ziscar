@@ -2,16 +2,18 @@
   "name": "ziscar",
   "private": true,
   "scripts": {
-    "start": "npm run up:db & npm run frontend & npm run backend",
-    "backend": "cd backend && npm run start:dev",
-    "frontend": "cd frontend && npm run dev",
-    "up:db": "docker-compose up --build -d ziscar_db",
-    "down:db": "docker-compose down ziscar_db",
-    "up:test_db": "docker-compose up --build -d test_ziscar_db",
-    "down:test_db": "docker-compose down test_ziscar_db",
-    "up:dev": "docker-compose up --build -d backend_dev frontend ziscar_db",
-    "down:dev": "docker-compose down backend_dev frontend ziscar_db",
-    "up:backend": "docker-compose up --build -d backend_prod",
-    "down:backend": "docker-compose down backend_prod"
+    "start": "npm run dev:db & npm --prefix frontend run dev & npm --prefix backend run start:dev",
+
+    "dev": "docker-compose up --build -d backend_dev frontend ziscar_db",
+    "dev:down": "docker-compose down backend_dev frontend ziscar_db",
+    "dev:db": "docker-compose up --build -d ziscar_db",
+    "dev:down:db": "docker-compose down ziscar_db",
+    "dev:test_db": "docker-compose up --build -d test_ziscar_db",
+    "dev:down:test_db": "docker-compose down test_ziscar_db",
+
+    "prod:db": "RESTART_POLICY=always npm run dev:db",
+    "prod:down:db": "npm run dev:down:db",
+    "prod:backend": "docker-compose up --build -d backend_prod",
+    "prod:down:backend": "docker-compose down backend_prod"
   }
 }
