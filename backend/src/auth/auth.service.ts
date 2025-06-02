@@ -15,7 +15,6 @@ import { OrganizationService } from '../organization/organization.service';
 import { UserService } from '../user/user.service';
 import { EmailService } from '../email/email.service';
 import { PrismaService } from '../database/prisma.service';
-import { generateRandomPassword } from '../utils/generateRandomPassword';
 import { SEED_ROLE_ADMIN_ID } from '@shared/constants';
 import { COOKIE_JWT_NAME, FRONTEND_URL } from 'src/constants';
 import { randomUUID } from 'crypto';
@@ -151,9 +150,5 @@ export class AuthService {
     });
 
     return true;
-  }
-
-  generateRandomPassword() {
-    return generateRandomPassword();
   }
 }

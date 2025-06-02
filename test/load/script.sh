@@ -17,44 +17,37 @@ if [ -z "$EMAIL" ] || [ -z "$PASSWORD" ]; then
   exit 1
 fi
 
-# Path to the JSON configuration file and output name
-CONFIG_FILE="load/config.json"
+# Path to the routes and result directory
+ROUTES_DIR="$SCRIPT_DIR/routes"
+RESULTS_DIR="$SCRIPT_DIR/result"
+
+# Current timestamp
 TIMESTAMP=$(date +%Y%m%d%H%M)
 
-# Replace the email and password in the JSON file
-TEMP_CONFIG_FILE=$(mktemp)
-jq --arg EMAIL "$EMAIL" --arg PASSWORD "$PASSWORD" '
-  map(
-    if .PAYLOAD then
-      .PAYLOAD.email = ($EMAIL // .PAYLOAD.email) |
-      .PAYLOAD.password = ($PASSWORD // .PAYLOAD.password)
-    else
-      .
-    end
-  )
-' "$CONFIG_FILE" > "$TEMP_CONFIG_FILE"
-
-# Iterate through each test configuration in the JSON file
-jq -c '.[]' "$TEMP_CONFIG_FILE" | while read -r test; do
-  # Check if the "skip" property exists and is true
-  SKIP=$(echo "$test" | jq -r '.SKIP // false')
-  if [ "$SKIP" = "true" ]; then
-    continue
+# If an argument is provided, use it as the test file (relative to ROUTES_DIR)
+if [ -n "$1" ]; then
+  jsfiles=("$ROUTES_DIR/$1")
+  if [ ! -f "${jsfiles[0]}" ]; then
+    echo "Error: Test file ${jsfiles[0]} not found."
+    exit 1
   fi
+else
+  mapfile -t jsfiles < <(find "$ROUTES_DIR" -type f -name "*.js")
+fi
 
-  # Read the test configuration variables
-  VUS=$(echo "$test" | jq -r '.VUS')
-  STATUS_CODE=$(echo "$test" | jq -r '.STATUS_CODE')
-  ENDPOINT=$(echo "$test" | jq -r '.ENDPOINT')
-  PAYLOAD=$(echo "$test" | jq -c '.PAYLOAD')
-  METHOD=$(echo "$test" | jq -c '.METHOD')
+for jsfile in "${jsfiles[@]}"; do
+  # Get relative path from routes/ (e.g., auth/get.js)
+  relpath="${jsfile#$ROUTES_DIR/}"
+  # Get just the file name without extension (e.g., get)
+  filename_noext="$(basename "$jsfile" .js)"
+  # Directory for result (e.g., result/auth)
+  result_subdir="$RESULTS_DIR/$(dirname "$relpath")/${filename_noext}"
 
-  # Create the result directory for the endpoint if it doesn't exist
-  mkdir -p "load/result/${ENDPOINT}"
+  mkdir -p "$result_subdir"
 
-  # Run the k6 load test with the extracted variables
-  k6 run --env BASE_URL=https://api.ziscar.me --env VUS="$VUS" --env STATUS_CODE="$STATUS_CODE" --env ENDPOINT="$ENDPOINT" --env METHOD="$METHOD" --env PAYLOAD="$PAYLOAD" --env EMAIL="$EMAIL" --env PASSWORD="$PASSWORD" load/main.js --summary-export="load/result/${ENDPOINT}/VUS#${VUS}#DATE#${TIMESTAMP}.json"
+  # Run the k6 load test using the current jsfile
+  k6 run --env EMAIL="$EMAIL" --env PASSWORD="$PASSWORD" "$jsfile" --summary-export="${result_subdir}/${TIMESTAMP}.json"
 
-  # Wait before the next test
-  sleep 5
+  # Sleep 5 seconds if not the last iteration
+  [ "$jsfile" != "${jsfiles[-1]}" ] && sleep 5
 done
