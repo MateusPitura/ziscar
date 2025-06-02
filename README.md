@@ -4,13 +4,16 @@ DEV:
 - Execute `backend/npm run prisma:dev` para preparar o banco para desenvolvimento, isso irá aplicar migrations, rodar seeds e popular. Use também quando precisar redefinir o banco
 - Instale a extensão [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) para testar requisições através dos arquivos `.http`
 
-TESTES:
+TESTES UNITÁRIOS:
 - Execute `up:test_db` para subir o banco de testes
 - Execute `backend/npm run test:setup` para preparar o banco para testes
 - Para executar os testes faça `backend/npm run test`
 - Um testes não pode interferir no outro, assim a ordem de execução não pode ser um fator determinante. Portanto, o comando `test:setup` deve ser usado para preparar o banco na primeira vez e enquanto criar/modificar os testes, logo usar o comando antes de cada suit de testes não é uma prática recomendada, pois cada testes deve ser capaz de fazer rollback de suas transações e manter o estado inicial do banco
 - Para realizar rollback faça uso das transações. Se o teste buscar a falha, o próprio método testado deve ser capaz de realizar o rollback. Se o método testado possui uma transaction (ex.: createAccount), use o spyOn para injetar a transaction. Nos outros casos use Reflect para injetar a transaction
 - Os testes não passam pelo ValidationPipe do Zod, logo os inputs não são validados. Também não passam pelos AuthGuards
+
+TESTES DE CARGA:
+- Há também testes de carga com k6, execute `test/npm run test:load`. O comando irá iterar pelas pastas de `test/load/routes`, que deve ficar organizada conforme as rotas do backend. O resultado dos testes serão escritos em um JSON e salvos na pasta `test/load/result`, para posterior comparação. Atenção, o teste de carga interage com o ambiente de produção, não com o de desenvolvimento
 
 BACKEND:
 - As migrations podem ser geradas com `backend/npm run migration:generate` e aplicadas com `backend/npm run migration:run`
