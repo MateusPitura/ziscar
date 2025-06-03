@@ -1,6 +1,6 @@
 DEV:
 - Configure `.env` e `backend/.env`
-- Inicie o banco, backend e frontend com `npm start`
+- Inicie o banco, backend e frontend com `npm start` ou com `npm run dev` para executar com Docker
 - Execute `backend/npm run prisma:dev` para preparar o banco para desenvolvimento, isso irá aplicar migrations, rodar seeds e popular. Use também quando precisar redefinir o banco
 - Instale a extensão [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) para testar requisições através dos arquivos `.http`
 
@@ -13,7 +13,7 @@ TESTES UNITÁRIOS:
 - Os testes não passam pelo ValidationPipe do Zod, logo os inputs não são validados. Também não passam pelos AuthGuards
 
 TESTES DE CARGA:
-- Há também testes de carga com k6, execute `test/npm run test:load`. O comando irá iterar pelas pastas de `test/load/routes`, que deve ficar organizada conforme as rotas do backend. O resultado dos testes serão escritos em um JSON e salvos na pasta `test/load/result`, para posterior comparação. Atenção, o teste de carga interage com o ambiente de produção, não com o de desenvolvimento
+- Há também testes de carga com k6, execute `test/npm run test:load`. O comando irá iterar pelas pastas de `test/load/routes`, que deve ficar organizada conforme as rotas do backend. O resultado dos testes serão escritos em um JSON e salvos na pasta `test/load/result`, para posterior comparação. Atenção, o teste de carga interage com o ambiente de produção, não com o de desenvolvimento. É possível ainda executar apenas um teste de carga com `test/npm run test:load <path>.js`
 
 BACKEND:
 - As migrations podem ser geradas com `backend/npm run migration:generate` e aplicadas com `backend/npm run migration:run`

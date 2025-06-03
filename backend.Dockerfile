@@ -44,29 +44,28 @@ RUN apt update && apt install -y \
     xdg-utils \
     && rm -rf /var/lib/apt/lists/*
 
-# Set the working directory
+# Set the working directory for shared
 WORKDIR /app/shared
-# Copy package.json
+# Copy package.json for shared
 COPY shared/package*.json ./
+# Install dependencies for shared
+RUN npm install
+# Copy the rest of the application files for shared
+COPY shared/ ./
+
+# Set the working directory
+WORKDIR /app/backend
+# Copy package.json
+COPY backend/package*.json ./
 # Install dependencies
 RUN npm install
 # Copy the rest of the application files
-COPY shared/ ./
-
-WORKDIR /app/backend
-COPY backend/package*.json ./
-RUN npm install
 COPY backend/ ./
+
 # Generate Prisma client
 RUN npx prisma generate
 
 # Expose the application port
 EXPOSE 3000
 
-# Run the application
-RUN npm run build
-
-# Prepare database for production
-RUN npm run prisma:deploy
-
-CMD ["sh", "-c", "npm run start:${APP_ENV}"]
+CMD ["sh", "-c", "npm run ${APP_ENV}"]

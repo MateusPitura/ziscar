@@ -1,25 +1,22 @@
 # Use the official Node.js image
 FROM node:22
 
-# Create a working directory
-WORKDIR /app
-
-# Copy package.json and install dependencies
-COPY frontend/package*.json ./
+# Set the working directory for shared
+WORKDIR /app/shared
+# Copy package.json for shared
+COPY shared/package*.json ./
+# Install dependencies for shared
 RUN npm install
+# Copy the rest of the application files for shared
+COPY shared/ ./
 
 # Set the working directory
-WORKDIR /app/shared
+WORKDIR /app/frontend
 # Copy package.json
-COPY shared/package*.json ./
+COPY frontend/package*.json ./
 # Install dependencies
 RUN npm install
 # Copy the rest of the application files
-COPY shared/ ./
-
-WORKDIR /app/frontend
-COPY frontend/package*.json ./
-RUN npm install
 COPY frontend/ .
 
 # Expose the port for serving the static files
