@@ -1,10 +1,33 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Roles } from '@prisma/client';
 import {
   SEED_ROLE_ADMIN_ID,
   SEED_ROLE_SALES_ID,
 } from '../../shared/src/constants';
 
 const prisma = new PrismaClient();
+
+function safeUpsertRole(
+  id: number,
+  name: Roles,
+  permissions: { id: number }[],
+) {
+  return {
+    where: { id },
+    update: {
+      name,
+      permissions: {
+        set: permissions,
+      },
+    },
+    create: {
+      id,
+      name,
+      permissions: {
+        connect: permissions,
+      },
+    },
+  };
+}
 
 async function seed() {
   console.log('🌠 Started to seed database');
@@ -32,27 +55,21 @@ async function seed() {
         action: 'DELETE',
       },
     ],
+    skipDuplicates: true,
   });
 
   await Promise.all([
-    prisma.role.create({
-      data: {
-        id: SEED_ROLE_ADMIN_ID,
-        name: 'ADMIN',
-        permissions: {
-          connect: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }],
-        },
-      },
-    }),
-    prisma.role.create({
-      data: {
-        id: SEED_ROLE_SALES_ID,
-        name: 'SALES',
-        permissions: {
-          connect: [{ id: 2 }],
-        },
-      },
-    }),
+    prisma.role.upsert(
+      safeUpsertRole(SEED_ROLE_ADMIN_ID, 'ADMIN', [
+        { id: 1 },
+        { id: 2 },
+        { id: 3 },
+        { id: 4 },
+      ]),
+    ),
+    prisma.role.upsert(
+      safeUpsertRole(SEED_ROLE_SALES_ID, 'SALES', [{ id: 2 }]),
+    ),
   ]);
 
   console.log('🌠 Successfully seeded database');
