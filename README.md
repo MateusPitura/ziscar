@@ -33,4 +33,5 @@ SHARED:
 DEPLOY:
 - O frontend é hospeado no Git Hub Pages, para realizar o deploy da main faça `frontend/npm run prod`
 - O banco é hospedado em uma VM no OCI. Para fazer o deploy, configure o `.env` e execute o comando de `npm run prod:db` estando conectado na VM
-- O backend é hospedado em uma VM no OCI. Para fazer o deploy, configure o `backend/.env` e execute o comando de `npm run prod:backend` estando conectado na VM. A primeira vez, estando conectado a um backend com acesso ao banco em produção, execute `backend/npm run prod:prisma` para preparar o banco para produção, isso irá aplicar migrations e rodar seeds
+- O backend é hospedado em uma VM no OCI. Para fazer o deploy, configure o `backend/.env` e execute o comando de `npm run prod:backend` estando conectado na VM. 
+- A primeira vez e quando precisar atualizar o banco de produção, use o Bastion com o IP e porta do banco de produção, configure o `backend/.env` com o usuário, senha e porta do banco de produção, mantenha localhost. Então execute `backend/npm run prod:prisma` para aplicar migrations e rodar seeds
