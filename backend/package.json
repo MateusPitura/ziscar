@@ -12,9 +12,9 @@
     "dev:migration-generate": "prisma migrate dev --create-only",
     "dev:migration-run": "prisma migrate deploy && npx prisma generate",
     "prod:prisma": "npx prisma migrate deploy && npx prisma generate && ts-node ./prisma/seed.ts",
-    "dev:prisma": "ts-node ./prisma/initializer.ts",
+    "dev:prisma": "ts-node ./prisma/init.ts",
     "test": "jest",
-    "test:setup": "NODE_ENV=test ts-node ./prisma/initializer.ts"
+    "test:init": "NODE_ENV=test ts-node ./prisma/init.ts"
   },
   "dependencies": {
     "@nestjs-modules/mailer": "^2.0.2",

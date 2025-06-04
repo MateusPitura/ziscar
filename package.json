@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "start": "npm run dev:db & npm --prefix frontend run dev & npm --prefix backend run dev",
-    "dev": "docker-compose up --build -d backend frontend database",
+    "dev": "npm run dev:db && docker-compose up --build -d backend frontend",
     "dev:down": "docker-compose down backend frontend database",
     "dev:db": "docker-compose up --build -d database",
     "dev:down:db": "docker-compose down database",
