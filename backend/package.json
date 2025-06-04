@@ -7,18 +7,14 @@
   "license": "UNLICENSED",
   "scripts": {
     "dev": "nest start --debug --watch",
-    "build": "nest build",
     "prod": "npm run build && NODE_ENV=production node dist/backend/src/main",
+    "build": "nest build",
+    "dev:migration-generate": "prisma migrate dev --create-only",
+    "dev:migration-run": "prisma migrate deploy && npx prisma generate",
+    "prod:prisma": "npx prisma migrate deploy && npx prisma generate && ts-node ./prisma/seed.ts",
+    "dev:prisma": "ts-node ./prisma/initializer.ts",
     "test": "jest",
-    "test:setup": "NODE_ENV=test ts-node ./prisma/initializer.ts",
-    "test:watch": "jest --watch",
-    "test:cov": "jest --coverage",
-    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json",
-    "migration:generate": "prisma migrate dev --create-only",
-    "migration:run": "prisma migrate deploy && npx prisma generate",
-    "prisma:deploy": "npx prisma migrate deploy && npx prisma generate && ts-node ./prisma/seed.ts",
-    "prisma:dev": "ts-node ./prisma/initializer.ts"
+    "test:setup": "NODE_ENV=test ts-node ./prisma/initializer.ts"
   },
   "dependencies": {
     "@nestjs-modules/mailer": "^2.0.2",

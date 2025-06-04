@@ -1,11 +1,11 @@
 DEV:
 - Configure `.env` e `backend/.env`
 - Inicie o banco, backend e frontend com `npm start` ou com `npm run dev` para executar com Docker
-- Execute `backend/npm run prisma:dev` para preparar o banco para desenvolvimento, isso irá aplicar migrations, rodar seeds e popular. Use também quando precisar redefinir o banco
+- Execute `backend/npm run dev:prisma` para preparar o banco para desenvolvimento, isso irá aplicar migrations, rodar seeds e popular. Use também quando precisar redefinir o banco
 - Instale a extensão [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) para testar requisições através dos arquivos `.http`
 
 TESTES UNITÁRIOS:
-- Execute `up:test_db` para subir o banco de testes
+- Execute `test:db` para subir o banco de testes
 - Execute `backend/npm run test:setup` para preparar o banco para testes
 - Para executar os testes faça `backend/npm run test`
 - Um testes não pode interferir no outro, assim a ordem de execução não pode ser um fator determinante. Portanto, o comando `test:setup` deve ser usado para preparar o banco na primeira vez e enquanto criar/modificar os testes, logo usar o comando antes de cada suit de testes não é uma prática recomendada, pois cada testes deve ser capaz de fazer rollback de suas transações e manter o estado inicial do banco
@@ -16,7 +16,7 @@ TESTES DE CARGA:
 - Há também testes de carga com k6, execute `test/npm run test:load`. O comando irá iterar pelas pastas de `test/load/routes`, que deve ficar organizada conforme as rotas do backend. O resultado dos testes serão escritos em um JSON e salvos na pasta `test/load/result`, para posterior comparação. Atenção, o teste de carga interage com o ambiente de produção, não com o de desenvolvimento. É possível ainda executar apenas um teste de carga com `test/npm run test:load <path>.js`
 
 BACKEND:
-- As migrations podem ser geradas com `backend/npm run migration:generate` e aplicadas com `backend/npm run migration:run`
+- As migrations podem ser geradas com `backend/npm run dev:migration-generate` e aplicadas com `backend/npm run dev:migration-run`
 - Para usar transactions, use do método `.transaction` e não do `.$transaction`, que é nativo do Prisma. Esse método sobreescreve a função original e define tratativas para rollback e retries
 
 FRONTEND:
@@ -31,6 +31,6 @@ SHARED:
 - Ao invés de usar o zod diretamente, use o `safeZod`, importado como `s`. Ele abstrai e define padrões para o uso do zod, como toda string ser required e no máximo 128 caracteres. Para tornar opcional, no backend use `.optional()` e no frontend `.or(s.empty())`. Essa distinção é necessária pois no frontend não podemos ter campos undefined, apenas strings vazias `""`
 
 DEPLOY:
-- O frontend é hospeado no Git Hub Pages, para realizar o deploy da main faça `frontend/npm run deploy`
+- O frontend é hospeado no Git Hub Pages, para realizar o deploy da main faça `frontend/npm run prod`
 - O banco é hospedado em uma VM no OCI. Para fazer o deploy, configure o `.env` e execute o comando de `npm run prod:db` estando conectado na VM
-- O backend é hospedado em uma VM no OCI. Para fazer o deploy, configure o `backend/.env` e execute o comando de `npm run prod:backend` estando conectado na VM. A primeira vez, estando conectado a um backend com acesso ao banco em produção, execute `backend/npm run prisma:deploy` para preparar o banco para produção, isso irá aplicar migrations e rodar seeds
+- O backend é hospedado em uma VM no OCI. Para fazer o deploy, configure o `backend/.env` e execute o comando de `npm run prod:backend` estando conectado na VM. A primeira vez, estando conectado a um backend com acesso ao banco em produção, execute `backend/npm run prod:prisma` para preparar o banco para produção, isso irá aplicar migrations e rodar seeds

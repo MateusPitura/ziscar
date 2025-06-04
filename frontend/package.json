@@ -5,10 +5,9 @@
   "type": "module",
   "homepage": "https://mateuspitura.github.io/ziscar/",
   "scripts": {
-    "predeploy": "npm run build",
-    "build": "tsc -b && vite build",
-    "deploy": "gh-pages -d dist",
-    "dev": "vite"
+    "dev": "vite",
+    "prod": "npm run build && gh-pages -d dist",
+    "build": "tsc -b && vite build"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
