@@ -1,1 +1,0 @@
-import{r as t,j as e}from"./index-CERee9Ii.js";const s=t.createContext(null);function d({children:r}){const[n,o]=t.useState("");function u(i){o(i)}const a=t.useMemo(()=>({example:n,handleExample:u}),[n]);return e.jsx(s.Provider,{value:a,children:r})}function x(){return e.jsx("div",{children:"Audit Page"})}function l(){return e.jsx(d,{children:e.jsx(x,{})})}export{l as default};
