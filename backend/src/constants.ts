@@ -4,10 +4,11 @@ import { DEFAULT_PERMISSIONS } from './user/user.constant';
 export const COOKIE_JWT_NAME = 'jwt';
 export const JWT_EXPIRATION_TIME = 43200; // 12h
 
-export const FRONTEND_URL =
-  process.env.NODE_ENV === 'production'
-    ? 'https://ziscar.me'
-    : 'http://localhost:5173';
+export const isProduction = process.env.NODE_ENV === 'production';
+
+export const FRONTEND_URL = isProduction
+  ? 'https://ziscar.me'
+  : 'http://localhost:5173';
 
 export const POPULATE_USER_DEFAULT = {
   id: 150,

@@ -21,6 +21,7 @@ import { randomUUID } from 'crypto';
 import handlePermissions from 'src/utils/handlePermissions';
 import { Role } from 'src/user/user.type';
 import { GET_PERMISSIONS } from 'src/user/user.constant';
+import { isProduction } from 'src/constants';
 
 @Injectable()
 export class AuthService {
@@ -71,8 +72,8 @@ export class AuthService {
 
     res?.cookie(COOKIE_JWT_NAME, token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production' ? true : false,
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      secure: isProduction ? true : false,
+      sameSite: isProduction ? 'none' : 'lax',
     });
 
     return res?.json(true);
