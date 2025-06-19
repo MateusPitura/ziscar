@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source .env
+
 # Inputs
 CERT_NAME="cert-$(date +%Y%m%d)"
 PUBLIC_FILE_PATH="$HOME/Downloads/cert.pem"

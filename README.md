@@ -1,10 +1,12 @@
 DEV:
+
 - Configure `.env` e `backend/.env`
 - Inicie o banco, backend e frontend com `npm start` ou com `npm run dev` para executar com Docker
 - Execute `backend/npm run dev:prisma` para preparar o banco para desenvolvimento, isso irá aplicar migrations, rodar seeds e popular. Use também quando precisar redefinir o banco
 - Instale a extensão [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) para testar requisições através dos arquivos `.http`
 
 TESTES UNITÁRIOS:
+
 - Execute `test:db` para subir o banco de testes
 - Execute `backend/npm run test:init` para preparar o banco para testes
 - Para executar os testes faça `backend/npm run test`
@@ -13,13 +15,16 @@ TESTES UNITÁRIOS:
 - Os testes não passam pelo ValidationPipe do Zod, logo os inputs não são validados. Também não passam pelos AuthGuards
 
 TESTES DE CARGA:
-- Há também testes de carga com k6, execute `test/npm run test:load`. O comando irá iterar pelas pastas de `test/load/routes`, que deve ficar organizada conforme as rotas do backend. O resultado dos testes serão escritos em um JSON e salvos na pasta `test/load/result`, para posterior comparação. Atenção, o teste de carga interage com o ambiente de produção, não com o de desenvolvimento. É possível ainda executar apenas um teste de carga com `test/npm run test:load <path>.js`
+
+- Há também testes de carga com k6, execute `test/npm run test:load`. O comando irá iterar pelas pastas de `test/load/routes`, que deve ficar organizada conforme as rotas do backend. O resultado dos testes serão escritos em um JSON e salvos na pasta `test/load/result`, para posterior comparação. Atenção, o teste de carga interage com o ambiente de produção, não com o de desenvolvimento. É possível ainda executar apenas um teste de carga com `test/npm run test:load load/routes/<path>.js`
 
 BACKEND:
+
 - As migrations podem ser geradas com `backend/npm run dev:migration-generate` e aplicadas com `backend/npm run dev:migration-run`
 - Para usar transactions, use do método `.transaction` e não do `.$transaction`, que é nativo do Prisma. Esse método sobreescreve a função original e define tratativas para rollback e retries
 
 FRONTEND:
+
 - Para realizar requisições use o hook `useSafeFetch`, este método irá: mostrar snackbar em caso de erro, validar as permissões do usuário antes de cada request, fazer o stringify e o parse de objetos
 - Para criar rotas modifique o arquivo `routes.tsx`, isso irá automaticamente criar uma rota e também um item no menu lateral. Elas são dividas em dois grupos, rotas privadas e públicas. Ao acessar uma rota privada será feita uma request para buscar as permissões do usuário, caso não retorne corretamente irá redirecionar para o signin, então irá verificar se o usuário possui as permissões necessárias conforme definido para cada rota em `routes.tsx`
 - Para itens de formulário, use o `Form`, por padrão ele irá remover campos com strings vazias `""` ao realizar submit. Também sempre forneça o defaultValues, garanta que ao menos uma string vazia `""` seja fornecida e não undefined
@@ -27,11 +32,13 @@ FRONTEND:
 - As queries keys do React Query estão definidas em `global/types/index.ts`
 
 SHARED:
+
 - O módulo shared pode ser acessado tanto no frontend quanto no backend
 - Ao invés de usar o zod diretamente, use o `safeZod`, importado como `s`. Ele abstrai e define padrões para o uso do zod, como toda string ser required e no máximo 128 caracteres. Para tornar opcional, no backend use `.optional()` e no frontend `.or(s.empty())`. Essa distinção é necessária pois no frontend não podemos ter campos undefined, apenas strings vazias `""`
 
 DEPLOY:
+
 - O frontend é hospeado no Git Hub Pages, para realizar o deploy da main faça `frontend/npm run prod`
 - O banco é hospedado em uma VM no OCI. Para fazer o deploy, configure o `.env` e execute o comando de `npm run prod:db` estando conectado na VM
-- O backend é hospedado em uma VM no OCI. Para fazer o deploy, configure o `backend/.env` e execute o comando de `npm run prod:backend` estando conectado na VM. 
+- O backend é hospedado em uma VM no OCI. Para fazer o deploy, configure o `backend/.env` e execute o comando de `npm run prod:backend` estando conectado na VM.
 - A primeira vez e quando precisar atualizar o banco de produção, use o Bastion com o IP e porta do banco de produção, configure o `backend/.env` com o usuário, senha e porta do banco de produção, mantenha localhost. Então execute `backend/npm run prod:prisma` para aplicar migrations e rodar seeds

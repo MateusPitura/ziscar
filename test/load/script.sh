@@ -1,21 +1,15 @@
 #!/bin/bash
 
-# Get the directory of the script
-SCRIPT_DIR=$(dirname "$(realpath "$0")")
-
-# Load email and password from .env file in the same directory as the script
-if [ -f "$SCRIPT_DIR/.env" ]; then
-  export $(grep -v '^#' "$SCRIPT_DIR/.env" | xargs)
-else
-  echo "Error: .env file not found in $SCRIPT_DIR."
-  exit 1
-fi
+source .env
 
 # Check if email and password from .env are provided
 if [ -z "$EMAIL" ] || [ -z "$PASSWORD" ]; then
   echo "Error: Email and password are required."
   exit 1
 fi
+
+# Get the directory of the script
+SCRIPT_DIR=$(dirname "$(realpath "$0")")
 
 # Path to the routes and result directory
 ROUTES_DIR="$SCRIPT_DIR/routes"
@@ -24,9 +18,9 @@ RESULTS_DIR="$SCRIPT_DIR/result"
 # Current timestamp
 TIMESTAMP=$(date +%Y%m%d%H%M)
 
-# If an argument is provided, use it as the test file (relative to ROUTES_DIR)
+# If an argument is provided, use it as the test file
 if [ -n "$1" ]; then
-  jsfiles=("$ROUTES_DIR/$1")
+  jsfiles=$1
   if [ ! -f "${jsfiles[0]}" ]; then
     echo "Error: Test file ${jsfiles[0]} not found."
     exit 1
