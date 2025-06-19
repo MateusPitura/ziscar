@@ -56,7 +56,7 @@ function AddressFormContent({
   return (
     <>
       <Dialog.Body>
-        <AddressFields<AddressFormInputs> />
+        <AddressFields<AddressFormInputs> autoFocus />
       </Dialog.Body>
       <Dialog.Footer
         labelPrimaryBtn="Alterar"

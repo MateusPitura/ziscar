@@ -61,6 +61,7 @@ export default function NewPasswordForm(): ReactNode {
           label="Nova senha"
           name="newPassword"
           required
+          autoFocus
         />
         <InputPassword<NewPasswordFormInputs>
           label="Confirmar senha"

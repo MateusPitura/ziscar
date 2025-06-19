@@ -63,6 +63,8 @@ export default function UserForm({
                   name="fullName"
                   label="Nome completo"
                   required
+                  autoFocus
+                  // tabIndex={-1}
                 />
                 <Input<UserFormInputs> name="email" label="Email" required />
                 <Input<UserFormInputs>
@@ -88,7 +90,10 @@ export default function UserForm({
             <Section.Group>
               <Section.Header title="Endereço" />
               <Section.Body>
-                <AddressFields<UserFormInputs> inputNamePrefix="address" />
+                <AddressFields<UserFormInputs>
+                  inputNamePrefix="address"
+                  autoFocus={false}
+                />
               </Section.Body>
             </Section.Group>
             <Section.Group>

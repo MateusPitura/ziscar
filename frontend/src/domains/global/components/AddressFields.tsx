@@ -17,10 +17,12 @@ interface ViaCepAddress {
 
 interface AddressFieldsProps<T extends FieldValues> {
   inputNamePrefix?: keyof T & string;
+  autoFocus?: boolean;
 }
 
 export default function AddressFields<T extends FieldValues>({
   inputNamePrefix,
+  autoFocus = false,
 }: AddressFieldsProps<T>): ReactNode {
   const [currentValidCep, setCurrentValidCep] = useState("");
 
@@ -97,6 +99,8 @@ export default function AddressFields<T extends FieldValues>({
           mask="cep"
           maxLength={9}
           required
+          autoFocus={autoFocus}
+          autoSelect={false}
         />
         <Button
           variant="quaternary"

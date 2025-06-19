@@ -55,7 +55,7 @@ export default function SignInForm(): ReactNode {
         className="flex-1 flex flex-col"
       >
         <div className="flex-1 flex flex-col gap-2">
-          <Input<SignInFormInputs> name="email" label="Email" required />
+          <Input<SignInFormInputs> name="email" label="Email" required autoFocus />
           <InputPassword<SignInFormInputs>
             label="Senha"
             name="password"

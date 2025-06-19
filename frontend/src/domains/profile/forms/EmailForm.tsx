@@ -46,7 +46,13 @@ function EmailFormContent({ isPending }: EmailFormContentProps): ReactElement {
   return (
     <>
       <Dialog.Body>
-        <Input<EmailFormInputs> name="email" label="Email" required />
+        <Input<EmailFormInputs>
+          name="email"
+          label="Email"
+          required
+          autoSelect={false}
+          autoFocus
+        />
       </Dialog.Body>
       <Dialog.Footer
         labelPrimaryBtn="Alterar"

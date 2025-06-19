@@ -48,6 +48,8 @@ function CellphoneFormContent({ isPending }: CellphoneFormContentProps) {
           label="Celular"
           mask="cellphone"
           maxLength={15}
+          autoSelect={false}
+          autoFocus
         />
       </Dialog.Body>
       <Dialog.Footer

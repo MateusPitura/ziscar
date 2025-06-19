@@ -8,7 +8,7 @@ import { SchemaUserForm } from "@/domains/users/schemas";
 
 const SchemaCodeForm = SchemaUserForm.pick({
   code: true,
-})
+});
 
 type CodeFormInputs = s.infer<typeof SchemaCodeForm>;
 
@@ -43,7 +43,12 @@ function CodeFormContent({ isPending }: CodeFormContentProps) {
   return (
     <>
       <Dialog.Body>
-        <Input<CodeFormInputs> name="code" label="Matrícula" />
+        <Input<CodeFormInputs>
+          name="code"
+          label="Matrícula"
+          autoSelect={false}
+          autoFocus
+        />
       </Dialog.Body>
       <Dialog.Footer
         labelPrimaryBtn="Alterar"

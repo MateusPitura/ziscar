@@ -57,6 +57,7 @@ export default function SignUpForm(): ReactNode {
           name="name"
           label="Nome da filial"
           required
+          autoFocus
         />
         <Input<SignUpFormInputs>
           name="cnpj"

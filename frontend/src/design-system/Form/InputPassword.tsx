@@ -8,12 +8,14 @@ interface InputPasswordProperties<T> {
   name: keyof T & string;
   label: string;
   required?: boolean;
+  autoFocus?: boolean;
 }
 
 export default function InputPassword<T extends FieldValues>({
   label,
   required,
   name,
+  autoFocus = false,
 }: InputPasswordProperties<T>): ReactNode {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -31,6 +33,7 @@ export default function InputPassword<T extends FieldValues>({
       }
       onClickIconRight={() => setShowPassword((prevState) => !prevState)}
       type={showPassword ? "text" : "password"}
+      autoFocus={autoFocus}
     />
   );
 }
