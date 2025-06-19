@@ -2,7 +2,6 @@ import { useState, type ReactNode } from "react";
 
 import Input from "./Input";
 import { FieldValues } from "react-hook-form";
-import Icon from "../Icon";
 
 interface InputPasswordProperties<T> {
   name: keyof T & string;
@@ -24,13 +23,7 @@ export default function InputPassword<T extends FieldValues>({
       name={name}
       label={label}
       required={required}
-      iconRight={
-        showPassword ? (
-          <Icon iconName="Visibility" />
-        ) : (
-          <Icon iconName="VisibilityOff" />
-        )
-      }
+      iconRight={showPassword ? "Visibility" : "VisibilityOff"}
       onClickIconRight={() => setShowPassword((prevState) => !prevState)}
       type={showPassword ? "text" : "password"}
       autoFocus={autoFocus}

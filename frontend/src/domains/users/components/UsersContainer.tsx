@@ -3,7 +3,6 @@ import { type ReactElement } from "react";
 import { useNavigate } from "react-router-dom";
 import UsersDashBoard from "./UsersDashBoard";
 import UsersTable from "./UsersTable";
-import Icon from "@/design-system/Icon";
 
 export default function UsersContainer(): ReactElement {
   const navigate = useNavigate();
@@ -14,7 +13,7 @@ export default function UsersContainer(): ReactElement {
         title="Usuários"
         primaryButtonLabel="Adicionar usuário"
         onClickPrimaryBtn={() => navigate("/users/new")}
-        primaryBtnIconRigth={<Icon iconName="PersonAdd" />}
+        primaryBtnIconRigth="PersonAdd"
         primaryBtnResource="USERS"
         primaryBtnAction="CREATE"
       />

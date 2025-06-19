@@ -1,10 +1,11 @@
 import classNames from "classnames";
-import { forwardRef, ReactNode } from "react";
+import { forwardRef } from "react";
 import Tooltip from "./Tooltip";
 import useCheckPermission from "@/domains/global/hooks/useCheckPermission";
-import { ButtonState } from "./types";
+import { ButtonState, IconsName } from "./types";
 import { Action, Resource } from "@shared/types";
-import { formatDeniedMessage } from '@shared/utils/formatDeniedMessage';
+import { formatDeniedMessage } from "@shared/utils/formatDeniedMessage";
+import Icon from "./Icon";
 
 interface BaseButtonProps {
   state?: ButtonState;
@@ -13,8 +14,8 @@ interface BaseButtonProps {
   onClick?: () => void;
   fullWidth?: boolean;
   textAlign?: "start" | "center" | "end";
-  iconLeft?: ReactNode;
-  iconRight?: ReactNode;
+  iconLeft?: IconsName;
+  iconRight?: IconsName;
   padding?: "default" | "none";
   type?: "submit" | "button";
 }
@@ -54,7 +55,9 @@ const BaseButton = forwardRef(
         {...props}
       >
         {iconLeft && (
-          <div className="flex flex-1 justify-center">{iconLeft}</div>
+          <div className="flex flex-1 justify-center">
+            <Icon iconName={iconLeft} />
+          </div>
         )}
         {label && (
           <span
@@ -68,7 +71,9 @@ const BaseButton = forwardRef(
           </span>
         )}
         {iconRight && (
-          <div className="flex flex-1 justify-center">{iconRight}</div>
+          <div className="flex flex-1 justify-center">
+            {<Icon iconName={iconRight} />}
+          </div>
         )}
       </button>
     );

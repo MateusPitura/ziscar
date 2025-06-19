@@ -1,11 +1,11 @@
 import { lazy, ReactNode } from "react";
 import { Action, Resource } from "@shared/types";
-import Icon from "@/design-system/Icon";
+import { IconsName } from "@/design-system/types";
 
 interface Route {
   path: string;
   displayName?: string;
-  icon?: ReactNode;
+  icon?: IconsName;
   entryPage: ReactNode;
   shouldDisplay: boolean;
   resource?: Resource;
@@ -41,7 +41,7 @@ export const privateRoutes: RouteGroup[] = [
       {
         path: "/users",
         displayName: "Usuários",
-        icon: <Icon iconName="Person" />,
+        icon: "Person",
         entryPage: <Users />,
         shouldDisplay: true,
         action: "READ",
@@ -64,14 +64,14 @@ export const privateRoutes: RouteGroup[] = [
       {
         path: "/vehicles",
         displayName: "Veículos",
-        icon: <Icon iconName="DirectionsCar" />,
+        icon: "DirectionsCar",
         entryPage: <Vehicles />,
         shouldDisplay: true,
       },
       {
         path: "/branches",
         displayName: "Filiais",
-        icon: <Icon iconName="Store" />,
+        icon: "Store",
         entryPage: <Branches />,
         shouldDisplay: true,
       },
@@ -84,7 +84,7 @@ export const privateRoutes: RouteGroup[] = [
       {
         path: "/profile",
         displayName: "Perfil",
-        icon: <Icon iconName="Settings" />,
+        icon: "Settings",
         entryPage: <Profile />,
         shouldDisplay: true,
       },
@@ -97,7 +97,7 @@ export const privateRoutes: RouteGroup[] = [
       {
         path: "/audit",
         displayName: "Auditoria",
-        icon: <Icon iconName="VerifiedUser" />,
+        icon: "VerifiedUser",
         entryPage: <Audit />,
         shouldDisplay: true,
       },

@@ -2,13 +2,13 @@ import Button from "@/design-system/Button";
 import { type ReactElement } from "react";
 import useButtonState from "../hooks/useButtonState";
 import { Action, Resource } from "@shared/types";
-import { ButtonState } from "@/design-system/types";
+import { ButtonState, IconsName } from "@/design-system/types";
 
 interface PageHeaderProperties {
   title: string;
   primaryButtonLabel?: string;
   onClickPrimaryBtn?: () => void;
-  primaryBtnIconRigth?: ReactElement;
+  primaryBtnIconRigth?: IconsName;
   secondaryButtonLabel?: string;
   onClickSecondaryBtn?: () => void;
   primaryBtnState?: ButtonState;

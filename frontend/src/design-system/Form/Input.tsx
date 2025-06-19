@@ -9,13 +9,14 @@ import {
 import Button from "../Button";
 import ErrorLabel from "./ErrorLabel";
 import { Mask } from "@/domains/global/types";
+import { IconsName } from "../types";
 
 interface InputProperties<T extends FieldValues> {
   name: keyof T & string;
   label: string;
   placeholder?: string;
   mask?: Mask;
-  iconRight?: ReactElement;
+  iconRight?: IconsName;
   onClickIconRight?: () => void;
   type?: string;
   maxLength?: number;
@@ -80,7 +81,7 @@ export default function Input<T extends FieldValues>({
           <div className="px-2">
             <Button
               variant="tertiary"
-              iconLeft={iconRight}
+              iconRight={iconRight}
               padding="none"
               onClick={onClickIconRight}
             />

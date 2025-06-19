@@ -12,7 +12,6 @@ import { formatDeniedMessage } from "@shared/utils/formatDeniedMessage";
 import { Resource, Action as ActionProp } from "@shared/types";
 import { ButtonState } from "./types";
 import { ITEMS_PER_PAGE } from "@shared/constants";
-import Icon from "./Icon";
 
 function Container({ children }: Childrenable): ReactElement {
   return (
@@ -108,10 +107,7 @@ function Action({ className, colSpan = 1, children }: ActionProps) {
     >
       <Popover>
         <Popover.Trigger>
-          <Button
-            variant="tertiary"
-            iconRight={<Icon iconName="MoreHoriz" />}
-          />
+          <Button variant="tertiary" iconRight="MoreHoriz" />
         </Popover.Trigger>
         <Popover.Content align="end" className="w-fit">
           {children}
@@ -227,7 +223,7 @@ function Footer({
         <Button
           variant="quaternary"
           label="Exportar como planilha"
-          iconRight={<Icon iconName="FileDownload" />}
+          iconRight="FileDownload"
           onClick={onClickSheetBtn}
           state={isLoading ? "loading" : sheetBtnState}
           resource={resourceExportBtn}
@@ -238,7 +234,7 @@ function Footer({
         <Button
           variant="quaternary"
           label="Exportar como PDF"
-          iconRight={<Icon iconName="FileDownload" />}
+          iconRight="FileDownload"
           onClick={onClickPdfBtn}
           state={isLoading ? "loading" : pdfBtnState}
           resource={resourceExportBtn}
@@ -259,7 +255,7 @@ function Footer({
       </Loading>
       <Button
         variant="tertiary"
-        iconLeft={<Icon iconName="NavigateBefore" />}
+        iconLeft="NavigateBefore"
         onClick={handleBefore}
         state={
           isLoading
@@ -271,7 +267,7 @@ function Footer({
       />
       <Button
         variant="tertiary"
-        iconLeft={<Icon iconName="NavigateNext" />}
+        iconLeft="NavigateNext"
         onClick={handleNext}
         state={
           isLoading
@@ -301,7 +297,7 @@ function Filter({ onFilterCallback, filterBtnState, form }: FilterProps) {
           <Button
             variant="secondary"
             label="Filtros"
-            iconRight={<Icon iconName="FilterList" />}
+            iconRight="FilterList"
             onClick={onFilterCallback}
             state={filterBtnState}
           />
