@@ -1,22 +1,18 @@
 import classNames from "classnames";
 import { Children, type ReactElement, type ReactNode } from "react";
 import Button from "./Button";
-import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
-import NavigateNextOutlinedIcon from "@mui/icons-material/NavigateNextOutlined";
-import NavigateBeforeOutlinedIcon from "@mui/icons-material/NavigateBeforeOutlined";
 import Spinner from "@/design-system/Spinner";
-import FilterListIcon from "@mui/icons-material/FilterList";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { Popover } from "./Popover";
 import SideSheet from "./SideSheet";
 import { Childrenable } from "@/domains/global/types";
 import useDialog from "@/domains/global/hooks/useDialog";
 import Loading from "./Loading";
 import useCheckPermission from "@/domains/global/hooks/useCheckPermission";
-import { formatDeniedMessage } from '@shared/utils/formatDeniedMessage';
+import { formatDeniedMessage } from "@shared/utils/formatDeniedMessage";
 import { Resource, Action as ActionProp } from "@shared/types";
 import { ButtonState } from "./types";
-import { ITEMS_PER_PAGE } from '@shared/constants';
+import { ITEMS_PER_PAGE } from "@shared/constants";
+import Icon from "./Icon";
 
 function Container({ children }: Childrenable): ReactElement {
   return (
@@ -112,7 +108,10 @@ function Action({ className, colSpan = 1, children }: ActionProps) {
     >
       <Popover>
         <Popover.Trigger>
-          <Button variant="tertiary" iconRight={<MoreHorizIcon />} />
+          <Button
+            variant="tertiary"
+            iconRight={<Icon iconName="MoreHoriz" />}
+          />
         </Popover.Trigger>
         <Popover.Content align="end" className="w-fit">
           {children}
@@ -228,7 +227,7 @@ function Footer({
         <Button
           variant="quaternary"
           label="Exportar como planilha"
-          iconRight={<FileDownloadOutlinedIcon />}
+          iconRight={<Icon iconName="FileDownload" />}
           onClick={onClickSheetBtn}
           state={isLoading ? "loading" : sheetBtnState}
           resource={resourceExportBtn}
@@ -239,7 +238,7 @@ function Footer({
         <Button
           variant="quaternary"
           label="Exportar como PDF"
-          iconRight={<FileDownloadOutlinedIcon />}
+          iconRight={<Icon iconName="FileDownload" />}
           onClick={onClickPdfBtn}
           state={isLoading ? "loading" : pdfBtnState}
           resource={resourceExportBtn}
@@ -260,7 +259,7 @@ function Footer({
       </Loading>
       <Button
         variant="tertiary"
-        iconLeft={<NavigateBeforeOutlinedIcon />}
+        iconLeft={<Icon iconName="NavigateBefore" />}
         onClick={handleBefore}
         state={
           isLoading
@@ -272,7 +271,7 @@ function Footer({
       />
       <Button
         variant="tertiary"
-        iconLeft={<NavigateNextOutlinedIcon />}
+        iconLeft={<Icon iconName="NavigateNext" />}
         onClick={handleNext}
         state={
           isLoading
@@ -302,7 +301,7 @@ function Filter({ onFilterCallback, filterBtnState, form }: FilterProps) {
           <Button
             variant="secondary"
             label="Filtros"
-            iconRight={<FilterListIcon />}
+            iconRight={<Icon iconName="FilterList" />}
             onClick={onFilterCallback}
             state={filterBtnState}
           />

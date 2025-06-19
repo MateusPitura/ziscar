@@ -1,10 +1,6 @@
-import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
-import DirectionsCarOutlinedIcon from "@mui/icons-material/DirectionsCarOutlined";
-import StoreOutlinedIcon from "@mui/icons-material/StoreOutlined";
-import VerifiedUserOutlinedIcon from "@mui/icons-material/VerifiedUserOutlined";
-import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import { lazy, ReactNode } from "react";
 import { Action, Resource } from "@shared/types";
+import Icon from "@/design-system/Icon";
 
 interface Route {
   path: string;
@@ -45,37 +41,37 @@ export const privateRoutes: RouteGroup[] = [
       {
         path: "/users",
         displayName: "Usuários",
-        icon: <PersonOutlinedIcon />,
+        icon: <Icon iconName="Person" />,
         entryPage: <Users />,
         shouldDisplay: true,
-        action: 'READ',
-        resource: 'USERS'
+        action: "READ",
+        resource: "USERS",
       },
       {
         path: "/users/new",
         entryPage: <NewUser />,
         shouldDisplay: false,
-        action: 'CREATE',
-        resource: 'USERS'
+        action: "CREATE",
+        resource: "USERS",
       },
       {
         path: "/users/edit/:userId",
         entryPage: <EditUser />,
         shouldDisplay: false,
-        action: 'UPDATE',
-        resource: 'USERS'
+        action: "UPDATE",
+        resource: "USERS",
       },
       {
         path: "/vehicles",
         displayName: "Veículos",
-        icon: <DirectionsCarOutlinedIcon />,
+        icon: <Icon iconName="DirectionsCar" />,
         entryPage: <Vehicles />,
         shouldDisplay: true,
       },
       {
         path: "/branches",
         displayName: "Filiais",
-        icon: <StoreOutlinedIcon />,
+        icon: <Icon iconName="Store" />,
         entryPage: <Branches />,
         shouldDisplay: true,
       },
@@ -88,7 +84,7 @@ export const privateRoutes: RouteGroup[] = [
       {
         path: "/profile",
         displayName: "Perfil",
-        icon: <SettingsOutlinedIcon />,
+        icon: <Icon iconName="Settings" />,
         entryPage: <Profile />,
         shouldDisplay: true,
       },
@@ -101,7 +97,7 @@ export const privateRoutes: RouteGroup[] = [
       {
         path: "/audit",
         displayName: "Auditoria",
-        icon: <VerifiedUserOutlinedIcon />,
+        icon: <Icon iconName="VerifiedUser" />,
         entryPage: <Audit />,
         shouldDisplay: true,
       },

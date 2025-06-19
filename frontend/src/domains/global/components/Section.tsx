@@ -1,8 +1,8 @@
 import Button from "@/design-system/Button";
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import Loading from "@/design-system/Loading";
 import classNames from "classnames";
 import { Childrenable } from "../types";
+import Icon from "@/design-system/Icon";
 
 function Container({ children }: Childrenable) {
   return <div className="flex flex-col gap-4 w-[56rem]">{children}</div>;
@@ -61,7 +61,7 @@ function Row({ label, value, onEdit, isLoading = false }: SectionRowProps) {
         variant="quaternary"
         onClick={onEdit}
         state={isLoading ? "loading" : undefined}
-        iconLeft={<EditOutlinedIcon />}
+        iconLeft={<Icon iconName="Edit" />}
       />
     </div>
   );

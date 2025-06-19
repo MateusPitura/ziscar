@@ -1,8 +1,8 @@
 import { useState, type ReactNode } from "react";
-import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
-import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
+
 import Input from "./Input";
 import { FieldValues } from "react-hook-form";
+import Icon from "../Icon";
 
 interface InputPasswordProperties<T> {
   name: keyof T & string;
@@ -26,9 +26,9 @@ export default function InputPassword<T extends FieldValues>({
       required={required}
       iconRight={
         showPassword ? (
-          <VisibilityOutlinedIcon />
+          <Icon iconName="Visibility" />
         ) : (
-          <VisibilityOffOutlinedIcon />
+          <Icon iconName="VisibilityOff" />
         )
       }
       onClickIconRight={() => setShowPassword((prevState) => !prevState)}

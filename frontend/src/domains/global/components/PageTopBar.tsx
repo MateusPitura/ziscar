@@ -1,12 +1,12 @@
 import Button from "@/design-system/Button";
 import type { ReactElement } from "react";
-import MenuIcon from "@mui/icons-material/Menu";
-import LogoutIcon from "@mui/icons-material/Logout";
+
 import { useMutation } from "@tanstack/react-query";
 import useSafeFetch from "../hooks/useSafeFetch";
 import { AUTH_CHANNEL, BASE_URL } from "../constants";
 import useGlobalContext from "../hooks/useGlobalContext";
 import safeNavigate from "../utils/safeNavigate";
+import Icon from "@/design-system/Icon";
 
 interface PageTopBarProps {
   onToggleSideMenu: () => void;
@@ -38,7 +38,7 @@ export default function PageTopBar({
         <Button
           onClick={onToggleSideMenu}
           variant="tertiary"
-          iconLeft={<MenuIcon />}
+          iconLeft={<Icon iconName="Menu" />}
         />
         <span className="text-headline-small text-light-onSurface flex items-center">
           Ziscar
@@ -48,7 +48,7 @@ export default function PageTopBar({
         <Button
           onClick={mutate}
           variant="tertiary"
-          iconLeft={<LogoutIcon />}
+          iconRight={<Icon iconName="Logout" />}
           state={isPending ? "loading" : undefined}
         />
       </div>

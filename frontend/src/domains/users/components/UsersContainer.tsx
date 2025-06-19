@@ -1,9 +1,9 @@
 import PageHeader from "@/domains/global/components/PageHeader";
 import { type ReactElement } from "react";
-import PersonAddOutlinedIcon from "@mui/icons-material/PersonAddOutlined";
 import { useNavigate } from "react-router-dom";
 import UsersDashBoard from "./UsersDashBoard";
 import UsersTable from "./UsersTable";
+import Icon from "@/design-system/Icon";
 
 export default function UsersContainer(): ReactElement {
   const navigate = useNavigate();
@@ -14,7 +14,7 @@ export default function UsersContainer(): ReactElement {
         title="Usuários"
         primaryButtonLabel="Adicionar usuário"
         onClickPrimaryBtn={() => navigate("/users/new")}
-        primaryBtnIconRigth={<PersonAddOutlinedIcon />}
+        primaryBtnIconRigth={<Icon iconName="PersonAdd" />}
         primaryBtnResource="USERS"
         primaryBtnAction="CREATE"
       />
