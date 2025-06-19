@@ -46,7 +46,7 @@ export class UserService {
       cpf: userCreateInDto.cpf ?? undefined,
     });
 
-    const { address, clientId, roleId, ...rest } = userCreateInDto;
+    const { address, clientId, roleId, birthDate, ...rest } = userCreateInDto;
 
     const createPayload = {
       ...rest,
@@ -58,6 +58,9 @@ export class UserService {
       createPayload['address'] = {
         create: address,
       };
+    }
+    if (birthDate !== undefined) {
+      createPayload['birthDate'] = birthDate ? new Date(birthDate) : null;
     }
 
     await database.user.create({
@@ -213,7 +216,7 @@ export class UserService {
       cpf: userUpdateInDto?.cpf ?? undefined,
     });
 
-    const { address, roleId, ...rest } = userUpdateInDto;
+    const { address, roleId, birthDate, ...rest } = userUpdateInDto;
 
     const updatePayload = {
       ...rest,
@@ -247,6 +250,10 @@ export class UserService {
 
     if (roleId || userUpdateInDto.password || 'isActive' in userUpdateInDto) {
       updatePayload['jit'] = null;
+    }
+
+    if (birthDate !== undefined) {
+      updatePayload['birthDate'] = birthDate ? new Date(birthDate) : null;
     }
 
     try {

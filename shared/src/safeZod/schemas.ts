@@ -54,7 +54,8 @@ export const cep = () =>
 export const birthDate = () =>
   date()
     .min(new Date("1900-01-01"), { message: "Data de nascimento inválida" })
-    .max(new Date(), { message: "Data de nascimento inválida" });
+    .max(new Date(), { message: "Data de nascimento inválida" })
+    .transform(date => date.toISOString().split('T')[0]);
 
 export const cpf = () =>
   string(14)

@@ -8,9 +8,4 @@ export interface DisableUser {
 
 export type UsersFilterFormInputs = s.infer<typeof SchemaUsersFilterForm>;
 
-export type UserFormInputs = Omit<
-  s.infer<typeof SchemaUserForm>,
-  "birthDate"
-> & {
-  birthDate: string;
-};
+export type UserFormInputs = s.infer<typeof SchemaUserForm>;

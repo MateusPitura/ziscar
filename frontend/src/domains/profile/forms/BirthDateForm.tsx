@@ -10,9 +10,7 @@ const BirthDateSchema = SchemaUserForm.pick({
   birthDate: true,
 })
 
-type BirthDateFormInputs = Omit<s.infer<typeof BirthDateSchema>, "birthDate"> & {
-  birthDate: string;
-};
+type BirthDateFormInputs = s.infer<typeof BirthDateSchema>;
 
 interface BirthDateFormProps {
   defaultValues: Partial<BirthDateFormInputs>;

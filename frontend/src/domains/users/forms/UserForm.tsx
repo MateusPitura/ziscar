@@ -64,7 +64,6 @@ export default function UserForm({
                   label="Nome completo"
                   required
                   autoFocus
-                  // tabIndex={-1}
                 />
                 <Input<UserFormInputs> name="email" label="Email" required />
                 <Input<UserFormInputs>
