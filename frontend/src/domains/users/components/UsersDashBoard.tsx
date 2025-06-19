@@ -5,7 +5,6 @@ import { DashBoardProps } from "@/domains/global/types";
 
 export default function UsersDashBoard(): ReactNode {
   async function getDashBoardInfo(): Promise<DashBoardProps[]> {
-    // TODO: implementar no backend
     return [
       {
         id: "1",

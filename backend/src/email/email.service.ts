@@ -14,7 +14,7 @@ export class EmailService {
         text: body,
       });
     } catch {
-      console.log('🌠 Cannot send the email');
+      console.log('Cannot send the email');
     }
   }
 }

@@ -293,7 +293,7 @@ export class UserService {
         fullName: true,
         email: true,
       },
-    }); // TODO: talvez aqui permita buscar o próprio usuário
+    });
 
     if (!users.data) {
       throw new BadRequestException('Nenhum dado encontrado');
@@ -326,7 +326,7 @@ export class UserService {
         fullName: true,
         email: true,
       },
-    }); // TODO: talvez aqui permita buscar o próprio usuário
+    });
 
     if (!users.data) {
       throw new BadRequestException('Nenhum dado encontrado');

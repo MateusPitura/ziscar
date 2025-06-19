@@ -30,7 +30,7 @@ function safeUpsertRole(
 }
 
 async function seed() {
-  console.log('🌠 Started to seed database');
+  console.log('Started to seed database');
 
   await prisma.permission.createMany({
     data: [
@@ -72,12 +72,12 @@ async function seed() {
     ),
   ]);
 
-  console.log('🌠 Successfully seeded database');
+  console.log('Successfully seeded database');
 }
 
 seed()
   .catch((error) => {
-    console.log('🌠 Failed to run seed', error);
+    console.log('Failed to run seed', error);
     console.error(error);
   })
   .finally(() => void prisma.$disconnect());

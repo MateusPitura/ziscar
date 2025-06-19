@@ -17,7 +17,7 @@ import {
 const prisma = new PrismaClient();
 
 async function seed() {
-  console.log('🌠 Started to populate database');
+  console.log('Started to populate database');
 
   await prisma.client.createMany({
     data: [
@@ -89,12 +89,12 @@ async function seed() {
 
   await Promise.all(promises);
 
-  console.log('🌠 Successfully populated database');
+  console.log('Successfully populated database');
 }
 
 seed()
   .catch((error) => {
-    console.log('🌠 Failed to run populate', error);
+    console.log('Failed to run populate', error);
     console.error(error);
   })
   .finally(() => void prisma.$disconnect());
