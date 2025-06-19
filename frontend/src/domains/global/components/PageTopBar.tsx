@@ -4,7 +4,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useMutation } from "@tanstack/react-query";
 import useSafeFetch from "../hooks/useSafeFetch";
-import { AUTH_CHANNEL_SIGNOUT, BASE_URL } from "../constants";
+import { AUTH_CHANNEL, BASE_URL } from "../constants";
 import useGlobalContext from "../hooks/useGlobalContext";
 import safeNavigate from "../utils/safeNavigate";
 
@@ -28,7 +28,7 @@ export default function PageTopBar({
     mutationFn: handleSignOut,
     onSettled: () => {
       safeNavigate("/");
-      authChannel.postMessage({ type: AUTH_CHANNEL_SIGNOUT });
+      authChannel.postMessage({ type: AUTH_CHANNEL.SIGNOUT });
     },
   });
 
