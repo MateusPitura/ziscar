@@ -18,6 +18,7 @@ import useDialog from "../../global/hooks/useDialog";
 import EditProfileModal from "./EditProfileModal";
 import { EditProfile } from "../types";
 import { BASE_URL } from "@/domains/global/constants";
+import { DateFormats } from "@/domains/global/types";
 
 export default function ProfileContainer(): ReactElement {
   const [editProfileInfo, setEditProfileInfo] = useState<EditProfile>({
@@ -47,10 +48,10 @@ export default function ProfileContainer(): ReactElement {
     [profileInfo?.address?.street, profileInfo?.address?.number]
   );
 
-  function formatBirthDate(format: string) {
+  function formatBirthDate(format: DateFormats) {
     if (profileInfo?.birthDate) {
       return safeFormat({
-        date: new Date(profileInfo?.birthDate),
+        date: profileInfo.birthDate,
         format,
       });
     }

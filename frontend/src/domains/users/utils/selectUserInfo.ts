@@ -12,7 +12,7 @@ export default function selectUserInfo(data: User): UserFormInputs {
     code: data.code ?? "",
     birthDate: data.birthDate
       ? safeFormat({
-          date: new Date(data.birthDate),
+          date: data.birthDate,
           format: "yyyy-MM-dd",
         })
       : "",

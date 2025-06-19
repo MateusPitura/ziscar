@@ -52,10 +52,10 @@ model User {
   email     String    @unique @db.VarChar(128)
   password  String    @db.VarChar(128)
   cpf       String?   @unique @db.VarChar(11)
-  birthDate DateTime?
+  birthDate DateTime? @db.Date
   code      String?   @db.VarChar(128)
   cellPhone String?   @db.VarChar(11)
-  jit       String?       
+  jit       String?
   addressId Int?      @unique
   address   Address?  @relation(fields: [addressId], references: [id], onDelete: SetNull)
   clientId  Int

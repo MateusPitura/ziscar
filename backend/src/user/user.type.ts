@@ -62,3 +62,7 @@ export interface VerifyDuplicatedInput {
   email?: string;
   cpf?: string;
 }
+
+export interface RemoveTimeFromDateInput {
+  date: Date | null;
+}

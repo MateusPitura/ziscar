@@ -1,15 +1,11 @@
-import { format as fnsFormat } from "date-fns";
+import { format as fnsFormat, parseISO } from "date-fns";
+import { DateFormats } from "../types";
 
 interface FormatDateProps {
-  date: Date;
-  format: string;
+  date: string;
+  format: DateFormats;
 }
 
-const ONE_HOUR = 60000;
-
 export default function safeFormat({ date, format }: FormatDateProps) {
-  const dateWithoutTimeZone = new Date(
-    date.valueOf() + date.getTimezoneOffset() * ONE_HOUR
-  );
-  return fnsFormat(dateWithoutTimeZone, format);
+  return fnsFormat(parseISO(date), format);
 }

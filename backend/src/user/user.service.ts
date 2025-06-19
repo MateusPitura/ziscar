@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from '../database/prisma.service';
 import { EncryptPasswordInput, GetCallback } from '../types';
-import { encryptPassword } from './user.utils';
+import { encryptPassword, removeTimeFromDate } from './user.utils';
 import { GET_PERMISSIONS, GET_USER } from './user.constant';
 import { verifyDuplicated } from '../utils/verifyDuplicated';
 import { EmailService } from '../email/email.service';
@@ -139,9 +139,18 @@ export class UserService {
       this.prismaService.user.count(findManyWhere),
     ]);
 
+    const dataFormatted = data.map((item) => {
+      return {
+        ...item,
+        ...(item.birthDate && {
+          birthDate: removeTimeFromDate({ date: item.birthDate }),
+        }),
+      };
+    });
+
     return {
       total,
-      data,
+      data: dataFormatted,
     };
   }
 
@@ -165,11 +174,21 @@ export class UserService {
       select,
     });
 
-    if (showNotFoundError && !user) {
-      throw new NotFoundException('Usuário não encontrado');
+    if (!user) {
+      if (showNotFoundError) {
+        throw new NotFoundException('Usuário não encontrado');
+      }
+      return null;
     }
 
-    return user;
+    const userFormatted = {
+      ...user,
+      ...(user.birthDate && {
+        birthDate: removeTimeFromDate({ date: user.birthDate }),
+      }),
+    };
+
+    return userFormatted;
   }
 
   async getPermissions({ clientId, userId }: GetPermissionsInput) {
@@ -240,7 +259,15 @@ export class UserService {
         data: updatePayload,
         select,
       });
-      return user;
+
+      const userFormatted = {
+        ...user,
+        ...(user.birthDate && {
+          birthDate: removeTimeFromDate({ date: user.birthDate }),
+        }),
+      };
+
+      return userFormatted;
     } catch (error) {
       if ((error as Record<'code', string>)?.code === 'P2025') {
         if (showNotFoundError) {
