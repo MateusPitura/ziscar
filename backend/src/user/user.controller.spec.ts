@@ -224,6 +224,14 @@ describe('UserController', () => {
     });
   });
 
+  it('should find many user and not return birthDate, because if it return the property should be formatted', async () => {
+    const result = await userController.findMany(AUTH_REQUEST_DEFAULT, {
+      page: 1,
+    });
+
+    expect(result.data[0]).not.toHaveProperty('birthDate');
+  });
+
   it('should disable user', async () => {
     await prismaService.transaction(async (transaction) => {
       Reflect.set(userService, 'prismaService', transaction);

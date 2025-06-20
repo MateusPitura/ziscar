@@ -59,8 +59,8 @@ export class UserService {
         create: address,
       };
     }
-    if (birthDate !== undefined) {
-      createPayload['birthDate'] = birthDate ? new Date(birthDate) : null;
+    if (birthDate) {
+      createPayload['birthDate'] = new Date(birthDate);
     }
 
     await database.user.create({

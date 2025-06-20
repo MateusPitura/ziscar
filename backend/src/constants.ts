@@ -16,6 +16,7 @@ export const POPULATE_USER_DEFAULT = {
   email: 'john.doe@email.com',
   password: '123456',
   cpf: '12345678901',
+  birthDate: '2000-01-01',
 };
 export const POPULATE_USER_INACTIVE = {
   id: 168,

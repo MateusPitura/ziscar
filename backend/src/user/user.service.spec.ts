@@ -132,7 +132,7 @@ describe('UserService', () => {
             fullName: 'Jane Doe',
             email: 'jane.doe@email.com',
             cpf: '11111111111',
-            birthDate: new Date(),
+            birthDate: '2000-01-01',
             code: 'ABCDEF',
             cellPhone: '42988884444',
             address: {
@@ -168,7 +168,7 @@ describe('UserService', () => {
             fullName: 'Jane Doe',
             email: 'jane.doe@email.com',
             cpf: '11111111111',
-            birthDate: new Date(),
+            birthDate: '2000-01-01',
             code: 'ABCDEF',
             cellPhone: '42988884444',
             address: {
@@ -625,30 +625,57 @@ describe('UserService', () => {
     await prismaService.transaction(async (transaction) => {
       Reflect.set(userService, 'prismaService', transaction);
 
-      expect(
-        await userService.update({
-          where: {
-            id: POPULATE_USER_DEFAULT.id,
-          },
-          userUpdateInDto: {
-            cpf: null,
-            birthDate: null,
-            cellPhone: null,
-          },
-          clientId: POPULATE_CLIENT_PRIMARY_ID,
+      const result = await userService.update({
+        where: {
+          id: POPULATE_USER_DEFAULT.id,
+        },
+        userUpdateInDto: {
+          cpf: null,
+          birthDate: null,
+          cellPhone: null,
+        },
+        clientId: POPULATE_CLIENT_PRIMARY_ID,
+      });
+
+      expect(result).toMatchObject(
+        expect.objectContaining({
+          cpf: null,
+          birthDate: null,
+          cellPhone: null,
         }),
-      ).toBeTruthy();
+      );
 
       transaction.rollback();
     });
   });
 
-  it('should find one user by id', async () => {
+  it('should update birthDate and return it formatted', async () => {
+    await prismaService.transaction(async (transaction) => {
+      Reflect.set(userService, 'prismaService', transaction);
+
+      const result = await userService.update({
+        where: {
+          id: POPULATE_USER_DEFAULT.id,
+        },
+        userUpdateInDto: {
+          birthDate: '2000-01-02',
+        },
+        clientId: POPULATE_CLIENT_PRIMARY_ID,
+      });
+
+      expect(result).toHaveProperty('birthDate', '2000-01-02');
+
+      transaction.rollback();
+    });
+  });
+
+  it('should find one user by id and return it with formatted birthDate', async () => {
     const user = await userService.findOne({
       where: { id: POPULATE_USER_DEFAULT.id },
-      select: { id: true },
+      select: { id: true, birthDate: true },
     });
 
+    expect(user).toHaveProperty('birthDate', '2000-01-01');
     expect(user).toHaveProperty('id');
   });
 

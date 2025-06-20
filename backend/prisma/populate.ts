@@ -57,6 +57,7 @@ async function seed() {
           }),
           clientId: POPULATE_CLIENT_PRIMARY_ID,
           roleId: SEED_ROLE_ADMIN_ID,
+          birthDate: new Date(POPULATE_USER_DEFAULT.birthDate),
         },
         {
           ...POPULATE_USER_INACTIVE,
