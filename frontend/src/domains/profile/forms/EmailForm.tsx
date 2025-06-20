@@ -50,7 +50,7 @@ function EmailFormContent({ isPending }: EmailFormContentProps): ReactElement {
           name="email"
           label="Email"
           required
-          autoSelect={false}
+          forceUnselect
           autoFocus
         />
       </Dialog.Body>

@@ -52,7 +52,7 @@ function FullNameFormContent({
           name="fullName"
           label="Nome completo"
           required
-          autoSelect={false}
+          forceUnselect
           autoFocus
         />
       </Dialog.Body>

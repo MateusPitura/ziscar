@@ -48,7 +48,7 @@ function CpfFormContent({ isPending }: CpfFormContentProps) {
           label="CPF"
           mask="cpf"
           maxLength={14}
-          autoSelect={false}
+          forceUnselect
           autoFocus
         />
       </Dialog.Body>

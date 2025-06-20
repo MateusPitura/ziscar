@@ -100,7 +100,7 @@ export default function AddressFields<T extends FieldValues>({
           maxLength={9}
           required
           autoFocus={autoFocus}
-          autoSelect={false}
+          forceUnselect
         />
         <Button
           variant="quaternary"

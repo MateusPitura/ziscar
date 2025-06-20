@@ -46,7 +46,7 @@ function CodeFormContent({ isPending }: CodeFormContentProps) {
         <Input<CodeFormInputs>
           name="code"
           label="Matrícula"
-          autoSelect={false}
+          forceUnselect
           autoFocus
         />
       </Dialog.Body>

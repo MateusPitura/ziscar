@@ -23,7 +23,7 @@ interface InputProperties<T extends FieldValues> {
   required?: boolean;
   hideErrorLabel?: boolean;
   autoFocus?: boolean;
-  autoSelect?: boolean;
+  forceUnselect?: boolean;
 }
 
 export default function Input<T extends FieldValues>({
@@ -38,7 +38,7 @@ export default function Input<T extends FieldValues>({
   required,
   hideErrorLabel,
   autoFocus = false,
-  autoSelect = true,
+  forceUnselect,
 }: InputProperties<T>): ReactElement {
   const { register, setValue } = useFormContext();
   const { errors } = useFormState({
@@ -75,7 +75,7 @@ export default function Input<T extends FieldValues>({
           maxLength={maxLength}
           required={required}
           autoFocus={autoFocus}
-          tabIndex={autoSelect ? undefined : -1}
+          tabIndex={forceUnselect ? -1 : undefined}
         />
         {iconRight && (
           <div className="px-2">
