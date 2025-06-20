@@ -16,8 +16,15 @@ ACTIVE_SESSION=$(oci bastion session list \
     --output json | jq -r --arg DATABASE_OCID "$DATABASE_OCID" '.data[] | select(.["target-resource-details"].["target-resource-id"] == $DATABASE_OCID) | @json' | head -n 1)
 
 if [[ -n "$ACTIVE_SESSION" ]]; then
-    echo "Found ACTIVE session"
     SESSION_ID=$(echo "$ACTIVE_SESSION" | jq -r '.id')
+    EXPIRATION=$(echo "$ACTIVE_SESSION" | jq -r '.["time-updated"]')
+    SESSION_TTL=$(echo "$ACTIVE_SESSION" | jq -r '.["session-ttl-in-seconds"]')
+
+    # Calculate session expiration time by adding TTL (in seconds) to time-updated
+    SESSION_EXPIRATION=$(date -d "$EXPIRATION + $SESSION_TTL seconds" +"%Y-%m-%d %H:%M:%S %Z")
+
+    echo "Found ACTIVE session"
+    echo "Session expires at: $SESSION_EXPIRATION"
 else
     echo "Creating Bastion session for port forwarding..."
     SESSION_JSON=$(oci bastion session create-port-forwarding \
