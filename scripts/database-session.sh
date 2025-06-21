@@ -57,4 +57,4 @@ fi
 
 # Start port forwarding using SSH and ProxyCommand
 echo "Starting port forwarding: localhost:$LOCAL_PORT -> $DATABASE_PRIVATE_IP:$DATABASE_PORT"
-ssh -i "$PRIVATE_KEY_PATH" -N -L $LOCAL_PORT:$DATABASE_PRIVATE_IP:$DATABASE_PORT -p 22 $SESSION_ID@host.bastion.sa-saopaulo-1.oci.oraclecloud.com
+ssh -i "$PUBLIC_KEY_PATH" -N -L $LOCAL_PORT:$DATABASE_PRIVATE_IP:$DATABASE_PORT -p 22 $SESSION_ID@host.bastion.sa-saopaulo-1.oci.oraclecloud.com
