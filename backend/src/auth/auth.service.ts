@@ -15,8 +15,8 @@ import { OrganizationService } from '../organization/organization.service';
 import { UserService } from '../user/user.service';
 import { EmailService } from '../email/email.service';
 import { PrismaService } from '../database/prisma.service';
-import { SEED_ROLE_ADMIN_ID } from '@shared/constants';
-import { COOKIE_JWT_NAME, FRONTEND_URL } from 'src/constants';
+import { SEED_ROLE_ADMIN_ID, JWT_COOKIE_NAME } from '@shared/constants';
+import { FRONTEND_URL } from 'src/constants';
 import { randomUUID } from 'crypto';
 import handlePermissions from 'src/utils/handlePermissions';
 import { Role } from 'src/user/user.type';
@@ -70,7 +70,7 @@ export class AuthService {
 
     const token = this.jwtService.sign(payload);
 
-    res?.cookie(COOKIE_JWT_NAME, token, {
+    res?.cookie(JWT_COOKIE_NAME, token, {
       httpOnly: true,
       secure: isProduction ? true : false,
       sameSite: isProduction ? 'none' : 'lax',
@@ -87,7 +87,7 @@ export class AuthService {
       clientId,
     });
 
-    res?.clearCookie(COOKIE_JWT_NAME);
+    res?.clearCookie(JWT_COOKIE_NAME);
 
     return res?.json(true);
   }

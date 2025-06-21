@@ -4,3 +4,5 @@ export const UNAUTHORIZED = "Sem autenticação, faça o sign-in novamente";
 
 export const SEED_ROLE_ADMIN_ID = 1;
 export const SEED_ROLE_SALES_ID = 2;
+
+export const JWT_COOKIE_NAME = "jwt";

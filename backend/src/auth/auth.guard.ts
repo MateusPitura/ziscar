@@ -6,8 +6,7 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
-import { COOKIE_JWT_NAME } from 'src/constants';
-import { UNAUTHORIZED } from '@shared/constants';
+import { UNAUTHORIZED, JWT_COOKIE_NAME } from '@shared/constants';
 import {
   AuthResetPassword,
   AuthSignin,
@@ -74,7 +73,7 @@ abstract class BaseAuthGuard implements CanActivate {
 @Injectable()
 export class AuthGuard extends BaseAuthGuard {
   getToken(request: Request): string | undefined {
-    return request.cookies[COOKIE_JWT_NAME] as string;
+    return request.cookies[JWT_COOKIE_NAME] as string;
   }
   customizeValidation(): CustomizeValidationProperties {
     return {
@@ -87,7 +86,7 @@ export class AuthGuard extends BaseAuthGuard {
 @Injectable()
 export class AuthGuardSignOut extends BaseAuthGuard {
   getToken(request: Request): string | undefined {
-    return request.cookies[COOKIE_JWT_NAME] as string;
+    return request.cookies[JWT_COOKIE_NAME] as string;
   }
   customizeValidation(): CustomizeValidationProperties {
     return {

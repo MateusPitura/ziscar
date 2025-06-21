@@ -1,7 +1,7 @@
 import http from "k6/http";
 import { sleep } from "k6";
-import { defaultDuration, defaultHeaders, defaultRequestsPerVU, defaultUrl } from "../../../utils/constants.js";
-import { checkResponse } from "../../../utils/checkResponse.js";
+import { defaultDuration, defaultHeaders, defaultRequestsPerVU, defaultUrl } from "/test/load/utils/constants.js";
+import { checkResponse } from "/test/load/utils/checkResponse.js";
 
 const VUS = 5
 

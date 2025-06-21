@@ -5,10 +5,11 @@ import {
   defaultHeaders,
   defaultRequestsPerVU,
   defaultUrl,
-} from "../../utils/constants.js";
-import { signIn } from "../../utils/signIn.js";
-import { getToken } from "../../utils/getToken.js";
-import { checkResponse } from "../../utils/checkResponse.js";
+} from "/test/load/utils/constants.js";
+import { signIn } from "/test/load/utils/signIn.js";
+import { getToken } from "/test/load/utils/getToken.js";
+import { checkResponse } from "/test/load/utils/checkResponse.js";
+import { JWT_COOKIE_NAME } from "/shared/src/constants.ts";
 
 const VUS = 150;
 
@@ -28,7 +29,7 @@ export default function (data) {
   const params = {
     ...defaultHeaders,
     cookies: {
-      jwt: getToken(data),
+      [JWT_COOKIE_NAME]: getToken(data),
     },
   };
 

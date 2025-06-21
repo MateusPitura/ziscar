@@ -47,6 +47,7 @@ services:
   k6:
     image: grafana/k6
     volumes:
+      - ./shared:/shared
       - ./test/load:/test/load
     env_file:
       - path: .env
