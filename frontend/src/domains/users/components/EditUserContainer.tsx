@@ -1,17 +1,17 @@
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import {
-    useIsFetching,
-    useQueryClient,
-    useMutation,
-    useQuery,
+  useIsFetching,
+  useQueryClient,
+  useMutation,
+  useQuery,
 } from "@tanstack/react-query";
 import { useEffect, type ReactNode } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import UserForm from "../forms/UserForm";
 import selectUserInfo from "../utils/selectUserInfo";
 import Spinner from "@/design-system/Spinner";
-import { BASE_URL } from "@/domains/global/constants";
+import { BACKEND_URL } from "@/domains/global/constants";
 import { User } from "@/domains/global/types/model";
 import { UserFormInputs } from "../types";
 
@@ -24,7 +24,7 @@ export default function EditUserContainer(): ReactNode {
   const { userId } = useParams();
 
   async function getUser(): Promise<User> {
-    return await safeFetch(`${BASE_URL}/user/${userId}`, {
+    return await safeFetch(`${BACKEND_URL}/user/${userId}`, {
       resource: "USERS",
       action: "READ",
     });
@@ -37,7 +37,7 @@ export default function EditUserContainer(): ReactNode {
   });
 
   async function editUser(data: UserFormInputs) {
-    await safeFetch(`${BASE_URL}/user/${userId}`, {
+    await safeFetch(`${BACKEND_URL}/user/${userId}`, {
       method: "PATCH",
       body: data,
       resource: "USERS",

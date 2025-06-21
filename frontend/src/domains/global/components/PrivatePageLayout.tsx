@@ -4,7 +4,7 @@ import PageSideBar from "./PageSideBar";
 import { Outlet, useMatches, useNavigate } from "react-router-dom";
 import Spinner from "@/design-system/Spinner";
 import useSafeFetch from "../hooks/useSafeFetch";
-import { BASE_URL } from "../constants";
+import { BACKEND_URL } from "../constants";
 import { useQuery } from "@tanstack/react-query";
 import { Action, Permissions, Resource } from "@shared/types";
 import useSnackbar from "../hooks/useSnackbar";
@@ -23,7 +23,7 @@ export default function PrivatePageLayout(): ReactElement {
   const navigate = useNavigate();
 
   async function getUserPermissions(): Promise<Permissions> {
-    return await safeFetch(`${BASE_URL}/permissions`);
+    return await safeFetch(`${BACKEND_URL}/permissions`);
   }
 
   const { data: userPermissions, isLoading } = useQuery({

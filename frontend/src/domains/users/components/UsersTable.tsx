@@ -2,7 +2,7 @@ import Table from "@/design-system/Table";
 import { useMemo, useState, type ReactNode } from "react";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
-import { BASE_URL } from "@/domains/global/constants";
+import { BACKEND_URL } from "@/domains/global/constants";
 import { User } from "@/domains/global/types/model";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import selectUsersInfo from "../utils/selectUsersInfo";
@@ -54,7 +54,7 @@ export default function UsersTable(): ReactNode {
   }, [usersFilter]);
 
   async function getUsersInfo(filter?: string): Promise<PageablePayload<User>> {
-    return await safeFetch(`${BASE_URL}/user?${filter}`, {
+    return await safeFetch(`${BACKEND_URL}/user?${filter}`, {
       resource: "USERS",
       action: "READ",
     });
@@ -69,7 +69,7 @@ export default function UsersTable(): ReactNode {
   const { showSuccessSnackbar } = useSnackbar();
 
   async function generatePdf(): Promise<Response> {
-    return await safeFetch(`${BASE_URL}/user/pdf?${filterExportFormatted}`, {
+    return await safeFetch(`${BACKEND_URL}/user/pdf?${filterExportFormatted}`, {
       method: "GET",
       resource: "USERS",
       action: "READ",
@@ -97,7 +97,7 @@ export default function UsersTable(): ReactNode {
   });
 
   async function generateSheet(): Promise<Response> {
-    return await safeFetch(`${BASE_URL}/user/sheet?${filterExportFormatted}`, {
+    return await safeFetch(`${BACKEND_URL}/user/sheet?${filterExportFormatted}`, {
       method: "GET",
       resource: "USERS",
       action: "READ",

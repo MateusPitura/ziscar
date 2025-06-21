@@ -1,5 +1,5 @@
 ###
-POST {{BASE_URL}}/user HTTP/1.1
+POST {{BACKEND_URL}}/user HTTP/1.1
 content-type: application/json
 
 {
@@ -13,19 +13,19 @@ content-type: application/json
 }
 
 ###
-GET {{BASE_URL}}/user/1 HTTP/1.1
+GET {{BACKEND_URL}}/user/1 HTTP/1.1
 content-type: application/json
 
 ###
-GET {{BASE_URL}}/profile HTTP/1.1
+GET {{BACKEND_URL}}/profile HTTP/1.1
 content-type: application/json
 
 ###
-GET {{BASE_URL}}/user?page=1&fullName=john&orderBy=email&status=active HTTP/1.1
+GET {{BACKEND_URL}}/user?page=1&fullName=john&orderBy=email&status=active HTTP/1.1
 content-type: application/json
 
 ###
-PATCH {{BASE_URL}}/user/1 HTTP/1.1
+PATCH {{BACKEND_URL}}/user/1 HTTP/1.1
 content-type: application/json
 
 {
@@ -33,7 +33,7 @@ content-type: application/json
 }
 
 ###
-PATCH {{BASE_URL}}/user/1 HTTP/1.1
+PATCH {{BACKEND_URL}}/user/1 HTTP/1.1
 content-type: application/json
 
 {
@@ -43,7 +43,7 @@ content-type: application/json
 }
 
 ###
-PATCH {{BASE_URL}}/user/1 HTTP/1.1
+PATCH {{BACKEND_URL}}/user/1 HTTP/1.1
 content-type: application/json
 
 {
@@ -51,7 +51,7 @@ content-type: application/json
 }
 
 ###
-PATCH {{BASE_URL}}/profile HTTP/1.1
+PATCH {{BACKEND_URL}}/profile HTTP/1.1
 content-type: application/json
 
 {
@@ -59,11 +59,11 @@ content-type: application/json
 }
 
 ###
-GET {{BASE_URL}}/permissions HTTP/1.1
+GET {{BACKEND_URL}}/permissions HTTP/1.1
 content-type: application/json
 
 ###
-DELETE {{BASE_URL}}/user/1 HTTP/1.1
+DELETE {{BACKEND_URL}}/user/1 HTTP/1.1
 content-type: application/json
 
 {
@@ -71,9 +71,9 @@ content-type: application/json
 }
 
 ###
-GET {{BASE_URL}}/user/pdf?fullName=john&orderBy=email&status=active HTTP/1.1
+GET {{BACKEND_URL}}/user/pdf?fullName=john&orderBy=email&status=active HTTP/1.1
 content-type: application/json
 
 ###
-GET {{BASE_URL}}/user/sheet?fullName=john&orderBy=email&status=active HTTP/1.1
+GET {{BACKEND_URL}}/user/sheet?fullName=john&orderBy=email&status=active HTTP/1.1
 content-type: application/json

@@ -5,7 +5,7 @@ import { DisableUser } from "../types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
-import { BASE_URL } from "@/domains/global/constants";
+import { BACKEND_URL } from "@/domains/global/constants";
 
 interface UsersTableActionsProperties {
   isActive?: boolean;
@@ -26,7 +26,7 @@ export default function UsersTableActions({
   const queryClient = useQueryClient();
 
   async function enableUser() {
-    await safeFetch(`${BASE_URL}/user/${userId}`, {
+    await safeFetch(`${BACKEND_URL}/user/${userId}`, {
       method: "DELETE",
       body: { isActive: true },
       resource: "USERS",

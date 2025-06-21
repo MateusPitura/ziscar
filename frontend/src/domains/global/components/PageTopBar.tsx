@@ -2,7 +2,7 @@ import Button from "@/design-system/Button";
 import type { ReactElement } from "react";
 import { useMutation } from "@tanstack/react-query";
 import useSafeFetch from "../hooks/useSafeFetch";
-import { AUTH_CHANNEL, BASE_URL } from "../constants";
+import { AUTH_CHANNEL, BACKEND_URL } from "../constants";
 import useGlobalContext from "../hooks/useGlobalContext";
 import safeNavigate from "../utils/safeNavigate";
 
@@ -17,7 +17,7 @@ export default function PageTopBar({
   const { authChannel } = useGlobalContext();
 
   async function handleSignOut(): Promise<boolean> {
-    return await safeFetch(`${BASE_URL}/auth/sign-out`, {
+    return await safeFetch(`${BACKEND_URL}/auth/sign-out`, {
       method: "POST",
     });
   }

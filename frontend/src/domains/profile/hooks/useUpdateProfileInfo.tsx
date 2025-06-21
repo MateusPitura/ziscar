@@ -1,4 +1,4 @@
-import { BASE_URL } from "@/domains/global/constants";
+import { BACKEND_URL } from "@/domains/global/constants";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -20,7 +20,7 @@ export default function useUpdateProfileInfo<T>({
 
   async function updateProfileInfo(data: T) {
     await safeFetch(
-      `${BASE_URL}/profile`,
+      `${BACKEND_URL}/profile`,
       {
         method: "PATCH",
         body: data,

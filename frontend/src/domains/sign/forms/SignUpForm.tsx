@@ -7,7 +7,7 @@ import useSignPageContext from "../hooks/useSignPageContext";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import { useMutation } from "@tanstack/react-query";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
-import { BASE_URL } from "@/domains/global/constants";
+import { BACKEND_URL } from "@/domains/global/constants";
 
 const SchemaSignUpForm = s.object({
   name: s.string(),
@@ -24,7 +24,7 @@ export default function SignUpForm(): ReactNode {
   const { showSuccessSnackbar } = useSnackbar();
 
   async function handleSignUp(data: SignUpFormInputs) {
-    await safeFetch(`${BASE_URL}/auth/sign-up`, {
+    await safeFetch(`${BACKEND_URL}/auth/sign-up`, {
       method: "POST",
       body: data,
     });

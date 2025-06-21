@@ -10,7 +10,7 @@ import useDialog from "@/domains/global/hooks/useDialog";
 import ForgetPasswordModal from "../components/ForgetPasswordModal";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import { useMutation } from "@tanstack/react-query";
-import { AUTH_CHANNEL, BASE_URL } from "@/domains/global/constants";
+import { AUTH_CHANNEL, BACKEND_URL } from "@/domains/global/constants";
 import useGlobalContext from "@/domains/global/hooks/useGlobalContext";
 import safeNavigate from "@/domains/global/utils/safeNavigate";
 
@@ -28,7 +28,7 @@ export default function SignInForm(): ReactNode {
   const { authChannel } = useGlobalContext();
 
   async function handleSignIn(data: SignInFormInputs) {
-    await safeFetch(`${BASE_URL}/auth/sign-in`, {
+    await safeFetch(`${BACKEND_URL}/auth/sign-in`, {
       method: "POST",
       body: data,
     });

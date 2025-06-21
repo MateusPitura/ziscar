@@ -1,5 +1,5 @@
 import Dialog from "@/design-system/Dialog";
-import { BASE_URL, BLANK } from "@/domains/global/constants";
+import { BACKEND_URL, BLANK } from "@/domains/global/constants";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -21,7 +21,7 @@ export default function DisableUserModal({
   const { handleUsersFilter } = useGlobalContext();
 
   async function disableUser() {
-    await safeFetch(`${BASE_URL}/user/${userId}`, {
+    await safeFetch(`${BACKEND_URL}/user/${userId}`, {
       method: "DELETE",
       body: { isActive: false },
       resource: "USERS",

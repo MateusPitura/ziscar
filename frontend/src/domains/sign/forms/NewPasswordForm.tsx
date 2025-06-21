@@ -7,7 +7,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import InputPassword from "@/design-system/Form/InputPassword";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
-import { BASE_URL } from "@/domains/global/constants";
+import { BACKEND_URL } from "@/domains/global/constants";
 import useSignPageContext from "../hooks/useSignPageContext";
 
 type NewPasswordFormInputs = s.infer<typeof s.SchemaPassword>;
@@ -25,7 +25,7 @@ export default function NewPasswordForm(): ReactNode {
   }
 
   async function handleNewPassword(data: NewPasswordFormInputs) {
-    await safeFetch(`${BASE_URL}/auth/reset-password`, {
+    await safeFetch(`${BACKEND_URL}/auth/reset-password`, {
       method: "POST",
       body: {
         password: data.newPassword,

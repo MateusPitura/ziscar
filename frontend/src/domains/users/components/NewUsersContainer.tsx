@@ -9,7 +9,7 @@ import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import UserForm from "../forms/UserForm";
 import { UserFormInputs } from "../types";
-import { BASE_URL } from "@/domains/global/constants";
+import { BACKEND_URL } from "@/domains/global/constants";
 import { userDefaultValues } from "../constants";
 
 export default function NewUsersContainer(): ReactElement {
@@ -20,7 +20,7 @@ export default function NewUsersContainer(): ReactElement {
   const navigate = useNavigate();
 
   async function createUser(data: UserFormInputs) {
-    await safeFetch(`${BASE_URL}/user`, {
+    await safeFetch(`${BACKEND_URL}/user`, {
       method: "POST",
       body: data,
       resource: "USERS",

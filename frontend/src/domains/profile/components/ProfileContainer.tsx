@@ -17,7 +17,7 @@ import selectProfileInfo from "../utils/selectProfileInfo";
 import useDialog from "../../global/hooks/useDialog";
 import EditProfileModal from "./EditProfileModal";
 import { EditProfile } from "../types";
-import { BASE_URL } from "@/domains/global/constants";
+import { BACKEND_URL } from "@/domains/global/constants";
 import { DateFormats } from "@/domains/global/types";
 
 export default function ProfileContainer(): ReactElement {
@@ -31,7 +31,7 @@ export default function ProfileContainer(): ReactElement {
   const { safeFetch } = useSafeFetch();
 
   async function getProfileInfo(): Promise<User> {
-    return await safeFetch(`${BASE_URL}/profile`);
+    return await safeFetch(`${BACKEND_URL}/profile`);
   }
 
   const { data: profileInfo, isFetching } = useQuery({
