@@ -4,12 +4,11 @@ import {
   defaultDuration,
   defaultHeaders,
   defaultRequestsPerVU,
-  defaultUrl,
 } from "/test/load/utils/constants.js";
 import { signIn } from "/test/load/utils/signIn.js";
 import { getToken } from "/test/load/utils/getToken.js";
 import { checkResponse } from "/test/load/utils/checkResponse.js";
-import { JWT_COOKIE_NAME } from "/shared/src/constants.ts";
+import { JWT_COOKIE_NAME, BACKEND_PROD_URL } from "/shared/src/constants.ts";
 
 const VUS = 150;
 
@@ -24,7 +23,7 @@ export function setup() {
 }
 
 export default function (data) {
-  const url = `${defaultUrl}/profile`;
+  const url = `${BACKEND_PROD_URL}/profile`;
 
   const params = {
     ...defaultHeaders,

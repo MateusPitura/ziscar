@@ -6,3 +6,5 @@ export const SEED_ROLE_ADMIN_ID = 1;
 export const SEED_ROLE_SALES_ID = 2;
 
 export const JWT_COOKIE_NAME = "jwt";
+
+export const BACKEND_PROD_URL = "https://api.ziscar.me";

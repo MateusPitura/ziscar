@@ -1,7 +1,8 @@
 import http from "k6/http";
 import { sleep } from "k6";
-import { defaultDuration, defaultHeaders, defaultRequestsPerVU, defaultUrl } from "/test/load/utils/constants.js";
+import { defaultDuration, defaultHeaders, defaultRequestsPerVU } from "/test/load/utils/constants.js";
 import { checkResponse } from "/test/load/utils/checkResponse.js";
+import { BACKEND_PROD_URL } from "/shared/src/constants.ts";
 
 const VUS = 5
 
@@ -12,7 +13,7 @@ export const options = {
 };
 
 export default function () {
-  const url = `${defaultUrl}/auth/sign-in`;
+  const url = `${BACKEND_PROD_URL}/auth/sign-in`;
 
   const params = {
     ...defaultHeaders

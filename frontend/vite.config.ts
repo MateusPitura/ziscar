@@ -2,6 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
 import { createHtmlPlugin } from "vite-plugin-html";
+import { BACKEND_PROD_URL } from "../shared/src/constants";
 
 export default ({ mode }: { mode: string }) => {
   return defineConfig({
@@ -12,7 +13,7 @@ export default ({ mode }: { mode: string }) => {
           data: {
             BACKEND_URL:
               mode === "production"
-                ? "https://api.ziscar.me"
+                ? BACKEND_PROD_URL
                 : "http://localhost:3000",
           },
         },

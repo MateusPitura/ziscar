@@ -4,8 +4,6 @@ export const defaultHeaders = {
   },
 };
 
-export const defaultDuration = "15m"
+export const defaultDuration = "15m";
 
-export const defaultRequestsPerVU = 100
-
-export const defaultUrl = "https://api.ziscar.me"
+export const defaultRequestsPerVU = 100;
