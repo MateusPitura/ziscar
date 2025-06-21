@@ -44,6 +44,17 @@ services:
     network_mode: host
     restart: ${RESTART_POLICY:-no}
 
+  k6:
+    image: grafana/k6
+    volumes:
+      - ./test/load:/test/load
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      - EMAIL=${APP_EMAIL}
+      - PASSWORD=${APP_PASSWORD}
+
 volumes:
   db-data:
   test-db-data:

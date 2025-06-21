@@ -9,6 +9,8 @@
     "dev:down:db": "docker-compose down database",
     "test:db": "docker-compose up --build -d test_database",
     "test:down:db": "docker-compose down test_database",
+    "test:load": "./test/load/script.sh",
+    "test:down:load": "docker-compose down k6",
     "prod:db": "RESTART_POLICY=always npm run dev:db",
     "prod:down:db": "npm run dev:down:db",
     "prod:backend": "APP_ENV=prod RESTART_POLICY=always docker-compose up --build -d backend",

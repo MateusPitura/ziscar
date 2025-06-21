@@ -16,7 +16,7 @@ TESTES UNITÁRIOS:
 
 TESTES DE CARGA:
 
-- Há também testes de carga com k6, execute `test/npm run test:load`. O comando irá iterar pelas pastas de `test/load/routes`, que deve ficar organizada conforme as rotas do backend. O resultado dos testes serão escritos em um JSON e salvos na pasta `test/load/result`, para posterior comparação. Atenção, o teste de carga interage com o ambiente de produção, não com o de desenvolvimento. É possível ainda executar apenas um teste de carga com `test/npm run test:load load/routes/<path>.js`
+- Há também testes de carga com k6, execute `npm run test:load`. O comando irá iterar pelas pastas de `test/load/routes`, que deve ficar organizada conforme as rotas do backend. O resultado dos testes serão salvos na pasta `test/load/result`, para posterior comparação. Atenção, o teste de carga interage com o ambiente de produção. É possível ainda executar apenas um teste de carga com `npm run test:load test/load/routes/<path>.js`
 
 BACKEND:
 
