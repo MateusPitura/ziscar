@@ -1,14 +1,14 @@
 import http from "k6/http";
 import { sleep } from "k6";
 import {
-  defaultDuration,
-  defaultHeaders,
-  defaultRequestsPerVU,
+    defaultDuration,
+    defaultHeaders,
+    defaultRequestsPerVU,
 } from "/test/load/utils/constants.js";
 import { signIn } from "/test/load/utils/signIn.js";
 import { getToken } from "/test/load/utils/getToken.js";
 import { checkResponse } from "/test/load/utils/checkResponse.js";
-import { JWT_COOKIE_NAME, BACKEND_PROD_URL } from "/shared/src/constants.ts";
+import { JWT_COOKIE_NAME, API_URL } from "/shared/src/constants.ts";
 
 const VUS = 150;
 
@@ -23,7 +23,7 @@ export function setup() {
 }
 
 export default function (data) {
-  const url = `${BACKEND_PROD_URL}/profile`;
+  const url = `${API_URL}/profile`;
 
   const params = {
     ...defaultHeaders,

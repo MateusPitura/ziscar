@@ -11,6 +11,7 @@ import {
   AUTH_REQUEST_DEFAULT,
   POPULATE_CLIENT_PRIMARY_ID,
   POPULATE_USER_DEFAULT,
+  RANDOM_URL,
 } from '../constants';
 import { AuthRequestResetPassword } from './auth.type';
 import { PdfService } from 'src/pdf/pdf.service';
@@ -112,7 +113,7 @@ describe('AuthController', () => {
       ).toBeTruthy();
 
       const request = {
-        ...new Request('http://localhost:3000'),
+        ...new Request(RANDOM_URL),
         authToken: resetPasswordPayload,
       } as unknown as AuthRequestResetPassword;
 

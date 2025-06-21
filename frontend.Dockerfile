@@ -19,8 +19,5 @@ RUN npm install
 # Copy the rest of the application files
 COPY frontend/ .
 
-# Expose the port for serving the static files
-EXPOSE 5173
-
 # Start the React app
 CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]

@@ -2,7 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
 import { createHtmlPlugin } from "vite-plugin-html";
-import { BACKEND_PROD_URL } from "../shared/src/constants";
+import { BACKEND_PORT, API_URL, FRONTEND_PORT } from "../shared/src/constants";
 
 export default ({ mode }: { mode: string }) => {
   return defineConfig({
@@ -13,8 +13,8 @@ export default ({ mode }: { mode: string }) => {
           data: {
             BACKEND_URL:
               mode === "production"
-                ? BACKEND_PROD_URL
-                : "http://localhost:3000",
+                ? API_URL
+                : `http://localhost:${BACKEND_PORT}`,
           },
         },
       }),
@@ -26,5 +26,8 @@ export default ({ mode }: { mode: string }) => {
       },
     },
     base: "/",
+    server: {
+      port: FRONTEND_PORT,
+    },
   });
 };

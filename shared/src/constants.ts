@@ -7,4 +7,6 @@ export const SEED_ROLE_SALES_ID = 2;
 
 export const JWT_COOKIE_NAME = "jwt";
 
-export const BACKEND_PROD_URL = "https://api.ziscar.me";
+export const API_URL = "https://api.ziscar.me";
+export const BACKEND_PORT = 3000;
+export const FRONTEND_PORT = 5173;

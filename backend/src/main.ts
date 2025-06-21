@@ -2,17 +2,18 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { Logger } from '@nestjs/common';
 import cookieParser from 'cookie-parser';
-import { isProduction } from './constants';
+import { FRONTEND_URL } from './constants';
+import { BACKEND_PORT } from '@shared/constants';
 
 export async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(cookieParser());
   app.enableCors({
-    origin: [isProduction ? 'https://ziscar.me' : 'http://localhost:5173'],
+    origin: [FRONTEND_URL],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     allowedHeaders: 'Content-Type, Authorization',
     credentials: true,
   });
-  await app.listen(3000);
+  await app.listen(BACKEND_PORT as number);
   Logger.log(`Worker ${process.pid} started`);
 }

@@ -1,3 +1,4 @@
+import { FRONTEND_PORT } from '@shared/constants';
 import { AuthRequest } from './auth/auth.type';
 import { DEFAULT_PERMISSIONS } from './user/user.constant';
 
@@ -7,7 +8,7 @@ export const isProduction = process.env.NODE_ENV === 'production';
 
 export const FRONTEND_URL = isProduction
   ? 'https://ziscar.me'
-  : 'http://localhost:5173';
+  : `http://localhost:${FRONTEND_PORT}`;
 
 export const POPULATE_USER_DEFAULT = {
   id: 150,
@@ -39,8 +40,10 @@ export const POPULATE_ORGANIZATION_INACTIVE = {
 export const POPULATE_CLIENT_PRIMARY_ID = 145;
 export const POPULATE_CLIENT_SECONDARY_ID = 154;
 
+export const RANDOM_URL = 'http://localhost:8080';
+
 export const AUTH_REQUEST_DEFAULT = {
-  ...new Request('http://localhost:3000'),
+  ...new Request(RANDOM_URL),
   authToken: {
     userId: POPULATE_USER_DEFAULT.id,
     clientId: POPULATE_CLIENT_PRIMARY_ID,

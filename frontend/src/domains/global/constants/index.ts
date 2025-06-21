@@ -1,10 +1,10 @@
-import { BACKEND_PROD_URL } from "@shared/constants";
+import { BACKEND_PORT, API_URL } from "@shared/constants";
 
 export const BLANK = " ";
 
 export const BASE_URL = import.meta.env.PROD // 🌠 trocar para backend_url
-  ? BACKEND_PROD_URL
-  : "http://localhost:3000";
+  ? API_URL
+  : `http://localhost:${BACKEND_PORT}`;
 
 export const AUTH_CHANNEL = {
   SIGNIN: "SIGN_IN",

@@ -65,7 +65,4 @@ COPY backend/ ./
 # Generate Prisma client
 RUN npx prisma generate
 
-# Expose the application port
-EXPOSE 3000
-
 CMD ["sh", "-c", "npm run ${APP_ENV}"]
