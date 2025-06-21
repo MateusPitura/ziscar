@@ -6,7 +6,7 @@ export function checkResponse(response, statusCode) {
       if (r.status === statusCode) {
         return true;
       } else {
-        console.log(JSON.stringify(r.body));
+        console.error("❌", JSON.stringify(r.body));
         return false;
       }
     },

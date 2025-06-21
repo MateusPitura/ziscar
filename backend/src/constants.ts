@@ -1,4 +1,4 @@
-import { FRONTEND_PORT } from '@shared/constants';
+import { FRONTEND_PORT } from '../../shared/src/constants';
 import { AuthRequest } from './auth/auth.type';
 import { DEFAULT_PERMISSIONS } from './user/user.constant';
 

@@ -20,7 +20,7 @@ class ErrorBoundary extends React.Component<
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error("Error caught in global boundary:", error, errorInfo);
+    console.error("❌ Error caught in global boundary:", error, errorInfo);
   }
 
   render() {

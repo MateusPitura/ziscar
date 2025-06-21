@@ -1,25 +1,39 @@
 import { execSync } from 'child_process';
-import { config } from 'dotenv';
+import connect from './connect';
 
-const path = process.env.NODE_ENV === 'test' ? '.env.test' : '.env';
-config({ path, override: true });
+async function init() {
+  await connect();
 
-function setup() {
-  console.log('\nSetting up database...');
+  if (process.env.NODE_ENV === 'production') {
+    console.log('\n🔧 Setting up database...');
 
-  console.log('Resetting database and applying migrations...');
-  execSync('npx prisma migrate reset --force');
+    console.log('📃 Applying migrations...');
+    execSync('npx prisma migrate deploy');
 
-  console.log('Generating prisma client...');
-  execSync('npx prisma generate');
+    console.log('🔨 Generating prisma client...');
+    execSync('npx prisma generate');
 
-  console.log('Running seed...');
-  execSync('ts-node ./prisma/seed.ts');
+    console.log('🌱 Running seed...');
+    execSync('ts-node ./prisma/seed.ts');
 
-  console.log('Running populate...');
-  execSync('ts-node ./prisma/populate.ts');
+    console.log('✅ Successfully set up database');
+  } else {
+    console.log('\n🔧 Setting up database...');
 
-  console.log('Successfully set up database');
+    console.log('🔄 Resetting database and applying migrations...');
+    execSync('npx prisma migrate reset --force');
+
+    console.log('🔨 Generating prisma client...');
+    execSync('npx prisma generate');
+
+    console.log('🌱 Running seed...');
+    execSync('ts-node ./prisma/seed.ts');
+
+    console.log('👥 Running populate...');
+    execSync('ts-node ./prisma/populate.ts');
+
+    console.log('✅ Successfully set up database');
+  }
 }
 
-setup();
+void init();

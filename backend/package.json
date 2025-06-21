@@ -11,10 +11,10 @@
     "build": "nest build",
     "dev:migration-generate": "prisma migrate dev --create-only",
     "dev:migration-run": "prisma migrate deploy && npx prisma generate",
-    "prod:prisma": "npx prisma migrate deploy && npx prisma generate && ts-node ./prisma/seed.ts",
-    "dev:prisma": "ts-node ./prisma/init.ts",
-    "test": "jest",
-    "test:init": "NODE_ENV=test ts-node ./prisma/init.ts"
+    "prod:db-init": "NODE_ENV=production ts-node ./prisma/init.ts",
+    "dev:db-init": "ts-node ./prisma/init.ts",
+    "test:db-init": "NODE_ENV=test ts-node ./prisma/init.ts",
+    "test": "jest"
   },
   "dependencies": {
     "@nestjs-modules/mailer": "^2.0.2",
@@ -84,7 +84,7 @@
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
-    "globalSetup": "../prisma/setup.ts",
+    "globalSetup": "../prisma/connect.ts",
     "testEnvironment": "node",
     "moduleNameMapper": {
       "^src/(.*)": "<rootDir>/$1",
