@@ -39,6 +39,7 @@ export interface UpdateInput {
   userUpdateInDto: UserUpdateInDto;
   select?: Prisma.UserSelect;
   showNotFoundError?: boolean;
+  transaction?: Transaction;
 }
 
 export interface GeneratePdfInput {

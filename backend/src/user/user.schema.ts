@@ -35,12 +35,12 @@ const SchemaUserGeneratePdfInDto = SchemaUserFindManyInDto.omit({ page: true });
 
 const SchemaUserGenerateSheetInDto = SchemaUserGeneratePdfInDto;
 
-const SchemaUserUpdateInDto = SchemaUserPostInDto.partial().extend({
-  address: SchemaAddress.partial().optional(),
-  password: s.password().optional(),
-  isActive: s.boolean().optional(),
-  jit: s.string(36).nullable().optional(),
-});
+const SchemaUserUpdateInDto = SchemaUserPostInDto.extend({
+  address: SchemaAddress.partial(),
+  password: s.password(),
+  isActive: s.boolean(),
+  jit: s.string(36).nullable(),
+}).partial();
 
 const SchemaProfilePatchInDto = SchemaUserUpdateInDto.omit({
   roleId: true,
