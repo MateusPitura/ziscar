@@ -1,7 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserService } from './user.service';
 import { PrismaService } from '../database/prisma.service';
-import { ConflictException, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  NotFoundException,
+} from '@nestjs/common';
 import {
   POPULATE_CLIENT_PRIMARY_ID,
   POPULATE_CLIENT_SECONDARY_ID,
@@ -214,7 +218,7 @@ describe('UserService', () => {
   });
 
   it('should not verify duplicated if email or cpf is not passed', async () => {
-    const spy = jest.spyOn(userService, 'findOne');
+    const spy = jest.spyOn(userService, 'verifyDuplicated');
 
     await userService.update({
       where: {
@@ -359,7 +363,7 @@ describe('UserService', () => {
         }),
       ).rejects.toThrow(NotFoundException);
 
-      expect(spy).toHaveBeenCalledWith({ password: '123456' });
+      expect(spy).toHaveBeenCalledTimes(0);
 
       transaction.rollback();
     });
@@ -385,25 +389,39 @@ describe('UserService', () => {
     });
   });
 
-  it('should create user address', async () => {
+  it('should create user address and if already exist delete the previous and create a new one', async () => {
     await prismaService.transaction(async (transaction) => {
       Reflect.set(userService, 'prismaService', transaction);
+      const spy = jest.spyOn(transaction.address, 'delete');
 
-      const user = await userService.update({
+      const commomPayload = {
         where: {
           id: POPULATE_USER_DEFAULT.id,
         },
+        clientId: POPULATE_CLIENT_PRIMARY_ID,
+      };
+
+      await userService.update({
+        ...commomPayload,
         userUpdateInDto: {
           address: {
-            cep: '12345676',
-            number: '123',
+            add: { cep: '12345678', number: '123' },
           },
         },
-        clientId: POPULATE_CLIENT_PRIMARY_ID,
       });
 
-      expect(user).toHaveProperty('address.cep', '12345676');
-      expect(user).toHaveProperty('address.number', '123');
+      const user = await userService.update({
+        ...commomPayload,
+        userUpdateInDto: {
+          address: {
+            add: { cep: '87654321', number: '321' },
+          },
+        },
+      });
+
+      expect(user).toHaveProperty('address.cep', '87654321');
+      expect(user).toHaveProperty('address.number', '321');
+      expect(spy).toHaveBeenCalledTimes(1);
 
       transaction.rollback();
     });
@@ -419,15 +437,14 @@ describe('UserService', () => {
         },
         userUpdateInDto: {
           address: {
-            cep: '12345676',
-            number: '123',
+            add: { cep: '12345678', number: '123' },
           },
           roleId: SEED_ROLE_SALES_ID,
         },
         clientId: POPULATE_CLIENT_PRIMARY_ID,
       });
 
-      expect(user).toHaveProperty('address.cep', '12345676');
+      expect(user).toHaveProperty('address.cep', '12345678');
       expect(user).toHaveProperty('address.number', '123');
       expect(user).toHaveProperty('roleId', SEED_ROLE_SALES_ID);
 
@@ -435,38 +452,95 @@ describe('UserService', () => {
     });
   });
 
-  it('should update user address', async () => {
+  it('should update user address and if not exist should throw an exception', async () => {
     await prismaService.transaction(async (transaction) => {
       Reflect.set(userService, 'prismaService', transaction);
 
-      await userService.update({
+      const commomPayload = {
         where: {
           id: POPULATE_USER_DEFAULT.id,
         },
+        clientId: POPULATE_CLIENT_PRIMARY_ID,
+      };
+
+      await expect(
+        userService.update({
+          ...commomPayload,
+          userUpdateInDto: {
+            address: {
+              update: { street: 'Broadway' },
+            },
+          },
+        }),
+      ).rejects.toThrow(BadRequestException);
+
+      await userService.update({
+        ...commomPayload,
         userUpdateInDto: {
           address: {
-            cep: '12345676',
-            number: '123',
+            add: { cep: '12345678', number: '123' },
           },
         },
-        clientId: POPULATE_CLIENT_PRIMARY_ID,
       });
 
       const user = await userService.update({
+        ...commomPayload,
+        userUpdateInDto: {
+          address: {
+            update: { street: 'Broadway' },
+          },
+        },
+      });
+
+      expect(user).toHaveProperty('address.cep', '12345678');
+      expect(user).toHaveProperty('address.number', '123');
+      expect(user).toHaveProperty('address.street', 'Broadway');
+
+      transaction.rollback();
+    });
+  });
+
+  it('should delete user address and if not exist should throw an exception', async () => {
+    await prismaService.transaction(async (transaction) => {
+      Reflect.set(userService, 'prismaService', transaction);
+
+      const commomPayload = {
         where: {
           id: POPULATE_USER_DEFAULT.id,
         },
+        clientId: POPULATE_CLIENT_PRIMARY_ID,
+      };
+
+      await expect(
+        userService.update({
+          ...commomPayload,
+          userUpdateInDto: {
+            address: {
+              remove: true,
+            },
+          },
+        }),
+      ).rejects.toThrow(BadRequestException);
+
+      await userService.update({
+        ...commomPayload,
         userUpdateInDto: {
           address: {
-            street: 'Broadway',
+            add: { cep: '12345678', number: '123' },
           },
         },
-        clientId: POPULATE_CLIENT_PRIMARY_ID,
       });
 
-      expect(user).toHaveProperty('address.cep', '12345676');
-      expect(user).toHaveProperty('address.number', '123');
-      expect(user).toHaveProperty('address.street', 'Broadway');
+      const user = await userService.update({
+        ...commomPayload,
+        userUpdateInDto: {
+          address: {
+            remove: true,
+          },
+        },
+      });
+
+      expect(user).toHaveProperty('address', null);
 
       transaction.rollback();
     });

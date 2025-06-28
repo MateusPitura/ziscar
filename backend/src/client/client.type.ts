@@ -1,5 +1,3 @@
-import { Transaction } from 'src/types';
+import { Transactionable } from 'src/types';
 
-export interface CreateInput {
-  transaction?: Transaction;
-}
+export type CreateInput = Transactionable;

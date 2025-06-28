@@ -38,7 +38,7 @@ content-type: application/json
 
 {
     "address": {
-        "cep": "12345676"
+        "cep": "12345678"
     }
 }
 

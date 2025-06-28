@@ -27,6 +27,7 @@ import {
 import { PdfService } from 'src/pdf/pdf.service';
 import { SheetService } from 'src/sheet/sheet.service';
 import handlePermissions from 'src/utils/handlePermissions';
+import { Address } from '@prisma/client';
 
 @Injectable()
 export class UserService {
@@ -41,10 +42,12 @@ export class UserService {
   async create({ userCreateInDto, transaction }: CreateInput) {
     const database = transaction || this.prismaService;
 
-    await this.verifyDuplicated({
-      email: userCreateInDto.email,
-      cpf: userCreateInDto.cpf ?? undefined,
-    });
+    if (userCreateInDto.email || userCreateInDto.cpf) {
+      await this.verifyDuplicated({
+        email: userCreateInDto.email,
+        cpf: userCreateInDto.cpf ?? undefined,
+      });
+    }
 
     const { address, clientId, roleId, birthDate, ...rest } = userCreateInDto;
 
@@ -214,9 +217,25 @@ export class UserService {
   }: UpdateInput) {
     const database = transaction || this.prismaService;
 
-    await this.verifyDuplicated({
-      email: userUpdateInDto?.email,
-      cpf: userUpdateInDto?.cpf ?? undefined,
+    if (userUpdateInDto.email || userUpdateInDto.cpf) {
+      await this.verifyDuplicated({
+        email: userUpdateInDto.email,
+        cpf: userUpdateInDto.cpf ?? undefined,
+      });
+    }
+
+    const userBeforeUpdate = await this.findOne({
+      where: {
+        isActive: !userUpdateInDto.isActive,
+        ...where,
+      },
+      clientId,
+      onlyActive: false,
+      showNotFoundError,
+      select: {
+        addressId: true,
+        id: true,
+      },
     });
 
     const { address, roleId, birthDate, ...rest } = userUpdateInDto;
@@ -224,16 +243,43 @@ export class UserService {
     const updatePayload = {
       ...rest,
     };
-    if (address) {
+
+    if (!userBeforeUpdate?.id) {
+      return null;
+    }
+
+    const promises: Promise<Address>[] = [];
+
+    if (address?.remove) {
+      if (!userBeforeUpdate.addressId) {
+        throw new BadRequestException(
+          'Não é possível excluir, endereço não encontrado',
+        );
+      }
       updatePayload['address'] = {
-        upsert: {
-          create: {
-            ...address,
-            cep: address.cep || '',
-            number: address.number || '',
-          },
-          update: address,
-        },
+        delete: true,
+      };
+    } else if (address?.update) {
+      if (!userBeforeUpdate.addressId) {
+        throw new BadRequestException(
+          'Não é possível editar, endereço não encontrado',
+        );
+      }
+      updatePayload['address'] = {
+        update: address.update,
+      };
+    } else if (address?.add) {
+      if (userBeforeUpdate.addressId) {
+        promises.push(
+          database.address.delete({
+            where: {
+              id: userBeforeUpdate.addressId,
+            },
+          }),
+        );
+      }
+      updatePayload['address'] = {
+        create: address.add,
       };
     }
 
@@ -259,34 +305,25 @@ export class UserService {
       updatePayload['birthDate'] = birthDate ? new Date(birthDate) : null;
     }
 
-    try {
-      const user = await database.user.update({
+    const [userAfterUpdate] = await Promise.all([
+      database.user.update({
         where: {
-          clientId,
-          isActive: !userUpdateInDto.isActive,
-          ...where,
+          id: userBeforeUpdate.id,
         },
         data: updatePayload,
         select,
-      });
+      }),
+      ...promises,
+    ]);
 
-      const userFormatted = {
-        ...user,
-        ...(user.birthDate && {
-          birthDate: removeTimeFromDate({ date: user.birthDate }),
-        }),
-      };
+    const userFormatted = {
+      ...userAfterUpdate,
+      ...(userAfterUpdate.birthDate && {
+        birthDate: removeTimeFromDate({ date: userAfterUpdate.birthDate }),
+      }),
+    };
 
-      return userFormatted;
-    } catch (error) {
-      if ((error as Record<'code', string>)?.code === 'P2025') {
-        if (showNotFoundError) {
-          throw new NotFoundException('Usuário não encontrado');
-        }
-        return null;
-      }
-      throw error;
-    }
+    return userFormatted;
   }
 
   async generatePdf({

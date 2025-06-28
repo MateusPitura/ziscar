@@ -6,15 +6,14 @@ import {
   UserGenerateSheetInDto,
   UserUpdateInDto,
 } from './user.schema';
-import { Transaction } from 'src/types';
+import { Transactionable } from 'src/types';
 
 export interface Role {
   permissions?: Permission[];
 }
 
-export interface CreateInput {
+export interface CreateInput extends Transactionable {
   userCreateInDto: UserCreateInDto;
-  transaction?: Transaction;
 }
 
 export interface FindManyInput {
@@ -33,13 +32,12 @@ export interface FindOneInput {
   showNotFoundError?: boolean;
 }
 
-export interface UpdateInput {
+export interface UpdateInput extends Transactionable {
   clientId?: number;
   where: Prisma.UserWhereUniqueInput;
   userUpdateInDto: UserUpdateInDto;
   select?: Prisma.UserSelect;
   showNotFoundError?: boolean;
-  transaction?: Transaction;
 }
 
 export interface GeneratePdfInput {

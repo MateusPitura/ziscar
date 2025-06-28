@@ -8,6 +8,10 @@ export type Transaction = Omit<
   rollback: () => void;
 };
 
+export type Transactionable = {
+  transaction?: Transaction;
+};
+
 interface GetCallbackInput {
   where: Partial<Record<'OR', Record<string, string>[]>>;
   select: { id: boolean };

@@ -1,10 +1,9 @@
-import { Transaction } from 'src/types';
+import { Transactionable } from 'src/types';
 import { OrganizationCreateInDto } from './organization.schema';
 import { Prisma } from '@prisma/client';
 
-export interface CreateInput {
+export interface CreateInput extends Transactionable {
   organizationCreateInDto: OrganizationCreateInDto;
-  transaction?: Transaction;
 }
 
 export interface FindOneInput {
