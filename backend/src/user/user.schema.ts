@@ -1,13 +1,21 @@
 import { s } from '@shared/safeZod';
 import { createZodDto } from 'nestjs-zod';
 
-const SchemaAddress = s.SchemaAddress.extend({
+const SchemaAddressToCreate = s.SchemaAddress.extend({
   street: s.string().optional(),
   neighborhood: s.string().optional(),
   city: s.string().optional(),
   state: s.string().optional(),
   complement: s.string().optional(),
 });
+
+const SchemaAddressToUpdate = s.SchemaAddress.extend({
+  street: s.string().nullable(),
+  neighborhood: s.string().nullable(),
+  city: s.string().nullable(),
+  state: s.string().nullable(),
+  complement: s.string().nullable(),
+}).partial();
 
 const SchemaUserPostInDto = s.object({
   fullName: s.fullName(),
@@ -16,7 +24,7 @@ const SchemaUserPostInDto = s.object({
   birthDate: s.birthDate().nullable().optional(),
   code: s.string().nullable().optional(),
   cellPhone: s.cellphone().nullable().optional(),
-  address: SchemaAddress.optional(),
+  address: SchemaAddressToCreate.optional(),
   roleId: s.id(),
 });
 
@@ -39,8 +47,8 @@ const SchemaUserUpdateInDto = SchemaUserPostInDto.extend({
   address: s
     .object({
       remove: s.boolean(),
-      add: SchemaAddress,
-      update: SchemaAddress.partial(),
+      add: SchemaAddressToCreate,
+      update: SchemaAddressToUpdate,
     })
     .partial(),
   password: s.password(),
@@ -72,5 +80,5 @@ export class UserGenerateSheetInDto extends createZodDto(
 export class UserFindManyInDto extends createZodDto(SchemaUserFindManyInDto) {}
 export class UserPatchInDto extends createZodDto(SchemaUserPatchInDto) {}
 export class ProfilePatchInDto extends createZodDto(SchemaProfilePatchInDto) {}
-export class UserDeleteInDto extends createZodDto(SchemaUserDeleteInDto) {}
 export class UserUpdateInDto extends createZodDto(SchemaUserUpdateInDto) {}
+export class UserDeleteInDto extends createZodDto(SchemaUserDeleteInDto) {}

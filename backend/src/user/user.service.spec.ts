@@ -21,6 +21,7 @@ import {
 } from '@shared/constants';
 import { PdfService } from 'src/pdf/pdf.service';
 import { SheetService } from 'src/sheet/sheet.service';
+import { adddressNullableFields } from './user.constant';
 
 describe('UserService', () => {
   let userService: UserService;
@@ -389,10 +390,10 @@ describe('UserService', () => {
     });
   });
 
-  it('should create user address and if already exist delete the previous and create a new one', async () => {
+  it('should create user address and if already exist update setting all to null', async () => {
     await prismaService.transaction(async (transaction) => {
       Reflect.set(userService, 'prismaService', transaction);
-      const spy = jest.spyOn(transaction.address, 'delete');
+      const spy = jest.spyOn(transaction.user, 'update');
 
       const commomPayload = {
         where: {
@@ -421,7 +422,19 @@ describe('UserService', () => {
 
       expect(user).toHaveProperty('address.cep', '87654321');
       expect(user).toHaveProperty('address.number', '321');
-      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: {
+            address: {
+              update: {
+                ...adddressNullableFields,
+                cep: '87654321',
+                number: '321',
+              },
+            },
+          },
+        }),
+      );
 
       transaction.rollback();
     });

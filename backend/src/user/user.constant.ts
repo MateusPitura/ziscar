@@ -1,4 +1,5 @@
 import { Permissions } from '@shared/types';
+import { AddressNullableFields } from './user.type';
 
 export const GET_USER = {
   id: true,
@@ -44,3 +45,12 @@ export const DEFAULT_PERMISSIONS: Permissions = {
     DELETE: false,
   },
 };
+
+export const adddressNullableFields: Record<keyof AddressNullableFields, null> =
+  {
+    neighborhood: null,
+    city: null,
+    state: null,
+    street: null,
+    complement: null,
+  };

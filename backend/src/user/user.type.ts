@@ -32,7 +32,7 @@ export interface FindOneInput {
   showNotFoundError?: boolean;
 }
 
-export interface UpdateInput extends Transactionable {
+export interface UpdateInput {
   clientId?: number;
   where: Prisma.UserWhereUniqueInput;
   userUpdateInDto: UserUpdateInDto;
@@ -65,3 +65,8 @@ export interface VerifyDuplicatedInput {
 export interface RemoveTimeFromDateInput {
   date: Date | null;
 }
+
+export type AddressNullableFields = Omit<
+  NonNullable<NonNullable<UserUpdateInDto['address']>['update']>,
+  'cep' | 'number'
+>;

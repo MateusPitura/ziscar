@@ -6,7 +6,11 @@ import {
 import { PrismaService } from '../database/prisma.service';
 import { EncryptPasswordInput, GetCallback } from '../types';
 import { encryptPassword, removeTimeFromDate } from './user.utils';
-import { GET_PERMISSIONS, GET_USER } from './user.constant';
+import {
+  GET_PERMISSIONS,
+  GET_USER,
+  adddressNullableFields,
+} from './user.constant';
 import { verifyDuplicated } from '../utils/verifyDuplicated';
 import { EmailService } from '../email/email.service';
 import { JwtService } from '@nestjs/jwt';
@@ -27,7 +31,6 @@ import {
 import { PdfService } from 'src/pdf/pdf.service';
 import { SheetService } from 'src/sheet/sheet.service';
 import handlePermissions from 'src/utils/handlePermissions';
-import { Address } from '@prisma/client';
 
 @Injectable()
 export class UserService {
@@ -213,10 +216,7 @@ export class UserService {
     userUpdateInDto,
     select = GET_USER,
     showNotFoundError = true,
-    transaction,
   }: UpdateInput) {
-    const database = transaction || this.prismaService;
-
     if (userUpdateInDto.email || userUpdateInDto.cpf) {
       await this.verifyDuplicated({
         email: userUpdateInDto.email,
@@ -248,8 +248,6 @@ export class UserService {
       return null;
     }
 
-    const promises: Promise<Address>[] = [];
-
     if (address?.remove) {
       if (!userBeforeUpdate.addressId) {
         throw new BadRequestException(
@@ -270,17 +268,17 @@ export class UserService {
       };
     } else if (address?.add) {
       if (userBeforeUpdate.addressId) {
-        promises.push(
-          database.address.delete({
-            where: {
-              id: userBeforeUpdate.addressId,
-            },
-          }),
-        );
+        updatePayload['address'] = {
+          update: {
+            ...adddressNullableFields,
+            ...address.add,
+          },
+        };
+      } else {
+        updatePayload['address'] = {
+          create: address.add,
+        };
       }
-      updatePayload['address'] = {
-        create: address.add,
-      };
     }
 
     if (userUpdateInDto.password) {
@@ -305,16 +303,13 @@ export class UserService {
       updatePayload['birthDate'] = birthDate ? new Date(birthDate) : null;
     }
 
-    const [userAfterUpdate] = await Promise.all([
-      database.user.update({
-        where: {
-          id: userBeforeUpdate.id,
-        },
-        data: updatePayload,
-        select,
-      }),
-      ...promises,
-    ]);
+    const userAfterUpdate = await this.prismaService.user.update({
+      where: {
+        id: userBeforeUpdate.id,
+      },
+      data: updatePayload,
+      select,
+    });
 
     const userFormatted = {
       ...userAfterUpdate,
