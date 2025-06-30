@@ -89,6 +89,7 @@
     "moduleNameMapper": {
       "^src/(.*)": "<rootDir>/$1",
       "^@shared/(.*)$": "<rootDir>/../../shared/src/$1"
-    }
+    },
+    "maxWorkers": 1
   }
 }
