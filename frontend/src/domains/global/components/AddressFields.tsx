@@ -6,6 +6,8 @@ import useSafeFetch from "../hooks/useSafeFetch";
 import useSnackbar from "../hooks/useSnackbar";
 import { useQuery } from "@tanstack/react-query";
 import formatInputPrefix from "../utils/formatInputPrefix";
+import Tooltip from "@/design-system/Tooltip";
+import { addressDefaultValues } from "@/domains/users/constants";
 
 interface ViaCepAddress {
   logradouro?: string;
@@ -18,15 +20,18 @@ interface ViaCepAddress {
 interface AddressFieldsProps<T extends FieldValues> {
   inputNamePrefix?: keyof T & string;
   autoFocus?: boolean;
+  defaultOpen?: boolean;
 }
 
 export default function AddressFields<T extends FieldValues>({
   inputNamePrefix,
   autoFocus = false,
+  defaultOpen = false,
 }: AddressFieldsProps<T>): ReactNode {
   const [currentValidCep, setCurrentValidCep] = useState("");
+  const [isOpen, setIsOpen] = useState(defaultOpen);
 
-  const { setValue, trigger, getValues } = useFormContext();
+  const { setValue, trigger, getValues, resetField } = useFormContext();
 
   const { safeFetch } = useSafeFetch();
   const { showErrorSnackbar } = useSnackbar();
@@ -76,7 +81,7 @@ export default function AddressFields<T extends FieldValues>({
         shouldDirty: true,
       });
     }
-  }, [cepInfo, inputNamePrefix]);
+  }, [cepInfo, inputNamePrefix, setValue, showErrorSnackbar]);
 
   function handleOnSubmitCepField(
     event: React.KeyboardEvent<HTMLInputElement>
@@ -87,8 +92,33 @@ export default function AddressFields<T extends FieldValues>({
     }
   }
 
-  return (
+  return !isOpen ? (
+    <div className="col-span-full">
+      <Button
+        variant="secondary"
+        label="Adicionar endereço"
+        onClick={() => {
+          setIsOpen(true);
+          setValue("address", addressDefaultValues);
+        }}
+        fullWidth
+        textAlign="center"
+      />
+    </div>
+  ) : (
     <>
+      <div className="flex items-center justify-end col-span-full">
+        <Tooltip content="Remover endereço">
+          <Button
+            variant="tertiary"
+            iconLeft="Delete"
+            onClick={() => {
+              setIsOpen(false);
+              resetField("address");
+            }}
+          />
+        </Tooltip>
+      </div>
       <div
         className="flex items-center justify-between gap-1"
         onKeyDown={handleOnSubmitCepField}
