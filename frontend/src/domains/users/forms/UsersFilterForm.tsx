@@ -29,7 +29,7 @@ function UsersFilterForm(): ReactNode {
         orderBy: usersFilter?.orderBy || "fullName",
         status: usersFilter?.status || 'active',
       }}
-      removeEmptyString={false}
+      replaceEmptyStringToNull={false}
     >
       <UsersFilterFormContent />
     </Form>
