@@ -96,24 +96,25 @@ export class AuthService {
     await this.prismaService.transaction(async (transaction) => {
       const { clientId } = await this.clientService.create({ transaction });
 
-      await this.organizationService.create({
-        organizationCreateInDto: {
-          cnpj: authSignUpInDto.cnpj,
-          name: authSignUpInDto.name,
-          clientId,
-        },
-        transaction,
-      });
-
-      await this.userService.create({
-        userCreateInDto: {
-          email: authSignUpInDto.email,
-          fullName: authSignUpInDto.fullName,
-          clientId,
-          roleId: SEED_ROLE_ADMIN_ID,
-        },
-        transaction,
-      });
+      await Promise.all([
+        this.organizationService.create({
+          organizationCreateInDto: {
+            cnpj: authSignUpInDto.cnpj,
+            name: authSignUpInDto.name,
+            clientId,
+          },
+          transaction,
+        }),
+        this.userService.create({
+          userCreateInDto: {
+            email: authSignUpInDto.email,
+            fullName: authSignUpInDto.fullName,
+            clientId,
+            roleId: SEED_ROLE_ADMIN_ID,
+          },
+          transaction,
+        }),
+      ]);
     });
 
     return true;

@@ -32,7 +32,7 @@ export default function NewUsersContainer(): ReactElement {
     mutationFn: createUser,
     onSuccess: () => {
       showSuccessSnackbar({
-        title: "Enviaremos um email para definir a senha",
+        title: "Um email será enviado",
         description: "Confira também a caixa de spam",
       });
       navigate("/users");
