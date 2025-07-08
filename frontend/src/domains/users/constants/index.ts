@@ -18,7 +18,7 @@ export const userDefaultValues: UserFormInputs = {
   cpf: "",
   code: "",
   birthDate: "",
-  address: undefined,
+  address: null,
   roleId: String(SEED_ROLE_ADMIN_ID),
 };
 

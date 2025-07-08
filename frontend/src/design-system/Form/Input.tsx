@@ -49,9 +49,7 @@ export default function Input<T extends FieldValues>({
   useEffect(() => {
     if (mask) {
       const valueFormatted = applyMask(value, mask);
-      setValue<string>(name, valueFormatted, {
-        shouldDirty: true,
-      });
+      setValue<string>(name, valueFormatted);
     }
   }, [value, mask, name, setValue]);
 

@@ -23,5 +23,5 @@ export const SchemaUserForm = s.object({
   code: s.string().or(s.empty()),
   birthDate: s.birthDate().or(s.empty()),
   roleId: s.list([String(SEED_ROLE_ADMIN_ID), String(SEED_ROLE_SALES_ID)]),
-  address: SchemaAddress.optional(),
+  address: SchemaAddress.nullable(),
 });

@@ -37,9 +37,29 @@ export default function EditUserContainer(): ReactNode {
   });
 
   async function editUser(data: UserFormInputs) {
+    const { address, ...rest } = data;
+
+    let addressPayload = undefined;
+    if (address && !userData?.address) {
+      addressPayload = {
+        add: address,
+      };
+    } else if (address && userData?.address) {
+      addressPayload = {
+        update: address,
+      };
+    } else if (!address && userData?.address) {
+      addressPayload = {
+        remove: true,
+      };
+    }
+
     await safeFetch(`${BACKEND_URL}/user/${userId}`, {
       method: "PATCH",
-      body: data,
+      body: {
+        ...rest,
+        ...(addressPayload && { address: addressPayload }),
+      },
       resource: "USERS",
       action: "UPDATE",
     });

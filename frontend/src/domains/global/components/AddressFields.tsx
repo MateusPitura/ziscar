@@ -31,7 +31,7 @@ export default function AddressFields<T extends FieldValues>({
   const [currentValidCep, setCurrentValidCep] = useState("");
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
-  const { setValue, trigger, getValues, resetField } = useFormContext();
+  const { setValue, trigger, getValues } = useFormContext();
 
   const { safeFetch } = useSafeFetch();
   const { showErrorSnackbar } = useSnackbar();
@@ -99,7 +99,7 @@ export default function AddressFields<T extends FieldValues>({
         label="Adicionar endereço"
         onClick={() => {
           setIsOpen(true);
-          setValue("address", addressDefaultValues);
+          setValue("address", addressDefaultValues, { shouldDirty: true });
         }}
         fullWidth
         textAlign="center"
@@ -114,7 +114,7 @@ export default function AddressFields<T extends FieldValues>({
             iconLeft="Delete"
             onClick={() => {
               setIsOpen(false);
-              resetField("address");
+              setValue("address", null, { shouldDirty: true });
             }}
           />
         </Tooltip>
