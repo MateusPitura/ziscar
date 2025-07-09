@@ -74,12 +74,14 @@ export default function UserForm({
                   label="Email"
                   required
                   disabled={isEdit}
+                  type="email"
                 />
                 <Input<UserFormInputs>
                   name="cellPhone"
                   label="Celular"
                   mask="cellphone"
                   maxLength={15}
+                  type="tel"
                 />
                 <Input<UserFormInputs>
                   name="cpf"

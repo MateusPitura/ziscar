@@ -91,6 +91,11 @@ export default function Input<T extends FieldValues>({
           autoFocus={autoFocus}
           tabIndex={forceUnselect ? -1 : undefined}
           disabled={disabled}
+          onBlur={(event) =>
+            setValue<string>(name, event.target.value.trim(), {
+              shouldDirty: true,
+            })
+          }
         />
         {iconRight && (
           <div className="px-2">
