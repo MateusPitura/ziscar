@@ -12,7 +12,7 @@ export default function ProfileContainer(): ReactElement {
 
   return (
     <>
-      <RequestChangePasswordModal email="mateuspitura@gmail.com" {...dialog} />
+      <RequestChangePasswordModal {...dialog} />
       <div className="flex flex-col gap-4">
         <PageHeader title="Perfil" />
         <div className="flex justify-center">

@@ -6,23 +6,15 @@ import { BACKEND_URL } from "@/domains/global/constants";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import { useMutation } from "@tanstack/react-query";
 
-interface RequestChangePasswordModalProps extends DialogProps {
-  email: string;
-}
-
 export default function RequestChangePasswordModal({
-  email,
   ...dialog
-}: RequestChangePasswordModalProps): ReactNode {
+}: DialogProps): ReactNode {
   const { safeFetch } = useSafeFetch();
   const { showSuccessSnackbar } = useSnackbar();
 
   async function handleRequestChangePassword() {
-    await safeFetch(`${BACKEND_URL}/auth/forget-password`, {
+    await safeFetch(`${BACKEND_URL}/auth/request-change-password`, {
       method: "POST",
-      body: {
-        email,
-      },
     });
   }
 
@@ -42,7 +34,7 @@ export default function RequestChangePasswordModal({
       <Dialog.Header title={"Alteração de senha"} />
       <Dialog.Body>
         Caso deseje alterar a senha, clique no botão abaixo e siga as instruções
-        enviadas para o email <span className="font-bold">{email}</span>
+        enviadas para seu email
       </Dialog.Body>
       <Dialog.Footer
         labelSecondaryBtn="Cancelar"

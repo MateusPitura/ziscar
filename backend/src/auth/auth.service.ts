@@ -4,6 +4,7 @@ import {
   AuthResetPassword,
   AuthSignin,
   ForgetPasswordInput,
+  RequestChangePasswordInput,
   ResetPasswordInput,
   SiginInInput,
   SignOutInput,
@@ -133,7 +134,7 @@ export class AuthService {
   async forgetPassword({ authForgetPasswordInDto }: ForgetPasswordInput) {
     const user = await this.userService.findOne({
       where: { email: authForgetPasswordInDto.email },
-      select: { id: true, clientId: true },
+      select: { clientId: true },
       showNotFoundError: false,
     });
 
@@ -152,5 +153,31 @@ export class AuthService {
     });
 
     return true;
+  }
+
+  async requestChangePassword({
+    requestChangePasswordInDto: requestChangePasswordInputInDto,
+  }: RequestChangePasswordInput) {
+    const user = await this.userService.findOne({
+      where: { id: requestChangePasswordInputInDto.id },
+      select: { email: true, clientId: true },
+      clientId: requestChangePasswordInputInDto.clientId,
+    });
+
+    if (user) {
+      const payload: AuthResetPassword = {
+        email: user.email,
+        clientId: user.clientId,
+      };
+      const token = this.jwtService.sign(payload);
+
+      void this.emailService.sendEmail({
+        to: user.email,
+        title: 'Redefina sua senha',
+        body: `${FRONTEND_URL}/?token=${token}`,
+      });
+
+      return true;
+    }
   }
 }
