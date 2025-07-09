@@ -53,7 +53,9 @@ const SchemaUserUpdateInDto = SchemaUserPostInDto.extend({
   password: s.password(),
   isActive: s.boolean(),
   jit: s.string(36).nullable(),
-}).partial();
+})
+  .omit({ email: true })
+  .partial();
 
 const SchemaProfilePatchInDto = SchemaUserUpdateInDto.omit({
   roleId: true,
