@@ -6,8 +6,8 @@ import PageHeader from "@/domains/global/components/PageHeader";
 import Section from "@/domains/global/components/Section";
 import type { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
-import { SchemaUserForm } from "../schemas";
-import { UserFormInputs } from "../types";
+import { SchemaUserForm } from "../../users/schemas";
+import { UserFormInputs } from "../../users/types";
 import { SEED_ROLE_ADMIN_ID, SEED_ROLE_SALES_ID } from "@shared/constants";
 import { Action, Resource } from "@shared/types";
 

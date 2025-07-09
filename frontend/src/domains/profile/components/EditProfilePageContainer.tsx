@@ -1,5 +1,5 @@
 import { User } from "@/domains/global/types/model";
-import UserForm from "@/domains/users/forms/UserForm";
+import UserForm from "@/domains/global/forms/UserForm";
 import {
   useIsFetching,
   useMutation,

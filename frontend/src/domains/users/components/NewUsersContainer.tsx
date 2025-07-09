@@ -7,7 +7,7 @@ import {
 } from "@tanstack/react-query";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
-import UserForm from "../forms/UserForm";
+import UserForm from "@/domains/global/forms/UserForm";
 import { UserFormInputs } from "../types";
 import { BACKEND_URL } from "@/domains/global/constants";
 import { userDefaultValues } from "../constants";

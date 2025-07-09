@@ -8,7 +8,7 @@ import {
 } from "@tanstack/react-query";
 import { useEffect, type ReactNode } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import UserForm from "../forms/UserForm";
+import UserForm from "@/domains/global/forms/UserForm";
 import selectUserInfo from "../utils/selectUserInfo";
 import Spinner from "@/design-system/Spinner";
 import { BACKEND_URL } from "@/domains/global/constants";
