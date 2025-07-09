@@ -1,1 +1,0 @@
-import{r as n,j as p}from"./index-DpCb8Zub.js";import{I as f}from"./index-BT4GbdeD.js";function w({label:t,required:o,name:i,autoFocus:r=!1}){const[s,a]=n.useState(!1);return p.jsx(f,{name:i,label:t,required:o,iconRight:s?"Visibility":"VisibilityOff",onClickIconRight:()=>a(e=>!e),type:s?"text":"password",autoFocus:r})}export{w as I};
