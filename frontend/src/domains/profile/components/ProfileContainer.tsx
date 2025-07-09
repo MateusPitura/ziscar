@@ -1,24 +1,11 @@
 import PageHeader from "@/domains/global/components/PageHeader";
 import Section from "@/domains/global/components/Section";
-import { useMemo, useState, type ReactElement } from "react";
-import { User } from "@/domains/global/types/model";
-import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
-import safeFormat from "@/domains/global/utils/safeFormat";
-import EmailForm from "../forms/EmailForm";
+import { useState, type ReactElement } from "react";
 import PasswordForm from "../forms/PasswordForm";
-import { useQuery } from "@tanstack/react-query";
-import FullNameForm from "../forms/FullNameForm";
-import AddressForm from "../forms/AddressForm";
-import BirthDateForm from "../forms/BirthDateForm";
-import CpfForm from "../forms/CpfForm";
-import CodeForm from "../forms/CodeForm";
-import CellphoneForm from "../forms/CellphoneForm";
-import selectProfileInfo from "../utils/selectProfileInfo";
 import useDialog from "@/domains/global/hooks/useDialog";
 import EditProfileModal from "./EditProfileModal";
 import { EditProfile } from "../types";
-import { BACKEND_URL } from "@/domains/global/constants";
-import { DateFormats } from "@/domains/global/types";
+import { useNavigate } from "react-router-dom";
 
 export default function ProfileContainer(): ReactElement {
   const [editProfileInfo, setEditProfileInfo] = useState<EditProfile>({
@@ -26,37 +13,9 @@ export default function ProfileContainer(): ReactElement {
     content: undefined,
   });
 
+  const navigate = useNavigate();
+
   const dialog = useDialog();
-
-  const { safeFetch } = useSafeFetch();
-
-  async function getProfileInfo(): Promise<User> {
-    return await safeFetch(`${BACKEND_URL}/profile`);
-  }
-
-  const { data: profileInfo, isFetching } = useQuery({
-    queryKey: ["profile"],
-    queryFn: getProfileInfo,
-    select: selectProfileInfo,
-  });
-
-  const addressFormatted = useMemo(
-    () =>
-      [profileInfo?.address?.street, profileInfo?.address?.number]
-        .filter(Boolean)
-        .join(", "),
-    [profileInfo?.address?.street, profileInfo?.address?.number]
-  );
-
-  function formatBirthDate(format: DateFormats) {
-    if (profileInfo?.birthDate) {
-      return safeFormat({
-        date: profileInfo.birthDate,
-        format,
-      });
-    }
-    return "";
-  }
 
   return (
     <>
@@ -65,29 +24,26 @@ export default function ProfileContainer(): ReactElement {
         <PageHeader title="Perfil" />
         <div className="flex justify-center">
           <Section>
-            <Section.Title title="Informações Pessoais" />
+            <Section.Title title="Seus dados" />
             <Section.Group>
               <Section.Header title="Conta" />
               <Section.Row
-                label="Email"
-                value={profileInfo?.email}
-                isLoading={isFetching}
+                label="Informações pessoais"
                 onEdit={() => {
-                  dialog.openDialog();
-                  setEditProfileInfo({
-                    title: "Alterar email",
-                    content: (
-                      <EmailForm
-                        defaultValues={{ email: profileInfo?.email }}
-                      />
-                    ),
-                  });
+                  navigate("/profile/edit");
+                  // dialog.openDialog();
+                  // setEditProfileInfo({
+                  //   title: "Alterar email",
+                  //   content: (
+                  //     <EmailForm
+                  //       defaultValues={{ email: profileInfo?.email }}
+                  //     />
+                  //   ),
+                  // });
                 }}
               />
               <Section.Row
                 label="Senha"
-                value="••••••••••••"
-                isLoading={isFetching}
                 onEdit={() => {
                   dialog.openDialog();
                   setEditProfileInfo({
@@ -97,7 +53,7 @@ export default function ProfileContainer(): ReactElement {
                 }}
               />
             </Section.Group>
-            <Section.Group>
+            {/* <Section.Group>
               <Section.Header title="Dados" />
               <Section.Row
                 label="Nome completo"
@@ -193,7 +149,7 @@ export default function ProfileContainer(): ReactElement {
                   });
                 }}
               />
-            </Section.Group>
+            </Section.Group> */}
           </Section>
         </div>
       </div>

@@ -50,6 +50,7 @@ export default function NewUsersContainer(): ReactElement {
       headerTitle="Novo usuário"
       resource="USERS"
       action="CREATE"
+      allowEditRole
     />
   );
 }

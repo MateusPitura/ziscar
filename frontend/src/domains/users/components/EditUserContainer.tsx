@@ -14,6 +14,7 @@ import Spinner from "@/design-system/Spinner";
 import { BACKEND_URL } from "@/domains/global/constants";
 import { User } from "@/domains/global/types/model";
 import { UserFormInputs } from "../types";
+import parseAddressPayload from "@/domains/global/utils/parseAddressPayload";
 
 export default function EditUserContainer(): ReactNode {
   const { safeFetch } = useSafeFetch();
@@ -39,20 +40,10 @@ export default function EditUserContainer(): ReactNode {
   async function editUser(data: UserFormInputs) {
     const { address, ...rest } = data;
 
-    let addressPayload = undefined;
-    if (address && !userData?.address) {
-      addressPayload = {
-        add: address,
-      };
-    } else if (address && userData?.address) {
-      addressPayload = {
-        update: address,
-      };
-    } else if (!address && userData?.address) {
-      addressPayload = {
-        remove: true,
-      };
-    }
+    const addressPayload = parseAddressPayload({
+      newAddress: address,
+      oldAddress: userData?.address,
+    });
 
     await safeFetch(`${BACKEND_URL}/user/${userId}`, {
       method: "PATCH",
@@ -107,6 +98,7 @@ export default function EditUserContainer(): ReactNode {
         onlyDirty
         resource="USERS"
         action="UPDATE"
+        allowEditRole
       />
     )
   );

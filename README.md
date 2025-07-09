@@ -34,7 +34,7 @@ FRONTEND:
 SHARED:
 
 - O módulo shared pode ser acessado tanto no frontend quanto no backend
-- Ao invés de usar o zod diretamente, use o `safeZod`, importado como `s`. Ele abstrai e define padrões para o uso do zod, como toda string ser required e no máximo 128 caracteres. Para tornar opcional, no frontend `.or(s.empty())`, pois no frontend não pode haver campos undefined, apenas strings vazias `""`
+- Ao invés de usar o zod diretamente, use o `safeZod`, importado como `s`. Ele abstrai e define padrões para o uso do zod, como toda string ser required e no máximo 128 caracteres. Para tornar opcional, no frontend `.or(s.empty())`, pois no frontend, no geral, não pode haver campos undefined, apenas strings vazias `""`
 
 DEPLOY:
 

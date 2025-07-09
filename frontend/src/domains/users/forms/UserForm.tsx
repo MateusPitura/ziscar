@@ -11,6 +11,8 @@ import { UserFormInputs } from "../types";
 import { SEED_ROLE_ADMIN_ID, SEED_ROLE_SALES_ID } from "@shared/constants";
 import { Action, Resource } from "@shared/types";
 
+const PREVIOUS_PAGE = -1;
+
 interface UserFormProperties {
   defaultValues: Partial<UserFormInputs>;
   onSubmit: (data: UserFormInputs) => void;
@@ -20,6 +22,7 @@ interface UserFormProperties {
   onlyDirty?: boolean;
   resource?: Resource;
   action?: Action;
+  allowEditRole?: boolean;
 }
 
 export default function UserForm({
@@ -31,6 +34,7 @@ export default function UserForm({
   onlyDirty,
   resource,
   action,
+  allowEditRole = false,
 }: UserFormProperties): ReactNode {
   const navigate = useNavigate();
 
@@ -47,7 +51,7 @@ export default function UserForm({
           title={headerTitle}
           primaryButtonLabel={headerPrimaryBtnLabel}
           secondaryButtonLabel="Cancelar"
-          onClickSecondaryBtn={() => navigate("/users")}
+          onClickSecondaryBtn={() => navigate(PREVIOUS_PAGE)}
           primaryBtnState={isPending ? "loading" : undefined}
           dirty
           primaryBtnResource={resource}
@@ -96,18 +100,20 @@ export default function UserForm({
                 />
               </Section.Body>
             </Section.Group>
-            <Section.Group>
-              <Section.Header title="Categoria" />
-              <Section.Body>
-                <Choice<UserFormInputs> name="roleId">
-                  <Choice.Radio
-                    label="Administrador"
-                    value={SEED_ROLE_ADMIN_ID}
-                  />
-                  <Choice.Radio label="Vendedor" value={SEED_ROLE_SALES_ID} />
-                </Choice>
-              </Section.Body>
-            </Section.Group>
+            {allowEditRole && (
+              <Section.Group>
+                <Section.Header title="Categoria" />
+                <Section.Body>
+                  <Choice<UserFormInputs> name="roleId">
+                    <Choice.Radio
+                      label="Administrador"
+                      value={SEED_ROLE_ADMIN_ID}
+                    />
+                    <Choice.Radio label="Vendedor" value={SEED_ROLE_SALES_ID} />
+                  </Choice>
+                </Section.Body>
+              </Section.Group>
+            )}
           </Section>
         </div>
       </Form>
