@@ -164,20 +164,18 @@ export class AuthService {
       clientId: requestChangePasswordInputInDto.clientId,
     });
 
-    if (user) {
-      const payload: AuthResetPassword = {
-        email: user.email,
-        clientId: user.clientId,
-      };
-      const token = this.jwtService.sign(payload);
+    const payload: AuthResetPassword = {
+      email: user!.email,
+      clientId: user!.clientId,
+    };
+    const token = this.jwtService.sign(payload);
 
-      void this.emailService.sendEmail({
-        to: user.email,
-        title: 'Redefina sua senha',
-        body: `${FRONTEND_URL}/?token=${token}`,
-      });
+    void this.emailService.sendEmail({
+      to: user!.email,
+      title: 'Redefina sua senha',
+      body: `${FRONTEND_URL}/?token=${token}`,
+    });
 
-      return true;
-    }
+    return true;
   }
 }
