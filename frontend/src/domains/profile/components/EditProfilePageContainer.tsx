@@ -6,7 +6,7 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-import type { ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 import selectProfileInfo from "../utils/selectProfileInfo";
 import { BACKEND_URL } from "@/domains/global/constants";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
@@ -51,14 +51,11 @@ export default function EditProfilePageContainer(): ReactNode {
     });
   }
 
-  const { mutate, isPending } = useMutation({
+  const { mutate, isPending, isSuccess } = useMutation({
     mutationFn: editUser,
     onSuccess: async () => {
       showSuccessSnackbar({
         title: `Perfil atualizado com sucesso`,
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["profile"],
       });
       queryClient.invalidateQueries({
         queryKey: ["usersDashboard"],
@@ -66,6 +63,17 @@ export default function EditProfilePageContainer(): ReactNode {
       navigate("/profile");
     },
   });
+
+  useEffect(
+    () => () => {
+      if (isSuccess) {
+        queryClient.invalidateQueries({
+          queryKey: ["profile"],
+        });
+      }
+    },
+    [isSuccess, queryClient]
+  );
 
   if (isFetching) {
     return (

@@ -36,7 +36,7 @@ export default function NewUsersContainer(): ReactElement {
         description: "Confira também a caixa de spam",
       });
       navigate("/users");
-      queryClient.invalidateQueries({ queryKey: ["user"] });
+      queryClient.invalidateQueries({ queryKey: ["users"] });
       queryClient.invalidateQueries({ queryKey: ["usersDashboard"] });
     },
   });

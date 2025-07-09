@@ -71,7 +71,7 @@ export default function Input<T extends FieldValues>({
         className={classNames(
           "border-light-outline border-2 rounded-md flex items-center gap-1 overflow-hidden",
           {
-            "border-light-disabled": disabled,
+            "!border-light-disabled": disabled,
           }
         )}
       >
@@ -80,7 +80,7 @@ export default function Input<T extends FieldValues>({
           className={classNames(
             "text-body-large text-light-onSurface bg-transparent p-1 px-2 caret-light-primary flex-1 h-10",
             {
-              "text-light-disabled": disabled,
+              "!text-light-disabled": disabled,
             }
           )}
           autoComplete="on"

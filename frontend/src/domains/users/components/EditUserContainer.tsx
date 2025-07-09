@@ -65,19 +65,23 @@ export default function EditUserContainer(): ReactNode {
       queryClient.invalidateQueries({
         queryKey: ["usersDashboard"],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["users"],
+      });
       navigate("/users");
     },
   });
 
-  useEffect(() => {
-    return () => {
+  useEffect(
+    () => () => {
       if (isSuccess) {
         queryClient.invalidateQueries({
-          queryKey: ["user"],
+          queryKey: ["user", userId],
         });
       }
-    };
-  }, [isSuccess, queryClient]);
+    },
+    [isSuccess, queryClient, userId]
+  );
 
   if (isFetching) {
     return (
