@@ -93,10 +93,7 @@ export default function UserForm({
             <Section.Group>
               <Section.Header title="Endereço" />
               <Section.Body>
-                <AddressFields<UserFormInputs>
-                  inputNamePrefix="address"
-                  defaultOpen={!!defaultValues.address}
-                />
+                <AddressFields defaultOpen={!!defaultValues.address} />
               </Section.Body>
             </Section.Group>
             {allowEditRole && (

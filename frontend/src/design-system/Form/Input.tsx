@@ -2,6 +2,7 @@ import { applyMask } from "@/domains/global/utils/applyMask";
 import { useEffect, type ReactElement } from "react";
 import {
   FieldValues,
+  Path,
   useFormContext,
   useFormState,
   useWatch,
@@ -12,7 +13,7 @@ import { Mask } from "@/domains/global/types";
 import { IconsName } from "../types";
 
 interface InputProperties<T extends FieldValues> {
-  name: keyof T & string;
+  name: Path<T>;
   label: string;
   placeholder?: string;
   mask?: Mask;

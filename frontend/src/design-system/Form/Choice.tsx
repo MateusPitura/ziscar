@@ -6,11 +6,11 @@ import {
   useMemo,
   type ReactElement,
 } from "react";
-import { FieldValues, useFormContext, useFormState } from "react-hook-form";
+import { FieldValues, Path, useFormContext, useFormState } from "react-hook-form";
 import ErrorLabel from "./ErrorLabel";
 
 interface ContainerProps<T extends FieldValues> extends Childrenable {
-  name: keyof T & string;
+  name: Path<T>;
   hideErrorLabel?: boolean;
 }
 
