@@ -95,7 +95,7 @@ export default function EditUserContainer(): ReactNode {
         isPending={isPending || !!isFetchingCep}
         headerPrimaryBtnLabel="Alterar"
         headerTitle="Alterar usuário"
-        onlyDirty
+        isEdit
         resource="USERS"
         action="UPDATE"
         allowEditRole

@@ -19,7 +19,7 @@ interface UserFormProperties {
   isPending: boolean;
   headerPrimaryBtnLabel: string;
   headerTitle: string;
-  onlyDirty?: boolean;
+  isEdit?: boolean;
   resource?: Resource;
   action?: Action;
   allowEditRole?: boolean;
@@ -31,7 +31,7 @@ export default function UserForm({
   isPending,
   headerPrimaryBtnLabel,
   headerTitle,
-  onlyDirty,
+  isEdit = false,
   resource,
   action,
   allowEditRole = false,
@@ -45,7 +45,7 @@ export default function UserForm({
         defaultValues={defaultValues}
         onSubmit={onSubmit}
         className="gap-4 flex flex-col"
-        onlyDirty={onlyDirty}
+        onlyDirty={isEdit}
       >
         <PageHeader
           title={headerTitle}
@@ -69,7 +69,12 @@ export default function UserForm({
                   required
                   autoFocus
                 />
-                <Input<UserFormInputs> name="email" label="Email" required />
+                <Input<UserFormInputs>
+                  name="email"
+                  label="Email"
+                  required
+                  disabled={isEdit}
+                />
                 <Input<UserFormInputs>
                   name="cellPhone"
                   label="Celular"

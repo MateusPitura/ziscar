@@ -83,7 +83,7 @@ export default function EditProfilePageContainer(): ReactNode {
         defaultValues={profileData}
         onSubmit={mutate}
         isPending={isPending || !!isFetchingCep}
-        onlyDirty
+        isEdit
       />
     )
   );

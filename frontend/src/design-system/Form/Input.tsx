@@ -11,6 +11,7 @@ import Button from "../Button";
 import ErrorLabel from "./ErrorLabel";
 import { Mask } from "@/domains/global/types";
 import { IconsName } from "../types";
+import classNames from "classnames";
 
 interface InputProperties<T extends FieldValues> {
   name: Path<T>;
@@ -25,6 +26,7 @@ interface InputProperties<T extends FieldValues> {
   hideErrorLabel?: boolean;
   autoFocus?: boolean;
   forceUnselect?: boolean;
+  disabled?: boolean;
 }
 
 export default function Input<T extends FieldValues>({
@@ -40,6 +42,7 @@ export default function Input<T extends FieldValues>({
   hideErrorLabel,
   autoFocus = false,
   forceUnselect,
+  disabled = false,
 }: InputProperties<T>): ReactElement {
   const { register, setValue } = useFormContext();
   const { errors } = useFormState({
@@ -64,10 +67,22 @@ export default function Input<T extends FieldValues>({
           <span className="text-light-error text-body-medium">*</span>
         )}
       </div>
-      <div className="border-light-outline border-2 rounded-md flex items-center gap-1 overflow-hidden">
+      <div
+        className={classNames(
+          "border-light-outline border-2 rounded-md flex items-center gap-1 overflow-hidden",
+          {
+            "border-light-disabled": disabled,
+          }
+        )}
+      >
         <input
           {...register(name)}
-          className="text-body-large text-light-onSurface bg-transparent p-1 px-2 caret-light-primary flex-1 h-10"
+          className={classNames(
+            "text-body-large text-light-onSurface bg-transparent p-1 px-2 caret-light-primary flex-1 h-10",
+            {
+              "text-light-disabled": disabled,
+            }
+          )}
           autoComplete="on"
           placeholder={placeholder}
           type={type}
@@ -75,6 +90,7 @@ export default function Input<T extends FieldValues>({
           required={required}
           autoFocus={autoFocus}
           tabIndex={forceUnselect ? -1 : undefined}
+          disabled={disabled}
         />
         {iconRight && (
           <div className="px-2">
