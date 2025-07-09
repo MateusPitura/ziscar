@@ -60,6 +60,9 @@ export default function EditProfilePageContainer(): ReactNode {
       queryClient.invalidateQueries({
         queryKey: ["profile"],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["usersDashboard"],
+      });
       navigate("/profile");
     },
   });

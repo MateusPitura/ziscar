@@ -95,7 +95,6 @@ export default function UserForm({
               <Section.Body>
                 <AddressFields<UserFormInputs>
                   inputNamePrefix="address"
-                  autoFocus={false}
                   defaultOpen={!!defaultValues.address}
                 />
               </Section.Body>
