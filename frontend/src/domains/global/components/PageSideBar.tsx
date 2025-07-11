@@ -1,6 +1,5 @@
 import { memo, useState, type ReactElement } from "react";
 import Button from "@/design-system/Button";
-import RoutesGroup from "@/domains/global/components/RoutesGroup";
 import { privateRoutes } from "@/domains/global/constants/routes";
 import { useNavigate } from "react-router-dom";
 import classNames from "classnames";
@@ -61,32 +60,22 @@ function PageSideBar(): ReactElement {
           </span>
         )}
       </div>
-      <div className="flex-1">
-        {privateRoutes.map((group) => {
-          if (!group.shoudDisplay) return null;
+      <div className="flex-1 flex flex-col gap-2">
+        {privateRoutes.map((route) => {
+          if (!route.shouldDisplay) return null;
 
           return (
-            <RoutesGroup
-              key={group.groupName}
-              label={isSideMenuOpen ? group.groupName : undefined}
-            >
-              {group.routes.map(
-                (route) =>
-                  route.shouldDisplay && (
-                    <Button
-                      key={route.path}
-                      padding={isSideMenuOpen ? "default" : "none"}
-                      label={isSideMenuOpen ? route.displayName : undefined}
-                      variant="tertiary"
-                      iconLeft={route.icon}
-                      onClick={() => {
-                        navigate(route.path);
-                      }}
-                      fullWidth
-                    />
-                  )
-              )}
-            </RoutesGroup>
+            <Button
+              key={route.path}
+              padding={isSideMenuOpen ? "default" : "none"}
+              label={isSideMenuOpen ? route.displayName : undefined}
+              variant="tertiary"
+              iconLeft={route.icon}
+              onClick={() => {
+                navigate(route.path);
+              }}
+              fullWidth
+            />
           );
         })}
       </div>
