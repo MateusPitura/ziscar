@@ -47,7 +47,7 @@ export default function ForgetPasswordForm(): ReactNode {
     >
       <Dialog.Body>
         <div className="flex flex-col gap-4">
-          <span className="text-body-large text-light-onSurface">
+          <span className="text-body-large text-neutral-700">
             Insira seu email para enviarmos as instruções para recuperar sua senha
           </span>
           <Input<ForgetPasswordFormInputs>

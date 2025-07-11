@@ -60,27 +60,27 @@ export default function Input<T extends FieldValues>({
   return (
     <label className="flex flex-col">
       <div>
-        <span className="text-body-medium text-light-onSurface p-1">
+        <span className="text-body-medium text-neutral-700 p-1">
           {label}
         </span>
         {required && (
-          <span className="text-light-error text-body-medium">*</span>
+          <span className="text-red-500 text-body-medium">*</span>
         )}
       </div>
       <div
         className={classNames(
-          "border-light-outline border-2 rounded-md flex items-center gap-1 overflow-hidden",
+          "border-neutral-500 border-2 rounded-md flex items-center gap-1 overflow-hidden",
           {
-            "!border-light-disabled": disabled,
+            "!border-neutral-300": disabled,
           }
         )}
       >
         <input
           {...register(name)}
           className={classNames(
-            "text-body-large text-light-onSurface bg-transparent p-1 px-2 caret-light-primary flex-1 h-10",
+            "text-body-large text-neutral-700 bg-transparent p-1 px-2 caret-neutral-700 flex-1 h-10",
             {
-              "!text-light-disabled": disabled,
+              "!text-neutral-300": disabled,
             }
           )}
           autoComplete="on"

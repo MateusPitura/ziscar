@@ -99,12 +99,13 @@ const ButtonVariant = forwardRef(
         return (
           <BaseButton
             className={classNames(
-              "bg-light-primary text-light-onPrimary",
+              "bg-neutral-800 text-neutral-100",
               className,
               {
                 "bg-light-secondary": state === "active",
-                "!bg-light-error": state === "red",
-                "!bg-light-disabled": state === "disabled" || state === "loading",
+                "!bg-red-500": state === "red",
+                "!bg-neutral-300":
+                  state === "disabled" || state === "loading",
               }
             )}
             state={state}
@@ -120,8 +121,8 @@ const ButtonVariant = forwardRef(
               className,
               {
                 "bg-light-primaryContainer": state === "active",
-                "!border-light-error !text-light-error": state === "red",
-                "border-light-disabled text-light-disabled":
+                "!border-red-500 !text-red-500": state === "red",
+                "border-neutral-300 text-neutral-300":
                   state === "disabled" || state === "loading",
               }
             )}
@@ -135,8 +136,9 @@ const ButtonVariant = forwardRef(
           <BaseButton
             className={classNames("text-light-onSurface", className, {
               "text-light-primary": state === "active",
-              "!text-light-error": state === "red",
-              "text-light-disabled": state === "disabled" || state === "loading",
+              "!text-red-500": state === "red",
+              "text-neutral-300":
+                state === "disabled" || state === "loading",
             })}
             state={state}
             ref={ref}
@@ -146,10 +148,11 @@ const ButtonVariant = forwardRef(
       case "quaternary":
         return (
           <BaseButton
-            className={classNames("text-light-primary", className, {
+            className={classNames("text-blue-800", className, {
               "bg-light-primaryContainer": state === "active",
-              "!text-light-error": state === "red",
-              "text-light-disabled": state === "disabled" || state === "loading",
+              "!text-red-500": state === "red",
+              "text-neutral-300":
+                state === "disabled" || state === "loading",
             })}
             state={state}
             ref={ref}

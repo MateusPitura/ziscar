@@ -21,7 +21,7 @@ function Container({ children, ...dialog }: ContainerProps): ReactElement {
   return (
     <DialogProvider {...dialog}>
       <DialogShadcn open={dialog.isOpen} onOpenChange={dialog.handleOpen}>
-        <DialogContent className="bg-light-surfaceContainerLowest p-0 gap-0">
+        <DialogContent className="bg-neutral-100 p-0 gap-0">
           {children}
         </DialogContent>
       </DialogShadcn>
@@ -37,7 +37,7 @@ function Header({ title }: HeaderProps): ReactElement {
   return (
     <DialogHeader className="flex gap-2 flex-row items-center px-6 pt-6 pb-2">
       <DialogTitle className="flex-1">
-        <span className="text-light-onSurface text-title-large">{title}</span>
+        <span className="text-neutral-700 text-title-large">{title}</span>
       </DialogTitle>
       <DialogDescription />
     </DialogHeader>
