@@ -16,12 +16,6 @@ export interface DialogProps {
   handleOpen: (state: boolean) => void;
 }
 
-export interface DashBoardProps {
-  id: string;
-  label: string;
-  value: string;
-}
-
 export type Mask = "cellphone" | "cpf" | "cep" | "cnpj";
 
 export type QueryKeys = [

@@ -107,7 +107,7 @@ function Action({ className, colSpan = 1, children }: ActionProps) {
     >
       <Popover>
         <Popover.Trigger>
-          <Button variant="tertiary" iconRight="MoreHoriz" />
+          <Button variant="quaternary" iconRight="MoreHoriz" />
         </Popover.Trigger>
         <Popover.Content align="end" className="w-fit">
           {children}

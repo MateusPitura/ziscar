@@ -60,6 +60,7 @@ export default function PageHeader({
             state={primaryBtnStateParsed}
             resource={primaryBtnResource}
             action={primaryBtnAction}
+            color="green"
           />
         )}
       </div>

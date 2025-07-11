@@ -1,7 +1,6 @@
 import PageHeader from "@/domains/global/components/PageHeader";
 import { type ReactElement } from "react";
 import { useNavigate } from "react-router-dom";
-import UsersDashBoard from "./UsersDashBoard";
 import UsersTable from "./UsersTable";
 
 export default function UsersContainer(): ReactElement {
@@ -17,7 +16,6 @@ export default function UsersContainer(): ReactElement {
         primaryBtnResource="USERS"
         primaryBtnAction="CREATE"
       />
-      <UsersDashBoard />
       <UsersTable />
     </div>
   );
