@@ -69,8 +69,8 @@ export default function useSnackbar() {
           <ToastAction altText="Action button" asChild>
             <Button
               variant="primary"
-              state="red"
               label={actionLabel}
+              color="red"
               padding="none"
               onClick={onActionClick}
               resource={actionBtnResource}

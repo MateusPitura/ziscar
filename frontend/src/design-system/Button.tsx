@@ -2,7 +2,7 @@ import classNames from "classnames";
 import { forwardRef } from "react";
 import Tooltip from "./Tooltip";
 import useCheckPermission from "@/domains/global/hooks/useCheckPermission";
-import { ButtonState, IconsName } from "./types";
+import { ButtonColor, ButtonState, IconsName } from "./types";
 import { Action, Resource } from "@shared/types";
 import { formatDeniedMessage } from "@shared/utils/formatDeniedMessage";
 import Icon from "./Icon";
@@ -18,6 +18,7 @@ interface BaseButtonProps {
   iconRight?: IconsName;
   padding?: "default" | "none";
   type?: "submit" | "button";
+  color?: ButtonColor;
 }
 
 const BaseButton = forwardRef(
@@ -90,6 +91,7 @@ const ButtonVariant = forwardRef(
       variant = "primary",
       state = undefined,
       className,
+      color = "gray",
       ...props
     }: ButtonVariantProps,
     ref: React.Ref<HTMLButtonElement>
@@ -102,9 +104,12 @@ const ButtonVariant = forwardRef(
               "bg-neutral-800 text-neutral-100",
               className,
               {
-                "!bg-red-500": state === "red",
-                "!bg-neutral-300":
-                  state === "disabled" || state === "loading",
+                "!bg-neutral-300": state === "disabled" || state === "loading",
+                "bg-neutral-800": color === "gray",
+                "bg-green-600": color === "green",
+                "bg-blue-800": color === "darkBlue",
+                "bg-sky-500": color === "lightBlue",
+                "bg-red-500": color === "red",
               }
             )}
             state={state}
@@ -119,7 +124,6 @@ const ButtonVariant = forwardRef(
               "border-light-primary border-2 text-light-primary",
               className,
               {
-                "!border-red-500 !text-red-500": state === "red",
                 "border-neutral-300 text-neutral-300":
                   state === "disabled" || state === "loading",
               }
@@ -133,9 +137,7 @@ const ButtonVariant = forwardRef(
         return (
           <BaseButton
             className={classNames("text-neutral-100", className, {
-              "!text-red-500": state === "red",
-              "text-neutral-300":
-                state === "disabled" || state === "loading",
+              "text-neutral-300": state === "disabled" || state === "loading",
             })}
             state={state}
             ref={ref}
@@ -145,10 +147,8 @@ const ButtonVariant = forwardRef(
       case "quaternary":
         return (
           <BaseButton
-            className={classNames("text-blue-800", className, {
-              "!text-red-500": state === "red",
-              "text-neutral-300":
-                state === "disabled" || state === "loading",
+            className={classNames("text-slate-800", className, {
+              "text-neutral-300": state === "disabled" || state === "loading",
             })}
             state={state}
             ref={ref}

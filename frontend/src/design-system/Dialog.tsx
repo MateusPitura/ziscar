@@ -1,11 +1,11 @@
 import { type ReactElement } from "react";
 import {
-    Dialog as DialogShadcn,
-    DialogContent,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogDescription,
+  Dialog as DialogShadcn,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import Button from "./Button";
 import { DialogClose } from "@radix-ui/react-dialog";
@@ -13,7 +13,7 @@ import { DialogProvider } from "@/domains/global/contexts/DialogContext";
 import useButtonState from "@/domains/global/hooks/useButtonState";
 import { Childrenable, DialogProps } from "@/domains/global/types";
 import { Action, Resource } from "@shared/types";
-import { ButtonState } from "./types";
+import { ButtonColor, ButtonState } from "./types";
 
 interface ContainerProps extends DialogProps, Childrenable {}
 
@@ -52,6 +52,7 @@ interface FooterProps {
   onClickPrimaryBtn?: () => void;
   labelPrimaryBtn: string;
   primaryBtnState?: ButtonState;
+  primaryBtnColor?: ButtonColor;
   primaryBtResource?: Resource;
   primaryBtnAction?: Action;
   onClickSecondaryBtn?: () => void;
@@ -69,6 +70,7 @@ function Footer({
   onClickSecondaryBtn,
   labelSecondaryBtn = "Cancelar",
   secondaryBtnState,
+  primaryBtnColor,
   dirty,
 }: FooterProps): ReactElement {
   const primaryBtnStateParsed = useButtonState({
@@ -102,6 +104,7 @@ function Footer({
         type="submit"
         resource={primaryBtResource}
         action={primaryBtnAction}
+        color={primaryBtnColor}
       />
     </DialogFooter>
   );

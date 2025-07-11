@@ -57,7 +57,8 @@ export default function DisableUserModal({
       <Dialog.Footer
         labelPrimaryBtn="Desativar"
         onClickPrimaryBtn={mutate}
-        primaryBtnState={isPending ? "loading" : "red"}
+        primaryBtnState={isPending ? "loading" : undefined}
+        primaryBtnColor="red"
         primaryBtResource="USERS"
         primaryBtnAction="DELETE"
       />
