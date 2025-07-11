@@ -60,7 +60,7 @@ function PageSideBar(): ReactElement {
           </span>
         )}
       </div>
-      <div className="flex-1 flex flex-col gap-2">
+      <div className="flex-1 flex flex-col gap-2 text-nowrap">
         {privateRoutes.map((route) => {
           if (!route.shouldDisplay) return null;
 
