@@ -60,8 +60,10 @@ export default function PrivatePageLayout(): ReactElement {
     <div className="bg-neutral-50 w-full h-screen flex flex-col">
       <div className="flex flex-1 overflow-hidden">
         <PageSideBar />
-        <div className="bg-neutral-50 p-4 rounded-tl-md w-full overflow-y-auto">
-          <Outlet />
+        <div className="bg-neutral-50 p-4 w-full overflow-y-auto">
+          <div className="w-full p-4 rounded-md shadow-md h-full">
+            <Outlet />
+          </div>
         </div>
       </div>
     </div>
