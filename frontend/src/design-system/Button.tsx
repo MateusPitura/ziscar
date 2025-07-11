@@ -102,7 +102,6 @@ const ButtonVariant = forwardRef(
               "bg-neutral-800 text-neutral-100",
               className,
               {
-                "bg-light-secondary": state === "active",
                 "!bg-red-500": state === "red",
                 "!bg-neutral-300":
                   state === "disabled" || state === "loading",
@@ -120,7 +119,6 @@ const ButtonVariant = forwardRef(
               "border-light-primary border-2 text-light-primary",
               className,
               {
-                "bg-light-primaryContainer": state === "active",
                 "!border-red-500 !text-red-500": state === "red",
                 "border-neutral-300 text-neutral-300":
                   state === "disabled" || state === "loading",
@@ -134,8 +132,7 @@ const ButtonVariant = forwardRef(
       case "tertiary":
         return (
           <BaseButton
-            className={classNames("text-light-onSurface", className, {
-              "text-light-primary": state === "active",
+            className={classNames("text-neutral-100", className, {
               "!text-red-500": state === "red",
               "text-neutral-300":
                 state === "disabled" || state === "loading",
@@ -149,7 +146,6 @@ const ButtonVariant = forwardRef(
         return (
           <BaseButton
             className={classNames("text-blue-800", className, {
-              "bg-light-primaryContainer": state === "active",
               "!text-red-500": state === "red",
               "text-neutral-300":
                 state === "disabled" || state === "loading",
