@@ -29,9 +29,9 @@ export default function Snackbar(): ReactElement {
             variant={variant}
             {...props}
             className={classNames(
-              "bg-light-surfaceContainerLowest border-light-surfaceContainerLowest mt-2",
+              "bg-white border-white mt-2 [&>button]:!ring-0 [&>button]!outline-none [&>button]:!ring-offset-0",
               {
-                "bg-light-error border-light-error": variant === "destructive",
+                "bg-red-500 border-red-500": variant === "destructive",
               }
             )}
           >
@@ -40,9 +40,9 @@ export default function Snackbar(): ReactElement {
                 <ToastTitle>
                   <span
                     className={classNames(
-                      "text-light-onSurface text-title-medium line-clamp-1",
+                      "text-neutral-700 text-title-medium line-clamp-1",
                       {
-                        "!text-light-onError": variant === "destructive",
+                        "!text-white": variant === "destructive",
                       }
                     )}
                   >
@@ -54,9 +54,9 @@ export default function Snackbar(): ReactElement {
                 <ToastDescription>
                   <span
                     className={classNames(
-                      "text-light-onSurface text-body-medium line-clamp-1",
+                      "text-neutral-700 text-body-medium line-clamp-1",
                       {
-                        "!text-light-onError": variant === "destructive",
+                        "!text-white": variant === "destructive",
                       }
                     )}
                   >

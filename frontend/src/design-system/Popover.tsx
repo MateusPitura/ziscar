@@ -26,7 +26,7 @@ function Content({
 }: ContentProps): ReactElement {
   return (
     <PopoverContent
-      className={classNames("bg-light-surface", className)}
+      className={classNames("bg-white", className)}
       {...props}
       onOpenAutoFocus={(e) => e.preventDefault()}
     >

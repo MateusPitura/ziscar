@@ -47,7 +47,7 @@ export default function UsersTableActions({
   return isActive ? (
     <>
       <Button
-        variant="tertiary"
+        variant="quaternary"
         fullWidth
         label="Editar"
         onClick={() => navigate(`/users/edit/${userId}`)}
@@ -55,7 +55,7 @@ export default function UsersTableActions({
         action="UPDATE"
       />
       <Button
-        variant="tertiary"
+        variant="quaternary"
         fullWidth
         label="Desativar"
         onClick={() =>
@@ -70,7 +70,7 @@ export default function UsersTableActions({
     </>
   ) : (
     <Button
-      variant="tertiary"
+      variant="quaternary"
       fullWidth
       label="Ativar"
       onClick={mutate}
