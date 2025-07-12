@@ -1,38 +1,26 @@
-import Button from "@/design-system/Button";
-import { type ReactElement } from "react";
+import { Children, cloneElement, type ReactElement } from "react";
 import useButtonState from "../hooks/useButtonState";
-import { Action, Resource } from "@shared/types";
-import { ButtonState, IconsName } from "@/design-system/types";
+import { ButtonState } from "@/design-system/types";
+import { Childrenable } from "../types";
 
-interface PageHeaderProperties {
+interface PageHeaderProperties extends Childrenable {
   title: string;
   dirty?: boolean;
-  primaryButtonLabel?: string;
-  primaryBtnIconRigth?: IconsName;
   primaryBtnState?: ButtonState;
-  primaryBtnResource?: Resource;
-  primaryBtnAction?: Action;
-  onClickPrimaryBtn?: () => void;
-  secondaryButtonLabel?: string;
-  onClickSecondaryBtn?: () => void;
 }
 
 export default function PageHeader({
   title,
-  primaryButtonLabel,
-  primaryBtnIconRigth,
-  onClickPrimaryBtn,
   primaryBtnState,
-  primaryBtnResource,
-  primaryBtnAction,
-  secondaryButtonLabel,
-  onClickSecondaryBtn,
   dirty,
+  children,
 }: PageHeaderProperties): ReactElement {
   const primaryBtnStateParsed = useButtonState({
     dirty,
     buttonState: primaryBtnState,
   });
+
+  const [first, ...others] = Children.toArray(children);
 
   return (
     <div className="w-full py-4 flex flex-col gap-4">
@@ -43,26 +31,13 @@ export default function PageHeader({
         <div className="border-b border-neutral-300 w-[80%]" />
       </div>
       <div className="flex justify-end">
-        {secondaryButtonLabel && (
-          <Button
-            variant="quaternary"
-            onClick={onClickSecondaryBtn}
-            label={secondaryButtonLabel}
-          />
-        )}
-        {primaryButtonLabel && (
-          <Button
-            variant="primary"
-            onClick={onClickPrimaryBtn}
-            label={primaryButtonLabel}
-            iconRight={primaryBtnIconRigth}
-            type="submit"
-            state={primaryBtnStateParsed}
-            resource={primaryBtnResource}
-            action={primaryBtnAction}
-            color="green"
-          />
-        )}
+        {first &&
+          cloneElement(first as ReactElement, {
+            dirty,
+            state: primaryBtnStateParsed,
+            type: "submit",
+          })}
+        {others}
       </div>
     </div>
   );

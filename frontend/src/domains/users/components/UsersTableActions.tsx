@@ -83,7 +83,7 @@ export default function UsersTableActions({
         resource="USERS"
         action="DELETE"
         padding="none"
-        iconLeft="ToggleOnOutlined"
+        iconLeft="ToggleOn"
       />
     </Tooltip>
   );

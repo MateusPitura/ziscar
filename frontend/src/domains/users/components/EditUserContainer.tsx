@@ -85,7 +85,7 @@ export default function EditUserContainer(): ReactNode {
 
   if (isFetching) {
     return (
-      <div className="flex justify-center items-center h-full">
+      <div className="flex justify-center items-center h-full w-full">
         <Spinner />
       </div>
     );
@@ -97,7 +97,6 @@ export default function EditUserContainer(): ReactNode {
         defaultValues={userData}
         onSubmit={mutate}
         isPending={isPending || !!isFetchingCep}
-        headerPrimaryBtnLabel="Alterar"
         headerTitle="Alterar usuário"
         isEdit
         resource="USERS"
