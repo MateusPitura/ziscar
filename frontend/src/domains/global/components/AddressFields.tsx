@@ -99,7 +99,7 @@ export default function AddressFields({
       <div className="flex items-center justify-end col-span-full">
         <Tooltip content="Remover endereço">
           <Button
-            variant="tertiary"
+            variant="quaternary"
             iconLeft="Delete"
             onClick={() => {
               setIsOpen(false);

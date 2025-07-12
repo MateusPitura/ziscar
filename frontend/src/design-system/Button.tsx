@@ -121,7 +121,7 @@ const ButtonVariant = forwardRef(
         return (
           <BaseButton
             className={classNames(
-              "border-light-primary border-2 text-light-primary",
+              "border-slate-800 border-2 text-slate-800",
               className,
               {
                 "!border-neutral-300 !text-neutral-300":

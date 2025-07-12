@@ -100,7 +100,7 @@ export default function Input<T extends FieldValues>({
         {iconRight && (
           <div className="px-2">
             <Button
-              variant="tertiary"
+              variant="quaternary"
               iconRight={iconRight}
               padding="none"
               onClick={onClickIconRight}
