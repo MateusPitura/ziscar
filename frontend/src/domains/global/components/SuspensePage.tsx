@@ -6,7 +6,7 @@ export default function SuspensePage({ children }: Childrenable): ReactElement {
   return (
     <Suspense
       fallback={
-        <div className="flex justify-center items-center h-full">
+        <div className="flex justify-center items-center h-full w-full">
           <Spinner />
         </div>
       }

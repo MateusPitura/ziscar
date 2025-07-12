@@ -11,6 +11,7 @@ import { UserFormInputs } from "../../users/types";
 import { SEED_ROLE_ADMIN_ID, SEED_ROLE_SALES_ID } from "@shared/constants";
 import { Action, Resource } from "@shared/types";
 import PageFooter from "../components/PageFooter";
+import Button from "@/design-system/Button";
 
 const PREVIOUS_PAGE = -1;
 
@@ -108,17 +109,21 @@ export default function UserForm({
             )}
           </Section>
         </div>
-        <PageFooter
-          primaryButtonLabel="Salvar"
-          primaryBtnIconRigth="Save"
-          secondaryButtonLabel="Cancelar"
-          onClickSecondaryBtn={() => navigate(PREVIOUS_PAGE)}
-          primaryBtnState={isPending ? "loading" : undefined}
-          dirty
-          primaryBtnResource={resource}
-          primaryBtnAction={action}
-          primaryBtnColor="lightBlue"
-        />
+        <PageFooter primaryBtnState={isPending ? "loading" : undefined} dirty>
+          <Button
+            color="lightBlue"
+            iconRight="Save"
+            label="Salvar"
+            resource={resource}
+            action={action}
+          />
+          <Button
+            color="red"
+            iconRight="Close"
+            label="Cancelar"
+            onClick={() => navigate(PREVIOUS_PAGE)}
+          />
+        </PageFooter>
       </Form>
     </div>
   );

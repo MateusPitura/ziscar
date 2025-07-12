@@ -21,6 +21,7 @@ import CreditCardOff from '@mui/icons-material/CreditCardOff';
 import People from '@mui/icons-material/People';
 import ToggleOn from '@mui/icons-material/ToggleOnOutlined';
 import Save from '@mui/icons-material/Save';
+import Close from '@mui/icons-material/Close';
 
 export const icons = {
   FileDownload,
@@ -45,5 +46,6 @@ export const icons = {
   CreditCardOff,
   People,
   ToggleOn,
-  Save
+  Save,
+  Close
 };
