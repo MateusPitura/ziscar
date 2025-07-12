@@ -12,6 +12,8 @@ import { SEED_ROLE_ADMIN_ID, SEED_ROLE_SALES_ID } from "@shared/constants";
 import { Action, Resource } from "@shared/types";
 import PageFooter from "../components/PageFooter";
 import Button from "@/design-system/Button";
+import useDialog from "../hooks/useDialog";
+import RequestChangePasswordModal from "@/domains/profile/components/RequestChangePasswordModal";
 
 const PREVIOUS_PAGE = -1;
 
@@ -24,6 +26,7 @@ interface UserFormProperties {
   resource?: Resource;
   action?: Action;
   allowEditRole?: boolean;
+  allowChangePassword?: boolean;
 }
 
 export default function UserForm({
@@ -35,96 +38,115 @@ export default function UserForm({
   resource,
   action,
   allowEditRole = false,
+  allowChangePassword = false,
 }: UserFormProperties): ReactNode {
   const navigate = useNavigate();
+  const dialog = useDialog();
 
   return (
-    <div className="flex flex-col gap-4 w-full">
-      <Form<UserFormInputs>
-        schema={SchemaUserForm}
-        defaultValues={defaultValues}
-        onSubmit={onSubmit}
-        className="gap-4 flex flex-col flex-1"
-        onlyDirty={isEdit}
-      >
-        <PageHeader title={headerTitle} />
-        <div className="flex justify-center flex-1">
-          <Section>
-            <Section.Group>
-              <Section.Header title="Dados" />
-              <Section.Body>
-                <Input<UserFormInputs>
-                  name="fullName"
-                  label="Nome completo"
-                  required
-                  autoFocus
-                />
-                <Input<UserFormInputs>
-                  name="email"
-                  label="Email"
-                  required
-                  disabled={isEdit}
-                  type="email"
-                />
-                <Input<UserFormInputs>
-                  name="cellPhone"
-                  label="Celular"
-                  mask="cellphone"
-                  maxLength={15}
-                  type="tel"
-                />
-                <Input<UserFormInputs>
-                  name="cpf"
-                  label="CPF"
-                  mask="cpf"
-                  maxLength={14}
-                />
-                <Input<UserFormInputs> name="code" label="Matrícula" />
-                <Input<UserFormInputs>
-                  name="birthDate"
-                  label="Data de nascimento"
-                  type="date"
-                />
-              </Section.Body>
-            </Section.Group>
-            <Section.Group>
-              <Section.Header title="Endereço" />
-              <Section.Body>
-                <AddressFields defaultOpen={!!defaultValues.address} />
-              </Section.Body>
-            </Section.Group>
-            {allowEditRole && (
+    <>
+      <RequestChangePasswordModal {...dialog} />
+      <div className="flex flex-col gap-4 w-full">
+        <Form<UserFormInputs>
+          schema={SchemaUserForm}
+          defaultValues={defaultValues}
+          onSubmit={onSubmit}
+          className="gap-4 flex flex-col flex-1"
+          onlyDirty={isEdit}
+        >
+          <PageHeader title={headerTitle} />
+          <div className="flex justify-center flex-1">
+            <Section>
               <Section.Group>
-                <Section.Header title="Categoria" />
+                <Section.Header title="Dados" />
                 <Section.Body>
-                  <Choice<UserFormInputs> name="roleId">
-                    <Choice.Radio
-                      label="Administrador"
-                      value={SEED_ROLE_ADMIN_ID}
-                    />
-                    <Choice.Radio label="Vendedor" value={SEED_ROLE_SALES_ID} />
-                  </Choice>
+                  <Input<UserFormInputs>
+                    name="fullName"
+                    label="Nome completo"
+                    required
+                    autoFocus
+                  />
+                  <Input<UserFormInputs>
+                    name="email"
+                    label="Email"
+                    required
+                    disabled={isEdit}
+                    type="email"
+                  />
+                  <Input<UserFormInputs>
+                    name="cellPhone"
+                    label="Celular"
+                    mask="cellphone"
+                    maxLength={15}
+                    type="tel"
+                  />
+                  <Input<UserFormInputs>
+                    name="cpf"
+                    label="CPF"
+                    mask="cpf"
+                    maxLength={14}
+                  />
+                  <Input<UserFormInputs> name="code" label="Matrícula" />
+                  <Input<UserFormInputs>
+                    name="birthDate"
+                    label="Data de nascimento"
+                    type="date"
+                  />
                 </Section.Body>
               </Section.Group>
-            )}
-          </Section>
-        </div>
-        <PageFooter primaryBtnState={isPending ? "loading" : undefined} dirty>
-          <Button
-            color="lightBlue"
-            iconRight="Save"
-            label="Salvar"
-            resource={resource}
-            action={action}
-          />
-          <Button
-            color="red"
-            iconRight="Close"
-            label="Cancelar"
-            onClick={() => navigate(PREVIOUS_PAGE)}
-          />
-        </PageFooter>
-      </Form>
-    </div>
+              <Section.Group>
+                <Section.Header title="Endereço" />
+                <Section.Body>
+                  <AddressFields defaultOpen={!!defaultValues.address} />
+                </Section.Body>
+              </Section.Group>
+              {allowEditRole && (
+                <Section.Group>
+                  <Section.Header title="Categoria" />
+                  <Section.Body>
+                    <Choice<UserFormInputs> name="roleId">
+                      <Choice.Radio
+                        label="Administrador"
+                        value={SEED_ROLE_ADMIN_ID}
+                      />
+                      <Choice.Radio
+                        label="Vendedor"
+                        value={SEED_ROLE_SALES_ID}
+                      />
+                    </Choice>
+                  </Section.Body>
+                </Section.Group>
+              )}
+              {allowChangePassword && (
+                <Section.Group>
+                  <Section.Header title="Segurança" />
+                  <Section.Body>
+                    <Button
+                      label="Alterar senha"
+                      onClick={() => dialog.openDialog()}
+                    />
+                  </Section.Body>
+                </Section.Group>
+              )}
+            </Section>
+          </div>
+          <PageFooter primaryBtnState={isPending ? "loading" : undefined} dirty>
+            <Button
+              color="lightBlue"
+              iconRight="Save"
+              label="Salvar"
+              resource={resource}
+              action={action}
+            />
+            <Button
+              color="red"
+              iconRight="Close"
+              label="Cancelar"
+              onClick={() => navigate(PREVIOUS_PAGE)}
+            />
+          </PageFooter>
+        </Form>
+      </div>
+    </>
   );
 }

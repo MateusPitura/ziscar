@@ -16,7 +16,7 @@ const authChannel = new BroadcastChannel("auth");
 function GlobalProvider({ children }: Childrenable) {
   authChannel.onmessage = (event) => {
     if (event?.data?.type === AUTH_CHANNEL.SIGNIN) {
-      safeNavigate("/profile");
+      safeNavigate("/profile/edit");
     } else if (event?.data?.type === AUTH_CHANNEL.SIGNOUT) {
       safeNavigate("/");
     }

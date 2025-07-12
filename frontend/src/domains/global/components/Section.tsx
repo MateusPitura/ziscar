@@ -1,5 +1,3 @@
-import Button from "@/design-system/Button";
-import Loading from "@/design-system/Loading";
 import classNames from "classnames";
 import { Childrenable } from "../types";
 
@@ -23,37 +21,6 @@ function Header({ title }: HeaderProps) {
   );
 }
 
-interface SectionRowProps {
-  label: string;
-  value?: string;
-  onEdit: () => void;
-  isLoading?: boolean;
-}
-
-function Row({ label, value, onEdit, isLoading = false }: SectionRowProps) {
-  return (
-    <div className="p-4 border-b flex last:border-none">
-      <div className="w-full flex items-center">
-        <span className="text-neutral-700 flex-1 text-body-large">{label}</span>
-        {value && (
-          <Loading
-            className="flex-1 text-neutral-700 text-body-large line-clamp-1"
-            isLoading={isLoading}
-          >
-            {value}
-          </Loading>
-        )}
-      </div>
-      <Button
-        variant="quaternary"
-        onClick={onEdit}
-        state={isLoading ? "loading" : undefined}
-        iconLeft="Edit"
-      />
-    </div>
-  );
-}
-
 interface SectionBodyProps extends Childrenable {
   className?: string;
 }
@@ -66,6 +33,6 @@ function Body({ children, className }: SectionBodyProps) {
   );
 }
 
-const Section = Object.assign(Container, { Group, Header, Row, Body });
+const Section = Object.assign(Container, { Group, Header, Body });
 
 export default Section;

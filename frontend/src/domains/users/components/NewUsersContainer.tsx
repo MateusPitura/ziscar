@@ -37,7 +37,6 @@ export default function NewUsersContainer(): ReactElement {
       });
       navigate("/users");
       queryClient.invalidateQueries({ queryKey: ["users"] });
-      queryClient.invalidateQueries({ queryKey: ["usersDashboard"] });
     },
   });
 

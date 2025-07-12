@@ -44,7 +44,7 @@ export default function PrivatePageLayout(): ReactElement {
       showErrorSnackbar({
         description: formatDeniedMessage({ resource, action }),
       });
-      navigate("/profile");
+      navigate("/profile/edit");
     }
   }, [isLoading, userPermissions, matches, navigate, showErrorSnackbar]);
 

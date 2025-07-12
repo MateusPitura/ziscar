@@ -37,7 +37,7 @@ export default function SignInForm(): ReactNode {
   const { mutate, isPending } = useMutation({
     mutationFn: handleSignIn,
     onSuccess: () => {
-      safeNavigate('/profile')
+      safeNavigate('/profile/edit')
       authChannel.postMessage({ type: AUTH_CHANNEL.SIGNIN });
     },
   });
