@@ -8,6 +8,8 @@ import useGlobalContext from "../hooks/useGlobalContext";
 import { AUTH_CHANNEL, BACKEND_URL } from "../constants";
 import { useMutation } from "@tanstack/react-query";
 import safeNavigate from "../utils/safeNavigate";
+import usePermissions from "../hooks/usePermissions";
+import checkPermission from "../utils/checkPermission";
 
 function PageSideBar(): ReactElement {
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(true);
@@ -34,6 +36,8 @@ function PageSideBar(): ReactElement {
       authChannel.postMessage({ type: AUTH_CHANNEL.SIGNOUT });
     },
   });
+
+  const { userPermissions } = usePermissions();
 
   return (
     <div
@@ -63,6 +67,14 @@ function PageSideBar(): ReactElement {
       <div className="flex-1 flex flex-col gap-2 text-nowrap">
         {privateRoutes.map((route) => {
           if (!route.shouldDisplay) return null;
+
+          const hasPermission = checkPermission(
+            userPermissions,
+            route.resource,
+            route.action
+          );
+
+          if(!hasPermission) return null;
 
           return (
             <Button
