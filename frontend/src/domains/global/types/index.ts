@@ -31,3 +31,8 @@ export interface PageablePayload<T> {
 }
 
 export type DateFormats = "yyyy-MM-dd" | "dd/MM/yyyy";
+
+export interface Options {
+  value: string;
+  label: string;
+}

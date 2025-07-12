@@ -14,14 +14,16 @@ import Store from "@mui/icons-material/StoreOutlined";
 import VerifiedUser from "@mui/icons-material/VerifiedUserOutlined";
 import Settings from "@mui/icons-material/SettingsOutlined";
 import PersonAdd from "@mui/icons-material/PersonAddOutlined";
-import Delete from '@mui/icons-material/DeleteOutlineOutlined';
-import CurrencyExchange from '@mui/icons-material/CurrencyExchange';
-import CreditCard from '@mui/icons-material/CreditCard';
-import CreditCardOff from '@mui/icons-material/CreditCardOff';
-import People from '@mui/icons-material/People';
-import ToggleOn from '@mui/icons-material/ToggleOnOutlined';
-import Save from '@mui/icons-material/Save';
-import Close from '@mui/icons-material/Close';
+import Delete from "@mui/icons-material/DeleteOutlineOutlined";
+import CurrencyExchange from "@mui/icons-material/CurrencyExchange";
+import CreditCard from "@mui/icons-material/CreditCard";
+import CreditCardOff from "@mui/icons-material/CreditCardOff";
+import People from "@mui/icons-material/People";
+import ToggleOn from "@mui/icons-material/ToggleOnOutlined";
+import Save from "@mui/icons-material/Save";
+import Close from "@mui/icons-material/Close";
+import Check from "@mui/icons-material/Check";
+import UnfoldMore from "@mui/icons-material/UnfoldMore";
 
 export const icons = {
   FileDownload,
@@ -47,5 +49,7 @@ export const icons = {
   People,
   ToggleOn,
   Save,
-  Close
+  Close,
+  Check,
+  UnfoldMore,
 };

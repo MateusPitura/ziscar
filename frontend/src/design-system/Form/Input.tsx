@@ -69,7 +69,7 @@ export default function Input<T extends FieldValues>({
       </div>
       <div
         className={classNames(
-          "border-neutral-500 border-2 rounded-md flex items-center gap-1 overflow-hidden",
+          "border-neutral-500 border-2 rounded-md flex items-center gap-1 overflow-hidden h-10",
           {
             "!border-neutral-300": disabled,
           }
@@ -78,7 +78,7 @@ export default function Input<T extends FieldValues>({
         <input
           {...register(name)}
           className={classNames(
-            "text-body-large text-neutral-700 bg-transparent p-1 px-2 caret-neutral-700 flex-1 h-10",
+            "text-body-large text-neutral-700 bg-transparent p-1 px-2 caret-neutral-700 flex-1",
             {
               "!text-neutral-300": disabled,
             }

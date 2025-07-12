@@ -62,7 +62,7 @@ const BaseButton = forwardRef(
         )}
         {label && (
           <span
-            className={classNames("text-label-large flex w-full", {
+            className={classNames("text-label-large flex w-full truncate", {
               "justify-center": textAlign === "center",
               "justify-start": textAlign === "start",
               "justify-end": textAlign === "end",
