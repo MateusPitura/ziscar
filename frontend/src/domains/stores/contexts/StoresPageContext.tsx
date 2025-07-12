@@ -1,16 +1,16 @@
 import { Childrenable } from "@/domains/global/types";
 import { createContext, useMemo, useState } from "react";
 
-interface BranchesPageContextValues {
+interface StoresPageContextValues {
   example: string;
   handleExample: (value: string) => void;
 }
 
-const BranchesPageContext = createContext<BranchesPageContextValues | null>(
+const StoresPageContext = createContext<StoresPageContextValues | null>(
   null
 );
 
-function BranchesPageProvider({ children }: Childrenable) {
+function StoresPageProvider({ children }: Childrenable) {
   const [example, setExample] = useState("");
 
   function handleExample(value: string) {
@@ -26,10 +26,10 @@ function BranchesPageProvider({ children }: Childrenable) {
   );
 
   return (
-    <BranchesPageContext.Provider value={valuesMemoized}>
+    <StoresPageContext.Provider value={valuesMemoized}>
       {children}
-    </BranchesPageContext.Provider>
+    </StoresPageContext.Provider>
   );
 }
 
-export { BranchesPageContext, BranchesPageProvider };
+export { StoresPageContext, StoresPageProvider };

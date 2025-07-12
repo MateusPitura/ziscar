@@ -22,8 +22,8 @@ const EditUser = lazy(() => import("@/domains/users/components/EditUserPage"));
 const EditProfile = lazy(
   () => import("@/domains/profile/components/EditProfilePage")
 );
-const Branches = lazy(
-  () => import("@/domains/branches/components/BranchesPage")
+const Stores = lazy(
+  () => import("@/domains/stores/components/StoresPage")
 );
 const Audit = lazy(() => import("@/domains/audit/components/AuditPage"));
 const NotFound = lazy(() => import("@/domains/global/components/NotFoundPage"));
@@ -39,10 +39,10 @@ export const privateRoutes: Route[] = [
     shouldDisplay: true,
   },
   {
-    path: "/branches",
+    path: "/stores",
     displayName: "Lojas",
     icon: "Store",
-    entryPage: <Branches />, // 🌠 mudar par stores
+    entryPage: <Stores />,
     shouldDisplay: true,
   },
   {
