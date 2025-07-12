@@ -10,7 +10,7 @@ import useDialog from "@/domains/global/hooks/useDialog";
 import ForgetPasswordModal from "../components/ForgetPasswordModal";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import { useMutation } from "@tanstack/react-query";
-import { AUTH_CHANNEL, BACKEND_URL } from "@/domains/global/constants";
+import { AUTH_CHANNEL, BACKEND_URL, DEFAULT_ROUTE } from "@/domains/global/constants";
 import useGlobalContext from "@/domains/global/hooks/useGlobalContext";
 import safeNavigate from "@/domains/global/utils/safeNavigate";
 
@@ -37,7 +37,7 @@ export default function SignInForm(): ReactNode {
   const { mutate, isPending } = useMutation({
     mutationFn: handleSignIn,
     onSuccess: () => {
-      safeNavigate('/profile/edit')
+      safeNavigate(DEFAULT_ROUTE)
       authChannel.postMessage({ type: AUTH_CHANNEL.SIGNIN });
     },
   });

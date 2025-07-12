@@ -10,3 +10,5 @@ export const AUTH_CHANNEL = {
   SIGNIN: "SIGN_IN",
   SIGNOUT: "SIGN_OUT",
 };
+
+export const DEFAULT_ROUTE = "/vehicles"

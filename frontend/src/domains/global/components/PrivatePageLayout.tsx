@@ -3,7 +3,7 @@ import PageSideBar from "./PageSideBar";
 import { Outlet, useMatches, useNavigate } from "react-router-dom";
 import Spinner from "@/design-system/Spinner";
 import useSafeFetch from "../hooks/useSafeFetch";
-import { BACKEND_URL } from "../constants";
+import { BACKEND_URL, DEFAULT_ROUTE } from "../constants";
 import { useQuery } from "@tanstack/react-query";
 import { Action, Permissions, Resource } from "@shared/types";
 import useSnackbar from "../hooks/useSnackbar";
@@ -44,7 +44,7 @@ export default function PrivatePageLayout(): ReactElement {
       showErrorSnackbar({
         description: formatDeniedMessage({ resource, action }),
       });
-      navigate("/profile/edit");
+      navigate(DEFAULT_ROUTE);
     }
   }, [isLoading, userPermissions, matches, navigate, showErrorSnackbar]);
 

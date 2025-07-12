@@ -1,6 +1,7 @@
 import { lazy, ReactNode } from "react";
 import { Action, Resource } from "@shared/types";
 import { IconsName } from "@/design-system/types";
+import { DEFAULT_ROUTE } from ".";
 
 interface Route {
   path: string;
@@ -31,7 +32,7 @@ const Sign = lazy(() => import("@/domains/sign/components/SignPage"));
 
 export const privateRoutes: Route[] = [
   {
-    path: "/vehicles",
+    path: DEFAULT_ROUTE,
     displayName: "Veículos",
     icon: "DirectionsCar",
     entryPage: <Vehicles />,
