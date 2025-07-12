@@ -10,6 +10,7 @@ import { SchemaUserForm } from "../../users/schemas";
 import { UserFormInputs } from "../../users/types";
 import { SEED_ROLE_ADMIN_ID, SEED_ROLE_SALES_ID } from "@shared/constants";
 import { Action, Resource } from "@shared/types";
+import PageFooter from "../components/PageFooter";
 
 const PREVIOUS_PAGE = -1;
 
@@ -17,7 +18,6 @@ interface UserFormProperties {
   defaultValues: Partial<UserFormInputs>;
   onSubmit: (data: UserFormInputs) => void;
   isPending: boolean;
-  headerPrimaryBtnLabel: string;
   headerTitle: string;
   isEdit?: boolean;
   resource?: Resource;
@@ -29,7 +29,6 @@ export default function UserForm({
   defaultValues,
   onSubmit,
   isPending,
-  headerPrimaryBtnLabel,
   headerTitle,
   isEdit = false,
   resource,
@@ -39,27 +38,17 @@ export default function UserForm({
   const navigate = useNavigate();
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 w-full">
       <Form<UserFormInputs>
         schema={SchemaUserForm}
         defaultValues={defaultValues}
         onSubmit={onSubmit}
-        className="gap-4 flex flex-col"
+        className="gap-4 flex flex-col flex-1"
         onlyDirty={isEdit}
       >
-        <PageHeader
-          title={headerTitle}
-          primaryButtonLabel={headerPrimaryBtnLabel}
-          secondaryButtonLabel="Cancelar"
-          onClickSecondaryBtn={() => navigate(PREVIOUS_PAGE)}
-          primaryBtnState={isPending ? "loading" : undefined}
-          dirty
-          primaryBtnResource={resource}
-          primaryBtnAction={action}
-        />
-        <div className="flex justify-center">
+        <PageHeader title={headerTitle} />
+        <div className="flex justify-center flex-1">
           <Section>
-            <Section.Title title="Informações pessoais" />
             <Section.Group>
               <Section.Header title="Dados" />
               <Section.Body>
@@ -119,6 +108,17 @@ export default function UserForm({
             )}
           </Section>
         </div>
+        <PageFooter
+          primaryButtonLabel="Salvar"
+          primaryBtnIconRigth="Save"
+          secondaryButtonLabel="Cancelar"
+          onClickSecondaryBtn={() => navigate(PREVIOUS_PAGE)}
+          primaryBtnState={isPending ? "loading" : undefined}
+          dirty
+          primaryBtnResource={resource}
+          primaryBtnAction={action}
+          primaryBtnColor="lightBlue"
+        />
       </Form>
     </div>
   );

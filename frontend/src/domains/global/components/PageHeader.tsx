@@ -6,15 +6,15 @@ import { ButtonState, IconsName } from "@/design-system/types";
 
 interface PageHeaderProperties {
   title: string;
-  primaryButtonLabel?: string;
-  onClickPrimaryBtn?: () => void;
-  primaryBtnIconRigth?: IconsName;
-  secondaryButtonLabel?: string;
-  onClickSecondaryBtn?: () => void;
-  primaryBtnState?: ButtonState;
   dirty?: boolean;
+  primaryButtonLabel?: string;
+  primaryBtnIconRigth?: IconsName;
+  primaryBtnState?: ButtonState;
   primaryBtnResource?: Resource;
   primaryBtnAction?: Action;
+  onClickPrimaryBtn?: () => void;
+  secondaryButtonLabel?: string;
+  onClickSecondaryBtn?: () => void;
 }
 
 export default function PageHeader({

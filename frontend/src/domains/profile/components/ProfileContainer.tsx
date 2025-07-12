@@ -13,11 +13,10 @@ export default function ProfileContainer(): ReactElement {
   return (
     <>
       <RequestChangePasswordModal {...dialog} />
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 w-full">
         <PageHeader title="Perfil" />
         <div className="flex justify-center">
           <Section>
-            <Section.Title title="Seus dados" />
             <Section.Group>
               <Section.Header title="Conta" />
               <Section.Row

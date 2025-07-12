@@ -87,7 +87,6 @@ export default function EditProfilePageContainer(): ReactNode {
     profileData && (
       <UserForm
         headerTitle="Editar informações pessoais"
-        headerPrimaryBtnLabel="Alterar"
         defaultValues={profileData}
         onSubmit={mutate}
         isPending={isPending || !!isFetchingCep}

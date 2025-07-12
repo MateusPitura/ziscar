@@ -101,7 +101,7 @@ const ButtonVariant = forwardRef(
         return (
           <BaseButton
             className={classNames(
-              "bg-neutral-800 text-neutral-100",
+              "text-neutral-100",
               className,
               {
                 "!bg-neutral-300": state === "disabled" || state === "loading",

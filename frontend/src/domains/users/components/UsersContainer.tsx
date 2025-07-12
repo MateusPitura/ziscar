@@ -7,7 +7,7 @@ export default function UsersContainer(): ReactElement {
   const navigate = useNavigate();
 
   return (
-    <div className="flex flex-col gap-4 h-full">
+    <div className="flex flex-col gap-4 h-full w-full">
       <PageHeader
         title="Usuários"
         primaryButtonLabel="Adicionar usuário"
