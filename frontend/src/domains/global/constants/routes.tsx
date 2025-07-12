@@ -22,13 +22,21 @@ const EditUser = lazy(() => import("@/domains/users/components/EditUserPage"));
 const EditProfile = lazy(
   () => import("@/domains/profile/components/EditProfilePage")
 );
-const Stores = lazy(
-  () => import("@/domains/stores/components/StoresPage")
+const Stores = lazy(() => import("@/domains/stores/components/StoresPage"));
+const VehicleSale = lazy(
+  () => import("@/domains/vehicleSale/components/VehicleSalePage")
 );
-const Audit = lazy(() => import("@/domains/audit/components/AuditPage"));
 const NotFound = lazy(() => import("@/domains/global/components/NotFoundPage"));
-
 const Sign = lazy(() => import("@/domains/sign/components/SignPage"));
+const AccountsPayable = lazy(
+  () => import("@/domains/accountsPayable/components/AccountsPayablePage")
+);
+const AccountsReceivable = lazy(
+  () => import("@/domains/accountsReceivable/components/AccountsReceivablePage")
+);
+const Customers = lazy(
+  () => import("@/domains/customers/components/CustomersPage")
+);
 
 export const privateRoutes: Route[] = [
   {
@@ -49,21 +57,21 @@ export const privateRoutes: Route[] = [
     path: "/vehicle-sale",
     displayName: "Realizar Venda",
     icon: "CurrencyExchange",
-    entryPage: <Vehicles />, // 🌠 Criar tela
+    entryPage: <VehicleSale />,
     shouldDisplay: true,
   },
   {
     path: "/accounts-payable",
     displayName: "Contas a Pagar",
     icon: "CreditCardOff",
-    entryPage: <Vehicles />, // 🌠 Criar tela
+    entryPage: <AccountsPayable />,
     shouldDisplay: true,
   },
   {
     path: "/accounts-receivable",
     displayName: "Contas a Receber",
     icon: "CreditCard",
-    entryPage: <Vehicles />, // 🌠 Criar tela
+    entryPage: <AccountsReceivable />,
     shouldDisplay: true,
   },
   {
@@ -100,16 +108,9 @@ export const privateRoutes: Route[] = [
     path: "/customers",
     displayName: "Clientes",
     icon: "People",
-    entryPage: <Audit />, // 🌠 Criar tela
+    entryPage: <Customers />,
     shouldDisplay: true,
   },
-  // { // 🌠 Remover
-  //   path: "/audit",
-  //   displayName: "Auditoria",
-  //   icon: "VerifiedUser",
-  //   entryPage: <Audit />,
-  //   shouldDisplay: true,
-  // },
 ];
 
 export const publicRoutes: Route[] = [

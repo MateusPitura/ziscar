@@ -1,14 +1,16 @@
 import { Childrenable } from "@/domains/global/types";
 import { createContext, useMemo, useState } from "react";
 
-interface AuditPageContextValues {
+interface CustomersPageContextValues {
   example: string;
   handleExample: (value: string) => void;
 }
 
-const AuditPageContext = createContext<AuditPageContextValues | null>(null);
+const CustomersPageContext = createContext<CustomersPageContextValues | null>(
+  null
+);
 
-function AuditPageProvider({ children }: Childrenable) {
+function CustomersPageProvider({ children }: Childrenable) {
   const [example, setExample] = useState("");
 
   function handleExample(value: string) {
@@ -24,10 +26,10 @@ function AuditPageProvider({ children }: Childrenable) {
   );
 
   return (
-    <AuditPageContext.Provider value={valuesMemoized}>
+    <CustomersPageContext.Provider value={valuesMemoized}>
       {children}
-    </AuditPageContext.Provider>
+    </CustomersPageContext.Provider>
   );
 }
 
-export { AuditPageContext, AuditPageProvider };
+export { CustomersPageContext, CustomersPageProvider };

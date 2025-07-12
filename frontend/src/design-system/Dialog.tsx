@@ -46,7 +46,7 @@ function Header({ title }: HeaderProps): ReactElement {
 }
 
 function Body({ children }: Childrenable): ReactElement {
-  return <div className="px-6 py-2">{children}</div>;
+  return <div className="px-6 py-2 text-neutral-700">{children}</div>;
 }
 
 interface FooterProps {
