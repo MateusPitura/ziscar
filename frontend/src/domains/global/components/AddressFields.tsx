@@ -8,13 +8,20 @@ import { useQuery } from "@tanstack/react-query";
 import { addressDefaultValues } from "@/domains/users/constants";
 import Tooltip from "@/design-system/Tooltip";
 import { UserFormInputs } from "@/domains/users/types";
+import Select from "@/design-system/Form/Select";
+import { STATES } from "../constants";
 
 interface ViaCepAddress {
   logradouro: string;
   bairro: string;
-  localidade: string;
+  ibge: string;
   uf: string;
   erro: boolean;
+}
+
+interface IbgeCity {
+  nome: string;
+  id: string;
 }
 
 interface AddressFieldsProps {
@@ -27,7 +34,8 @@ export default function AddressFields({
   const [currentValidCep, setCurrentValidCep] = useState("");
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
-  const { setValue, trigger, getValues } = useFormContext<UserFormInputs>();
+  const { setValue, trigger, getValues, watch } =
+    useFormContext<UserFormInputs>();
 
   const { safeFetch } = useSafeFetch();
   const { showErrorSnackbar } = useSnackbar();
@@ -46,10 +54,36 @@ export default function AddressFields({
     });
   }
 
-  const { data: cepInfo, isFetching } = useQuery({
+  const { data: cepInfo, isFetching: isFetchingCep } = useQuery({
     queryKey: ["cepApi", currentValidCep],
     queryFn: ({ queryKey }) => getCepInfo(queryKey[1]),
     enabled: !!currentValidCep,
+  });
+
+  async function getCitiesFromState(
+    state?: string
+  ): Promise<IbgeCity[] | undefined> {
+    if (!state) return [];
+
+    return await safeFetch(
+      `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${state}/municipios`,
+      {
+        enableCookie: false,
+      }
+    );
+  }
+
+  const selectedState = watch("address.state");
+
+  const { data: citiesInfo, isFetching: isFetchingCities } = useQuery({
+    queryKey: ["ibgeApi", selectedState],
+    queryFn: ({ queryKey }) => getCitiesFromState(queryKey[1]),
+    enabled: !!selectedState,
+    select: (data) =>
+      data?.map((city) => ({
+        value: String(city.id),
+        label: city.nome,
+      })),
   });
 
   useEffect(() => {
@@ -64,7 +98,7 @@ export default function AddressFields({
 
     setValue("address.street", cepInfo.logradouro, { shouldDirty: true });
     setValue("address.neighborhood", cepInfo.bairro, { shouldDirty: true });
-    setValue("address.city", cepInfo.localidade, {
+    setValue("address.city", cepInfo.ibge, {
       shouldDirty: true,
     });
     setValue("address.state", cepInfo.uf, {
@@ -125,14 +159,23 @@ export default function AddressFields({
           label="Preencher automaticamente"
           onClick={fillAddress}
           padding="none"
-          state={isFetching ? "loading" : undefined}
+          state={isFetchingCep ? "loading" : undefined}
         />
       </div>
       <Input<UserFormInputs> label="Número" name="address.number" required />
       <Input<UserFormInputs> label="Rua" name="address.street" />
       <Input<UserFormInputs> label="Bairro" name="address.neighborhood" />
-      <Input<UserFormInputs> label="Cidade" name="address.city" />
-      <Input<UserFormInputs> label="Estado" name="address.state" />
+      <Select<UserFormInputs>
+        label="Estado"
+        name="address.state"
+        options={STATES}
+      />
+      <Select<UserFormInputs>
+        label="Cidade"
+        name="address.city"
+        options={citiesInfo || []}
+        loading={isFetchingCities}
+      />
       <Input<UserFormInputs> label="Complemento" name="address.complement" />
     </>
   );

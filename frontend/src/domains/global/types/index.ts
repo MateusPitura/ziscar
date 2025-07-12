@@ -19,7 +19,7 @@ export interface DialogProps {
 export type Mask = "cellphone" | "cpf" | "cep" | "cnpj";
 
 export type QueryKeys = [
-  "cepApi" | "user" | "users" | "profile" | "permissions",
+  "cepApi" | "ibgeApi" | "user" | "users" | "profile" | "permissions",
   ...ReadonlyArray<unknown>
 ];
 

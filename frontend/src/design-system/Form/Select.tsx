@@ -72,9 +72,8 @@ export default function Select<T extends FieldValues>({
           <Button
             variant="secondary"
             label={
-              watch
-                ? options.find((item) => item.value === watch)?.label
-                : "Selecione um item"
+              (watch && options.find((item) => item.value === watch)?.label) ||
+              "Selecione um item"
             }
             iconRight="UnfoldMore"
             fullWidth
@@ -113,6 +112,7 @@ export default function Select<T extends FieldValues>({
                           field.onChange(value);
                         }}
                         className="flex !text-neutral-700"
+                        keywords={[option.label]}
                       >
                         <span className="flex-1">{option.label}</span>
                         {watch === option.value && <Icon iconName="Check" />}
