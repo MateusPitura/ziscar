@@ -124,7 +124,7 @@ const ButtonVariant = forwardRef(
               "border-light-primary border-2 text-light-primary",
               className,
               {
-                "border-neutral-300 text-neutral-300":
+                "!border-neutral-300 !text-neutral-300":
                   state === "disabled" || state === "loading",
               }
             )}
@@ -137,7 +137,7 @@ const ButtonVariant = forwardRef(
         return (
           <BaseButton
             className={classNames("text-neutral-100", className, {
-              "text-neutral-300": state === "disabled" || state === "loading",
+              "!text-neutral-300": state === "disabled" || state === "loading",
             })}
             state={state}
             ref={ref}
@@ -148,7 +148,7 @@ const ButtonVariant = forwardRef(
         return (
           <BaseButton
             className={classNames("text-slate-800", className, {
-              "text-neutral-300": state === "disabled" || state === "loading",
+              "!text-neutral-300": state === "disabled" || state === "loading",
             })}
             state={state}
             ref={ref}

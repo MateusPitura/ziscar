@@ -39,7 +39,7 @@ function Header({ title }: HeaderProps): ReactElement {
       <DialogTitle className="flex-1">
         <span className="text-neutral-700 text-title-large">{title}</span>
       </DialogTitle>
-      <DialogDescription />
+      <DialogDescription className="hidden" />
     </DialogHeader>
   );
 }
