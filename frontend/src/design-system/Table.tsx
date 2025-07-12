@@ -2,7 +2,6 @@ import classNames from "classnames";
 import { Children, type ReactElement, type ReactNode } from "react";
 import Button from "./Button";
 import Spinner from "@/design-system/Spinner";
-import { Popover } from "./Popover";
 import SideSheet from "./SideSheet";
 import { Childrenable } from "@/domains/global/types";
 import useDialog from "@/domains/global/hooks/useDialog";
@@ -100,19 +99,15 @@ interface ActionProps extends Childrenable {
 function Action({ className, colSpan = 1, children }: ActionProps) {
   return (
     <div
-      className={classNames("overflow-x-hidden flex justify-end", className)}
+      className={classNames(
+        "overflow-x-hidden flex justify-end gap-2",
+        className
+      )}
       style={{
         gridColumn: `span ${colSpan} / span ${colSpan}`,
       }}
     >
-      <Popover>
-        <Popover.Trigger>
-          <Button variant="quaternary" iconRight="MoreHoriz" />
-        </Popover.Trigger>
-        <Popover.Content align="end" className="w-fit">
-          {children}
-        </Popover.Content>
-      </Popover>
+      {children}
     </div>
   );
 }

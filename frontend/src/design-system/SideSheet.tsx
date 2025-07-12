@@ -35,7 +35,7 @@ function Trigger({ children }: Childrenable): ReactElement {
 
 function Content({ children }: Childrenable): ReactElement {
   return (
-    <SheetContent className="bg-light-surfaceContainerLowest rounded-tl-md flex flex-col p-0 gap-0 justify-between">
+    <SheetContent className="bg-white rounded-tl-md flex flex-col p-0 gap-0 justify-between">
       {children}
     </SheetContent>
   );
@@ -49,7 +49,7 @@ function Header({ label }: HeaderProps): ReactElement {
   return (
     <SheetHeader className="p-6">
       <SheetTitle>
-        <span className="text-title-large text-light-onSurface">{label}</span>
+        <span className="text-title-large text-neutral-700">{label}</span>
       </SheetTitle>
     </SheetHeader>
   );
@@ -96,7 +96,7 @@ function Footer({
   return (
     <div
       className={classNames(
-        "p-6 border-t border-light-outlineVariant flex flex-0",
+        "p-6 border-t border-neutral-300 flex flex-0",
         className
       )}
     >

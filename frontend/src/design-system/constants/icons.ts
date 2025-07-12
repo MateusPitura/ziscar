@@ -19,6 +19,7 @@ import CurrencyExchange from '@mui/icons-material/CurrencyExchange';
 import CreditCard from '@mui/icons-material/CreditCard';
 import CreditCardOff from '@mui/icons-material/CreditCardOff';
 import People from '@mui/icons-material/People';
+import ToggleOnOutlined from '@mui/icons-material/ToggleOnOutlined';
 
 export const icons = {
   FileDownload,
@@ -41,5 +42,6 @@ export const icons = {
   CurrencyExchange,
   CreditCard,
   CreditCardOff,
-  People
+  People,
+  ToggleOnOutlined
 };

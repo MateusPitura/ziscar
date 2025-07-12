@@ -48,16 +48,17 @@ export default function UsersTableActions({
     <>
       <Button
         variant="quaternary"
-        fullWidth
-        label="Editar"
+        iconLeft="Edit"
         onClick={() => navigate(`/users/edit/${userId}`)}
         resource="USERS"
         action="UPDATE"
+        padding="none"
       />
       <Button
-        variant="quaternary"
-        fullWidth
-        label="Desativar"
+        variant="primary"
+        iconLeft="Delete"
+        color="red"
+        padding="none"
         onClick={() =>
           handleDisableUserInfo({
             userName: fullName,
@@ -71,12 +72,12 @@ export default function UsersTableActions({
   ) : (
     <Button
       variant="quaternary"
-      fullWidth
-      label="Ativar"
       onClick={mutate}
       state={isPending ? "loading" : undefined}
       resource="USERS"
       action="DELETE"
+      padding="none"
+      iconLeft="ToggleOnOutlined"
     />
   );
 }
