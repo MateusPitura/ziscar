@@ -23,7 +23,6 @@ export default function PageFooter({
   return (
     <div className="w-full py-4 flex justify-end gap-4">
       {cloneElement(first as ReactElement, {
-        dirty,
         state: primaryBtnStateParsed,
         type: "submit",
       })}
