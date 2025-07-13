@@ -45,6 +45,8 @@ export const privateRoutes: Route[] = [
     icon: "DirectionsCar",
     entryPage: <Vehicles />,
     shouldDisplay: true,
+    action: "READ",
+    resource: "VEHICLES",
   },
   {
     path: "/stores",
@@ -52,6 +54,8 @@ export const privateRoutes: Route[] = [
     icon: "Store",
     entryPage: <Stores />,
     shouldDisplay: true,
+    action: "READ",
+    resource: "STORES",
   },
   {
     path: "/vehicle-sale",
@@ -59,6 +63,8 @@ export const privateRoutes: Route[] = [
     icon: "CurrencyExchange",
     entryPage: <VehicleSale />,
     shouldDisplay: true,
+    action: "CREATE",
+    resource: "VEHICLE_SALE",
   },
   {
     path: "/accounts-payable",
@@ -66,6 +72,8 @@ export const privateRoutes: Route[] = [
     icon: "CreditCardOff",
     entryPage: <AccountsPayable />,
     shouldDisplay: true,
+    action: "READ",
+    resource: "ACCOUNTS_PAYABLE",
   },
   {
     path: "/accounts-receivable",
@@ -73,6 +81,8 @@ export const privateRoutes: Route[] = [
     icon: "CreditCard",
     entryPage: <AccountsReceivable />,
     shouldDisplay: true,
+    action: "READ",
+    resource: "ACCOUNTS_RECEIVABLE",
   },
   {
     path: "/users",
@@ -110,6 +120,8 @@ export const privateRoutes: Route[] = [
     icon: "People",
     entryPage: <Customers />,
     shouldDisplay: true,
+    action: "READ",
+    resource: "CUSTOMERS",
   },
 ];
 
