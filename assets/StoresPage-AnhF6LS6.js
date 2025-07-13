@@ -1,0 +1,1 @@
+import{r as t,j as e}from"./index-aVBDU0Ve.js";const i=t.createContext(null);function x({children:o}){const[r,n]=t.useState("");function s(u){n(u)}const a=t.useMemo(()=>({example:r,handleExample:s}),[r]);return e.jsx(i.Provider,{value:a,children:o})}function c(){return e.jsx("div",{children:"Stores Page"})}function d(){return e.jsx(x,{children:e.jsx(c,{})})}export{d as default};
