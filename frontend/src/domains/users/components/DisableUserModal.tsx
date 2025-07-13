@@ -45,7 +45,7 @@ export default function DisableUserModal({
     <Dialog {...dialog}>
       <Dialog.Header title="Desativar usuário" />
       <Dialog.Body>
-        <span className="text-body-medium text-light-onSurface">
+        <span className="text-body-medium text-neutral-700">
           Tem certeza que deseja desativar o usuário
           <span className="font-bold">
             {BLANK}
