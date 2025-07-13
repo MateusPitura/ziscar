@@ -6,20 +6,18 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-import { useEffect, type ReactNode } from "react";
+import { type ReactNode } from "react";
 import selectProfileInfo from "../utils/selectProfileInfo";
 import { BACKEND_URL } from "@/domains/global/constants";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import Spinner from "@/design-system/Spinner";
 import { UserFormInputs } from "@/domains/users/types";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
-import { useNavigate } from "react-router-dom";
 import parseAddressPayload from "@/domains/global/utils/parseAddressPayload";
 
 export default function EditProfilePageContainer(): ReactNode {
   const { safeFetch } = useSafeFetch();
   const { showSuccessSnackbar } = useSnackbar();
-  const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   const isFetchingCep = useIsFetching({ queryKey: ["cepApi"] });
@@ -51,33 +49,21 @@ export default function EditProfilePageContainer(): ReactNode {
     });
   }
 
-  const { mutate, isPending, isSuccess } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: editUser,
     onSuccess: async () => {
       showSuccessSnackbar({
         title: `Perfil atualizado com sucesso`,
       });
       queryClient.invalidateQueries({
-        queryKey: ["usersDashboard"],
+        queryKey: ["profile"],
       });
-      navigate("/profile");
     },
   });
 
-  useEffect(
-    () => () => {
-      if (isSuccess) {
-        queryClient.invalidateQueries({
-          queryKey: ["profile"],
-        });
-      }
-    },
-    [isSuccess, queryClient]
-  );
-
   if (isFetching) {
     return (
-      <div className="flex justify-center items-center h-full">
+      <div className="flex justify-center items-center h-full w-full">
         <Spinner />
       </div>
     );
@@ -86,12 +72,12 @@ export default function EditProfilePageContainer(): ReactNode {
   return (
     profileData && (
       <UserForm
-        headerTitle="Editar informações pessoais"
-        headerPrimaryBtnLabel="Alterar"
+        headerTitle="Editar minha conta"
         defaultValues={profileData}
         onSubmit={mutate}
         isPending={isPending || !!isFetchingCep}
         isEdit
+        allowChangePassword
       />
     )
   );

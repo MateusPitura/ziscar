@@ -2,7 +2,7 @@ import classNames from "classnames";
 import { forwardRef } from "react";
 import Tooltip from "./Tooltip";
 import useCheckPermission from "@/domains/global/hooks/useCheckPermission";
-import { ButtonState, IconsName } from "./types";
+import { ButtonColor, ButtonState, IconsName } from "./types";
 import { Action, Resource } from "@shared/types";
 import { formatDeniedMessage } from "@shared/utils/formatDeniedMessage";
 import Icon from "./Icon";
@@ -18,6 +18,7 @@ interface BaseButtonProps {
   iconRight?: IconsName;
   padding?: "default" | "none";
   type?: "submit" | "button";
+  color?: ButtonColor;
 }
 
 const BaseButton = forwardRef(
@@ -61,7 +62,7 @@ const BaseButton = forwardRef(
         )}
         {label && (
           <span
-            className={classNames("text-label-large flex w-full", {
+            className={classNames("text-label-large flex w-full truncate", {
               "justify-center": textAlign === "center",
               "justify-start": textAlign === "start",
               "justify-end": textAlign === "end",
@@ -90,6 +91,7 @@ const ButtonVariant = forwardRef(
       variant = "primary",
       state = undefined,
       className,
+      color = "gray",
       ...props
     }: ButtonVariantProps,
     ref: React.Ref<HTMLButtonElement>
@@ -99,12 +101,15 @@ const ButtonVariant = forwardRef(
         return (
           <BaseButton
             className={classNames(
-              "bg-light-primary text-light-onPrimary",
+              "text-neutral-100",
               className,
               {
-                "bg-light-secondary": state === "active",
-                "!bg-light-error": state === "red",
-                "!bg-light-disabled": state === "disabled" || state === "loading",
+                "!bg-neutral-300": state === "disabled" || state === "loading",
+                "bg-neutral-800": color === "gray",
+                "bg-green-600": color === "green",
+                "bg-blue-800": color === "darkBlue",
+                "bg-sky-500": color === "lightBlue",
+                "bg-red-500": color === "red",
               }
             )}
             state={state}
@@ -116,12 +121,10 @@ const ButtonVariant = forwardRef(
         return (
           <BaseButton
             className={classNames(
-              "border-light-primary border-2 text-light-primary",
+              "border-slate-800 border-2 text-slate-800",
               className,
               {
-                "bg-light-primaryContainer": state === "active",
-                "!border-light-error !text-light-error": state === "red",
-                "border-light-disabled text-light-disabled":
+                "!border-neutral-300 !text-neutral-300":
                   state === "disabled" || state === "loading",
               }
             )}
@@ -133,10 +136,8 @@ const ButtonVariant = forwardRef(
       case "tertiary":
         return (
           <BaseButton
-            className={classNames("text-light-onSurface", className, {
-              "text-light-primary": state === "active",
-              "!text-light-error": state === "red",
-              "text-light-disabled": state === "disabled" || state === "loading",
+            className={classNames("text-neutral-100", className, {
+              "!text-neutral-300": state === "disabled" || state === "loading",
             })}
             state={state}
             ref={ref}
@@ -146,10 +147,8 @@ const ButtonVariant = forwardRef(
       case "quaternary":
         return (
           <BaseButton
-            className={classNames("text-light-primary", className, {
-              "bg-light-primaryContainer": state === "active",
-              "!text-light-error": state === "red",
-              "text-light-disabled": state === "disabled" || state === "loading",
+            className={classNames("text-slate-800", className, {
+              "!text-neutral-300": state === "disabled" || state === "loading",
             })}
             state={state}
             ref={ref}

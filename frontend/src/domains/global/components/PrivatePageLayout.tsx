@@ -1,23 +1,17 @@
-import { useEffect, useState, type ReactElement } from "react";
-import PageTopBar from "./PageTopBar";
+import { useEffect, type ReactElement } from "react";
 import PageSideBar from "./PageSideBar";
 import { Outlet, useMatches, useNavigate } from "react-router-dom";
 import Spinner from "@/design-system/Spinner";
 import useSafeFetch from "../hooks/useSafeFetch";
-import { BACKEND_URL } from "../constants";
+import { BACKEND_URL, DEFAULT_ROUTE } from "../constants";
 import { useQuery } from "@tanstack/react-query";
 import { Action, Permissions, Resource } from "@shared/types";
 import useSnackbar from "../hooks/useSnackbar";
 import { formatDeniedMessage } from "@shared/utils/formatDeniedMessage";
 
 export default function PrivatePageLayout(): ReactElement {
-  const [isSideMenuOpen, setIsSideMenuOpen] = useState(true);
   const matches = useMatches();
   const { showErrorSnackbar } = useSnackbar();
-
-  function handleToggleSideMenu() {
-    setIsSideMenuOpen((prev) => !prev);
-  }
 
   const { safeFetch } = useSafeFetch();
   const navigate = useNavigate();
@@ -50,9 +44,9 @@ export default function PrivatePageLayout(): ReactElement {
       showErrorSnackbar({
         description: formatDeniedMessage({ resource, action }),
       });
-      navigate("/profile");
+      navigate(DEFAULT_ROUTE);
     }
-  }, [isLoading, userPermissions, matches]);
+  }, [isLoading, userPermissions, matches, navigate, showErrorSnackbar]);
 
   if (!userPermissions) {
     return (
@@ -63,12 +57,13 @@ export default function PrivatePageLayout(): ReactElement {
   }
 
   return (
-    <div className="bg-light-surfaceContainerLowest w-full h-screen flex flex-col">
-      <PageTopBar onToggleSideMenu={handleToggleSideMenu} />
+    <div className="bg-neutral-50 w-full h-screen flex flex-col">
       <div className="flex flex-1 overflow-hidden">
-        <PageSideBar isOpen={isSideMenuOpen} />
-        <div className="bg-light-surface p-4 rounded-tl-md w-full overflow-y-auto">
-          <Outlet />
+        <PageSideBar />
+        <div className="bg-neutral-50 p-4 w-full overflow-y-auto">
+          <div className="w-full p-4 rounded-md shadow-md h-full overflow-y-auto flex">
+            <Outlet />
+          </div>
         </div>
       </div>
     </div>

@@ -1,64 +1,43 @@
-import Button from "@/design-system/Button";
-import { type ReactElement } from "react";
+import { Children, cloneElement, type ReactElement } from "react";
 import useButtonState from "../hooks/useButtonState";
-import { Action, Resource } from "@shared/types";
-import { ButtonState, IconsName } from "@/design-system/types";
+import { ButtonState } from "@/design-system/types";
+import { Childrenable } from "../types";
 
-interface PageHeaderProperties {
+interface PageHeaderProperties extends Childrenable {
   title: string;
-  primaryButtonLabel?: string;
-  onClickPrimaryBtn?: () => void;
-  primaryBtnIconRigth?: IconsName;
-  secondaryButtonLabel?: string;
-  onClickSecondaryBtn?: () => void;
-  primaryBtnState?: ButtonState;
   dirty?: boolean;
-  primaryBtnResource?: Resource;
-  primaryBtnAction?: Action;
+  primaryBtnState?: ButtonState;
 }
 
 export default function PageHeader({
   title,
-  primaryButtonLabel,
-  primaryBtnIconRigth,
-  onClickPrimaryBtn,
   primaryBtnState,
-  primaryBtnResource,
-  primaryBtnAction,
-  secondaryButtonLabel,
-  onClickSecondaryBtn,
   dirty,
+  children,
 }: PageHeaderProperties): ReactElement {
   const primaryBtnStateParsed = useButtonState({
     dirty,
     buttonState: primaryBtnState,
   });
 
+  const [first, ...others] = Children.toArray(children);
+
   return (
-    <div className="w-full py-4 flex">
-      <span className="text-headline-large text-light-onSurface flex-1">
-        {title}
-      </span>
-      <div className="flex">
-        {secondaryButtonLabel && (
-          <Button
-            variant="quaternary"
-            onClick={onClickSecondaryBtn}
-            label={secondaryButtonLabel}
-          />
-        )}
-        {primaryButtonLabel && (
-          <Button
-            variant="primary"
-            onClick={onClickPrimaryBtn}
-            label={primaryButtonLabel}
-            iconRight={primaryBtnIconRigth}
-            type="submit"
-            state={primaryBtnStateParsed}
-            resource={primaryBtnResource}
-            action={primaryBtnAction}
-          />
-        )}
+    <div className="w-full py-4 flex flex-col gap-4">
+      <div className="flex-1 flex flex-col items-center gap-2">
+        <span className="text-headline-large text-neutral-700 flex-1">
+          {title}
+        </span>
+        <div className="border-b border-neutral-300 w-[80%]" />
+      </div>
+      <div className="flex justify-end">
+        {first &&
+          cloneElement(first as ReactElement, {
+            dirty,
+            state: primaryBtnStateParsed,
+            type: "submit",
+          })}
+        {others}
       </div>
     </div>
   );

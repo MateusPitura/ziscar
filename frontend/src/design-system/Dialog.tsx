@@ -1,11 +1,11 @@
 import { type ReactElement } from "react";
 import {
-    Dialog as DialogShadcn,
-    DialogContent,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogDescription,
+  Dialog as DialogShadcn,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import Button from "./Button";
 import { DialogClose } from "@radix-ui/react-dialog";
@@ -13,7 +13,7 @@ import { DialogProvider } from "@/domains/global/contexts/DialogContext";
 import useButtonState from "@/domains/global/hooks/useButtonState";
 import { Childrenable, DialogProps } from "@/domains/global/types";
 import { Action, Resource } from "@shared/types";
-import { ButtonState } from "./types";
+import { ButtonColor, ButtonState } from "./types";
 
 interface ContainerProps extends DialogProps, Childrenable {}
 
@@ -21,7 +21,7 @@ function Container({ children, ...dialog }: ContainerProps): ReactElement {
   return (
     <DialogProvider {...dialog}>
       <DialogShadcn open={dialog.isOpen} onOpenChange={dialog.handleOpen}>
-        <DialogContent className="bg-light-surfaceContainerLowest p-0 gap-0">
+        <DialogContent className="bg-neutral-100 p-0 gap-0 [&>button]:!ring-0 [&>button]!outline-none [&>button]:!ring-offset-0">
           {children}
         </DialogContent>
       </DialogShadcn>
@@ -37,21 +37,23 @@ function Header({ title }: HeaderProps): ReactElement {
   return (
     <DialogHeader className="flex gap-2 flex-row items-center px-6 pt-6 pb-2">
       <DialogTitle className="flex-1">
-        <span className="text-light-onSurface text-title-large">{title}</span>
+        <span className="text-neutral-700 text-title-large">{title}</span>
       </DialogTitle>
-      <DialogDescription />
+      {/* DialogDescription corrige warning de acessibilidade */}
+      <DialogDescription className="hidden" />
     </DialogHeader>
   );
 }
 
 function Body({ children }: Childrenable): ReactElement {
-  return <div className="px-6 py-2">{children}</div>;
+  return <div className="px-6 py-2 text-neutral-700">{children}</div>;
 }
 
 interface FooterProps {
   onClickPrimaryBtn?: () => void;
   labelPrimaryBtn: string;
   primaryBtnState?: ButtonState;
+  primaryBtnColor?: ButtonColor;
   primaryBtResource?: Resource;
   primaryBtnAction?: Action;
   onClickSecondaryBtn?: () => void;
@@ -69,6 +71,7 @@ function Footer({
   onClickSecondaryBtn,
   labelSecondaryBtn = "Cancelar",
   secondaryBtnState,
+  primaryBtnColor,
   dirty,
 }: FooterProps): ReactElement {
   const primaryBtnStateParsed = useButtonState({
@@ -102,6 +105,7 @@ function Footer({
         type="submit"
         resource={primaryBtResource}
         action={primaryBtnAction}
+        color={primaryBtnColor}
       />
     </DialogFooter>
   );

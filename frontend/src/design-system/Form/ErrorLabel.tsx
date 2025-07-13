@@ -16,7 +16,7 @@ export default function ErrorLabel({
 
   return (
     <span
-      className={classNames("text-body-small text-light-error p-1", {
+      className={classNames("text-body-small text-red-500 p-1", {
         invisible: !errorsFormatted,
       })}
     >

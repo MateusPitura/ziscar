@@ -15,6 +15,7 @@ import DisableUserModal from "./DisableUserModal";
 import useDialog from "@/domains/global/hooks/useDialog";
 import { PageablePayload } from "@/domains/global/types";
 import handleExportFile from "@/domains/global/utils/handleExportFile";
+import Button from "@/design-system/Button";
 
 export default function UsersTable(): ReactNode {
   const [disableUserInfo, setDisableUserInfo] = useState<DisableUser>({
@@ -96,38 +97,22 @@ export default function UsersTable(): ReactNode {
     },
   });
 
-  async function generateSheet(): Promise<Response> {
-    return await safeFetch(`${BACKEND_URL}/user/sheet?${filterExportFormatted}`, {
-      method: "GET",
-      resource: "USERS",
-      action: "READ",
-      isExport: true,
-    });
-  }
-
-  const { mutate: mutateSheet, isPending: isSheetPending } = useMutation({
-    mutationFn: generateSheet,
-    onSuccess: (data: Response) => {
-      showSuccessSnackbar({
-        title: "Planilha gerada com sucesso",
-        actionLabel: "Baixar",
-        onActionClick: async () => {
-          handleExportFile({
-            data,
-            fileName: "users",
-            type: "sheet",
-          });
-        },
-        actionBtnResource: "USERS",
-        actionBtnAction: "READ",
-      });
-    },
-  });
-
   return (
     <>
       <DisableUserModal {...disableUserInfo} {...dialog} />
-      <Table.Filter form={<UsersFilterForm />} />
+      <div className="flex gap-4 justify-end">
+        <Button
+          variant="primary"
+          color="darkBlue"
+          label="Exportar como PDF"
+          iconRight="FileDownload"
+          onClick={pdfMutate}
+          state={isPdfPending ? "loading" : undefined}
+          resource="USERS"
+          action="READ"
+        />
+        <Table.Filter form={<UsersFilterForm />} />
+      </div>
       <Table>
         <Table.Header>
           <Table.Head label="ID" />
@@ -165,13 +150,7 @@ export default function UsersTable(): ReactNode {
           currentStartItem={usersFilter?.page}
           totalItems={usersInfo?.total}
           onClickNavigateBtn={handleChangePage}
-          onClickPdfBtn={pdfMutate}
-          onClickSheetBtn={mutateSheet}
-          pdfBtnState={isPdfPending ? "loading" : undefined}
-          sheetBtnState={isSheetPending ? "loading" : undefined}
           isLoading={isFetchingUsersInfo}
-          resourceExportBtn="USERS"
-          actionExportBtn="READ"
         />
       </Table>
     </>

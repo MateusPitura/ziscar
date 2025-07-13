@@ -5,23 +5,19 @@ import PrivatePageLayout from "./domains/global/components/PrivatePageLayout";
 import { createBrowserRouter } from "react-router-dom";
 import ErrorBoundary from "./ErrorBoundary";
 
-const privateRouteElements = privateRoutes.flatMap((group) =>
-  group.routes.map((route) => ({
-    path: route.path,
-    element: <SuspensePage key={route.path}>{route.entryPage}</SuspensePage>,
-    handle: {
-      resource: route.resource,
-      action: route.action,
-    },
-  }))
-);
+const privateRouteElements = privateRoutes.map((route) => ({
+  path: route.path,
+  element: <SuspensePage key={route.path}>{route.entryPage}</SuspensePage>,
+  handle: {
+    resource: route.resource,
+    action: route.action,
+  },
+}));
 
-const publicRouteElements = publicRoutes.flatMap((group) =>
-  group.routes.map((route) => ({
-    path: route.path,
-    element: <SuspensePage key={route.path}>{route.entryPage}</SuspensePage>,
-  }))
-);
+const publicRouteElements = publicRoutes.map((route) => ({
+  path: route.path,
+  element: <SuspensePage key={route.path}>{route.entryPage}</SuspensePage>,
+}));
 
 export const router = createBrowserRouter([
   {

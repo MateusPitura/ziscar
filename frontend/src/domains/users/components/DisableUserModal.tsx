@@ -45,7 +45,7 @@ export default function DisableUserModal({
     <Dialog {...dialog}>
       <Dialog.Header title="Desativar usuário" />
       <Dialog.Body>
-        <span className="text-body-medium text-light-onSurface">
+        <span className="text-body-medium text-neutral-700">
           Tem certeza que deseja desativar o usuário
           <span className="font-bold">
             {BLANK}
@@ -57,7 +57,8 @@ export default function DisableUserModal({
       <Dialog.Footer
         labelPrimaryBtn="Desativar"
         onClickPrimaryBtn={mutate}
-        primaryBtnState={isPending ? "loading" : "red"}
+        primaryBtnState={isPending ? "loading" : undefined}
+        primaryBtnColor="red"
         primaryBtResource="USERS"
         primaryBtnAction="DELETE"
       />

@@ -8,7 +8,7 @@
       http-equiv="Content-Security-Policy"
       content="
 		    default-src 'self'; 
-        connect-src 'self' https://viacep.com.br <%= BACKEND_URL %>;
+        connect-src 'self' https://viacep.com.br https://servicodados.ibge.gov.br <%= BACKEND_URL %>;
 	      img-src 'self' data:;
         script-src 'self' 'unsafe-inline';
         style-src 'self' 'unsafe-inline';
@@ -58,7 +58,7 @@
             width: 2.5rem;
             height: 2.5rem;
             border-width: 4px;
-            border-color: #904b40;
+            border-color: #1e293b;
             border-style: solid;
             border-radius: 50%;
             animation: spin 1s linear infinite;

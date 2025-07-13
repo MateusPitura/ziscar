@@ -6,6 +6,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import { BACKEND_URL } from "@/domains/global/constants";
+import Tooltip from "@/design-system/Tooltip";
 
 interface UsersTableActionsProperties {
   isActive?: boolean;
@@ -46,37 +47,44 @@ export default function UsersTableActions({
 
   return isActive ? (
     <>
-      <Button
-        variant="tertiary"
-        fullWidth
-        label="Editar"
-        onClick={() => navigate(`/users/edit/${userId}`)}
-        resource="USERS"
-        action="UPDATE"
-      />
-      <Button
-        variant="tertiary"
-        fullWidth
-        label="Desativar"
-        onClick={() =>
-          handleDisableUserInfo({
-            userName: fullName,
-            userId: userId,
-          })
-        }
-        resource="USERS"
-        action="DELETE"
-      />
+      <Tooltip content="Editar">
+        <Button
+          variant="quaternary"
+          iconLeft="Edit"
+          onClick={() => navigate(`/users/edit/${userId}`)}
+          resource="USERS"
+          action="UPDATE"
+          padding="none"
+        />
+      </Tooltip>
+      <Tooltip content="Desativar">
+        <Button
+          variant="primary"
+          iconLeft="Delete"
+          color="red"
+          padding="none"
+          onClick={() =>
+            handleDisableUserInfo({
+              userName: fullName,
+              userId: userId,
+            })
+          }
+          resource="USERS"
+          action="DELETE"
+        />
+      </Tooltip>
     </>
   ) : (
-    <Button
-      variant="tertiary"
-      fullWidth
-      label="Ativar"
-      onClick={mutate}
-      state={isPending ? "loading" : undefined}
-      resource="USERS"
-      action="DELETE"
-    />
+    <Tooltip content="Ativar">
+      <Button
+        variant="quaternary"
+        onClick={mutate}
+        state={isPending ? "loading" : undefined}
+        resource="USERS"
+        action="DELETE"
+        padding="none"
+        iconLeft="ToggleOn"
+      />
+    </Tooltip>
   );
 }
