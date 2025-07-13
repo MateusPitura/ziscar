@@ -40,14 +40,6 @@ export default function AddressFields({
   const { safeFetch } = useSafeFetch();
   const { showErrorSnackbar } = useSnackbar();
 
-  async function fillAddress() {
-    const isValid = await trigger("address.cep");
-    if (isValid) {
-      const cep = getValues("address.cep");
-      setCurrentValidCep(cep);
-    }
-  }
-
   async function getCepInfo(cep: string): Promise<ViaCepAddress | undefined> {
     return await safeFetch(`https://viacep.com.br/ws/${cep}/json/`, {
       enableCookie: false,
@@ -59,6 +51,26 @@ export default function AddressFields({
     queryFn: ({ queryKey }) => getCepInfo(queryKey[1]),
     enabled: !!currentValidCep,
   });
+
+  useEffect(() => {
+    if (cepInfo?.erro) {
+      showErrorSnackbar({
+        description: "CEP não encontrado",
+      });
+      return;
+    }
+
+    if (!cepInfo) return;
+
+    setValue("address.street", cepInfo.logradouro, { shouldDirty: true });
+    setValue("address.neighborhood", cepInfo.bairro, { shouldDirty: true });
+    setValue("address.city", cepInfo.ibge, {
+      shouldDirty: true,
+    });
+    setValue("address.state", cepInfo.uf, {
+      shouldDirty: true,
+    });
+  }, [cepInfo, setValue, showErrorSnackbar]);
 
   async function getCitiesFromState(
     state?: string
@@ -86,25 +98,13 @@ export default function AddressFields({
       })),
   });
 
-  useEffect(() => {
-    if (cepInfo?.erro) {
-      showErrorSnackbar({
-        description: "CEP não encontrado",
-      });
-      return;
+  async function fillAddress() {
+    const isValid = await trigger("address.cep");
+    if (isValid) {
+      const cep = getValues("address.cep");
+      setCurrentValidCep(cep);
     }
-
-    if (!cepInfo) return;
-
-    setValue("address.street", cepInfo.logradouro, { shouldDirty: true });
-    setValue("address.neighborhood", cepInfo.bairro, { shouldDirty: true });
-    setValue("address.city", cepInfo.ibge, {
-      shouldDirty: true,
-    });
-    setValue("address.state", cepInfo.uf, {
-      shouldDirty: true,
-    });
-  }, [cepInfo, setValue, showErrorSnackbar]);
+  }
 
   function handleOnSubmitCepField(
     event: React.KeyboardEvent<HTMLInputElement>
@@ -169,12 +169,14 @@ export default function AddressFields({
         label="Estado"
         name="address.state"
         options={STATES}
+        onChange={() => setValue("address.city", "", { shouldDirty: true })}
       />
       <Select<UserFormInputs>
         label="Cidade"
         name="address.city"
         options={citiesInfo || []}
         loading={isFetchingCities}
+        disabled={!selectedState}
       />
       <Input<UserFormInputs> label="Complemento" name="address.complement" />
     </>

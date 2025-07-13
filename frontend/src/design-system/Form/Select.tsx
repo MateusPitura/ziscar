@@ -29,6 +29,7 @@ interface SelectProperties<T> {
   hideErrorLabel?: boolean;
   label: string;
   required?: boolean;
+  onChange?: (value: string) => void;
 }
 
 export default function Select<T extends FieldValues>({
@@ -39,6 +40,7 @@ export default function Select<T extends FieldValues>({
   hideErrorLabel,
   label,
   required = false,
+  onChange
 }: SelectProperties<T>): ReactNode {
   const [isOpen, setIsOpen] = useState(false);
   const { register, control } = useFormContext<T>();
@@ -105,6 +107,7 @@ export default function Select<T extends FieldValues>({
                         key={option.value}
                         value={option.value}
                         onSelect={(value) => {
+                          onChange?.(value);
                           if (value === watch) {
                             field.onChange("");
                             return;
