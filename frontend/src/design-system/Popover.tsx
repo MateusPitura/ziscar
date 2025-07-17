@@ -1,14 +1,27 @@
 import type { ReactElement } from "react";
 import {
-    Popover as PopoverShadcn,
-    PopoverContent,
-    PopoverTrigger,
+  Popover as PopoverShadcn,
+  PopoverContent,
+  PopoverTrigger,
 } from "@/components/ui/popover";
 import classNames from "classnames";
 import { Childrenable } from "@/domains/global/types";
 
-function Container({ children }: Childrenable): ReactElement {
-  return <PopoverShadcn>{children}</PopoverShadcn>;
+interface ContainerProps extends Childrenable {
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+}
+
+function Container({
+  children,
+  onOpenChange,
+  open,
+}: ContainerProps): ReactElement {
+  return (
+    <PopoverShadcn open={open} onOpenChange={onOpenChange}>
+      {children}
+    </PopoverShadcn>
+  );
 }
 
 interface ContentProps extends Childrenable {
@@ -26,7 +39,7 @@ function Content({
 }: ContentProps): ReactElement {
   return (
     <PopoverContent
-      className={classNames("bg-light-surface", className)}
+      className={classNames("bg-white", className)}
       {...props}
       onOpenAutoFocus={(e) => e.preventDefault()}
     >

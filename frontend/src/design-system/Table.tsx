@@ -2,7 +2,6 @@ import classNames from "classnames";
 import { Children, type ReactElement, type ReactNode } from "react";
 import Button from "./Button";
 import Spinner from "@/design-system/Spinner";
-import { Popover } from "./Popover";
 import SideSheet from "./SideSheet";
 import { Childrenable } from "@/domains/global/types";
 import useDialog from "@/domains/global/hooks/useDialog";
@@ -37,7 +36,7 @@ function Row({ children, className, gridColumns = "default" }: RowProps) {
   return (
     <div
       className={classNames(
-        "p-4 grid gap-2 bg-light-surfaceContainerLowest h-[72px] items-center border-b border-outlineVariant",
+        "p-4 grid gap-2 bg-neutral-50 h-[72px] items-center border-b border-neutral-300 last:border-b-0",
         className
       )}
       style={{
@@ -55,7 +54,7 @@ function Header({ children, className, gridColumns }: HeaderProps) {
   return (
     <Row
       className={classNames(
-        "bg-light-tertiaryContainer rounded-t-md border-none",
+        "bg-neutral-50 border border-neutral-300 rounded-t-md",
         className
       )}
       gridColumns={gridColumns}
@@ -77,7 +76,7 @@ function Cell({ label, className, colSpan }: CellProps) {
   return (
     <span
       className={classNames(
-        "text-light-onTertiaryContainer text-body-medium overflow-x-hidden",
+        "text-neutral-700 text-body-medium overflow-x-hidden",
         className,
         {
           "first:!col-span-1": !colSpan,
@@ -100,19 +99,15 @@ interface ActionProps extends Childrenable {
 function Action({ className, colSpan = 1, children }: ActionProps) {
   return (
     <div
-      className={classNames("overflow-x-hidden flex justify-end", className)}
+      className={classNames(
+        "overflow-x-hidden flex justify-end gap-2",
+        className
+      )}
       style={{
         gridColumn: `span ${colSpan} / span ${colSpan}`,
       }}
     >
-      <Popover>
-        <Popover.Trigger>
-          <Button variant="tertiary" iconRight="MoreHoriz" />
-        </Popover.Trigger>
-        <Popover.Content align="end" className="w-fit">
-          {children}
-        </Popover.Content>
-      </Popover>
+      {children}
     </div>
   );
 }
@@ -145,11 +140,11 @@ function Body({ children, isEmpty, isLoading, action, resource }: BodyProps) {
 
   if (isLoading || isEmpty) {
     return (
-      <div className="flex-1 bg-light-surfaceContainerLowest overflow-y-auto flex items-center justify-center">
+      <div className="flex-1 bg-neutral-50 overflow-y-auto flex items-center justify-center border-x border-b rounded-b-md border-neutral-300">
         {isLoading ? (
           <Spinner />
         ) : (
-          <span className="text-light-onSurface text-body-medium">
+          <span className="text-neutral-700 text-body-medium">
             {hasPermission
               ? "Nenhum item encontrado"
               : formatDeniedMessage({ resource, action })}
@@ -160,7 +155,7 @@ function Body({ children, isEmpty, isLoading, action, resource }: BodyProps) {
   }
 
   return (
-    <div className="flex-1 bg-light-surfaceContainerLowest overflow-y-auto">
+    <div className="flex-1 bg-neutral-50 border-x border-b rounded-b-md border-neutral-300 overflow-y-auto">
       {children}
     </div>
   );
@@ -168,17 +163,11 @@ function Body({ children, isEmpty, isLoading, action, resource }: BodyProps) {
 
 interface FooterProps {
   className?: string;
-  onClickSheetBtn?: () => void;
-  sheetBtnState?: ButtonState;
-  onClickPdfBtn?: () => void;
-  pdfBtnState?: ButtonState;
-  onClickNavigateBtn?: (page: number) => void;
   currentStartItem?: number;
-  totalItems?: number;
   itemsPerPage?: number;
+  totalItems?: number;
+  onClickNavigateBtn?: (page: number) => void;
   isLoading?: boolean;
-  resourceExportBtn?: Resource;
-  actionExportBtn?: ActionProp;
 }
 
 function Footer({
@@ -186,14 +175,8 @@ function Footer({
   currentStartItem = 1,
   itemsPerPage = ITEMS_PER_PAGE,
   totalItems,
-  onClickPdfBtn,
-  onClickSheetBtn,
   onClickNavigateBtn,
   isLoading,
-  pdfBtnState,
-  sheetBtnState,
-  actionExportBtn,
-  resourceExportBtn,
 }: FooterProps) {
   const pageOffset = (currentStartItem - 1) * itemsPerPage; // 0, 20, 40 etc.
 
@@ -214,36 +197,27 @@ function Footer({
   return (
     <Row
       className={classNames(
-        "bg-light-tertiaryContainer rounded-b-md border-none !flex items-center gap-4 justify-end",
+        "bg-neutral-50 rounded-b-md border-none !flex items-center gap-4 justify-center",
         className
       )}
       gridColumns={1}
     >
-      {onClickSheetBtn && (
-        <Button
-          variant="quaternary"
-          label="Exportar como planilha"
-          iconRight="FileDownload"
-          onClick={onClickSheetBtn}
-          state={isLoading ? "loading" : sheetBtnState}
-          resource={resourceExportBtn}
-          action={actionExportBtn}
-        />
-      )}
-      {onClickPdfBtn && (
-        <Button
-          variant="quaternary"
-          label="Exportar como PDF"
-          iconRight="FileDownload"
-          onClick={onClickPdfBtn}
-          state={isLoading ? "loading" : pdfBtnState}
-          resource={resourceExportBtn}
-          action={actionExportBtn}
-        />
-      )}
+      <Button
+        variant="quaternary"
+        iconLeft="NavigateBefore"
+        onClick={handleBefore}
+        label="Anterior"
+        state={
+          isLoading
+            ? "loading"
+            : currentStartItem === 1
+            ? "disabled"
+            : undefined
+        }
+      />
       <Loading
         isLoading={!!isLoading}
-        className="text-light-onTertiaryContainer text-body-large"
+        className="text-neutral-700 text-body-large"
       >
         {totalItems && (
           <>
@@ -254,21 +228,10 @@ function Footer({
         )}
       </Loading>
       <Button
-        variant="tertiary"
-        iconLeft="NavigateBefore"
-        onClick={handleBefore}
-        state={
-          isLoading
-            ? "loading"
-            : currentStartItem === 1
-            ? "disabled"
-            : undefined
-        }
-      />
-      <Button
-        variant="tertiary"
-        iconLeft="NavigateNext"
+        variant="quaternary"
+        iconRight="NavigateNext"
         onClick={handleNext}
+        label="Próxima"
         state={
           isLoading
             ? "loading"

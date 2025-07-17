@@ -26,7 +26,7 @@ export default function SignContainer(): ReactNode {
       }
       default:
         return (
-          <SignCard title="Ziscar">
+          <SignCard title="Login">
             <SignInForm />
           </SignCard>
         );
@@ -34,7 +34,9 @@ export default function SignContainer(): ReactNode {
   }, [step]);
 
   return (
-    <div className="bg-gradient-to-br from-light-tertiaryContainer to-light-primary w-full h-screen flex justify-center items-center">
+    <div className="bg-slate-800 w-full h-screen flex justify-center items-center flex-col gap-4">
+      <span className="text-headline-large text-neutral-100">Ziscar</span>
+      <div className="border-b border-neutral-300 w-96" />
       {renderStep}
     </div>
   );

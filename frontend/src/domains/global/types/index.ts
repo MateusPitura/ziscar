@@ -16,16 +16,10 @@ export interface DialogProps {
   handleOpen: (state: boolean) => void;
 }
 
-export interface DashBoardProps {
-  id: string;
-  label: string;
-  value: string;
-}
-
 export type Mask = "cellphone" | "cpf" | "cep" | "cnpj";
 
 export type QueryKeys = [
-  "cepApi" | "user" | "users" | "profile" | "usersDashboard" | "permissions",
+  "cepApi" | "ibgeApi" | "user" | "users" | "profile" | "permissions",
   ...ReadonlyArray<unknown>
 ];
 
@@ -37,3 +31,8 @@ export interface PageablePayload<T> {
 }
 
 export type DateFormats = "yyyy-MM-dd" | "dd/MM/yyyy";
+
+export interface Options {
+  value: string;
+  label: string;
+}

@@ -27,10 +27,10 @@ class ErrorBoundary extends React.Component<
     if (this.state.hasError) {
       return (
         <div className="flex flex-col gap-4 justify-center items-center h-screen">
-          <span className="text-light-primary text-display-large">
+          <span className="text-slate-800 text-display-large">
             Algo deu errado
           </span>
-          <span className="text-light-onSurface text-headline-large">
+          <span className="text-neutral-700 text-headline-large">
             Por favor, recarregue a página e tente novamente
           </span>
         </div>

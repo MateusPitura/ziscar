@@ -50,14 +50,14 @@ function UsersFilterFormContent(): ReactElement {
   return (
     <>
       <SideSheet.Body className="flex flex-col gap-4">
-        <span className="text-label-medium text-light-onSurface">
+        <span className="text-label-medium text-neutral-700">
           Buscar por
         </span>
         <Input<UsersFilterFormInputs>
           name="fullName"
           label="Nome completo"
         />
-        <span className="text-label-medium text-light-onSurface">
+        <span className="text-label-medium text-neutral-700">
           Ordenar por
         </span>
         <div className="flex flex-col gap-2">
@@ -66,7 +66,7 @@ function UsersFilterFormContent(): ReactElement {
             <Choice.Radio label="Email" value="email" />
           </Choice>
         </div>
-        <span className="text-label-medium text-light-onSurface">Status</span>
+        <span className="text-label-medium text-neutral-700">Status</span>
         <div className="flex flex-col gap-2">
           <Choice<UsersFilterFormInputs> name="status" hideErrorLabel>
             <Choice.Radio label="Ativo" value={'active'} />

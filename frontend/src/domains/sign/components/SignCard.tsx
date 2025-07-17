@@ -10,8 +10,8 @@ interface ContainerProps extends Childrenable {
 
 function Container({ title, children }: ContainerProps): ReactNode {
   return (
-    <div className="w-[23rem] h-[41rem] bg-light-surfaceContainerLowest px-4 py-8 flex flex-col gap-8 rounded-md">
-      <span className="text-headline-large text-light-onSurface text-center">
+    <div className="w-[23rem] h-[41rem] bg-neutral-50 shadow-md px-4 py-8 flex flex-col gap-8 rounded-md">
+      <span className="text-headline-large text-neutral-700 text-center">
         {title}
       </span>
       {children}

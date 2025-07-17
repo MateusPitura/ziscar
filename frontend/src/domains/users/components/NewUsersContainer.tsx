@@ -37,7 +37,6 @@ export default function NewUsersContainer(): ReactElement {
       });
       navigate("/users");
       queryClient.invalidateQueries({ queryKey: ["users"] });
-      queryClient.invalidateQueries({ queryKey: ["usersDashboard"] });
     },
   });
 
@@ -46,7 +45,6 @@ export default function NewUsersContainer(): ReactElement {
       defaultValues={userDefaultValues}
       onSubmit={mutate}
       isPending={isPending || !!isFetching}
-      headerPrimaryBtnLabel="Criar"
       headerTitle="Novo usuário"
       resource="USERS"
       action="CREATE"

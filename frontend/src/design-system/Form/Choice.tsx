@@ -63,12 +63,12 @@ function Radio({
         <input
           type="radio"
           {...register(name)}
-          className="peer col-start-1 row-start-1 appearance-none shrink-0 w-4 h-4 border-2 border-light-primary rounded-full disabled:border-light-disabled cursor-pointer"
+          className="peer col-start-1 row-start-1 appearance-none shrink-0 w-4 h-4 border-2 border-slate-800 rounded-full disabled:border-neutral-300 cursor-pointer"
           {...props}
         />
-        <div className="col-start-1 row-start-1 w-2 h-2 rounded-full peer-checked:bg-light-primary peer-checked:peer-disabled:bg-light-disabled" />
+        <div className="col-start-1 row-start-1 w-2 h-2 rounded-full peer-checked:bg-slate-800 peer-checked:peer-disabled:bg-neutral-300" />
       </div>
-      <div className="text-body-large text-light-onSurface">{label}</div>
+      <div className="text-body-large text-neutral-700">{label}</div>
       {hideErrorLabel || <ErrorLabel errors={errors} name={name} />}
     </label>
   );
@@ -95,10 +95,10 @@ function Checkbox({
       <input
         type="checkbox"
         {...register(name)}
-        className="col-start-1 row-start-1 shrink-0 w-4 h-4 border-2 accent-light-primary disabled:border-light-disabled cursor-pointer"
+        className="col-start-1 row-start-1 shrink-0 w-4 h-4 border-2 accent-slate-800 disabled:border-neutral-300 cursor-pointer"
         {...props}
       />
-      <div className="text-body-large text-light-onSurface">{label}</div>
+      <div className="text-body-large text-neutral-700">{label}</div>
       {hideErrorLabel || <ErrorLabel errors={errors} name={name} />}
     </label>
   );
