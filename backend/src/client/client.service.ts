@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../database/prisma.service';
+import { PrismaService } from '../infra/database/prisma.service';
 import { CreateInput } from './client.type';
 
 @Injectable()
 export class ClientService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(private readonly prismaService: PrismaService) { }
 
   async create({ transaction }: CreateInput) {
     const database = transaction || this.prismaService;

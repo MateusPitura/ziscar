@@ -7,11 +7,11 @@ import {
 import { Methods } from '@prisma/client';
 import { Observable, tap } from 'rxjs';
 import { AuthRequest } from 'src/auth/auth.type';
-import { PrismaService } from 'src/database/prisma.service';
+import { PrismaService } from 'src/infra/database/prisma.service';
 
 @Injectable()
 export class AuditInterceptor implements NestInterceptor {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(private readonly prismaService: PrismaService) { }
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
@@ -31,7 +31,7 @@ export class AuditInterceptor implements NestInterceptor {
                 clientId,
               },
             })
-            .then(() => {});
+            .then(() => { });
         }
       }),
     );

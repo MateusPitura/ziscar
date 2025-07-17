@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserService } from './user.service';
-import { PrismaService } from '../database/prisma.service';
+import { PrismaService } from '../infra/database/prisma.service';
 import {
   BadRequestException,
   ConflictException,
@@ -19,7 +19,7 @@ import {
   SEED_ROLE_ADMIN_ID,
   SEED_ROLE_SALES_ID,
 } from '@shared/constants';
-import { PdfService } from 'src/pdf/pdf.service';
+import { PdfService } from 'src/helpers/pdf/pdf.service';
 import { SheetService } from 'src/sheet/sheet.service';
 import { adddressNullableFields } from './user.constant';
 

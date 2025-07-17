@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
-import { DatabaseModule } from '../database/database.module';
-import { EmailModule } from 'src/email/email.module';
+import { DatabaseModule } from '../infra/database/database.module';
+import { EmailModule } from 'src/entities/email/email.module';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { PdfModule } from 'src/pdf/pdf.module';
+import { PdfModule } from 'src/helpers/pdf/pdf.module';
 import { SheetModule } from 'src/sheet/sheet.module';
 import { JWT_EXPIRATION_TIME } from 'src/constants';
 
@@ -30,4 +30,4 @@ import { JWT_EXPIRATION_TIME } from 'src/constants';
   providers: [UserService],
   exports: [UserService],
 })
-export class UserModule {}
+export class UserModule { }

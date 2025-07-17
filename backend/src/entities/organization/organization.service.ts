@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from '../database/prisma.service';
-import { GetCallback } from '../types';
-import { verifyDuplicated } from '../utils/verifyDuplicated';
+import { PrismaService } from '../../infra/database/prisma.service';
+import { GetCallback } from '../../types';
+import { verifyDuplicated } from '../../utils/verifyDuplicated';
 import {
   CreateInput,
   FindOneInput,
@@ -10,7 +10,7 @@ import {
 
 @Injectable()
 export class OrganizationService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(private readonly prismaService: PrismaService) { }
 
   async create({ organizationCreateInDto, transaction }: CreateInput) {
     const database = transaction || this.prismaService;

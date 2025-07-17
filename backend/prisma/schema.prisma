@@ -7,14 +7,248 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Store {
+  id      Int       @id @default(autoincrement())
+  vehicle Vehicle[]
+
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  archivedAt DateTime?
+}
+
+model VehicleCharacteristicValue {
+  id             Int       @id @default(autoincrement())
+  vehicleId      Int
+  vehicle        Vehicle   @relation(fields: [vehicleId], references: [id])
+  characteristic String
+  value          String
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  archivedAt     DateTime?
+}
+
+model VehicleBase {
+  id                  Int             @id @default(autoincrement())
+  vehicleBrandId      Int
+  brand               VehicleBrand    @relation(fields: [vehicleBrandId], references: [id])
+  chassi_number       String
+  model_year          Int
+  year_of_manufacture Int
+  model_name          String
+  category            VehicleCategory
+  vehicle             Vehicle[]
+
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  archivedAt DateTime?
+}
+
+model VehicleBrand {
+  id          Int           @id @default(autoincrement())
+  vehicleBase VehicleBase[]
+  name        String
+
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  archivedAt DateTime?
+}
+
+model Vehicle {
+  id                         Int                          @id @default(autoincrement())
+  vehicleBaseId              Int
+  vehicle_base               VehicleBase                  @relation(fields: [vehicleBaseId], references: [id])
+  storeId                    Int
+  store                      Store                        @relation(fields: [storeId], references: [id])
+  vehicleCharacteristicValue VehicleCharacteristicValue[]
+
+  kilometers      Int
+  announced_price Int
+  minimum_price   Int
+  fuel_type       FuelType
+  color           String
+  plate_number    String
+  comission_value String
+  status          VehicleStatus
+  vehiclePurchase VehiclePurchase[]
+
+  vehicleExpense          VehicleExpense[]
+  vehicleSale             VehicleSale[]
+  paymentMethodReceivable PaymentMethodReceivable[]
+
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  archivedAt DateTime?
+}
+
+model VehiclePurchase {
+  id               Int            @id @default(autoincrement())
+  vehicleId        Int
+  vehicle          Vehicle        @relation(fields: [vehicleId], references: [id])
+  userId           Int
+  user             User           @relation(fields: [userId], references: [id])
+  accountPayableId Int
+  accountPayable   AccountPayable @relation(fields: [accountPayableId], references: [id])
+  date             DateTime
+
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  archivedAt DateTime?
+}
+
+model VehicleExpense {
+  id               Int             @id @default(autoincrement())
+  vehicleId        Int
+  vehicle          Vehicle         @relation(fields: [vehicleId], references: [id])
+  userId           Int
+  user             User            @relation(fields: [userId], references: [id])
+  accountPayableId Int
+  accountPayable   AccountPayable  @relation(fields: [accountPayableId], references: [id])
+  observations     String
+  category         ExpenseCategory
+
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  archivedAt DateTime?
+}
+
+model VehicleSale {
+  id                  Int               @id @default(autoincrement())
+  vehicleId           Int
+  vehicle             Vehicle           @relation(fields: [vehicleId], references: [id])
+  userId              Int
+  user                User              @relation(fields: [userId], references: [id])
+  customer            Customer          @relation(fields: [customerId], references: [id])
+  customerId          Int
+  accountReceivable   AccountReceivable @relation(fields: [accountReceivableId], references: [id])
+  accountReceivableId Int
+  accountPayable      AccountPayable    @relation(fields: [accountPayableId], references: [id])
+  accountPayableId    Int
+  date                DateTime
+
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  archivedAt DateTime?
+}
+
+model AccountPayable {
+  id                        Int                         @id @default(autoincrement())
+  description               String
+  vehiclePurchase           VehiclePurchase[]
+  vehicleExpense            VehicleExpense[]
+  vehicleSale               VehicleSale[]
+  accountPayableInstallment AccountPayableInstallment[]
+
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  archivedAt DateTime?
+}
+
+model AccountPayableInstallment {
+  id Int @id @default(autoincrement())
+
+  accountPayable                    AccountPayable         @relation(fields: [accountPayableId], references: [id])
+  accountPayableId                  Int
+  installmentSequence               Int
+  dueDate                           DateTime
+  value                             Int
+  status                            InstallmentStatus
+  isRefund                          Boolean?
+  refundAccountPayableInstallmentId Int
+  isUpfront                         Boolean?
+  paymentMethodPayable              PaymentMethodPayable[]
+
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  archivedAt DateTime?
+}
+
+model PaymentMethodReceivable {
+  id                             Int                          @id @default(autoincrement())
+  accountReceivableInstallment   AccountReceivableInstallment @relation(fields: [accountReceivableInstallmentId], references: [id])
+  accountReceivableInstallmentId Int
+  user                           User                         @relation(fields: [userId], references: [id])
+  userId                         Int
+  vehicle                        Vehicle                      @relation(fields: [vehicleId], references: [id])
+  vehicleId                      Int
+  // type
+  value                          Int
+  paymentDate                    DateTime
+
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  archivedAt DateTime?
+}
+
+model PaymentMethodPayable {
+  id                          Int                           @id @default(autoincrement())
+  accountPayableInstallment   AccountPayableInstallment     @relation(fields: [accountPayableInstallmentId], references: [id])
+  accountPayableInstallmentId Int
+  user                        User                          @relation(fields: [userId], references: [id])
+  userId                      Int
+  type                        PaymentMethodReceivableStatus
+  value                       Int
+  paymentDate                 DateTime
+
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  archivedAt DateTime?
+}
+
+model Customer {
+  id          Int           @id @default(autoincrement())
+  address     Address       @relation(fields: [addressId], references: [id])
+  addressId   Int
+  fullName    String
+  phone       String
+  email       String
+  cpf         String
+  vehicleSale VehicleSale[]
+
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  archivedAt DateTime?
+}
+
+model AccountReceivable {
+  id          Int           @id @default(autoincrement())
+  description String
+  vehicleSale VehicleSale[]
+
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  archivedAt DateTime?
+}
+
+model City {
+  id      Int            @id @default(autoincrement())
+  zipCode String
+  name    String
+  state   BrazilianState
+
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  archivedAt DateTime?
+}
+
+model AccountReceivableInstallment {
+  id                      Int                       @id @default(autoincrement())
+  paymentMethodReceivable PaymentMethodReceivable[]
+
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  archivedAt DateTime?
+}
+
 model Client {
   id           Int            @id @default(autoincrement())
-  createAt     DateTime       @default(now())
-  updateAt     DateTime       @updatedAt
   isActive     Boolean        @default(true)
   organization Organization[]
   user         User[]
   audit        Audit[]
+
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  archivedAt DateTime?
 }
 
 model Address {
@@ -28,6 +262,7 @@ model Address {
   complement   String?        @db.VarChar(128)
   organization Organization[]
   user         User[]
+  Customer     Customer[]
 }
 
 model Organization {
@@ -44,25 +279,30 @@ model Organization {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  createAt  DateTime  @default(now())
-  updateAt  DateTime  @updatedAt
-  isActive  Boolean   @default(true)
-  fullName  String    @db.VarChar(128)
-  email     String    @unique @db.VarChar(128)
-  password  String    @db.VarChar(128)
-  cpf       String?   @unique @db.VarChar(11)
-  birthDate DateTime? @db.Date
-  code      String?   @db.VarChar(128)
-  cellPhone String?   @db.VarChar(11)
-  jit       String?
-  addressId Int?      @unique
-  address   Address?  @relation(fields: [addressId], references: [id], onDelete: SetNull)
-  clientId  Int
-  client    Client    @relation(fields: [clientId], references: [id], onDelete: Cascade)
-  roleId    Int
-  role      Role      @relation(fields: [roleId], references: [id])
-  audit     Audit[]
+  id                      Int                       @id @default(autoincrement())
+  createAt                DateTime                  @default(now())
+  updateAt                DateTime                  @updatedAt
+  isActive                Boolean                   @default(true)
+  fullName                String                    @db.VarChar(128)
+  email                   String                    @unique @db.VarChar(128)
+  password                String                    @db.VarChar(128)
+  cpf                     String?                   @unique @db.VarChar(11)
+  birthDate               DateTime?                 @db.Date
+  code                    String?                   @db.VarChar(128)
+  cellPhone               String?                   @db.VarChar(11)
+  jit                     String?
+  addressId               Int?                      @unique
+  address                 Address?                  @relation(fields: [addressId], references: [id], onDelete: SetNull)
+  clientId                Int
+  client                  Client                    @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  roleId                  Int
+  role                    Role                      @relation(fields: [roleId], references: [id])
+  audit                   Audit[]
+  VehiclePurchase         VehiclePurchase[]
+  VehicleExpense          VehicleExpense[]
+  VehicleSale             VehicleSale[]
+  PaymentMethodReceivable PaymentMethodReceivable[]
+  PaymentMethodPayable    PaymentMethodPayable[]
 }
 
 enum Roles {
@@ -87,6 +327,89 @@ enum Actions {
   READ
   UPDATE
   DELETE
+}
+
+enum VehicleCategory {
+  CAR
+  MOTORCYCLE
+  TRUCK
+  VAN
+  BUS
+}
+
+enum FuelType {
+  GASOLINE
+  ETHANOL
+  FLEX
+  ELETRIC
+  GNV
+  HYBRID
+}
+
+enum VehicleStatus {
+  PURCHASED
+  IN_STOCK
+  MAINTENANCE
+  SOLD
+  DELIVERED
+}
+
+enum ExpenseCategory {
+  IPVA
+  MAINTENANCE
+  FUEL
+  FINE
+  LICENSING
+  INSURANCE
+  AGENCY_FEES
+  LOGISTICS
+  OTHER
+}
+
+enum InstallmentStatus {
+  PAID
+  PENDING
+}
+
+enum PaymentMethodReceivableStatus {
+  TRANSFER
+  PIX
+  BANK_SLIP
+  CREDIT_CARD
+  DEBIT_CARD
+  TED
+  DOC
+  CASH
+}
+
+enum BrazilianState {
+  AC
+  AL
+  AP
+  AM
+  BA
+  CE
+  DF
+  ES
+  GO
+  MA
+  MT
+  MS
+  MG
+  PA
+  PB
+  PR
+  PE
+  PI
+  RJ
+  RN
+  RS
+  RO
+  RR
+  SC
+  SP
+  SE
+  TO
 }
 
 model Permission {

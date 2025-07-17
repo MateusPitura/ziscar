@@ -3,7 +3,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { PrismaService } from '../database/prisma.service';
+import { PrismaService } from '../infra/database/prisma.service';
 import { EncryptPasswordInput, GetCallback } from '../types';
 import { encryptPassword, removeTimeFromDate } from './user.utils';
 import {
@@ -28,7 +28,7 @@ import {
   UpdateInput,
   VerifyDuplicatedInput,
 } from './user.type';
-import { PdfService } from 'src/pdf/pdf.service';
+import { PdfService } from 'src/helpers/pdf/pdf.service';
 import { SheetService } from 'src/sheet/sheet.service';
 import handlePermissions from 'src/utils/handlePermissions';
 
@@ -40,7 +40,7 @@ export class UserService {
     private readonly jwtService: JwtService,
     private readonly pdfService: PdfService,
     private readonly sheetService: SheetService,
-  ) {}
+  ) { }
 
   async create({ userCreateInDto, transaction }: CreateInput) {
     const database = transaction || this.prismaService;

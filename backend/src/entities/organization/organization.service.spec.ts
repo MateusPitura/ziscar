@@ -1,12 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { OrganizationService } from './organization.service';
-import { PrismaService } from '../database/prisma.service';
+import { PrismaService } from '../../infra/database/prisma.service';
 import {
   POPULATE_CLIENT_PRIMARY_ID,
   POPULATE_CLIENT_SECONDARY_ID,
   POPULATE_ORGANIZATION_DEFAULT,
   POPULATE_ORGANIZATION_INACTIVE,
-} from '../constants';
+} from '../../constants';
 import { ConflictException, NotFoundException } from '@nestjs/common';
 
 describe('OrganizationService', () => {

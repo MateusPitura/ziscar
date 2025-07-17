@@ -12,10 +12,10 @@ import {
 } from './auth.type';
 import { compare } from 'bcrypt';
 import { ClientService } from '../client/client.service';
-import { OrganizationService } from '../organization/organization.service';
+import { OrganizationService } from '../entities/organization/organization.service';
 import { UserService } from '../user/user.service';
-import { EmailService } from '../email/email.service';
-import { PrismaService } from '../database/prisma.service';
+import { EmailService } from '../entities/email/email.service';
+import { PrismaService } from '../infra/database/prisma.service';
 import { SEED_ROLE_ADMIN_ID, JWT_COOKIE_NAME } from '@shared/constants';
 import { FRONTEND_URL } from 'src/constants';
 import { randomUUID } from 'crypto';
@@ -33,7 +33,7 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly emailService: EmailService,
     private readonly prismaService: PrismaService,
-  ) {}
+  ) { }
 
   async signIn({ authSignInInDto, res }: SiginInInput) {
     const user = await this.userService.findOne({

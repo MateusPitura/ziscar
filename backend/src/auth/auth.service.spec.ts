@@ -1,11 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from './auth.service';
 import { JwtService } from '@nestjs/jwt';
-import { EmailService } from '../email/email.service';
+import { EmailService } from '../entities/email/email.service';
 import { ClientService } from '../client/client.service';
-import { OrganizationService } from '../organization/organization.service';
+import { OrganizationService } from '../entities/organization/organization.service';
 import { UserService } from '../user/user.service';
-import { PrismaService } from '../database/prisma.service';
+import { PrismaService } from '../infra/database/prisma.service';
 import {
   FRONTEND_URL,
   POPULATE_CLIENT_PRIMARY_ID,
@@ -20,7 +20,7 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { PdfService } from 'src/pdf/pdf.service';
+import { PdfService } from 'src/helpers/pdf/pdf.service';
 import { SheetService } from 'src/sheet/sheet.service';
 
 describe('AuthService', () => {
