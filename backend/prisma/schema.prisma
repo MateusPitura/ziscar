@@ -305,10 +305,11 @@ model User {
   PaymentMethodPayable    PaymentMethodPayable[]
 }
 
-enum Roles {
-  ADMIN
-  FINANCE
-  SALES
+model Permission {
+  id       Int       @id @default(autoincrement())
+  resource Resources
+  action   Actions
+  roles    Role[]
 }
 
 model Role {
@@ -316,6 +317,24 @@ model Role {
   name        Roles        @unique
   user        User[]
   permissions Permission[]
+}
+
+model Audit {
+  id        Int      @id @default(autoincrement())
+  createAt  DateTime @default(now())
+  method    Methods
+  ipAddress String?  @db.VarChar(128)
+  url       String   @db.VarChar(128)
+  userId    Int?
+  user      User?    @relation(fields: [userId], references: [id])
+  clientId  Int?
+  client    Client?  @relation(fields: [clientId], references: [id])
+}
+
+enum Roles {
+  ADMIN
+  FINANCE
+  SALES
 }
 
 enum Resources {
@@ -420,28 +439,9 @@ enum BrazilianState {
   TO
 }
 
-model Permission {
-  id       Int       @id @default(autoincrement())
-  resource Resources
-  action   Actions
-  roles    Role[]
-}
-
 enum Methods {
   CREATE
   POST
   PATCH
   DELETE
-}
-
-model Audit {
-  id        Int      @id @default(autoincrement())
-  createAt  DateTime @default(now())
-  method    Methods
-  ipAddress String?  @db.VarChar(128)
-  url       String   @db.VarChar(128)
-  userId    Int?
-  user      User?    @relation(fields: [userId], references: [id])
-  clientId  Int?
-  client    Client?  @relation(fields: [clientId], references: [id])
 }
