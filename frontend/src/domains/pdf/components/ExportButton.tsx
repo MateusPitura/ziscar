@@ -5,22 +5,23 @@ import { pdf } from "@react-pdf/renderer";
 import { ITEMS_PER_PAGE } from "@shared/constants";
 import { Resource } from "@shared/types";
 import { QueryKey, useIsFetching, useQueryClient } from "@tanstack/react-query";
-import { cloneElement, type ReactElement } from "react";
+import { type ReactElement } from "react";
+import Report from "./Report";
 
 interface ExportButtonProperties<T> {
-  document: ReactElement;
   fileName: string;
   resource: Resource;
   queryKey: QueryKey;
   queryFn: (filter?: string) => Promise<PageablePayload<T>>;
+  formatColumns: Partial<Record<keyof T, string>>;
 }
 
 export default function ExportButton<T>({
-  document: customDocument,
   fileName,
   resource,
   queryKey,
   queryFn: customQueryFn,
+  formatColumns
 }: ExportButtonProperties<T>): ReactElement {
   const queryClient = useQueryClient();
   const { showErrorSnackbar, showSuccessSnackbar } = useSnackbar();
@@ -31,7 +32,7 @@ export default function ExportButton<T>({
 
     const cachedData = queryClient.getQueryData<PageablePayload<T>>(queryKey);
 
-    if (!cachedData || !cachedData.total) throw new Error();
+    if (!cachedData) throw new Error();
 
     const totalPages = Math.ceil(cachedData?.total / ITEMS_PER_PAGE);
 
@@ -72,11 +73,7 @@ export default function ExportButton<T>({
         try {
           const itemsFlat = await fetchAll();
 
-          const documentEnhanced = cloneElement(customDocument, {
-            data: itemsFlat,
-          });
-
-          const blob = await pdf(documentEnhanced).toBlob();
+          const blob = await pdf(<Report data={itemsFlat} formatColumns={formatColumns}/>).toBlob();
 
           const url = URL.createObjectURL(blob);
           const link = document.createElement("a");

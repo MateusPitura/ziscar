@@ -14,7 +14,6 @@ import DisableUserModal from "./DisableUserModal";
 import useDialog from "@/domains/global/hooks/useDialog";
 import { PageablePayload } from "@/domains/global/types";
 import ExportButton from "@/domains/pdf/components/ExportButton";
-import Report from "@/domains/pdf/components/Report";
 
 export default function UsersTable(): ReactNode {
   const [disableUserInfo, setDisableUserInfo] = useState<DisableUser>({
@@ -42,7 +41,9 @@ export default function UsersTable(): ReactNode {
     return "";
   }, [usersFilter]);
 
-  async function getUsersInfo(filter?: string): Promise<PageablePayload<FetchUser>> {
+  async function getUsersInfo(
+    filter?: string
+  ): Promise<PageablePayload<FetchUser>> {
     return await safeFetch(`${BACKEND_URL}/user?${filter}`, {
       resource: "USERS",
       action: "READ",
@@ -60,11 +61,17 @@ export default function UsersTable(): ReactNode {
       <DisableUserModal {...disableUserInfo} {...dialog} />
       <div className="flex gap-4 justify-end">
         <ExportButton
-          document={<Report />}
           fileName="usuarios"
           resource="USERS"
-          queryKey={['users', filterFormatted]}
+          queryKey={["users", filterFormatted]}
           queryFn={getUsersInfo}
+          formatColumns={{
+            id: "ID",
+            fullName: "Nome",
+            email: "Email",
+            cellPhone: "Celular",
+            isActive: "Status",
+          }}
         />
         <Table.Filter form={<UsersFilterForm />} />
       </div>

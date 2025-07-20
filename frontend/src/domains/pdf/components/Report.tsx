@@ -94,13 +94,12 @@ const styles = StyleSheet.create({
   },
 });
 
-interface ReportProperties<T = Record<string, unknown>> {
-  data?: T[];
+interface ReportProperties<T> {
+  data: T[];
+  formatColumns: Record<string, string | undefined>;
 }
 
-function Report<T extends Record<string, unknown>>({
-  data,
-}: ReportProperties<T>): ReactElement {
+function Report<T>({ data, formatColumns }: ReportProperties<T>): ReactElement {
   if (!data || data.length === 0) {
     return (
       <Document>
@@ -119,7 +118,7 @@ function Report<T extends Record<string, unknown>>({
     );
   }
 
-  const keys = Object.keys(data[0])
+  const keys = Object.keys(data[0] || {}).filter((key) => formatColumns[key]);
   const columnWidth = `${100 / keys.length}%`;
 
   const formatValue = (value: unknown): string => {
@@ -127,13 +126,6 @@ function Report<T extends Record<string, unknown>>({
     if (typeof value === "boolean") return value ? "Sim" : "Não";
     if (typeof value === "object") return JSON.stringify(value);
     return String(value);
-  };
-
-  const formatKey = (key: string): string => { // 🌠 vai precisar de uma prop para isso
-    return key
-      .replace(/([A-Z])/g, " $1")
-      .replace(/^./, (str) => str.toUpperCase())
-      .trim();
   };
 
   return (
@@ -155,18 +147,20 @@ function Report<T extends Record<string, unknown>>({
                 key={key}
                 style={[styles.tableColHeader, { width: columnWidth }]}
               >
-                <Text style={styles.tableCellHeader}>{formatKey(key)}</Text>
+                <Text style={styles.tableCellHeader}>
+                  {formatColumns[key]}
+                </Text>
               </View>
             ))}
           </View>
 
           {data.map((item, index) => (
-            <View 
+            <View
               style={[
-                styles.tableRow, 
-                ...(index % 2 === 1 ? [styles.tableRowAlternate] : [])
-              ]} 
-              key={`row-${index}`} 
+                styles.tableRow,
+                ...(index % 2 === 1 ? [styles.tableRowAlternate] : []),
+              ]}
+              key={`row-${index}`}
               wrap={false}
             >
               {keys.map((key) => (
@@ -175,7 +169,7 @@ function Report<T extends Record<string, unknown>>({
                   style={[styles.tableCol, { width: columnWidth }]}
                 >
                   <Text style={styles.tableCell}>
-                    {formatValue(item[key])}
+                    {formatValue((item as Record<string, unknown>)[key])}
                   </Text>
                 </View>
               ))}
