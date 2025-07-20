@@ -63,6 +63,8 @@ export default function UsersTable(): ReactNode {
           document={<Report />}
           fileName="usuarios"
           resource="USERS"
+          queryKey={['users', filterFormatted]}
+          queryFn={getUsersInfo}
         />
         <Table.Filter form={<UsersFilterForm />} />
       </div>
