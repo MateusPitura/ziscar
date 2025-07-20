@@ -2,7 +2,7 @@ import Table from "@/design-system/Table";
 import { useMemo, useState, type ReactNode } from "react";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import { BACKEND_URL } from "@/domains/global/constants";
-import { User } from "@/domains/global/types/model";
+import { FetchUser } from "@/domains/global/types/model";
 import { useQuery } from "@tanstack/react-query";
 import selectUsersInfo from "../utils/selectUsersInfo";
 import UsersFilterForm from "../forms/UsersFilterForm";
@@ -42,7 +42,7 @@ export default function UsersTable(): ReactNode {
     return "";
   }, [usersFilter]);
 
-  async function getUsersInfo(filter?: string): Promise<PageablePayload<User>> {
+  async function getUsersInfo(filter?: string): Promise<PageablePayload<FetchUser>> {
     return await safeFetch(`${BACKEND_URL}/user?${filter}`, {
       resource: "USERS",
       action: "READ",

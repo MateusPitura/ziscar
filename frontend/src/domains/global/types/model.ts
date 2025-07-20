@@ -23,3 +23,5 @@ export interface User {
   roleId?: string;
   permissions: Record<Resource, Record<Action, boolean>>;
 }
+
+export type FetchUser = Pick<User, "id" | "fullName" | "email" | "cellPhone" | "isActive" | 'roleId'>;
