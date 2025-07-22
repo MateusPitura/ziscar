@@ -292,6 +292,7 @@ model User {
   role         Role       @relation(fields: [roleId], references: [id])
   addressId    Int?
   address      Address?   @relation(fields: [addressId], references: [id])
+  jit          String?
 
   vehiclePurchases        VehiclePurchase[]
   vehicleExpenses         VehicleExpense[]
