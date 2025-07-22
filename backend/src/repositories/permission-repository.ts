@@ -1,4 +1,5 @@
 import { Permission } from "@prisma/client";
+import { CreateInput, UpdateInput } from "src/types";
 
 export interface CreatePermission { }
 
@@ -6,8 +7,8 @@ export interface UpdatePermission { }
 
 
 export abstract class PermissionRepository {
-    abstract create(data: CreatePermission): Promise<Permission>;
+    abstract create(data: CreateInput<Permission>): Promise<Permission>;
     abstract findById(id: string): Promise<Permission | null>;
-    abstract update(id: string, data: UpdatePermission): Promise<void>;
+    abstract update(id: string, data: UpdateInput<Permission>): Promise<void>;
     abstract delete(id: string): Promise<void>
 }
