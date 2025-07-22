@@ -1,13 +1,8 @@
 import { City } from "@prisma/client";
-
-export interface CreateCity { }
-
-export interface UpdateCity { }
-
-
+import { CreateInput, UpdateInput } from "src/types";
 export abstract class CityRepository {
-    abstract create(data: CreateCity): Promise<City>;
-    abstract findById(id: string): Promise<City | null>;
-    abstract update(id: string, data: UpdateCity): Promise<void>;
-    abstract delete(id: string): Promise<void>
+    abstract create(data: CreateInput<City>): Promise<City>;
+    abstract findById(ibgeCode: string): Promise<City | null>;
+    abstract update(ibgeCode: string, data: UpdateInput<City>): Promise<void>;
+    abstract delete(ibgeCode: string): Promise<void>
 }
