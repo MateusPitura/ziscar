@@ -1,4 +1,4 @@
-import { PrismaClient, Roles } from '@prisma/client';
+import { PrismaClient, RoleType, Resources, Actions } from '@prisma/client';
 import {
   SEED_ROLE_ADMIN_ID,
   SEED_ROLE_SALES_ID,
@@ -8,7 +8,7 @@ const prisma = new PrismaClient();
 
 function safeUpsertRole(
   id: number,
-  name: Roles,
+  name: RoleType,
   permissions: { id: number }[],
 ) {
   return {
@@ -34,168 +34,168 @@ async function seed() {
     data: [
       {
         id: 1,
-        resource: 'USERS',
-        action: 'CREATE',
+        resource: Resources.USERS,
+        action: Actions.CREATE,
       },
       {
         id: 2,
-        resource: 'USERS',
-        action: 'READ',
+        resource: Resources.USERS,
+        action: Actions.READ,
       },
       {
         id: 3,
-        resource: 'USERS',
-        action: 'UPDATE',
+        resource: Resources.USERS,
+        action: Actions.UPDATE,
       },
       {
         id: 4,
-        resource: 'USERS',
-        action: 'DELETE',
+        resource: Resources.USERS,
+        action: Actions.DELETE,
       },
       {
         id: 5,
-        resource: 'VEHICLES',
-        action: 'CREATE',
+        resource: Resources.VEHICLES,
+        action: Actions.CREATE,
       },
       {
         id: 6,
-        resource: 'VEHICLES',
-        action: 'READ',
+        resource: Resources.VEHICLES,
+        action: Actions.READ,
       },
       {
         id: 7,
-        resource: 'VEHICLES',
-        action: 'UPDATE',
+        resource: Resources.VEHICLES,
+        action: Actions.UPDATE,
       },
       {
         id: 8,
-        resource: 'VEHICLES',
-        action: 'DELETE',
+        resource: Resources.VEHICLES,
+        action: Actions.DELETE,
       },
       {
         id: 9,
-        resource: 'STORES',
-        action: 'CREATE',
+        resource: Resources.STORES,
+        action: Actions.CREATE,
       },
       {
         id: 10,
-        resource: 'STORES',
-        action: 'READ',
+        resource: Resources.STORES,
+        action: Actions.READ,
       },
       {
         id: 11,
-        resource: 'STORES',
-        action: 'UPDATE',
+        resource: Resources.STORES,
+        action: Actions.UPDATE,
       },
       {
         id: 12,
-        resource: 'STORES',
-        action: 'DELETE',
+        resource: Resources.STORES,
+        action: Actions.DELETE,
       },
       {
         id: 13,
-        resource: 'VEHICLE_PURCHASE',
-        action: 'READ',
+        resource: Resources.VEHICLE_PURCHASE,
+        action: Actions.READ,
       },
       {
         id: 14,
-        resource: 'VEHICLE_PURCHASE',
-        action: 'UPDATE',
+        resource: Resources.VEHICLE_PURCHASE,
+        action: Actions.UPDATE,
       },
       {
         id: 15,
-        resource: 'VEHICLE_SALE',
-        action: 'READ',
+        resource: Resources.VEHICLE_SALE,
+        action: Actions.READ,
       },
       {
         id: 16,
-        resource: 'VEHICLE_SALE',
-        action: 'UPDATE',
+        resource: Resources.VEHICLE_SALE,
+        action: Actions.UPDATE,
       },
       {
         id: 17,
-        resource: 'VEHICLE_SALE',
-        action: 'CREATE',
+        resource: Resources.VEHICLE_SALE,
+        action: Actions.CREATE,
       },
       {
         id: 18,
-        resource: 'VEHICLE_EXPENSE',
-        action: 'CREATE',
+        resource: Resources.VEHICLE_EXPENSE,
+        action: Actions.CREATE,
       },
       {
         id: 19,
-        resource: 'VEHICLE_EXPENSE',
-        action: 'READ',
+        resource: Resources.VEHICLE_EXPENSE,
+        action: Actions.READ,
       },
       {
         id: 20,
-        resource: 'VEHICLE_EXPENSE',
-        action: 'UPDATE',
+        resource: Resources.VEHICLE_EXPENSE,
+        action: Actions.UPDATE,
       },
       {
         id: 21,
-        resource: 'VEHICLE_EXPENSE',
-        action: 'DELETE',
+        resource: Resources.VEHICLE_EXPENSE,
+        action: Actions.DELETE,
       },
       {
         id: 22,
-        resource: 'ACCOUNTS_PAYABLE',
-        action: 'CREATE',
+        resource: Resources.ACCOUNTS_PAYABLE,
+        action: Actions.CREATE,
       },
       {
         id: 23,
-        resource: 'ACCOUNTS_PAYABLE',
-        action: 'READ',
+        resource: Resources.ACCOUNTS_PAYABLE,
+        action: Actions.READ,
       },
       {
         id: 24,
-        resource: 'ACCOUNTS_PAYABLE',
-        action: 'UPDATE',
+        resource: Resources.ACCOUNTS_PAYABLE,
+        action: Actions.UPDATE,
       },
       {
         id: 25,
-        resource: 'ACCOUNTS_PAYABLE',
-        action: 'DELETE',
+        resource: Resources.ACCOUNTS_PAYABLE,
+        action: Actions.DELETE,
       },
       {
         id: 26,
-        resource: 'ACCOUNTS_RECEIVABLE',
-        action: 'CREATE',
+        resource: Resources.ACCOUNTS_RECEIVABLE,
+        action: Actions.CREATE,
       },
       {
         id: 27,
-        resource: 'ACCOUNTS_RECEIVABLE',
-        action: 'READ',
+        resource: Resources.ACCOUNTS_RECEIVABLE,
+        action: Actions.READ,
       },
       {
         id: 28,
-        resource: 'ACCOUNTS_RECEIVABLE',
-        action: 'UPDATE',
+        resource: Resources.ACCOUNTS_RECEIVABLE,
+        action: Actions.UPDATE,
       },
       {
         id: 29,
-        resource: 'ACCOUNTS_RECEIVABLE',
-        action: 'DELETE',
+        resource: Resources.ACCOUNTS_RECEIVABLE,
+        action: Actions.DELETE,
       },
       {
         id: 30,
-        resource: 'CUSTOMERS',
-        action: 'CREATE',
+        resource: Resources.CUSTOMERS,
+        action: Actions.CREATE,
       },
       {
         id: 31,
-        resource: 'CUSTOMERS',
-        action: 'READ',
+        resource: Resources.CUSTOMERS,
+        action: Actions.READ,
       },
       {
         id: 32,
-        resource: 'CUSTOMERS',
-        action: 'UPDATE',
+        resource: Resources.CUSTOMERS,
+        action: Actions.UPDATE,
       },
       {
         id: 33,
-        resource: 'CUSTOMERS',
-        action: 'DELETE',
+        resource: Resources.CUSTOMERS,
+        action: Actions.DELETE,
       },
     ],
     skipDuplicates: true,
@@ -203,7 +203,7 @@ async function seed() {
 
   await Promise.all([
     prisma.role.upsert(
-      safeUpsertRole(SEED_ROLE_ADMIN_ID, 'ADMIN', [
+      safeUpsertRole(SEED_ROLE_ADMIN_ID, RoleType.ADMIN, [
         { id: 1 },
         { id: 2 },
         { id: 3 },
@@ -240,7 +240,7 @@ async function seed() {
       ]),
     ),
     prisma.role.upsert(
-      safeUpsertRole(SEED_ROLE_SALES_ID, 'SALES', [
+      safeUpsertRole(SEED_ROLE_SALES_ID, RoleType.SELLER, [
         { id: 6 },
         { id: 15 },
         { id: 16 },
