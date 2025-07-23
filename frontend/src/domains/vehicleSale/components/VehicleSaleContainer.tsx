@@ -7,22 +7,22 @@ import { useNavigate } from "react-router-dom";
 import VehicleSaleTabs from "./VehicleSaleTabs";
 import Form from "@/design-system/Form";
 import { SchemaVehicleSaleForm } from "../schemas";
-
+import { VehicleSaleFormInputs } from "../types";
 
 export default function VehicleSaleContainer(): ReactElement {
   const navigate = useNavigate();
 
   return (
     <div className="flex flex-col gap-4 w-full">
-      <Form
+      <Form<VehicleSaleFormInputs>
         onSubmit={(data) => {
           console.log("🌠 data: ", data);
         }}
         className="flex-1 flex flex-col gap-4"
         schema={SchemaVehicleSaleForm}
         defaultValues={{
-          client: { fullName: "", cpf: "" },
-          vehicle: { model: "", price: 0 },
+          customer: { id: "", fullName: "", email: "" },
+          vehicle: { model: "Ford", price: 10 },
           payment: { isUpfront: true, installments: 1 },
         }}
       >

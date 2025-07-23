@@ -92,7 +92,7 @@ export default function UsersTable(): ReactNode {
         >
           {usersInfo?.data.map((user) => (
             <Table.Row key={user.id}>
-              <Table.Cell label={user.id} />
+              <Table.Cell label={String(user.id)} />
               <Table.Cell label={user.fullName} />
               <Table.Cell label={user.email} />
               <Table.Cell label={user.cellPhone} />
@@ -100,7 +100,7 @@ export default function UsersTable(): ReactNode {
               <Table.Action>
                 <UsersTableActions
                   isActive={user.isActive}
-                  userId={user.id}
+                  userId={String(user.id)}
                   fullName={user.fullName}
                   handleDisableUserInfo={handleDisableUserInfo}
                 />

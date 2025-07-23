@@ -6,6 +6,7 @@ import Section from "@/domains/global/components/Section";
 import CustomerForm from "../forms/CustomerForm";
 import VehicleForm from "../forms/VehicleForm";
 import PaymentForm from "../forms/PaymentForm";
+import CustomerSearchForm from "../forms/CustomerSearchForm";
 
 type VehicleSaleTabs = "CLIENT" | "VEHICLE" | "PAYMENT";
 
@@ -20,7 +21,7 @@ export default function VehicleSaleTabs(): ReactElement {
           isActive={activeTab === "CLIENT"}
           title="Cliente"
           onClick={() => setActiveTab("CLIENT")}
-          hasError={!!errors?.client}
+          hasError={!!errors?.customer}
         />
         <Tabs.Tab
           isActive={activeTab === "VEHICLE"}
@@ -38,9 +39,18 @@ export default function VehicleSaleTabs(): ReactElement {
       <Tabs.Body>
         <Tabs.Section isActive={activeTab === "CLIENT"}>
           <Section>
-            <Section.Body>
-              <CustomerForm />
-            </Section.Body>
+            <Section.Group>
+              <Section.Header title="Busque pelo cliente" />
+              <Section.Body>
+                <CustomerSearchForm/>
+              </Section.Body>
+            </Section.Group>
+            <Section.Group>
+              <Section.Header title="Dados do cliente" />
+              <Section.Body>
+                <CustomerForm />
+              </Section.Body>
+            </Section.Group>
           </Section>
         </Tabs.Section>
         <Tabs.Section isActive={activeTab === "VEHICLE"}>

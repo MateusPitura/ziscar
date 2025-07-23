@@ -8,6 +8,8 @@ export interface Pageable {
   page: number;
 }
 
+export type UnwrapArray<T> = T extends (infer U)[] ? U : T;
+
 export interface DialogProps {
   isOpen: boolean;
   openDialog: () => void;
@@ -18,10 +20,14 @@ export interface DialogProps {
 
 export type Mask = "cellphone" | "cpf" | "cep" | "cnpj";
 
-export type QueryKeys = [
-  "cepApi" | "ibgeApi" | "user" | "users" | "profile" | "permissions",
-  ...ReadonlyArray<unknown>
-];
+export type QueryKeys =
+  | "cepApi"
+  | "ibgeApi"
+  | "user"
+  | "users"
+  | "profile"
+  | "permissions"
+  | "usersSearch";
 
 export interface UsersFilter extends UsersFilterFormInputs, Pageable {}
 
