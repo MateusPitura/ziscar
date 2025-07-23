@@ -70,7 +70,7 @@ export default function UsersTable(): ReactNode {
             fullName: "Nome",
             email: "Email",
             cellPhone: "Celular",
-            isActive: "Status",
+            isActive: "Ativo",
           }}
         />
         <Table.Filter form={<UsersFilterForm />} />

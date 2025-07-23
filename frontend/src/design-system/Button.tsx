@@ -149,6 +149,7 @@ const ButtonVariant = forwardRef(
           <BaseButton
             className={classNames("text-slate-800", className, {
               "!text-neutral-300": state === "disabled" || state === "loading",
+              "!text-red-500": color === "red",
             })}
             state={state}
             ref={ref}

@@ -14,8 +14,7 @@ import PageFooter from "../components/PageFooter";
 import Button from "@/design-system/Button";
 import useDialog from "../hooks/useDialog";
 import RequestChangePasswordModal from "@/domains/profile/components/RequestChangePasswordModal";
-
-const PREVIOUS_PAGE = -1;
+import { PREVIOUS_PAGE } from "../constants";
 
 interface UserFormProperties {
   defaultValues: Partial<UserFormInputs>;
