@@ -63,7 +63,7 @@ CREATE TABLE "VehicleCharacteristicValue" (
 -- CreateTable
 CREATE TABLE "VehicleBase" (
     "id" SERIAL NOT NULL,
-    "chassiNumber" VARCHAR(17),
+    "chassiNumber" VARCHAR(17) NOT NULL,
     "modelYear" INTEGER,
     "yearOfManufacture" INTEGER,
     "modelName" VARCHAR(127),
@@ -293,11 +293,12 @@ CREATE TABLE "User" (
     "fullName" VARCHAR(127) NOT NULL,
     "phone" VARCHAR(11),
     "email" VARCHAR(127),
-    "password" VARCHAR(127) NOT NULL,
+    "password" VARCHAR(256) NOT NULL,
     "cpf" VARCHAR(11),
     "enterpriseId" INTEGER NOT NULL,
     "roleId" INTEGER NOT NULL,
     "addressId" INTEGER,
+    "jit" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "archivedAt" TIMESTAMP(3),
