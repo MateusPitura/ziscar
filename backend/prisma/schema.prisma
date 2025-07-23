@@ -284,7 +284,7 @@ model User {
   fullName     String     @db.VarChar(127)
   phone        String?    @db.VarChar(11)
   email        String?    @unique @db.VarChar(127)
-  password     String     @db.VarChar(127)
+  password     String     @db.VarChar(256)
   cpf          String?    @unique @db.VarChar(11)
   enterpriseId Int
   enterprise   Enterprise @relation(fields: [enterpriseId], references: [id])

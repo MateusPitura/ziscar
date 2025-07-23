@@ -293,7 +293,7 @@ CREATE TABLE "User" (
     "fullName" VARCHAR(127) NOT NULL,
     "phone" VARCHAR(11),
     "email" VARCHAR(127),
-    "password" VARCHAR(127) NOT NULL,
+    "password" VARCHAR(256) NOT NULL,
     "cpf" VARCHAR(11),
     "enterpriseId" INTEGER NOT NULL,
     "roleId" INTEGER NOT NULL,
