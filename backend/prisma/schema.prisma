@@ -310,11 +310,13 @@ model Permission {
   resource        Resources
   action          Actions
   rolePermissions RolePermission[]
+
+  @@unique([resource, action])
 }
 
 model Role {
   id              Int               @id @default(autoincrement())
-  name            RoleType
+  name            RoleType          @unique
   users           User[]
   rolePermissions RolePermission[]
 }
