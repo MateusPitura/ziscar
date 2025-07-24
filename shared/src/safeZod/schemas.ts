@@ -5,11 +5,16 @@ import { removeMask } from "../utils/removeMask";
 
 export type infer<T extends z.ZodTypeAny> = z.infer<T>;
 
-export const enums = z.enum;
+export const radio = z.enum;
 
-export function array<T extends string>(values: readonly T[]) {
-  return z.array(enums(values as [T, ...T[]]));
+export function checkbox<T extends string>(values: readonly T[]) {
+  return z.array(z.enum(values as [T, ...T[]]));
 }
+
+export const array = z.array;
+
+export const fieldArray = <T extends z.ZodRawShape>(shape: T) =>
+  array(object(shape));
 
 export const boolean = z.boolean;
 

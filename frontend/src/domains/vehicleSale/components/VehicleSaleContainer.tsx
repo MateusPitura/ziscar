@@ -27,7 +27,8 @@ export default function VehicleSaleContainer(): ReactElement {
             model: "Ford",
             price: applyMask("10000", "money"),
             color: "#FFFFFF",
-            characteristics: [],
+            commonCharacteristics: [],
+            newCharacteristics: [],
           },
           payment: { isUpfront: true, installments: 1 },
         }}

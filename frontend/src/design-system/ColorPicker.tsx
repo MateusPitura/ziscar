@@ -10,7 +10,7 @@ import {
 import { Popover } from "./Popover";
 import Button from "./Button";
 import InputLabel from "./Form/InputLabel";
-import ErrorLabel from "./Form/ErrorLabel";
+import InputError from "./Form/InputError";
 
 interface ColorPickerProperties<T extends FieldValues> {
   name: Path<T>;
@@ -90,7 +90,7 @@ export default function ColorPicker<T extends FieldValues>({
           />
         </Popover.Content>
       </Popover>
-      {hideErrorLabel || <ErrorLabel name={name} />}
+      {hideErrorLabel || <InputError name={name} />}
     </label>
   );
 }

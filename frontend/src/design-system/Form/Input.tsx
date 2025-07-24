@@ -6,7 +6,7 @@ import {
   useFormContext, useWatch
 } from "react-hook-form";
 import Button from "../Button";
-import ErrorLabel from "./ErrorLabel";
+import InputError from "./InputError";
 import { Mask } from "@/domains/global/types";
 import { IconsName } from "../types";
 import classNames from "classnames";
@@ -97,7 +97,7 @@ export default function Input<T extends FieldValues>({
           </div>
         )}
       </div>
-      {hideErrorLabel || <ErrorLabel name={name} />}
+      {hideErrorLabel || <InputError name={name} />}
     </label>
   );
 }

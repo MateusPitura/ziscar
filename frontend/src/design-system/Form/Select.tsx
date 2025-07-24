@@ -18,7 +18,7 @@ import {
 import { Options } from "@/domains/global/types";
 import Icon from "../Icon";
 import Spinner from "../Spinner";
-import ErrorLabel from "./ErrorLabel";
+import InputError from "./InputError";
 import InputLabel from "./InputLabel";
 
 interface SelectProperties<T> {
@@ -131,7 +131,7 @@ export default function Select<T extends FieldValues>({
           </Command>
         </Popover.Content>
       </Popover>
-      {hideErrorLabel || <ErrorLabel name={name} />}
+      {hideErrorLabel || <InputError name={name} />}
     </label>
   );
 }

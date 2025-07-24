@@ -1,7 +1,7 @@
 import { Childrenable, UnwrapArray } from "@/domains/global/types";
 import { createContext, ReactNode, useContext, type ReactElement } from "react";
 import { FieldValues, Path, PathValue, useFormContext } from "react-hook-form";
-import ErrorLabel from "./ErrorLabel";
+import InputError from "./InputError";
 
 interface ChoiceContextValues {
   hideErrorLabel?: boolean;
@@ -65,7 +65,7 @@ function Radio<T extends FieldValues>({
         <div className="col-start-1 row-start-1 w-2 h-2 rounded-full peer-checked:bg-slate-800 peer-checked:peer-disabled:bg-neutral-300" />
       </div>
       <div className="text-body-large text-neutral-700">{label}</div>
-      {hideErrorLabel || <ErrorLabel name={name} />}
+      {hideErrorLabel || <InputError name={name} />}
     </label>
   );
 }
@@ -98,7 +98,7 @@ function Checkbox<T extends FieldValues>({
         {...props}
       />
       <div className="text-body-large text-neutral-700">{label}</div>
-      {hideErrorLabel || <ErrorLabel name={name} />}
+      {hideErrorLabel || <InputError name={name} />}
     </label>
   );
 }

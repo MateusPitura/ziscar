@@ -11,8 +11,8 @@ export const SchemaAddress = s.SchemaAddress.extend({
 
 export const SchemaUsersFilterForm = s.object({
   fullName: s.fullName().or(s.empty()),
-  orderBy: s.enums(["fullName", "email"]),
-  status: s.enums(["active", "inactive"]),
+  orderBy: s.radio(["fullName", "email"]),
+  status: s.radio(["active", "inactive"]),
 });
 
 export const SchemaUserForm = s.object({
@@ -22,6 +22,6 @@ export const SchemaUserForm = s.object({
   cpf: s.cpf().or(s.empty()),
   code: s.string().or(s.empty()),
   birthDate: s.birthDate().or(s.empty()),
-  roleId: s.enums([String(SEED_ROLE_ADMIN_ID), String(SEED_ROLE_SALES_ID)]).optional(),
+  roleId: s.radio([String(SEED_ROLE_ADMIN_ID), String(SEED_ROLE_SALES_ID)]).optional(),
   address: SchemaAddress.nullable(),
 });

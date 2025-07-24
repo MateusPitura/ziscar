@@ -7,7 +7,8 @@ import CustomerForm from "../forms/CustomerForm";
 import VehicleForm from "../forms/VehicleForm";
 import PaymentForm from "../forms/PaymentForm";
 import CustomerSearchForm from "../forms/CustomerSearchForm";
-import VehicleCharacteristicForm from "../forms/VehicleCharacteristicForm";
+import VehicleCommonCharacteristicForm from "../forms/VehicleCommonCharacteristicForm";
+import VehicleNewCharacteristicForm from "../forms/VehicleNewCharacteristicForm";
 
 type VehicleSaleTabs = "CLIENT" | "VEHICLE" | "PAYMENT";
 
@@ -63,9 +64,15 @@ export default function VehicleSaleTabs(): ReactElement {
               </Section.Body>
             </Section.Group>
             <Section.Group>
-              <Section.Header title="Características" />
+              <Section.Header title="Selecione características comuns" />
               <Section.Body>
-                <VehicleCharacteristicForm />
+                <VehicleCommonCharacteristicForm />
+              </Section.Body>
+            </Section.Group>
+            <Section.Group>
+              <Section.Header title="Adicione características" />
+              <Section.Body>
+                <VehicleNewCharacteristicForm />
               </Section.Body>
             </Section.Group>
           </Section>
