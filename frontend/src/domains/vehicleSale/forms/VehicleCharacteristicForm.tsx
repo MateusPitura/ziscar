@@ -4,7 +4,7 @@ import { VehicleSaleFormInputs } from "../types";
 
 export default function VehicleCharacteristicForm(): ReactNode {
   return (
-    <Choice<VehicleSaleFormInputs> name="vehicle.characteristics">
+    <Choice>
       <Choice.Checkbox<VehicleSaleFormInputs>
         name="vehicle.characteristics"
         label="Câmbio automático"

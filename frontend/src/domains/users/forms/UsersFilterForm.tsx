@@ -55,7 +55,7 @@ function UsersFilterFormContent(): ReactElement {
         <Input<UsersFilterFormInputs> name="fullName" label="Nome completo" />
         <InputLabel label="Ordenar por" />
         <div className="flex flex-col gap-2">
-          <Choice<UsersFilterFormInputs> name="orderBy" hideErrorLabel>
+          <Choice hideErrorLabel>
             <Choice.Radio<UsersFilterFormInputs>
               name="orderBy"
               label="Nome"
@@ -70,7 +70,7 @@ function UsersFilterFormContent(): ReactElement {
         </div>
         <InputLabel label="Status" />
         <div className="flex flex-col gap-2">
-          <Choice<UsersFilterFormInputs> name="status" hideErrorLabel>
+          <Choice hideErrorLabel>
             <Choice.Radio<UsersFilterFormInputs>
               name="status"
               label="Ativo"

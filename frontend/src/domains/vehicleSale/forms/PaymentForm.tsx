@@ -6,7 +6,7 @@ import Choice from "@/design-system/Form/Choice";
 export default function PaymentForm(): ReactNode {
   return (
     <>
-      <Choice<VehicleSaleFormInputs> name="payment.isUpfront">
+      <Choice>
         <Choice.Checkbox<VehicleSaleFormInputs>
           name="payment.isUpfront"
           label="Possui entrada"
