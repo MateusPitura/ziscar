@@ -10,7 +10,7 @@ export const SchemaVehicleSaleForm = s.object({
     model: s.string(),
     price: s.money(),
     color: s.color(),
-    characteristics: s.array(s.enums(['A', 'B', 'C', 'D'])),
+    characteristics: s.array(["A", "B", "C", "D"]),
   }),
   payment: s.object({
     isUpfront: s.boolean(),

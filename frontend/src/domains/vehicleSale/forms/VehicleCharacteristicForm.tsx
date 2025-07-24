@@ -13,7 +13,7 @@ export default function VehicleCharacteristicForm(): ReactNode {
       <Choice.Checkbox<VehicleSaleFormInputs>
         name="vehicle.characteristics"
         label="Vidros elétricos"
-        value="A"
+        value="B"
       />
       <Choice.Checkbox<VehicleSaleFormInputs>
         name="vehicle.characteristics"

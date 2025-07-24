@@ -7,7 +7,9 @@ export type infer<T extends z.ZodTypeAny> = z.infer<T>;
 
 export const enums = z.enum;
 
-export const array = z.array;
+export function array<T extends string>(values: readonly T[]) {
+  return z.array(enums(values as [T, ...T[]]));
+}
 
 export const boolean = z.boolean;
 
