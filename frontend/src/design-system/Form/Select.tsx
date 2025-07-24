@@ -13,13 +13,13 @@ import {
   Path,
   useController,
   useFormContext,
-  useFormState,
   useWatch,
 } from "react-hook-form";
 import { Options } from "@/domains/global/types";
 import Icon from "../Icon";
 import Spinner from "../Spinner";
 import ErrorLabel from "./ErrorLabel";
+import InputLabel from "./InputLabel";
 
 interface SelectProperties<T> {
   options: Options[];
@@ -48,9 +48,6 @@ export default function Select<T extends FieldValues>({
 }: SelectProperties<T>): ReactNode {
   const [isOpen, setIsOpen] = useState(false);
   const { register, control } = useFormContext<T>();
-  const { errors } = useFormState({
-    name,
-  });
 
   const { field } = useController({
     name,
@@ -69,10 +66,7 @@ export default function Select<T extends FieldValues>({
 
   return (
     <label className="flex flex-col">
-      <div>
-        <span className="text-body-medium text-neutral-700 p-1">{label}</span>
-        {required && <span className="text-red-500 text-body-medium">*</span>}
-      </div>
+      <InputLabel label={label} required={required} />
       <Popover open={isOpen} onOpenChange={setIsOpen}>
         <Popover.Trigger>
           <Button
@@ -87,7 +81,6 @@ export default function Select<T extends FieldValues>({
             className="!h-10"
           />
         </Popover.Trigger>
-        {hideErrorLabel || <ErrorLabel errors={errors} name={name} />}
         <Popover.Content align="start" className="!p-2">
           <Command shouldFilter={shouldFilter}>
             <CommandInput
@@ -138,6 +131,7 @@ export default function Select<T extends FieldValues>({
           </Command>
         </Popover.Content>
       </Popover>
+      {hideErrorLabel || <ErrorLabel name={name} />}
     </label>
   );
 }

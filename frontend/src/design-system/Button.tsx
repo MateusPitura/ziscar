@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { forwardRef } from "react";
+import { forwardRef, ReactNode } from "react";
 import Tooltip from "./Tooltip";
 import useCheckPermission from "@/domains/global/hooks/useCheckPermission";
 import { ButtonColor, ButtonState, IconsName } from "./types";
@@ -10,7 +10,7 @@ import Icon from "./Icon";
 interface BaseButtonProps {
   state?: ButtonState;
   className?: string;
-  label?: string;
+  label?: ReactNode;
   onClick?: () => void;
   fullWidth?: boolean;
   textAlign?: "start" | "center" | "end";

@@ -82,6 +82,9 @@ export const password = () =>
       message: "Ao menos um caractere especial",
     });
 
+export const color = () =>
+  string(7).regex(/^#[0-9A-Fa-f]{6}$/, { message: "Cor inválida" });
+
 export const SchemaPassword = object({
   newPassword: password(),
   confirmPassword: string(),

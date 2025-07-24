@@ -1,17 +1,17 @@
 import classNames from "classnames";
 import type { ReactNode } from "react";
-import { FieldErrors, FieldValues } from "react-hook-form";
+import { useFormState } from "react-hook-form";
 import get from "lodash/get";
 
 interface ErrorLabelProperties {
-  errors: FieldErrors<FieldValues>;
   name: string;
 }
 
-export default function ErrorLabel({
-  errors,
-  name,
-}: ErrorLabelProperties): ReactNode {
+export default function ErrorLabel({ name }: ErrorLabelProperties): ReactNode {
+  const { errors } = useFormState({
+    name,
+  });
+
   const errorsFormatted = get(errors, name);
 
   return (

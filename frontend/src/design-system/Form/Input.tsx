@@ -3,15 +3,14 @@ import { useEffect, type ReactElement } from "react";
 import {
   FieldValues,
   Path,
-  useFormContext,
-  useFormState,
-  useWatch,
+  useFormContext, useWatch
 } from "react-hook-form";
 import Button from "../Button";
 import ErrorLabel from "./ErrorLabel";
 import { Mask } from "@/domains/global/types";
 import { IconsName } from "../types";
 import classNames from "classnames";
+import InputLabel from "./InputLabel";
 
 interface InputProperties<T extends FieldValues> {
   name: Path<T>;
@@ -45,9 +44,6 @@ export default function Input<T extends FieldValues>({
   disabled = false,
 }: InputProperties<T>): ReactElement {
   const { register, setValue } = useFormContext();
-  const { errors } = useFormState({
-    name,
-  });
   const value = useWatch({ name });
 
   useEffect(() => {
@@ -59,14 +55,7 @@ export default function Input<T extends FieldValues>({
 
   return (
     <label className="flex flex-col">
-      <div>
-        <span className="text-body-medium text-neutral-700 p-1">
-          {label}
-        </span>
-        {required && (
-          <span className="text-red-500 text-body-medium">*</span>
-        )}
-      </div>
+      <InputLabel label={label} required={required} />
       <div
         className={classNames(
           "border-neutral-500 border-2 rounded-md flex items-center gap-1 overflow-hidden h-10",
@@ -108,7 +97,7 @@ export default function Input<T extends FieldValues>({
           </div>
         )}
       </div>
-      {hideErrorLabel || <ErrorLabel errors={errors} name={name} />}
+      {hideErrorLabel || <ErrorLabel name={name} />}
     </label>
   );
 }

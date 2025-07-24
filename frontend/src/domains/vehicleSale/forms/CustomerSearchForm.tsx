@@ -34,7 +34,15 @@ export default function CustomerSearchForm(): ReactElement {
             resetField("customer");
             return;
           }
-          setValue("customer", value);
+          setValue(
+            "customer",
+            {
+              id: value.id,
+              fullName: value.fullName,
+              email: value.email,
+            },
+            { shouldDirty: true }
+          );
         }}
         labelKey="fullName"
         valueKey="id"
