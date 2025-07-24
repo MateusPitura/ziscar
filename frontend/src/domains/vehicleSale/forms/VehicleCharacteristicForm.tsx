@@ -8,22 +8,37 @@ export default function VehicleCharacteristicForm(): ReactNode {
       <Choice.Checkbox<VehicleSaleFormInputs>
         name="vehicle.characteristics"
         label="Câmbio automático"
-        value="A"
+        value="automaticTransmission"
       />
       <Choice.Checkbox<VehicleSaleFormInputs>
         name="vehicle.characteristics"
         label="Vidros elétricos"
-        value="B"
+        value="electricWindows"
       />
       <Choice.Checkbox<VehicleSaleFormInputs>
         name="vehicle.characteristics"
         label="Ar condicionado"
-        value="C"
+        value="airConditioning"
       />
       <Choice.Checkbox<VehicleSaleFormInputs>
         name="vehicle.characteristics"
         label="Travas elétricas"
-        value="D"
+        value="electricLocks"
+      />
+      <Choice.Checkbox<VehicleSaleFormInputs>
+        name="vehicle.characteristics"
+        label="Câmera de ré"
+        value="rearViewCamera"
+      />
+      <Choice.Checkbox<VehicleSaleFormInputs>
+        name="vehicle.characteristics"
+        label="Air Bag"
+        value="airBag"
+      />
+      <Choice.Checkbox<VehicleSaleFormInputs>
+        name="vehicle.characteristics"
+        label="Roda de liga leve"
+        value="alloyWheel"
       />
     </Choice>
   );
