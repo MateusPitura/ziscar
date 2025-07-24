@@ -8,7 +8,7 @@ export const SchemaVehicleSaleForm = s.object({
   }),
   vehicle: s.object({
     model: s.string(),
-    price: s.number().positive(),
+    price: s.money(),
     color: s.color()
   }),
   payment: s.object({

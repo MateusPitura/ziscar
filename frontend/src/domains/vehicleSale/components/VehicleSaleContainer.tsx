@@ -22,7 +22,7 @@ export default function VehicleSaleContainer(): ReactElement {
         schema={SchemaVehicleSaleForm}
         defaultValues={{
           customer: { id: "", fullName: "", email: "" },
-          vehicle: { model: "Ford", price: 10, color: "#00000" },
+          vehicle: { model: "Ford", price: 10000, color: "#000000" },
           payment: { isUpfront: true, installments: 1 },
         }}
       >

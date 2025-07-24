@@ -15,6 +15,8 @@ export function applyMask(
       return applyCepMask(value);
     case "cnpj":
       return applyCnpjMask(value);
+    case "money":
+      return applyMoneyMask(value);
     default:
       return value;
   }
@@ -71,4 +73,20 @@ function applyCnpjMask(value: string): string {
       "$1.$2.$3/$4-$5"
     );
   }
+}
+
+function applyMoneyMask(value: string): string {
+  const digits = String(value).replace(/\D/g, "");
+
+  if (digits.length === 0) {
+    return "R$ 0,00";
+  }
+
+  const numericValue = parseInt(digits, 10);
+  const formattedValue = (numericValue / 100).toLocaleString("pt-BR", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+
+  return `R$ ${formattedValue}`;
 }

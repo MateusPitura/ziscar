@@ -85,6 +85,13 @@ export const password = () =>
 export const color = () =>
   string(7).regex(/^#[0-9A-Fa-f]{6}$/, { message: "Cor inválida" });
 
+export const money = () =>
+  string()
+    .transform((money) => parseInt(money.replace(/\D/g, ""), 10))
+    .refine((money) => money > 0, {
+      message: "Valor monetário inválido",
+    });
+
 export const SchemaPassword = object({
   newPassword: password(),
   confirmPassword: string(),

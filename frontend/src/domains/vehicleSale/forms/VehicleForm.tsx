@@ -10,6 +10,7 @@ export default function VehicleForm(): ReactNode {
       <Input<VehicleSaleFormInputs>
         label="Preço de venda"
         name="vehicle.price"
+        mask="money"
       />
       <ColorPicker<VehicleSaleFormInputs>
         name="vehicle.color"
