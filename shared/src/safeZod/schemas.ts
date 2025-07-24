@@ -91,8 +91,8 @@ export const color = () =>
 
 export const money = () =>
   string()
-    .transform((money) => parseInt(money.replace(/\D/g, ""), 10))
-    .refine((money) => money > 0, {
+    .transform((money) => money.replace(/\D/g, ""))
+    .refine((money) => parseInt(money, 10) > 0, {
       message: "Valor monetário inválido",
     });
 

@@ -8,6 +8,7 @@ import VehicleSaleTabs from "./VehicleSaleTabs";
 import Form from "@/design-system/Form";
 import { SchemaVehicleSaleForm } from "../schemas";
 import { VehicleSaleFormInputs } from "../types";
+import { applyMask } from "@/domains/global/utils/applyMask";
 
 export default function VehicleSaleContainer(): ReactElement {
   const navigate = useNavigate();
@@ -24,7 +25,7 @@ export default function VehicleSaleContainer(): ReactElement {
           customer: { id: "", fullName: "Mateus", email: "mateus@email.com" },
           vehicle: {
             model: "Ford",
-            price: 10000,
+            price: applyMask("10000", "money"),
             color: "#FFFFFF",
             characteristics: [],
           },

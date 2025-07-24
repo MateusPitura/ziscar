@@ -51,7 +51,7 @@ function applyCellphoneMask(value: string): string {
 }
 
 function applyCepMask(value: string): string {
-  const digits = value?.replace(/\D/g, "");
+  const digits = value.replace(/\D/g, "");
 
   return digits?.replace(/(\d{5})(\d{1,3}).*/, "$1-$2");
 }
@@ -76,7 +76,7 @@ function applyCnpjMask(value: string): string {
 }
 
 function applyMoneyMask(value: string): string {
-  const digits = String(value).replace(/\D/g, "");
+  const digits = value.replace(/\D/g, "");
 
   if (digits.length === 0) {
     return "R$ 0,00";
