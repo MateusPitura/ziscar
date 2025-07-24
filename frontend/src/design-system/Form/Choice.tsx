@@ -9,8 +9,7 @@ import {
 import {
   FieldValues,
   Path,
-  useFormContext,
-  useFormState,
+  useFormContext
 } from "react-hook-form";
 import ErrorLabel from "./ErrorLabel";
 
@@ -51,10 +50,6 @@ function Radio({
 }: RadioProperties): ReactNode {
   const { register } = useFormContext();
 
-  const { errors } = useFormState({
-    name,
-  });
-
   if (!name) return;
 
   return (
@@ -69,12 +64,17 @@ function Radio({
         <div className="col-start-1 row-start-1 w-2 h-2 rounded-full peer-checked:bg-slate-800 peer-checked:peer-disabled:bg-neutral-300" />
       </div>
       <div className="text-body-large text-neutral-700">{label}</div>
-      {hideErrorLabel || <ErrorLabel errors={errors} name={name} />}
+      {hideErrorLabel || <ErrorLabel name={name} />}
     </label>
   );
 }
 
-type CheckboxProperties = RadioProperties;
+interface CheckboxProperties {
+  label: string;
+  name?: string;
+  required?: boolean;
+  hideErrorLabel?: boolean;
+};
 
 function Checkbox({
   label,
@@ -83,10 +83,6 @@ function Checkbox({
   ...props
 }: CheckboxProperties): ReactNode {
   const { register } = useFormContext();
-
-  const { errors } = useFormState({
-    name,
-  });
 
   if (!name) return;
 
@@ -99,7 +95,7 @@ function Checkbox({
         {...props}
       />
       <div className="text-body-large text-neutral-700">{label}</div>
-      {hideErrorLabel || <ErrorLabel errors={errors} name={name} />}
+      {hideErrorLabel || <ErrorLabel name={name} />}
     </label>
   );
 }
