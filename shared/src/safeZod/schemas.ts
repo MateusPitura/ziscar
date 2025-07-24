@@ -5,7 +5,9 @@ import { removeMask } from "../utils/removeMask";
 
 export type infer<T extends z.ZodTypeAny> = z.infer<T>;
 
-export const list = z.enum;
+export const enums = z.enum;
+
+export const array = z.array;
 
 export const boolean = z.boolean;
 

@@ -7,6 +7,7 @@ import CustomerForm from "../forms/CustomerForm";
 import VehicleForm from "../forms/VehicleForm";
 import PaymentForm from "../forms/PaymentForm";
 import CustomerSearchForm from "../forms/CustomerSearchForm";
+import VehicleCharacteristicForm from "../forms/VehicleCharacteristicForm";
 
 type VehicleSaleTabs = "CLIENT" | "VEHICLE" | "PAYMENT";
 
@@ -42,7 +43,7 @@ export default function VehicleSaleTabs(): ReactElement {
             <Section.Group>
               <Section.Header title="Busque pelo cliente" />
               <Section.Body>
-                <CustomerSearchForm/>
+                <CustomerSearchForm />
               </Section.Body>
             </Section.Group>
             <Section.Group>
@@ -55,16 +56,27 @@ export default function VehicleSaleTabs(): ReactElement {
         </Tabs.Section>
         <Tabs.Section isActive={activeTab === "VEHICLE"}>
           <Section>
-            <Section.Body>
-              <VehicleForm />
-            </Section.Body>
+            <Section.Group>
+              <Section.Header title="Informações" />
+              <Section.Body>
+                <VehicleForm />
+              </Section.Body>
+            </Section.Group>
+            <Section.Group>
+              <Section.Header title="Características" />
+              <Section.Body>
+                <VehicleCharacteristicForm />
+              </Section.Body>
+            </Section.Group>
           </Section>
         </Tabs.Section>
         <Tabs.Section isActive={activeTab === "PAYMENT"}>
           <Section>
-            <Section.Body>
-              <PaymentForm />
-            </Section.Body>
+            <Section.Group>
+              <Section.Body>
+                <PaymentForm />
+              </Section.Body>
+            </Section.Group>
           </Section>
         </Tabs.Section>
       </Tabs.Body>

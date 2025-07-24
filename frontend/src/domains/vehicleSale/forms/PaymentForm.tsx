@@ -7,7 +7,11 @@ export default function PaymentForm(): ReactNode {
   return (
     <>
       <Choice<VehicleSaleFormInputs> name="payment.isUpfront">
-        <Choice.Checkbox label="Possui entrada" />
+        <Choice.Checkbox<VehicleSaleFormInputs>
+          name="payment.isUpfront"
+          label="Possui entrada"
+          value={true}
+        />
       </Choice>
       <Input<VehicleSaleFormInputs>
         label="Parcelas"

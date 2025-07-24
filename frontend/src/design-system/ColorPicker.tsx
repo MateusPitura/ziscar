@@ -74,6 +74,17 @@ export default function ColorPicker<T extends FieldValues>({
                 color={field.value}
                 onChange={(color) => field.onChange(color.hex)}
                 disableAlpha
+                presetColors={[
+                  "#FFFFFF",
+                  "#C0C0C0",
+                  "#808080",
+                  "#000000",
+                  "#C00000",
+                  "#0033A0",
+                  "#D8CAB8",
+                  "#4B3621",
+                  "#800020",
+                ]}
               />
             )}
           />

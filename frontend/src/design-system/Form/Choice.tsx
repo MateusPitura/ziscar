@@ -1,4 +1,4 @@
-import { Childrenable } from "@/domains/global/types";
+import { Childrenable, UnwrapArray } from "@/domains/global/types";
 import {
   Children,
   cloneElement,
@@ -6,11 +6,7 @@ import {
   useMemo,
   type ReactElement,
 } from "react";
-import {
-  FieldValues,
-  Path,
-  useFormContext
-} from "react-hook-form";
+import { FieldValues, Path, PathValue, useFormContext } from "react-hook-form";
 import ErrorLabel from "./ErrorLabel";
 
 interface ContainerProps<T extends FieldValues> extends Childrenable {
@@ -34,20 +30,22 @@ function Container<T extends FieldValues>({
   return <>{enhancedChildren}</>;
 }
 
-interface RadioProperties {
-  label: string;
-  name?: string;
-  required?: boolean;
-  value: string | number;
-  hideErrorLabel?: boolean;
-}
+type RadioProperties<T extends FieldValues> = {
+  [K in Path<T>]: {
+    label: string;
+    name?: K;
+    required?: boolean;
+    value: PathValue<T, K>;
+    hideErrorLabel?: boolean;
+  };
+}[Path<T>];
 
-function Radio({
+function Radio<T extends FieldValues>({
   label,
   name,
   hideErrorLabel,
   ...props
-}: RadioProperties): ReactNode {
+}: RadioProperties<T>): ReactNode {
   const { register } = useFormContext();
 
   if (!name) return;
@@ -69,19 +67,22 @@ function Radio({
   );
 }
 
-interface CheckboxProperties {
-  label: string;
-  name?: string;
-  required?: boolean;
-  hideErrorLabel?: boolean;
-};
+type CheckboxProperties<T extends FieldValues> = {
+  [K in Path<T>]: {
+    label: string;
+    name?: K;
+    required?: boolean;
+    value: UnwrapArray<PathValue<T, K>>;
+    hideErrorLabel?: boolean;
+  };
+}[Path<T>];
 
-function Checkbox({
+function Checkbox<T extends FieldValues>({
   label,
   name,
   hideErrorLabel,
   ...props
-}: CheckboxProperties): ReactNode {
+}: CheckboxProperties<T>): ReactNode {
   const { register } = useFormContext();
 
   if (!name) return;
