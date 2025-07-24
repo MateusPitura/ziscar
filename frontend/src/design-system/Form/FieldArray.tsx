@@ -2,11 +2,12 @@ import { Fragment, type ReactNode } from "react";
 import Tooltip from "../Tooltip";
 import Button from "../Button";
 import {
-    ArrayPath,
-    FieldArray as FieldArrayRHF,
-    FieldValues,
-    useFieldArray,
+  ArrayPath,
+  FieldArray as FieldArrayRHF,
+  FieldValues,
+  useFieldArray,
 } from "react-hook-form";
+import InputError from "./InputError";
 
 interface FieldArrayProperties<T extends FieldValues> {
   name: ArrayPath<T>;
@@ -60,6 +61,7 @@ export default function FieldArray<T extends FieldValues>({
             fullWidth
             textAlign="center"
           />
+          <InputError name={name} isFieldArray />
         </div>
       )}
     </>

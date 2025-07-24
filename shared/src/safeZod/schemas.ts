@@ -11,10 +11,14 @@ export function checkbox<T extends string>(values: readonly T[]) {
   return z.array(z.enum(values as [T, ...T[]]));
 }
 
-export const array = z.array;
-
-export const fieldArray = <T extends z.ZodRawShape>(shape: T) =>
-  array(object(shape));
+export const array = <T extends z.ZodTypeAny>(schema: T, maxItems?: number) => {
+  const arraySchema = z.array(schema);
+  return maxItems
+    ? arraySchema.max(maxItems, {
+        message: `Limite de ${maxItems} excedido`,
+      })
+    : arraySchema;
+};
 
 export const boolean = z.boolean;
 

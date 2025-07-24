@@ -19,10 +19,13 @@ export const SchemaVehicleSaleForm = s.object({
       "airBag",
       "alloyWheel",
     ]),
-    newCharacteristics: s.fieldArray({
-      label: s.string(),
-      value: s.string(),
-    }),
+    newCharacteristics: s.array(
+      s.object({
+        label: s.string(),
+        value: s.string(),
+      }),
+      10
+    ),
   }),
   payment: s.object({
     isUpfront: s.boolean(),

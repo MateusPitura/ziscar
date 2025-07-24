@@ -5,9 +5,13 @@ import get from "lodash/get";
 
 interface InputErrorProperties {
   name: string;
+  isFieldArray?: boolean;
 }
 
-export default function InputError({ name }: InputErrorProperties): ReactNode {
+export default function InputError({
+  name,
+  isFieldArray,
+}: InputErrorProperties): ReactNode {
   const { errors } = useFormState({
     name,
   });
@@ -20,7 +24,9 @@ export default function InputError({ name }: InputErrorProperties): ReactNode {
         invisible: !errorsFormatted,
       })}
     >
-      {errorsFormatted?.message?.toString() ?? "Campo inválido"}
+      {isFieldArray
+        ? errorsFormatted?.root?.message?.toString()
+        : errorsFormatted?.message?.toString() ?? "Campo inválido"}
     </span>
   );
 }
