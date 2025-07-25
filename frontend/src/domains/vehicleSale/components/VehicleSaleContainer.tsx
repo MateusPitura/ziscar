@@ -16,7 +16,29 @@ export default function VehicleSaleContainer(): ReactElement {
   return (
     <div className="flex flex-col gap-4 w-full">
       <Form<VehicleSaleFormInputs>
-        onSubmit={() => {}}
+        onSubmit={(data) => {
+          const { commonCharacteristics, ...rest } = data.vehicle;
+
+          const formattedCharacteristics = commonCharacteristics.map(
+            (item) => ({
+              label: item,
+              value: "Sim",
+            })
+          );
+
+          const payload = {
+            ...data,
+            vehicle: {
+              ...rest,
+              characteristics: [
+                ...data.vehicle.characteristics,
+                ...formattedCharacteristics,
+              ],
+            },
+          };
+
+          console.log("🌠 payload: ", payload);
+        }}
         className="flex-1 flex flex-col gap-4"
         schema={SchemaVehicleSaleForm}
         defaultValues={{
@@ -26,7 +48,7 @@ export default function VehicleSaleContainer(): ReactElement {
             price: applyMask("10000", "money"),
             color: "#FFFFFF",
             commonCharacteristics: [],
-            newCharacteristics: [],
+            characteristics: [],
           },
           payment: { isUpfront: true, installments: 1 },
         }}

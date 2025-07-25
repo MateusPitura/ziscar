@@ -11,15 +11,15 @@ export const SchemaVehicleSaleForm = s.object({
     price: s.money(),
     color: s.color(),
     commonCharacteristics: s.checkbox([
-      "automaticTransmission",
-      "electricWindows",
-      "airConditioning",
-      "electricLocks",
-      "rearViewCamera",
-      "airBag",
-      "alloyWheel",
+      "Direção hidráulica",
+      "Janelas elétricas",
+      "Ar condicionado",
+      "Travas elétricas",
+      "Câmera de ré",
+      "Air bag",
+      "Rodas de liga leve",
     ]),
-    newCharacteristics: s.array(
+    characteristics: s.array(
       s.object({
         label: s.string(),
         value: s.string(),

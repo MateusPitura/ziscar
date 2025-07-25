@@ -7,38 +7,38 @@ export default function VehicleCommonCharacteristicForm(): ReactNode {
     <Choice>
       <Choice.Checkbox<VehicleSaleFormInputs>
         name="vehicle.commonCharacteristics"
-        label="Câmbio automático"
-        value="automaticTransmission"
+        label="Direção hidráulica"
+        value="Direção hidráulica"
       />
       <Choice.Checkbox<VehicleSaleFormInputs>
         name="vehicle.commonCharacteristics"
         label="Vidros elétricos"
-        value="electricWindows"
+        value="Janelas elétricas"
       />
       <Choice.Checkbox<VehicleSaleFormInputs>
         name="vehicle.commonCharacteristics"
         label="Ar condicionado"
-        value="airConditioning"
+        value="Ar condicionado"
       />
       <Choice.Checkbox<VehicleSaleFormInputs>
         name="vehicle.commonCharacteristics"
         label="Travas elétricas"
-        value="electricLocks"
+        value="Travas elétricas"
       />
       <Choice.Checkbox<VehicleSaleFormInputs>
         name="vehicle.commonCharacteristics"
         label="Câmera de ré"
-        value="rearViewCamera"
+        value="Câmera de ré"
       />
       <Choice.Checkbox<VehicleSaleFormInputs>
         name="vehicle.commonCharacteristics"
-        label="Air Bag"
-        value="airBag"
+        label="Air bag"
+        value="Air bag"
       />
       <Choice.Checkbox<VehicleSaleFormInputs>
         name="vehicle.commonCharacteristics"
         label="Roda de liga leve"
-        value="alloyWheel"
+        value="Rodas de liga leve"
       />
     </Choice>
   );

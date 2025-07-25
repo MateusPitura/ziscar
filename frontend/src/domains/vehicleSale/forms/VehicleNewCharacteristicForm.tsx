@@ -6,7 +6,7 @@ import Input from "@/design-system/Form/Input";
 export default function VehicleNewCharacteristicForm(): ReactElement {
   return (
     <FieldArray<VehicleSaleFormInputs>
-      name="vehicle.newCharacteristics"
+      name="vehicle.characteristics"
       appendText="Adicionar característica"
       removeText="Remover característica"
       appendDefaultValues={{ label: "", value: "" }}
@@ -14,12 +14,12 @@ export default function VehicleNewCharacteristicForm(): ReactElement {
       render={(index) => (
         <>
           <Input<VehicleSaleFormInputs>
-            name={`vehicle.newCharacteristics.${index}.label`}
+            name={`vehicle.characteristics.${index}.label`}
             label="Característica"
             placeholder="Câmbio"
           />
           <Input<VehicleSaleFormInputs>
-            name={`vehicle.newCharacteristics.${index}.value`}
+            name={`vehicle.characteristics.${index}.value`}
             label="Valor"
             placeholder="Automático"
           />
