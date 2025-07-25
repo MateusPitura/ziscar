@@ -1,13 +1,12 @@
 import { Store } from "@prisma/client";
+import { CreateInput, UpdateInput } from "src/types";
 
-export interface CreateStore { }
 
-export interface UpdateStore { }
 
 
 export abstract class StoreRepository {
-    abstract create(data: CreateStore): Promise<Store>;
+    abstract create(data: CreateInput<Store>): Promise<Store>;
     abstract findById(id: string): Promise<Store | null>;
-    abstract update(id: string, data: UpdateStore): Promise<void>;
+    abstract update(id: string, data: UpdateInput<Store>): Promise<void>;
     abstract delete(id: string): Promise<void>
 }
