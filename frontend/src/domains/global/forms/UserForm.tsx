@@ -96,7 +96,7 @@ export default function UserForm({
               <Section.Group>
                 <Section.Header title="Endereço" />
                 <Section.Body>
-                  <AddressFields defaultOpen={!!defaultValues.address} />
+                  <AddressFields />
                 </Section.Body>
               </Section.Group>
               {allowEditRole && (

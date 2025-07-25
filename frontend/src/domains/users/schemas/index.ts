@@ -22,6 +22,8 @@ export const SchemaUserForm = s.object({
   cpf: s.cpf().or(s.empty()),
   code: s.string().or(s.empty()),
   birthDate: s.birthDate().or(s.empty()),
-  roleId: s.radio([String(SEED_ROLE_ADMIN_ID), String(SEED_ROLE_SALES_ID)]).optional(),
-  address: SchemaAddress.nullable(),
+  roleId: s
+    .radio([String(SEED_ROLE_ADMIN_ID), String(SEED_ROLE_SALES_ID)])
+    .optional(),
+  address: s.array(SchemaAddress).max(1),
 });

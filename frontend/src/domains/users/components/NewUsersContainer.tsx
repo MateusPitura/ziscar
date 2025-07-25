@@ -20,9 +20,14 @@ export default function NewUsersContainer(): ReactElement {
   const navigate = useNavigate();
 
   async function createUser(data: UserFormInputs) {
+    const { address, ...rest } = data;
+
     await safeFetch(`${BACKEND_URL}/user`, {
       method: "POST",
-      body: data,
+      body: {
+        ...rest,
+        ...address[0],
+      },
       resource: "USERS",
       action: "CREATE",
     });

@@ -36,7 +36,7 @@ export default function EditProfilePageContainer(): ReactNode {
     const { address, ...rest } = data;
 
     const addressPayload = parseAddressPayload({
-      newAddress: address,
+      newAddress: address[0],
       oldAddress: profileData?.address,
     });
 

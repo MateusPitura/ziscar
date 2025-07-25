@@ -6,10 +6,10 @@ import useSafeFetch from "../hooks/useSafeFetch";
 import useSnackbar from "../hooks/useSnackbar";
 import { useQuery } from "@tanstack/react-query";
 import { addressDefaultValues } from "@/domains/users/constants";
-import Tooltip from "@/design-system/Tooltip";
 import { UserFormInputs } from "@/domains/users/types";
 import Select from "@/design-system/Form/Select";
 import { STATES } from "../constants";
+import FieldArray from "@/design-system/Form/FieldArray";
 
 interface ViaCepAddress {
   logradouro: string;
@@ -24,15 +24,8 @@ interface IbgeCity {
   id: string;
 }
 
-interface AddressFieldsProps {
-  defaultOpen?: boolean;
-}
-
-export default function AddressFields({
-  defaultOpen = false,
-}: AddressFieldsProps): ReactNode {
+export default function AddressFields(): ReactNode {
   const [currentValidCep, setCurrentValidCep] = useState("");
-  const [isOpen, setIsOpen] = useState(defaultOpen);
 
   const { setValue, trigger, getValues, watch } =
     useFormContext<UserFormInputs>();
@@ -62,12 +55,12 @@ export default function AddressFields({
 
     if (!cepInfo) return;
 
-    setValue("address.street", cepInfo.logradouro, { shouldDirty: true });
-    setValue("address.neighborhood", cepInfo.bairro, { shouldDirty: true });
-    setValue("address.city", cepInfo.ibge, {
+    setValue("address.0.street", cepInfo.logradouro, { shouldDirty: true });
+    setValue("address.0.neighborhood", cepInfo.bairro, { shouldDirty: true });
+    setValue("address.0.city", cepInfo.ibge, {
       shouldDirty: true,
     });
-    setValue("address.state", cepInfo.uf, {
+    setValue("address.0.state", cepInfo.uf, {
       shouldDirty: true,
     });
   }, [cepInfo, setValue, showErrorSnackbar]);
@@ -85,7 +78,7 @@ export default function AddressFields({
     );
   }
 
-  const selectedState = watch("address.state");
+  const selectedState = watch("address.0.state");
 
   const { data: citiesInfo, isFetching: isFetchingCities } = useQuery({
     queryKey: ["ibgeApi", selectedState],
@@ -99,9 +92,9 @@ export default function AddressFields({
   });
 
   async function fillAddress() {
-    const isValid = await trigger("address.cep");
+    const isValid = await trigger("address.0.cep");
     if (isValid) {
-      const cep = getValues("address.cep");
+      const cep = getValues("address.0.cep");
       setCurrentValidCep(cep);
     }
   }
@@ -115,70 +108,63 @@ export default function AddressFields({
     }
   }
 
-  return !isOpen ? (
-    <div className="col-span-full">
-      <Button
-        variant="secondary"
-        label="Adicionar endereço"
-        onClick={() => {
-          setIsOpen(true);
-          setValue("address", addressDefaultValues, { shouldDirty: true });
-        }}
-        fullWidth
-        textAlign="center"
-      />
-    </div>
-  ) : (
-    <>
-      <div className="flex items-center justify-end col-span-full">
-        <Tooltip content="Remover endereço">
-          <Button
-            variant="quaternary"
-            iconLeft="Delete"
-            onClick={() => {
-              setIsOpen(false);
-              setValue("address", null, { shouldDirty: true });
-            }}
+  return (
+    <FieldArray<UserFormInputs>
+      name="address"
+      appendText="Adicionar endereço"
+      removeText="Remover endereço"
+      maxLength={1}
+      appendDefaultValues={addressDefaultValues}
+      render={() => (
+        <>
+          <div
+            className="flex items-center justify-between gap-1"
+            onKeyDown={handleOnSubmitCepField}
+          >
+            <Input<UserFormInputs>
+              label="CEP"
+              name="address.0.cep"
+              mask="cep"
+              maxLength={9}
+              required
+              forceUnselect
+            />
+            <Button
+              variant="quaternary"
+              label="Preencher automaticamente"
+              onClick={fillAddress}
+              padding="none"
+              state={isFetchingCep ? "loading" : undefined}
+            />
+          </div>
+          <Input<UserFormInputs>
+            label="Número"
+            name="address.0.number"
+            required
           />
-        </Tooltip>
-      </div>
-      <div
-        className="flex items-center justify-between gap-1"
-        onKeyDown={handleOnSubmitCepField}
-      >
-        <Input<UserFormInputs>
-          label="CEP"
-          name="address.cep"
-          mask="cep"
-          maxLength={9}
-          required
-          forceUnselect
-        />
-        <Button
-          variant="quaternary"
-          label="Preencher automaticamente"
-          onClick={fillAddress}
-          padding="none"
-          state={isFetchingCep ? "loading" : undefined}
-        />
-      </div>
-      <Input<UserFormInputs> label="Número" name="address.number" required />
-      <Input<UserFormInputs> label="Rua" name="address.street" />
-      <Input<UserFormInputs> label="Bairro" name="address.neighborhood" />
-      <Select<UserFormInputs>
-        label="Estado"
-        name="address.state"
-        options={STATES}
-        onChange={() => setValue("address.city", "", { shouldDirty: true })}
-      />
-      <Select<UserFormInputs>
-        label="Cidade"
-        name="address.city"
-        options={citiesInfo || []}
-        loading={isFetchingCities}
-        disabled={!selectedState}
-      />
-      <Input<UserFormInputs> label="Complemento" name="address.complement" />
-    </>
+          <Input<UserFormInputs> label="Rua" name="address.0.street" />
+          <Input<UserFormInputs> label="Bairro" name="address.0.neighborhood" />
+          <Select<UserFormInputs>
+            label="Estado"
+            name="address.0.state"
+            options={STATES}
+            onChange={() =>
+              setValue(`address.0.city`, "", { shouldDirty: true })
+            }
+          />
+          <Select<UserFormInputs>
+            label="Cidade"
+            name="address.0.city"
+            options={citiesInfo || []}
+            loading={isFetchingCities}
+            disabled={!selectedState}
+          />
+          <Input<UserFormInputs>
+            label="Complemento"
+            name="address.0.complement"
+          />
+        </>
+      )}
+    />
   );
 }

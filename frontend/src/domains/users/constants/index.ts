@@ -1,7 +1,7 @@
 import { SEED_ROLE_ADMIN_ID } from "@shared/constants";
 import { UserFormInputs, UsersFilterFormInputs } from "../types";
 
-export const addressDefaultValues: UserFormInputs['address'] = {
+export const addressDefaultValues: UserFormInputs['address'][number] = {
   cep: "",
   street: "",
   number: "",
@@ -18,7 +18,7 @@ export const userDefaultValues: UserFormInputs = {
   cpf: "",
   code: "",
   birthDate: "",
-  address: null,
+  address: [],
   roleId: String(SEED_ROLE_ADMIN_ID),
 };
 
