@@ -37,7 +37,7 @@ export default function VehicleSaleContainer(): ReactElement {
             },
           };
 
-          console.log("🌠 payload: ", payload);
+          return payload
         }}
         className="flex-1 flex flex-col gap-4"
         schema={SchemaVehicleSaleForm}
