@@ -51,5 +51,5 @@ export const POPULATE_STORE_INACTIVE = {
   id: 984,
   name: 'Stark Industries',
   cnpj: '12345678901235',
-  isActive: false,
+  archivedAt: new Date(),
 };

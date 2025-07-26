@@ -37,15 +37,15 @@ model VehicleCharacteristicValue {
 }
 
 model VehicleBase {
-  id                  Int             @id @default(autoincrement())
-  chassiNumber        String          @unique @db.VarChar(17)
-  modelYear           Int?
-  yearOfManufacture   Int?
-  modelName           String?         @db.VarChar(127)
-  brandId             Int
-  brand               VehicleBrand    @relation(fields: [brandId], references: [id])
-  category            VehicleCategory?
-  vehicles            Vehicle[]
+  id                Int              @id @default(autoincrement())
+  chassiNumber      String           @unique @db.VarChar(17)
+  modelYear         Int?
+  yearOfManufacture Int?
+  modelName         String?          @db.VarChar(127)
+  brandId           Int
+  brand             VehicleBrand     @relation(fields: [brandId], references: [id])
+  category          VehicleCategory?
+  vehicles          Vehicle[]
 
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
@@ -53,8 +53,8 @@ model VehicleBase {
 }
 
 model VehicleBrand {
-  id          Int           @id @default(autoincrement())
-  name        String        @db.VarChar(127)
+  id           Int           @id @default(autoincrement())
+  name         String        @db.VarChar(127)
   vehicleBases VehicleBase[]
 
   createdAt  DateTime  @default(now())
@@ -63,19 +63,19 @@ model VehicleBrand {
 }
 
 model Vehicle {
-  id                          Int                          @id @default(autoincrement())
-  kilometers                  Int?
-  plateNumber                 String                       @db.VarChar(7)
-  announcedPrice              Int?
-  minimumPrice                Int?
-  commissionValue             Int
-  color                       String?                      @db.VarChar(6)
-  fuelType                    FuelType?
-  status                      VehicleStatus
-  vehicleBaseId               Int
-  vehicleBase                 VehicleBase                  @relation(fields: [vehicleBaseId], references: [id])
-  storeId                     Int
-  store                       Store                        @relation(fields: [storeId], references: [id])
+  id              Int           @id @default(autoincrement())
+  kilometers      Int?
+  plateNumber     String        @db.VarChar(7)
+  announcedPrice  Int?
+  minimumPrice    Int?
+  commissionValue Int
+  color           String?       @db.VarChar(6)
+  fuelType        FuelType?
+  status          VehicleStatus
+  vehicleBaseId   Int
+  vehicleBase     VehicleBase   @relation(fields: [vehicleBaseId], references: [id])
+  storeId         Int
+  store           Store         @relation(fields: [storeId], references: [id])
 
   vehiclePurchases            VehiclePurchase[]
   vehicleExpenses             VehicleExpense[]
@@ -139,11 +139,11 @@ model VehicleSale {
 }
 
 model AccountPayable {
-  id                        Int                         @id @default(autoincrement())
-  description               String?                     @db.VarChar(127)
-  vehiclePurchases          VehiclePurchase[]
-  vehicleExpenses           VehicleExpense[]
-  vehicleSales              VehicleSale[]
+  id                         Int                         @id @default(autoincrement())
+  description                String?                     @db.VarChar(127)
+  vehiclePurchases           VehiclePurchase[]
+  vehicleExpenses            VehicleExpense[]
+  vehicleSales               VehicleSale[]
   accountPayableInstallments AccountPayableInstallment[]
 
   createdAt  DateTime  @default(now())
@@ -152,17 +152,17 @@ model AccountPayable {
 }
 
 model AccountPayableInstallment {
-  id                                Int                       @id @default(autoincrement())
+  id                                Int                         @id @default(autoincrement())
   installmentSequence               Int
-  dueDate                           DateTime                  @db.Date
+  dueDate                           DateTime                    @db.Date
   value                             Int
-  status                            InstallmentStatus         @default(PENDING)
-  isRefund                          Boolean                   @default(false)
-  isUpfront                         Boolean                   @default(false)
+  status                            InstallmentStatus           @default(PENDING)
+  isRefund                          Boolean                     @default(false)
+  isUpfront                         Boolean                     @default(false)
   accountPayableId                  Int
-  accountPayable                    AccountPayable            @relation(fields: [accountPayableId], references: [id])
+  accountPayable                    AccountPayable              @relation(fields: [accountPayableId], references: [id])
   refundAccountPayableInstallmentId Int?
-  refundInstallment                 AccountPayableInstallment? @relation("RefundInstallment", fields: [refundAccountPayableInstallmentId], references: [id])
+  refundInstallment                 AccountPayableInstallment?  @relation("RefundInstallment", fields: [refundAccountPayableInstallmentId], references: [id])
   refundedBy                        AccountPayableInstallment[] @relation("RefundInstallment")
   paymentMethodPayables             PaymentMethodPayable[]
 
@@ -204,13 +204,13 @@ model PaymentMethodPayable {
 }
 
 model Customer {
-  id          Int           @id @default(autoincrement())
-  fullName    String        @db.VarChar(127)
-  phone       String?       @db.VarChar(11)
-  email       String?       @db.VarChar(127)
-  cpf         String?       @unique @db.VarChar(11)
-  addressId   Int?
-  address     Address?      @relation(fields: [addressId], references: [id])
+  id           Int           @id @default(autoincrement())
+  fullName     String        @db.VarChar(127)
+  phone        String?       @db.VarChar(11)
+  email        String?       @db.VarChar(127)
+  cpf          String?       @unique @db.VarChar(11)
+  addressId    Int?
+  address      Address?      @relation(fields: [addressId], references: [id])
   vehicleSales VehicleSale[]
 
   createdAt  DateTime  @default(now())
@@ -230,26 +230,26 @@ model AccountReceivable {
 }
 
 model City {
-  ibgeCode  Int       @id
-  name      String    @db.VarChar(127)
+  ibgeCode  Int            @id
+  name      String         @db.VarChar(127)
   state     BrazilianState
   addresses Address[]
 }
 
 model AccountReceivableInstallment {
-  id                                    Int                       @id @default(autoincrement())
-  installmentSequence                   Int
-  dueDate                               DateTime                  @db.Date
-  value                                 Int
-  status                                InstallmentStatus         @default(PENDING)
-  isRefund                              Boolean                   @default(false)
-  isUpfront                             Boolean                   @default(false)
-  accountReceivableId                   Int
-  accountReceivable                     AccountReceivable         @relation(fields: [accountReceivableId], references: [id])
-  refundAccountReceivableInstallmentId  Int?
-  refundInstallment                     AccountReceivableInstallment? @relation("RefundInstallment", fields: [refundAccountReceivableInstallmentId], references: [id])
-  refundedBy                            AccountReceivableInstallment[] @relation("RefundInstallment")
-  paymentMethodReceivables              PaymentMethodReceivable[]
+  id                                   Int                            @id @default(autoincrement())
+  installmentSequence                  Int
+  dueDate                              DateTime                       @db.Date
+  value                                Int
+  status                               InstallmentStatus              @default(PENDING)
+  isRefund                             Boolean                        @default(false)
+  isUpfront                            Boolean                        @default(false)
+  accountReceivableId                  Int
+  accountReceivable                    AccountReceivable              @relation(fields: [accountReceivableId], references: [id])
+  refundAccountReceivableInstallmentId Int?
+  refundInstallment                    AccountReceivableInstallment?  @relation("RefundInstallment", fields: [refundAccountReceivableInstallmentId], references: [id])
+  refundedBy                           AccountReceivableInstallment[] @relation("RefundInstallment")
+  paymentMethodReceivables             PaymentMethodReceivable[]
 
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
@@ -257,23 +257,23 @@ model AccountReceivableInstallment {
 }
 
 model Enterprise {
-  id    Int    @id @default(autoincrement())
-  users User[]
+  id     Int     @id @default(autoincrement())
+  users  User[]
   stores Store[]
-  
+
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
   archivedAt DateTime?
 }
 
 model Address {
-  id           Int      @id @default(autoincrement())
-  cep          String   @db.VarChar(8)
-  street       String   @db.VarChar(127)
-  number       String   @db.VarChar(127)
-  neighborhood String?  @db.VarChar(127)
+  id           Int        @id @default(autoincrement())
+  cep          String     @db.VarChar(8)
+  number       String     @db.VarChar(127)
+  street       String?    @db.VarChar(127)
+  neighborhood String?    @db.VarChar(127)
   cityIbgeCode Int?
-  city         City?    @relation(fields: [cityIbgeCode], references: [ibgeCode])
+  city         City?      @relation(fields: [cityIbgeCode], references: [ibgeCode])
   users        User[]
   stores       Store[]
   customers    Customer[]
@@ -306,7 +306,7 @@ model User {
 }
 
 model Permission {
-  id              Int               @id @default(autoincrement())
+  id              Int              @id @default(autoincrement())
   resource        Resources
   action          Actions
   rolePermissions RolePermission[]
@@ -315,8 +315,8 @@ model Permission {
 }
 
 model Role {
-  id              Int               @id @default(autoincrement())
-  name            RoleType          @unique
+  id              Int              @id @default(autoincrement())
+  name            RoleType         @unique
   users           User[]
   rolePermissions RolePermission[]
 }

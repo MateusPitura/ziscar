@@ -6,11 +6,10 @@ export const GET_USER = {
   fullName: true,
   phone: true,
   email: true,
-  password: true,
   cpf: true,
-  jit: true,
   archivedAt: true,
   roleId: true,
+  address: true,
 };
 
 export const FETCH_USER = {
@@ -18,9 +17,7 @@ export const FETCH_USER = {
   fullName: true,
   phone: true,
   email: true,
-  password: true,
   cpf: true,
-  jit: true,
   archivedAt: true,
   roleId: true,
 };
@@ -105,8 +102,7 @@ export const DEFAULT_PERMISSIONS: Permissions = {
 export const addressNullableFields: Record<keyof AddressNullableFields, null> =
   {
     neighborhood: null,
-    city: null,
+    cityIbgeCode: null,
     state: null,
     street: null,
-    complement: null,
   };

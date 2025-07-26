@@ -4,9 +4,8 @@ import { createZodDto } from 'nestjs-zod';
 const SchemaAddress = s.object({
   street: s.string().nullish(),
   neighborhood: s.string().nullish(),
-  city: s.string().nullish(),
+  cityIbgeCode: s.string().nullish(),
   state: s.string().nullish(),
-  complement: s.string().nullish(),
 });
 
 const SchemaAddressToCreate = s.SchemaAddress.extend({
@@ -51,7 +50,7 @@ const SchemaUserUpdateInDto = SchemaUserPostInDto.extend({
     })
     .partial(),
   password: s.password(),
-  arquivedAt: s.date() || null, // 🌠 verificar isso
+  archivedAt: s.date().nullable(),
   jit: s.string(36).nullable(),
 })
   .omit({ email: true })
@@ -59,15 +58,15 @@ const SchemaUserUpdateInDto = SchemaUserPostInDto.extend({
 
 const SchemaProfilePatchInDto = SchemaUserUpdateInDto.omit({
   roleId: true,
-  arquivedAt: true,
+  archivedAt: true,
 });
 
 const SchemaUserDeleteInDto = s.object({
-  arquivedAt: s.date(),
+  archivedAt: s.date().nullable(),
 });
 
 export const SchemaUserPatchInDto = SchemaUserUpdateInDto.omit({
-  arquivedAt: true,
+  archivedAt: true,
 });
 
 export class UserPostInDto extends createZodDto(SchemaUserPostInDto) {}

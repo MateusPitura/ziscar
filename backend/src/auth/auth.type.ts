@@ -28,7 +28,7 @@ export interface AuthRequestResetPassword extends Request {
   authToken: AuthResetPassword;
 }
 
-export interface SiginInInput {
+export interface SignInInput {
   authSignInInDto: AuthSignInInDto;
   res?: Response;
 }

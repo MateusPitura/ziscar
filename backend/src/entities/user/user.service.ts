@@ -213,7 +213,7 @@ export class UserService {
 
     const userBeforeUpdate = await this.findOne({
       where: {
-        archivedAt: userUpdateInDto.arquivedAt === null ? { not: null } : null,
+        archivedAt: userUpdateInDto.archivedAt === null ? { not: null } : null,
         ...where,
       },
       enterpriseId,

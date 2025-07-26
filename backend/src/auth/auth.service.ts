@@ -6,7 +6,7 @@ import {
   ForgetPasswordInput,
   RequestChangePasswordInput,
   ResetPasswordInput,
-  SiginInInput,
+  SignInInput,
   SignOutInput,
   SignUpInput,
 } from './auth.type';
@@ -44,7 +44,7 @@ export class AuthService {
     private readonly prismaService: PrismaService,
   ) {}
 
-  async signIn({ authSignInInDto, res }: SiginInInput) {
+  async signIn({ authSignInInDto, res }: SignInInput) {
     const user = await this.userService.findOne({
       where: { email: authSignInInDto.email },
       select: {
@@ -137,7 +137,7 @@ export class AuthService {
 
   async resetPassword({ authResetPasswordInDto }: ResetPasswordInput) {
     await this.userService.update({
-      where: { archivedAt: { not: null }, email: authResetPasswordInDto.email },
+      where: { archivedAt: null, email: authResetPasswordInDto.email },
       userUpdateInDto: { password: authResetPasswordInDto.password },
       enterpriseId: authResetPasswordInDto.enterpriseId,
     });

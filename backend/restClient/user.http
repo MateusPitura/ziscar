@@ -7,10 +7,8 @@ content-type: application/json
     "email": "john.doe@email.com",
     "roleId": 1,
     "address": {
-        "add": {
-            "cep": "12345678",
-            "number": "123"
-        }
+        "cep": "12345678",
+        "number": "123"
     }
 }
 
@@ -48,14 +46,6 @@ content-type: application/json
 }
 
 ###
-PATCH {{BACKEND_URL}}/user/1 HTTP/1.1
-content-type: application/json
-
-{
-    "isActive": true
-}
-
-###
 PATCH {{BACKEND_URL}}/profile HTTP/1.1
 content-type: application/json
 
@@ -72,13 +62,5 @@ DELETE {{BACKEND_URL}}/user/1 HTTP/1.1
 content-type: application/json
 
 {
-    "isActive": true
+    "archivedAt": "2025-01-01"
 }
-
-###
-GET {{BACKEND_URL}}/user/pdf?fullName=john&orderBy=email&status=active HTTP/1.1
-content-type: application/json
-
-###
-GET {{BACKEND_URL}}/user/sheet?fullName=john&orderBy=email&status=active HTTP/1.1
-content-type: application/json

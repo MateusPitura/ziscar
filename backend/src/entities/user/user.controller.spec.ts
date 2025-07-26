@@ -242,7 +242,7 @@ describe('UserController', () => {
           request,
           { id: POPULATE_USER_DEFAULT.id },
           {
-            arquivedAt: new Date(),
+            archivedAt: new Date(),
           },
         ),
       ).toBeTruthy();
@@ -260,7 +260,7 @@ describe('UserController', () => {
           AUTH_REQUEST_DEFAULT,
           { id: POPULATE_USER_DEFAULT.id },
           {
-            arquivedAt: new Date(),
+            archivedAt: new Date(),
           },
         ),
       ).rejects.toThrow(ForbiddenException);

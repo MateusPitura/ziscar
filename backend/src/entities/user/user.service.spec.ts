@@ -584,7 +584,7 @@ describe('UserService', () => {
           id: POPULATE_USER_DEFAULT.id,
         },
         userUpdateInDto: {
-          arquivedAt: new Date(),
+          archivedAt: new Date(),
         },
         enterpriseId: POPULATE_ENTERPRISE_ID,
         select: {
@@ -608,7 +608,7 @@ describe('UserService', () => {
             id: POPULATE_USER_DEFAULT.id,
           },
           userUpdateInDto: {
-            arquivedAt: new Date(),
+            archivedAt: new Date(),
           },
           enterpriseId: POPULATE_ENTERPRISE_ID,
         }),
@@ -628,7 +628,7 @@ describe('UserService', () => {
             id: POPULATE_USER_INACTIVE.id,
           },
           userUpdateInDto: {
-            arquivedAt: new Date(),
+            archivedAt: new Date(),
           },
           enterpriseId: POPULATE_ENTERPRISE_ID,
         }),
@@ -648,7 +648,7 @@ describe('UserService', () => {
             id: POPULATE_USER_INACTIVE.id,
           },
           userUpdateInDto: {
-            arquivedAt: undefined,
+            archivedAt: undefined,
           },
           enterpriseId: POPULATE_ENTERPRISE_ID,
         }),
@@ -668,7 +668,7 @@ describe('UserService', () => {
             id: POPULATE_USER_DEFAULT.id,
           },
           userUpdateInDto: {
-            arquivedAt: undefined,
+            archivedAt: undefined,
           },
           enterpriseId: POPULATE_ENTERPRISE_ID,
         }),
