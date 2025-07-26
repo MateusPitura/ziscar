@@ -13,7 +13,7 @@
     "dev:migration-run": "prisma migrate deploy && npx prisma generate",
     "prod:db-init": "NODE_ENV=production ts-node ./prisma/init.ts",
     "dev:db-init": "ts-node ./prisma/init.ts",
-    "test:db-init": "set NODE_ENV=test && ts-node ./prisma/init.ts",
+    "test:db-init": "NODE_ENV=test ts-node ./prisma/init.ts",
     "test": "jest"
   },
   "dependencies": {
