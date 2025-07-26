@@ -19,7 +19,7 @@ const queryClient = new QueryClient({
 
 declare module "@tanstack/react-query" {
   interface Register {
-    queryKey: QueryKeys;
+    queryKey: [QueryKeys, ...ReadonlyArray<unknown>];
   }
 }
 

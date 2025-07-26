@@ -7,7 +7,7 @@ import { encryptPassword, removeTimeFromDate } from './user.utils';
 import {
   GET_PERMISSIONS,
   GET_USER,
-  adddressNullableFields,
+  addressNullableFields,
 } from './user.constant';
 import { EmailService } from '../email/email.service';
 import { JwtService } from '@nestjs/jwt';
@@ -255,7 +255,7 @@ export class UserService {
       if (userBeforeUpdate.addressId) {
         updatePayload['address'] = {
           update: {
-            ...adddressNullableFields,
+            ...addressNullableFields,
             ...address.add,
           },
         };

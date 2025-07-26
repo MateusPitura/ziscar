@@ -30,7 +30,7 @@ export default function PageHeader({
         </span>
         <div className="border-b border-neutral-300 w-[80%]" />
       </div>
-      <div className="flex justify-end">
+      <div className="flex justify-end empty:hidden">
         {first &&
           cloneElement(first as ReactElement, {
             dirty,

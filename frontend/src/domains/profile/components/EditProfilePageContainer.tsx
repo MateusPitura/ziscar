@@ -53,7 +53,7 @@ export default function EditProfilePageContainer(): ReactNode {
     mutationFn: editUser,
     onSuccess: async () => {
       showSuccessSnackbar({
-        title: `Perfil atualizado com sucesso`,
+        title: "Perfil atualizado com sucesso",
       });
       queryClient.invalidateQueries({
         queryKey: ["profile"],

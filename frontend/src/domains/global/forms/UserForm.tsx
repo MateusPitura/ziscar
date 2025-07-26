@@ -14,8 +14,7 @@ import PageFooter from "../components/PageFooter";
 import Button from "@/design-system/Button";
 import useDialog from "../hooks/useDialog";
 import RequestChangePasswordModal from "@/domains/profile/components/RequestChangePasswordModal";
-
-const PREVIOUS_PAGE = -1;
+import { PREVIOUS_PAGE } from "../constants";
 
 interface UserFormProperties {
   defaultValues: Partial<UserFormInputs>;
@@ -97,21 +96,23 @@ export default function UserForm({
               <Section.Group>
                 <Section.Header title="Endereço" />
                 <Section.Body>
-                  <AddressFields defaultOpen={!!defaultValues.address} />
+                  <AddressFields />
                 </Section.Body>
               </Section.Group>
               {allowEditRole && (
                 <Section.Group>
                   <Section.Header title="Categoria" />
                   <Section.Body>
-                    <Choice<UserFormInputs> name="roleId">
-                      <Choice.Radio
+                    <Choice>
+                      <Choice.Radio<UserFormInputs>
+                        name="roleId"
                         label="Administrador"
-                        value={SEED_ROLE_ADMIN_ID}
+                        value={String(SEED_ROLE_ADMIN_ID)}
                       />
-                      <Choice.Radio
+                      <Choice.Radio<UserFormInputs>
+                        name="roleId"
                         label="Vendedor"
-                        value={SEED_ROLE_SALES_ID}
+                        value={String(SEED_ROLE_SALES_ID)}
                       />
                     </Choice>
                   </Section.Body>

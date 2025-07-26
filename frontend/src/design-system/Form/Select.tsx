@@ -13,13 +13,13 @@ import {
   Path,
   useController,
   useFormContext,
-  useFormState,
   useWatch,
 } from "react-hook-form";
 import { Options } from "@/domains/global/types";
 import Icon from "../Icon";
 import Spinner from "../Spinner";
-import ErrorLabel from "./ErrorLabel";
+import InputError from "./InputError";
+import InputLabel from "./InputLabel";
 
 interface SelectProperties<T> {
   options: Options[];
@@ -29,7 +29,9 @@ interface SelectProperties<T> {
   hideErrorLabel?: boolean;
   label: string;
   required?: boolean;
-  onChange?: (value: string) => void;
+  onChange?: (value?: string) => void;
+  onSearchChange?: (search: string) => void;
+  shouldFilter?: boolean;
 }
 
 export default function Select<T extends FieldValues>({
@@ -40,13 +42,12 @@ export default function Select<T extends FieldValues>({
   hideErrorLabel,
   label,
   required = false,
-  onChange
+  onChange,
+  onSearchChange,
+  shouldFilter = true,
 }: SelectProperties<T>): ReactNode {
   const [isOpen, setIsOpen] = useState(false);
   const { register, control } = useFormContext<T>();
-  const { errors } = useFormState({
-    name,
-  });
 
   const { field } = useController({
     name,
@@ -65,10 +66,7 @@ export default function Select<T extends FieldValues>({
 
   return (
     <label className="flex flex-col">
-      <div>
-        <span className="text-body-medium text-neutral-700 p-1">{label}</span>
-        {required && <span className="text-red-500 text-body-medium">*</span>}
-      </div>
+      <InputLabel label={label} required={required} />
       <Popover open={isOpen} onOpenChange={setIsOpen}>
         <Popover.Trigger>
           <Button
@@ -79,17 +77,21 @@ export default function Select<T extends FieldValues>({
             }
             iconRight="UnfoldMore"
             fullWidth
-            state={disabled ? "disabled" : loading ? "loading" : undefined}
+            state={disabled ? "disabled" : undefined}
             className="!h-10"
           />
         </Popover.Trigger>
-        {hideErrorLabel || <ErrorLabel errors={errors} name={name} />}
         <Popover.Content align="start" className="!p-2">
-          <Command>
+          <Command shouldFilter={shouldFilter}>
             <CommandInput
               placeholder="Pesquise"
               autoFocus
               className="text-body-medium text-neutral-700"
+              onValueChange={(search) => {
+                onChange?.(undefined);
+                field.onChange("");
+                onSearchChange?.(search);
+              }}
             />
             <CommandList {...register(name)}>
               {loading ? (
@@ -98,7 +100,7 @@ export default function Select<T extends FieldValues>({
                 </div>
               ) : (
                 <>
-                  <CommandEmpty className="text-neutral-700 flex items-center justify-center p-2 text-body-medium">
+                  <CommandEmpty className="text-neutral-700 flex items-center justify-center p-2 text-body-medium min-h-14">
                     Nenhum item encontrado
                   </CommandEmpty>
                   {options.map((option) => {
@@ -107,11 +109,12 @@ export default function Select<T extends FieldValues>({
                         key={option.value}
                         value={option.value}
                         onSelect={(value) => {
-                          onChange?.(value);
                           if (value === watch) {
+                            onChange?.(undefined);
                             field.onChange("");
                             return;
                           }
+                          onChange?.(value);
                           field.onChange(value);
                         }}
                         className="flex !text-neutral-700"
@@ -128,6 +131,7 @@ export default function Select<T extends FieldValues>({
           </Command>
         </Popover.Content>
       </Popover>
+      {hideErrorLabel || <InputError name={name} />}
     </label>
   );
 }

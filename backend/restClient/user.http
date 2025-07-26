@@ -7,8 +7,10 @@ content-type: application/json
     "email": "john.doe@email.com",
     "roleId": 1,
     "address": {
-        "cep": "12345678",
-        "number": "123"
+        "add": {
+            "cep": "12345678",
+            "number": "123"
+        }
     }
 }
 
@@ -38,7 +40,10 @@ content-type: application/json
 
 {
     "address": {
-        "cep": "12345678"
+        "add": {
+            "cep": "12345678",
+            "number": "456"
+        }
     }
 }
 

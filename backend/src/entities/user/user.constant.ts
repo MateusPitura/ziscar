@@ -102,7 +102,7 @@ export const DEFAULT_PERMISSIONS: Permissions = {
   },
 };
 
-export const adddressNullableFields: Record<keyof AddressNullableFields, null> =
+export const addressNullableFields: Record<keyof AddressNullableFields, null> =
   {
     neighborhood: null,
     city: null,
