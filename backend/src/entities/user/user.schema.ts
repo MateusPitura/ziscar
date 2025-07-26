@@ -19,9 +19,7 @@ const SchemaUserPostInDto = s.object({
   fullName: s.fullName(),
   email: s.email(),
   cpf: s.cpf().nullish(),
-  birthDate: s.birthDate().nullish(),
-  code: s.string().nullish(),
-  cellPhone: s.cellphone().nullish(),
+  phone: s.cellphone().nullish(),
   address: SchemaAddressToCreate.nullish(),
   roleId: s.id(),
 });

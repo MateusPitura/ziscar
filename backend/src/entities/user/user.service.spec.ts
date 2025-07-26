@@ -135,9 +135,7 @@ describe('UserService', () => {
             fullName: 'Jane Doe',
             email: 'jane.doe@email.com',
             cpf: '11111111111',
-            birthDate: '2000-01-01',
-            code: 'ABCDEF',
-            cellPhone: '42988884444',
+            phone: '42988884444',
             address: {
               cep: '12345678',
               number: '123',
@@ -171,9 +169,7 @@ describe('UserService', () => {
             fullName: 'Jane Doe',
             email: 'jane.doe@email.com',
             cpf: '11111111111',
-            birthDate: '2000-01-01',
-            code: 'ABCDEF',
-            cellPhone: '42988884444',
+            phone: '42988884444',
             address: {
               cep: '12345678',
               number: '123',
@@ -181,7 +177,6 @@ describe('UserService', () => {
               city: 'New York',
               state: 'NY',
               neighborhood: 'Manhattan',
-              complement: 'Apt 123',
             },
             enterpriseId: POPULATE_ENTERPRISE_ID,
             roleId: SEED_ROLE_SALES_ID,
@@ -224,7 +219,7 @@ describe('UserService', () => {
         id: POPULATE_USER_DEFAULT.id,
       },
       userUpdateInDto: {
-        code: '123',
+        phone: '42988884444',
       },
       enterpriseId: POPULATE_ENTERPRISE_ID,
     });
@@ -688,8 +683,7 @@ describe('UserService', () => {
         },
         userUpdateInDto: {
           cpf: null,
-          birthDate: null,
-          cellPhone: null,
+          phone: null,
         },
         enterpriseId: POPULATE_ENTERPRISE_ID,
       });
@@ -697,30 +691,9 @@ describe('UserService', () => {
       expect(result).toMatchObject(
         expect.objectContaining({
           cpf: null,
-          birthDate: null,
-          cellPhone: null,
+          phone: null,
         }),
       );
-
-      transaction.rollback();
-    });
-  });
-
-  it('should update birthDate and return it formatted', async () => {
-    await prismaService.transaction(async (transaction) => {
-      Reflect.set(userService, 'prismaService', transaction);
-
-      const result = await userService.update({
-        where: {
-          id: POPULATE_USER_DEFAULT.id,
-        },
-        userUpdateInDto: {
-          birthDate: '2000-01-02',
-        },
-        enterpriseId: POPULATE_ENTERPRISE_ID,
-      });
-
-      expect(result).toHaveProperty('birthDate', '2000-01-02');
 
       transaction.rollback();
     });

@@ -49,8 +49,7 @@ export class UserService {
       });
     }
 
-    const { address, enterpriseId, roleId, birthDate, ...rest } =
-      userCreateInDto;
+    const { address, enterpriseId, roleId, ...rest } = userCreateInDto;
 
     const createPayload = {
       ...rest,
@@ -63,9 +62,6 @@ export class UserService {
       createPayload['address'] = {
         create: address,
       };
-    }
-    if (birthDate) {
-      createPayload['birthDate'] = new Date(birthDate);
     }
 
     await database.user.create({
@@ -225,7 +221,7 @@ export class UserService {
       },
     });
 
-    const { address, roleId, birthDate, ...rest } = userUpdateInDto;
+    const { address, roleId, ...rest } = userUpdateInDto;
 
     const updatePayload = {
       ...rest,
@@ -284,10 +280,6 @@ export class UserService {
 
     if (roleId || userUpdateInDto.password || 'archivedAt' in userUpdateInDto) {
       updatePayload['jit'] = null;
-    }
-
-    if (birthDate !== undefined) {
-      updatePayload['birthDate'] = birthDate ? new Date(birthDate) : null;
     }
 
     const userAfterUpdate = await this.prismaService.user.update({
