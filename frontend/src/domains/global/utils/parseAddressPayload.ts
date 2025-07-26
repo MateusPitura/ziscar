@@ -1,23 +1,29 @@
-interface ParseAddressPayloadProperties<T> {
+import { UnwrapArray } from "../types";
+
+interface ParseAddressPayloadProperties<T extends unknown[]> {
   newAddress?: T;
   oldAddress?: Record<string, string>[];
 }
 
-export default function parseAddressPayload<T>({
+export default function parseAddressPayload<T extends unknown[]>({
   newAddress,
   oldAddress,
 }: ParseAddressPayloadProperties<T>):
-  | Record<string, NonNullable<T> | boolean>
+  | Record<string, NonNullable<UnwrapArray<T>> | boolean>
   | undefined {
-  if (newAddress && !oldAddress?.length) {
+  if (!newAddress) return undefined;
+
+  const address = newAddress[0] as NonNullable<UnwrapArray<T>>;
+
+  if (address && !oldAddress?.length) {
     return {
-      add: newAddress,
+      add: address,
     };
-  } else if (newAddress && oldAddress?.length) {
+  } else if (address && oldAddress?.length) {
     return {
-      update: newAddress,
+      update: address,
     };
-  } else if (!newAddress && oldAddress?.length) {
+  } else if (!address && oldAddress?.length) {
     return {
       remove: true,
     };

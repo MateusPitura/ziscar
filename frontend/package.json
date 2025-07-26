@@ -41,6 +41,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
+    "@faker-js/faker": "^9.9.0",
     "@hookform/devtools": "^4.3.3",
     "@tanstack/react-query-devtools": "^5.66.0",
     "@types/lodash": "^4.17.15",

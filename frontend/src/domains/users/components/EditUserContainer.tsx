@@ -41,7 +41,7 @@ export default function EditUserContainer(): ReactNode {
     const { address, ...rest } = data;
 
     const addressPayload = parseAddressPayload({
-      newAddress: address[0],
+      newAddress: address,
       oldAddress: userData?.address,
     });
 

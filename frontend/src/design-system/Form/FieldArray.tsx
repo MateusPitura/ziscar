@@ -43,6 +43,7 @@ export default function FieldArray<T extends FieldValues>({
                   onClick={() => {
                     remove(index);
                   }}
+                  data-cy={`button-remove-${name}`}
                 />
               </Tooltip>
             </div>
@@ -60,6 +61,7 @@ export default function FieldArray<T extends FieldValues>({
             }}
             fullWidth
             textAlign="center"
+            data-cy={`button-append-${name}`}
           />
           <InputError name={name} isFieldArray />
         </div>

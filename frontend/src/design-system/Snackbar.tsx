@@ -45,6 +45,7 @@ export default function Snackbar(): ReactElement {
                         "!text-white": variant === "destructive",
                       }
                     )}
+                    data-cy="snackbar-title"
                   >
                     {title}
                   </span>

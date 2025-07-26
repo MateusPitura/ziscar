@@ -21,7 +21,7 @@ import {
 } from '@shared/constants';
 import { PdfService } from 'src/pdf/pdf.service';
 import { SheetService } from 'src/sheet/sheet.service';
-import { adddressNullableFields } from './user.constant';
+import { addressNullableFields } from './user.constant';
 
 describe('UserService', () => {
   let userService: UserService;
@@ -399,7 +399,7 @@ describe('UserService', () => {
           data: {
             address: {
               update: {
-                ...adddressNullableFields,
+                ...addressNullableFields,
                 cep: '87654321',
                 number: '321',
               },

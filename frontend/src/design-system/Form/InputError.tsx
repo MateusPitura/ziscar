@@ -23,6 +23,7 @@ export default function InputError({
       className={classNames("text-body-small text-red-500 p-1", {
         invisible: !errorsFormatted,
       })}
+      data-cy={`input-error-${name}`}
     >
       {isFieldArray
         ? errorsFormatted?.root?.message?.toString()
