@@ -10,8 +10,8 @@ export const FRONTEND_URL = isProduction
   ? 'https://ziscar.me'
   : `http://localhost:${FRONTEND_PORT}`;
 
-export const POPULATE_ENTERPRISE_ID = 145; // 🌠 change name
-export const POPULATE_SECONDARY_ENTERPRISE_ID = 154;
+export const POPULATE_ENTERPRISE_PRIMARY_ID = 145;
+export const POPULATE_ENTERPRISE_SECONDARY_ID = 154;
 
 export const POPULATE_USER_DEFAULT = {
   id: 150,
@@ -36,7 +36,7 @@ export const AUTH_REQUEST_DEFAULT = {
   ...new Request(RANDOM_URL),
   authToken: {
     userId: POPULATE_USER_DEFAULT.id,
-    enterpriseId: POPULATE_ENTERPRISE_ID,
+    enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
     jit: '0aaa1cdc-9839-4c3f-879f-b5c037b7af3c',
     permissions: DEFAULT_PERMISSIONS,
   },

@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import {
-  POPULATE_ENTERPRISE_ID,
+  POPULATE_ENTERPRISE_PRIMARY_ID,
   POPULATE_STORE_DEFAULT,
   POPULATE_STORE_INACTIVE,
   POPULATE_USER_DEFAULT,
@@ -20,10 +20,10 @@ async function seed() {
     console.log('👥 Starting database population...');
 
     const enterprise = await tx.enterprise.upsert({
-      where: { id: POPULATE_ENTERPRISE_ID },
+      where: { id: POPULATE_ENTERPRISE_PRIMARY_ID },
       update: {},
       create: {
-        id: POPULATE_ENTERPRISE_ID,
+        id: POPULATE_ENTERPRISE_PRIMARY_ID,
       },
     });
 
@@ -33,11 +33,11 @@ async function seed() {
       data: [
         {
           ...POPULATE_STORE_DEFAULT,
-          enterpriseId: POPULATE_ENTERPRISE_ID,
+          enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
         },
         {
           ...POPULATE_STORE_INACTIVE,
-          enterpriseId: POPULATE_ENTERPRISE_ID,
+          enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
         },
       ],
     });

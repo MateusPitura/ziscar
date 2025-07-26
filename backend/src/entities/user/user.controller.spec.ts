@@ -11,7 +11,7 @@ import { PdfService } from 'src/helpers/pdf/pdf.service';
 import { PrismaService } from 'src/infra/database/prisma.service';
 import {
   AUTH_REQUEST_DEFAULT,
-  POPULATE_ENTERPRISE_ID,
+  POPULATE_ENTERPRISE_PRIMARY_ID,
   POPULATE_USER_DEFAULT,
   POPULATE_USER_INACTIVE,
 } from 'src/constants';
@@ -207,7 +207,7 @@ describe('UserController', () => {
           mode: 'insensitive',
         },
         isActive: true,
-        clientId: POPULATE_ENTERPRISE_ID,
+        clientId: POPULATE_ENTERPRISE_PRIMARY_ID,
         NOT: {
           id: POPULATE_USER_DEFAULT.id,
         },

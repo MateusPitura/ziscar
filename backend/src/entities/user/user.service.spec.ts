@@ -16,8 +16,8 @@ import { PdfService } from 'src/helpers/pdf/pdf.service';
 import { addressNullableFields } from './user.constant';
 import { PrismaService } from 'src/infra/database/prisma.service';
 import {
-  POPULATE_ENTERPRISE_ID,
-  POPULATE_SECONDARY_ENTERPRISE_ID,
+  POPULATE_ENTERPRISE_PRIMARY_ID,
+  POPULATE_ENTERPRISE_SECONDARY_ID,
   POPULATE_USER_DEFAULT,
   POPULATE_USER_INACTIVE,
 } from 'src/constants';
@@ -66,7 +66,7 @@ describe('UserService', () => {
           userCreateInDto: {
             email: 'jane.doe@email.com',
             fullName: 'Jane Doe',
-            enterpriseId: POPULATE_ENTERPRISE_ID,
+            enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
             roleId: SEED_ROLE_SALES_ID,
           },
         }),
@@ -85,7 +85,7 @@ describe('UserService', () => {
         userCreateInDto: {
           email: POPULATE_USER_DEFAULT.email,
           fullName: 'John Doe',
-          enterpriseId: POPULATE_ENTERPRISE_ID,
+          enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
           roleId: SEED_ROLE_SALES_ID,
         },
       }),
@@ -98,7 +98,7 @@ describe('UserService', () => {
         userCreateInDto: {
           email: POPULATE_USER_INACTIVE.email,
           fullName: 'Tony Stark',
-          enterpriseId: POPULATE_ENTERPRISE_ID,
+          enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
           roleId: SEED_ROLE_SALES_ID,
         },
       }),
@@ -112,7 +112,7 @@ describe('UserService', () => {
           email: 'jane.doe@email.com',
           fullName: 'John Doe',
           cpf: POPULATE_USER_INACTIVE.cpf,
-          enterpriseId: POPULATE_ENTERPRISE_ID,
+          enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
           roleId: SEED_ROLE_SALES_ID,
         },
       }),
@@ -140,7 +140,7 @@ describe('UserService', () => {
               cep: '12345678',
               number: '123',
             },
-            enterpriseId: POPULATE_ENTERPRISE_ID,
+            enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
             roleId: SEED_ROLE_SALES_ID,
           },
         }),
@@ -178,7 +178,7 @@ describe('UserService', () => {
               state: 'NY',
               neighborhood: 'Manhattan',
             },
-            enterpriseId: POPULATE_ENTERPRISE_ID,
+            enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
             roleId: SEED_ROLE_SALES_ID,
           },
         }),
@@ -203,7 +203,7 @@ describe('UserService', () => {
           userUpdateInDto: {
             fullName: 'Jane Doe',
           },
-          enterpriseId: POPULATE_ENTERPRISE_ID,
+          enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
         }),
       ).toBeTruthy();
 
@@ -221,7 +221,7 @@ describe('UserService', () => {
       userUpdateInDto: {
         phone: '42988884444',
       },
-      enterpriseId: POPULATE_ENTERPRISE_ID,
+      enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
     });
 
     expect(spy).toHaveBeenCalledTimes(0);
@@ -239,7 +239,7 @@ describe('UserService', () => {
           userUpdateInDto: {
             cpf: '11111111111',
           },
-          enterpriseId: POPULATE_ENTERPRISE_ID,
+          enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
         }),
       ).toBeTruthy();
 
@@ -259,7 +259,7 @@ describe('UserService', () => {
           userUpdateInDto: {
             cpf: POPULATE_USER_DEFAULT.cpf,
           },
-          enterpriseId: POPULATE_ENTERPRISE_ID,
+          enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
         }),
       ).rejects.toThrow(ConflictException);
 
@@ -279,7 +279,7 @@ describe('UserService', () => {
           userUpdateInDto: {
             cpf: POPULATE_USER_INACTIVE.cpf,
           },
-          enterpriseId: POPULATE_ENTERPRISE_ID,
+          enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
         }),
       ).rejects.toThrow(ConflictException);
 
@@ -301,7 +301,7 @@ describe('UserService', () => {
           userUpdateInDto: {
             password: '123456',
           },
-          enterpriseId: POPULATE_ENTERPRISE_ID,
+          enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
         }),
       ).toBeTruthy();
 
@@ -325,7 +325,7 @@ describe('UserService', () => {
           userUpdateInDto: {
             password: '123456',
           },
-          enterpriseId: POPULATE_ENTERPRISE_ID,
+          enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
         }),
       ).rejects.toThrow(NotFoundException);
 
@@ -347,7 +347,7 @@ describe('UserService', () => {
           userUpdateInDto: {
             password: '123456',
           },
-          enterpriseId: POPULATE_SECONDARY_ENTERPRISE_ID,
+          enterpriseId: POPULATE_ENTERPRISE_SECONDARY_ID,
         }),
       ).rejects.toThrow(NotFoundException);
 
@@ -364,7 +364,7 @@ describe('UserService', () => {
         where: {
           id: POPULATE_USER_DEFAULT.id,
         },
-        enterpriseId: POPULATE_ENTERPRISE_ID,
+        enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
       };
 
       await userService.update({
@@ -419,7 +419,7 @@ describe('UserService', () => {
           },
           roleId: SEED_ROLE_SALES_ID,
         },
-        enterpriseId: POPULATE_ENTERPRISE_ID,
+        enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
       });
 
       expect(user).toHaveProperty('address.cep', '12345678');
@@ -438,7 +438,7 @@ describe('UserService', () => {
         where: {
           id: POPULATE_USER_DEFAULT.id,
         },
-        enterpriseId: POPULATE_ENTERPRISE_ID,
+        enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
       };
 
       await expect(
@@ -486,7 +486,7 @@ describe('UserService', () => {
         where: {
           id: POPULATE_USER_DEFAULT.id,
         },
-        enterpriseId: POPULATE_ENTERPRISE_ID,
+        enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
       };
 
       await expect(
@@ -535,7 +535,7 @@ describe('UserService', () => {
         userUpdateInDto: {
           roleId: SEED_ROLE_ADMIN_ID,
         },
-        enterpriseId: POPULATE_ENTERPRISE_ID,
+        enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
         select: {
           jit: true,
         },
@@ -558,7 +558,7 @@ describe('UserService', () => {
         userUpdateInDto: {
           password: '123456',
         },
-        enterpriseId: POPULATE_ENTERPRISE_ID,
+        enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
         select: {
           jit: true,
         },
@@ -581,7 +581,7 @@ describe('UserService', () => {
         userUpdateInDto: {
           archivedAt: new Date(),
         },
-        enterpriseId: POPULATE_ENTERPRISE_ID,
+        enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
         select: {
           jit: true,
         },
@@ -605,7 +605,7 @@ describe('UserService', () => {
           userUpdateInDto: {
             archivedAt: new Date(),
           },
-          enterpriseId: POPULATE_ENTERPRISE_ID,
+          enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
         }),
       ).toBeTruthy();
 
@@ -625,7 +625,7 @@ describe('UserService', () => {
           userUpdateInDto: {
             archivedAt: new Date(),
           },
-          enterpriseId: POPULATE_ENTERPRISE_ID,
+          enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
         }),
       ).rejects.toThrow(NotFoundException);
 
@@ -645,7 +645,7 @@ describe('UserService', () => {
           userUpdateInDto: {
             archivedAt: undefined,
           },
-          enterpriseId: POPULATE_ENTERPRISE_ID,
+          enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
         }),
       ).toBeTruthy();
 
@@ -665,7 +665,7 @@ describe('UserService', () => {
           userUpdateInDto: {
             archivedAt: undefined,
           },
-          enterpriseId: POPULATE_ENTERPRISE_ID,
+          enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
         }),
       ).rejects.toThrow(NotFoundException);
 
@@ -685,7 +685,7 @@ describe('UserService', () => {
           cpf: null,
           phone: null,
         },
-        enterpriseId: POPULATE_ENTERPRISE_ID,
+        enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
       });
 
       expect(result).toMatchObject(
@@ -723,7 +723,7 @@ describe('UserService', () => {
       userService.findOne({
         where: { id: POPULATE_USER_DEFAULT.id },
         select: { id: true },
-        enterpriseId: POPULATE_SECONDARY_ENTERPRISE_ID,
+        enterpriseId: POPULATE_ENTERPRISE_SECONDARY_ID,
       }),
     ).rejects.toThrow(NotFoundException);
   });
@@ -732,7 +732,7 @@ describe('UserService', () => {
     const result = await userService.findMany({
       userFindManyInDto: { page: 1 },
       userId: POPULATE_USER_DEFAULT.id,
-      enterpriseId: POPULATE_ENTERPRISE_ID,
+      enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
     });
 
     expect(result).toHaveProperty('total', 24);
@@ -743,7 +743,7 @@ describe('UserService', () => {
     const result = await userService.findMany({
       userFindManyInDto: { page: 1 },
       userId: POPULATE_USER_DEFAULT.id,
-      enterpriseId: POPULATE_ENTERPRISE_ID,
+      enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
     });
 
     const signedUser = result.data.find(
@@ -763,7 +763,7 @@ describe('UserService', () => {
         fullName: POPULATE_USER_DEFAULT.fullName,
       },
       userId: POPULATE_USER_DEFAULT.id,
-      enterpriseId: POPULATE_ENTERPRISE_ID,
+      enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
     });
 
     expect(spy).toHaveBeenCalledWith(
@@ -784,7 +784,7 @@ describe('UserService', () => {
     await userService.findMany({
       userFindManyInDto: { orderBy: 'fullName' },
       userId: POPULATE_USER_DEFAULT.id,
-      enterpriseId: POPULATE_ENTERPRISE_ID,
+      enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
     });
 
     expect(spy).toHaveBeenCalledWith(
@@ -796,7 +796,7 @@ describe('UserService', () => {
     const result = await userService.findMany({
       userFindManyInDto: { status: 'inactive' },
       userId: POPULATE_USER_DEFAULT.id,
-      enterpriseId: POPULATE_ENTERPRISE_ID,
+      enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
     });
 
     expect(result).toHaveProperty('total', 7);
@@ -813,7 +813,7 @@ describe('UserService', () => {
         orderBy: 'fullName',
       },
       userId: POPULATE_USER_DEFAULT.id,
-      enterpriseId: POPULATE_ENTERPRISE_ID,
+      enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
     });
 
     expect(spy).toHaveBeenCalledWith({
@@ -826,7 +826,7 @@ describe('UserService', () => {
           mode: 'insensitive',
         },
         isActive: true,
-        enterpriseId: POPULATE_ENTERPRISE_ID,
+        enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
         NOT: {
           id: POPULATE_USER_DEFAULT.id,
         },
@@ -839,7 +839,7 @@ describe('UserService', () => {
     const result = await userService.findMany({
       userFindManyInDto: { status: 'active' },
       userId: POPULATE_USER_DEFAULT.id,
-      enterpriseId: POPULATE_SECONDARY_ENTERPRISE_ID,
+      enterpriseId: POPULATE_ENTERPRISE_SECONDARY_ID,
     });
 
     expect(result).toHaveProperty('total', 0);
@@ -850,7 +850,7 @@ describe('UserService', () => {
     await expect(
       userService.getPermissions({
         userId: POPULATE_USER_DEFAULT.id,
-        enterpriseId: POPULATE_SECONDARY_ENTERPRISE_ID,
+        enterpriseId: POPULATE_ENTERPRISE_SECONDARY_ID,
       }),
     ).rejects.toThrow(NotFoundException);
   });
@@ -858,7 +858,7 @@ describe('UserService', () => {
   it('should not get user permissions with outer client id provided', async () => {
     const permissions = await userService.getPermissions({
       userId: POPULATE_USER_DEFAULT.id,
-      enterpriseId: POPULATE_ENTERPRISE_ID,
+      enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
     });
 
     expect(permissions).toEqual({
@@ -879,7 +879,7 @@ describe('UserService', () => {
         status: 'active',
       },
       userId: POPULATE_USER_DEFAULT.id,
-      enterpriseId: POPULATE_ENTERPRISE_ID,
+      enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
     });
 
     expect(spy).toHaveBeenCalled();
