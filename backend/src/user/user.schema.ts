@@ -33,9 +33,9 @@ const SchemaUserCreateInDto = SchemaUserPostInDto.extend({
 
 const SchemaUserFindManyInDto = s.object({
   page: s.number().optional(),
-  status: s.list(['active', 'inactive']).optional(),
+  status: s.radio(['active', 'inactive']).optional(),
   fullName: s.fullName().optional(),
-  orderBy: s.list(['fullName', 'email']).optional(),
+  orderBy: s.radio(['fullName', 'email']).optional(),
 });
 
 const SchemaUserGeneratePdfInDto = SchemaUserFindManyInDto.omit({ page: true });

@@ -23,22 +23,20 @@ interface FormProperties<T extends FieldValues> extends Childrenable {
   replaceEmptyStringToNull?: boolean;
 }
 
-function getDirtyValues(
-  dirtyFields: Record<string, unknown> | boolean,
-  allValues: Record<string, unknown>
-): Record<string, unknown> {
+type Field = Record<string, unknown>;
+
+function getDirtyValues(dirtyFields: Field | boolean, allValues: Field): Field {
   if (dirtyFields === true || Array.isArray(dirtyFields)) return allValues;
   return Object.fromEntries(
-    Object.keys(dirtyFields).map((key) => [
-      key,
-      getDirtyValues(
-        (dirtyFields as Record<string, unknown>)[key] as Record<
-          string,
-          unknown
-        >,
-        allValues[key] as Record<string, unknown>
-      ),
-    ])
+    Object.keys(dirtyFields)
+      .filter((key) => (dirtyFields as Field)[key] !== false)
+      .map((key) => [
+        key,
+        getDirtyValues(
+          (dirtyFields as Field)[key] as Field,
+          allValues[key] as Field
+        ),
+      ])
   );
 }
 

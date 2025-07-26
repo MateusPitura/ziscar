@@ -42,3 +42,5 @@ export const STATES = [
   { value: "SE", label: "Sergipe" },
   { value: "TO", label: "Tocantins" },
 ];
+
+export const PREVIOUS_PAGE = -1;

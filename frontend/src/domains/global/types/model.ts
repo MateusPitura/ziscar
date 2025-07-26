@@ -11,7 +11,7 @@ export type Address = {
 };
 
 export interface User {
-  id: string;
+  id: number;
   fullName: string;
   email: string;
   cellPhone?: string;

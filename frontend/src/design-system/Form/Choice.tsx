@@ -1,59 +1,54 @@
-import { Childrenable } from "@/domains/global/types";
-import {
-  Children,
-  cloneElement,
-  ReactNode,
-  useMemo,
-  type ReactElement,
-} from "react";
-import {
-  FieldValues,
-  Path,
-  useFormContext,
-  useFormState,
-} from "react-hook-form";
-import ErrorLabel from "./ErrorLabel";
+import { Childrenable, UnwrapArray } from "@/domains/global/types";
+import { createContext, ReactNode, useContext, type ReactElement } from "react";
+import { FieldValues, Path, PathValue, useFormContext } from "react-hook-form";
+import InputError from "./InputError";
 
-interface ContainerProps<T extends FieldValues> extends Childrenable {
-  name: Path<T>;
+interface ChoiceContextValues {
   hideErrorLabel?: boolean;
-}
-
-function Container<T extends FieldValues>({
-  children,
-  name,
-  hideErrorLabel,
-}: ContainerProps<T>): ReactElement {
-  const enhancedChildren = useMemo(
-    () =>
-      Children.map(children, (child) => {
-        return cloneElement(child as ReactElement, { name, hideErrorLabel });
-      }),
-    [children, name, hideErrorLabel]
-  );
-
-  return <>{enhancedChildren}</>;
-}
-
-interface RadioProperties {
-  label: string;
-  name?: string;
   required?: boolean;
-  value: string | number;
-  hideErrorLabel?: boolean;
 }
 
-function Radio({
+const ChoiceContext = createContext<ChoiceContextValues>({
+  hideErrorLabel: false,
+  required: false,
+});
+
+function useChoiceContext() {
+  const context = useContext(ChoiceContext);
+  if (!context)
+    throw new Error("useChoiceContext must be used within a ChoiceProvider");
+  return context;
+}
+
+type ContainerProps = Childrenable & ChoiceContextValues;
+
+function Container({
+  children,
+  hideErrorLabel,
+  required,
+}: ContainerProps): ReactElement {
+  return (
+    <ChoiceContext.Provider value={{ hideErrorLabel, required }}>
+      {children}
+    </ChoiceContext.Provider>
+  );
+}
+
+type RadioProperties<T extends FieldValues> = {
+  [K in Path<T>]: {
+    label: string;
+    name: K;
+    value: PathValue<T, K>;
+  };
+}[Path<T>];
+
+function Radio<T extends FieldValues>({
   label,
   name,
-  hideErrorLabel,
   ...props
-}: RadioProperties): ReactNode {
+}: RadioProperties<T>): ReactNode {
   const { register } = useFormContext();
-
-  const { errors } = useFormState({
-    name,
-  });
+  const { hideErrorLabel, required } = useChoiceContext();
 
   if (!name) return;
 
@@ -64,29 +59,32 @@ function Radio({
           type="radio"
           {...register(name)}
           className="peer col-start-1 row-start-1 appearance-none shrink-0 w-4 h-4 border-2 border-slate-800 rounded-full disabled:border-neutral-300 cursor-pointer"
+          required={required}
           {...props}
         />
         <div className="col-start-1 row-start-1 w-2 h-2 rounded-full peer-checked:bg-slate-800 peer-checked:peer-disabled:bg-neutral-300" />
       </div>
       <div className="text-body-large text-neutral-700">{label}</div>
-      {hideErrorLabel || <ErrorLabel errors={errors} name={name} />}
+      {hideErrorLabel || <InputError name={name} />}
     </label>
   );
 }
 
-type CheckboxProperties = RadioProperties;
+type CheckboxProperties<T extends FieldValues> = {
+  [K in Path<T>]: {
+    label: string;
+    name: K;
+    value: UnwrapArray<PathValue<T, K>>;
+  };
+}[Path<T>];
 
-function Checkbox({
+function Checkbox<T extends FieldValues>({
   label,
   name,
-  hideErrorLabel,
   ...props
-}: CheckboxProperties): ReactNode {
+}: CheckboxProperties<T>): ReactNode {
   const { register } = useFormContext();
-
-  const { errors } = useFormState({
-    name,
-  });
+  const { hideErrorLabel, required } = useChoiceContext();
 
   if (!name) return;
 
@@ -96,10 +94,11 @@ function Checkbox({
         type="checkbox"
         {...register(name)}
         className="col-start-1 row-start-1 shrink-0 w-4 h-4 border-2 accent-slate-800 disabled:border-neutral-300 cursor-pointer"
+        required={required}
         {...props}
       />
       <div className="text-body-large text-neutral-700">{label}</div>
-      {hideErrorLabel || <ErrorLabel errors={errors} name={name} />}
+      {hideErrorLabel || <InputError name={name} />}
     </label>
   );
 }
