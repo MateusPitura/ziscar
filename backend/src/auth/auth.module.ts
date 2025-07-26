@@ -31,4 +31,4 @@ import { EnterpriseModule } from 'src/enterprise/enterprise.module';
   controllers: [AuthController],
   providers: [AuthService],
 })
-export class AuthModule { }
+export class AuthModule {}

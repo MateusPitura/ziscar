@@ -6,12 +6,14 @@ import { PaymentMethodReceivableController } from './payment-method-receivable.c
 
 @Module({
   controllers: [PaymentMethodReceivableController],
-  providers: [PrismaService,
+  providers: [
+    PrismaService,
     {
       provide: PaymentMethodReceivableRepository,
       useClass: PaymentMethodReceivableService,
     },
-    PaymentMethodReceivableService,],
+    PaymentMethodReceivableService,
+  ],
   exports: [PaymentMethodReceivableRepository, PaymentMethodReceivableService],
 })
 export class PaymentMethodReceivableModule {}

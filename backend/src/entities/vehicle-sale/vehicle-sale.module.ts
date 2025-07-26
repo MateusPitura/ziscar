@@ -6,12 +6,14 @@ import { VehicleSaleController } from './vehicle-sale.controller';
 
 @Module({
   controllers: [VehicleSaleController],
-  providers: [PrismaService,
+  providers: [
+    PrismaService,
     {
       provide: VehicleSaleRepository,
       useClass: VehicleSaleService,
     },
-    VehicleSaleService,],
+    VehicleSaleService,
+  ],
   exports: [VehicleSaleRepository, VehicleSaleService],
 })
 export class VehicleSaleModule {}

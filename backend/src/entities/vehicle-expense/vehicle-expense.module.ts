@@ -6,12 +6,14 @@ import { VehicleExpenseController } from './vehicle-expense.controller';
 
 @Module({
   controllers: [VehicleExpenseController],
-  providers: [PrismaService,
+  providers: [
+    PrismaService,
     {
       provide: VehicleExpenseRepository,
       useClass: VehicleExpenseService,
     },
-    VehicleExpenseService,],
+    VehicleExpenseService,
+  ],
   exports: [VehicleExpenseRepository, VehicleExpenseService],
 })
 export class VehicleExpenseModule {}

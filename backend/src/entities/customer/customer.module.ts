@@ -6,12 +6,14 @@ import { CustomerController } from './customer.controller';
 
 @Module({
   controllers: [CustomerController],
-  providers: [PrismaService,
+  providers: [
+    PrismaService,
     {
       provide: CustomerRepository,
       useClass: CustomerService,
     },
-    CustomerService,],
+    CustomerService,
+  ],
   exports: [CustomerRepository, CustomerService],
 })
 export class CustomerModule {}

@@ -6,12 +6,14 @@ import { AccountPayableController } from './account-payable.controller';
 
 @Module({
   controllers: [AccountPayableController],
-  providers: [PrismaService,
+  providers: [
+    PrismaService,
     {
       provide: AccountPayableRepository,
       useClass: AccountPayableService,
     },
-    AccountPayableService,],
+    AccountPayableService,
+  ],
   exports: [AccountPayableRepository, AccountPayableService],
 })
 export class AccountPayableModule {}

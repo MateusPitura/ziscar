@@ -3,7 +3,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { encryptPassword, removeTimeFromDate } from './user.utils';
+import { encryptPassword } from './user.utils';
 import {
   GET_PERMISSIONS,
   GET_USER,
@@ -18,9 +18,7 @@ import {
   FindManyInput,
   FindOneInput,
   GeneratePdfInput,
-  GenerateSheetInput,
   GetPermissionsInput,
-  Role,
   UpdateInput,
   VerifyDuplicatedInput,
 } from './user.type';
@@ -39,7 +37,7 @@ export class UserService {
     private readonly emailService: EmailService,
     private readonly jwtService: JwtService,
     private readonly pdfService: PdfService,
-  ) { }
+  ) {}
 
   async create({ userCreateInDto, transaction }: CreateInput) {
     const database = transaction || this.prismaService;
@@ -51,7 +49,8 @@ export class UserService {
       });
     }
 
-    const { address, enterpriseId, roleId, birthDate, ...rest } = userCreateInDto;
+    const { address, enterpriseId, roleId, birthDate, ...rest } =
+      userCreateInDto;
 
     const createPayload = {
       ...rest,
@@ -192,7 +191,10 @@ export class UserService {
     });
 
     return handlePermissions({
-      permissions: (user?.role as RoleWithPermissions)?.rolePermissions?.map(rp => rp.permission) ?? [],
+      permissions:
+        (user?.role as RoleWithPermissions)?.rolePermissions?.map(
+          (rp) => rp.permission,
+        ) ?? [],
     });
   }
 
@@ -211,15 +213,15 @@ export class UserService {
 
     const userBeforeUpdate = await this.findOne({
       where: {
-      archivedAt: userUpdateInDto.arquivedAt === null ? { not: null } : null,
-      ...where,
+        archivedAt: userUpdateInDto.arquivedAt === null ? { not: null } : null,
+        ...where,
       },
       enterpriseId,
       onlyActive: false,
       showNotFoundError,
       select: {
-      addressId: true,
-      id: true,
+        addressId: true,
+        id: true,
       },
     });
 

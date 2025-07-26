@@ -3,7 +3,7 @@ import { AuthModule } from './auth/auth.module';
 import { DatabaseModule } from './infra/database/database.module';
 import { ConfigModule } from '@nestjs/config';
 import { EmailModule } from './entities/email/email.module';
-import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
+import { APP_PIPE } from '@nestjs/core';
 import { ZodValidationPipe } from 'nestjs-zod';
 import { PdfModule } from './helpers/pdf/pdf.module';
 import { AppController } from './app.controller';
@@ -22,8 +22,8 @@ import { UserModule } from './entities/user/user.module';
     {
       provide: APP_PIPE,
       useClass: ZodValidationPipe,
-    }
+    },
   ],
   controllers: [AppController],
 })
-export class AppModule { }
+export class AppModule {}

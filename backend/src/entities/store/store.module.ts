@@ -6,12 +6,14 @@ import { StoreController } from './store.controller';
 
 @Module({
   controllers: [StoreController],
-  providers: [PrismaService,
+  providers: [
+    PrismaService,
     {
       provide: StoreRepository,
       useClass: StoreService,
     },
-    StoreService,],
+    StoreService,
+  ],
   exports: [StoreRepository, StoreService],
 })
 export class StoreModule {}

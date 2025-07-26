@@ -6,12 +6,14 @@ import { AccountReceivableController } from './account-receivable.controller';
 
 @Module({
   controllers: [AccountReceivableController],
-  providers: [PrismaService,
+  providers: [
+    PrismaService,
     {
       provide: AccountReceivableRepository,
       useClass: AccountReceivableService,
     },
-    AccountReceivableService,],
+    AccountReceivableService,
+  ],
   exports: [AccountReceivableRepository, AccountReceivableService],
 })
 export class AccountReceivableModule {}

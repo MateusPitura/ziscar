@@ -15,7 +15,7 @@ const prisma = new PrismaClient();
 
 async function seed() {
   await prisma.$transaction(async (tx) => {
-    console.log('🌱 Starting database population...');
+    console.log('👥 Starting database population...');
 
     const enterprise = await tx.enterprise.upsert({
       where: { id: POPULATE_ENTERPRISE_ID },
@@ -24,6 +24,7 @@ async function seed() {
         id: POPULATE_ENTERPRISE_ID,
       },
     });
+
     console.log(`✅ Enterprise "${enterprise.id}" created or verified.`);
 
     await tx.user.createMany({
@@ -47,6 +48,7 @@ async function seed() {
       ],
       skipDuplicates: true,
     });
+
     console.log('✅ Default users created.');
 
     const usersPromise = Array.from({ length: 30 }, async (_, index) => ({
@@ -64,18 +66,19 @@ async function seed() {
       data: usersToCreate,
       skipDuplicates: true,
     });
+
     console.log(`✅ ${usersToCreate.length} fake users created.`);
   });
 }
 
 seed()
   .then(() => {
-    console.log('🌱 Database populated successfully.');
+    console.log('👥 Database populated successfully.');
   })
   .catch((error) => {
     console.error('❌ Failed to run populate:', error);
     process.exit(1);
   })
-  .finally(async () => {
-    await prisma.$disconnect();
+  .finally(() => {
+    void prisma.$disconnect();
   });

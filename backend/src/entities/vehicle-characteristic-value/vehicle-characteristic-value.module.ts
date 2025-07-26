@@ -6,12 +6,17 @@ import { VehicleCharacteristicValueController } from './vehicle-characteristic-v
 
 @Module({
   controllers: [VehicleCharacteristicValueController],
-  providers: [PrismaService,
+  providers: [
+    PrismaService,
     {
       provide: VehicleCharacteristicValueRepository,
       useClass: VehicleCharacteristicValueService,
     },
-    VehicleCharacteristicValueService,],
-  exports: [VehicleCharacteristicValueRepository, VehicleCharacteristicValueService],
+    VehicleCharacteristicValueService,
+  ],
+  exports: [
+    VehicleCharacteristicValueRepository,
+    VehicleCharacteristicValueService,
+  ],
 })
 export class VehicleCharacteristicValueModule {}

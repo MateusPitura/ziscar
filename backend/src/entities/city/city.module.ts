@@ -6,12 +6,14 @@ import { CityController } from './city.controller';
 
 @Module({
   controllers: [CityController],
-  providers: [PrismaService,
+  providers: [
+    PrismaService,
     {
       provide: CityRepository,
       useClass: CityService,
     },
-    CityService,],
+    CityService,
+  ],
   exports: [CityRepository, CityService],
 })
 export class CityModule {}

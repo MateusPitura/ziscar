@@ -10,7 +10,7 @@ export const GET_USER = {
   cpf: true,
   jit: true,
   archivedAt: true,
-  roleId: true
+  roleId: true,
 };
 
 export const FETCH_USER = {
@@ -22,7 +22,7 @@ export const FETCH_USER = {
   cpf: true,
   jit: true,
   archivedAt: true,
-  roleId: true
+  roleId: true,
 };
 
 export const GET_PERMISSIONS = {

@@ -6,12 +6,17 @@ import { AccountReceivableInstallmentController } from './account-receivable-ins
 
 @Module({
   controllers: [AccountReceivableInstallmentController],
-  providers: [PrismaService,
+  providers: [
+    PrismaService,
     {
       provide: AccountReceivableInstallmentRepository,
       useClass: AccountReceivableInstallmentService,
     },
-    AccountReceivableInstallmentService,],
-  exports: [AccountReceivableInstallmentRepository, AccountReceivableInstallmentService],
+    AccountReceivableInstallmentService,
+  ],
+  exports: [
+    AccountReceivableInstallmentRepository,
+    AccountReceivableInstallmentService,
+  ],
 })
 export class AccountReceivableInstallmentModule {}

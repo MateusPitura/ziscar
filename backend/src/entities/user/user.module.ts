@@ -1,5 +1,3 @@
-import { PrismaService } from 'src/infra/database/prisma.service';
-import { UserRepository } from 'src/repositories/user-repository';
 import { Module } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
@@ -30,4 +28,4 @@ import { DatabaseModule } from 'src/infra/database/database.module';
   providers: [UserService],
   exports: [UserService],
 })
-export class UserModule { }
+export class UserModule {}

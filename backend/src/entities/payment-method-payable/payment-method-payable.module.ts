@@ -6,12 +6,14 @@ import { PaymentMethodPayableController } from './payment-method-payable.control
 
 @Module({
   controllers: [PaymentMethodPayableController],
-  providers: [PrismaService,
+  providers: [
+    PrismaService,
     {
       provide: PaymentMethodPayableRepository,
       useClass: PaymentMethodPayableService,
     },
-    PaymentMethodPayableService,],
+    PaymentMethodPayableService,
+  ],
   exports: [PaymentMethodPayableRepository, PaymentMethodPayableService],
 })
 export class PaymentMethodPayableModule {}

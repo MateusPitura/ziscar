@@ -6,12 +6,14 @@ import { VehicleBrandController } from './vehicle-brand.controller';
 
 @Module({
   controllers: [VehicleBrandController],
-  providers: [PrismaService,
+  providers: [
+    PrismaService,
     {
       provide: VehicleBrandRepository,
       useClass: VehicleBrandService,
     },
-    VehicleBrandService,],
+    VehicleBrandService,
+  ],
   exports: [VehicleBrandRepository, VehicleBrandService],
 })
 export class VehicleBrandModule {}

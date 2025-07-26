@@ -23,7 +23,6 @@ import {
   UserDeleteInDto,
   UserFindManyInDto,
   UserGeneratePdfInDto,
-  UserGenerateSheetInDto,
 } from './user.schema';
 import { ParamInputs } from 'src/schemas';
 import { Actions, Resources } from '@prisma/client';
@@ -76,7 +75,10 @@ export class UserController {
   @Get('permissions')
   async getPermissions(@Req() req: AuthRequest) {
     const { userId, enterpriseId } = req.authToken;
-    return await this.userService.getPermissions({ userId: +userId, enterpriseId });
+    return await this.userService.getPermissions({
+      userId: +userId,
+      enterpriseId,
+    });
   }
 
   @Get('user/pdf')

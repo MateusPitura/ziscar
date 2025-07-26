@@ -7,4 +7,4 @@ import { DatabaseModule } from '../infra/database/database.module';
   imports: [DatabaseModule],
   exports: [EnterpriseService],
 })
-export class EnterpriseModule { }
+export class EnterpriseModule {}

@@ -6,12 +6,14 @@ import { RoleController } from './role.controller';
 
 @Module({
   controllers: [RoleController],
-  providers: [PrismaService,
+  providers: [
+    PrismaService,
     {
       provide: RoleRepository,
       useClass: RoleService,
     },
-    RoleService,],
+    RoleService,
+  ],
   exports: [RoleRepository, RoleService],
 })
 export class RoleModule {}

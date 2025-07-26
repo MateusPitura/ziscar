@@ -28,7 +28,9 @@ import { Actions, Resources } from '@prisma/client';
 export type RoleWithPermissions = {
   id: number;
   name: string;
-  rolePermissions: { permission: { id: number; resource: Resources; action: Actions } }[];
+  rolePermissions: {
+    permission: { id: number; resource: Resources; action: Actions };
+  }[];
 };
 
 @Injectable()
@@ -40,7 +42,7 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly emailService: EmailService,
     private readonly prismaService: PrismaService,
-  ) { }
+  ) {}
 
   async signIn({ authSignInInDto, res }: SiginInInput) {
     const user = await this.userService.findOne({
@@ -65,9 +67,11 @@ export class AuthService {
       userUpdateInDto: { jit },
     });
 
-
     const permissions = handlePermissions({
-      permissions: (user?.role as RoleWithPermissions)?.rolePermissions?.map(rp => rp.permission) ?? [],
+      permissions:
+        (user?.role as RoleWithPermissions)?.rolePermissions?.map(
+          (rp) => rp.permission,
+        ) ?? [],
     });
 
     const payload: AuthSignin = {
@@ -103,7 +107,9 @@ export class AuthService {
 
   async signUp({ authSignUpInDto }: SignUpInput) {
     await this.prismaService.transaction(async (transaction) => {
-      const { enterpriseId } = await this.enterpriseService.create({ transaction });
+      const { enterpriseId } = await this.enterpriseService.create({
+        transaction,
+      });
 
       await Promise.all([
         this.storeService.create({
@@ -112,7 +118,7 @@ export class AuthService {
           enterpriseId,
           email: null,
           phone: null,
-          addressId: null
+          addressId: null,
         }),
         this.userService.create({
           userCreateInDto: {
@@ -173,13 +179,13 @@ export class AuthService {
     });
 
     const payload: AuthResetPassword = {
-      email: user?.email ?? "",
+      email: user?.email ?? '',
       enterpriseId: user!.enterpriseId,
     };
     const token = this.jwtService.sign(payload);
 
     void this.emailService.sendEmail({
-      to: user?.email ?? "",
+      to: user?.email ?? '',
       title: 'Redefina sua senha',
       body: `${FRONTEND_URL}/?token=${token}`,
     });

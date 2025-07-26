@@ -6,12 +6,17 @@ import { AccountPayableInstallmentController } from './account-payable-installme
 
 @Module({
   controllers: [AccountPayableInstallmentController],
-  providers: [PrismaService,
+  providers: [
+    PrismaService,
     {
       provide: AccountPayableInstallmentRepository,
       useClass: AccountPayableInstallmentService,
     },
-    AccountPayableInstallmentService,],
-  exports: [AccountPayableInstallmentRepository, AccountPayableInstallmentService],
+    AccountPayableInstallmentService,
+  ],
+  exports: [
+    AccountPayableInstallmentRepository,
+    AccountPayableInstallmentService,
+  ],
 })
 export class AccountPayableInstallmentModule {}

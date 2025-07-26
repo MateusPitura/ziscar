@@ -1,4 +1,3 @@
-import { User } from '@prisma/client';
 import { FRONTEND_PORT } from '../../shared/src/constants';
 import { AuthRequest } from './auth/auth.type';
 import { DEFAULT_PERMISSIONS } from './entities/user/user.constant';
@@ -27,7 +26,7 @@ export const POPULATE_USER_INACTIVE = {
   email: 'tony.stark@email.com',
   password: '123456',
   cpf: '12345678902',
-  archivedAt: new Date()
+  archivedAt: new Date(),
 };
 
 export const RANDOM_URL = 'http://localhost:8080';
