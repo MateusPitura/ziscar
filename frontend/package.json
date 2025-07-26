@@ -8,7 +8,9 @@
     "prod": "npm run build && gh-pages -d dist",
     "build": "tsc -b && vite build",
     "dev": "vite",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "cypress:test": "cypress run --browser chrome",
+    "cypress:open": "cypress open --browser chrome"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
