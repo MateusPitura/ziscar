@@ -43,8 +43,8 @@ export class AuthController {
   @UseGuards(AuthGuardSignOut)
   @Post('sign-out')
   signOut(@Req() req: AuthRequest, @Res() res?: Response) {
-    const { userId, clientId } = req.authToken;
-    return this.authService.signOut({ userId, clientId, res });
+    const { userId, enterpriseId } = req.authToken;
+    return this.authService.signOut({ userId, enterpriseId, res });
   }
 
   @Post('sign-up')
@@ -58,12 +58,12 @@ export class AuthController {
     @Req() req: AuthRequestResetPassword,
     @Body() { password }: PasswordInDto,
   ) {
-    const { email, clientId } = req.authToken;
+    const { email, enterpriseId } = req.authToken;
     return await this.authService.resetPassword({
       authResetPasswordInDto: {
         email,
         password,
-        clientId,
+        enterpriseId,
       },
     });
   }
@@ -80,12 +80,12 @@ export class AuthController {
   @Post('request-change-password')
   @UseGuards(AuthGuard)
   async requestChangePassword(@Req() req: AuthRequest) {
-    const { userId, clientId } = req.authToken;
+    const { userId, enterpriseId } = req.authToken;
 
     return await this.authService.requestChangePassword({
       requestChangePasswordInDto: {
         id: userId,
-        clientId,
+        enterpriseId,
       },
     });
   }

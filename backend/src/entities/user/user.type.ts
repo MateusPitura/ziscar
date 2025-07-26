@@ -19,13 +19,13 @@ export interface CreateInput extends Transactionable {
 export interface FindManyInput {
   userFindManyInDto: UserFindManyInDto;
   userId: number;
-  clientId: number;
+  enterpriseId: number;
   paginate?: boolean;
   select?: Prisma.UserSelect;
 }
 
 export interface FindOneInput {
-  clientId?: number;
+  enterpriseId?: number;
   where: Prisma.UserWhereUniqueInput;
   select: Prisma.UserSelect;
   onlyActive?: boolean;
@@ -33,7 +33,7 @@ export interface FindOneInput {
 }
 
 export interface UpdateInput {
-  clientId?: number;
+  enterpriseId?: number;
   where: Prisma.UserWhereUniqueInput;
   userUpdateInDto: UserUpdateInDto;
   select?: Prisma.UserSelect;
@@ -41,19 +41,19 @@ export interface UpdateInput {
 }
 
 export interface GeneratePdfInput {
-  clientId: number;
+  enterpriseId: number;
   userGeneratePdfInDto: UserGeneratePdfInDto;
   userId: number;
 }
 
 export interface GenerateSheetInput {
-  clientId: number;
+  enterpriseId: number;
   userGenerateSheetInDto: UserGenerateSheetInDto;
   userId: number;
 }
 
 export interface GetPermissionsInput {
-  clientId: number;
+  enterpriseId: number;
   userId: number;
 }
 

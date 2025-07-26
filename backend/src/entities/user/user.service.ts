@@ -3,18 +3,14 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { PrismaService } from '../infra/database/prisma.service';
-import { EncryptPasswordInput, GetCallback } from '../types';
 import { encryptPassword, removeTimeFromDate } from './user.utils';
 import {
   GET_PERMISSIONS,
   GET_USER,
   adddressNullableFields,
 } from './user.constant';
-import { verifyDuplicated } from '../utils/verifyDuplicated';
 import { EmailService } from '../email/email.service';
 import { JwtService } from '@nestjs/jwt';
-import { generateRandomPassword } from '../utils/generateRandomPassword';
 import { ITEMS_PER_PAGE } from '@shared/constants';
 import { FRONTEND_URL } from 'src/constants';
 import {
@@ -29,8 +25,11 @@ import {
   VerifyDuplicatedInput,
 } from './user.type';
 import { PdfService } from 'src/helpers/pdf/pdf.service';
-import { SheetService } from 'src/sheet/sheet.service';
 import handlePermissions from 'src/utils/handlePermissions';
+import { PrismaService } from 'src/infra/database/prisma.service';
+import { verifyDuplicated } from 'src/utils/verifyDuplicated';
+import { EncryptPasswordInput, GetCallback } from 'src/types';
+import { generateRandomPassword } from 'src/utils/generateRandomPassword';
 
 @Injectable()
 export class UserService {
@@ -39,7 +38,6 @@ export class UserService {
     private readonly emailService: EmailService,
     private readonly jwtService: JwtService,
     private readonly pdfService: PdfService,
-    private readonly sheetService: SheetService,
   ) { }
 
   async create({ userCreateInDto, transaction }: CreateInput) {
@@ -52,13 +50,14 @@ export class UserService {
       });
     }
 
-    const { address, clientId, roleId, birthDate, ...rest } = userCreateInDto;
+    const { address, enterpriseId, roleId, birthDate, ...rest } = userCreateInDto;
 
     const createPayload = {
       ...rest,
       password: await this.encryptPassword({
         password: this.generateRandomPassword(),
       }),
+      fullName: userCreateInDto.fullName,
     };
     if (address) {
       createPayload['address'] = {
@@ -72,9 +71,9 @@ export class UserService {
     await database.user.create({
       data: {
         ...createPayload,
-        client: {
+        enterprise: {
           connect: {
-            id: clientId,
+            id: enterpriseId,
           },
         },
         role: {
@@ -99,7 +98,7 @@ export class UserService {
   async findMany({
     userFindManyInDto,
     userId,
-    clientId,
+    enterpriseId,
     paginate = true,
     select,
   }: FindManyInput) {
@@ -113,7 +112,7 @@ export class UserService {
     const findManyWhere = {
       where: {
         isActive: true,
-        clientId: clientId,
+        enterpriseId: enterpriseId,
         NOT: {
           id: userId,
         },
@@ -148,23 +147,14 @@ export class UserService {
       this.prismaService.user.count(findManyWhere),
     ]);
 
-    const dataFormatted = data.map((item) => {
-      return {
-        ...item,
-        ...(item.birthDate && {
-          birthDate: removeTimeFromDate({ date: item.birthDate }),
-        }),
-      };
-    });
-
     return {
       total,
-      data: dataFormatted,
+      data,
     };
   }
 
   async findOne({
-    clientId,
+    enterpriseId,
     where,
     select,
     onlyActive = true,
@@ -174,8 +164,8 @@ export class UserService {
       where['isActive'] = true;
     }
 
-    if (clientId) {
-      where['clientId'] = clientId;
+    if (enterpriseId) {
+      where['enterpriseId'] = enterpriseId;
     }
 
     const user = await this.prismaService.user.findFirst({
@@ -190,19 +180,12 @@ export class UserService {
       return null;
     }
 
-    const userFormatted = {
-      ...user,
-      ...(user.birthDate && {
-        birthDate: removeTimeFromDate({ date: user.birthDate }),
-      }),
-    };
-
-    return userFormatted;
+    return user;
   }
 
-  async getPermissions({ clientId, userId }: GetPermissionsInput) {
+  async getPermissions({ enterpriseId, userId }: GetPermissionsInput) {
     const user = await this.findOne({
-      clientId,
+      enterpriseId,
       where: { id: userId },
       select: GET_PERMISSIONS,
     });
@@ -211,7 +194,7 @@ export class UserService {
   }
 
   async update({
-    clientId,
+    enterpriseId,
     where,
     userUpdateInDto,
     select = GET_USER,
@@ -225,15 +208,15 @@ export class UserService {
 
     const userBeforeUpdate = await this.findOne({
       where: {
-        isActive: !userUpdateInDto.isActive,
-        ...where,
+      archivedAt: userUpdateInDto.isActive === false ? { not: null } : null,
+      ...where,
       },
-      clientId,
+      enterpriseId,
       onlyActive: false,
       showNotFoundError,
       select: {
-        addressId: true,
-        id: true,
+      addressId: true,
+      id: true,
       },
     });
 
@@ -310,23 +293,16 @@ export class UserService {
       select,
     });
 
-    const userFormatted = {
-      ...userAfterUpdate,
-      ...(userAfterUpdate.birthDate && {
-        birthDate: removeTimeFromDate({ date: userAfterUpdate.birthDate }),
-      }),
-    };
-
-    return userFormatted;
+    return userAfterUpdate;
   }
 
   async generatePdf({
-    clientId,
+    enterpriseId,
     userGeneratePdfInDto,
     userId,
   }: GeneratePdfInput) {
     const users = await this.findMany({
-      clientId,
+      enterpriseId,
       userFindManyInDto: userGeneratePdfInDto,
       userId,
       paginate: false,
@@ -351,34 +327,6 @@ export class UserService {
     }
     pdfPayload += '</div>';
     return await this.pdfService.generatePdf({ html: pdfPayload });
-  }
-
-  async generateSheet({
-    clientId,
-    userGenerateSheetInDto,
-    userId,
-  }: GenerateSheetInput) {
-    const users = await this.findMany({
-      clientId,
-      userFindManyInDto: userGenerateSheetInDto,
-      userId,
-      paginate: false,
-      select: {
-        fullName: true,
-        email: true,
-      },
-    });
-
-    if (!users.data) {
-      throw new BadRequestException('Nenhum dado encontrado');
-    }
-
-    return await this.sheetService.generateSheet('users', (sheet) => {
-      sheet.addRow(['Name', 'Email']);
-      for (const user of users.data) {
-        sheet.addRow([user.fullName, user.email]);
-      }
-    });
   }
 
   async verifyDuplicated({ email, cpf }: VerifyDuplicatedInput) {

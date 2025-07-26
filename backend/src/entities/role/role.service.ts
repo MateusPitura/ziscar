@@ -1,13 +1,14 @@
 import { Injectable } from "@nestjs/common";
 import { Role } from "@prisma/client";
 import { PrismaService } from "src/infra/database/prisma.service";
-import { CreateRole, RoleRepository, UpdateRole } from "src/repositories/role-repository";
+import { RoleRepository } from "src/repositories/role-repository";
+import { CreateInput, UpdateInput } from "src/types";
 
 @Injectable()
 export class RoleService implements RoleRepository {
     constructor(private prisma: PrismaService) { }
 
-    async create(data: CreateRole): Promise<Role> {
+    async create(data: CreateInput<Role>): Promise<Role> {
         throw new Error("Method not implemented.");
     }
 
@@ -15,7 +16,7 @@ export class RoleService implements RoleRepository {
         throw new Error("Method not implemented.");
     }
 
-    async update(id: string, data: UpdateRole): Promise<void> {
+    async update(id: string, data: UpdateInput<Role>): Promise<void> {
         throw new Error("Method not implemented.");
     }
 

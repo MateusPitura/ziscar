@@ -1,13 +1,14 @@
 import { Injectable } from "@nestjs/common";
 import { Store } from "@prisma/client";
 import { PrismaService } from "src/infra/database/prisma.service";
-import { CreateStore, StoreRepository, UpdateStore } from "src/repositories/store-repository";
+import { StoreRepository } from "src/repositories/store-repository";
+import { CreateInput, UpdateInput } from "src/types";
 
 @Injectable()
 export class StoreService implements StoreRepository {
     constructor(private prisma: PrismaService) { }
 
-    async create(data: CreateStore): Promise<Store> {
+    async create(data: CreateInput<Store>): Promise<Store> {
         throw new Error("Method not implemented.");
     }
 
@@ -15,7 +16,7 @@ export class StoreService implements StoreRepository {
         throw new Error("Method not implemented.");
     }
 
-    async update(id: string, data: UpdateStore): Promise<void> {
+    async update(id: string, data: UpdateInput<Store>): Promise<void> {
         throw new Error("Method not implemented.");
     }
 

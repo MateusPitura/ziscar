@@ -10,14 +10,14 @@ import { Permissions } from '@shared/types';
 
 export interface AuthSignin {
   userId: number;
-  clientId: number;
+  enterpriseId: number;
   jit: string;
   permissions: Permissions;
 }
 
 export interface AuthResetPassword {
   email: string;
-  clientId: number;
+  enterpriseId: number;
 }
 
 export interface AuthRequest extends Request {
@@ -34,7 +34,7 @@ export interface SiginInInput {
 }
 
 export interface SignOutInput {
-  clientId: number;
+  enterpriseId: number;
   userId: number;
   res?: Response;
 }
