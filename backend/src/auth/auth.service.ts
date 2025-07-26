@@ -11,7 +11,6 @@ import {
   SignUpInput,
 } from './auth.type';
 import { compare } from 'bcrypt';
-import { EnterpriseService } from '../enterprise/enterprise.service';
 import { EmailService } from '../entities/email/email.service';
 import { PrismaService } from '../infra/database/prisma.service';
 import { SEED_ROLE_ADMIN_ID, JWT_COOKIE_NAME } from '@shared/constants';
@@ -21,8 +20,16 @@ import handlePermissions from 'src/utils/handlePermissions';
 import { isProduction } from 'src/constants';
 import { UserService } from 'src/entities/user/user.service';
 import { GET_PERMISSIONS } from 'src/entities/user/user.constant';
+import { EnterpriseService } from 'src/enterprise/enterprise.service';
 import { StoreService } from 'src/entities/store/store.service';
-import { Role } from '@prisma/client';
+import { Actions, Resources } from '@prisma/client';
+
+// Temp: revise it later
+export type RoleWithPermissions = {
+  id: number;
+  name: string;
+  rolePermissions: { permission: { id: number; resource: Resources; action: Actions } }[];
+};
 
 @Injectable()
 export class AuthService {
@@ -58,8 +65,9 @@ export class AuthService {
       userUpdateInDto: { jit },
     });
 
+
     const permissions = handlePermissions({
-      role: user?.role as Role,
+      permissions: (user?.role as RoleWithPermissions)?.rolePermissions?.map(rp => rp.permission) ?? [],
     });
 
     const payload: AuthSignin = {
@@ -123,8 +131,9 @@ export class AuthService {
 
   async resetPassword({ authResetPasswordInDto }: ResetPasswordInput) {
     await this.userService.update({
-      where: { archivedAt: null, email: authResetPasswordInDto.email },
+      where: { archivedAt: { not: null }, email: authResetPasswordInDto.email },
       userUpdateInDto: { password: authResetPasswordInDto.password },
+      enterpriseId: authResetPasswordInDto.enterpriseId,
     });
 
     return true;
@@ -163,17 +172,14 @@ export class AuthService {
       enterpriseId: requestChangePasswordInputInDto.enterpriseId,
     });
 
-    if (!user || !user.email) {
-      throw new UnauthorizedException('User not found or invalid');
-    }
     const payload: AuthResetPassword = {
-      email: user.email,
-      enterpriseId: user.enterpriseId,
+      email: user?.email ?? "",
+      enterpriseId: user!.enterpriseId,
     };
     const token = this.jwtService.sign(payload);
 
     void this.emailService.sendEmail({
-      to: user!.email,
+      to: user?.email ?? "",
       title: 'Redefina sua senha',
       body: `${FRONTEND_URL}/?token=${token}`,
     });

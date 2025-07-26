@@ -1,11 +1,6 @@
 import { VehicleBase } from "@prisma/client";
 import { CreateInput, UpdateInput } from "src/types";
 
-export interface CreateVehicleBase { }
-
-export interface UpdateVehicleBase { }
-
-
 export abstract class VehicleBaseRepository {
     abstract create(data: CreateInput<VehicleBase>): Promise<VehicleBase>;
     abstract findById(id: string): Promise<VehicleBase | null>;

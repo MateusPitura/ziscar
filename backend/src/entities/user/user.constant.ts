@@ -3,34 +3,42 @@ import { AddressNullableFields } from './user.type';
 
 export const GET_USER = {
   id: true,
-  isActive: true,
   fullName: true,
+  phone: true,
   email: true,
+  password: true,
   cpf: true,
-  birthDate: true,
-  code: true,
-  cellPhone: true,
-  address: true,
-  roleId: true,
+  jit: true,
+  archivedAt: true,
+  roleId: true
 };
 
 export const FETCH_USER = {
   id: true,
   fullName: true,
+  phone: true,
   email: true,
-  cellPhone: true,
-  roleId: true,
-  isActive: true,
+  password: true,
+  cpf: true,
+  jit: true,
+  archivedAt: true,
+  roleId: true
 };
 
 export const GET_PERMISSIONS = {
   role: {
     select: {
+      id: true,
       name: true,
-      permissions: {
+      rolePermissions: {
         select: {
-          resource: true,
-          action: true,
+          permission: {
+            select: {
+              id: true,
+              resource: true,
+              action: true,
+            },
+          },
         },
       },
     },

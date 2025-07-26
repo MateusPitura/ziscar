@@ -1,13 +1,14 @@
 import { Injectable } from "@nestjs/common";
 import { Address } from "@prisma/client";
 import { PrismaService } from "src/infra/database/prisma.service";
-import { AddressRepository, CreateAddress, UpdateAddress } from "src/repositories/address-repository";
+import { AddressRepository } from "src/repositories/address-repository";
+import { CreateInput, UpdateInput } from "src/types";
 
 @Injectable()
 export class AddressService implements AddressRepository {
     constructor(private prisma: PrismaService) { }
 
-    async create(data: CreateAddress): Promise<Address> {
+    async create(data: CreateInput<Address>): Promise<Address> {
         throw new Error("Method not implemented.");
     }
 
@@ -15,7 +16,7 @@ export class AddressService implements AddressRepository {
         throw new Error("Method not implemented.");
     }
 
-    async update(id: string, data: UpdateAddress): Promise<void> {
+    async update(id: string, data: UpdateInput<Address>): Promise<void> {
         throw new Error("Method not implemented.");
     }
 

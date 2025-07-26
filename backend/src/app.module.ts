@@ -6,7 +6,6 @@ import { EmailModule } from './entities/email/email.module';
 import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { ZodValidationPipe } from 'nestjs-zod';
 import { PdfModule } from './helpers/pdf/pdf.module';
-import { AuditInterceptor } from './infra/audit/audit.interceptor';
 import { AppController } from './app.controller';
 import { UserModule } from './entities/user/user.module';
 
@@ -23,11 +22,7 @@ import { UserModule } from './entities/user/user.module';
     {
       provide: APP_PIPE,
       useClass: ZodValidationPipe,
-    },
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: AuditInterceptor,
-    },
+    }
   ],
   controllers: [AppController],
 })

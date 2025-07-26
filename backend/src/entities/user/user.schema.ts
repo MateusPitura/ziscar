@@ -28,7 +28,7 @@ const SchemaUserPostInDto = s.object({
 });
 
 const SchemaUserCreateInDto = SchemaUserPostInDto.extend({
-  clientId: s.id(),
+  enterpriseId: s.id(),
 });
 
 const SchemaUserFindManyInDto = s.object({
@@ -51,7 +51,7 @@ const SchemaUserUpdateInDto = SchemaUserPostInDto.extend({
     })
     .partial(),
   password: s.password(),
-  isActive: s.boolean(),
+  arquivedAt: s.date() || null,
   jit: s.string(36).nullable(),
 })
   .omit({ email: true })
@@ -59,15 +59,15 @@ const SchemaUserUpdateInDto = SchemaUserPostInDto.extend({
 
 const SchemaProfilePatchInDto = SchemaUserUpdateInDto.omit({
   roleId: true,
-  isActive: true,
+  arquivedAt: true,
 });
 
 const SchemaUserDeleteInDto = s.object({
-  isActive: s.boolean(),
+  arquivedAt: s.date(),
 });
 
 export const SchemaUserPatchInDto = SchemaUserUpdateInDto.omit({
-  isActive: true,
+  arquivedAt: true,
 });
 
 export class UserPostInDto extends createZodDto(SchemaUserPostInDto) {}

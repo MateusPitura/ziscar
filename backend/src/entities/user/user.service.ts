@@ -30,6 +30,7 @@ import { PrismaService } from 'src/infra/database/prisma.service';
 import { verifyDuplicated } from 'src/utils/verifyDuplicated';
 import { EncryptPasswordInput, GetCallback } from 'src/types';
 import { generateRandomPassword } from 'src/utils/generateRandomPassword';
+import { RoleWithPermissions } from 'src/auth/auth.service';
 
 @Injectable()
 export class UserService {
@@ -111,7 +112,7 @@ export class UserService {
 
     const findManyWhere = {
       where: {
-        isActive: true,
+        archivedAt: null,
         enterpriseId: enterpriseId,
         NOT: {
           id: userId,
@@ -135,7 +136,7 @@ export class UserService {
     }
     const status = userFindManyInDto?.status;
     if (status === 'inactive') {
-      findManyWhere.where['isActive'] = false;
+      findManyWhere.where['archivedAt'] = null;
     }
 
     const [data, total] = await Promise.all([
@@ -161,7 +162,7 @@ export class UserService {
     showNotFoundError = true,
   }: FindOneInput) {
     if (onlyActive) {
-      where['isActive'] = true;
+      where['archivedAt'] = null;
     }
 
     if (enterpriseId) {
@@ -190,7 +191,9 @@ export class UserService {
       select: GET_PERMISSIONS,
     });
 
-    return handlePermissions({ role: user?.role as Role });
+    return handlePermissions({
+      permissions: (user?.role as RoleWithPermissions)?.rolePermissions?.map(rp => rp.permission) ?? [],
+    });
   }
 
   async update({
@@ -208,7 +211,7 @@ export class UserService {
 
     const userBeforeUpdate = await this.findOne({
       where: {
-      archivedAt: userUpdateInDto.isActive === false ? { not: null } : null,
+      archivedAt: userUpdateInDto.arquivedAt === null ? { not: null } : null,
       ...where,
       },
       enterpriseId,
@@ -277,7 +280,7 @@ export class UserService {
       };
     }
 
-    if (roleId || userUpdateInDto.password || 'isActive' in userUpdateInDto) {
+    if (roleId || userUpdateInDto.password || 'archivedAt' in userUpdateInDto) {
       updatePayload['jit'] = null;
     }
 

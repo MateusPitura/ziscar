@@ -1,14 +1,15 @@
 import { Injectable } from "@nestjs/common";
 import { VehicleBase } from "@prisma/client";
 import { PrismaService } from "src/infra/database/prisma.service";
-import { CreateVehicleBase, UpdateVehicleBase, VehicleBaseRepository } from "src/repositories/vehicle_base-repository";
+import { VehicleBaseRepository } from "src/repositories/vehicle_base-repository";
+import { CreateInput, UpdateInput } from "src/types";
 
 
 @Injectable()
 export class VehicleBaseService implements VehicleBaseRepository {
     constructor(private prisma: PrismaService) { }
 
-    async create(data: CreateVehicleBase): Promise<VehicleBase> {
+    async create(data: CreateInput<VehicleBase>): Promise<VehicleBase> {
         throw new Error("Method not implemented.");
     }
 
@@ -16,7 +17,7 @@ export class VehicleBaseService implements VehicleBaseRepository {
         throw new Error("Method not implemented.");
     }
 
-    async update(id: string, data: UpdateVehicleBase): Promise<void> {
+    async update(id: string, data: UpdateInput<VehicleBase>): Promise<void> {
         throw new Error("Method not implemented.");
     }
 

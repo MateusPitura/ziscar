@@ -1,13 +1,14 @@
 import { Injectable } from "@nestjs/common";
 import { Permission } from "@prisma/client";
 import { PrismaService } from "src/infra/database/prisma.service";
-import { CreatePermission, PermissionRepository, UpdatePermission } from "src/repositories/permission-repository";
+import { PermissionRepository } from "src/repositories/permission-repository";
+import { CreateInput, UpdateInput } from "src/types";
 
 @Injectable()
 export class PermissionService implements PermissionRepository {
     constructor(private prisma: PrismaService) { }
 
-    async create(data: CreatePermission): Promise<Permission> {
+    async create(data: CreateInput<Permission>): Promise<Permission> {
         throw new Error("Method not implemented.");
     }
 
@@ -15,7 +16,7 @@ export class PermissionService implements PermissionRepository {
         throw new Error("Method not implemented.");
     }
 
-    async update(id: string, data: UpdatePermission): Promise<void> {
+    async update(id: string, data: UpdateInput<Permission>): Promise<void> {
         throw new Error("Method not implemented.");
     }
 

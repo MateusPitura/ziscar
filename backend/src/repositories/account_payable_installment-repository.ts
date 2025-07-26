@@ -1,11 +1,6 @@
 import { AccountPayableInstallment } from "@prisma/client";
 import { CreateInput, UpdateInput } from "src/types";
 
-export interface CreateAccountPayableInstallment { }
-
-export interface UpdateAccountPayableInstallment { }
-
-
 export abstract class AccountPayableInstallmentRepository {
     abstract create(data: CreateInput<AccountPayableInstallment>): Promise<AccountPayableInstallment>;
     abstract findById(id: string): Promise<AccountPayableInstallment | null>;

@@ -1,21 +1,22 @@
 import { Injectable } from "@nestjs/common";
-import { PaymentMethodPayable } from "@prisma/client";
+import { PaymentMethodReceivable } from "@prisma/client";
 import { PrismaService } from "src/infra/database/prisma.service";
-import { CreatePaymentMethodPayable, PaymentMethodPayableRepository, UpdatePaymentMethodPayable } from "src/repositories/payment_method_payable-repository";
+import { PaymentMethodReceivableRepository } from "src/repositories/payment_method_receivable-repository";
+import { CreateInput, UpdateInput } from "src/types";
 
 @Injectable()
-export class PaymentMethodPayableService implements PaymentMethodPayableRepository {
+export class PaymentMethodReceivableService implements PaymentMethodReceivableRepository {
     constructor(private prisma: PrismaService) { }
 
-    async create(data: CreatePaymentMethodPayable): Promise<PaymentMethodPayable> {
+    async create(data: CreateInput<PaymentMethodReceivable>): Promise<PaymentMethodReceivable> {
         throw new Error("Method not implemented.");
     }
 
-    async findById(id: string): Promise<PaymentMethodPayable | null> {
+    async findById(id: string): Promise<PaymentMethodReceivable | null> {
         throw new Error("Method not implemented.");
     }
 
-    async update(id: string, data: UpdatePaymentMethodPayable): Promise<void> {
+    async update(id: string, data: UpdateInput<PaymentMethodReceivable>): Promise<void> {
         throw new Error("Method not implemented.");
     }
 

@@ -1,13 +1,14 @@
 import { Injectable } from "@nestjs/common";
 import { AccountPayableInstallment } from "@prisma/client";
 import { PrismaService } from "src/infra/database/prisma.service";
-import { AccountPayableInstallmentRepository, CreateAccountPayableInstallment, UpdateAccountPayableInstallment } from "src/repositories/account_payable_installment-repository";
+import { AccountPayableInstallmentRepository } from "src/repositories/account_payable_installment-repository";
+import { CreateInput, UpdateInput } from "src/types";
 
 @Injectable()
 export class AccountPayableInstallmentService implements AccountPayableInstallmentRepository {
     constructor(private prisma: PrismaService) { }
 
-    async create(data: CreateAccountPayableInstallment): Promise<AccountPayableInstallment> {
+    async create(data: CreateInput<AccountPayableInstallment>): Promise<AccountPayableInstallment> {
         throw new Error("Method not implemented.");
     }
 
@@ -15,7 +16,7 @@ export class AccountPayableInstallmentService implements AccountPayableInstallme
         throw new Error("Method not implemented.");
     }
 
-    async update(id: string, data: UpdateAccountPayableInstallment): Promise<void> {
+    async update(id: string, data: UpdateInput<AccountPayableInstallment>): Promise<void> {
         throw new Error("Method not implemented.");
     }
 
