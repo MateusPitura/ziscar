@@ -9,10 +9,8 @@ export default function formatFilters(value: object): string {
 
   for (const key in data) {
     if (data[key]) {
-      if (Array.isArray(data[key])) {
-        if (data[key].length) {
-          filters.push(`${key}=${data[key].join(",")}`);
-        }
+      if (Array.isArray(data[key]) && data[key].length) {
+        filters.push(`${key}=${data[key].join(",")}`);
       } else {
         filters.push(`${key}=${data[key]}`);
       }
