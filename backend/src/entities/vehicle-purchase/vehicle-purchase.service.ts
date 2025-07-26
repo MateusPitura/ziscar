@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/require-await */
+
 import { Injectable } from '@nestjs/common';
 import { VehiclePurchase } from '@prisma/client';
 import { PrismaService } from 'src/infra/database/prisma.service';

@@ -1,21 +1,20 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
-import { PrismaService } from '../infra/database/prisma.service';
 import { JwtService } from '@nestjs/jwt';
-import {
-  AUTH_REQUEST_DEFAULT,
-  POPULATE_CLIENT_PRIMARY_ID,
-  POPULATE_USER_DEFAULT,
-  POPULATE_USER_INACTIVE,
-} from '../constants';
 import { FETCH_USER, GET_USER } from './user.constant';
 import { EmailService } from '../email/email.service';
 import { AuthRequest } from 'src/auth/auth.type';
 import { ITEMS_PER_PAGE, SEED_ROLE_SALES_ID } from '@shared/constants';
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { PdfService } from 'src/helpers/pdf/pdf.service';
-import { SheetService } from 'src/sheet/sheet.service';
+import { PrismaService } from 'src/infra/database/prisma.service';
+import {
+  AUTH_REQUEST_DEFAULT,
+  POPULATE_ENTERPRISE_ID,
+  POPULATE_USER_DEFAULT,
+  POPULATE_USER_INACTIVE,
+} from 'src/constants';
 
 describe('UserController', () => {
   let userController: UserController;
@@ -45,12 +44,6 @@ describe('UserController', () => {
           provide: PdfService,
           useValue: {
             generatePdf: jest.fn(),
-          },
-        },
-        {
-          provide: SheetService,
-          useValue: {
-            generateSheet: jest.fn(),
           },
         },
       ],
@@ -214,7 +207,7 @@ describe('UserController', () => {
           mode: 'insensitive',
         },
         isActive: true,
-        clientId: POPULATE_CLIENT_PRIMARY_ID,
+        clientId: POPULATE_ENTERPRISE_ID,
         NOT: {
           id: POPULATE_USER_DEFAULT.id,
         },
@@ -249,7 +242,7 @@ describe('UserController', () => {
           request,
           { id: POPULATE_USER_DEFAULT.id },
           {
-            isActive: false,
+            arquivedAt: new Date(),
           },
         ),
       ).toBeTruthy();
@@ -267,7 +260,7 @@ describe('UserController', () => {
           AUTH_REQUEST_DEFAULT,
           { id: POPULATE_USER_DEFAULT.id },
           {
-            isActive: false,
+            arquivedAt: new Date(),
           },
         ),
       ).rejects.toThrow(ForbiddenException);
@@ -285,16 +278,6 @@ describe('UserController', () => {
 
   it('should generate pdf', async () => {
     const response = await userController.generatePdf(AUTH_REQUEST_DEFAULT, {
-      status: 'active',
-      fullName: POPULATE_USER_DEFAULT.fullName,
-      orderBy: 'fullName',
-    });
-
-    expect(response).toBeUndefined();
-  });
-
-  it('should generate sheet', async () => {
-    const response = await userController.generateSheet(AUTH_REQUEST_DEFAULT, {
       status: 'active',
       fullName: POPULATE_USER_DEFAULT.fullName,
       orderBy: 'fullName',

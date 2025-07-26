@@ -2,16 +2,13 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from './auth.service';
 import { JwtService } from '@nestjs/jwt';
 import { EmailService } from '../entities/email/email.service';
-import { ClientService } from '../enterprise/enterprise.service';
-import { OrganizationService } from '../entities/organization/organization.service';
-import { UserService } from '../user/user.service';
 import { PrismaService } from '../infra/database/prisma.service';
 import {
   FRONTEND_URL,
-  POPULATE_CLIENT_PRIMARY_ID,
-  POPULATE_CLIENT_SECONDARY_ID,
-  POPULATE_ORGANIZATION_DEFAULT,
-  POPULATE_ORGANIZATION_INACTIVE,
+  POPULATE_ENTERPRISE_ID,
+  POPULATE_SECONDARY_ENTERPRISE_ID,
+  POPULATE_STORE_DEFAULT,
+  POPULATE_STORE_INACTIVE,
   POPULATE_USER_DEFAULT,
   POPULATE_USER_INACTIVE,
 } from '../constants';
@@ -21,7 +18,9 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { PdfService } from 'src/helpers/pdf/pdf.service';
-import { SheetService } from 'src/sheet/sheet.service';
+import { UserService } from 'src/entities/user/user.service';
+import { EnterpriseService } from 'src/enterprise/enterprise.service';
+import { StoreService } from 'src/entities/store/store.service';
 
 describe('AuthService', () => {
   let authService: AuthService;
@@ -32,8 +31,8 @@ describe('AuthService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         AuthService,
-        ClientService,
-        OrganizationService,
+        StoreService,
+        EnterpriseService,
         UserService,
         JwtService,
         PrismaService,
@@ -53,12 +52,6 @@ describe('AuthService', () => {
           provide: PdfService,
           useValue: {
             generatePdf: jest.fn(),
-          },
-        },
-        {
-          provide: SheetService,
-          useValue: {
-            generateSheet: jest.fn(),
           },
         },
       ],
@@ -129,7 +122,7 @@ describe('AuthService', () => {
     const spy = jest.spyOn(userService, 'update');
 
     const response = await authService.signOut({
-      clientId: POPULATE_CLIENT_PRIMARY_ID,
+      enterpriseId: POPULATE_ENTERPRISE_ID,
       userId: POPULATE_USER_DEFAULT.id,
     });
     expect(response).toBeUndefined();
@@ -146,7 +139,7 @@ describe('AuthService', () => {
 
   it('should not throw error when sign out with outer client id', async () => {
     const response = await authService.signOut({
-      clientId: POPULATE_CLIENT_SECONDARY_ID,
+      enterpriseId: POPULATE_SECONDARY_ENTERPRISE_ID,
       userId: POPULATE_USER_DEFAULT.id,
     });
     expect(response).toBeUndefined();
@@ -154,7 +147,7 @@ describe('AuthService', () => {
 
   it('should not throw error when sign out with a inactive user', async () => {
     const response = await authService.signOut({
-      clientId: POPULATE_CLIENT_PRIMARY_ID,
+      enterpriseId: POPULATE_ENTERPRISE_ID,
       userId: POPULATE_USER_INACTIVE.id,
     });
     expect(response).toBeUndefined();
@@ -213,7 +206,7 @@ describe('AuthService', () => {
     await expect(
       authService.signUp({
         authSignUpInDto: {
-          cnpj: POPULATE_ORGANIZATION_DEFAULT.cnpj,
+          cnpj: POPULATE_STORE_DEFAULT.cnpj,
           name: 'Wayne Enterprises',
           email: 'jane.doe@email.com',
           fullName: 'Jane Doe',
@@ -226,7 +219,7 @@ describe('AuthService', () => {
     await expect(
       authService.signUp({
         authSignUpInDto: {
-          cnpj: POPULATE_ORGANIZATION_INACTIVE.cnpj,
+          cnpj: POPULATE_STORE_INACTIVE.cnpj,
           name: 'Wayne Enterprises',
           email: 'jane.doe@email.com',
           fullName: 'Jane Doe',
@@ -244,7 +237,7 @@ describe('AuthService', () => {
         authResetPasswordInDto: {
           email: POPULATE_USER_DEFAULT.email,
           password: '123456',
-          clientId: POPULATE_CLIENT_PRIMARY_ID,
+          enterpriseId: POPULATE_ENTERPRISE_ID,
         },
       });
 
@@ -264,7 +257,7 @@ describe('AuthService', () => {
           authResetPasswordInDto: {
             email: POPULATE_USER_INACTIVE.email,
             password: '123456',
-            clientId: POPULATE_CLIENT_SECONDARY_ID,
+            enterpriseId: POPULATE_SECONDARY_ENTERPRISE_ID,
           },
         }),
       ).rejects.toThrow(NotFoundException);
@@ -282,7 +275,7 @@ describe('AuthService', () => {
           authResetPasswordInDto: {
             email: POPULATE_USER_DEFAULT.email,
             password: '123456',
-            clientId: POPULATE_CLIENT_SECONDARY_ID,
+            enterpriseId: POPULATE_SECONDARY_ENTERPRISE_ID,
           },
         }),
       ).rejects.toThrow(NotFoundException);
@@ -333,7 +326,7 @@ describe('AuthService', () => {
     await authService.requestChangePassword({
       requestChangePasswordInDto: {
         id: POPULATE_USER_DEFAULT.id,
-        clientId: POPULATE_CLIENT_PRIMARY_ID,
+        enterpriseId: POPULATE_ENTERPRISE_ID,
       },
     });
 
@@ -349,7 +342,7 @@ describe('AuthService', () => {
       authService.requestChangePassword({
         requestChangePasswordInDto: {
           id: POPULATE_USER_INACTIVE.id,
-          clientId: POPULATE_CLIENT_PRIMARY_ID,
+          enterpriseId: POPULATE_ENTERPRISE_ID,
         },
       }),
     ).rejects.toThrow(NotFoundException);

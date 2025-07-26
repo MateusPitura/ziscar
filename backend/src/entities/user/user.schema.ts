@@ -51,7 +51,7 @@ const SchemaUserUpdateInDto = SchemaUserPostInDto.extend({
     })
     .partial(),
   password: s.password(),
-  arquivedAt: s.date() || null,
+  arquivedAt: s.date() || null, // 🌠 verificar isso
   jit: s.string(36).nullable(),
 })
   .omit({ email: true })

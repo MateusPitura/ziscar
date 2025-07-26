@@ -1,17 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserService } from './user.service';
-import { PrismaService } from '../infra/database/prisma.service';
 import {
   BadRequestException,
   ConflictException,
   NotFoundException,
 } from '@nestjs/common';
-import {
-  POPULATE_CLIENT_PRIMARY_ID,
-  POPULATE_CLIENT_SECONDARY_ID,
-  POPULATE_USER_DEFAULT,
-  POPULATE_USER_INACTIVE,
-} from '../constants';
 import { EmailService } from '../email/email.service';
 import { JwtService } from '@nestjs/jwt';
 import {
@@ -20,8 +13,14 @@ import {
   SEED_ROLE_SALES_ID,
 } from '@shared/constants';
 import { PdfService } from 'src/helpers/pdf/pdf.service';
-import { SheetService } from 'src/sheet/sheet.service';
 import { addressNullableFields } from './user.constant';
+import { PrismaService } from 'src/infra/database/prisma.service';
+import {
+  POPULATE_ENTERPRISE_ID,
+  POPULATE_SECONDARY_ENTERPRISE_ID,
+  POPULATE_USER_DEFAULT,
+  POPULATE_USER_INACTIVE,
+} from 'src/constants';
 
 describe('UserService', () => {
   let userService: UserService;
@@ -32,7 +31,6 @@ describe('UserService', () => {
       providers: [
         UserService,
         PrismaService,
-        SheetService,
         PdfService,
         {
           provide: EmailService,
@@ -68,7 +66,7 @@ describe('UserService', () => {
           userCreateInDto: {
             email: 'jane.doe@email.com',
             fullName: 'Jane Doe',
-            clientId: POPULATE_CLIENT_PRIMARY_ID,
+            enterpriseId: POPULATE_ENTERPRISE_ID,
             roleId: SEED_ROLE_SALES_ID,
           },
         }),
@@ -87,7 +85,7 @@ describe('UserService', () => {
         userCreateInDto: {
           email: POPULATE_USER_DEFAULT.email,
           fullName: 'John Doe',
-          clientId: POPULATE_CLIENT_PRIMARY_ID,
+          enterpriseId: POPULATE_ENTERPRISE_ID,
           roleId: SEED_ROLE_SALES_ID,
         },
       }),
@@ -100,7 +98,7 @@ describe('UserService', () => {
         userCreateInDto: {
           email: POPULATE_USER_INACTIVE.email,
           fullName: 'Tony Stark',
-          clientId: POPULATE_CLIENT_PRIMARY_ID,
+          enterpriseId: POPULATE_ENTERPRISE_ID,
           roleId: SEED_ROLE_SALES_ID,
         },
       }),
@@ -114,7 +112,7 @@ describe('UserService', () => {
           email: 'jane.doe@email.com',
           fullName: 'John Doe',
           cpf: POPULATE_USER_INACTIVE.cpf,
-          clientId: POPULATE_CLIENT_PRIMARY_ID,
+          enterpriseId: POPULATE_ENTERPRISE_ID,
           roleId: SEED_ROLE_SALES_ID,
         },
       }),
@@ -144,7 +142,7 @@ describe('UserService', () => {
               cep: '12345678',
               number: '123',
             },
-            clientId: POPULATE_CLIENT_PRIMARY_ID,
+            enterpriseId: POPULATE_ENTERPRISE_ID,
             roleId: SEED_ROLE_SALES_ID,
           },
         }),
@@ -185,7 +183,7 @@ describe('UserService', () => {
               neighborhood: 'Manhattan',
               complement: 'Apt 123',
             },
-            clientId: POPULATE_CLIENT_PRIMARY_ID,
+            enterpriseId: POPULATE_ENTERPRISE_ID,
             roleId: SEED_ROLE_SALES_ID,
           },
         }),
@@ -210,7 +208,7 @@ describe('UserService', () => {
           userUpdateInDto: {
             fullName: 'Jane Doe',
           },
-          clientId: POPULATE_CLIENT_PRIMARY_ID,
+          enterpriseId: POPULATE_ENTERPRISE_ID,
         }),
       ).toBeTruthy();
 
@@ -228,7 +226,7 @@ describe('UserService', () => {
       userUpdateInDto: {
         code: '123',
       },
-      clientId: POPULATE_CLIENT_PRIMARY_ID,
+      enterpriseId: POPULATE_ENTERPRISE_ID,
     });
 
     expect(spy).toHaveBeenCalledTimes(0);
@@ -246,7 +244,7 @@ describe('UserService', () => {
           userUpdateInDto: {
             cpf: '11111111111',
           },
-          clientId: POPULATE_CLIENT_PRIMARY_ID,
+          enterpriseId: POPULATE_ENTERPRISE_ID,
         }),
       ).toBeTruthy();
 
@@ -266,7 +264,7 @@ describe('UserService', () => {
           userUpdateInDto: {
             cpf: POPULATE_USER_DEFAULT.cpf,
           },
-          clientId: POPULATE_CLIENT_PRIMARY_ID,
+          enterpriseId: POPULATE_ENTERPRISE_ID,
         }),
       ).rejects.toThrow(ConflictException);
 
@@ -286,7 +284,7 @@ describe('UserService', () => {
           userUpdateInDto: {
             cpf: POPULATE_USER_INACTIVE.cpf,
           },
-          clientId: POPULATE_CLIENT_PRIMARY_ID,
+          enterpriseId: POPULATE_ENTERPRISE_ID,
         }),
       ).rejects.toThrow(ConflictException);
 
@@ -308,7 +306,7 @@ describe('UserService', () => {
           userUpdateInDto: {
             password: '123456',
           },
-          clientId: POPULATE_CLIENT_PRIMARY_ID,
+          enterpriseId: POPULATE_ENTERPRISE_ID,
         }),
       ).toBeTruthy();
 
@@ -332,7 +330,7 @@ describe('UserService', () => {
           userUpdateInDto: {
             password: '123456',
           },
-          clientId: POPULATE_CLIENT_PRIMARY_ID,
+          enterpriseId: POPULATE_ENTERPRISE_ID,
         }),
       ).rejects.toThrow(NotFoundException);
 
@@ -354,7 +352,7 @@ describe('UserService', () => {
           userUpdateInDto: {
             password: '123456',
           },
-          clientId: POPULATE_CLIENT_SECONDARY_ID,
+          enterpriseId: POPULATE_SECONDARY_ENTERPRISE_ID,
         }),
       ).rejects.toThrow(NotFoundException);
 
@@ -367,15 +365,15 @@ describe('UserService', () => {
       Reflect.set(userService, 'prismaService', transaction);
       const spy = jest.spyOn(transaction.user, 'update');
 
-      const commomPayload = {
+      const commonPayload = {
         where: {
           id: POPULATE_USER_DEFAULT.id,
         },
-        clientId: POPULATE_CLIENT_PRIMARY_ID,
+        enterpriseId: POPULATE_ENTERPRISE_ID,
       };
 
       await userService.update({
-        ...commomPayload,
+        ...commonPayload,
         userUpdateInDto: {
           address: {
             add: { cep: '12345678', number: '123' },
@@ -384,7 +382,7 @@ describe('UserService', () => {
       });
 
       const user = await userService.update({
-        ...commomPayload,
+        ...commonPayload,
         userUpdateInDto: {
           address: {
             add: { cep: '87654321', number: '321' },
@@ -426,7 +424,7 @@ describe('UserService', () => {
           },
           roleId: SEED_ROLE_SALES_ID,
         },
-        clientId: POPULATE_CLIENT_PRIMARY_ID,
+        enterpriseId: POPULATE_ENTERPRISE_ID,
       });
 
       expect(user).toHaveProperty('address.cep', '12345678');
@@ -441,16 +439,16 @@ describe('UserService', () => {
     await prismaService.transaction(async (transaction) => {
       Reflect.set(userService, 'prismaService', transaction);
 
-      const commomPayload = {
+      const commonPayload = {
         where: {
           id: POPULATE_USER_DEFAULT.id,
         },
-        clientId: POPULATE_CLIENT_PRIMARY_ID,
+        enterpriseId: POPULATE_ENTERPRISE_ID,
       };
 
       await expect(
         userService.update({
-          ...commomPayload,
+          ...commonPayload,
           userUpdateInDto: {
             address: {
               update: { street: 'Broadway' },
@@ -460,7 +458,7 @@ describe('UserService', () => {
       ).rejects.toThrow(BadRequestException);
 
       await userService.update({
-        ...commomPayload,
+        ...commonPayload,
         userUpdateInDto: {
           address: {
             add: { cep: '12345678', number: '123' },
@@ -469,7 +467,7 @@ describe('UserService', () => {
       });
 
       const user = await userService.update({
-        ...commomPayload,
+        ...commonPayload,
         userUpdateInDto: {
           address: {
             update: { street: 'Broadway' },
@@ -489,16 +487,16 @@ describe('UserService', () => {
     await prismaService.transaction(async (transaction) => {
       Reflect.set(userService, 'prismaService', transaction);
 
-      const commomPayload = {
+      const commonPayload = {
         where: {
           id: POPULATE_USER_DEFAULT.id,
         },
-        clientId: POPULATE_CLIENT_PRIMARY_ID,
+        enterpriseId: POPULATE_ENTERPRISE_ID,
       };
 
       await expect(
         userService.update({
-          ...commomPayload,
+          ...commonPayload,
           userUpdateInDto: {
             address: {
               remove: true,
@@ -508,7 +506,7 @@ describe('UserService', () => {
       ).rejects.toThrow(BadRequestException);
 
       await userService.update({
-        ...commomPayload,
+        ...commonPayload,
         userUpdateInDto: {
           address: {
             add: { cep: '12345678', number: '123' },
@@ -517,7 +515,7 @@ describe('UserService', () => {
       });
 
       const user = await userService.update({
-        ...commomPayload,
+        ...commonPayload,
         userUpdateInDto: {
           address: {
             remove: true,
@@ -542,7 +540,7 @@ describe('UserService', () => {
         userUpdateInDto: {
           roleId: SEED_ROLE_ADMIN_ID,
         },
-        clientId: POPULATE_CLIENT_PRIMARY_ID,
+        enterpriseId: POPULATE_ENTERPRISE_ID,
         select: {
           jit: true,
         },
@@ -565,7 +563,7 @@ describe('UserService', () => {
         userUpdateInDto: {
           password: '123456',
         },
-        clientId: POPULATE_CLIENT_PRIMARY_ID,
+        enterpriseId: POPULATE_ENTERPRISE_ID,
         select: {
           jit: true,
         },
@@ -586,9 +584,9 @@ describe('UserService', () => {
           id: POPULATE_USER_DEFAULT.id,
         },
         userUpdateInDto: {
-          isActive: false,
+          arquivedAt: new Date(),
         },
-        clientId: POPULATE_CLIENT_PRIMARY_ID,
+        enterpriseId: POPULATE_ENTERPRISE_ID,
         select: {
           jit: true,
         },
@@ -610,9 +608,9 @@ describe('UserService', () => {
             id: POPULATE_USER_DEFAULT.id,
           },
           userUpdateInDto: {
-            isActive: false,
+            arquivedAt: new Date(),
           },
-          clientId: POPULATE_CLIENT_PRIMARY_ID,
+          enterpriseId: POPULATE_ENTERPRISE_ID,
         }),
       ).toBeTruthy();
 
@@ -630,9 +628,9 @@ describe('UserService', () => {
             id: POPULATE_USER_INACTIVE.id,
           },
           userUpdateInDto: {
-            isActive: false,
+            arquivedAt: new Date(),
           },
-          clientId: POPULATE_CLIENT_PRIMARY_ID,
+          enterpriseId: POPULATE_ENTERPRISE_ID,
         }),
       ).rejects.toThrow(NotFoundException);
 
@@ -650,9 +648,9 @@ describe('UserService', () => {
             id: POPULATE_USER_INACTIVE.id,
           },
           userUpdateInDto: {
-            isActive: true,
+            arquivedAt: undefined,
           },
-          clientId: POPULATE_CLIENT_PRIMARY_ID,
+          enterpriseId: POPULATE_ENTERPRISE_ID,
         }),
       ).toBeTruthy();
 
@@ -670,9 +668,9 @@ describe('UserService', () => {
             id: POPULATE_USER_DEFAULT.id,
           },
           userUpdateInDto: {
-            isActive: true,
+            arquivedAt: undefined,
           },
-          clientId: POPULATE_CLIENT_PRIMARY_ID,
+          enterpriseId: POPULATE_ENTERPRISE_ID,
         }),
       ).rejects.toThrow(NotFoundException);
 
@@ -693,7 +691,7 @@ describe('UserService', () => {
           birthDate: null,
           cellPhone: null,
         },
-        clientId: POPULATE_CLIENT_PRIMARY_ID,
+        enterpriseId: POPULATE_ENTERPRISE_ID,
       });
 
       expect(result).toMatchObject(
@@ -719,23 +717,13 @@ describe('UserService', () => {
         userUpdateInDto: {
           birthDate: '2000-01-02',
         },
-        clientId: POPULATE_CLIENT_PRIMARY_ID,
+        enterpriseId: POPULATE_ENTERPRISE_ID,
       });
 
       expect(result).toHaveProperty('birthDate', '2000-01-02');
 
       transaction.rollback();
     });
-  });
-
-  it('should find one user by id and return it with formatted birthDate', async () => {
-    const user = await userService.findOne({
-      where: { id: POPULATE_USER_DEFAULT.id },
-      select: { id: true, birthDate: true },
-    });
-
-    expect(user).toHaveProperty('birthDate', '2000-01-01');
-    expect(user).toHaveProperty('id');
   });
 
   it('should not find inactive user', async () => {
@@ -762,7 +750,7 @@ describe('UserService', () => {
       userService.findOne({
         where: { id: POPULATE_USER_DEFAULT.id },
         select: { id: true },
-        clientId: POPULATE_CLIENT_SECONDARY_ID,
+        enterpriseId: POPULATE_SECONDARY_ENTERPRISE_ID,
       }),
     ).rejects.toThrow(NotFoundException);
   });
@@ -771,7 +759,7 @@ describe('UserService', () => {
     const result = await userService.findMany({
       userFindManyInDto: { page: 1 },
       userId: POPULATE_USER_DEFAULT.id,
-      clientId: POPULATE_CLIENT_PRIMARY_ID,
+      enterpriseId: POPULATE_ENTERPRISE_ID,
     });
 
     expect(result).toHaveProperty('total', 24);
@@ -782,7 +770,7 @@ describe('UserService', () => {
     const result = await userService.findMany({
       userFindManyInDto: { page: 1 },
       userId: POPULATE_USER_DEFAULT.id,
-      clientId: POPULATE_CLIENT_PRIMARY_ID,
+      enterpriseId: POPULATE_ENTERPRISE_ID,
     });
 
     const signedUser = result.data.find(
@@ -802,7 +790,7 @@ describe('UserService', () => {
         fullName: POPULATE_USER_DEFAULT.fullName,
       },
       userId: POPULATE_USER_DEFAULT.id,
-      clientId: POPULATE_CLIENT_PRIMARY_ID,
+      enterpriseId: POPULATE_ENTERPRISE_ID,
     });
 
     expect(spy).toHaveBeenCalledWith(
@@ -823,7 +811,7 @@ describe('UserService', () => {
     await userService.findMany({
       userFindManyInDto: { orderBy: 'fullName' },
       userId: POPULATE_USER_DEFAULT.id,
-      clientId: POPULATE_CLIENT_PRIMARY_ID,
+      enterpriseId: POPULATE_ENTERPRISE_ID,
     });
 
     expect(spy).toHaveBeenCalledWith(
@@ -835,7 +823,7 @@ describe('UserService', () => {
     const result = await userService.findMany({
       userFindManyInDto: { status: 'inactive' },
       userId: POPULATE_USER_DEFAULT.id,
-      clientId: POPULATE_CLIENT_PRIMARY_ID,
+      enterpriseId: POPULATE_ENTERPRISE_ID,
     });
 
     expect(result).toHaveProperty('total', 7);
@@ -852,7 +840,7 @@ describe('UserService', () => {
         orderBy: 'fullName',
       },
       userId: POPULATE_USER_DEFAULT.id,
-      clientId: POPULATE_CLIENT_PRIMARY_ID,
+      enterpriseId: POPULATE_ENTERPRISE_ID,
     });
 
     expect(spy).toHaveBeenCalledWith({
@@ -865,7 +853,7 @@ describe('UserService', () => {
           mode: 'insensitive',
         },
         isActive: true,
-        clientId: POPULATE_CLIENT_PRIMARY_ID,
+        enterpriseId: POPULATE_ENTERPRISE_ID,
         NOT: {
           id: POPULATE_USER_DEFAULT.id,
         },
@@ -878,7 +866,7 @@ describe('UserService', () => {
     const result = await userService.findMany({
       userFindManyInDto: { status: 'active' },
       userId: POPULATE_USER_DEFAULT.id,
-      clientId: POPULATE_CLIENT_SECONDARY_ID,
+      enterpriseId: POPULATE_SECONDARY_ENTERPRISE_ID,
     });
 
     expect(result).toHaveProperty('total', 0);
@@ -889,7 +877,7 @@ describe('UserService', () => {
     await expect(
       userService.getPermissions({
         userId: POPULATE_USER_DEFAULT.id,
-        clientId: POPULATE_CLIENT_SECONDARY_ID,
+        enterpriseId: POPULATE_SECONDARY_ENTERPRISE_ID,
       }),
     ).rejects.toThrow(NotFoundException);
   });
@@ -897,7 +885,7 @@ describe('UserService', () => {
   it('should not get user permissions with outer client id provided', async () => {
     const permissions = await userService.getPermissions({
       userId: POPULATE_USER_DEFAULT.id,
-      clientId: POPULATE_CLIENT_PRIMARY_ID,
+      enterpriseId: POPULATE_ENTERPRISE_ID,
     });
 
     expect(permissions).toEqual({
@@ -918,21 +906,7 @@ describe('UserService', () => {
         status: 'active',
       },
       userId: POPULATE_USER_DEFAULT.id,
-      clientId: POPULATE_CLIENT_PRIMARY_ID,
-    });
-
-    expect(spy).toHaveBeenCalled();
-  });
-
-  it('should generate sheet', async () => {
-    const spy = jest.spyOn(SheetService.prototype, 'generateSheet');
-
-    await userService.generateSheet({
-      userGenerateSheetInDto: {
-        status: 'active',
-      },
-      userId: POPULATE_USER_DEFAULT.id,
-      clientId: POPULATE_CLIENT_PRIMARY_ID,
+      enterpriseId: POPULATE_ENTERPRISE_ID,
     });
 
     expect(spy).toHaveBeenCalled();

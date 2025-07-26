@@ -10,7 +10,8 @@ export const FRONTEND_URL = isProduction
   ? 'https://ziscar.me'
   : `http://localhost:${FRONTEND_PORT}`;
 
-export const POPULATE_ENTERPRISE_ID = 145;
+export const POPULATE_ENTERPRISE_ID = 145; // 🌠 change name
+export const POPULATE_SECONDARY_ENTERPRISE_ID = 154;
 
 export const POPULATE_USER_DEFAULT = {
   id: 150,
@@ -40,3 +41,15 @@ export const AUTH_REQUEST_DEFAULT = {
     permissions: DEFAULT_PERMISSIONS,
   },
 } as unknown as AuthRequest;
+
+export const POPULATE_STORE_DEFAULT = {
+  id: 443,
+  name: 'Wayne Enterprises',
+  cnpj: '12345678901234',
+};
+export const POPULATE_STORE_INACTIVE = {
+  id: 984,
+  name: 'Stark Industries',
+  cnpj: '12345678901235',
+  isActive: false,
+};

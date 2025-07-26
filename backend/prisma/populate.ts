@@ -1,6 +1,8 @@
 import { PrismaClient } from '@prisma/client';
 import {
   POPULATE_ENTERPRISE_ID,
+  POPULATE_STORE_DEFAULT,
+  POPULATE_STORE_INACTIVE,
   POPULATE_USER_DEFAULT,
   POPULATE_USER_INACTIVE,
 } from '../src/constants';
@@ -26,6 +28,19 @@ async function seed() {
     });
 
     console.log(`✅ Enterprise "${enterprise.id}" created or verified.`);
+
+    await tx.store.createMany({
+      data: [
+        {
+          ...POPULATE_STORE_DEFAULT,
+          enterpriseId: POPULATE_ENTERPRISE_ID,
+        },
+        {
+          ...POPULATE_STORE_INACTIVE,
+          enterpriseId: POPULATE_ENTERPRISE_ID,
+        },
+      ],
+    });
 
     await tx.user.createMany({
       data: [
