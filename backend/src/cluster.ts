@@ -4,7 +4,7 @@ import { Logger } from '@nestjs/common';
 import { bootstrap } from './main';
 import { isProduction } from './constants';
 
-const MAX_WORKERS = 2;
+const MAX_WORKERS = 1;
 
 async function start() {
   if (cluster.isPrimary) {

@@ -11,29 +11,36 @@ import {
   SignUpInput,
 } from './auth.type';
 import { compare } from 'bcrypt';
-import { ClientService } from '../client/client.service';
-import { OrganizationService } from '../organization/organization.service';
-import { UserService } from '../user/user.service';
-import { EmailService } from '../email/email.service';
-import { PrismaService } from '../database/prisma.service';
+import { EmailService } from '../entities/email/email.service';
+import { PrismaService } from '../infra/database/prisma.service';
 import { SEED_ROLE_ADMIN_ID, JWT_COOKIE_NAME } from '@shared/constants';
 import { FRONTEND_URL } from 'src/constants';
 import { randomUUID } from 'crypto';
 import handlePermissions from 'src/utils/handlePermissions';
-import { Role } from 'src/user/user.type';
-import { GET_PERMISSIONS } from 'src/user/user.constant';
 import { isProduction } from 'src/constants';
+import { UserService } from 'src/entities/user/user.service';
+import { GET_PERMISSIONS } from 'src/entities/user/user.constant';
+import { EnterpriseService } from 'src/enterprise/enterprise.service';
+import { StoreService } from 'src/entities/store/store.service';
+import { Actions, Resources } from '@prisma/client';
+
+// Temp: revise it later
+export type RoleWithPermissions = {
+  id: number;
+  name: string;
+  rolePermissions: { permission: { id: number; resource: Resources; action: Actions } }[];
+};
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
-    private readonly clientService: ClientService,
-    private readonly organizationService: OrganizationService,
+    private readonly enterpriseService: EnterpriseService,
+    private readonly storeService: StoreService,
     private readonly userService: UserService,
     private readonly emailService: EmailService,
     private readonly prismaService: PrismaService,
-  ) {}
+  ) { }
 
   async signIn({ authSignInInDto, res }: SiginInInput) {
     const user = await this.userService.findOne({
@@ -41,7 +48,7 @@ export class AuthService {
       select: {
         ...GET_PERMISSIONS,
         id: true,
-        clientId: true,
+        enterpriseId: true,
         password: true,
       },
       showNotFoundError: false,
@@ -58,12 +65,13 @@ export class AuthService {
       userUpdateInDto: { jit },
     });
 
+
     const permissions = handlePermissions({
-      role: user?.role as Role,
+      permissions: (user?.role as RoleWithPermissions)?.rolePermissions?.map(rp => rp.permission) ?? [],
     });
 
     const payload: AuthSignin = {
-      clientId: user.clientId,
+      enterpriseId: user.enterpriseId,
       userId: user.id,
       jit,
       permissions,
@@ -80,12 +88,12 @@ export class AuthService {
     return res?.json(true);
   }
 
-  async signOut({ userId, clientId, res }: SignOutInput) {
+  async signOut({ userId, enterpriseId, res }: SignOutInput) {
     await this.userService.update({
       where: { id: userId },
       userUpdateInDto: { jit: null },
       showNotFoundError: false,
-      clientId,
+      enterpriseId,
     });
 
     res?.clearCookie(JWT_COOKIE_NAME);
@@ -95,22 +103,22 @@ export class AuthService {
 
   async signUp({ authSignUpInDto }: SignUpInput) {
     await this.prismaService.transaction(async (transaction) => {
-      const { clientId } = await this.clientService.create({ transaction });
+      const { enterpriseId } = await this.enterpriseService.create({ transaction });
 
       await Promise.all([
-        this.organizationService.create({
-          organizationCreateInDto: {
-            cnpj: authSignUpInDto.cnpj,
-            name: authSignUpInDto.name,
-            clientId,
-          },
-          transaction,
+        this.storeService.create({
+          cnpj: authSignUpInDto.cnpj,
+          name: authSignUpInDto.name,
+          enterpriseId,
+          email: null,
+          phone: null,
+          addressId: null
         }),
         this.userService.create({
           userCreateInDto: {
             email: authSignUpInDto.email,
             fullName: authSignUpInDto.fullName,
-            clientId,
+            enterpriseId,
             roleId: SEED_ROLE_ADMIN_ID,
           },
           transaction,
@@ -123,9 +131,9 @@ export class AuthService {
 
   async resetPassword({ authResetPasswordInDto }: ResetPasswordInput) {
     await this.userService.update({
-      where: { isActive: true, email: authResetPasswordInDto.email },
+      where: { archivedAt: { not: null }, email: authResetPasswordInDto.email },
       userUpdateInDto: { password: authResetPasswordInDto.password },
-      clientId: authResetPasswordInDto.clientId,
+      enterpriseId: authResetPasswordInDto.enterpriseId,
     });
 
     return true;
@@ -134,7 +142,7 @@ export class AuthService {
   async forgetPassword({ authForgetPasswordInDto }: ForgetPasswordInput) {
     const user = await this.userService.findOne({
       where: { email: authForgetPasswordInDto.email },
-      select: { clientId: true },
+      select: { enterpriseId: true },
       showNotFoundError: false,
     });
 
@@ -142,7 +150,7 @@ export class AuthService {
 
     const payload: AuthResetPassword = {
       email: authForgetPasswordInDto.email,
-      clientId: user.clientId,
+      enterpriseId: user.enterpriseId,
     };
     const token = this.jwtService.sign(payload);
 
@@ -160,18 +168,18 @@ export class AuthService {
   }: RequestChangePasswordInput) {
     const user = await this.userService.findOne({
       where: { id: requestChangePasswordInputInDto.id },
-      select: { email: true, clientId: true },
-      clientId: requestChangePasswordInputInDto.clientId,
+      select: { email: true, enterpriseId: true },
+      enterpriseId: requestChangePasswordInputInDto.enterpriseId,
     });
 
     const payload: AuthResetPassword = {
-      email: user!.email,
-      clientId: user!.clientId,
+      email: user?.email ?? "",
+      enterpriseId: user!.enterpriseId,
     };
     const token = this.jwtService.sign(payload);
 
     void this.emailService.sendEmail({
-      to: user!.email,
+      to: user?.email ?? "",
       title: 'Redefina sua senha',
       body: `${FRONTEND_URL}/?token=${token}`,
     });

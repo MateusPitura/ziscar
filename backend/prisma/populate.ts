@@ -1,96 +1,81 @@
 import { PrismaClient } from '@prisma/client';
 import {
-  POPULATE_CLIENT_PRIMARY_ID,
-  POPULATE_CLIENT_SECONDARY_ID,
-  POPULATE_ORGANIZATION_DEFAULT,
-  POPULATE_ORGANIZATION_INACTIVE,
+  POPULATE_ENTERPRISE_ID,
   POPULATE_USER_DEFAULT,
   POPULATE_USER_INACTIVE,
 } from '../src/constants';
-import { encryptPassword } from '../src/user/user.utils';
 import { faker } from '@faker-js/faker';
 import {
   SEED_ROLE_ADMIN_ID,
   SEED_ROLE_SALES_ID,
 } from '../../shared/src/constants';
+import { encryptPassword } from '../src/entities/user/user.utils';
 
 const prisma = new PrismaClient();
 
 async function seed() {
-  await prisma.client.createMany({
-    data: [
-      {
-        id: POPULATE_CLIENT_PRIMARY_ID,
+  await prisma.$transaction(async (tx) => {
+    console.log('🌱 Starting database population...');
+
+    const enterprise = await tx.enterprise.upsert({
+      where: { id: POPULATE_ENTERPRISE_ID },
+      update: {},
+      create: {
+        id: POPULATE_ENTERPRISE_ID,
       },
-      {
-        id: POPULATE_CLIENT_SECONDARY_ID,
-      },
-    ],
-  });
+    });
+    console.log(`✅ Enterprise "${enterprise.id}" created or verified.`);
 
-  const promises: Promise<unknown>[] = [];
-
-  promises.push(
-    prisma.organization.createMany({
-      data: [
-        {
-          ...POPULATE_ORGANIZATION_DEFAULT,
-          clientId: POPULATE_CLIENT_PRIMARY_ID,
-        },
-        {
-          ...POPULATE_ORGANIZATION_INACTIVE,
-          clientId: POPULATE_CLIENT_PRIMARY_ID,
-        },
-      ],
-    }),
-  );
-
-  promises.push(
-    prisma.user.createMany({
+    await tx.user.createMany({
       data: [
         {
           ...POPULATE_USER_DEFAULT,
           password: await encryptPassword({
             password: POPULATE_USER_DEFAULT.password,
           }),
-          clientId: POPULATE_CLIENT_PRIMARY_ID,
+          enterpriseId: enterprise.id,
           roleId: SEED_ROLE_ADMIN_ID,
-          birthDate: new Date(POPULATE_USER_DEFAULT.birthDate),
         },
         {
           ...POPULATE_USER_INACTIVE,
           password: await encryptPassword({
             password: POPULATE_USER_INACTIVE.password,
           }),
-          clientId: POPULATE_CLIENT_PRIMARY_ID,
+          enterpriseId: enterprise.id,
           roleId: SEED_ROLE_ADMIN_ID,
         },
       ],
-    }),
-  );
+      skipDuplicates: true,
+    });
+    console.log('✅ Default users created.');
 
-  const usersPromise = Array.from({ length: 30 }, async (_, index) => ({
-    fullName: faker.person.fullName(),
-    email: faker.internet.email(),
-    isActive: index > 5,
-    password: await encryptPassword({ password: faker.internet.password() }),
-    clientId: POPULATE_CLIENT_PRIMARY_ID,
-    roleId: SEED_ROLE_SALES_ID,
-  }));
+    const usersPromise = Array.from({ length: 30 }, async (_, index) => ({
+      fullName: faker.person.fullName(),
+      email: faker.internet.email(),
+      archivedAt: index > 5 ? null : new Date(),
+      password: await encryptPassword({ password: faker.internet.password() }),
+      enterpriseId: enterprise.id,
+      roleId: SEED_ROLE_SALES_ID,
+    }));
 
-  const users = await Promise.all(usersPromise);
+    const usersToCreate = await Promise.all(usersPromise);
 
-  promises.push(
-    prisma.user.createMany({
-      data: users,
-    }),
-  );
-
-  await Promise.all(promises);
+    await tx.user.createMany({
+      data: usersToCreate,
+      skipDuplicates: true,
+    });
+    console.log(`✅ ${usersToCreate.length} fake users created.`);
+  });
 }
 
 seed()
-  .catch((error) => {
-    console.error('❌ Failed to run populate', error);
+  .then(() => {
+    console.log('🌱 Database populated successfully.');
   })
-  .finally(() => void prisma.$disconnect());
+  .catch((error) => {
+    console.error('❌ Failed to run populate:', error);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });

@@ -1,21 +1,21 @@
 import { NotFoundException } from '@nestjs/common';
+import { Permission } from '@prisma/client';
 import { Permissions } from '@shared/types';
-import { DEFAULT_PERMISSIONS } from 'src/user/user.constant';
-import { Role } from 'src/user/user.type';
+import { DEFAULT_PERMISSIONS } from 'src/entities/user/user.constant';
 
 interface HandlePermissionsProperties {
-  role?: Role;
+  permissions?: Permission[];
 }
 
 export default function handlePermissions({
-  role,
+  permissions,
 }: HandlePermissionsProperties): Permissions {
-  if (!role?.permissions) {
+  if (!permissions) {
     throw new NotFoundException('Permissões não encontradas');
   }
 
   const permissionsFormatted = structuredClone(DEFAULT_PERMISSIONS);
-  for (const permission of role.permissions) {
+  for (const permission of permissions) {
     permissionsFormatted[permission.resource][permission.action] = true;
   }
 

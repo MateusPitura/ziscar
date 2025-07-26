@@ -12,7 +12,7 @@ import {
   AuthSignin,
   CustomizeValidationProperties,
 } from './auth.type';
-import { UserService } from 'src/user/user.service';
+import { UserService } from 'src/entities/user/user.service';
 
 @Injectable()
 abstract class BaseAuthGuard implements CanActivate {
@@ -44,7 +44,7 @@ abstract class BaseAuthGuard implements CanActivate {
       });
 
       if (customValidation.shouldValidateJit) {
-        const { clientId, userId, jit } = payload as AuthSignin;
+        const { enterpriseId, userId, jit } = payload as AuthSignin;
 
         const user = await this.userService.findOne({
           select: {
@@ -53,7 +53,7 @@ abstract class BaseAuthGuard implements CanActivate {
           where: {
             id: userId,
           },
-          clientId,
+          enterpriseId,
         });
 
         if (jit !== user?.jit) {
