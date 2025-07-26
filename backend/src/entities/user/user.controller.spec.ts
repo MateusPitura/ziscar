@@ -207,7 +207,7 @@ describe('UserController', () => {
           mode: 'insensitive',
         },
         isActive: true,
-        clientId: POPULATE_ENTERPRISE_PRIMARY_ID,
+        enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
         NOT: {
           id: POPULATE_USER_DEFAULT.id,
         },

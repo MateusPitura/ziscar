@@ -4,18 +4,18 @@ import { JwtService } from '@nestjs/jwt';
 import { EmailService } from '../entities/email/email.service';
 import { PrismaService } from '../infra/database/prisma.service';
 import {
-    FRONTEND_URL,
-    POPULATE_ENTERPRISE_PRIMARY_ID,
-    POPULATE_ENTERPRISE_SECONDARY_ID,
-    POPULATE_STORE_DEFAULT,
-    POPULATE_STORE_INACTIVE,
-    POPULATE_USER_DEFAULT,
-    POPULATE_USER_INACTIVE,
+  FRONTEND_URL,
+  POPULATE_ENTERPRISE_PRIMARY_ID,
+  POPULATE_ENTERPRISE_SECONDARY_ID,
+  POPULATE_STORE_DEFAULT,
+  POPULATE_STORE_INACTIVE,
+  POPULATE_USER_DEFAULT,
+  POPULATE_USER_INACTIVE,
 } from '../constants';
 import {
-    ConflictException,
-    NotFoundException,
-    UnauthorizedException,
+  ConflictException,
+  NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { PdfService } from 'src/helpers/pdf/pdf.service';
 import { UserService } from 'src/entities/user/user.service';
@@ -137,7 +137,7 @@ describe('AuthService', () => {
     );
   });
 
-  it('should not throw error when sign out with outer client id', async () => {
+  it('should not throw error when sign out with outer enterprise id', async () => {
     const response = await authService.signOut({
       enterpriseId: POPULATE_ENTERPRISE_SECONDARY_ID,
       userId: POPULATE_USER_DEFAULT.id,
@@ -266,7 +266,7 @@ describe('AuthService', () => {
     });
   });
 
-  it('should not reset password with outer client id provided', async () => {
+  it('should not reset password with outer enterprise id provided', async () => {
     await prismaService.transaction(async (transaction) => {
       Reflect.set(userService, 'prismaService', transaction);
 

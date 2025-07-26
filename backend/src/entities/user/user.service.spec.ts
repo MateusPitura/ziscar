@@ -335,7 +335,7 @@ describe('UserService', () => {
     });
   });
 
-  it('should not update user with outer client id provided', async () => {
+  it('should not update user with outer enterprise id provided', async () => {
     await prismaService.transaction(async (transaction) => {
       Reflect.set(userService, 'prismaService', transaction);
 
@@ -718,7 +718,7 @@ describe('UserService', () => {
     expect(user).toHaveProperty('id');
   });
 
-  it('should not find user with outer client id provided', async () => {
+  it('should not find user with outer enterprise id provided', async () => {
     await expect(
       userService.findOne({
         where: { id: POPULATE_USER_DEFAULT.id },
@@ -835,7 +835,7 @@ describe('UserService', () => {
     });
   });
 
-  it('should not find many users with outer client id provided', async () => {
+  it('should not find many users with outer enterprise id provided', async () => {
     const result = await userService.findMany({
       userFindManyInDto: { status: 'active' },
       userId: POPULATE_USER_DEFAULT.id,
@@ -855,7 +855,7 @@ describe('UserService', () => {
     ).rejects.toThrow(NotFoundException);
   });
 
-  it('should not get user permissions with outer client id provided', async () => {
+  it('should not get user permissions with outer enterprise id provided', async () => {
     const permissions = await userService.getPermissions({
       userId: POPULATE_USER_DEFAULT.id,
       enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
