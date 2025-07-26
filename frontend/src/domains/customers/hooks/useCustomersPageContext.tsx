@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { CustomersPageContext } from "../contexts/AuditPageContext";
+import { CustomersPageContext } from "../contexts/CustomersPageContext";
 
 export default function useCustomersPageContext() {
   const context = useContext(CustomersPageContext);
