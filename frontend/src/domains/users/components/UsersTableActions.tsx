@@ -29,7 +29,7 @@ export default function UsersTableActions({
   async function enableUser() {
     await safeFetch(`${BACKEND_URL}/user/${userId}`, {
       method: "DELETE",
-      body: { isActive: true },
+      body: { archivedAt: null },
       resource: "USERS",
       action: "DELETE",
     });

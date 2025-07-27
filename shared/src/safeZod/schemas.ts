@@ -80,9 +80,9 @@ export const cnpj = () =>
     .transform((cnpj) => removeMask(cnpj))
     .refine((cnpj) => validateCnpj(cnpj), { message: "CNPJ inválido" });
 
-export const cellphone = () =>
+export const phone = () =>
   string(15)
-    .transform((cellphone) => removeMask(cellphone))
+    .transform((phone) => removeMask(phone))
     .refine((cep) => /^\d{11}$/.test(cep), "Celular inválido");
 
 export const password = () =>

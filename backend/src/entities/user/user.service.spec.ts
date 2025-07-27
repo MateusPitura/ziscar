@@ -447,7 +447,9 @@ describe('UserService', () => {
 
       expect(user).toHaveProperty('address.cep', '12345678');
       expect(user).toHaveProperty('address.number', '123');
-      expect(user).toHaveProperty('address.cityIbgeCode', 4119905);
+      expect(user).toHaveProperty('address.city.ibgeCode', 4119905);
+      expect(user).toHaveProperty('address.city.state', 'PR');
+      expect(user).toHaveProperty('address.city.name', 'Ponta Grossa');
       expect(user).toHaveProperty('roleId', SEED_ROLE_SALES_ID);
 
       transaction.rollback();
@@ -497,7 +499,9 @@ describe('UserService', () => {
       expect(user).toHaveProperty('address.cep', '12345678');
       expect(user).toHaveProperty('address.number', '123');
       expect(user).toHaveProperty('address.street', 'Broadway');
-      expect(user).toHaveProperty('address.cityIbgeCode', 4119905);
+      expect(user).toHaveProperty('address.city.ibgeCode', 4119905);
+      expect(user).toHaveProperty('address.city.state', 'PR');
+      expect(user).toHaveProperty('address.city.name', 'Ponta Grossa');
 
       transaction.rollback();
     });

@@ -9,8 +9,8 @@ export function applyMask(
   switch (mask) {
     case "cpf":
       return applyCpfMask(value);
-    case "cellphone":
-      return applyCellphoneMask(value);
+    case "phone":
+      return applyPhoneMask(value);
     case "cep":
       return applyCepMask(value);
     case "cnpj":
@@ -36,7 +36,7 @@ function applyCpfMask(value: string): string {
   }
 }
 
-function applyCellphoneMask(value: string): string {
+function applyPhoneMask(value: string): string {
   const digits = value.replace(/\D/g, "");
 
   if (digits.length === 0) {

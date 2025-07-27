@@ -69,8 +69,8 @@ export default function UsersTable(): ReactNode {
             id: "ID",
             fullName: "Nome",
             email: "Email",
-            cellPhone: "Celular",
-            isActive: "Ativo",
+            phone: "Celular",
+            archivedAt: "Ativo",
           }}
         />
         <Table.Filter form={<UsersFilterForm />} />
@@ -95,11 +95,11 @@ export default function UsersTable(): ReactNode {
               <Table.Cell label={String(user.id)} />
               <Table.Cell label={user.fullName} />
               <Table.Cell label={user.email} />
-              <Table.Cell label={user.cellPhone} />
-              <Table.Cell label={user.isActive ? "Ativo" : "Inativo"} />
+              <Table.Cell label={user.phone} />
+              <Table.Cell label={user.archivedAt ? "Inativo" : "Ativo"} />
               <Table.Action>
                 <UsersTableActions
-                  isActive={user.isActive}
+                  isActive={!user.archivedAt}
                   userId={String(user.id)}
                   fullName={user.fullName}
                   handleDisableUserInfo={handleDisableUserInfo}
