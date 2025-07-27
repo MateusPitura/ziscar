@@ -113,12 +113,12 @@ export class AuthService {
 
       await Promise.all([
         this.storeService.create({
-          cnpj: authSignUpInDto.cnpj,
-          name: authSignUpInDto.name,
-          enterpriseId,
-          email: null,
-          phone: null,
-          addressId: null,
+          storeCreateInDto: {
+            cnpj: authSignUpInDto.cnpj,
+            name: authSignUpInDto.name,
+            enterpriseId,
+          },
+          transaction,
         }),
         this.userService.create({
           userCreateInDto: {
