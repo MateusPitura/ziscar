@@ -5,10 +5,10 @@ import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../infra/database/prisma.service';
 import { EmailService } from '../entities/email/email.service';
 import {
-    AUTH_REQUEST_DEFAULT,
-    POPULATE_ENTERPRISE_PRIMARY_ID,
-    POPULATE_USER_DEFAULT,
-    RANDOM_URL,
+  AUTH_REQUEST_DEFAULT,
+  POPULATE_ENTERPRISE_PRIMARY_ID,
+  POPULATE_USER_DEFAULT,
+  RANDOM_URL,
 } from '../constants';
 import { AuthRequestResetPassword } from './auth.type';
 import { PdfService } from 'src/helpers/pdf/pdf.service';
