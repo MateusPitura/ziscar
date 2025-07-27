@@ -1,4 +1,4 @@
-import { CustomersPageProvider } from "../contexts/AuditPageContext";
+import { CustomersPageProvider } from "../contexts/CustomersPageContext";
 import CustomersContainer from "./CustomersContainer";
 
 export default function CustomersPage() {

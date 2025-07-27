@@ -14,7 +14,8 @@
     "prod:db-init": "NODE_ENV=production ts-node ./prisma/init.ts",
     "dev:db-init": "ts-node ./prisma/init.ts",
     "test:db-init": "NODE_ENV=test ts-node ./prisma/init.ts",
-    "test": "jest"
+    "test": "jest",
+    "lint": "eslint '{src,apps,libs,test}/**/*.ts' --fix"
   },
   "dependencies": {
     "@nestjs-modules/mailer": "^2.0.2",

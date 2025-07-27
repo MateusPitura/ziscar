@@ -1,21 +1,20 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { ClientService } from '../client/client.service';
-import { OrganizationService } from '../organization/organization.service';
-import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
-import { PrismaService } from '../database/prisma.service';
-import { EmailService } from '../email/email.service';
+import { PrismaService } from '../infra/database/prisma.service';
+import { EmailService } from '../entities/email/email.service';
 import {
   AUTH_REQUEST_DEFAULT,
-  POPULATE_CLIENT_PRIMARY_ID,
+  POPULATE_ENTERPRISE_PRIMARY_ID,
   POPULATE_USER_DEFAULT,
   RANDOM_URL,
 } from '../constants';
 import { AuthRequestResetPassword } from './auth.type';
-import { PdfService } from 'src/pdf/pdf.service';
-import { SheetService } from 'src/sheet/sheet.service';
+import { PdfService } from 'src/helpers/pdf/pdf.service';
+import { UserService } from 'src/entities/user/user.service';
+import { EnterpriseService } from 'src/enterprise/enterprise.service';
+import { StoreService } from 'src/entities/store/store.service';
 
 describe('AuthController', () => {
   let authController: AuthController;
@@ -27,8 +26,8 @@ describe('AuthController', () => {
       controllers: [AuthController],
       providers: [
         AuthService,
-        ClientService,
-        OrganizationService,
+        EnterpriseService,
+        StoreService,
         UserService,
         PrismaService,
         {
@@ -47,12 +46,6 @@ describe('AuthController', () => {
           provide: PdfService,
           useValue: {
             generatePdf: jest.fn(),
-          },
-        },
-        {
-          provide: SheetService,
-          useValue: {
-            generateSheet: jest.fn(),
           },
         },
       ],
@@ -105,7 +98,7 @@ describe('AuthController', () => {
 
       const resetPasswordPayload = {
         email: POPULATE_USER_DEFAULT.email,
-        clientId: POPULATE_CLIENT_PRIMARY_ID,
+        enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
       };
 
       expect(

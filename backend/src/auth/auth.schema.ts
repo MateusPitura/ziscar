@@ -12,7 +12,7 @@ const SchemaAuthSigInInDto = s.object({
 
 const SchemaResetPasswordInDto = SchemaPassword.extend({
   email: s.email(),
-  clientId: s.id(),
+  enterpriseId: s.id(),
 });
 
 const SchemaAuthForgetPasswordInDto = SchemaAuthSigInInDto.pick({
@@ -21,7 +21,7 @@ const SchemaAuthForgetPasswordInDto = SchemaAuthSigInInDto.pick({
 
 const SchemaRequestChangePasswordInDto = s.object({
   id: s.id(),
-  clientId: s.id(),
+  enterpriseId: s.id(),
 });
 
 const SchemaAuthSignUpInDto = s.object({
