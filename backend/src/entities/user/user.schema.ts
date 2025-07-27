@@ -4,8 +4,7 @@ import { createZodDto } from 'nestjs-zod';
 const SchemaAddress = s.object({
   street: s.string().nullish(),
   neighborhood: s.string().nullish(),
-  cityIbgeCode: s.string().nullish(),
-  state: s.string().nullish(),
+  cityIbgeCode: s.number().nullish(),
 });
 
 const SchemaAddressToCreate = s.SchemaAddress.extend({

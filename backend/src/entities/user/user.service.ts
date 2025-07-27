@@ -58,9 +58,20 @@ export class UserService {
       }),
       fullName: userCreateInDto.fullName,
     };
+
     if (address) {
+      const { cityIbgeCode, ...addressRest } = address;
+
+      if (cityIbgeCode) {
+        addressRest['city'] = {
+          connect: {
+            ibgeCode: cityIbgeCode,
+          },
+        };
+      }
+
       createPayload['address'] = {
-        create: address,
+        create: addressRest,
       };
     }
 

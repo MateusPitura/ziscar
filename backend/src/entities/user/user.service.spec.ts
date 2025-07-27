@@ -174,8 +174,7 @@ describe('UserService', () => {
               cep: '12345678',
               number: '123',
               street: 'Broadway',
-              cityIbgeCode: '4119905',
-              state: 'NY',
+              cityIbgeCode: 4119905,
               neighborhood: 'Manhattan',
             },
             enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
@@ -371,7 +370,7 @@ describe('UserService', () => {
         ...commonPayload,
         userUpdateInDto: {
           address: {
-            add: { cep: '12345678', number: '123' },
+            add: { cep: '12345678', number: '123', cityIbgeCode: 4119905 },
           },
         },
       });
@@ -405,11 +404,24 @@ describe('UserService', () => {
     });
   });
 
-  it('should create user address and update role', async () => {
+  it('should create, create if already exist and update user address and update role', async () => {
     await prismaService.transaction(async (transaction) => {
       Reflect.set(userService, 'prismaService', transaction);
 
-      const user = await userService.update({
+      await userService.update({
+        where: {
+          id: POPULATE_USER_DEFAULT.id,
+        },
+        userUpdateInDto: {
+          address: {
+            add: { cep: '12345678', number: '123', cityIbgeCode: 4119905 },
+          },
+          roleId: SEED_ROLE_SALES_ID,
+        },
+        enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+      });
+
+      await userService.update({
         where: {
           id: POPULATE_USER_DEFAULT.id,
         },
@@ -422,8 +434,22 @@ describe('UserService', () => {
         enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
       });
 
+      const user = await userService.update({
+        where: {
+          id: POPULATE_USER_DEFAULT.id,
+        },
+        userUpdateInDto: {
+          address: {
+            update: { cep: '12345678', number: '123', cityIbgeCode: 4119905 },
+          },
+          roleId: SEED_ROLE_SALES_ID,
+        },
+        enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+      });
+
       expect(user).toHaveProperty('address.cep', '12345678');
       expect(user).toHaveProperty('address.number', '123');
+      expect(user).toHaveProperty('address.cityIbgeCode', 4119905);
       expect(user).toHaveProperty('roleId', SEED_ROLE_SALES_ID);
 
       transaction.rollback();
@@ -456,7 +482,7 @@ describe('UserService', () => {
         ...commonPayload,
         userUpdateInDto: {
           address: {
-            add: { cep: '12345678', number: '123' },
+            add: { cep: '12345678', number: '123', cityIbgeCode: 4119905 },
           },
         },
       });
@@ -473,6 +499,7 @@ describe('UserService', () => {
       expect(user).toHaveProperty('address.cep', '12345678');
       expect(user).toHaveProperty('address.number', '123');
       expect(user).toHaveProperty('address.street', 'Broadway');
+      expect(user).toHaveProperty('address.cityIbgeCode', 4119905);
 
       transaction.rollback();
     });
@@ -504,7 +531,7 @@ describe('UserService', () => {
         ...commonPayload,
         userUpdateInDto: {
           address: {
-            add: { cep: '12345678', number: '123' },
+            add: { cep: '12345678', number: '123', cityIbgeCode: 4119905 },
           },
         },
       });

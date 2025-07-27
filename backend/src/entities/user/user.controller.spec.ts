@@ -208,8 +208,8 @@ describe('UserController', () => {
         },
         archivedAt: null,
         enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
-        NOT: {
-          id: POPULATE_USER_DEFAULT.id,
+        id: {
+          not: POPULATE_USER_DEFAULT.id,
         },
       },
       orderBy: [{ fullName: 'asc' }],

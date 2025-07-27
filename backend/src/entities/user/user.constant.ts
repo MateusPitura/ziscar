@@ -103,6 +103,5 @@ export const addressNullableFields: Record<keyof AddressNullableFields, null> =
   {
     neighborhood: null,
     cityIbgeCode: null,
-    state: null,
     street: null,
   };
