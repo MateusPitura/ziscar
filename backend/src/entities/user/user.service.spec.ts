@@ -296,13 +296,13 @@ describe('UserService', () => {
             id: POPULATE_USER_DEFAULT.id,
           },
           userUpdateInDto: {
-            password: '123456',
+            password: 'Senha12345@',
           },
           enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
         }),
       ).toBeTruthy();
 
-      expect(spy).toHaveBeenCalledWith({ password: '123456' });
+      expect(spy).toHaveBeenCalledWith({ password: 'Senha12345@' });
 
       transaction.rollback();
     });
@@ -320,7 +320,7 @@ describe('UserService', () => {
             id: POPULATE_USER_INACTIVE.id,
           },
           userUpdateInDto: {
-            password: '123456',
+            password: 'Senha12345@',
           },
           enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
         }),
@@ -342,7 +342,7 @@ describe('UserService', () => {
             id: POPULATE_USER_DEFAULT.id,
           },
           userUpdateInDto: {
-            password: '123456',
+            password: 'Senha12345@',
           },
           enterpriseId: POPULATE_ENTERPRISE_SECONDARY_ID,
         }),
@@ -585,7 +585,7 @@ describe('UserService', () => {
           id: POPULATE_USER_DEFAULT.id,
         },
         userUpdateInDto: {
-          password: '123456',
+          password: 'Senha12345@',
         },
         enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
         select: {

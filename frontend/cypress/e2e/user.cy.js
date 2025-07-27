@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
 
-describe("User address", () => {
+describe("User", () => {
   beforeEach(() => {
     cy.login();
   });

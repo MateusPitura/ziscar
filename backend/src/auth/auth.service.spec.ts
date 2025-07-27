@@ -229,13 +229,13 @@ describe('AuthService', () => {
       const response = await authService.resetPassword({
         authResetPasswordInDto: {
           email: POPULATE_USER_DEFAULT.email,
-          password: '123456',
+          password: 'Senha12345@',
           enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
         },
       });
 
       expect(response).toBeTruthy();
-      expect(spy).toHaveBeenCalledWith({ password: '123456' });
+      expect(spy).toHaveBeenCalledWith({ password: 'Senha12345@' });
 
       transaction.rollback();
     });
@@ -249,7 +249,7 @@ describe('AuthService', () => {
         authService.resetPassword({
           authResetPasswordInDto: {
             email: POPULATE_USER_INACTIVE.email,
-            password: '123456',
+            password: 'Senha12345@',
             enterpriseId: POPULATE_ENTERPRISE_SECONDARY_ID,
           },
         }),
@@ -267,7 +267,7 @@ describe('AuthService', () => {
         authService.resetPassword({
           authResetPasswordInDto: {
             email: POPULATE_USER_DEFAULT.email,
-            password: '123456',
+            password: 'Senha12345@',
             enterpriseId: POPULATE_ENTERPRISE_SECONDARY_ID,
           },
         }),

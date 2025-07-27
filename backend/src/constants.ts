@@ -17,15 +17,15 @@ export const POPULATE_USER_DEFAULT = {
   id: 150,
   fullName: 'John Doe',
   email: 'john.doe@email.com',
-  password: '123456',
-  cpf: '12345678901',
+  password: 'Senha12345@',
+  cpf: '91228253048',
 };
 
 export const POPULATE_USER_INACTIVE = {
   id: 168,
   fullName: 'Tony Stark',
   email: 'tony.stark@email.com',
-  password: '123456',
+  password: 'Senha12345@',
   cpf: '12345678902',
   archivedAt: new Date(),
 };
