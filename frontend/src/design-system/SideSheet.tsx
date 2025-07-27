@@ -105,6 +105,7 @@ function Footer({
         onClick={onPrimaryCallback}
         type="submit"
         state={primaryBtnStateParsed}
+        data-cy="side-sheet-primary-button"
       />
       {onSecondaryCallback ? (
         <Button

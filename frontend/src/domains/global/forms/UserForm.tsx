@@ -73,9 +73,9 @@ export default function UserForm({
                     type="email"
                   />
                   <Input<UserFormInputs>
-                    name="cellPhone"
+                    name="phone"
                     label="Celular"
-                    mask="cellphone"
+                    mask="phone"
                     maxLength={15}
                     type="tel"
                   />
@@ -84,12 +84,6 @@ export default function UserForm({
                     label="CPF"
                     mask="cpf"
                     maxLength={14}
-                  />
-                  <Input<UserFormInputs> name="code" label="Matrícula" />
-                  <Input<UserFormInputs>
-                    name="birthDate"
-                    label="Data de nascimento"
-                    type="date"
                   />
                 </Section.Body>
               </Section.Group>

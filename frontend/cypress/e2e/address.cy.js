@@ -1,35 +1,8 @@
 import { faker } from "@faker-js/faker";
 
-describe("Should update address successfully", () => {
+describe("User address", () => {
   beforeEach(() => {
     cy.login();
-  });
-
-  it("should delete address", () => {
-    cy.intercept("PATCH", "http://localhost:3000/profile", (req) => {
-      expect(req.body).to.deep.equal({
-        address: {
-          remove: true,
-        },
-      });
-    }).as("removeAddress");
-
-    cy.visit("/profile/edit");
-
-    cy.get('button[type="submit"]').should("be.disabled");
-
-    cy.get('[data-cy="button-remove-address"]').click();
-
-    cy.get('button[type="submit"]').should("be.enabled");
-
-    cy.get('button[type="submit"]').click();
-
-    cy.get('[data-cy="snackbar-title"]').should(
-      "have.text",
-      "Perfil atualizado com sucesso"
-    );
-
-    cy.wait("@removeAddress");
   });
 
   it("should append address, validate CEP and number on submit, remove address and update only full name", () => {
@@ -85,9 +58,7 @@ describe("Should update address successfully", () => {
             number: "123",
             street: null,
             neighborhood: null,
-            city: null,
-            state: null,
-            complement: null,
+            cityIbgeCode: null,
           },
         },
       });
@@ -125,9 +96,7 @@ describe("Should update address successfully", () => {
             number,
             street: null,
             neighborhood: null,
-            city: null,
-            state: null,
-            complement: null,
+            cityIbgeCode: null,
           },
         },
       });
@@ -149,5 +118,32 @@ describe("Should update address successfully", () => {
     );
 
     cy.wait("@updateAddress");
+  });
+
+  it("should delete address", () => {
+    cy.intercept("PATCH", "http://localhost:3000/profile", (req) => {
+      expect(req.body).to.deep.equal({
+        address: {
+          remove: true,
+        },
+      });
+    }).as("removeAddress");
+
+    cy.visit("/profile/edit");
+
+    cy.get('button[type="submit"]').should("be.disabled");
+
+    cy.get('[data-cy="button-remove-address"]').click();
+
+    cy.get('button[type="submit"]').should("be.enabled");
+
+    cy.get('button[type="submit"]').click();
+
+    cy.get('[data-cy="snackbar-title"]').should(
+      "have.text",
+      "Perfil atualizado com sucesso"
+    );
+
+    cy.wait("@removeAddress");
   });
 });

@@ -5,7 +5,6 @@ import { ConfigModule } from '@nestjs/config';
 import { EmailModule } from './entities/email/email.module';
 import { APP_PIPE } from '@nestjs/core';
 import { ZodValidationPipe } from 'nestjs-zod';
-import { PdfModule } from './helpers/pdf/pdf.module';
 import { AppController } from './app.controller';
 import { UserModule } from './entities/user/user.module';
 
@@ -16,7 +15,6 @@ import { UserModule } from './entities/user/user.module';
     UserModule,
     DatabaseModule,
     EmailModule,
-    PdfModule,
   ],
   providers: [
     {

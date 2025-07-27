@@ -8,7 +8,7 @@ export default function selectUsersInfo(payload: PageablePayload<FetchUser>): Pa
   for (const user of payload.data) {
     itemsFiltered.push({
       ...user,
-      cellPhone: applyMask(user?.cellPhone, "cellphone"),
+      phone: applyMask(user?.phone, "phone"),
     });
   }
 

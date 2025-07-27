@@ -3,7 +3,7 @@ describe("Login", () => {
     cy.visit("/");
 
     cy.get('input[name="email"]').type("john.doe@email.com");
-    cy.get('input[name="password"]').type("123456");
+    cy.get('input[name="password"]').type("Senha12345@");
     cy.get('button[type="submit"]').click();
 
     cy.url().should("include", "/vehicles");

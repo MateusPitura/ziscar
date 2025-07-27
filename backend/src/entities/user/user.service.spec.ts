@@ -12,7 +12,6 @@ import {
   SEED_ROLE_ADMIN_ID,
   SEED_ROLE_SALES_ID,
 } from '@shared/constants';
-import { PdfService } from 'src/helpers/pdf/pdf.service';
 import { addressNullableFields } from './user.constant';
 import { PrismaService } from 'src/infra/database/prisma.service';
 import {
@@ -31,7 +30,6 @@ describe('UserService', () => {
       providers: [
         UserService,
         PrismaService,
-        PdfService,
         {
           provide: EmailService,
           useValue: {
@@ -298,13 +296,13 @@ describe('UserService', () => {
             id: POPULATE_USER_DEFAULT.id,
           },
           userUpdateInDto: {
-            password: '123456',
+            password: 'Senha12345@',
           },
           enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
         }),
       ).toBeTruthy();
 
-      expect(spy).toHaveBeenCalledWith({ password: '123456' });
+      expect(spy).toHaveBeenCalledWith({ password: 'Senha12345@' });
 
       transaction.rollback();
     });
@@ -322,7 +320,7 @@ describe('UserService', () => {
             id: POPULATE_USER_INACTIVE.id,
           },
           userUpdateInDto: {
-            password: '123456',
+            password: 'Senha12345@',
           },
           enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
         }),
@@ -344,7 +342,7 @@ describe('UserService', () => {
             id: POPULATE_USER_DEFAULT.id,
           },
           userUpdateInDto: {
-            password: '123456',
+            password: 'Senha12345@',
           },
           enterpriseId: POPULATE_ENTERPRISE_SECONDARY_ID,
         }),
@@ -449,7 +447,9 @@ describe('UserService', () => {
 
       expect(user).toHaveProperty('address.cep', '12345678');
       expect(user).toHaveProperty('address.number', '123');
-      expect(user).toHaveProperty('address.cityIbgeCode', 4119905);
+      expect(user).toHaveProperty('address.city.ibgeCode', 4119905);
+      expect(user).toHaveProperty('address.city.state', 'PR');
+      expect(user).toHaveProperty('address.city.name', 'Ponta Grossa');
       expect(user).toHaveProperty('roleId', SEED_ROLE_SALES_ID);
 
       transaction.rollback();
@@ -499,7 +499,9 @@ describe('UserService', () => {
       expect(user).toHaveProperty('address.cep', '12345678');
       expect(user).toHaveProperty('address.number', '123');
       expect(user).toHaveProperty('address.street', 'Broadway');
-      expect(user).toHaveProperty('address.cityIbgeCode', 4119905);
+      expect(user).toHaveProperty('address.city.ibgeCode', 4119905);
+      expect(user).toHaveProperty('address.city.state', 'PR');
+      expect(user).toHaveProperty('address.city.name', 'Ponta Grossa');
 
       transaction.rollback();
     });
@@ -583,7 +585,7 @@ describe('UserService', () => {
           id: POPULATE_USER_DEFAULT.id,
         },
         userUpdateInDto: {
-          password: '123456',
+          password: 'Senha12345@',
         },
         enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
         select: {
@@ -942,19 +944,5 @@ describe('UserService', () => {
         UPDATE: true,
       },
     });
-  });
-
-  it('should generate pdf', async () => {
-    const spy = jest.spyOn(PdfService.prototype, 'generatePdf');
-
-    await userService.generatePdf({
-      userGeneratePdfInDto: {
-        status: 'active',
-      },
-      userId: POPULATE_USER_DEFAULT.id,
-      enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
-    });
-
-    expect(spy).toHaveBeenCalled();
   });
 });

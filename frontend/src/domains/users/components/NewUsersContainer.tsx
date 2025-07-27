@@ -22,11 +22,14 @@ export default function NewUsersContainer(): ReactElement {
   async function createUser(data: UserFormInputs) {
     const { address, ...rest } = data;
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { state, ...addressRest } = address[0];
+
     await safeFetch(`${BACKEND_URL}/user`, {
       method: "POST",
       body: {
         ...rest,
-        ...address[0],
+        ...addressRest,
       },
       resource: "USERS",
       action: "CREATE",

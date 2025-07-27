@@ -57,7 +57,7 @@ export default function AddressFields(): ReactNode {
 
     setValue("address.0.street", cepInfo.logradouro, { shouldDirty: true });
     setValue("address.0.neighborhood", cepInfo.bairro, { shouldDirty: true });
-    setValue("address.0.city", cepInfo.ibge, {
+    setValue("address.0.cityIbgeCode", cepInfo.ibge, {
       shouldDirty: true,
     });
     setValue("address.0.state", cepInfo.uf, {
@@ -149,19 +149,15 @@ export default function AddressFields(): ReactNode {
             name="address.0.state"
             options={STATES}
             onChange={() =>
-              setValue(`address.0.city`, "", { shouldDirty: true })
+              setValue(`address.0.cityIbgeCode`, "", { shouldDirty: true })
             }
           />
           <Select<UserFormInputs>
             label="Cidade"
-            name="address.0.city"
+            name="address.0.cityIbgeCode"
             options={citiesInfo || []}
             loading={isFetchingCities}
             disabled={!selectedState}
-          />
-          <Input<UserFormInputs>
-            label="Complemento"
-            name="address.0.complement"
           />
         </>
       )}

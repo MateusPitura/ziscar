@@ -2,8 +2,6 @@ import { Permission, Prisma } from '@prisma/client';
 import {
   UserCreateInDto,
   UserFindManyInDto,
-  UserGeneratePdfInDto,
-  UserGenerateSheetInDto,
   UserUpdateInDto,
 } from './user.schema';
 import { Transactionable } from 'src/types';
@@ -38,18 +36,6 @@ export interface UpdateInput {
   userUpdateInDto: UserUpdateInDto;
   select?: Prisma.UserSelect;
   showNotFoundError?: boolean;
-}
-
-export interface GeneratePdfInput {
-  enterpriseId: number;
-  userGeneratePdfInDto: UserGeneratePdfInDto;
-  userId: number;
-}
-
-export interface GenerateSheetInput {
-  enterpriseId: number;
-  userGenerateSheetInDto: UserGenerateSheetInDto;
-  userId: number;
 }
 
 export interface GetPermissionsInput {

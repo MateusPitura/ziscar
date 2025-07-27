@@ -12,10 +12,9 @@ export default function selectAddressInfo(
       cep: applyMask(address?.cep, "cep") ?? "",
       number: address?.number ?? "",
       street: address?.street ?? "",
-      complement: address?.complement ?? "",
       neighborhood: address?.neighborhood ?? "",
-      city: address?.city ?? "",
-      state: address?.state ?? "",
+      cityIbgeCode: address?.city?.ibgeCode.toString() ?? "",
+      state: address?.city?.state ?? "",
     },
   ];
 }

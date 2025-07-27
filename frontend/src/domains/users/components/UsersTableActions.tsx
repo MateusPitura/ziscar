@@ -29,7 +29,7 @@ export default function UsersTableActions({
   async function enableUser() {
     await safeFetch(`${BACKEND_URL}/user/${userId}`, {
       method: "DELETE",
-      body: { isActive: true },
+      body: { archivedAt: null },
       resource: "USERS",
       action: "DELETE",
     });
@@ -71,6 +71,7 @@ export default function UsersTableActions({
           }
           resource="USERS"
           action="DELETE"
+          data-cy={`button-disable-user-${userId}`}
         />
       </Tooltip>
     </>
@@ -84,6 +85,7 @@ export default function UsersTableActions({
         action="DELETE"
         padding="none"
         iconLeft="ToggleOn"
+        data-cy={`button-enable-user-${userId}`}
       />
     </Tooltip>
   );

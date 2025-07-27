@@ -17,7 +17,6 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { PdfService } from 'src/helpers/pdf/pdf.service';
 import { UserService } from 'src/entities/user/user.service';
 import { EnterpriseService } from 'src/enterprise/enterprise.service';
 import { StoreService } from 'src/entities/store/store.service';
@@ -46,12 +45,6 @@ describe('AuthService', () => {
           provide: JwtService,
           useValue: {
             sign: jest.fn().mockReturnValue(''),
-          },
-        },
-        {
-          provide: PdfService,
-          useValue: {
-            generatePdf: jest.fn(),
           },
         },
       ],
@@ -236,13 +229,13 @@ describe('AuthService', () => {
       const response = await authService.resetPassword({
         authResetPasswordInDto: {
           email: POPULATE_USER_DEFAULT.email,
-          password: '123456',
+          password: 'Senha12345@',
           enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
         },
       });
 
       expect(response).toBeTruthy();
-      expect(spy).toHaveBeenCalledWith({ password: '123456' });
+      expect(spy).toHaveBeenCalledWith({ password: 'Senha12345@' });
 
       transaction.rollback();
     });
@@ -256,7 +249,7 @@ describe('AuthService', () => {
         authService.resetPassword({
           authResetPasswordInDto: {
             email: POPULATE_USER_INACTIVE.email,
-            password: '123456',
+            password: 'Senha12345@',
             enterpriseId: POPULATE_ENTERPRISE_SECONDARY_ID,
           },
         }),
@@ -274,7 +267,7 @@ describe('AuthService', () => {
         authService.resetPassword({
           authResetPasswordInDto: {
             email: POPULATE_USER_DEFAULT.email,
-            password: '123456',
+            password: 'Senha12345@',
             enterpriseId: POPULATE_ENTERPRISE_SECONDARY_ID,
           },
         }),

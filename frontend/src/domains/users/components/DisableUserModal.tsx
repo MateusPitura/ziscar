@@ -23,7 +23,7 @@ export default function DisableUserModal({
   async function disableUser() {
     await safeFetch(`${BACKEND_URL}/user/${userId}`, {
       method: "DELETE",
-      body: { isActive: false },
+      body: { archivedAt: new Date().toISOString() },
       resource: "USERS",
       action: "DELETE",
     });

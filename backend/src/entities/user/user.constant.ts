@@ -9,7 +9,14 @@ export const GET_USER = {
   cpf: true,
   archivedAt: true,
   roleId: true,
-  address: true,
+  address: {
+    omit: {
+      cityIbgeCode: true,
+    },
+    include: {
+      city: true,
+    },
+  },
 };
 
 export const FETCH_USER = {

@@ -7,7 +7,6 @@ import { EmailService } from '../email/email.service';
 import { AuthRequest } from 'src/auth/auth.type';
 import { ITEMS_PER_PAGE, SEED_ROLE_SALES_ID } from '@shared/constants';
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
-import { PdfService } from 'src/helpers/pdf/pdf.service';
 import { PrismaService } from 'src/infra/database/prisma.service';
 import {
   AUTH_REQUEST_DEFAULT,
@@ -38,12 +37,6 @@ describe('UserController', () => {
           provide: JwtService,
           useValue: {
             sign: jest.fn().mockReturnValue(''),
-          },
-        },
-        {
-          provide: PdfService,
-          useValue: {
-            generatePdf: jest.fn(),
           },
         },
       ],
@@ -266,15 +259,5 @@ describe('UserController', () => {
       await userController.getPermissions(AUTH_REQUEST_DEFAULT);
 
     expect(permissions).toBeTruthy();
-  });
-
-  it('should generate pdf', async () => {
-    const response = await userController.generatePdf(AUTH_REQUEST_DEFAULT, {
-      status: 'active',
-      fullName: POPULATE_USER_DEFAULT.fullName,
-      orderBy: 'fullName',
-    });
-
-    expect(response).toBeUndefined();
   });
 });

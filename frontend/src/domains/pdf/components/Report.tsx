@@ -121,7 +121,8 @@ function Report<T>({ data, formatColumns }: ReportProperties<T>): ReactElement {
   const keys = Object.keys(data[0] || {}).filter((key) => formatColumns[key]);
   const columnWidth = `${100 / keys.length}%`;
 
-  const formatValue = (value: unknown): string => {
+  const formatValue = (value: unknown, key: string): string => {
+    if (key === "archivedAt") return value ? "Não" : "Sim";
     if (value === null || value === undefined) return "-";
     if (typeof value === "boolean") return value ? "Sim" : "Não";
     if (typeof value === "object") return JSON.stringify(value);
@@ -147,9 +148,7 @@ function Report<T>({ data, formatColumns }: ReportProperties<T>): ReactElement {
                 key={key}
                 style={[styles.tableColHeader, { width: columnWidth }]}
               >
-                <Text style={styles.tableCellHeader}>
-                  {formatColumns[key]}
-                </Text>
+                <Text style={styles.tableCellHeader}>{formatColumns[key]}</Text>
               </View>
             ))}
           </View>
@@ -169,7 +168,7 @@ function Report<T>({ data, formatColumns }: ReportProperties<T>): ReactElement {
                   style={[styles.tableCol, { width: columnWidth }]}
                 >
                   <Text style={styles.tableCell}>
-                    {formatValue((item as Record<string, unknown>)[key])}
+                    {formatValue((item as Record<string, unknown>)[key], key)}
                   </Text>
                 </View>
               ))}

@@ -1,31 +1,35 @@
-import { UnwrapArray } from "../types";
+import { AddressFormInputs } from "@/domains/users/types";
 
-interface ParseAddressPayloadProperties<T extends unknown[]> {
-  newAddress?: T;
+interface ParseAddressPayloadProperties {
+  newAddress?: AddressFormInputs[];
   oldAddress?: Record<string, string>[];
 }
 
-export default function parseAddressPayload<T extends unknown[]>({
+export default function parseAddressPayload({
   newAddress,
   oldAddress,
-}: ParseAddressPayloadProperties<T>):
-  | Record<string, NonNullable<UnwrapArray<T>> | boolean>
+}: ParseAddressPayloadProperties):
+  | Record<string, Omit<AddressFormInputs, "state"> | boolean>
   | undefined {
-  if (!newAddress) return undefined;
+  if (!newAddress) return;
 
-  const address = newAddress[0] as NonNullable<UnwrapArray<T>>;
-
-  if (address && !oldAddress?.length) {
-    return {
-      add: address,
-    };
-  } else if (address && oldAddress?.length) {
-    return {
-      update: address,
-    };
-  } else if (!address && oldAddress?.length) {
+  if (!newAddress.length) {
+    if (!oldAddress?.length) return;
     return {
       remove: true,
+    };
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { state, ...addressRest } = newAddress[0];
+
+  if (addressRest && !oldAddress?.length) {
+    return {
+      add: addressRest,
+    };
+  } else if (addressRest && oldAddress?.length) {
+    return {
+      update: addressRest,
     };
   }
 }
