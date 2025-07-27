@@ -60,6 +60,7 @@ function Radio<T extends FieldValues>({
           {...register(name)}
           className="peer col-start-1 row-start-1 appearance-none shrink-0 w-4 h-4 border-2 border-slate-800 rounded-full disabled:border-neutral-300 cursor-pointer"
           required={required}
+          data-cy={`form-radio-${label}`}
           {...props}
         />
         <div className="col-start-1 row-start-1 w-2 h-2 rounded-full peer-checked:bg-slate-800 peer-checked:peer-disabled:bg-neutral-300" />

@@ -5,145 +5,54 @@ describe("User", () => {
     cy.login();
   });
 
-  it("should append address, validate CEP and number on submit, remove address and update only full name", () => {
+  it("should disable user", () => {
     const fullName = faker.person.fullName();
 
-    cy.intercept("PATCH", "http://localhost:3000/profile", (req) => {
-      expect(req.body).to.deep.equal({
-        fullName,
-      });
-    }).as("updateFullName");
+    cy.intercept("DELETE", "http://localhost:3000/user/23", (req) => {
+      expect(req.body).to.have.property("archivedAt");
+      expect(req.body.archivedAt).to.be.a("string");
+    }).as("disableUser");
 
-    cy.visit("/profile/edit");
+    cy.visit("/users");
 
-    cy.get('button[type="submit"]').should("be.disabled");
+    cy.get('[data-cy="button-disable-user-23"]').click();
 
-    cy.get('[data-cy="button-append-address"]').click();
+    cy.get('[data-cy="dialog-footer-button-primary"]').click();
 
-    cy.get('button[type="submit"]').click();
-
-    cy.get('[data-cy="input-error-address.0.cep"]').should(
-      "have.text",
-      "Campo obrigatório"
-    );
-    cy.get('[data-cy="input-error-address.0.cep"]').should(
-      "have.text",
-      "Campo obrigatório"
-    );
-
-    cy.get('[data-cy="button-remove-address"]').click();
-
-    cy.get('button[type="submit"]').should("be.disabled");
-
-    cy.get('input[name="fullName"]').clear().type(fullName);
-
-    cy.get('button[type="submit"]').should("be.enabled");
-
-    cy.get('button[type="submit"]').click();
-
+    cy.get('[data-cy="snackbar-title"]').should("contain", "Usuário");
     cy.get('[data-cy="snackbar-title"]').should(
-      "have.text",
-      "Perfil atualizado com sucesso"
+      "contain",
+      "desativado com sucesso"
     );
 
-    cy.wait("@updateFullName");
+    cy.wait("@disableUser");
   });
 
-  it("should create address", () => {
-    cy.intercept("PATCH", "http://localhost:3000/profile", (req) => {
+  it("should enable user", () => {
+    const fullName = faker.person.fullName();
+
+    cy.intercept("DELETE", "http://localhost:3000/user/23", (req) => {
       expect(req.body).to.deep.equal({
-        address: {
-          add: {
-            cep: "65043420",
-            number: "123",
-            street: null,
-            neighborhood: null,
-            cityIbgeCode: null,
-          },
-        },
+        archivedAt: null,
       });
-    }).as("createAddress");
+    }).as("enableUser");
 
-    cy.visit("/profile/edit");
+    cy.visit("/users");
 
-    cy.get('button[type="submit"]').should("be.disabled");
+    cy.get('[data-cy="button-table-filter"]').click();
 
-    cy.get('[data-cy="button-append-address"]').click();
+    cy.get('[data-cy="form-radio-Inativo"]').check({ force: true });
 
-    cy.get('button[type="submit"]').should("be.enabled");
+    cy.get('[data-cy="side-sheet-primary-button"').click();
 
-    cy.get('input[name="address.0.cep"]').type("65043420");
-    cy.get('input[name="address.0.number"]').type("123");
+    cy.get('[data-cy="button-enable-user-23"]').click();
 
-    cy.get('button[type="submit"]').click();
-
+    cy.get('[data-cy="snackbar-title"]').should("contain", "Usuário");
     cy.get('[data-cy="snackbar-title"]').should(
-      "have.text",
-      "Perfil atualizado com sucesso"
+      "contain",
+      "ativado com sucesso"
     );
 
-    cy.wait("@createAddress");
-  });
-
-  it("should update address", () => {
-    const number = faker.string.numeric(3);
-
-    cy.intercept("PATCH", "http://localhost:3000/profile", (req) => {
-      expect(req.body).to.deep.equal({
-        address: {
-          update: {
-            cep: "65043420",
-            number,
-            street: null,
-            neighborhood: null,
-            cityIbgeCode: null,
-          },
-        },
-      });
-    }).as("updateAddress");
-
-    cy.visit("/profile/edit");
-
-    cy.get('button[type="submit"]').should("be.disabled");
-
-    cy.get('input[name="address.0.number"]').clear().type(number);
-
-    cy.get('button[type="submit"]').should("be.enabled");
-
-    cy.get('button[type="submit"]').click();
-
-    cy.get('[data-cy="snackbar-title"]').should(
-      "have.text",
-      "Perfil atualizado com sucesso"
-    );
-
-    cy.wait("@updateAddress");
-  });
-
-  it("should delete address", () => {
-    cy.intercept("PATCH", "http://localhost:3000/profile", (req) => {
-      expect(req.body).to.deep.equal({
-        address: {
-          remove: true,
-        },
-      });
-    }).as("removeAddress");
-
-    cy.visit("/profile/edit");
-
-    cy.get('button[type="submit"]').should("be.disabled");
-
-    cy.get('[data-cy="button-remove-address"]').click();
-
-    cy.get('button[type="submit"]').should("be.enabled");
-
-    cy.get('button[type="submit"]').click();
-
-    cy.get('[data-cy="snackbar-title"]').should(
-      "have.text",
-      "Perfil atualizado com sucesso"
-    );
-
-    cy.wait("@removeAddress");
+    cy.wait("@enableUser");
   });
 });

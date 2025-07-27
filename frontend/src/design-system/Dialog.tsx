@@ -106,6 +106,7 @@ function Footer({
         resource={primaryBtResource}
         action={primaryBtnAction}
         color={primaryBtnColor}
+        data-cy={'dialog-footer-button-primary'}
       />
     </DialogFooter>
   );

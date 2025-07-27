@@ -71,6 +71,7 @@ export default function UsersTableActions({
           }
           resource="USERS"
           action="DELETE"
+          data-cy={`button-disable-user-${userId}`}
         />
       </Tooltip>
     </>
@@ -84,6 +85,7 @@ export default function UsersTableActions({
         action="DELETE"
         padding="none"
         iconLeft="ToggleOn"
+        data-cy={`button-enable-user-${userId}`}
       />
     </Tooltip>
   );
