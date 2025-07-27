@@ -206,7 +206,7 @@ describe('UserController', () => {
           contains: POPULATE_USER_DEFAULT.fullName.toLocaleLowerCase(),
           mode: 'insensitive',
         },
-        isActive: true,
+        archivedAt: null,
         enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
         NOT: {
           id: POPULATE_USER_DEFAULT.id,

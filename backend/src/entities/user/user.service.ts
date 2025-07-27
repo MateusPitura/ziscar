@@ -107,11 +107,8 @@ export class UserService {
 
     const findManyWhere = {
       where: {
-        archivedAt: null,
         enterpriseId: enterpriseId,
-        NOT: {
-          id: userId,
-        },
+        id: { not: userId },
       },
     };
     const orderBy = userFindManyInDto?.orderBy;
@@ -131,6 +128,8 @@ export class UserService {
     }
     const status = userFindManyInDto?.status;
     if (status === 'inactive') {
+      findManyWhere.where['archivedAt'] = { not: null };
+    } else {
       findManyWhere.where['archivedAt'] = null;
     }
 

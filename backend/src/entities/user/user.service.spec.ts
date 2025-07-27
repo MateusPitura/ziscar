@@ -174,7 +174,7 @@ describe('UserService', () => {
               cep: '12345678',
               number: '123',
               street: 'Broadway',
-              city: 'New York',
+              cityIbgeCode: '4119905',
               state: 'NY',
               neighborhood: 'Manhattan',
             },
@@ -355,7 +355,7 @@ describe('UserService', () => {
     });
   });
 
-  it('should create user address and if already exist update setting all to null', async () => {
+  it('should create user address and if already exist update all to null', async () => {
     await prismaService.transaction(async (transaction) => {
       Reflect.set(userService, 'prismaService', transaction);
       const spy = jest.spyOn(transaction.user, 'update');
@@ -643,7 +643,7 @@ describe('UserService', () => {
             id: POPULATE_USER_INACTIVE.id,
           },
           userUpdateInDto: {
-            archivedAt: undefined,
+            archivedAt: null,
           },
           enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
         }),
@@ -663,7 +663,7 @@ describe('UserService', () => {
             id: POPULATE_USER_DEFAULT.id,
           },
           userUpdateInDto: {
-            archivedAt: undefined,
+            archivedAt: null,
           },
           enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
         }),
@@ -825,11 +825,9 @@ describe('UserService', () => {
           contains: POPULATE_USER_DEFAULT.fullName.toLocaleLowerCase(),
           mode: 'insensitive',
         },
-        isActive: true,
+        archivedAt: null,
         enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
-        NOT: {
-          id: POPULATE_USER_DEFAULT.id,
-        },
+        id: { not: POPULATE_USER_DEFAULT.id },
       },
       orderBy: [{ fullName: 'asc' }],
     });
@@ -846,7 +844,7 @@ describe('UserService', () => {
     expect(result).toHaveProperty('data', []);
   });
 
-  it('should get user permissions', async () => {
+  it('should not get user permissions with outer enterprise id provided', async () => {
     await expect(
       userService.getPermissions({
         userId: POPULATE_USER_DEFAULT.id,
@@ -855,18 +853,66 @@ describe('UserService', () => {
     ).rejects.toThrow(NotFoundException);
   });
 
-  it('should not get user permissions with outer enterprise id provided', async () => {
+  it('should get user permissions', async () => {
     const permissions = await userService.getPermissions({
       userId: POPULATE_USER_DEFAULT.id,
       enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
     });
 
     expect(permissions).toEqual({
-      USERS: {
+      ACCOUNTS_PAYABLE: {
         CREATE: true,
+        DELETE: true,
         READ: true,
         UPDATE: true,
+      },
+      ACCOUNTS_RECEIVABLE: {
+        CREATE: true,
         DELETE: true,
+        READ: true,
+        UPDATE: true,
+      },
+      CUSTOMERS: {
+        CREATE: true,
+        DELETE: true,
+        READ: true,
+        UPDATE: true,
+      },
+      STORES: {
+        CREATE: true,
+        DELETE: true,
+        READ: true,
+        UPDATE: true,
+      },
+      USERS: {
+        CREATE: true,
+        DELETE: true,
+        READ: true,
+        UPDATE: true,
+      },
+      VEHICLES: {
+        CREATE: true,
+        DELETE: true,
+        READ: true,
+        UPDATE: true,
+      },
+      VEHICLE_EXPENSE: {
+        CREATE: true,
+        DELETE: true,
+        READ: true,
+        UPDATE: true,
+      },
+      VEHICLE_PURCHASE: {
+        CREATE: false,
+        DELETE: false,
+        READ: true,
+        UPDATE: true,
+      },
+      VEHICLE_SALE: {
+        CREATE: true,
+        DELETE: false,
+        READ: true,
+        UPDATE: true,
       },
     });
   });
