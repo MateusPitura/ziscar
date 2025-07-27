@@ -12,7 +12,6 @@ import {
   SEED_ROLE_ADMIN_ID,
   SEED_ROLE_SALES_ID,
 } from '@shared/constants';
-import { PdfService } from 'src/helpers/pdf/pdf.service';
 import { addressNullableFields } from './user.constant';
 import { PrismaService } from 'src/infra/database/prisma.service';
 import {
@@ -31,7 +30,6 @@ describe('UserService', () => {
       providers: [
         UserService,
         PrismaService,
-        PdfService,
         {
           provide: EmailService,
           useValue: {
@@ -942,19 +940,5 @@ describe('UserService', () => {
         UPDATE: true,
       },
     });
-  });
-
-  it('should generate pdf', async () => {
-    const spy = jest.spyOn(PdfService.prototype, 'generatePdf');
-
-    await userService.generatePdf({
-      userGeneratePdfInDto: {
-        status: 'active',
-      },
-      userId: POPULATE_USER_DEFAULT.id,
-      enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
-    });
-
-    expect(spy).toHaveBeenCalled();
   });
 });

@@ -34,10 +34,6 @@ const SchemaUserFindManyInDto = s.object({
   orderBy: s.radio(['fullName', 'email']).optional(),
 });
 
-const SchemaUserGeneratePdfInDto = SchemaUserFindManyInDto.omit({ page: true });
-
-const SchemaUserGenerateSheetInDto = SchemaUserGeneratePdfInDto;
-
 const SchemaUserUpdateInDto = SchemaUserPostInDto.extend({
   address: s
     .object({
@@ -68,12 +64,6 @@ export const SchemaUserPatchInDto = SchemaUserUpdateInDto.omit({
 
 export class UserPostInDto extends createZodDto(SchemaUserPostInDto) {}
 export class UserCreateInDto extends createZodDto(SchemaUserCreateInDto) {}
-export class UserGeneratePdfInDto extends createZodDto(
-  SchemaUserGeneratePdfInDto,
-) {}
-export class UserGenerateSheetInDto extends createZodDto(
-  SchemaUserGenerateSheetInDto,
-) {}
 export class UserFindManyInDto extends createZodDto(SchemaUserFindManyInDto) {}
 export class UserPatchInDto extends createZodDto(SchemaUserPatchInDto) {}
 export class ProfilePatchInDto extends createZodDto(SchemaProfilePatchInDto) {}

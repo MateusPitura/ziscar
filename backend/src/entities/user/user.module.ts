@@ -4,7 +4,6 @@ import { UserController } from './user.controller';
 import { EmailModule } from 'src/entities/email/email.module';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { PdfModule } from 'src/helpers/pdf/pdf.module';
 import { JWT_EXPIRATION_TIME } from 'src/constants';
 import { DatabaseModule } from 'src/infra/database/database.module';
 
@@ -22,7 +21,6 @@ import { DatabaseModule } from 'src/infra/database/database.module';
       }),
       inject: [ConfigService],
     }),
-    PdfModule,
   ],
   controllers: [UserController],
   providers: [UserService],

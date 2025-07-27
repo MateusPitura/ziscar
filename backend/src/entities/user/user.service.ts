@@ -17,12 +17,10 @@ import {
   CreateInput,
   FindManyInput,
   FindOneInput,
-  GeneratePdfInput,
   GetPermissionsInput,
   UpdateInput,
   VerifyDuplicatedInput,
 } from './user.type';
-import { PdfService } from 'src/helpers/pdf/pdf.service';
 import handlePermissions from 'src/utils/handlePermissions';
 import { PrismaService } from 'src/infra/database/prisma.service';
 import { verifyDuplicated } from 'src/utils/verifyDuplicated';
@@ -36,7 +34,6 @@ export class UserService {
     private readonly prismaService: PrismaService,
     private readonly emailService: EmailService,
     private readonly jwtService: JwtService,
-    private readonly pdfService: PdfService,
   ) {}
 
   async create({ userCreateInDto, transaction }: CreateInput) {
@@ -301,39 +298,6 @@ export class UserService {
     });
 
     return userAfterUpdate;
-  }
-
-  async generatePdf({
-    enterpriseId,
-    userGeneratePdfInDto,
-    userId,
-  }: GeneratePdfInput) {
-    const users = await this.findMany({
-      enterpriseId,
-      userFindManyInDto: userGeneratePdfInDto,
-      userId,
-      paginate: false,
-      select: {
-        fullName: true,
-        email: true,
-      },
-    });
-
-    if (!users.data) {
-      throw new BadRequestException('Nenhum dado encontrado');
-    }
-
-    let pdfPayload = '<h1>User Report</h1><div class="users">';
-    for (const user of users.data) {
-      pdfPayload += `
-      <div class="user">
-        <p><strong>Name:</strong> ${user.fullName}</p>
-        <p><strong>Email:</strong> ${user.email}</p>
-      </div>
-    `;
-    }
-    pdfPayload += '</div>';
-    return await this.pdfService.generatePdf({ html: pdfPayload });
   }
 
   async verifyDuplicated({ email, cpf }: VerifyDuplicatedInput) {
