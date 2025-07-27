@@ -21,15 +21,16 @@ TESTES DE CARGA:
 BACKEND:
 
 - As migrations podem ser geradas com `backend/npm run dev:migration-generate` e aplicadas com `backend/npm run dev:migration-run`
-- Para usar transactions, use do método `.transaction` e não do `.$transaction`, que é nativo do Prisma. Esse método sobreescreve a função original e define tratativas para rollback e retries
+- Para usar transactions, use do método `.transaction` e não do `.$transaction`, que é nativo do Prisma. Esse método sobrescreve a função original e define tratativas para rollback e retries
 
 FRONTEND:
 
 - Para realizar requisições use o hook `useSafeFetch`, este método irá: mostrar snackbar em caso de erro, validar as permissões do usuário antes de cada request, fazer o stringify e o parse de objetos
 - Para criar rotas modifique o arquivo `routes.tsx`, isso irá automaticamente criar uma rota e também um item no menu lateral. Elas são dividas em dois grupos, rotas privadas e públicas. Ao acessar uma rota privada será feita uma request para buscar as permissões do usuário, caso não retorne corretamente irá redirecionar para o signin, então irá verificar se o usuário possui as permissões necessárias conforme definido para cada rota em `routes.tsx`
 - Para itens de formulário, use o `Form`, por padrão ele irá remover campos com strings vazias `""` ao realizar submit. Também sempre forneça o defaultValues, garanta que ao menos uma string vazia `""` seja fornecida e não undefined
-- Para usar um dialog, use do componente `Dialog` e do hook `useDialog`, que fornece um state para controle do dialog é metodos úteis como `close`, `open`, `toggle` e `handle`
+- Para usar um dialog, use do componente `Dialog` e do hook `useDialog`, que fornece um state para controle do dialog é métodos úteis como `close`, `open`, `toggle` e `handle`
 - As queries keys do React Query estão definidas em `global/types/index.ts`
+- Para executar testes com Cypress execute `frontend/npm run cypress:test`, para abrir execute `frontend/npm run cypress:open`
 
 SHARED:
 
@@ -38,7 +39,7 @@ SHARED:
 
 DEPLOY:
 
-- O frontend é hospeado no Git Hub Pages, para realizar o deploy da main faça `frontend/npm run prod`
+- O frontend é hospedado no Git Hub Pages, para realizar o deploy da main faça `frontend/npm run prod`
 - O banco é hospedado em uma VM no OCI. Para fazer o deploy, configure o `.env` e execute o comando de `npm run prod:db` estando conectado na VM
 - O backend é hospedado em uma VM no OCI. Para fazer o deploy, configure o `backend/.env` e execute o comando de `npm run prod:backend` estando conectado na VM.
 - A primeira vez e quando precisar atualizar o banco de produção, use o Bastion com o IP e porta do banco de produção, configure o `backend/.env` com o usuário, senha e porta do banco de produção, mantenha localhost. Então execute `backend/npm run prod:db-init` para aplicar migrations e rodar seeds
