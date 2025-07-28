@@ -7,15 +7,28 @@ import { AccountPayableRepository, CreateAccountPayable, UpdateAccountPayable } 
 export class AccountPayableService implements AccountPayableRepository {
     constructor(private prisma: PrismaService) { }
     async create(data: CreateAccountPayable): Promise<AccountPayable> {
-        throw new Error("Method not implemented.");
+        return this.prisma.accountPayable.create({ data });
     }
     async findById(id: string): Promise<AccountPayable | null> {
-        throw new Error("Method not implemented.");
+        const accountPayable = await this.prisma.accountPayable.findUnique({
+            where: { id: Number(id) }
+        });
+
+        if (!accountPayable) {
+            return null;
+        }
+
+        return accountPayable;
     }
     async update(id: string, data: UpdateAccountPayable): Promise<void> {
-        throw new Error("Method not implemented.");
+        await this.prisma.accountPayable.update({
+            where: { id: Number(id) },
+            data
+        });
     }
     async delete(id: string): Promise<void> {
-        throw new Error("Method not implemented.");
+        await this.prisma.accountPayable.delete({
+            where: { id: Number(id) }
+        });
     }
 }

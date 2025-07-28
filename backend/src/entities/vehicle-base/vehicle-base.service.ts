@@ -2,25 +2,41 @@ import { Injectable } from "@nestjs/common";
 import { VehicleBase } from "@prisma/client";
 import { PrismaService } from "src/infra/database/prisma.service";
 import { CreateVehicleBase, UpdateVehicleBase, VehicleBaseRepository } from "src/repositories/vehicle_base-repository";
+import { CreateInput, UpdateInput } from "src/types";
 
 
 @Injectable()
 export class VehicleBaseService implements VehicleBaseRepository {
     constructor(private prisma: PrismaService) { }
 
-    async create(data: CreateVehicleBase): Promise<VehicleBase> {
-        throw new Error("Method not implemented.");
+    async create(data: CreateInput<VehicleBase>): Promise<VehicleBase> {
+        return this.prisma.vehicleBase.create({ data });
+
     }
 
     async findById(id: string): Promise<VehicleBase | null> {
-        throw new Error("Method not implemented.");
+        const vehicleBase = await this.prisma.vehicleBase.findUnique({
+            where: { id: Number(id) }
+        });
+
+        if (!vehicleBase) {
+            return null;
+        }
+
+        return vehicleBase;
+
     }
 
-    async update(id: string, data: UpdateVehicleBase): Promise<void> {
-        throw new Error("Method not implemented.");
+    async update(id: string, data: UpdateInput<VehicleBase>): Promise<void> {
+        await this.prisma.vehicleBase.update({
+            where: { id: Number(id) },
+            data
+        });
     }
 
     async delete(id: string): Promise<void> {
-        throw new Error("Method not implemented.");
+        await this.prisma.vehicleBase.delete({
+            where: { id: Number(id) }
+        });
     }
 }

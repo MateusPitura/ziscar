@@ -1,25 +1,40 @@
 import { Injectable } from "@nestjs/common";
 import { Store } from "@prisma/client";
 import { PrismaService } from "src/infra/database/prisma.service";
-import { CreateStore, StoreRepository, UpdateStore } from "src/repositories/store-repository";
+import { StoreRepository } from "src/repositories/store-repository";
+import { CreateInput, UpdateInput } from "src/types";
 
 @Injectable()
 export class StoreService implements StoreRepository {
     constructor(private prisma: PrismaService) { }
 
-    async create(data: CreateStore): Promise<Store> {
-        throw new Error("Method not implemented.");
+    async create(data: CreateInput<Store>): Promise<Store> {
+        return this.prisma.store.create({ data });
     }
 
     async findById(id: string): Promise<Store | null> {
-        throw new Error("Method not implemented.");
+        const store = await this.prisma.store.findUnique({
+            where: { id: Number(id) }
+        });
+
+        if (!store) {
+            return null;
+        }
+
+        return store;
     }
 
-    async update(id: string, data: UpdateStore): Promise<void> {
-        throw new Error("Method not implemented.");
+    async update(id: string, data: UpdateInput<Store>): Promise<void> {
+        await this.prisma.store.update({
+            where: { id: Number(id) },
+            data
+        });
+
     }
 
     async delete(id: string): Promise<void> {
-        throw new Error("Method not implemented.");
+        await this.prisma.store.delete({
+            where: { id: Number(id) }
+        });
     }
 }
