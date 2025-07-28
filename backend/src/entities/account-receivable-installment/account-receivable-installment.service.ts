@@ -6,35 +6,36 @@ import { CreateInput, UpdateInput } from "src/types";
 
 
 @Injectable()
-export class AccountReceivableInstallmentService implements AccountReceivableInstallmentRepository {
-    constructor(private prisma: PrismaService) { }
+export class AccountReceivableInstallmentService
+  implements AccountReceivableInstallmentRepository {
+  constructor(private prisma: PrismaService) { }
 
-    async create(data: CreateInput<AccountReceivableInstallment>): Promise<AccountReceivableInstallment> {
-        return this.prisma.accountReceivableInstallment.create({ data });
+  async create(data: CreateInput<AccountReceivableInstallment>): Promise<AccountReceivableInstallment> {
+    return this.prisma.accountReceivableInstallment.create({ data });
+  }
+
+  async findById(id: string): Promise<AccountReceivableInstallment | null> {
+    const installment = await this.prisma.accountReceivableInstallment.findUnique({
+      where: { id: Number(id) }
+    });
+
+    if (!installment) {
+      return null;
     }
 
-    async findById(id: string): Promise<AccountReceivableInstallment | null> {
-        const installment = await this.prisma.accountReceivableInstallment.findUnique({
-            where: { id: Number(id) }
-        });
+    return installment;
+  }
 
-        if (!installment) {
-            return null;
-        }
+  async update(id: string, data: UpdateInput<AccountReceivableInstallment>): Promise<void> {
+    await this.prisma.accountReceivableInstallment.update({
+      where: { id: Number(id) },
+      data
+    });
+  }
 
-        return installment;
-    }
-
-    async update(id: string, data: UpdateInput<AccountReceivableInstallment>): Promise<void> {
-        await this.prisma.accountReceivableInstallment.update({
-            where: { id: Number(id) },
-            data
-        });
-    }
-
-    async delete(id: string): Promise<void> {
-        await this.prisma.accountReceivableInstallment.delete({
-            where: { id: Number(id) }
-        });
-    }
+  async delete(id: string): Promise<void> {
+    await this.prisma.accountReceivableInstallment.delete({
+      where: { id: Number(id) }
+    });
+  }
 }

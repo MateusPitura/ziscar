@@ -5,35 +5,36 @@ import { AccountPayableInstallmentRepository, CreateAccountPayableInstallment, U
 import { CreateInput, UpdateInput } from "src/types";
 
 @Injectable()
-export class AccountPayableInstallmentService implements AccountPayableInstallmentRepository {
-    constructor(private prisma: PrismaService) { }
+export class AccountPayableInstallmentService
+  implements AccountPayableInstallmentRepository {
+  constructor(private prisma: PrismaService) { }
 
-    async create(data: CreateInput<AccountPayableInstallment>): Promise<AccountPayableInstallment> {
-        return this.prisma.accountPayableInstallment.create({ data });
+  async create(data: CreateInput<AccountPayableInstallment>): Promise<AccountPayableInstallment> {
+    return this.prisma.accountPayableInstallment.create({ data });
+  }
+
+  async findById(id: string): Promise<AccountPayableInstallment | null> {
+    const installment = await this.prisma.accountPayableInstallment.findUnique({
+      where: { id: Number(id) }
+    });
+
+    if (!installment) {
+      return null;
     }
 
-    async findById(id: string): Promise<AccountPayableInstallment | null> {
-        const installment = await this.prisma.accountPayableInstallment.findUnique({
-            where: { id: Number(id) }
-        });
+    return installment;
+  }
 
-        if (!installment) {
-            return null;
-        }
+  async update(id: string, data: UpdateInput<AccountPayableInstallment>): Promise<void> {
+    await this.prisma.accountPayableInstallment.update({
+      where: { id: Number(id) },
+      data
+    });
+  }
 
-        return installment;
-    }
-
-    async update(id: string, data: UpdateInput<AccountPayableInstallment>): Promise<void> {
-        await this.prisma.accountPayableInstallment.update({
-            where: { id: Number(id) },
-            data
-        });
-    }
-
-    async delete(id: string): Promise<void> {
-        await this.prisma.accountPayableInstallment.delete({
-            where: { id: Number(id) }
-        });
-    }
+  async delete(id: string): Promise<void> {
+    await this.prisma.accountPayableInstallment.delete({
+      where: { id: Number(id) }
+    });
+  }
 }

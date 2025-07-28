@@ -9,7 +9,7 @@ services:
       - PGPORT=${DB_PORT}
     volumes:
       - db-data:/var/lib/postgresql/data
-    network_mode: host
+    # network_mode: host
     env_file:
       - path: .env
         required: false

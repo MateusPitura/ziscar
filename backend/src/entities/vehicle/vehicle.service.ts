@@ -6,34 +6,34 @@ import { CreateInput, UpdateInput } from "src/types";
 
 @Injectable()
 export class VehicleService implements VehicleRepository {
-    constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) { }
 
-    async create(data: CreateInput<Vehicle>): Promise<Vehicle> {
-        return this.prisma.vehicle.create({ data });
+  async create(data: CreateInput<Vehicle>): Promise<Vehicle> {
+    return this.prisma.vehicle.create({ data });
+  }
+
+  async findById(id: string): Promise<Vehicle | null> {
+    const vehicle = await this.prisma.vehicle.findUnique({
+      where: { id: Number(id) }
+    });
+
+    if (!vehicle) {
+      return null;
     }
 
-    async findById(id: string): Promise<Vehicle | null> {
-        const vehicle = await this.prisma.vehicle.findUnique({
-            where: { id: Number(id) }
-        });
+    return vehicle;
+  }
 
-        if (!vehicle) {
-            return null;
-        }
+  async update(id: string, data: UpdateInput<Vehicle>): Promise<void> {
+    await this.prisma.vehicle.update({
+      where: { id: Number(id) },
+      data
+    });
+  }
 
-        return vehicle;
-    }
-
-    async update(id: string, data: UpdateInput<Vehicle>): Promise<void> {
-        await this.prisma.vehicle.update({
-            where: { id: Number(id) },
-            data
-        });
-    }
-
-    async delete(id: string): Promise<void> {
-        await this.prisma.vehicle.delete({
-            where: { id: Number(id) }
-        });
-    }
+  async delete(id: string): Promise<void> {
+    await this.prisma.vehicle.delete({
+      where: { id: Number(id) }
+    });
+  }
 }

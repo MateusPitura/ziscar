@@ -5,7 +5,20 @@ import { removeMask } from "../utils/removeMask";
 
 export type infer<T extends z.ZodTypeAny> = z.infer<T>;
 
-export const list = z.enum;
+export const radio = z.enum;
+
+export function checkbox<T extends string>(values: readonly T[]) {
+  return z.array(z.enum(values as [T, ...T[]]));
+}
+
+export const array = <T extends z.ZodTypeAny>(schema: T, maxItems?: number) => {
+  const arraySchema = z.array(schema);
+  return maxItems
+    ? arraySchema.max(maxItems, {
+        message: `Limite de ${maxItems} excedido`,
+      })
+    : arraySchema;
+};
 
 export const boolean = z.boolean;
 
@@ -67,9 +80,9 @@ export const cnpj = () =>
     .transform((cnpj) => removeMask(cnpj))
     .refine((cnpj) => validateCnpj(cnpj), { message: "CNPJ inválido" });
 
-export const cellphone = () =>
+export const phone = () =>
   string(15)
-    .transform((cellphone) => removeMask(cellphone))
+    .transform((phone) => removeMask(phone))
     .refine((cep) => /^\d{11}$/.test(cep), "Celular inválido");
 
 export const password = () =>
@@ -80,6 +93,16 @@ export const password = () =>
     .regex(/\d/, { message: "Ao menos um número" })
     .regex(/[@$!%*?&]/, {
       message: "Ao menos um caractere especial",
+    });
+
+export const color = () =>
+  string(7).regex(/^#[0-9A-Fa-f]{6}$/, { message: "Cor inválida" });
+
+export const money = () =>
+  string()
+    .transform((money) => money.replace(/\D/g, ""))
+    .refine((money) => parseInt(money, 10) > 0, {
+      message: "Valor monetário inválido",
     });
 
 export const SchemaPassword = object({

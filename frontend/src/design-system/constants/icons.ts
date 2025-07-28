@@ -24,6 +24,7 @@ import Save from "@mui/icons-material/Save";
 import Close from "@mui/icons-material/Close";
 import Check from "@mui/icons-material/Check";
 import UnfoldMore from "@mui/icons-material/UnfoldMore";
+import Search from '@mui/icons-material/Search';
 
 export const icons = {
   FileDownload,
@@ -52,4 +53,5 @@ export const icons = {
   Close,
   Check,
   UnfoldMore,
+  Search
 };

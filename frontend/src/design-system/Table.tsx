@@ -263,6 +263,7 @@ function Filter({ onFilterCallback, filterBtnState, form }: FilterProps) {
             iconRight="FilterList"
             onClick={onFilterCallback}
             state={filterBtnState}
+            data-cy="button-table-filter"
           />
         </div>
       </SideSheet.Trigger>

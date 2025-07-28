@@ -1,13 +1,11 @@
 import { Module } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
-import { DatabaseModule } from '../infra/database/database.module';
 import { EmailModule } from 'src/entities/email/email.module';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { PdfModule } from 'src/helpers/pdf/pdf.module';
-import { SheetModule } from 'src/sheet/sheet.module';
 import { JWT_EXPIRATION_TIME } from 'src/constants';
+import { DatabaseModule } from 'src/infra/database/database.module';
 
 @Module({
   imports: [
@@ -23,11 +21,9 @@ import { JWT_EXPIRATION_TIME } from 'src/constants';
       }),
       inject: [ConfigService],
     }),
-    PdfModule,
-    SheetModule,
   ],
   controllers: [UserController],
   providers: [UserService],
   exports: [UserService],
 })
-export class UserModule { }
+export class UserModule {}

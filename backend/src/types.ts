@@ -27,5 +27,8 @@ export interface EncryptPasswordInput {
   password: string;
 }
 
-export type CreateInput<T> = Omit<T, "id" | "createdAt" | "updatedAt" | "archivedAt">;
+export type CreateInput<T> = Omit<
+  T,
+  'id' | 'createdAt' | 'updatedAt' | 'archivedAt'
+>;
 export type UpdateInput<T> = Partial<CreateInput<T>>;

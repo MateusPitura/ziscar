@@ -3,34 +3,30 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { PrismaService } from '../infra/database/prisma.service';
-import { EncryptPasswordInput, GetCallback } from '../types';
-import { encryptPassword, removeTimeFromDate } from './user.utils';
+import { encryptPassword } from './user.utils';
 import {
   GET_PERMISSIONS,
   GET_USER,
-  adddressNullableFields,
+  addressNullableFields,
 } from './user.constant';
-import { verifyDuplicated } from '../utils/verifyDuplicated';
 import { EmailService } from '../email/email.service';
 import { JwtService } from '@nestjs/jwt';
-import { generateRandomPassword } from '../utils/generateRandomPassword';
 import { ITEMS_PER_PAGE } from '@shared/constants';
 import { FRONTEND_URL } from 'src/constants';
 import {
   CreateInput,
   FindManyInput,
   FindOneInput,
-  GeneratePdfInput,
-  GenerateSheetInput,
   GetPermissionsInput,
-  Role,
   UpdateInput,
   VerifyDuplicatedInput,
 } from './user.type';
-import { PdfService } from 'src/helpers/pdf/pdf.service';
-import { SheetService } from 'src/sheet/sheet.service';
 import handlePermissions from 'src/utils/handlePermissions';
+import { PrismaService } from 'src/infra/database/prisma.service';
+import { verifyDuplicated } from 'src/utils/verifyDuplicated';
+import { EncryptPasswordInput, GetCallback } from 'src/types';
+import { generateRandomPassword } from 'src/utils/generateRandomPassword';
+import { RoleWithPermissions } from 'src/auth/auth.service';
 
 @Injectable()
 export class UserService {
@@ -38,9 +34,7 @@ export class UserService {
     private readonly prismaService: PrismaService,
     private readonly emailService: EmailService,
     private readonly jwtService: JwtService,
-    private readonly pdfService: PdfService,
-    private readonly sheetService: SheetService,
-  ) { }
+  ) {}
 
   async create({ userCreateInDto, transaction }: CreateInput) {
     const database = transaction || this.prismaService;
@@ -52,29 +46,38 @@ export class UserService {
       });
     }
 
-    const { address, clientId, roleId, birthDate, ...rest } = userCreateInDto;
+    const { address, enterpriseId, roleId, ...rest } = userCreateInDto;
 
     const createPayload = {
       ...rest,
       password: await this.encryptPassword({
         password: this.generateRandomPassword(),
       }),
+      fullName: userCreateInDto.fullName,
     };
+
     if (address) {
+      const { cityIbgeCode, ...addressRest } = address;
+
+      if (cityIbgeCode) {
+        addressRest['city'] = {
+          connect: {
+            ibgeCode: cityIbgeCode,
+          },
+        };
+      }
+
       createPayload['address'] = {
-        create: address,
+        create: addressRest,
       };
-    }
-    if (birthDate) {
-      createPayload['birthDate'] = new Date(birthDate);
     }
 
     await database.user.create({
       data: {
         ...createPayload,
-        client: {
+        enterprise: {
           connect: {
-            id: clientId,
+            id: enterpriseId,
           },
         },
         role: {
@@ -99,7 +102,7 @@ export class UserService {
   async findMany({
     userFindManyInDto,
     userId,
-    clientId,
+    enterpriseId,
     paginate = true,
     select,
   }: FindManyInput) {
@@ -112,11 +115,8 @@ export class UserService {
 
     const findManyWhere = {
       where: {
-        isActive: true,
-        clientId: clientId,
-        NOT: {
-          id: userId,
-        },
+        enterpriseId: enterpriseId,
+        id: { not: userId },
       },
     };
     const orderBy = userFindManyInDto?.orderBy;
@@ -136,7 +136,9 @@ export class UserService {
     }
     const status = userFindManyInDto?.status;
     if (status === 'inactive') {
-      findManyWhere.where['isActive'] = false;
+      findManyWhere.where['archivedAt'] = { not: null };
+    } else {
+      findManyWhere.where['archivedAt'] = null;
     }
 
     const [data, total] = await Promise.all([
@@ -148,34 +150,25 @@ export class UserService {
       this.prismaService.user.count(findManyWhere),
     ]);
 
-    const dataFormatted = data.map((item) => {
-      return {
-        ...item,
-        ...(item.birthDate && {
-          birthDate: removeTimeFromDate({ date: item.birthDate }),
-        }),
-      };
-    });
-
     return {
       total,
-      data: dataFormatted,
+      data,
     };
   }
 
   async findOne({
-    clientId,
+    enterpriseId,
     where,
     select,
     onlyActive = true,
     showNotFoundError = true,
   }: FindOneInput) {
     if (onlyActive) {
-      where['isActive'] = true;
+      where['archivedAt'] = null;
     }
 
-    if (clientId) {
-      where['clientId'] = clientId;
+    if (enterpriseId) {
+      where['enterpriseId'] = enterpriseId;
     }
 
     const user = await this.prismaService.user.findFirst({
@@ -190,28 +183,26 @@ export class UserService {
       return null;
     }
 
-    const userFormatted = {
-      ...user,
-      ...(user.birthDate && {
-        birthDate: removeTimeFromDate({ date: user.birthDate }),
-      }),
-    };
-
-    return userFormatted;
+    return user;
   }
 
-  async getPermissions({ clientId, userId }: GetPermissionsInput) {
+  async getPermissions({ enterpriseId, userId }: GetPermissionsInput) {
     const user = await this.findOne({
-      clientId,
+      enterpriseId,
       where: { id: userId },
       select: GET_PERMISSIONS,
     });
 
-    return handlePermissions({ role: user?.role as Role });
+    return handlePermissions({
+      permissions:
+        (user?.role as RoleWithPermissions)?.rolePermissions?.map(
+          (rp) => rp.permission,
+        ) ?? [],
+    });
   }
 
   async update({
-    clientId,
+    enterpriseId,
     where,
     userUpdateInDto,
     select = GET_USER,
@@ -225,10 +216,10 @@ export class UserService {
 
     const userBeforeUpdate = await this.findOne({
       where: {
-        isActive: !userUpdateInDto.isActive,
+        archivedAt: userUpdateInDto.archivedAt === null ? { not: null } : null,
         ...where,
       },
-      clientId,
+      enterpriseId,
       onlyActive: false,
       showNotFoundError,
       select: {
@@ -237,7 +228,7 @@ export class UserService {
       },
     });
 
-    const { address, roleId, birthDate, ...rest } = userUpdateInDto;
+    const { address, roleId, ...rest } = userUpdateInDto;
 
     const updatePayload = {
       ...rest,
@@ -269,7 +260,7 @@ export class UserService {
       if (userBeforeUpdate.addressId) {
         updatePayload['address'] = {
           update: {
-            ...adddressNullableFields,
+            ...addressNullableFields,
             ...address.add,
           },
         };
@@ -294,12 +285,8 @@ export class UserService {
       };
     }
 
-    if (roleId || userUpdateInDto.password || 'isActive' in userUpdateInDto) {
+    if (roleId || userUpdateInDto.password || 'archivedAt' in userUpdateInDto) {
       updatePayload['jit'] = null;
-    }
-
-    if (birthDate !== undefined) {
-      updatePayload['birthDate'] = birthDate ? new Date(birthDate) : null;
     }
 
     const userAfterUpdate = await this.prismaService.user.update({
@@ -310,75 +297,7 @@ export class UserService {
       select,
     });
 
-    const userFormatted = {
-      ...userAfterUpdate,
-      ...(userAfterUpdate.birthDate && {
-        birthDate: removeTimeFromDate({ date: userAfterUpdate.birthDate }),
-      }),
-    };
-
-    return userFormatted;
-  }
-
-  async generatePdf({
-    clientId,
-    userGeneratePdfInDto,
-    userId,
-  }: GeneratePdfInput) {
-    const users = await this.findMany({
-      clientId,
-      userFindManyInDto: userGeneratePdfInDto,
-      userId,
-      paginate: false,
-      select: {
-        fullName: true,
-        email: true,
-      },
-    });
-
-    if (!users.data) {
-      throw new BadRequestException('Nenhum dado encontrado');
-    }
-
-    let pdfPayload = '<h1>User Report</h1><div class="users">';
-    for (const user of users.data) {
-      pdfPayload += `
-      <div class="user">
-        <p><strong>Name:</strong> ${user.fullName}</p>
-        <p><strong>Email:</strong> ${user.email}</p>
-      </div>
-    `;
-    }
-    pdfPayload += '</div>';
-    return await this.pdfService.generatePdf({ html: pdfPayload });
-  }
-
-  async generateSheet({
-    clientId,
-    userGenerateSheetInDto,
-    userId,
-  }: GenerateSheetInput) {
-    const users = await this.findMany({
-      clientId,
-      userFindManyInDto: userGenerateSheetInDto,
-      userId,
-      paginate: false,
-      select: {
-        fullName: true,
-        email: true,
-      },
-    });
-
-    if (!users.data) {
-      throw new BadRequestException('Nenhum dado encontrado');
-    }
-
-    return await this.sheetService.generateSheet('users', (sheet) => {
-      sheet.addRow(['Name', 'Email']);
-      for (const user of users.data) {
-        sheet.addRow([user.fullName, user.email]);
-      }
-    });
+    return userAfterUpdate;
   }
 
   async verifyDuplicated({ email, cpf }: VerifyDuplicatedInput) {

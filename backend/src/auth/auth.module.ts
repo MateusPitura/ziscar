@@ -3,12 +3,12 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { OrganizationModule } from '../entities/organization/organization.module';
-import { UserModule } from '../user/user.module';
-import { ClientModule } from '../client/client.module';
 import { EmailModule } from '../entities/email/email.module';
 import { DatabaseModule } from 'src/infra/database/database.module';
 import { JWT_EXPIRATION_TIME } from 'src/constants';
+import { UserModule } from 'src/entities/user/user.module';
+import { StoreModule } from 'src/entities/store/store.module';
+import { EnterpriseModule } from 'src/enterprise/enterprise.module';
 
 @Module({
   imports: [
@@ -22,13 +22,13 @@ import { JWT_EXPIRATION_TIME } from 'src/constants';
       }),
       inject: [ConfigService],
     }),
-    OrganizationModule,
+    StoreModule,
     UserModule,
-    ClientModule,
+    EnterpriseModule,
     EmailModule,
     DatabaseModule,
   ],
   controllers: [AuthController],
   providers: [AuthService],
 })
-export class AuthModule { }
+export class AuthModule {}

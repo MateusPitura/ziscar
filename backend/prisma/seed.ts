@@ -1,69 +1,22 @@
-import { PrismaClient, RoleType, Resources, Actions, Permission } from '@prisma/client';
+import { PrismaClient, RoleType } from '@prisma/client';
 import { citiesData } from './seed-data/cities';
 import { vehicleBrands } from './seed-data/vehicleBrands';
+import { rolePermissions } from './seed-data/rolePermissions';
 
 const prisma = new PrismaClient();
 
-const rolePermissions: Record<RoleType, { resource: Resources; action: Actions }[]> = {
-  [RoleType.ADMIN]: [
-    { resource: Resources.USERS, action: Actions.CREATE },
-    { resource: Resources.USERS, action: Actions.READ },
-    { resource: Resources.USERS, action: Actions.UPDATE },
-    { resource: Resources.USERS, action: Actions.DELETE },
-    { resource: Resources.VEHICLES, action: Actions.CREATE },
-    { resource: Resources.VEHICLES, action: Actions.READ },
-    { resource: Resources.VEHICLES, action: Actions.UPDATE },
-    { resource: Resources.VEHICLES, action: Actions.DELETE },
-    { resource: Resources.STORES, action: Actions.CREATE },
-    { resource: Resources.STORES, action: Actions.READ },
-    { resource: Resources.STORES, action: Actions.UPDATE },
-    { resource: Resources.STORES, action: Actions.DELETE },
-    { resource: Resources.VEHICLE_PURCHASE, action: Actions.READ },
-    { resource: Resources.VEHICLE_PURCHASE, action: Actions.UPDATE },
-    { resource: Resources.VEHICLE_SALE, action: Actions.READ },
-    { resource: Resources.VEHICLE_SALE, action: Actions.UPDATE },
-    { resource: Resources.VEHICLE_SALE, action: Actions.CREATE },
-    { resource: Resources.VEHICLE_EXPENSE, action: Actions.CREATE },
-    { resource: Resources.VEHICLE_EXPENSE, action: Actions.READ },
-    { resource: Resources.VEHICLE_EXPENSE, action: Actions.UPDATE },
-    { resource: Resources.VEHICLE_EXPENSE, action: Actions.DELETE },
-    { resource: Resources.ACCOUNTS_PAYABLE, action: Actions.CREATE },
-    { resource: Resources.ACCOUNTS_PAYABLE, action: Actions.READ },
-    { resource: Resources.ACCOUNTS_PAYABLE, action: Actions.UPDATE },
-    { resource: Resources.ACCOUNTS_PAYABLE, action: Actions.DELETE },
-    { resource: Resources.ACCOUNTS_RECEIVABLE, action: Actions.CREATE },
-    { resource: Resources.ACCOUNTS_RECEIVABLE, action: Actions.READ },
-    { resource: Resources.ACCOUNTS_RECEIVABLE, action: Actions.UPDATE },
-    { resource: Resources.ACCOUNTS_RECEIVABLE, action: Actions.DELETE },
-    { resource: Resources.CUSTOMERS, action: Actions.CREATE },
-    { resource: Resources.CUSTOMERS, action: Actions.READ },
-    { resource: Resources.CUSTOMERS, action: Actions.UPDATE },
-    { resource: Resources.CUSTOMERS, action: Actions.DELETE },
-  ],
-  [RoleType.SELLER]: [
-    { resource: Resources.VEHICLES, action: Actions.READ },
-    { resource: Resources.VEHICLE_SALE, action: Actions.READ },
-    { resource: Resources.VEHICLE_SALE, action: Actions.UPDATE },
-    { resource: Resources.VEHICLE_SALE, action: Actions.CREATE },
-    { resource: Resources.CUSTOMERS, action: Actions.CREATE },
-    { resource: Resources.CUSTOMERS, action: Actions.READ },
-    { resource: Resources.CUSTOMERS, action: Actions.UPDATE },
-  ],
-};
-
 async function seed() {
   await prisma.$transaction(async (tx) => {
+    await tx.city.createMany({
+      data: citiesData,
+      skipDuplicates: true,
+    });
 
-  await tx.city.createMany({
-    data: citiesData,
-    skipDuplicates: true,
-  });
+    await tx.vehicleBrand.createMany({
+      data: vehicleBrands,
+      skipDuplicates: true,
+    });
 
-  await tx.vehicleBrand.createMany({
-    data: vehicleBrands,
-    skipDuplicates: true,
-  });
-    
     const allPermissions = Object.values(rolePermissions).flat();
     await Promise.all(
       allPermissions.map((permission) =>
@@ -112,7 +65,9 @@ async function seed() {
       });
     }
 
-    console.log(`✅ Role ${RoleType.ADMIN} and ${RoleType.SELLER} created/updated with correct permissions.`);
+    console.log(
+      `✅ Role ${RoleType.ADMIN} and ${RoleType.SELLER} created/updated with correct permissions.`,
+    );
   });
 }
 
@@ -124,8 +79,6 @@ seed()
     console.error('❌ Failed to run seed:', error);
     process.exit(1);
   })
-  .finally(async () => {
-    await prisma.$disconnect();
+  .finally(() => {
+    void prisma.$disconnect();
   });
-
-  

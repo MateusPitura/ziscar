@@ -9,12 +9,14 @@ export function applyMask(
   switch (mask) {
     case "cpf":
       return applyCpfMask(value);
-    case "cellphone":
-      return applyCellphoneMask(value);
+    case "phone":
+      return applyPhoneMask(value);
     case "cep":
       return applyCepMask(value);
     case "cnpj":
       return applyCnpjMask(value);
+    case "money":
+      return applyMoneyMask(value);
     default:
       return value;
   }
@@ -34,7 +36,7 @@ function applyCpfMask(value: string): string {
   }
 }
 
-function applyCellphoneMask(value: string): string {
+function applyPhoneMask(value: string): string {
   const digits = value.replace(/\D/g, "");
 
   if (digits.length === 0) {
@@ -49,7 +51,7 @@ function applyCellphoneMask(value: string): string {
 }
 
 function applyCepMask(value: string): string {
-  const digits = value?.replace(/\D/g, "");
+  const digits = value.replace(/\D/g, "");
 
   return digits?.replace(/(\d{5})(\d{1,3}).*/, "$1-$2");
 }
@@ -71,4 +73,20 @@ function applyCnpjMask(value: string): string {
       "$1.$2.$3/$4-$5"
     );
   }
+}
+
+function applyMoneyMask(value: string): string {
+  const digits = value.replace(/\D/g, "");
+
+  if (digits.length === 0) {
+    return "R$ 0,00";
+  }
+
+  const numericValue = parseInt(digits, 10);
+  const formattedValue = (numericValue / 100).toLocaleString("pt-BR", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+
+  return `R$ ${formattedValue}`;
 }

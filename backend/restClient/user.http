@@ -4,16 +4,17 @@ content-type: application/json
 
 {
     "fullName": "John Doe",
-    "email": "john.doe@email.com",
+    "email": "john.doe+1@email.com",
     "roleId": 1,
     "address": {
         "cep": "12345678",
-        "number": "123"
+        "number": "123",
+        "cityIbgeCode": 4119905
     }
 }
 
 ###
-GET {{BACKEND_URL}}/user/1 HTTP/1.1
+GET {{BACKEND_URL}}/user/10 HTTP/1.1
 content-type: application/json
 
 ###
@@ -21,7 +22,7 @@ GET {{BACKEND_URL}}/profile HTTP/1.1
 content-type: application/json
 
 ###
-GET {{BACKEND_URL}}/user?page=1&fullName=john&orderBy=email&status=active HTTP/1.1
+GET {{BACKEND_URL}}/user?status=inactive HTTP/1.1
 content-type: application/json
 
 ###
@@ -33,21 +34,17 @@ content-type: application/json
 }
 
 ###
-PATCH {{BACKEND_URL}}/user/1 HTTP/1.1
+PATCH {{BACKEND_URL}}/user/10 HTTP/1.1
 content-type: application/json
 
 {
     "address": {
-        "cep": "12345678"
+        "add": {
+            "cep": "12345678",
+            "number": "456",
+            "cityIbgeCode": 4119905
+        }
     }
-}
-
-###
-PATCH {{BACKEND_URL}}/user/1 HTTP/1.1
-content-type: application/json
-
-{
-    "isActive": true
 }
 
 ###
@@ -67,13 +64,5 @@ DELETE {{BACKEND_URL}}/user/1 HTTP/1.1
 content-type: application/json
 
 {
-    "isActive": true
+    "archivedAt": "2025-01-01"
 }
-
-###
-GET {{BACKEND_URL}}/user/pdf?fullName=john&orderBy=email&status=active HTTP/1.1
-content-type: application/json
-
-###
-GET {{BACKEND_URL}}/user/sheet?fullName=john&orderBy=email&status=active HTTP/1.1
-content-type: application/json

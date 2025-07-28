@@ -5,36 +5,37 @@ import { CreateVehicleCharacteristicValue, UpdateVehicleCharacteristicValue, Veh
 import { CreateInput, UpdateInput } from "src/types";
 
 @Injectable()
-export class VehicleCharacteristicValueService implements VehicleCharacteristicValueRepository {
-    constructor(private prisma: PrismaService) { }
+export class VehicleCharacteristicValueService
+  implements VehicleCharacteristicValueRepository {
+  constructor(private prisma: PrismaService) { }
 
-    async create(data: CreateInput<VehicleCharacteristicValue>): Promise<VehicleCharacteristicValue> {
-        return this.prisma.vehicleCharacteristicValue.create({ data });
+  async create(data: CreateInput<VehicleCharacteristicValue>): Promise<VehicleCharacteristicValue> {
+    return this.prisma.vehicleCharacteristicValue.create({ data });
+  }
+
+  async findById(id: string): Promise<VehicleCharacteristicValue | null> {
+    const vehicleCharacteristicValue = await this.prisma.vehicleCharacteristicValue.findUnique({
+      where: { id: Number(id) }
+    });
+
+    if (!vehicleCharacteristicValue) {
+      return null;
     }
 
-    async findById(id: string): Promise<VehicleCharacteristicValue | null> {
-        const vehicleCharacteristicValue = await this.prisma.vehicleCharacteristicValue.findUnique({
-            where: { id: Number(id) }
-        });
+    return vehicleCharacteristicValue;
 
-        if (!vehicleCharacteristicValue) {
-            return null;
-        }
+  }
 
-        return vehicleCharacteristicValue;
+  async update(id: string, data: UpdateInput<VehicleCharacteristicValue>): Promise<void> {
+    await this.prisma.vehicleCharacteristicValue.update({
+      where: { id: Number(id) },
+      data
+    });
+  }
 
-    }
-
-    async update(id: string, data: UpdateInput<VehicleCharacteristicValue>): Promise<void> {
-        await this.prisma.vehicleCharacteristicValue.update({
-            where: { id: Number(id) },
-            data
-        });
-    }
-
-    async delete(id: string): Promise<void> {
-        await this.prisma.vehicleCharacteristicValue.delete({
-            where: { id: Number(id) }
-        });
-    }
+  async delete(id: string): Promise<void> {
+    await this.prisma.vehicleCharacteristicValue.delete({
+      where: { id: Number(id) }
+    });
+  }
 }

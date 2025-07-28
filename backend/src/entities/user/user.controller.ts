@@ -10,27 +10,21 @@ import {
   Req,
   ForbiddenException,
   Delete,
-  Res,
-  HttpStatus,
-  HttpCode,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { AuthGuard } from '../auth/auth.guard';
 import { FETCH_USER, GET_USER } from './user.constant';
-import { AuthRequest } from '../auth/auth.type';
 import {
   UserPostInDto,
   UserPatchInDto,
   ProfilePatchInDto,
   UserDeleteInDto,
   UserFindManyInDto,
-  UserGeneratePdfInDto,
-  UserGenerateSheetInDto,
 } from './user.schema';
 import { ParamInputs } from 'src/schemas';
 import { Actions, Resources } from '@prisma/client';
 import { RoleGuard } from 'src/auth/role.guard';
-import { Response } from 'express';
+import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthRequest } from 'src/auth/auth.type';
 
 @Controller()
 @UseGuards(AuthGuard)
@@ -40,11 +34,11 @@ export class UserController {
   @RoleGuard(Resources.USERS, Actions.CREATE)
   @Post('user')
   post(@Req() req: AuthRequest, @Body() userPostInDto: UserPostInDto) {
-    const { clientId } = req.authToken;
+    const { enterpriseId } = req.authToken;
 
     const createUserPayload = {
       ...userPostInDto,
-      clientId,
+      enterpriseId,
     };
     return this.userService.create({ userCreateInDto: createUserPayload });
   }
@@ -55,12 +49,12 @@ export class UserController {
     @Req() req: AuthRequest,
     @Query() userFindManyInDto: UserFindManyInDto,
   ) {
-    const { userId, clientId } = req.authToken;
+    const { userId, enterpriseId } = req.authToken;
     return await this.userService.findMany({
       userFindManyInDto,
       userId: +userId,
       select: FETCH_USER,
-      clientId,
+      enterpriseId,
     });
   }
 
@@ -75,59 +69,17 @@ export class UserController {
 
   @Get('permissions')
   async getPermissions(@Req() req: AuthRequest) {
-    const { userId, clientId } = req.authToken;
-    return await this.userService.getPermissions({ userId: +userId, clientId });
-  }
-
-  @Get('user/pdf')
-  @HttpCode(HttpStatus.OK)
-  async generatePdf(
-    @Req() req: AuthRequest,
-    @Query() userGeneratePdfInDto: UserGeneratePdfInDto,
-    @Res() res?: Response,
-  ) {
-    const { userId, clientId } = req.authToken;
-    const pdfBuffer = await this.userService.generatePdf({
-      userGeneratePdfInDto,
+    const { userId, enterpriseId } = req.authToken;
+    return await this.userService.getPermissions({
       userId: +userId,
-      clientId,
+      enterpriseId,
     });
-
-    res?.set({
-      'Content-Type': 'application/pdf',
-      'Content-Disposition': 'attachment; filename="report.pdf"',
-    });
-
-    res?.end(pdfBuffer);
-  }
-
-  @Get('user/sheet')
-  @HttpCode(HttpStatus.OK)
-  async generateSheet(
-    @Req() req: AuthRequest,
-    @Query() userGenerateSheetInDto: UserGenerateSheetInDto,
-    @Res() res?: Response,
-  ) {
-    const { userId, clientId } = req.authToken;
-    const sheetBuffer = await this.userService.generateSheet({
-      userGenerateSheetInDto,
-      userId: +userId,
-      clientId,
-    });
-
-    res?.set({
-      'Content-Type':
-        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-      'Content-Disposition': 'attachment; filename="users.xlsx"',
-    });
-
-    res?.send(sheetBuffer);
   }
 
   @RoleGuard(Resources.USERS, Actions.READ)
   @Get('user/:id')
   async get(@Req() req: AuthRequest, @Param() { id }: ParamInputs) {
-    const { userId, clientId } = req.authToken;
+    const { userId, enterpriseId } = req.authToken;
     if (userId == id) {
       throw new ForbiddenException(
         'Use a rota /profile para acessar seus dados',
@@ -136,7 +88,7 @@ export class UserController {
     return await this.userService.findOne({
       where: { id: +id },
       select: GET_USER,
-      clientId,
+      enterpriseId,
     });
   }
 
@@ -145,11 +97,11 @@ export class UserController {
     @Req() req: AuthRequest,
     @Body() profilePatchInDto: ProfilePatchInDto,
   ) {
-    const { userId, clientId } = req.authToken;
+    const { userId, enterpriseId } = req.authToken;
     return await this.userService.update({
       where: { id: +userId },
       userUpdateInDto: profilePatchInDto,
-      clientId,
+      enterpriseId,
     });
   }
 
@@ -160,7 +112,7 @@ export class UserController {
     @Param() { id }: ParamInputs,
     @Body() userPatchInDto: UserPatchInDto,
   ) {
-    const { userId, clientId } = req.authToken;
+    const { userId, enterpriseId } = req.authToken;
     if (userId == id) {
       throw new ForbiddenException(
         'Use a rota /profile para atualizar seus dados',
@@ -169,7 +121,7 @@ export class UserController {
     return await this.userService.update({
       where: { id: +id },
       userUpdateInDto: userPatchInDto,
-      clientId,
+      enterpriseId,
     });
   }
 
@@ -180,7 +132,7 @@ export class UserController {
     @Param() { id }: ParamInputs,
     @Body() userDeleteInDto: UserDeleteInDto,
   ) {
-    const { userId, clientId } = req.authToken;
+    const { userId, enterpriseId } = req.authToken;
     if (userId == id) {
       throw new ForbiddenException(
         'Você não pode desativar o seu próprio usuário',
@@ -189,7 +141,7 @@ export class UserController {
     return await this.userService.update({
       where: { id: +id },
       userUpdateInDto: userDeleteInDto,
-      clientId,
+      enterpriseId,
     });
   }
 }

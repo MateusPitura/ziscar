@@ -1,25 +1,35 @@
-interface ParseAddressPayloadProperties<T> {
-  newAddress?: T;
-  oldAddress?: Record<string, string> | null;
+import { AddressFormInputs } from "@/domains/users/types";
+
+interface ParseAddressPayloadProperties {
+  newAddress?: AddressFormInputs[];
+  oldAddress?: Record<string, string>[];
 }
 
-export default function parseAddressPayload<T>({
+export default function parseAddressPayload({
   newAddress,
   oldAddress,
-}: ParseAddressPayloadProperties<T>):
-  | Record<string, NonNullable<T> | boolean>
+}: ParseAddressPayloadProperties):
+  | Record<string, Omit<AddressFormInputs, "state"> | boolean>
   | undefined {
-  if (newAddress && !oldAddress) {
-    return {
-      add: newAddress,
-    };
-  } else if (newAddress && oldAddress) {
-    return {
-      update: newAddress,
-    };
-  } else if (!newAddress && oldAddress) {
+  if (!newAddress) return;
+
+  if (!newAddress.length) {
+    if (!oldAddress?.length) return;
     return {
       remove: true,
+    };
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { state, ...addressRest } = newAddress[0];
+
+  if (addressRest && !oldAddress?.length) {
+    return {
+      add: addressRest,
+    };
+  } else if (addressRest && oldAddress?.length) {
+    return {
+      update: addressRest,
     };
   }
 }

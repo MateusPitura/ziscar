@@ -5,35 +5,36 @@ import { CreatePaymentMethodPayable, PaymentMethodPayableRepository, UpdatePayme
 import { CreateInput, UpdateInput } from "src/types";
 
 @Injectable()
-export class PaymentMethodPayableService implements PaymentMethodPayableRepository {
-    constructor(private prisma: PrismaService) { }
+export class PaymentMethodReceivableService
+  implements PaymentMethodReceivableRepository {
+  constructor(private prisma: PrismaService) { }
 
-    async create(data: CreateInput<PaymentMethodPayable>): Promise<PaymentMethodPayable> {
-        return this.prisma.paymentMethodPayable.create({ data });
+  async create(data: CreateInput<PaymentMethodPayable>): Promise<PaymentMethodPayable> {
+    return this.prisma.paymentMethodPayable.create({ data });
+  }
+
+  async findById(id: string): Promise<PaymentMethodPayable | null> {
+    const paymentMethodPayable = await this.prisma.paymentMethodPayable.findUnique({
+      where: { id: Number(id) }
+    });
+
+    if (!paymentMethodPayable) {
+      return null;
     }
 
-    async findById(id: string): Promise<PaymentMethodPayable | null> {
-        const paymentMethodPayable = await this.prisma.paymentMethodPayable.findUnique({
-            where: { id: Number(id) }
-        });
+    return paymentMethodPayable;
+  }
 
-        if (!paymentMethodPayable) {
-            return null;
-        }
+  async update(id: string, data: UpdateInput<PaymentMethodPayable>): Promise<void> {
+    await this.prisma.paymentMethodPayable.update({
+      where: { id: Number(id) },
+      data
+    });
+  }
 
-        return paymentMethodPayable;
-    }
-
-    async update(id: string, data: UpdateInput<PaymentMethodPayable>): Promise<void> {
-        await this.prisma.paymentMethodPayable.update({
-            where: { id: Number(id) },
-            data
-        });
-    }
-
-    async delete(id: string): Promise<void> {
-        await this.prisma.paymentMethodPayable.delete({
-            where: { id: Number(id) }
-        });
-    }
+  async delete(id: string): Promise<void> {
+    await this.prisma.paymentMethodPayable.delete({
+      where: { id: Number(id) }
+    });
+  }
 }
