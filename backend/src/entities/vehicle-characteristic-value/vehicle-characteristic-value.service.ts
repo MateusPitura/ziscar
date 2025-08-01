@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { VehicleCharacteristicValue } from "@prisma/client";
 import { PrismaService } from "src/infra/database/prisma.service";
-import { CreateVehicleCharacteristicValue, UpdateVehicleCharacteristicValue, VehicleCharacteristicValueRepository } from "src/repositories/vehicle_characteristic_value-repository";
+import { VehicleCharacteristicValueRepository } from "src/repositories/vehicle_characteristic_value-repository";
 import { CreateInput, UpdateInput } from "src/types";
 
 @Injectable()

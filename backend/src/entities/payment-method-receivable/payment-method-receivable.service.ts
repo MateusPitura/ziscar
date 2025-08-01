@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
-import { PaymentMethodPayable } from "@prisma/client";
+import { PaymentMethodReceivable } from "@prisma/client";
 import { PrismaService } from "src/infra/database/prisma.service";
-import { CreatePaymentMethodPayable, PaymentMethodPayableRepository, UpdatePaymentMethodPayable } from "src/repositories/payment_method_payable-repository";
+import { PaymentMethodReceivableRepository } from "src/repositories/payment_method_receivable-repository";
 import { CreateInput, UpdateInput } from "src/types";
 
 @Injectable()
@@ -9,31 +9,31 @@ export class PaymentMethodReceivableService
   implements PaymentMethodReceivableRepository {
   constructor(private prisma: PrismaService) { }
 
-  async create(data: CreateInput<PaymentMethodPayable>): Promise<PaymentMethodPayable> {
-    return this.prisma.paymentMethodPayable.create({ data });
+  async create(data: CreateInput<PaymentMethodReceivable>): Promise<PaymentMethodReceivable> {
+    return this.prisma.paymentMethodReceivable.create({ data });
   }
 
-  async findById(id: string): Promise<PaymentMethodPayable | null> {
-    const paymentMethodPayable = await this.prisma.paymentMethodPayable.findUnique({
+  async findById(id: string): Promise<PaymentMethodReceivable | null> {
+    const paymentMethodReceivable = await this.prisma.paymentMethodReceivable.findUnique({
       where: { id: Number(id) }
     });
 
-    if (!paymentMethodPayable) {
+    if (!paymentMethodReceivable) {
       return null;
     }
 
-    return paymentMethodPayable;
+    return paymentMethodReceivable;
   }
 
-  async update(id: string, data: UpdateInput<PaymentMethodPayable>): Promise<void> {
-    await this.prisma.paymentMethodPayable.update({
+  async update(id: string, data: UpdateInput<PaymentMethodReceivable>): Promise<void> {
+    await this.prisma.paymentMethodReceivable.update({
       where: { id: Number(id) },
       data
     });
   }
 
   async delete(id: string): Promise<void> {
-    await this.prisma.paymentMethodPayable.delete({
+    await this.prisma.paymentMethodReceivable.delete({
       where: { id: Number(id) }
     });
   }

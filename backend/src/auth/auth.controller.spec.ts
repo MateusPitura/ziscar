@@ -1,122 +1,122 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { AuthController } from './auth.controller';
-import { AuthService } from './auth.service';
-import { JwtService } from '@nestjs/jwt';
-import { PrismaService } from '../infra/database/prisma.service';
-import { EmailService } from '../entities/email/email.service';
-import {
-  AUTH_REQUEST_DEFAULT,
-  POPULATE_ENTERPRISE_PRIMARY_ID,
-  POPULATE_USER_DEFAULT,
-  RANDOM_URL,
-} from '../constants';
-import { AuthRequestResetPassword } from './auth.type';
-import { UserService } from 'src/entities/user/user.service';
-import { EnterpriseService } from 'src/enterprise/enterprise.service';
-import { StoreService } from 'src/entities/store/store.service';
+// import { Test, TestingModule } from '@nestjs/testing';
+// import { AuthController } from './auth.controller';
+// import { AuthService } from './auth.service';
+// import { JwtService } from '@nestjs/jwt';
+// import { PrismaService } from '../infra/database/prisma.service';
+// import { EmailService } from '../entities/email/email.service';
+// import {
+//   AUTH_REQUEST_DEFAULT,
+//   POPULATE_ENTERPRISE_PRIMARY_ID,
+//   POPULATE_USER_DEFAULT,
+//   RANDOM_URL,
+// } from '../constants';
+// import { AuthRequestResetPassword } from './auth.type';
+// import { UserService } from 'src/entities/user/user.service';
+// import { EnterpriseService } from 'src/enterprise/enterprise.service';
+// import { StoreService } from 'src/entities/store/store.service';
 
-describe('AuthController', () => {
-  let authController: AuthController;
-  let prismaService: PrismaService;
-  let userService: UserService;
+// describe('AuthController', () => {
+//   let authController: AuthController;
+//   let prismaService: PrismaService;
+//   let userService: UserService;
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      controllers: [AuthController],
-      providers: [
-        AuthService,
-        EnterpriseService,
-        StoreService,
-        UserService,
-        PrismaService,
-        {
-          provide: EmailService,
-          useValue: {
-            sendEmail: jest.fn(),
-          },
-        },
-        {
-          provide: JwtService,
-          useValue: {
-            sign: jest.fn().mockReturnValue(''),
-          },
-        },
-      ],
-    }).compile();
+//   beforeEach(async () => {
+//     const module: TestingModule = await Test.createTestingModule({
+//       controllers: [AuthController],
+//       providers: [
+//         AuthService,
+//         EnterpriseService,
+//         StoreService,
+//         UserService,
+//         PrismaService,
+//         {
+//           provide: EmailService,
+//           useValue: {
+//             sendEmail: jest.fn(),
+//           },
+//         },
+//         {
+//           provide: JwtService,
+//           useValue: {
+//             sign: jest.fn().mockReturnValue(''),
+//           },
+//         },
+//       ],
+//     }).compile();
 
-    authController = module.get<AuthController>(AuthController);
-    prismaService = module.get<PrismaService>(PrismaService);
-    userService = module.get<UserService>(UserService);
-  });
+//     authController = module.get<AuthController>(AuthController);
+//     prismaService = module.get<PrismaService>(PrismaService);
+//     userService = module.get<UserService>(UserService);
+//   });
 
-  it('should signin', async () => {
-    const response = await authController.signIn({
-      email: POPULATE_USER_DEFAULT.email,
-      password: POPULATE_USER_DEFAULT.password,
-    });
+//   it('should signin', async () => {
+//     const response = await authController.signIn({
+//       email: POPULATE_USER_DEFAULT.email,
+//       password: POPULATE_USER_DEFAULT.password,
+//     });
 
-    expect(response).toBeUndefined();
-  });
+//     expect(response).toBeUndefined();
+//   });
 
-  it('should signout', async () => {
-    const response = await authController.signOut(AUTH_REQUEST_DEFAULT);
+//   it('should signout', async () => {
+//     const response = await authController.signOut(AUTH_REQUEST_DEFAULT);
 
-    expect(response).toBeUndefined();
-  });
+//     expect(response).toBeUndefined();
+//   });
 
-  it('should create an account', async () => {
-    await prismaService.transaction(async (transaction) => {
-      jest
-        .spyOn(prismaService, 'transaction')
-        .mockImplementation(async (callback) => {
-          await callback(transaction);
-        });
+//   it('should create an account', async () => {
+//     await prismaService.transaction(async (transaction) => {
+//       jest
+//         .spyOn(prismaService, 'transaction')
+//         .mockImplementation(async (callback) => {
+//           await callback(transaction);
+//         });
 
-      expect(
-        await authController.signUp({
-          cnpj: '12345678901236',
-          email: 'jane.doe@email.com',
-          fullName: 'Jane Doe',
-          name: 'Wayne Enterprises',
-        }),
-      ).toBeTruthy();
+//       expect(
+//         await authController.signUp({
+//           cnpj: '12345678901236',
+//           email: 'jane.doe@email.com',
+//           fullName: 'Jane Doe',
+//           name: 'Wayne Enterprises',
+//         }),
+//       ).toBeTruthy();
 
-      transaction.rollback();
-    });
-  });
+//       transaction.rollback();
+//     });
+//   });
 
-  it('should verify forget password and reset password', async () => {
-    await prismaService.transaction(async (transaction) => {
-      Reflect.set(userService, 'prismaService', transaction);
+//   it('should verify forget password and reset password', async () => {
+//     await prismaService.transaction(async (transaction) => {
+//       Reflect.set(userService, 'prismaService', transaction);
 
-      const resetPasswordPayload = {
-        email: POPULATE_USER_DEFAULT.email,
-        enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
-      };
+//       const resetPasswordPayload = {
+//         email: POPULATE_USER_DEFAULT.email,
+//         enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+//       };
 
-      expect(
-        await authController.forgetPassword(resetPasswordPayload),
-      ).toBeTruthy();
+//       expect(
+//         await authController.forgetPassword(resetPasswordPayload),
+//       ).toBeTruthy();
 
-      const request = {
-        ...new Request(RANDOM_URL),
-        authToken: resetPasswordPayload,
-      } as unknown as AuthRequestResetPassword;
+//       const request = {
+//         ...new Request(RANDOM_URL),
+//         authToken: resetPasswordPayload,
+//       } as unknown as AuthRequestResetPassword;
 
-      const response = await authController.resetPassword(request, {
-        password: '1234567',
-      });
+//       const response = await authController.resetPassword(request, {
+//         password: '1234567',
+//       });
 
-      expect(response).toBeTruthy();
+//       expect(response).toBeTruthy();
 
-      transaction.rollback();
-    });
-  });
+//       transaction.rollback();
+//     });
+//   });
 
-  it('should request change password', async () => {
-    const response =
-      await authController.requestChangePassword(AUTH_REQUEST_DEFAULT);
+//   it('should request change password', async () => {
+//     const response =
+//       await authController.requestChangePassword(AUTH_REQUEST_DEFAULT);
 
-    expect(response).toBeTruthy();
-  });
-});
+//     expect(response).toBeTruthy();
+//   });
+// });

@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { AccountReceivableInstallment } from "@prisma/client";
 import { PrismaService } from "src/infra/database/prisma.service";
-import { AccountReceivableInstallmentRepository, CreateAccountReceivableInstallment, UpdateAccountReceivableInstallment } from "src/repositories/account_receivable_installment-repository";
+import { AccountReceivableInstallmentRepository } from "src/repositories/account_receivable_installment-repository";
 import { CreateInput, UpdateInput } from "src/types";
 
 

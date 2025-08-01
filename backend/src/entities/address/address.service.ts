@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { Address } from "@prisma/client";
 import { PrismaService } from "src/infra/database/prisma.service";
-import { AddressRepository, CreateAddress, UpdateAddress } from "src/repositories/address-repository";
+import { AddressRepository } from "src/repositories/address-repository";
 import { CreateInput, UpdateInput } from "src/types";
 
 @Injectable()

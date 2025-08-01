@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { Permission } from "@prisma/client";
 import { PrismaService } from "src/infra/database/prisma.service";
-import { CreatePermission, PermissionRepository, UpdatePermission } from "src/repositories/permission-repository";
+import { PermissionRepository } from "src/repositories/permission-repository";
 import { CreateInput, UpdateInput } from "src/types";
 
 @Injectable()

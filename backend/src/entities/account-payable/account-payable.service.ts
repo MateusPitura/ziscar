@@ -10,7 +10,7 @@ import { CreateInput, UpdateInput } from 'src/types';
 @Injectable()
 export class AccountPayableService implements AccountPayableRepository {
   constructor(private prisma: PrismaService) { }
-  async create(data: CreateAccountPayable): Promise<AccountPayable> {
+  async create(data: CreateInput<AccountPayable>): Promise<AccountPayable> {
     return this.prisma.accountPayable.create({ data });
   }
   async findById(id: string): Promise<AccountPayable | null> {
@@ -24,7 +24,7 @@ export class AccountPayableService implements AccountPayableRepository {
 
     return accountPayable;
   }
-  async update(id: string, data: UpdateAccountPayable): Promise<void> {
+  async update(id: string, data: UpdateInput<AccountPayable>): Promise<void> {
     await this.prisma.accountPayable.update({
       where: { id: Number(id) },
       data

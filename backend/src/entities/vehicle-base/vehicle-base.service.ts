@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { VehicleBase } from "@prisma/client";
 import { PrismaService } from "src/infra/database/prisma.service";
-import { CreateVehicleBase, UpdateVehicleBase, VehicleBaseRepository } from "src/repositories/vehicle_base-repository";
+import { VehicleBaseRepository } from "src/repositories/vehicle_base-repository";
 import { CreateInput, UpdateInput } from "src/types";
 
 

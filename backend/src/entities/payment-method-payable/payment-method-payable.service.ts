@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { PaymentMethodPayable } from "@prisma/client";
 import { PrismaService } from "src/infra/database/prisma.service";
-import { CreatePaymentMethodPayable, PaymentMethodPayableRepository, UpdatePaymentMethodPayable } from "src/repositories/payment_method_payable-repository";
+import { PaymentMethodPayableRepository } from "src/repositories/payment_method_payable-repository";
 import { CreateInput, UpdateInput } from "src/types";
 
 @Injectable()
