@@ -5,7 +5,6 @@ import InputPassword from "@/design-system/Form/InputPassword";
 import { s } from "@shared/safeZod";
 import { type ReactNode } from "react";
 import SignCard from "../components/SignCard";
-import useSignPageContext from "../hooks/useSignPageContext";
 import useDialog from "@/domains/global/hooks/useDialog";
 import ForgetPasswordModal from "../components/ForgetPasswordModal";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
@@ -26,7 +25,6 @@ const SchemaSignInForm = s.object({
 type SignInFormInputs = s.infer<typeof SchemaSignInForm>;
 
 export default function SignInForm(): ReactNode {
-  const { handleStep } = useSignPageContext();
   const dialog = useDialog();
   const { safeFetch } = useSafeFetch();
   const { authChannel } = useGlobalContext();
@@ -71,8 +69,6 @@ export default function SignInForm(): ReactNode {
         </div>
         <SignCard.Footer
           label="Entrar"
-          secondaryBtnLabel="Criar conta"
-          onClickSecondaryBtn={() => handleStep("SIGN_UP")}
           primaryBtnState={isPending ? "loading" : undefined}
         />
       </Form>
