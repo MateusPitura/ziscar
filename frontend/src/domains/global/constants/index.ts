@@ -44,3 +44,4 @@ export const STATES = [
 ];
 
 export const PREVIOUS_PAGE = -1;
+export const CEP_LENGTH_WITH_MASK = 9
