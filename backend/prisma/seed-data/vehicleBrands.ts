@@ -1,6 +1,11 @@
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
+
 export const vehicleBrands = [
   { name: 'Fiat' },
   { name: 'Volkswagen' },
+  { name: 'BYD' },
   { name: 'Chevrolet' },
   { name: 'Hyundai' },
   { name: 'Toyota' },
@@ -45,3 +50,25 @@ export const vehicleBrands = [
   { name: 'Foton' },
   { name: 'MAN' },
 ];
+
+
+async function main() {
+  for (const brand of vehicleBrands) {
+    await prisma.vehicleBrand.upsert({
+      where: { name: brand.name },
+      update: {},
+      create: brand,
+    });
+  }
+
+  console.log('✅ Vehicle brands seeded.');
+}
+
+main()
+  .catch((e) => {
+    console.error('❌ Error seeding vehicle brands:', e);
+    process.exit(1);
+  })
+  .finally(() => {
+    prisma.$disconnect();
+  });

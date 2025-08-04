@@ -1,5 +1,6 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { VehicleBase } from "@prisma/client";
+import { NotFoundError } from "rxjs";
 import { PrismaService } from "src/infra/database/prisma.service";
 import { VehicleBaseRepository } from "src/repositories/vehicle_base-repository";
 import { CreateInput, UpdateInput } from "src/types";
@@ -20,7 +21,7 @@ export class VehicleBaseService implements VehicleBaseRepository {
     });
 
     if (!vehicleBase) {
-      return null;
+      throw new NotFoundException(`Vehicle base with id ${id} not found`);
     }
 
     return vehicleBase;
