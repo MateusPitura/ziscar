@@ -90,7 +90,7 @@ export default function ColorPicker<T extends FieldValues>({
           />
         </Popover.Content>
       </Popover>
-      {hideErrorLabel || <InputError name={name} />}
+      {hideErrorLabel || <InputError name={name} required={required} />}
     </label>
   );
 }

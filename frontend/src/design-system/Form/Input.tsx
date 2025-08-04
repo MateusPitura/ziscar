@@ -1,10 +1,6 @@
 import { applyMask } from "@/domains/global/utils/applyMask";
 import { useEffect, type ReactElement } from "react";
-import {
-  FieldValues,
-  Path,
-  useFormContext, useWatch
-} from "react-hook-form";
+import { FieldValues, Path, useFormContext, useWatch } from "react-hook-form";
 import Button from "../Button";
 import InputError from "./InputError";
 import { Mask } from "@/domains/global/types";
@@ -97,7 +93,7 @@ export default function Input<T extends FieldValues>({
           </div>
         )}
       </div>
-      {hideErrorLabel || <InputError name={name} />}
+      {hideErrorLabel || <InputError name={name} required={required} />}
     </label>
   );
 }

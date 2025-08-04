@@ -39,7 +39,6 @@ export default function EditProfilePageContainer(): ReactNode {
       newAddress: address,
       oldAddress: profileData?.address,
     });
-    console.log('🌠 C');
 
     await safeFetch(`${BACKEND_URL}/profile`, {
       method: "PATCH",
