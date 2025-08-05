@@ -11,7 +11,7 @@ import {
   SEED_ROLE_ADMIN_ID,
   SEED_ROLE_SALES_ID,
 } from '../../shared/src/constants';
-// import { encryptPassword } from '../src/entities/user/user.utils';
+import { encryptPassword } from '../src/entities/user/user.utils';
 
 const prisma = new PrismaClient();
 
@@ -44,22 +44,22 @@ async function seed() {
 
     await tx.user.createMany({
       data: [
-        // {
-        //   ...POPULATE_USER_DEFAULT,
-        //   password: await encryptPassword({
-        //     password: POPULATE_USER_DEFAULT.password,
-        //   }),
-        //   enterpriseId: enterprise.id,
-        //   roleId: SEED_ROLE_ADMIN_ID,
-        // },
-        // {
-        //   ...POPULATE_USER_INACTIVE,
-        //   password: await encryptPassword({
-        //     password: POPULATE_USER_INACTIVE.password,
-        //   }),
-        //   enterpriseId: enterprise.id,
-        //   roleId: SEED_ROLE_ADMIN_ID,
-        // },
+        {
+          ...POPULATE_USER_DEFAULT,
+          password: await encryptPassword({
+            password: POPULATE_USER_DEFAULT.password,
+          }),
+          enterpriseId: enterprise.id,
+          roleId: SEED_ROLE_ADMIN_ID,
+        },
+        {
+          ...POPULATE_USER_INACTIVE,
+          password: await encryptPassword({
+            password: POPULATE_USER_INACTIVE.password,
+          }),
+          enterpriseId: enterprise.id,
+          roleId: SEED_ROLE_ADMIN_ID,
+        },
       ],
       skipDuplicates: true,
     });
@@ -70,17 +70,17 @@ async function seed() {
       fullName: faker.person.fullName(),
       email: faker.internet.email(),
       archivedAt: index > 5 ? null : new Date(),
-      // password: await encryptPassword({ password: faker.internet.password() }),
+      password: await encryptPassword({ password: faker.internet.password() }),
       enterpriseId: enterprise.id,
       roleId: SEED_ROLE_SALES_ID,
     }));
 
     const usersToCreate = await Promise.all(usersPromise);
 
-    // await tx.user.createMany({
-    //   data: usersToCreate,
-    //   skipDuplicates: true,
-    // });
+    await tx.user.createMany({
+      data: usersToCreate,
+      skipDuplicates: true,
+    });
 
     console.log(`✅ ${usersToCreate.length} fake users created.`);
   });

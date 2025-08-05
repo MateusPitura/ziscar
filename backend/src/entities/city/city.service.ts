@@ -6,7 +6,7 @@ import { CreateInput, UpdateInput } from 'src/types';
 
 @Injectable()
 export class CityService implements CityRepository {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
   async create(data: CreateInput<City>): Promise<City> {
     return this.prisma.city.create({ data });
@@ -14,7 +14,7 @@ export class CityService implements CityRepository {
 
   async findById(ibgeCode: string): Promise<City | null> {
     const city = await this.prisma.city.findUnique({
-      where: { ibgeCode: Number(ibgeCode) }
+      where: { ibgeCode: Number(ibgeCode) },
     });
 
     if (!city) {

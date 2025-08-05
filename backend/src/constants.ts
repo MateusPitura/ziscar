@@ -1,6 +1,6 @@
 import { FRONTEND_PORT } from '../../shared/src/constants';
-// import { AuthRequest } from './auth/auth.type';
-// import { DEFAULT_PERMISSIONS } from './entities/user/user.constant';
+import { AuthRequest } from './auth/auth.type';
+import { DEFAULT_PERMISSIONS } from './entities/user/user.constant';
 
 export const JWT_EXPIRATION_TIME = 43200; // 12h
 
@@ -38,9 +38,9 @@ export const AUTH_REQUEST_DEFAULT = {
     userId: POPULATE_USER_DEFAULT.id,
     enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
     jit: '0aaa1cdc-9839-4c3f-879f-b5c037b7af3c',
-    // permissions: DEFAULT_PERMISSIONS,
+    permissions: DEFAULT_PERMISSIONS,
   },
-} //as unknown as AuthRequest;
+} as unknown as AuthRequest;
 
 export const POPULATE_STORE_DEFAULT = {
   id: 443,

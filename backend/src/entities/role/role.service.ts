@@ -1,12 +1,12 @@
-import { Injectable } from "@nestjs/common";
-import { Role } from "@prisma/client";
-import { PrismaService } from "src/infra/database/prisma.service";
-import { RoleRepository } from "src/repositories/role-repository";
-import { CreateInput, UpdateInput } from "src/types";
+import { Injectable } from '@nestjs/common';
+import { Role } from '@prisma/client';
+import { PrismaService } from 'src/infra/database/prisma.service';
+import { RoleRepository } from 'src/repositories/role-repository';
+import { CreateInput, UpdateInput } from 'src/types';
 
 @Injectable()
 export class RoleService implements RoleRepository {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
   async create(data: CreateInput<Role>): Promise<Role> {
     return this.prisma.role.create({ data });
@@ -14,7 +14,7 @@ export class RoleService implements RoleRepository {
 
   async findById(id: string): Promise<Role | null> {
     const role = await this.prisma.role.findUnique({
-      where: { id: Number(id) }
+      where: { id: Number(id) },
     });
 
     if (!role) {
@@ -27,13 +27,13 @@ export class RoleService implements RoleRepository {
   async update(id: string, data: UpdateInput<Role>): Promise<void> {
     await this.prisma.role.update({
       where: { id: Number(id) },
-      data
+      data,
     });
   }
 
   async delete(id: string): Promise<void> {
     await this.prisma.role.delete({
-      where: { id: Number(id) }
+      where: { id: Number(id) },
     });
   }
 }

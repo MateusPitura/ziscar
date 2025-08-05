@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-// import { AuthModule } from './auth/auth.module';
+import { AuthModule } from './auth/auth.module';
 import { DatabaseModule } from './infra/database/database.module';
 import { ConfigModule } from '@nestjs/config';
 import { EmailModule } from './entities/email/email.module';
@@ -25,15 +25,15 @@ import { VehicleCharacteristicValueModule } from './entities/vehicle-characteris
 import { VehicleExpenseModule } from './entities/vehicle-expense/vehicle-expense.module';
 import { VehiclePurchaseModule } from './entities/vehicle-purchase/vehicle-purchase.module';
 import { VehicleSaleModule } from './entities/vehicle-sale/vehicle-sale.module';
-// import { UserModule } from './entities/user/user.module';
+import { UserModule } from './entities/user/user.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    // AuthModule,
-    // UserModule,
-    // DatabaseModule,
-    // EmailModule,
+    AuthModule,
+    UserModule,
+    DatabaseModule,
+    EmailModule,
     AccountPayableModule,
     AccountPayableInstallmentModule,
     AccountReceivableModule,
@@ -62,4 +62,4 @@ import { VehicleSaleModule } from './entities/vehicle-sale/vehicle-sale.module';
   ],
   controllers: [AppController],
 })
-export class AppModule { }
+export class AppModule {}

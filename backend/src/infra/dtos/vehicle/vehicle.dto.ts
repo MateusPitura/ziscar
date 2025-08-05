@@ -1,5 +1,3 @@
-import { s } from "@shared/safeZod";
+import { s } from '@shared/safeZod';
 
-const createVehicleDTO = s.object({
-
-})
+const createVehicleDTO = s.object({});

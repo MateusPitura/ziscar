@@ -1,61 +1,61 @@
-// import { Request, Response } from 'express';
-// import {
-//   AuthForgetPasswordInDto,
-//   AuthResetPasswordInDto,
-//   AuthSignInInDto,
-//   AuthSignUpInDto,
-//   RequestChangePasswordInDto,
-// } from './auth.schema';
-// import { Permissions } from '@shared/types';
+import { Request, Response } from 'express';
+import {
+  AuthForgetPasswordInDto,
+  AuthResetPasswordInDto,
+  AuthSignInInDto,
+  AuthSignUpInDto,
+  RequestChangePasswordInDto,
+} from './auth.schema';
+import { Permissions } from '@shared/types';
 
-// export interface AuthSignin {
-//   userId: number;
-//   enterpriseId: number;
-//   jit: string;
-//   permissions: Permissions;
-// }
+export interface AuthSignin {
+  userId: number;
+  enterpriseId: number;
+  jit: string;
+  permissions: Permissions;
+}
 
-// export interface AuthResetPassword {
-//   email: string;
-//   enterpriseId: number;
-// }
+export interface AuthResetPassword {
+  email: string;
+  enterpriseId: number;
+}
 
-// export interface AuthRequest extends Request {
-//   authToken: AuthSignin;
-// }
+export interface AuthRequest extends Request {
+  authToken: AuthSignin;
+}
 
-// export interface AuthRequestResetPassword extends Request {
-//   authToken: AuthResetPassword;
-// }
+export interface AuthRequestResetPassword extends Request {
+  authToken: AuthResetPassword;
+}
 
-// export interface SignInInput {
-//   authSignInInDto: AuthSignInInDto;
-//   res?: Response;
-// }
+export interface SignInInput {
+  authSignInInDto: AuthSignInInDto;
+  res?: Response;
+}
 
-// export interface SignOutInput {
-//   enterpriseId: number;
-//   userId: number;
-//   res?: Response;
-// }
+export interface SignOutInput {
+  enterpriseId: number;
+  userId: number;
+  res?: Response;
+}
 
-// export interface SignUpInput {
-//   authSignUpInDto: AuthSignUpInDto;
-// }
+export interface SignUpInput {
+  authSignUpInDto: AuthSignUpInDto;
+}
 
-// export interface ResetPasswordInput {
-//   authResetPasswordInDto: AuthResetPasswordInDto;
-// }
+export interface ResetPasswordInput {
+  authResetPasswordInDto: AuthResetPasswordInDto;
+}
 
-// export interface ForgetPasswordInput {
-//   authForgetPasswordInDto: AuthForgetPasswordInDto;
-// }
+export interface ForgetPasswordInput {
+  authForgetPasswordInDto: AuthForgetPasswordInDto;
+}
 
-// export interface RequestChangePasswordInput {
-//   requestChangePasswordInDto: RequestChangePasswordInDto;
-// }
+export interface RequestChangePasswordInput {
+  requestChangePasswordInDto: RequestChangePasswordInDto;
+}
 
-// export interface CustomizeValidationProperties {
-//   shouldValidateJit: boolean;
-//   shouldValidateExpirationTime: boolean;
-// }
+export interface CustomizeValidationProperties {
+  shouldValidateJit: boolean;
+  shouldValidateExpirationTime: boolean;
+}
