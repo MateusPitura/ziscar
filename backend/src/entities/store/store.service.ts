@@ -8,10 +8,10 @@ import { StoreRepository } from 'src/repositories/store-repository';
 
 @Injectable()
 export class StoreService implements StoreRepository {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prismaService: PrismaService) {}
 
   async create({ storeCreateInDto, transaction }: CreateInput) {
-    const database = transaction || this.prisma;
+    const database = transaction || this.prismaService;
 
     await this.verifyDuplicated({ cnpj: storeCreateInDto.cnpj });
 
@@ -40,7 +40,7 @@ export class StoreService implements StoreRepository {
       where['enterpriseId'] = enterpriseId;
     }
 
-    const store = await this.prisma.store.findFirst({
+    const store = await this.prismaService.store.findFirst({
       where,
       select,
     });
@@ -51,14 +51,14 @@ export class StoreService implements StoreRepository {
   }
 
   async update(id: string, data: UpdateInput<Store>): Promise<void> {
-    await this.prisma.store.update({
+    await this.prismaService.store.update({
       where: { id: Number(id) },
       data,
     });
   }
 
   async delete(id: string): Promise<void> {
-    await this.prisma.store.delete({
+    await this.prismaService.store.delete({
       where: { id: Number(id) },
     });
   }

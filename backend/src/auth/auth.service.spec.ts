@@ -18,8 +18,8 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { UserService } from 'src/entities/user/user.service';
-import { EnterpriseService } from 'src/enterprise/enterprise.service';
 import { StoreService } from 'src/entities/store/store.service';
+import { EnterpriseService } from 'src/entities/enterprise/enterprise.service';
 
 describe('AuthService', () => {
   let authService: AuthService;
