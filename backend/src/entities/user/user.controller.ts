@@ -11,7 +11,6 @@ import {
   ForbiddenException,
   Delete,
 } from '@nestjs/common';
-import { UserService } from './user.service';
 import { FETCH_USER, GET_USER } from './user.constant';
 import {
   UserPostInDto,
@@ -25,6 +24,7 @@ import { Actions, Resources } from '@prisma/client';
 import { RoleGuard } from 'src/entities/auth/role.guard';
 import { AuthGuard } from 'src/entities/auth/auth.guard';
 import { AuthRequest } from 'src/entities/auth/auth.type';
+import { UserService } from './user.service';
 
 @Controller()
 @UseGuards(AuthGuard)

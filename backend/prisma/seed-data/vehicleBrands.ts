@@ -1,6 +1,7 @@
 export const vehicleBrands = [
   { name: 'Fiat' },
   { name: 'Volkswagen' },
+  { name: 'BYD' },
   { name: 'Chevrolet' },
   { name: 'Hyundai' },
   { name: 'Toyota' },

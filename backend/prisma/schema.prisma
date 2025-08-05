@@ -54,7 +54,7 @@ model VehicleBase {
 
 model VehicleBrand {
   id           Int           @id @default(autoincrement())
-  name         String        @db.VarChar(127)
+  name         String        @unique @db.VarChar(127)
   vehicleBases VehicleBase[]
 
   createdAt  DateTime  @default(now())

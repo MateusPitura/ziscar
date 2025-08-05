@@ -12,8 +12,8 @@ import {
 } from '../../constants';
 import { AuthRequestResetPassword } from './auth.type';
 import { UserService } from 'src/entities/user/user.service';
-import { EnterpriseService } from 'src/entities/enterprise/enterprise.service';
 import { StoreService } from 'src/entities/store/store.service';
+import { EnterpriseService } from 'src/entities/enterprise/enterprise.service';
 
 describe('AuthController', () => {
   let authController: AuthController;

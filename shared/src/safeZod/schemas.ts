@@ -5,6 +5,8 @@ import { removeMask } from "../utils/removeMask";
 
 export type infer<T extends z.ZodTypeAny> = z.infer<T>;
 
+export const nativeEnum = z.nativeEnum
+
 export const radio = z.enum;
 
 export function checkbox<T extends string>(values: readonly T[]) {

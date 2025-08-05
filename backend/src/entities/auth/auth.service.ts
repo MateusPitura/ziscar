@@ -20,11 +20,10 @@ import handlePermissions from 'src/utils/handlePermissions';
 import { isProduction } from 'src/constants';
 import { UserService } from 'src/entities/user/user.service';
 import { GET_PERMISSIONS } from 'src/entities/user/user.constant';
-import { EnterpriseService } from 'src/entities/enterprise/enterprise.service';
 import { StoreService } from 'src/entities/store/store.service';
 import { Actions, Resources } from '@prisma/client';
+import { EnterpriseService } from 'src/entities/enterprise/enterprise.service';
 
-// Temp: revise it later
 export type RoleWithPermissions = {
   id: number;
   name: string;
