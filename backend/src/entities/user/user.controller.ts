@@ -11,7 +11,6 @@ import {
   ForbiddenException,
   Delete,
 } from '@nestjs/common';
-// import { UserService } from './user.service';
 import { FETCH_USER, GET_USER } from './user.constant';
 import {
   UserPostInDto,
