@@ -2,10 +2,12 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/infra/database/prisma.service';
 import { verifyDuplicated } from 'src/utils/verifyDuplicated';
 import { CreateInput, FindOneInput, VerifyDuplicatedInput } from './store.type';
-import { GetCallback } from 'src/types';
+import { GetCallback, UpdateInput } from 'src/types';
+import { Store } from '@prisma/client';
+import { StoreRepository } from 'src/repositories/store-repository';
 
 @Injectable()
-export class StoreService {
+export class StoreService implements StoreRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
   async create({ storeCreateInDto, transaction }: CreateInput) {
@@ -46,6 +48,19 @@ export class StoreService {
       throw new NotFoundException('Loja não encontrada');
     }
     return store;
+  }
+
+  async update(id: string, data: UpdateInput<Store>): Promise<void> {
+    await this.prismaService.store.update({
+      where: { id: Number(id) },
+      data,
+    });
+  }
+
+  async delete(id: string): Promise<void> {
+    await this.prismaService.store.delete({
+      where: { id: Number(id) },
+    });
   }
 
   async verifyDuplicated({ cnpj }: VerifyDuplicatedInput) {

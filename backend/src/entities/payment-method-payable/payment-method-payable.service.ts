@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/require-await */
-
 import { Injectable } from '@nestjs/common';
 import { PaymentMethodPayable } from '@prisma/client';
 import { PrismaService } from 'src/infra/database/prisma.service';
@@ -16,21 +13,35 @@ export class PaymentMethodPayableService
   async create(
     data: CreateInput<PaymentMethodPayable>,
   ): Promise<PaymentMethodPayable> {
-    throw new Error('Method not implemented.');
+    return this.prisma.paymentMethodPayable.create({ data });
   }
 
   async findById(id: string): Promise<PaymentMethodPayable | null> {
-    throw new Error('Method not implemented.');
+    const paymentMethodPayable =
+      await this.prisma.paymentMethodPayable.findUnique({
+        where: { id: Number(id) },
+      });
+
+    if (!paymentMethodPayable) {
+      return null;
+    }
+
+    return paymentMethodPayable;
   }
 
   async update(
     id: string,
     data: UpdateInput<PaymentMethodPayable>,
   ): Promise<void> {
-    throw new Error('Method not implemented.');
+    await this.prisma.paymentMethodPayable.update({
+      where: { id: Number(id) },
+      data,
+    });
   }
 
   async delete(id: string): Promise<void> {
-    throw new Error('Method not implemented.');
+    await this.prisma.paymentMethodPayable.delete({
+      where: { id: Number(id) },
+    });
   }
 }

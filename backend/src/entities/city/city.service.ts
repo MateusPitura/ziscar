@@ -13,9 +13,15 @@ export class CityService implements CityRepository {
   }
 
   async findById(ibgeCode: string): Promise<City | null> {
-    return this.prisma.city.findUnique({
+    const city = await this.prisma.city.findUnique({
       where: { ibgeCode: Number(ibgeCode) },
     });
+
+    if (!city) {
+      return null;
+    }
+
+    return city;
   }
 
   async update(ibgeCode: string, data: UpdateInput<City>): Promise<void> {

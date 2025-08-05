@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/require-await */
-
 import { Injectable } from '@nestjs/common';
 import { Role } from '@prisma/client';
 import { PrismaService } from 'src/infra/database/prisma.service';
@@ -12,18 +9,31 @@ export class RoleService implements RoleRepository {
   constructor(private prisma: PrismaService) {}
 
   async create(data: CreateInput<Role>): Promise<Role> {
-    throw new Error('Method not implemented.');
+    return this.prisma.role.create({ data });
   }
 
   async findById(id: string): Promise<Role | null> {
-    throw new Error('Method not implemented.');
+    const role = await this.prisma.role.findUnique({
+      where: { id: Number(id) },
+    });
+
+    if (!role) {
+      return null;
+    }
+
+    return role;
   }
 
   async update(id: string, data: UpdateInput<Role>): Promise<void> {
-    throw new Error('Method not implemented.');
+    await this.prisma.role.update({
+      where: { id: Number(id) },
+      data,
+    });
   }
 
   async delete(id: string): Promise<void> {
-    throw new Error('Method not implemented.');
+    await this.prisma.role.delete({
+      where: { id: Number(id) },
+    });
   }
 }
