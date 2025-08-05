@@ -7,4 +7,4 @@ const SchemaStoreCreateInDto = s.object({
   enterpriseId: s.id(),
 });
 
-export class StoreCreateInDto extends createZodDto(SchemaStoreCreateInDto) {}
+export class StoreCreateInDto extends createZodDto(SchemaStoreCreateInDto) { }
