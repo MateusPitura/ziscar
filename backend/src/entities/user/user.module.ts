@@ -6,6 +6,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { JWT_EXPIRATION_TIME } from 'src/constants';
 import { DatabaseModule } from 'src/infra/database/database.module';
+import { UserService } from './user.service';
 
 @Module({
   imports: [
@@ -23,7 +24,7 @@ import { DatabaseModule } from 'src/infra/database/database.module';
     }),
   ],
   controllers: [UserController],
-  // providers: [UserService],
-  // exports: [UserService],
+  providers: [UserService],
+  exports: [UserService],
 })
 export class UserModule {}
