@@ -3,7 +3,6 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { encryptPassword } from './user.utils';
 import {
   GET_PERMISSIONS,
   GET_USER,
@@ -26,7 +25,8 @@ import { PrismaService } from 'src/infra/database/prisma.service';
 import { verifyDuplicated } from 'src/utils/verifyDuplicated';
 import { EncryptPasswordInput, GetCallback } from 'src/types';
 import { generateRandomPassword } from 'src/utils/generateRandomPassword';
-import { RoleWithPermissions } from 'src/auth/auth.service';
+import { RoleWithPermissions } from 'src/entities/auth/auth.service';
+import { encryptPassword } from './user.utils';
 
 @Injectable()
 export class UserService {

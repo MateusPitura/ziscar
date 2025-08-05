@@ -1,5 +1,5 @@
 import { FRONTEND_PORT } from '../../shared/src/constants';
-import { AuthRequest } from './auth/auth.type';
+import { AuthRequest } from './entities/auth/auth.type';
 import { DEFAULT_PERMISSIONS } from './entities/user/user.constant';
 
 export const JWT_EXPIRATION_TIME = 43200; // 12h

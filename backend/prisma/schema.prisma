@@ -27,7 +27,6 @@ model Store {
 model VehicleCharacteristicValue {
   id             Int     @id @default(autoincrement())
   characteristic String  @db.VarChar(127)
-  value          String  @db.VarChar(127)
   vehicleId      Int
   vehicle        Vehicle @relation(fields: [vehicleId], references: [id])
 
@@ -54,7 +53,7 @@ model VehicleBase {
 
 model VehicleBrand {
   id           Int           @id @default(autoincrement())
-  name         String        @db.VarChar(127)
+  name         String        @unique @db.VarChar(127)
   vehicleBases VehicleBase[]
 
   createdAt  DateTime  @default(now())
@@ -141,6 +140,7 @@ model VehicleSale {
 model AccountPayable {
   id                         Int                         @id @default(autoincrement())
   description                String?                     @db.VarChar(127)
+  paidTo                     String?                     @db.VarChar(127)
   vehiclePurchases           VehiclePurchase[]
   vehicleExpenses            VehicleExpense[]
   vehicleSales               VehicleSale[]
@@ -221,6 +221,7 @@ model Customer {
 model AccountReceivable {
   id                            Int                            @id @default(autoincrement())
   description                   String?                        @db.VarChar(127)
+  receivedFrom                  String?                        @db.VarChar(127)
   vehicleSales                  VehicleSale[]
   accountReceivableInstallments AccountReceivableInstallment[]
 

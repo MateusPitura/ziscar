@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/require-await */
-
 import { Injectable } from '@nestjs/common';
 import { Address } from '@prisma/client';
 import { PrismaService } from 'src/infra/database/prisma.service';
@@ -12,18 +9,31 @@ export class AddressService implements AddressRepository {
   constructor(private prisma: PrismaService) {}
 
   async create(data: CreateInput<Address>): Promise<Address> {
-    throw new Error('Method not implemented.');
+    return this.prisma.address.create({ data });
   }
 
   async findById(id: string): Promise<Address | null> {
-    throw new Error('Method not implemented.');
+    const address = await this.prisma.address.findUnique({
+      where: { id: Number(id) },
+    });
+
+    if (!address) {
+      return null;
+    }
+
+    return address;
   }
 
   async update(id: string, data: UpdateInput<Address>): Promise<void> {
-    throw new Error('Method not implemented.');
+    await this.prisma.address.update({
+      where: { id: Number(id) },
+      data,
+    });
   }
 
   async delete(id: string): Promise<void> {
-    throw new Error('Method not implemented.');
+    await this.prisma.address.delete({
+      where: { id: Number(id) },
+    });
   }
 }

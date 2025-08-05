@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/require-await */
-
 import { Injectable } from '@nestjs/common';
 import { VehiclePurchase } from '@prisma/client';
 import { PrismaService } from 'src/infra/database/prisma.service';
@@ -12,18 +9,31 @@ export class VehiclePurchaseService implements VehiclePurchaseRepository {
   constructor(private prisma: PrismaService) {}
 
   async create(data: CreateInput<VehiclePurchase>): Promise<VehiclePurchase> {
-    throw new Error('Method not implemented.');
+    return this.prisma.vehiclePurchase.create({ data });
   }
 
   async findById(id: string): Promise<VehiclePurchase | null> {
-    throw new Error('Method not implemented.');
+    const vehiclePurchase = await this.prisma.vehiclePurchase.findUnique({
+      where: { id: Number(id) },
+    });
+
+    if (!vehiclePurchase) {
+      return null;
+    }
+
+    return vehiclePurchase;
   }
 
   async update(id: string, data: UpdateInput<VehiclePurchase>): Promise<void> {
-    throw new Error('Method not implemented.');
+    await this.prisma.vehiclePurchase.update({
+      where: { id: Number(id) },
+      data,
+    });
   }
 
   async delete(id: string): Promise<void> {
-    throw new Error('Method not implemented.');
+    await this.prisma.vehiclePurchase.delete({
+      where: { id: Number(id) },
+    });
   }
 }

@@ -2,18 +2,18 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtService } from '@nestjs/jwt';
-import { PrismaService } from '../infra/database/prisma.service';
-import { EmailService } from '../entities/email/email.service';
+import { PrismaService } from '../../infra/database/prisma.service';
+import { EmailService } from '../email/email.service';
 import {
   AUTH_REQUEST_DEFAULT,
   POPULATE_ENTERPRISE_PRIMARY_ID,
   POPULATE_USER_DEFAULT,
   RANDOM_URL,
-} from '../constants';
+} from '../../constants';
 import { AuthRequestResetPassword } from './auth.type';
 import { UserService } from 'src/entities/user/user.service';
-import { EnterpriseService } from 'src/enterprise/enterprise.service';
 import { StoreService } from 'src/entities/store/store.service';
+import { EnterpriseService } from 'src/entities/enterprise/enterprise.service';
 
 describe('AuthController', () => {
   let authController: AuthController;
