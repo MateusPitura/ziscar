@@ -15,8 +15,6 @@ import { CityModule } from './entities/city/city.module';
 import { CustomerModule } from './entities/customer/customer.module';
 import { PaymentMethodPayableModule } from './entities/payment-method-payable/payment-method-payable.module';
 import { PaymentMethodReceivableModule } from './entities/payment-method-receivable/payment-method-receivable.module';
-import { PermissionModule } from './entities/permission/permission.module';
-import { RoleModule } from './entities/role/role.module';
 import { StoreModule } from './entities/store/store.module';
 import { VehicleModule } from './entities/vehicle/vehicle.module';
 import { VehicleBaseModule } from './entities/vehicle-base/vehicle-base.module';
@@ -43,8 +41,6 @@ import { UserModule } from './entities/user/user.module';
     CustomerModule,
     PaymentMethodPayableModule,
     PaymentMethodReceivableModule,
-    PermissionModule,
-    RoleModule,
     StoreModule,
     VehicleModule,
     VehicleBaseModule,
