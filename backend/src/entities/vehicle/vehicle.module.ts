@@ -13,6 +13,13 @@ import { VehicleController } from './vehicle.controller';
       useClass: VehicleService,
     },
     VehicleService,
+    // InsertVehicleUseCase,
+    // SearchVehiclesUseCase,
+    // InsertExpenseUseCase,
+    // FetchBrandsUseCase,
+    // MakeSaleUseCase,
+    // UpdateVehicleUseCase,
+    // ToggleArquiveVehicleUseCase,
   ],
   exports: [VehicleRepository, VehicleService],
 })

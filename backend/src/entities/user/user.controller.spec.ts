@@ -4,7 +4,7 @@ import { UserService } from './user.service';
 import { JwtService } from '@nestjs/jwt';
 import { FETCH_USER, GET_USER } from './user.constant';
 import { EmailService } from '../email/email.service';
-import { AuthRequest } from 'src/auth/auth.type';
+import { AuthRequest } from 'src/entities/auth/auth.type';
 import { ITEMS_PER_PAGE, SEED_ROLE_SALES_ID } from '@shared/constants';
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/infra/database/prisma.service';
