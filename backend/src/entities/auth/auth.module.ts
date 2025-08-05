@@ -3,7 +3,7 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { EmailModule } from '../entities/email/email.module';
+import { EmailModule } from '../email/email.module';
 import { DatabaseModule } from 'src/infra/database/database.module';
 import { JWT_EXPIRATION_TIME } from 'src/constants';
 import { UserModule } from 'src/entities/user/user.module';

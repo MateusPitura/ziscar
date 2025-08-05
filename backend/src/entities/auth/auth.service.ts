@@ -11,8 +11,8 @@ import {
   SignUpInput,
 } from './auth.type';
 import { compare } from 'bcrypt';
-import { EmailService } from '../entities/email/email.service';
-import { PrismaService } from '../infra/database/prisma.service';
+import { EmailService } from '../email/email.service';
+import { PrismaService } from '../../infra/database/prisma.service';
 import { SEED_ROLE_ADMIN_ID, JWT_COOKIE_NAME } from '@shared/constants';
 import { FRONTEND_URL } from 'src/constants';
 import { randomUUID } from 'crypto';

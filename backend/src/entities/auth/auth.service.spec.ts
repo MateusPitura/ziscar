@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from './auth.service';
 import { JwtService } from '@nestjs/jwt';
-import { EmailService } from '../entities/email/email.service';
-import { PrismaService } from '../infra/database/prisma.service';
+import { EmailService } from '../email/email.service';
+import { PrismaService } from '../../infra/database/prisma.service';
 import {
   FRONTEND_URL,
   POPULATE_ENTERPRISE_PRIMARY_ID,
@@ -11,15 +11,15 @@ import {
   POPULATE_STORE_INACTIVE,
   POPULATE_USER_DEFAULT,
   POPULATE_USER_INACTIVE,
-} from '../constants';
+} from '../../constants';
 import {
   ConflictException,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { UserService } from 'src/entities/user/user.service';
-import { StoreService } from 'src/entities/store/store.service';
 import { EnterpriseService } from 'src/entities/enterprise/enterprise.service';
+import { StoreService } from 'src/entities/store/store.service';
 
 describe('AuthService', () => {
   let authService: AuthService;
