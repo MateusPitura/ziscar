@@ -1,6 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { VehicleBase } from '@prisma/client';
-import { NotFoundError } from 'rxjs';
 import { PrismaService } from 'src/infra/database/prisma.service';
 import { VehicleBaseRepository } from 'src/repositories/vehicle_base-repository';
 import { CreateInput, UpdateInput } from 'src/types';

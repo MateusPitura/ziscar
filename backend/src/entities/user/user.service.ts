@@ -26,6 +26,7 @@ import { verifyDuplicated } from 'src/utils/verifyDuplicated';
 import { EncryptPasswordInput, GetCallback } from 'src/types';
 import { generateRandomPassword } from 'src/utils/generateRandomPassword';
 import { RoleWithPermissions } from 'src/auth/auth.service';
+import { encryptPassword } from './user.utils';
 
 @Injectable()
 export class UserService {
@@ -304,6 +305,10 @@ export class UserService {
       properties: { email, cpf },
       getCallback: this.findOne.bind(this) as GetCallback,
     });
+  }
+
+  async encryptPassword({ password }: EncryptPasswordInput) {
+    return encryptPassword({ password });
   }
 
   generateRandomPassword() {

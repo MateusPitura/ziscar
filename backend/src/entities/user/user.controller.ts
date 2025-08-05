@@ -25,6 +25,7 @@ import { Actions, Resources } from '@prisma/client';
 import { RoleGuard } from 'src/auth/role.guard';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { AuthRequest } from 'src/auth/auth.type';
+import { UserService } from './user.service';
 
 @Controller()
 @UseGuards(AuthGuard)
