@@ -7,22 +7,33 @@ import { Resource } from "@shared/types";
 import { QueryKey, useIsFetching, useQueryClient } from "@tanstack/react-query";
 import { type ReactElement } from "react";
 import Report from "./Report";
+import safeFormat from "@/domains/global/utils/safeFormat";
+import { FieldValues, Path, PathValue } from "react-hook-form";
+import { formatAppliedFilters } from "../utils";
 
-interface ExportButtonProperties<T> {
-  fileName: string;
-  resource: Resource;
-  queryKey: QueryKey;
-  queryFn: (filter?: string) => Promise<PageablePayload<T>>;
-  formatColumns: Partial<Record<keyof T, string>>;
-}
+type ExportButtonProperties<T, U extends FieldValues> = {
+  [K in Path<U>]: {
+    fileName: string;
+    resource: Resource;
+    queryKey: QueryKey;
+    queryFn: (filter?: string) => Promise<PageablePayload<T>>;
+    formatColumns: Partial<Record<keyof T, string>>;
+    formatFilters: Record<Path<U>, string>;
+    formatFiltersValues: Partial<
+      Record<Path<U>, Record<PathValue<U, K>, string>>
+    >;
+  };
+}[Path<U>];
 
-export default function ExportButton<T>({
+export default function ExportButton<T, U extends FieldValues>({
   fileName,
   resource,
   queryKey,
   queryFn: customQueryFn,
-  formatColumns
-}: ExportButtonProperties<T>): ReactElement {
+  formatColumns,
+  formatFilters,
+  formatFiltersValues,
+}: ExportButtonProperties<T, U>): ReactElement {
   const queryClient = useQueryClient();
   const { showErrorSnackbar, showSuccessSnackbar } = useSnackbar();
   const isFetching = useIsFetching({ queryKey: [queryKey[0]] });
@@ -58,7 +69,7 @@ export default function ExportButton<T>({
     <Button
       variant="primary"
       color="darkBlue"
-      label="Exportar como PDF"
+      label="Gerar relatório PDF"
       iconRight="FileDownload"
       state={isFetching ? "loading" : undefined}
       resource={resource}
@@ -73,12 +84,34 @@ export default function ExportButton<T>({
         try {
           const itemsFlat = await fetchAll();
 
-          const blob = await pdf(<Report data={itemsFlat} formatColumns={formatColumns}/>).toBlob();
+          const appliedFilters = formatAppliedFilters({
+            queryKey,
+            formatFilters,
+            formatFiltersValues,
+          });
+
+          const blob = await pdf(
+            <Report
+              data={itemsFlat}
+              formatColumns={formatColumns}
+              title={fileName}
+              appliedFilters={appliedFilters}
+            />
+          ).toBlob();
 
           const url = URL.createObjectURL(blob);
           const link = document.createElement("a");
           link.href = url;
-          link.download = `${fileName}.pdf`;
+
+          const fileNameFormatted = `${fileName} ${safeFormat({
+            date: new Date(),
+            format: "dd-MM-yyyy",
+          })} ${safeFormat({
+            date: new Date(),
+            format: "HH-mm",
+          })}.pdf`;
+
+          link.download = fileNameFormatted;
           link.click();
           URL.revokeObjectURL(url);
         } catch {
