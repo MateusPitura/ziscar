@@ -1,14 +1,14 @@
 import { AddressFormInputs } from "@/domains/users/types";
 
-interface ParseAddressPayloadProperties {
+interface ParseAddressToUpdateProperties {
   newAddress?: AddressFormInputs[];
   oldAddress?: Record<string, string>[];
 }
 
-export default function parseAddressPayload({
+export default function parseAddressToUpdate({
   newAddress,
   oldAddress,
-}: ParseAddressPayloadProperties):
+}: ParseAddressToUpdateProperties):
   | Record<string, Omit<AddressFormInputs, "state"> | boolean>
   | undefined {
   if (!newAddress) return;

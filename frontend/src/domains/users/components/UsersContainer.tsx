@@ -17,6 +17,7 @@ export default function UsersContainer(): ReactElement {
           resource="USERS"
           action="CREATE"
           color="green"
+          data-cy="new-user-button"
         />
       </PageHeader>
       <UsersTable />

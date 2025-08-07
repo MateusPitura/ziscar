@@ -14,7 +14,7 @@ import Spinner from "@/design-system/Spinner";
 import { BACKEND_URL } from "@/domains/global/constants";
 import { User } from "@/domains/global/types/model";
 import { UserFormInputs } from "../types";
-import parseAddressPayload from "@/domains/global/utils/parseAddressPayload";
+import parseAddressToUpdate from "@/domains/global/utils/parseAddressToUpdate";
 
 export default function EditUserContainer(): ReactNode {
   const { safeFetch } = useSafeFetch();
@@ -40,7 +40,7 @@ export default function EditUserContainer(): ReactNode {
   async function editUser(data: UserFormInputs) {
     const { address, ...rest } = data;
 
-    const addressPayload = parseAddressPayload({
+    const addressPayload = parseAddressToUpdate({
       newAddress: address,
       oldAddress: userData?.address,
     });
