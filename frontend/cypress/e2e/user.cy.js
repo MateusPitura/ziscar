@@ -174,4 +174,32 @@ describe("User", () => {
 
     cy.wait("@createUser");
   });
+
+  it("should navigate in user table", () => {
+    cy.visit("/users");
+
+    cy.intercept(
+      "GET",
+      "http://localhost:3000/user?page=1&orderBy=fullName&status=active"
+    ).as("getUsersPage1");
+
+    cy.wait("@getUsersPage1");
+
+    cy.get('[data-cy="table-navigate-before"]').should("be.disabled");
+
+    cy.intercept(
+      "GET",
+      "http://localhost:3000/user?page=2&orderBy=fullName&status=active"
+    ).as("getUsersPage2");
+
+    cy.get('[data-cy="table-navigate-next"]').click();
+
+    cy.wait("@getUsersPage2");
+
+    cy.get('[data-cy="table-navigate-before"]').should("be.enabled");
+
+    cy.get('[data-cy="table-navigate-before"]').click();
+
+    cy.get('[data-cy="table-navigate-before"]').should("be.disabled");
+  });
 });
