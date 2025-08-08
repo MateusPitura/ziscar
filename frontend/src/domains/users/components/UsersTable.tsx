@@ -72,12 +72,12 @@ export default function UsersTable(): ReactNode {
           }}
           formatFiltersValues={{
             orderBy: {
-              email: "email",
-              fullName: "nome completo",
+              email: "Email",
+              fullName: "Nome completo",
             },
             status: {
-              active: "ativo",
-              inactive: "inativo",
+              active: "Ativo",
+              inactive: "Inativo",
             },
           }}
           formatColumns={{

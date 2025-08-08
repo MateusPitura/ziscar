@@ -19,9 +19,7 @@ type ExportButtonProperties<T, U extends FieldValues> = {
     queryFn: (filter?: string) => Promise<PageablePayload<T>>;
     formatColumns: Partial<Record<keyof T, string>>;
     formatFilters: Record<Path<U>, string>;
-    formatFiltersValues: Partial<
-      Record<Path<U>, Record<PathValue<U, K>, string>>
-    >;
+    formatFiltersValues: Partial<Record<K, Record<PathValue<U, K>, string>>>;
   };
 }[Path<U>];
 
