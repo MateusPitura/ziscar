@@ -64,6 +64,7 @@ export default function SignInForm(): ReactNode {
               label="Esqueci a senha"
               variant="quaternary"
               onClick={dialog.openDialog}
+              data-cy="forget-password-button"
             />
           </div>
         </div>

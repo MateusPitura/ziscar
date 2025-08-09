@@ -98,6 +98,7 @@ function PageSideBar(): ReactElement {
         label={isSideMenuOpen ? "Sair" : undefined}
         state={isPending ? "loading" : undefined}
         fullWidth
+        data-cy="button-sign-out"
       />
     </div>
   );

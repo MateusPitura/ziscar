@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
 
-describe("Address", () => {
+describe("Profile", () => {
   beforeEach(() => {
     cy.login();
   });
@@ -171,5 +171,31 @@ describe("Address", () => {
       "have.text",
       "Perfil atualizado com sucesso"
     );
+  });
+
+  it("should open request change password modal", () => {
+    const email = "john.doe@email.com";
+
+    cy.intercept(
+      "POST",
+      "http://localhost:3000/auth/request-change-password"
+    ).as("requestChangePassword");
+
+    cy.visit("/profile/edit");
+
+    cy.get('[data-cy="request-change-password-button"]').click();
+
+    cy.get('button[type="submit"]').eq(1).click();
+
+    cy.get('[data-cy="snackbar-title"]').should(
+      "have.text",
+      "Um email será enviado"
+    );
+    cy.get('[data-cy="snackbar-description"]').should(
+      "have.text",
+      "Confira também a caixa de spam"
+    );
+
+    cy.wait("@requestChangePassword");
   });
 });
