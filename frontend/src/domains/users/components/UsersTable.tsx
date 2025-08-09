@@ -60,34 +60,36 @@ export default function UsersTable(): ReactNode {
     <>
       <DisableUserModal {...disableUserInfo} {...dialog} />
       <div className="flex gap-4 justify-end">
-        <ExportButton<FetchUser, UsersFilterFormInputs>
-          fileName="Relatório Usuários"
-          resource="USERS"
-          queryKey={["users", filterFormatted]}
-          queryFn={getUsersInfo}
-          formatFilters={{
-            fullName: "Nome completo",
-            orderBy: "Ordenar por",
-            status: "Status",
-          }}
-          formatFiltersValues={{
-            orderBy: {
-              email: "Email",
+        {true && (
+          <ExportButton<FetchUser, UsersFilterFormInputs>
+            fileName="Relatório Usuários"
+            resource="USERS"
+            queryKey={["users", filterFormatted]}
+            queryFn={getUsersInfo}
+            formatFilters={{
               fullName: "Nome completo",
-            },
-            status: {
-              active: "Ativo",
-              inactive: "Inativo",
-            },
-          }}
-          formatColumns={{
-            id: "ID",
-            fullName: "Nome",
-            email: "Email",
-            phone: "Celular",
-            archivedAt: "Ativo",
-          }}
-        />
+              orderBy: "Ordenar por",
+              status: "Status",
+            }}
+            formatFiltersValues={{
+              orderBy: {
+                email: "Email",
+                fullName: "Nome completo",
+              },
+              status: {
+                active: "Ativo",
+                inactive: "Inativo",
+              },
+            }}
+            formatColumns={{
+              id: "ID",
+              fullName: "Nome",
+              email: "Email",
+              phone: "Celular",
+              archivedAt: "Ativo",
+            }}
+          />
+        )}
         <Table.Filter form={<UsersFilterForm />} />
       </div>
       <Table>
