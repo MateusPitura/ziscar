@@ -46,7 +46,7 @@ export default function DisableStoreModal({
       <Dialog.Header title="Desativar loja" />
       <Dialog.Body>
         <span className="text-body-medium text-neutral-700">
-          Tem certeza que deseja desativar o usuário
+          Tem certeza que deseja desativar a loja
           <span className="font-bold">
             {BLANK}
             {storeName}
