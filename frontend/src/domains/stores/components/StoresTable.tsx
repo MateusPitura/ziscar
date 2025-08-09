@@ -44,10 +44,24 @@ export default function StoresTable(): ReactNode {
   async function getStoresInfo(
     filter?: string
   ): Promise<PageablePayload<FetchStore>> {
-    return await safeFetch(`${BACKEND_URL}/store?${filter}`, {
-      resource: "STORES",
-      action: "READ",
-    });
+    // 🌠 MOCK
+    // await safeFetch(`${BACKEND_URL}/store?${filter}`, {
+    //   resource: "STORES",
+    //   action: "READ",
+    // });
+
+    return {
+      data: [
+        {
+          id: 1,
+          name: "Loja 1",
+          email: "loja1@email.com",
+          phone: "11999999999",
+          archivedAt: undefined,
+        },
+      ],
+      total: 1,
+    };
   }
 
   const { data: storesInfo, isFetching: isFetchingStoresInfo } = useQuery({
@@ -60,34 +74,36 @@ export default function StoresTable(): ReactNode {
     <>
       <DisableStoreModal {...disableStoreInfo} {...dialog} />
       <div className="flex gap-4 justify-end">
-        <ExportButton<FetchStore, StoresFilterFormInputs>
-          fileName="Relatório Lojas"
-          resource="STORES"
-          queryKey={["stores", filterFormatted]}
-          queryFn={getStoresInfo}
-          formatFilters={{
-            name: "Nome completo",
-            orderBy: "Ordenar por",
-            status: "Status",
-          }}
-          formatFiltersValues={{
-            orderBy: {
-              email: "Email",
+        {false && (
+          <ExportButton<FetchStore, StoresFilterFormInputs>
+            fileName="Relatório Lojas"
+            resource="STORES"
+            queryKey={["stores", filterFormatted]}
+            queryFn={getStoresInfo}
+            formatFilters={{
+              name: "Nome completo",
+              orderBy: "Ordenar por",
+              status: "Status",
+            }}
+            formatFiltersValues={{
+              orderBy: {
+                email: "Email",
+                name: "Nome",
+              },
+              status: {
+                active: "Ativo",
+                inactive: "Inativo",
+              },
+            }}
+            formatColumns={{
+              id: "ID",
               name: "Nome",
-            },
-            status: {
-              active: "Ativo",
-              inactive: "Inativo",
-            },
-          }}
-          formatColumns={{
-            id: "ID",
-            name: "Nome",
-            email: "Email",
-            phone: "Celular",
-            archivedAt: "Ativo",
-          }}
-        />
+              email: "Email",
+              phone: "Celular",
+              archivedAt: "Ativo",
+            }}
+          />
+        )}
         <Table.Filter form={<StoresFilterForm />} />
       </div>
       <Table>
