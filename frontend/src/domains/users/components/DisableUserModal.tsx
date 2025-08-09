@@ -5,8 +5,8 @@ import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { ReactElement } from "react";
 import { DisableUser } from "../types";
-import useGlobalContext from "@/domains/global/hooks/useGlobalContext";
 import { DialogProps } from "@/domains/global/types";
+import useFilterContext from "@/domains/global/hooks/useFilterContext";
 
 interface DisableUserModalProps extends DisableUser, DialogProps {}
 
@@ -18,7 +18,7 @@ export default function DisableUserModal({
   const { safeFetch } = useSafeFetch();
   const { showSuccessSnackbar } = useSnackbar();
   const queryClient = useQueryClient();
-  const { handleUsersFilter } = useGlobalContext();
+  const { handleUsersFilter } = useFilterContext();
 
   async function disableUser() {
     await safeFetch(`${BACKEND_URL}/user/${userId}`, {

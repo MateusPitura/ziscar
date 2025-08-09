@@ -2,7 +2,6 @@ import Form from "@/design-system/Form";
 import Choice from "@/design-system/Form/Choice";
 import Input from "@/design-system/Form/Input";
 import SideSheet from "@/design-system/SideSheet";
-import useGlobalContext from "@/domains/global/hooks/useGlobalContext";
 import { memo, ReactElement, ReactNode } from "react";
 import { storeFilterDefaultValues } from "../constants";
 import { useFormContext } from "react-hook-form";
@@ -10,9 +9,10 @@ import { SchemaStoresFilterForm } from "../schemas";
 import useDialogContext from "@/domains/global/hooks/useDialogContext";
 import { StoresFilterFormInputs } from "../types";
 import InputLabel from "@/design-system/Form/InputLabel";
+import useFilterContext from "@/domains/global/hooks/useFilterContext";
 
 function StoresFilterForm(): ReactNode {
-  const { storesFilter, handleStoresFilter } = useGlobalContext();
+  const { storesFilter, handleStoresFilter } = useFilterContext();
   const { closeDialog } = useDialogContext();
 
   function handleSubmit(data: StoresFilterFormInputs) {
@@ -39,7 +39,7 @@ function StoresFilterForm(): ReactNode {
 
 function StoresFilterFormContent(): ReactElement {
   const { reset } = useFormContext();
-  const { handleStoresFilter } = useGlobalContext();
+  const { handleStoresFilter } = useFilterContext();
   const { closeDialog } = useDialogContext();
 
   function handleReset() {

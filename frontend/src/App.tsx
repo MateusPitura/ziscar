@@ -6,6 +6,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import ErrorBoundary from "./ErrorBoundary";
 import { QueryKeys } from "./domains/global/types";
 import { router } from "./router";
+import { FilterProvider } from "./domains/global/contexts/FilterContext";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -27,11 +28,13 @@ export default function App() {
   return (
     <ErrorBoundary>
       <GlobalProvider>
-        <QueryClientProvider client={queryClient}>
-          <Snackbar />
-          <RouterProvider router={router} />
-          <ReactQueryDevtools />
-        </QueryClientProvider>
+        <FilterProvider>
+          <QueryClientProvider client={queryClient}>
+            <Snackbar />
+            <RouterProvider router={router} />
+            <ReactQueryDevtools />
+          </QueryClientProvider>
+        </FilterProvider>
       </GlobalProvider>
     </ErrorBoundary>
   );

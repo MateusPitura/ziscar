@@ -6,7 +6,6 @@ import { FetchUser } from "@/domains/global/types/model";
 import { useQuery } from "@tanstack/react-query";
 import selectUsersInfo from "../utils/selectUsersInfo";
 import UsersFilterForm from "../forms/UsersFilterForm";
-import useGlobalContext from "@/domains/global/hooks/useGlobalContext";
 import formatFilters from "@/domains/global/utils/formatFilters";
 import UsersTableActions from "./UsersTableActions";
 import { DisableUser, UsersFilterFormInputs } from "../types";
@@ -14,6 +13,7 @@ import DisableUserModal from "./DisableUserModal";
 import useDialog from "@/domains/global/hooks/useDialog";
 import { PageablePayload } from "@/domains/global/types";
 import ExportButton from "@/domains/pdf/components/ExportButton";
+import useFilterContext from "@/domains/global/hooks/useFilterContext";
 
 export default function UsersTable(): ReactNode {
   const [disableUserInfo, setDisableUserInfo] = useState<DisableUser>({
@@ -23,7 +23,7 @@ export default function UsersTable(): ReactNode {
 
   const dialog = useDialog();
   const { safeFetch } = useSafeFetch();
-  const { usersFilter, handleUsersFilter } = useGlobalContext();
+  const { usersFilter, handleUsersFilter } = useFilterContext();
 
   function handleDisableUserInfo(user: DisableUser) {
     dialog.openDialog();

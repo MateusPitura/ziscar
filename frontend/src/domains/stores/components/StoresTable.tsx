@@ -5,15 +5,14 @@ import { DisableStore, StoresFilterFormInputs } from "../types";
 import useDialog from "@/domains/global/hooks/useDialog";
 import DisableStoreModal from "./DisableStoreModal";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
-import useGlobalContext from "@/domains/global/hooks/useGlobalContext";
 import formatFilters from "@/domains/global/utils/formatFilters";
 import { PageablePayload } from "@/domains/global/types";
-import { BACKEND_URL } from "@/domains/global/constants";
 import { useQuery } from "@tanstack/react-query";
 import { FetchStore } from "@/domains/global/types/model";
 import selectStoresInfo from "../utils";
 import StoresTableActions from "./StoresTableActions";
 import StoresFilterForm from "../forms/StoresFilterForm";
+import useFilterContext from "@/domains/global/hooks/useFilterContext";
 
 export default function StoresTable(): ReactNode {
   const [disableStoreInfo, setDisableStoreInfo] = useState<DisableStore>({
@@ -23,7 +22,7 @@ export default function StoresTable(): ReactNode {
 
   const dialog = useDialog();
   const { safeFetch } = useSafeFetch();
-  const { storesFilter, handleStoresFilter } = useGlobalContext();
+  const { storesFilter, handleStoresFilter } = useFilterContext();
 
   function handleDisableStoreInfo(store: DisableStore) {
     dialog.openDialog();

@@ -6,7 +6,7 @@ import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { BACKEND_URL, BLANK } from "@/domains/global/constants";
 import Dialog from "@/design-system/Dialog";
-import useGlobalContext from "@/domains/global/hooks/useGlobalContext";
+import useFilterContext from "@/domains/global/hooks/useFilterContext";
 
 interface DisableStoreModalProperties extends DisableStore, DialogProps {}
 
@@ -18,7 +18,7 @@ export default function DisableStoreModal({
   const { safeFetch } = useSafeFetch();
   const { showSuccessSnackbar } = useSnackbar();
   const queryClient = useQueryClient();
-  const { handleStoresFilter } = useGlobalContext();
+  const { handleStoresFilter } = useFilterContext();
 
   async function disableStore() {
     await safeFetch(`${BACKEND_URL}/store/${storeId}`, {
