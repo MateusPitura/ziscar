@@ -1,1 +1,0 @@
-import{k as a,r as n,A as c}from"./index-Ch3bubzI.js";function o(t,u){const e=a(),s=e.getQueryCache();return n.useSyncExternalStore(n.useCallback(r=>s.subscribe(c.batchCalls(r)),[s]),()=>e.isFetching(t),()=>e.isFetching(t))}export{o as u};
