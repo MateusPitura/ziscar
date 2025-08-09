@@ -12,7 +12,7 @@ model Store {
   name         String     @db.VarChar(127)
   email        String?    @db.VarChar(127)
   phone        String?    @db.VarChar(11)
-  cnpj         String?    @unique @db.VarChar(14)
+  cnpj         String     @unique @db.VarChar(14)
   enterpriseId Int
   enterprise   Enterprise @relation(fields: [enterpriseId], references: [id])
   addressId    Int?
