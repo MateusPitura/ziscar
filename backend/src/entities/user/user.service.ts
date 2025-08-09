@@ -53,7 +53,6 @@ export class UserService {
       password: await this.encryptPassword({
         password: this.generateRandomPassword(),
       }),
-      fullName: userCreateInDto.fullName,
     };
 
     if (address) {

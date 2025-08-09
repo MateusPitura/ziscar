@@ -1,10 +1,8 @@
 import { Store } from '@prisma/client';
-import { CreateInput, FindOneInput } from 'src/entities/store/store.type';
-import { UpdateInput } from 'src/types';
+import { CreateInput, FindOneInput, UpdateInput } from 'src/entities/store/store.type';
 
 export abstract class StoreRepository {
   abstract create(_: CreateInput): Promise<{ storeId: number }>;
   abstract findOne(_: FindOneInput): Promise<Store | null>;
-  abstract update(id: string, data: UpdateInput<Store>): Promise<void>;
-  abstract delete(id: string): Promise<void>;
+  abstract update(_: UpdateInput): Promise<Store | null>;
 }

@@ -4,4 +4,16 @@ export const SchemaParam = s.object({
   id: s.id(),
 });
 
-export type ParamInputs = s.infer<typeof SchemaParam>;
+const SchemaAddress = s.object({
+  street: s.string().nullish(),
+  neighborhood: s.string().nullish(),
+  cityIbgeCode: s.number().nullish(),
+});
+
+export const SchemaAddressToCreate = s.SchemaAddress.extend({
+  ...SchemaAddress.shape,
+});
+export const SchemaAddressToUpdate = s.SchemaAddress.partial().extend({
+  ...SchemaAddress.shape,
+});
+

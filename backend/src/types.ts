@@ -1,5 +1,7 @@
 import { Prisma, PrismaClient } from '@prisma/client';
 import { DefaultArgs } from '@prisma/client/runtime/library';
+import { s } from '@shared/safeZod';
+import { SchemaParam } from './schemas';
 
 export type Transaction = Omit<
   PrismaClient<Prisma.PrismaClientOptions, never, DefaultArgs>,
@@ -32,3 +34,5 @@ export type CreateInput<T> = Omit<
   'id' | 'createdAt' | 'updatedAt' | 'archivedAt'
 >;
 export type UpdateInput<T> = Partial<CreateInput<T>>;
+
+export type ParamInputs = s.infer<typeof SchemaParam>;

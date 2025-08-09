@@ -1,18 +1,6 @@
 import { s } from '@shared/safeZod';
 import { createZodDto } from 'nestjs-zod';
-
-const SchemaAddress = s.object({
-  street: s.string().nullish(),
-  neighborhood: s.string().nullish(),
-  cityIbgeCode: s.number().nullish(),
-});
-
-const SchemaAddressToCreate = s.SchemaAddress.extend({
-  ...SchemaAddress.shape,
-});
-const SchemaAddressToUpdate = s.SchemaAddress.partial().extend({
-  ...SchemaAddress.shape,
-});
+import { SchemaAddressToCreate, SchemaAddressToUpdate } from 'src/schemas';
 
 const SchemaUserPostInDto = s.object({
   fullName: s.fullName(),
