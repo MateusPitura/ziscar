@@ -1,3 +1,4 @@
+import { StoresFilterFormInputs } from "@/domains/stores/types";
 import { UsersFilterFormInputs } from "@/domains/users/types";
 
 export interface Childrenable {
@@ -27,9 +28,11 @@ export type QueryKeys =
   | "users"
   | "profile"
   | "permissions"
+  | "stores"
   | "usersSearch";
 
 export interface UsersFilter extends UsersFilterFormInputs, Pageable {}
+export interface StoresFilter extends StoresFilterFormInputs, Pageable {}
 
 export interface PageablePayload<T> {
   data: T[];
