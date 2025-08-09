@@ -72,6 +72,7 @@ export default function ExportButton<T, U extends FieldValues>({
       state={isFetching ? "loading" : undefined}
       resource={resource}
       action="READ"
+      data-cy="export-button"
       onClick={async () => {
         showSuccessSnackbar({
           title: "O PDF está sendo gerado",
