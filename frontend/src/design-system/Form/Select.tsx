@@ -131,7 +131,7 @@ export default function Select<T extends FieldValues>({
           </Command>
         </Popover.Content>
       </Popover>
-      {hideErrorLabel || <InputError name={name} />}
+      {hideErrorLabel || <InputError name={name} required={required} />}
     </label>
   );
 }

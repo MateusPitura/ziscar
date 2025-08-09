@@ -132,6 +132,11 @@ export const publicRoutes: Route[] = [
     shouldDisplay: false,
   },
   {
+    path: "/new-account",
+    entryPage: <Sign />,
+    shouldDisplay: false,
+  },
+  {
     path: "*",
     entryPage: <NotFound />,
     shouldDisplay: false,

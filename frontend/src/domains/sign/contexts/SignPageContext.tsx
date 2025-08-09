@@ -1,6 +1,7 @@
 import { Childrenable } from "@/domains/global/types";
 import { createContext, useMemo, useState, ReactNode } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
+import { verifyNewPasswordRoute } from "../utils";
 
 type Step = "SIGN_IN" | "SIGN_UP" | "NEW_PASSWORD";
 
@@ -13,12 +14,18 @@ const SignPageContext = createContext<SignPageContextValues | null>(null);
 
 function SignPageProvider({ children }: Childrenable): ReactNode {
   const [searchParams] = useSearchParams();
-  let token: string | null = null;
-  if (searchParams.has("token")) {
-    token = searchParams.get("token");
-  }
+  const location = useLocation();
 
-  const [step, setStep] = useState<Step>(token ? "NEW_PASSWORD" : "SIGN_IN");
+  const isNewPasswordRoute = verifyNewPasswordRoute(searchParams);
+  const isNewAccountRoute = location.pathname.includes("new-account");
+
+  const [step, setStep] = useState<Step>(
+    isNewPasswordRoute
+      ? "NEW_PASSWORD"
+      : isNewAccountRoute
+      ? "SIGN_UP"
+      : "SIGN_IN"
+  );
 
   function handleStep(step: Step) {
     setStep(step);

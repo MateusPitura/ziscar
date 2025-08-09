@@ -55,6 +55,7 @@ export default function UsersTableActions({
           resource="USERS"
           action="UPDATE"
           padding="none"
+          data-cy={`button-edit-user-${userId}`}
         />
       </Tooltip>
       <Tooltip content="Desativar">

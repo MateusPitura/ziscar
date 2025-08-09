@@ -49,9 +49,8 @@ export default function ColorPicker<T extends FieldValues>({
             label={
               watch ? (
                 <div className="flex gap-2 items-center font-mono">
-                  {watch}
                   <div
-                    className="h-4 w-4 rounded-md border border-neutral-300"
+                    className="h-8 w-16 rounded-md border border-neutral-300"
                     style={{ backgroundColor: watch }}
                   />
                 </div>
@@ -90,7 +89,7 @@ export default function ColorPicker<T extends FieldValues>({
           />
         </Popover.Content>
       </Popover>
-      {hideErrorLabel || <InputError name={name} />}
+      {hideErrorLabel || <InputError name={name} required={required} />}
     </label>
   );
 }

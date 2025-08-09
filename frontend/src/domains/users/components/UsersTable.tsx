@@ -9,7 +9,7 @@ import UsersFilterForm from "../forms/UsersFilterForm";
 import useGlobalContext from "@/domains/global/hooks/useGlobalContext";
 import formatFilters from "@/domains/global/utils/formatFilters";
 import UsersTableActions from "./UsersTableActions";
-import { DisableUser } from "../types";
+import { DisableUser, UsersFilterFormInputs } from "../types";
 import DisableUserModal from "./DisableUserModal";
 import useDialog from "@/domains/global/hooks/useDialog";
 import { PageablePayload } from "@/domains/global/types";
@@ -60,11 +60,26 @@ export default function UsersTable(): ReactNode {
     <>
       <DisableUserModal {...disableUserInfo} {...dialog} />
       <div className="flex gap-4 justify-end">
-        <ExportButton
-          fileName="usuarios"
+        <ExportButton<FetchUser, UsersFilterFormInputs>
+          fileName="Relatório Usuários"
           resource="USERS"
           queryKey={["users", filterFormatted]}
           queryFn={getUsersInfo}
+          formatFilters={{
+            fullName: "Nome completo",
+            orderBy: "Ordenar por",
+            status: "Status",
+          }}
+          formatFiltersValues={{
+            orderBy: {
+              email: "Email",
+              fullName: "Nome completo",
+            },
+            status: {
+              active: "Ativo",
+              inactive: "Inativo",
+            },
+          }}
           formatColumns={{
             id: "ID",
             fullName: "Nome",

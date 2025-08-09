@@ -3,6 +3,7 @@ import {
   DefaultValues,
   FieldValues,
   FormProvider,
+  Resolver,
   useForm,
   UseFormReturn,
 } from "react-hook-form";
@@ -40,6 +41,26 @@ function getDirtyValues(dirtyFields: Field | boolean, allValues: Field): Field {
   );
 }
 
+const loggingResolver = <T extends FieldValues, C>(
+  resolver: Resolver<T, C>
+): Resolver<T, C> => {
+  return async (values, context, options) => {
+    const shouldLog = false;
+
+    if (shouldLog) {
+      console.log("formZodInput:", values);
+    }
+
+    const result = await resolver(values, context, options);
+
+    if (shouldLog) {
+      console.log("formZodOutput:", result);
+    }
+
+    return result;
+  };
+};
+
 export default function Form<T extends FieldValues>({
   children,
   onSubmit,
@@ -51,7 +72,9 @@ export default function Form<T extends FieldValues>({
 }: FormProperties<T>): ReactElement {
   const methods: UseFormReturn<T> = useForm<T>({
     defaultValues,
-    resolver: zodResolver(schema),
+    resolver: import.meta.env.PROD
+      ? zodResolver(schema)
+      : loggingResolver(zodResolver(schema)),
   });
 
   const safeOnSubmit = useCallback(

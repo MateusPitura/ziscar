@@ -6,11 +6,23 @@ import get from "lodash/get";
 interface InputErrorProperties {
   name: string;
   isFieldArray?: boolean;
+  required?: boolean;
+}
+
+function handleRequired(
+  message?: string,
+  required?: boolean
+): string | undefined {
+  if (message === "Campo obrigatório" && required) {
+    return "";
+  }
+  return message;
 }
 
 export default function InputError({
   name,
   isFieldArray,
+  required,
 }: InputErrorProperties): ReactNode {
   const { errors } = useFormState({
     name,
@@ -20,14 +32,15 @@ export default function InputError({
 
   return (
     <span
-      className={classNames("text-body-small text-red-500 p-1", {
+      className={classNames("text-body-small text-red-500 p-1 !h-6", {
         invisible: !errorsFormatted,
       })}
       data-cy={`input-error-${name}`}
     >
       {isFieldArray
-        ? errorsFormatted?.root?.message?.toString()
-        : errorsFormatted?.message?.toString() ?? "Campo inválido"}
+        ? handleRequired(errorsFormatted?.root?.message?.toString(), required)
+        : handleRequired(errorsFormatted?.message?.toString(), required) ??
+          "Campo inválido"}
     </span>
   );
 }

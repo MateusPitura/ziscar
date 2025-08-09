@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
 
-describe("User address", () => {
+describe("Profile", () => {
   beforeEach(() => {
     cy.login();
   });
@@ -22,15 +22,6 @@ describe("User address", () => {
 
     cy.get('button[type="submit"]').click();
 
-    cy.get('[data-cy="input-error-address.0.cep"]').should(
-      "have.text",
-      "Campo obrigatório"
-    );
-    cy.get('[data-cy="input-error-address.0.cep"]').should(
-      "have.text",
-      "Campo obrigatório"
-    );
-
     cy.get('[data-cy="button-remove-address"]').click();
 
     cy.get('button[type="submit"]').should("be.disabled");
@@ -50,19 +41,30 @@ describe("User address", () => {
   });
 
   it("should create address", () => {
+    const cep = "65043420";
+    const number = "123";
+
     cy.intercept("PATCH", "http://localhost:3000/profile", (req) => {
       expect(req.body).to.deep.equal({
         address: {
           add: {
-            cep: "65043420",
-            number: "123",
-            street: null,
-            neighborhood: null,
-            cityIbgeCode: null,
+            cep,
+            number,
+            street: "Rua Sete",
+            neighborhood: "COHEB do Sacavém",
+            cityIbgeCode: "2111300",
           },
         },
       });
     }).as("createAddress");
+
+    cy.intercept("GET", "https://viacep.com.br/ws/65043-420/json/").as(
+      "cepApi"
+    );
+    cy.intercept(
+      "GET",
+      "https://servicodados.ibge.gov.br/api/v1/localidades/estados/MA/municipios"
+    ).as("citiesAPi");
 
     cy.visit("/profile/edit");
 
@@ -72,9 +74,11 @@ describe("User address", () => {
 
     cy.get('button[type="submit"]').should("be.enabled");
 
-    cy.get('input[name="address.0.cep"]').type("65043420");
-    cy.get('input[name="address.0.number"]').type("123");
+    cy.get('input[name="address.0.cep"]').type(cep);
+    cy.get('input[name="address.0.number"]').type(number);
 
+    cy.wait("@cepApi");
+    cy.wait("@citiesAPi");
     cy.get('button[type="submit"]').click();
 
     cy.get('[data-cy="snackbar-title"]').should(
@@ -86,21 +90,30 @@ describe("User address", () => {
   });
 
   it("should update address", () => {
+    const cep = "65043420";
     const number = faker.string.numeric(3);
 
     cy.intercept("PATCH", "http://localhost:3000/profile", (req) => {
       expect(req.body).to.deep.equal({
         address: {
           update: {
-            cep: "65043420",
+            cep,
             number,
-            street: null,
-            neighborhood: null,
-            cityIbgeCode: null,
+            street: "Rua Sete",
+            neighborhood: "COHEB do Sacavém",
+            cityIbgeCode: "2111300",
           },
         },
       });
     }).as("updateAddress");
+
+    cy.intercept("GET", "https://viacep.com.br/ws/65043-420/json/").as(
+      "cepApi"
+    );
+    cy.intercept(
+      "GET",
+      "https://servicodados.ibge.gov.br/api/v1/localidades/estados/MA/municipios"
+    ).as("citiesAPi");
 
     cy.visit("/profile/edit");
 
@@ -110,14 +123,16 @@ describe("User address", () => {
 
     cy.get('button[type="submit"]').should("be.enabled");
 
+    cy.wait("@cepApi");
+    cy.wait("@citiesAPi");
     cy.get('button[type="submit"]').click();
+
+    cy.wait("@updateAddress");
 
     cy.get('[data-cy="snackbar-title"]').should(
       "have.text",
       "Perfil atualizado com sucesso"
     );
-
-    cy.wait("@updateAddress");
   });
 
   it("should delete address", () => {
@@ -129,7 +144,18 @@ describe("User address", () => {
       });
     }).as("removeAddress");
 
+    cy.intercept("GET", "https://viacep.com.br/ws/65043-420/json/").as(
+      "cepApi"
+    );
+    cy.intercept(
+      "GET",
+      "https://servicodados.ibge.gov.br/api/v1/localidades/estados/MA/municipios"
+    ).as("citiesAPi");
+
     cy.visit("/profile/edit");
+
+    cy.wait("@cepApi");
+    cy.wait("@citiesAPi");
 
     cy.get('button[type="submit"]').should("be.disabled");
 
@@ -139,11 +165,37 @@ describe("User address", () => {
 
     cy.get('button[type="submit"]').click();
 
+    cy.wait("@removeAddress");
+
     cy.get('[data-cy="snackbar-title"]').should(
       "have.text",
       "Perfil atualizado com sucesso"
     );
+  });
 
-    cy.wait("@removeAddress");
+  it("should open request change password modal", () => {
+    const email = "john.doe@email.com";
+
+    cy.intercept(
+      "POST",
+      "http://localhost:3000/auth/request-change-password"
+    ).as("requestChangePassword");
+
+    cy.visit("/profile/edit");
+
+    cy.get('[data-cy="request-change-password-button"]').click();
+
+    cy.get('button[type="submit"]').eq(1).click();
+
+    cy.get('[data-cy="snackbar-title"]').should(
+      "have.text",
+      "Um email será enviado"
+    );
+    cy.get('[data-cy="snackbar-description"]').should(
+      "have.text",
+      "Confira também a caixa de spam"
+    );
+
+    cy.wait("@requestChangePassword");
   });
 });
