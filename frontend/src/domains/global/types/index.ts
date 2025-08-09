@@ -1,5 +1,7 @@
 import { StoresFilterFormInputs } from "@/domains/stores/types";
 import { UsersFilterFormInputs } from "@/domains/users/types";
+import { SchemaAddress } from "../schemas";
+import { s } from "@shared/safeZod";
 
 export interface Childrenable {
   children?: React.ReactNode;
@@ -45,3 +47,5 @@ export interface Options {
   value: string;
   label: string;
 }
+
+export type AddressFormInputs = s.infer<typeof SchemaAddress>;

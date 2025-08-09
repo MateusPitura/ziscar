@@ -13,7 +13,7 @@ export default function StoresContainer(): ReactElement {
         <Button
           label="Adicionar loja"
           iconLeft="AddBusiness"
-          onClick={() => navigate("/stores/new")} // 🌠 create route
+          onClick={() => navigate("/stores/new")}
           resource="STORES"
           action="CREATE"
           color="green"

@@ -9,7 +9,7 @@ import formatFilters from "@/domains/global/utils/formatFilters";
 import { PageablePayload } from "@/domains/global/types";
 import { useQuery } from "@tanstack/react-query";
 import { FetchStore } from "@/domains/global/types/model";
-import selectStoresInfo from "../utils";
+import selectStoresInfo from "../utils/selectStoresInfo";
 import StoresTableActions from "./StoresTableActions";
 import StoresFilterForm from "../forms/StoresFilterForm";
 import useFilterContext from "@/domains/global/hooks/useFilterContext";

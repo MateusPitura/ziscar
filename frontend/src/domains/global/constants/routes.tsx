@@ -80,7 +80,7 @@ export const privateRoutes: Route[] = [
     resource: "STORES",
   },
   {
-    path: "/stores/edit/:userId",
+    path: "/stores/edit/:storeId",
     entryPage: <EditStore />,
     shouldDisplay: false,
     action: "UPDATE",

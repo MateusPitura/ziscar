@@ -1,5 +1,5 @@
 import { s } from "@shared/safeZod";
-import { SchemaStoresFilterForm } from "../schemas";
+import { SchemaStoreForm, SchemaStoresFilterForm } from "../schemas";
 
 export interface DisableStore {
   storeName: string;
@@ -7,3 +7,5 @@ export interface DisableStore {
 }
 
 export type StoresFilterFormInputs = s.infer<typeof SchemaStoresFilterForm>;
+
+export type StoreFormInputs = s.infer<typeof SchemaStoreForm>;
