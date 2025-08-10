@@ -1,4 +1,7 @@
-import { SEED_ROLE_ADMIN_ID, SEED_ROLE_SALES_ID } from '../../../shared/src/constants';
+import {
+  SEED_ROLE_ADMIN_ID,
+  SEED_ROLE_SALES_ID,
+} from '../../../shared/src/constants';
 
 export const POPULATE_ENTERPRISE = {
   DEFAULT: {
