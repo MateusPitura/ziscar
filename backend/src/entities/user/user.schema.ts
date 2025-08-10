@@ -15,12 +15,16 @@ const SchemaUserCreateInDto = SchemaUserPostInDto.extend({
   enterpriseId: s.id(),
 });
 
-const SchemaUserFindManyInDto = s.object({
-  page: s.number().optional(),
-  status: s.radio(['active', 'inactive']).optional(),
-  fullName: s.fullName().optional(),
-  orderBy: s.radio(['fullName', 'email']).optional(),
-});
+const SchemaUserFindManyInDto = s
+  .object({
+    page: s.number().optional(),
+    status: s.radio(['active', 'inactive']).optional(),
+    fullName: s.fullName().optional(),
+    orderBy: s.radio(['fullName', 'email']).optional(),
+    startDate: s.date().optional(),
+    endDate: s.date().optional(),
+  })
+  .refine(...s.dateRangeRule);
 
 const SchemaUserUpdateInDto = SchemaUserPostInDto.extend({
   address: s

@@ -135,6 +135,14 @@ export class UserService {
     } else {
       findManyWhere.where['archivedAt'] = null;
     }
+    const startDate = userFindManyInDto?.startDate;
+    const endDate = userFindManyInDto?.endDate;
+    if (startDate || endDate) {
+      findManyWhere.where['createdAt'] = {
+        ...(startDate && { gte: new Date(startDate) }),
+        ...(endDate && { lte: new Date(endDate) }),
+      };
+    }
 
     const [data, total] = await Promise.all([
       this.prismaService.user.findMany({

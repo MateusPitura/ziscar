@@ -72,6 +72,8 @@ export default function UsersTable(): ReactNode {
               fullName: "Nome completo",
               orderBy: "Ordenar por",
               status: "Status",
+              startDate: "Data inicial",
+              endDate: "Data final",
             }}
             formatFiltersValues={{
               orderBy: {

@@ -29,6 +29,8 @@ function UsersFilterForm(): ReactNode {
         fullName: usersFilter?.fullName || "",
         orderBy: usersFilter?.orderBy || "fullName",
         status: usersFilter?.status || "active",
+        startDate: usersFilter?.startDate || "",
+        endDate: usersFilter?.endDate || "",
       }}
       replaceEmptyStringToNull={false}
     >
@@ -67,6 +69,16 @@ function UsersFilterFormContent(): ReactElement {
             />
           </Choice>
         </div>
+        <Input<UsersFilterFormInputs>
+          name="startDate"
+          label="Data inicial"
+          type="date"
+        />
+        <Input<UsersFilterFormInputs>
+          name="endDate"
+          label="Data final"
+          type="date"
+        />
         <InputLabel label="Ordenar por" />
         <div className="flex flex-col gap-2">
           <Choice hideErrorLabel>
