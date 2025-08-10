@@ -17,9 +17,10 @@ describe('StoreController', () => {
   let storeController: StoreController;
   let storeService: StoreService;
   let prismaService: PrismaService;
+  let module: TestingModule;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    module = await Test.createTestingModule({
       controllers: [StoreController],
       providers: [
         StoreService,
@@ -44,6 +45,11 @@ describe('StoreController', () => {
     storeController = module.get<StoreController>(StoreController);
     prismaService = module.get<PrismaService>(PrismaService);
     storeService = module.get<StoreService>(StoreService);
+  });
+
+  afterAll(async () => {
+    await prismaService.$disconnect();
+    await module.close();
   });
 
   it('should create an store', async () => {

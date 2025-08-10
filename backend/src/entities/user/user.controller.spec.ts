@@ -15,9 +15,10 @@ describe('UserController', () => {
   let userController: UserController;
   let userService: UserService;
   let prismaService: PrismaService;
+  let module: TestingModule;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    module = await Test.createTestingModule({
       controllers: [UserController],
       providers: [
         UserService,
@@ -40,6 +41,11 @@ describe('UserController', () => {
     userController = module.get<UserController>(UserController);
     prismaService = module.get<PrismaService>(PrismaService);
     userService = module.get<UserService>(UserService);
+  });
+
+  afterAll(async () => {
+    await prismaService.$disconnect();
+    await module.close();
   });
 
   it('should create an user', async () => {

@@ -22,9 +22,10 @@ describe('AuthService', () => {
   let authService: AuthService;
   let prismaService: PrismaService;
   let userService: UserService;
+  let module: TestingModule;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    module = await Test.createTestingModule({
       providers: [
         AuthService,
         StoreService,
@@ -50,6 +51,11 @@ describe('AuthService', () => {
     authService = module.get<AuthService>(AuthService);
     prismaService = module.get<PrismaService>(PrismaService);
     userService = module.get<UserService>(UserService);
+  });
+
+  afterAll(async () => {
+    await prismaService.$disconnect();
+    await module.close();
   });
 
   it('should signin and update jit', async () => {

@@ -15,9 +15,10 @@ describe('AuthController', () => {
   let authController: AuthController;
   let prismaService: PrismaService;
   let userService: UserService;
+  let module: TestingModule;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    module = await Test.createTestingModule({
       controllers: [AuthController],
       providers: [
         AuthService,
@@ -43,6 +44,11 @@ describe('AuthController', () => {
     authController = module.get<AuthController>(AuthController);
     prismaService = module.get<PrismaService>(PrismaService);
     userService = module.get<UserService>(UserService);
+  });
+
+  afterAll(async () => {
+    await prismaService.$disconnect();
+    await module.close();
   });
 
   it('should signin', async () => {

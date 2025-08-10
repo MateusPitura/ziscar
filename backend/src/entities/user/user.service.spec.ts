@@ -23,9 +23,10 @@ import { POPULATE_ENTERPRISE, POPULATE_USER } from 'src/constants/populate';
 describe('UserService', () => {
   let userService: UserService;
   let prismaService: PrismaService;
+  let module: TestingModule;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    module = await Test.createTestingModule({
       providers: [
         UserService,
         PrismaService,
@@ -46,6 +47,11 @@ describe('UserService', () => {
 
     userService = module.get<UserService>(UserService);
     prismaService = module.get<PrismaService>(PrismaService);
+  });
+
+  afterAll(async () => {
+    await prismaService.$disconnect();
+    await module.close();
   });
 
   it('should create an user with minimal data', async () => {
@@ -781,6 +787,26 @@ describe('UserService', () => {
     expect(result).toHaveProperty('total', calculatedUsers);
   });
 
+  it('should find many users by startDate', async () => {
+    const result = await userService.findMany({
+      userFindManyInDto: { startDate: '2000-01-01' },
+      userId: POPULATE_USER.ADM.id,
+      enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
+    });
+
+    const SIGNED_USER = 1;
+
+    const calculatedUsers =
+      POPULATE_OTHER_ENTITIES_AMOUNT +
+      Object.keys(POPULATE_USER).length -
+      POPULATE_INACTIVE_ENTITIES_AMOUNT -
+      Object.values(POPULATE_USER).filter((item) => item.archivedAt !== null)
+        .length -
+      SIGNED_USER;
+
+    expect(result).toHaveProperty('total', calculatedUsers);
+  });
+
   it('should find many users with many filters', async () => {
     const spy = jest.spyOn(prismaService.user, 'findMany');
 
@@ -790,6 +816,7 @@ describe('UserService', () => {
         status: 'active',
         fullName: POPULATE_USER.ADM.fullName,
         orderBy: 'fullName',
+        startDate: '2000-01-01',
       },
       userId: POPULATE_USER.ADM.id,
       enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
@@ -805,6 +832,9 @@ describe('UserService', () => {
           mode: 'insensitive',
         },
         archivedAt: null,
+        createdAt: {
+          gte: new Date('2000-01-01'),
+        },
         enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
         id: { not: POPULATE_USER.ADM.id },
       },

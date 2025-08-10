@@ -17,9 +17,10 @@ import { ITEMS_PER_PAGE } from '@shared/constants';
 describe('StoreService', () => {
   let storeService: StoreService;
   let prismaService: PrismaService;
+  let module: TestingModule;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    module = await Test.createTestingModule({
       providers: [StoreService, PrismaService],
     }).compile();
 
@@ -43,6 +44,11 @@ describe('StoreService', () => {
 
       transaction.rollback();
     });
+  });
+
+  afterAll(async () => {
+    await prismaService.$disconnect();
+    await module.close();
   });
 
   it('should not create an store with the same email', async () => {
@@ -593,6 +599,22 @@ describe('StoreService', () => {
     expect(result).toHaveProperty('total', calculatedStores);
   });
 
+  it('should find many stores by startDate', async () => {
+    const result = await storeService.findMany({
+      storeFindManyInDto: { startDate: '2000-01-01' },
+      enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
+    });
+
+    const calculatedStores =
+      POPULATE_OTHER_ENTITIES_AMOUNT +
+      Object.keys(POPULATE_STORE).length -
+      POPULATE_INACTIVE_ENTITIES_AMOUNT -
+      Object.values(POPULATE_STORE).filter((item) => item.archivedAt !== null)
+        .length;
+
+    expect(result).toHaveProperty('total', calculatedStores);
+  });
+
   it('should find many stores with many filters', async () => {
     const spy = jest.spyOn(prismaService.store, 'findMany');
 
@@ -602,6 +624,7 @@ describe('StoreService', () => {
         status: 'active',
         name: POPULATE_STORE.DEFAULT.name,
         orderBy: 'name',
+        startDate: '2000-01-01',
       },
       enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
     });
@@ -616,6 +639,9 @@ describe('StoreService', () => {
           mode: 'insensitive',
         },
         archivedAt: null,
+        createdAt: {
+          gte: new Date('2000-01-01'),
+        },
         enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
       },
       orderBy: [{ name: 'asc' }],
