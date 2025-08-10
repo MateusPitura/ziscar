@@ -20,7 +20,7 @@ import { GET_STORE } from './store.constant';
 import { addressNullableFields } from 'src/constants';
 
 @Injectable()
-export class StoreService implements StoreRepository {
+export class StoreService {
   constructor(private readonly prismaService: PrismaService) {}
 
   async create({ storeCreateInDto, transaction }: CreateInput) {
@@ -167,8 +167,7 @@ export class StoreService implements StoreRepository {
 
     const storeBeforeUpdate = await this.findOne({
       where: {
-        archivedAt:
-          storeUpdateInDto.archivedAt === null ? { not: null } : null,
+        archivedAt: storeUpdateInDto.archivedAt === null ? { not: null } : null,
         ...where,
       },
       enterpriseId,
@@ -190,7 +189,8 @@ export class StoreService implements StoreRepository {
       return null;
     }
 
-    if (address?.remove) { // 🌠 create a function to handle address
+    if (address?.remove) {
+      // 🌠 create a function to handle address
       if (!storeBeforeUpdate.addressId) {
         throw new BadRequestException(
           'Não é possível excluir, endereço não encontrado',
