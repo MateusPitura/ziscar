@@ -1,6 +1,10 @@
 import { Transactionable } from 'src/types';
 import { Prisma } from '@prisma/client';
-import { StoreCreateInDto, StoreFindManyInDto, StoreUpdateInDto } from './store.schema';
+import {
+  StoreCreateInDto,
+  StoreFindManyInDto,
+  StoreUpdateInDto,
+} from './store.schema';
 
 export interface CreateInput extends Transactionable {
   storeCreateInDto: StoreCreateInDto;

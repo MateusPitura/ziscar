@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Prisma } from '@prisma/client';
 
 export const GET_STORE: Prisma.StoreSelect = {
   id: true,
@@ -16,7 +16,6 @@ export const GET_STORE: Prisma.StoreSelect = {
     },
   },
 };
-
 
 export const FETCH_STORE: Prisma.StoreSelect = {
   id: true,

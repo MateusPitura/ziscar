@@ -105,4 +105,3 @@ export const DEFAULT_PERMISSIONS: Permissions = {
     DELETE: false,
   },
 };
-

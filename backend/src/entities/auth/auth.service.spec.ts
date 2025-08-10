@@ -3,15 +3,12 @@ import { AuthService } from './auth.service';
 import { JwtService } from '@nestjs/jwt';
 import { EmailService } from '../email/email.service';
 import { PrismaService } from '../../infra/database/prisma.service';
+import { FRONTEND_URL } from 'src/constants';
 import {
-  FRONTEND_URL,
-  POPULATE_ENTERPRISE_PRIMARY_ID,
-  POPULATE_ENTERPRISE_SECONDARY_ID,
-  POPULATE_STORE_DEFAULT,
-  POPULATE_STORE_INACTIVE,
-  POPULATE_USER_DEFAULT,
-  POPULATE_USER_INACTIVE,
-} from '../../constants';
+  POPULATE_ENTERPRISE,
+  POPULATE_STORE,
+  POPULATE_USER,
+} from 'src/constants/populate';
 import {
   ConflictException,
   NotFoundException,
@@ -62,8 +59,8 @@ describe('AuthService', () => {
 
       const response = await authService.signIn({
         authSignInInDto: {
-          email: POPULATE_USER_DEFAULT.email,
-          password: POPULATE_USER_DEFAULT.password,
+          email: POPULATE_USER.ADM.email,
+          password: POPULATE_USER.ADM.password,
         },
       });
 
@@ -87,8 +84,8 @@ describe('AuthService', () => {
     await expect(
       authService.signIn({
         authSignInInDto: {
-          email: POPULATE_USER_INACTIVE.email,
-          password: POPULATE_USER_INACTIVE.password,
+          email: POPULATE_USER.INACTIVE.email,
+          password: POPULATE_USER.INACTIVE.password,
         },
       }),
     ).rejects.toThrow(UnauthorizedException);
@@ -102,7 +99,7 @@ describe('AuthService', () => {
     await expect(
       authService.signIn({
         authSignInInDto: {
-          email: POPULATE_USER_DEFAULT.email,
+          email: POPULATE_USER.ADM.email,
           password: 'wrongpassword',
         },
       }),
@@ -115,8 +112,8 @@ describe('AuthService', () => {
     const spy = jest.spyOn(userService, 'update');
 
     const response = await authService.signOut({
-      enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
-      userId: POPULATE_USER_DEFAULT.id,
+      enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
+      userId: POPULATE_USER.ADM.id,
     });
     expect(response).toBeUndefined();
 
@@ -132,16 +129,16 @@ describe('AuthService', () => {
 
   it('should not throw error when sign out with outer enterprise id', async () => {
     const response = await authService.signOut({
-      enterpriseId: POPULATE_ENTERPRISE_SECONDARY_ID,
-      userId: POPULATE_USER_DEFAULT.id,
+      enterpriseId: POPULATE_ENTERPRISE.OUTER.id,
+      userId: POPULATE_USER.ADM.id,
     });
     expect(response).toBeUndefined();
   });
 
   it('should not throw error when sign out with a inactive user', async () => {
     const response = await authService.signOut({
-      enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
-      userId: POPULATE_USER_INACTIVE.id,
+      enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
+      userId: POPULATE_USER.INACTIVE.id,
     });
     expect(response).toBeUndefined();
   });
@@ -175,7 +172,7 @@ describe('AuthService', () => {
         authSignUpInDto: {
           cnpj: '12345678901236',
           name: 'Wayne Enterprises',
-          email: POPULATE_USER_DEFAULT.email,
+          email: POPULATE_USER.ADM.email,
           fullName: 'Jane Doe',
         },
       }),
@@ -188,7 +185,7 @@ describe('AuthService', () => {
         authSignUpInDto: {
           cnpj: '12345678901236',
           name: 'Wayne Enterprises',
-          email: POPULATE_USER_INACTIVE.email,
+          email: POPULATE_USER.INACTIVE.email,
           fullName: 'Jane Doe',
         },
       }),
@@ -199,7 +196,7 @@ describe('AuthService', () => {
     await expect(
       authService.signUp({
         authSignUpInDto: {
-          cnpj: POPULATE_STORE_DEFAULT.cnpj,
+          cnpj: POPULATE_STORE.DEFAULT.cnpj,
           name: 'Wayne Enterprises',
           email: 'jane.doe@email.com',
           fullName: 'Jane Doe',
@@ -212,7 +209,7 @@ describe('AuthService', () => {
     await expect(
       authService.signUp({
         authSignUpInDto: {
-          cnpj: POPULATE_STORE_INACTIVE.cnpj,
+          cnpj: POPULATE_STORE.INACTIVE.cnpj,
           name: 'Wayne Enterprises',
           email: 'jane.doe@email.com',
           fullName: 'Jane Doe',
@@ -228,9 +225,9 @@ describe('AuthService', () => {
 
       const response = await authService.resetPassword({
         authResetPasswordInDto: {
-          email: POPULATE_USER_DEFAULT.email,
+          email: POPULATE_USER.ADM.email,
           password: 'Senha12345@',
-          enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+          enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
         },
       });
 
@@ -248,9 +245,9 @@ describe('AuthService', () => {
       await expect(
         authService.resetPassword({
           authResetPasswordInDto: {
-            email: POPULATE_USER_INACTIVE.email,
+            email: POPULATE_USER.INACTIVE.email,
             password: 'Senha12345@',
-            enterpriseId: POPULATE_ENTERPRISE_SECONDARY_ID,
+            enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
           },
         }),
       ).rejects.toThrow(NotFoundException);
@@ -266,9 +263,9 @@ describe('AuthService', () => {
       await expect(
         authService.resetPassword({
           authResetPasswordInDto: {
-            email: POPULATE_USER_DEFAULT.email,
+            email: POPULATE_USER.ADM.email,
             password: 'Senha12345@',
-            enterpriseId: POPULATE_ENTERPRISE_SECONDARY_ID,
+            enterpriseId: POPULATE_ENTERPRISE.OUTER.id,
           },
         }),
       ).rejects.toThrow(NotFoundException);
@@ -282,12 +279,12 @@ describe('AuthService', () => {
 
     await authService.forgetPassword({
       authForgetPasswordInDto: {
-        email: POPULATE_USER_DEFAULT.email,
+        email: POPULATE_USER.ADM.email,
       },
     });
 
     expect(spy).toHaveBeenCalledWith({
-      to: POPULATE_USER_DEFAULT.email,
+      to: POPULATE_USER.ADM.email,
       title: 'Redefina sua senha',
       body: `${FRONTEND_URL}/?token=`,
     });
@@ -307,7 +304,7 @@ describe('AuthService', () => {
     expect(
       await authService.forgetPassword({
         authForgetPasswordInDto: {
-          email: POPULATE_USER_INACTIVE.email,
+          email: POPULATE_USER.INACTIVE.email,
         },
       }),
     ).toBeTruthy();
@@ -318,13 +315,13 @@ describe('AuthService', () => {
 
     await authService.requestChangePassword({
       requestChangePasswordInDto: {
-        id: POPULATE_USER_DEFAULT.id,
-        enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+        id: POPULATE_USER.ADM.id,
+        enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
       },
     });
 
     expect(spy).toHaveBeenCalledWith({
-      to: POPULATE_USER_DEFAULT.email,
+      to: POPULATE_USER.ADM.email,
       title: 'Redefina sua senha',
       body: `${FRONTEND_URL}/?token=`,
     });
@@ -334,8 +331,8 @@ describe('AuthService', () => {
     await expect(
       authService.requestChangePassword({
         requestChangePasswordInDto: {
-          id: POPULATE_USER_INACTIVE.id,
-          enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+          id: POPULATE_USER.INACTIVE.id,
+          enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
         },
       }),
     ).rejects.toThrow(NotFoundException);

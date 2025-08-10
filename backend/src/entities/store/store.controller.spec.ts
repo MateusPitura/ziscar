@@ -6,12 +6,8 @@ import { AuthRequest } from 'src/entities/auth/auth.type';
 import { ITEMS_PER_PAGE } from '@shared/constants';
 import { NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/infra/database/prisma.service';
-import {
-  AUTH_REQUEST_DEFAULT,
-  POPULATE_ENTERPRISE_PRIMARY_ID,
-  POPULATE_STORE_DEFAULT,
-  POPULATE_STORE_INACTIVE,
-} from 'src/constants';
+import { AUTH_REQUEST_DEFAULT } from 'src/constants';
+import { POPULATE_ENTERPRISE, POPULATE_STORE } from 'src/constants/populate';
 import { AuthGuard } from '../auth/auth.guard';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.service';
@@ -68,7 +64,7 @@ describe('StoreController', () => {
   it('should not find inactive store', async () => {
     await expect(
       storeController.get(AUTH_REQUEST_DEFAULT, {
-        id: POPULATE_STORE_INACTIVE.id,
+        id: POPULATE_STORE.INACTIVE.id,
       }),
     ).rejects.toThrow(NotFoundException);
   });
@@ -83,7 +79,7 @@ describe('StoreController', () => {
     } as AuthRequest;
 
     const store = await storeController.get(request, {
-      id: POPULATE_STORE_DEFAULT.id,
+      id: POPULATE_STORE.DEFAULT.id,
     });
 
     for (const key in GET_STORE) {
@@ -105,7 +101,7 @@ describe('StoreController', () => {
 
       const store = await storeController.patch(
         request,
-        { id: POPULATE_STORE_DEFAULT.id },
+        { id: POPULATE_STORE.DEFAULT.id },
         {
           name: 'InGen',
         },
@@ -125,7 +121,7 @@ describe('StoreController', () => {
     await storeController.findMany(AUTH_REQUEST_DEFAULT, {
       page: 1,
       status: 'active',
-      name: POPULATE_STORE_DEFAULT.name,
+      name: POPULATE_STORE.DEFAULT.name,
       orderBy: 'name',
     });
 
@@ -134,11 +130,11 @@ describe('StoreController', () => {
       take: ITEMS_PER_PAGE,
       where: {
         name: {
-          contains: POPULATE_STORE_DEFAULT.name.toLocaleLowerCase(),
+          contains: POPULATE_STORE.DEFAULT.name.toLocaleLowerCase(),
           mode: 'insensitive',
         },
         archivedAt: null,
-        enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+        enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
       },
       orderBy: [{ name: 'asc' }],
       select: FETCH_STORE,
@@ -160,7 +156,7 @@ describe('StoreController', () => {
       expect(
         await storeController.disable(
           request,
-          { id: POPULATE_STORE_DEFAULT.id },
+          { id: POPULATE_STORE.DEFAULT.id },
           {
             archivedAt: new Date(),
           },

@@ -13,7 +13,6 @@ import {
   VerifyDuplicatedInput,
 } from './store.type';
 import { GetCallback } from 'src/types';
-import { StoreRepository } from 'src/repositories/store-repository';
 import { ITEMS_PER_PAGE } from '@shared/constants';
 import { Store } from '@prisma/client';
 import { GET_STORE } from './store.constant';

@@ -8,11 +8,10 @@ import { StoreService } from './store.service';
 import { PrismaService } from 'src/infra/database/prisma.service';
 import {
   addressNullableFields,
-  POPULATE_ENTERPRISE_PRIMARY_ID,
-  POPULATE_ENTERPRISE_SECONDARY_ID,
-  POPULATE_STORE_DEFAULT,
-  POPULATE_STORE_INACTIVE,
+  POPULATE_INACTIVE_ENTITIES_AMOUNT,
+  POPULATE_OTHER_ENTITIES_AMOUNT,
 } from 'src/constants';
+import { POPULATE_ENTERPRISE, POPULATE_STORE } from 'src/constants/populate';
 import { ITEMS_PER_PAGE } from '@shared/constants';
 
 describe('StoreService', () => {
@@ -36,7 +35,7 @@ describe('StoreService', () => {
         storeCreateInDto: {
           name: 'LexCorp',
           cnpj: '12345678901236',
-          enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+          enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
         },
       });
 
@@ -52,8 +51,8 @@ describe('StoreService', () => {
         storeCreateInDto: {
           name: 'LexCorp',
           cnpj: '12345678901236',
-          email: POPULATE_STORE_DEFAULT.email,
-          enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+          email: POPULATE_STORE.DEFAULT.email,
+          enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
         },
       }),
     ).rejects.toThrow(ConflictException);
@@ -65,8 +64,8 @@ describe('StoreService', () => {
         storeCreateInDto: {
           name: 'LexCorp',
           cnpj: '12345678901236',
-          email: POPULATE_STORE_INACTIVE.email,
-          enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+          email: POPULATE_STORE.INACTIVE.email,
+          enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
         },
       }),
     ).rejects.toThrow(ConflictException);
@@ -77,8 +76,8 @@ describe('StoreService', () => {
       storeService.create({
         storeCreateInDto: {
           name: 'LexCorp',
-          cnpj: POPULATE_STORE_DEFAULT.cnpj,
-          enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+          cnpj: POPULATE_STORE.DEFAULT.cnpj,
+          enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
         },
       }),
     ).rejects.toThrow(ConflictException);
@@ -89,8 +88,8 @@ describe('StoreService', () => {
       storeService.create({
         storeCreateInDto: {
           name: 'LexCorp',
-          cnpj: POPULATE_STORE_INACTIVE.cnpj,
-          enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+          cnpj: POPULATE_STORE.INACTIVE.cnpj,
+          enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
         },
       }),
     ).rejects.toThrow(ConflictException);
@@ -105,7 +104,7 @@ describe('StoreService', () => {
           name: 'LexCorp',
           cnpj: '12345678901236',
           email: 'lex@corp.email',
-          enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+          enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
           phone: '42988884444',
           address: {
             cep: '12345678',
@@ -129,7 +128,7 @@ describe('StoreService', () => {
           name: 'LexCorp',
           cnpj: '12345678901236',
           email: 'lex@corp.email',
-          enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+          enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
           phone: '42988884444',
           address: {
             cep: '12345678',
@@ -154,12 +153,12 @@ describe('StoreService', () => {
       expect(
         await storeService.update({
           where: {
-            id: POPULATE_STORE_DEFAULT.id,
+            id: POPULATE_STORE.DEFAULT.id,
           },
           storeUpdateInDto: {
             name: 'InGen',
           },
-          enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+          enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
         }),
       ).toBeTruthy();
 
@@ -172,12 +171,12 @@ describe('StoreService', () => {
 
     await storeService.update({
       where: {
-        id: POPULATE_STORE_DEFAULT.id,
+        id: POPULATE_STORE.DEFAULT.id,
       },
       storeUpdateInDto: {
         phone: '42988884444',
       },
-      enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+      enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
     });
 
     expect(spy).toHaveBeenCalledTimes(0);
@@ -190,12 +189,12 @@ describe('StoreService', () => {
       expect(
         await storeService.update({
           where: {
-            id: POPULATE_STORE_DEFAULT.id,
+            id: POPULATE_STORE.DEFAULT.id,
           },
           storeUpdateInDto: {
             cnpj: '12345678901237',
           },
-          enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+          enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
         }),
       ).toBeTruthy();
 
@@ -207,12 +206,12 @@ describe('StoreService', () => {
     await expect(
       storeService.update({
         where: {
-          id: POPULATE_STORE_DEFAULT.id,
+          id: POPULATE_STORE.DEFAULT.id,
         },
         storeUpdateInDto: {
-          cnpj: POPULATE_STORE_DEFAULT.cnpj,
+          cnpj: POPULATE_STORE.DEFAULT.cnpj,
         },
-        enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+        enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
       }),
     ).rejects.toThrow(ConflictException);
   });
@@ -221,12 +220,12 @@ describe('StoreService', () => {
     await expect(
       storeService.update({
         where: {
-          id: POPULATE_STORE_DEFAULT.id,
+          id: POPULATE_STORE.DEFAULT.id,
         },
         storeUpdateInDto: {
-          cnpj: POPULATE_STORE_INACTIVE.cnpj,
+          cnpj: POPULATE_STORE.INACTIVE.cnpj,
         },
-        enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+        enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
       }),
     ).rejects.toThrow(ConflictException);
   });
@@ -235,12 +234,12 @@ describe('StoreService', () => {
     await expect(
       storeService.update({
         where: {
-          id: POPULATE_STORE_DEFAULT.id,
+          id: POPULATE_STORE.DEFAULT.id,
         },
         storeUpdateInDto: {
           name: 'LexCorp',
         },
-        enterpriseId: POPULATE_ENTERPRISE_SECONDARY_ID,
+        enterpriseId: POPULATE_ENTERPRISE.OUTER.id,
       }),
     ).rejects.toThrow(NotFoundException);
   });
@@ -252,9 +251,9 @@ describe('StoreService', () => {
 
       const commonPayload = {
         where: {
-          id: POPULATE_STORE_DEFAULT.id,
+          id: POPULATE_STORE.DEFAULT.id,
         },
-        enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+        enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
       };
 
       await storeService.update({
@@ -266,7 +265,7 @@ describe('StoreService', () => {
         },
       });
 
-      const user = await storeService.update({
+      const store = await storeService.update({
         ...commonPayload,
         storeUpdateInDto: {
           address: {
@@ -275,8 +274,8 @@ describe('StoreService', () => {
         },
       });
 
-      expect(user).toHaveProperty('address.cep', '87654321');
-      expect(user).toHaveProperty('address.number', '321');
+      expect(store).toHaveProperty('address.cep', '87654321');
+      expect(store).toHaveProperty('address.number', '321');
       expect(spy).toHaveBeenCalledWith(
         expect.objectContaining({
           data: {
@@ -301,33 +300,33 @@ describe('StoreService', () => {
 
       await storeService.update({
         where: {
-          id: POPULATE_STORE_DEFAULT.id,
+          id: POPULATE_STORE.DEFAULT.id,
         },
         storeUpdateInDto: {
           address: {
             add: { cep: '12345678', number: '123' },
           },
         },
-        enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+        enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
       });
 
-      const user = await storeService.update({
+      const store = await storeService.update({
         where: {
-          id: POPULATE_STORE_DEFAULT.id,
+          id: POPULATE_STORE.DEFAULT.id,
         },
         storeUpdateInDto: {
           address: {
             update: { cityIbgeCode: 4119905 },
           },
         },
-        enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+        enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
       });
 
-      expect(user).toHaveProperty('address.cep', '12345678');
-      expect(user).toHaveProperty('address.number', '123');
-      expect(user).toHaveProperty('address.city.ibgeCode', 4119905);
-      expect(user).toHaveProperty('address.city.state', 'PR');
-      expect(user).toHaveProperty('address.city.name', 'Ponta Grossa');
+      expect(store).toHaveProperty('address.cep', '12345678');
+      expect(store).toHaveProperty('address.number', '123');
+      expect(store).toHaveProperty('address.city.ibgeCode', 4119905);
+      expect(store).toHaveProperty('address.city.state', 'PR');
+      expect(store).toHaveProperty('address.city.name', 'Ponta Grossa');
 
       transaction.rollback();
     });
@@ -337,9 +336,9 @@ describe('StoreService', () => {
     await expect(
       storeService.update({
         where: {
-          id: POPULATE_STORE_DEFAULT.id,
+          id: POPULATE_STORE.DEFAULT.id,
         },
-        enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+        enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
         storeUpdateInDto: {
           address: {
             update: { street: 'Broadway' },
@@ -355,9 +354,9 @@ describe('StoreService', () => {
 
       const commonPayload = {
         where: {
-          id: POPULATE_STORE_DEFAULT.id,
+          id: POPULATE_STORE.DEFAULT.id,
         },
-        enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+        enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
       };
 
       await expect(
@@ -380,7 +379,7 @@ describe('StoreService', () => {
         },
       });
 
-      const user = await storeService.update({
+      const store = await storeService.update({
         ...commonPayload,
         storeUpdateInDto: {
           address: {
@@ -389,7 +388,7 @@ describe('StoreService', () => {
         },
       });
 
-      expect(user).toHaveProperty('address', null);
+      expect(store).toHaveProperty('address', null);
 
       transaction.rollback();
     });
@@ -402,12 +401,12 @@ describe('StoreService', () => {
       expect(
         await storeService.update({
           where: {
-            id: POPULATE_STORE_DEFAULT.id,
+            id: POPULATE_STORE.DEFAULT.id,
           },
           storeUpdateInDto: {
             archivedAt: new Date(),
           },
-          enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+          enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
         }),
       ).toBeTruthy();
 
@@ -419,12 +418,12 @@ describe('StoreService', () => {
     await expect(
       storeService.update({
         where: {
-          id: POPULATE_STORE_INACTIVE.id,
+          id: POPULATE_STORE.INACTIVE.id,
         },
         storeUpdateInDto: {
           archivedAt: new Date(),
         },
-        enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+        enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
       }),
     ).rejects.toThrow(NotFoundException);
   });
@@ -436,12 +435,12 @@ describe('StoreService', () => {
       expect(
         await storeService.update({
           where: {
-            id: POPULATE_STORE_INACTIVE.id,
+            id: POPULATE_STORE.INACTIVE.id,
           },
           storeUpdateInDto: {
             archivedAt: null,
           },
-          enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+          enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
         }),
       ).toBeTruthy();
 
@@ -453,12 +452,12 @@ describe('StoreService', () => {
     await expect(
       storeService.update({
         where: {
-          id: POPULATE_STORE_DEFAULT.id,
+          id: POPULATE_STORE.DEFAULT.id,
         },
         storeUpdateInDto: {
           archivedAt: null,
         },
-        enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+        enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
       }),
     ).rejects.toThrow(NotFoundException);
   });
@@ -469,13 +468,13 @@ describe('StoreService', () => {
 
       const result = await storeService.update({
         where: {
-          id: POPULATE_STORE_DEFAULT.id,
+          id: POPULATE_STORE.DEFAULT.id,
         },
         storeUpdateInDto: {
           email: null,
           phone: null,
         },
-        enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+        enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
       });
 
       expect(result).toMatchObject(
@@ -491,7 +490,7 @@ describe('StoreService', () => {
 
   it('should find store', async () => {
     const store = await storeService.findOne({
-      where: { id: POPULATE_STORE_DEFAULT.id },
+      where: { id: POPULATE_STORE.DEFAULT.id },
       select: { id: true },
       onlyActive: false,
     });
@@ -502,28 +501,28 @@ describe('StoreService', () => {
   it('should not find inactive store', async () => {
     await expect(
       storeService.findOne({
-        where: { id: POPULATE_STORE_INACTIVE.id },
+        where: { id: POPULATE_STORE.INACTIVE.id },
         select: { id: true },
       }),
     ).rejects.toThrow(NotFoundException);
   });
 
   it('should find inactive store', async () => {
-    const user = await storeService.findOne({
-      where: { id: POPULATE_STORE_INACTIVE.id },
+    const store = await storeService.findOne({
+      where: { id: POPULATE_STORE.INACTIVE.id },
       select: { id: true },
       onlyActive: false,
     });
 
-    expect(user).toHaveProperty('id');
+    expect(store).toHaveProperty('id');
   });
 
   it('should not find store with outer enterprise id provided', async () => {
     await expect(
       storeService.findOne({
-        where: { id: POPULATE_STORE_DEFAULT.id },
+        where: { id: POPULATE_STORE.DEFAULT.id },
         select: { id: true },
-        enterpriseId: POPULATE_ENTERPRISE_SECONDARY_ID,
+        enterpriseId: POPULATE_ENTERPRISE.OUTER.id,
       }),
     ).rejects.toThrow(NotFoundException);
   });
@@ -531,28 +530,35 @@ describe('StoreService', () => {
   it('should find many stores with pagination', async () => {
     const result = await storeService.findMany({
       storeFindManyInDto: { page: 1 },
-      enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+      enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
     });
 
-    expect(result).toHaveProperty('total', 24);
+    const calculatedStores =
+      POPULATE_OTHER_ENTITIES_AMOUNT +
+      Object.keys(POPULATE_STORE).length -
+      POPULATE_INACTIVE_ENTITIES_AMOUNT -
+      Object.values(POPULATE_STORE).filter((item) => item.archivedAt !== null)
+        .length;
+
+    expect(result).toHaveProperty('total', calculatedStores);
     expect(result.data).toHaveLength(ITEMS_PER_PAGE);
   });
 
   it('should find many stores by name', async () => {
-    const spy = jest.spyOn(prismaService.user, 'findMany');
+    const spy = jest.spyOn(prismaService.store, 'findMany');
 
     await storeService.findMany({
       storeFindManyInDto: {
-        name: POPULATE_STORE_DEFAULT.name,
+        name: POPULATE_STORE.DEFAULT.name,
       },
-      enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+      enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
     });
 
     expect(spy).toHaveBeenCalledWith(
       expect.objectContaining({
         where: expect.objectContaining({
           name: {
-            contains: POPULATE_STORE_DEFAULT.name.toLocaleLowerCase(),
+            contains: POPULATE_STORE.DEFAULT.name.toLocaleLowerCase(),
             mode: 'insensitive',
           },
         }) as object,
@@ -561,11 +567,11 @@ describe('StoreService', () => {
   });
 
   it('should find many stores ordered by name', async () => {
-    const spy = jest.spyOn(prismaService.user, 'findMany');
+    const spy = jest.spyOn(prismaService.store, 'findMany');
 
     await storeService.findMany({
       storeFindManyInDto: { orderBy: 'name' },
-      enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+      enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
     });
 
     expect(spy).toHaveBeenCalledWith(
@@ -576,23 +582,28 @@ describe('StoreService', () => {
   it('should find many stores by status igual to inactive', async () => {
     const result = await storeService.findMany({
       storeFindManyInDto: { status: 'inactive' },
-      enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+      enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
     });
 
-    expect(result).toHaveProperty('total', 7);
+    const calculatedStores =
+      POPULATE_INACTIVE_ENTITIES_AMOUNT +
+      Object.values(POPULATE_STORE).filter((item) => item.archivedAt !== null)
+        .length;
+
+    expect(result).toHaveProperty('total', calculatedStores);
   });
 
   it('should find many stores with many filters', async () => {
-    const spy = jest.spyOn(prismaService.user, 'findMany');
+    const spy = jest.spyOn(prismaService.store, 'findMany');
 
     await storeService.findMany({
       storeFindManyInDto: {
         page: 1,
         status: 'active',
-        name: POPULATE_STORE_DEFAULT.name,
+        name: POPULATE_STORE.DEFAULT.name,
         orderBy: 'name',
       },
-      enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+      enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
     });
 
     expect(spy).toHaveBeenCalledWith({
@@ -601,12 +612,11 @@ describe('StoreService', () => {
       select: undefined,
       where: {
         name: {
-          contains: POPULATE_STORE_DEFAULT.name.toLocaleLowerCase(),
+          contains: POPULATE_STORE.DEFAULT.name.toLocaleLowerCase(),
           mode: 'insensitive',
         },
         archivedAt: null,
-        enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
-        id: { not: POPULATE_STORE_DEFAULT.id },
+        enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
       },
       orderBy: [{ name: 'asc' }],
     });
@@ -615,7 +625,7 @@ describe('StoreService', () => {
   it('should not find many stores with outer enterprise id provided', async () => {
     const result = await storeService.findMany({
       storeFindManyInDto: { status: 'active' },
-      enterpriseId: POPULATE_ENTERPRISE_SECONDARY_ID,
+      enterpriseId: POPULATE_ENTERPRISE.OUTER.id,
     });
 
     expect(result).toHaveProperty('total', 0);

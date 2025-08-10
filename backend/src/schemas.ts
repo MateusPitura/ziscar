@@ -16,4 +16,3 @@ export const SchemaAddressToCreate = s.SchemaAddress.extend({
 export const SchemaAddressToUpdate = s.SchemaAddress.partial().extend({
   ...SchemaAddress.shape,
 });
-
