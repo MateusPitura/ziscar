@@ -8,25 +8,21 @@ import { AuthRequest } from 'src/entities/auth/auth.type';
 import { ITEMS_PER_PAGE, SEED_ROLE_SALES_ID } from '@shared/constants';
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/infra/database/prisma.service';
-import {
-  AUTH_REQUEST_DEFAULT,
-  POPULATE_ENTERPRISE_PRIMARY_ID,
-  POPULATE_USER_DEFAULT,
-  POPULATE_USER_INACTIVE,
-} from 'src/constants';
+import { AUTH_REQUEST_DEFAULT } from 'src/constants';
+import { POPULATE_ENTERPRISE, POPULATE_USER } from 'src/constants/populate';
 
 describe('UserController', () => {
   let userController: UserController;
   let userService: UserService;
   let prismaService: PrismaService;
+  let module: TestingModule;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    module = await Test.createTestingModule({
       controllers: [UserController],
       providers: [
         UserService,
         PrismaService,
-        JwtService,
         {
           provide: EmailService,
           useValue: {
@@ -45,6 +41,11 @@ describe('UserController', () => {
     userController = module.get<UserController>(UserController);
     prismaService = module.get<PrismaService>(PrismaService);
     userService = module.get<UserService>(UserService);
+  });
+
+  afterAll(async () => {
+    await prismaService.$disconnect();
+    await module.close();
   });
 
   it('should create an user', async () => {
@@ -74,7 +75,7 @@ describe('UserController', () => {
   it('should not find inactive user', async () => {
     await expect(
       userController.get(AUTH_REQUEST_DEFAULT, {
-        id: POPULATE_USER_INACTIVE.id,
+        id: POPULATE_USER.INACTIVE.id,
       }),
     ).rejects.toThrow(NotFoundException);
   });
@@ -84,7 +85,7 @@ describe('UserController', () => {
       ...AUTH_REQUEST_DEFAULT,
       authToken: {
         ...AUTH_REQUEST_DEFAULT.authToken,
-        userId: POPULATE_USER_INACTIVE.id,
+        userId: POPULATE_USER.INACTIVE.id,
       },
     } as AuthRequest;
 
@@ -103,7 +104,7 @@ describe('UserController', () => {
     } as AuthRequest;
 
     const user = await userController.get(request, {
-      id: POPULATE_USER_DEFAULT.id,
+      id: POPULATE_USER.ADM.id,
     });
 
     for (const key in GET_USER) {
@@ -114,7 +115,7 @@ describe('UserController', () => {
   it('should not allow find user by id equal to signed id', async () => {
     await expect(
       userController.get(AUTH_REQUEST_DEFAULT, {
-        id: POPULATE_USER_DEFAULT.id,
+        id: POPULATE_USER.ADM.id,
       }),
     ).rejects.toThrow(ForbiddenException);
   });
@@ -133,7 +134,7 @@ describe('UserController', () => {
 
       const user = await userController.patch(
         request,
-        { id: POPULATE_USER_DEFAULT.id },
+        { id: POPULATE_USER.ADM.id },
         {
           fullName: 'Jane Doe',
         },
@@ -154,7 +155,7 @@ describe('UserController', () => {
       await expect(
         userController.patch(
           AUTH_REQUEST_DEFAULT,
-          { id: POPULATE_USER_DEFAULT.id },
+          { id: POPULATE_USER.ADM.id },
           {
             fullName: 'Jane Doe',
           },
@@ -187,7 +188,7 @@ describe('UserController', () => {
     await userController.findMany(AUTH_REQUEST_DEFAULT, {
       page: 1,
       status: 'active',
-      fullName: POPULATE_USER_DEFAULT.fullName,
+      fullName: POPULATE_USER.ADM.fullName,
       orderBy: 'fullName',
     });
 
@@ -196,13 +197,13 @@ describe('UserController', () => {
       take: ITEMS_PER_PAGE,
       where: {
         fullName: {
-          contains: POPULATE_USER_DEFAULT.fullName.toLocaleLowerCase(),
+          contains: POPULATE_USER.ADM.fullName.toLocaleLowerCase(),
           mode: 'insensitive',
         },
         archivedAt: null,
-        enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+        enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
         id: {
-          not: POPULATE_USER_DEFAULT.id,
+          not: POPULATE_USER.ADM.id,
         },
       },
       orderBy: [{ fullName: 'asc' }],
@@ -225,7 +226,7 @@ describe('UserController', () => {
       expect(
         await userController.disable(
           request,
-          { id: POPULATE_USER_DEFAULT.id },
+          { id: POPULATE_USER.ADM.id },
           {
             archivedAt: new Date(),
           },
@@ -243,7 +244,7 @@ describe('UserController', () => {
       await expect(
         userController.disable(
           AUTH_REQUEST_DEFAULT,
-          { id: POPULATE_USER_DEFAULT.id },
+          { id: POPULATE_USER.ADM.id },
           {
             archivedAt: new Date(),
           },

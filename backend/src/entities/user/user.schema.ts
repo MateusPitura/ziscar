@@ -1,18 +1,6 @@
 import { s } from '@shared/safeZod';
 import { createZodDto } from 'nestjs-zod';
-
-const SchemaAddress = s.object({
-  street: s.string().nullish(),
-  neighborhood: s.string().nullish(),
-  cityIbgeCode: s.number().nullish(),
-});
-
-const SchemaAddressToCreate = s.SchemaAddress.extend({
-  ...SchemaAddress.shape,
-});
-const SchemaAddressToUpdate = s.SchemaAddress.partial().extend({
-  ...SchemaAddress.shape,
-});
+import { SchemaAddressToCreate, SchemaAddressToUpdate } from 'src/schemas';
 
 const SchemaUserPostInDto = s.object({
   fullName: s.fullName(),
@@ -27,12 +15,16 @@ const SchemaUserCreateInDto = SchemaUserPostInDto.extend({
   enterpriseId: s.id(),
 });
 
-const SchemaUserFindManyInDto = s.object({
-  page: s.number().optional(),
-  status: s.radio(['active', 'inactive']).optional(),
-  fullName: s.fullName().optional(),
-  orderBy: s.radio(['fullName', 'email']).optional(),
-});
+const SchemaUserFindManyInDto = s
+  .object({
+    page: s.number().optional(),
+    status: s.radio(['active', 'inactive']).optional(),
+    fullName: s.fullName().optional(),
+    orderBy: s.radio(['fullName', 'email']).optional(),
+    startDate: s.dateString().optional(),
+    endDate: s.dateString().optional(),
+  })
+  .refine(...s.dateRangeRule);
 
 const SchemaUserUpdateInDto = SchemaUserPostInDto.extend({
   address: s
@@ -54,8 +46,8 @@ const SchemaProfilePatchInDto = SchemaUserUpdateInDto.omit({
   archivedAt: true,
 });
 
-const SchemaUserDeleteInDto = s.object({
-  archivedAt: s.date().nullable(),
+export const SchemaUserDeleteInDto = SchemaUserUpdateInDto.pick({
+  archivedAt: true,
 });
 
 export const SchemaUserPatchInDto = SchemaUserUpdateInDto.omit({

@@ -3,15 +3,11 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import {
-  GET_PERMISSIONS,
-  GET_USER,
-  addressNullableFields,
-} from './user.constant';
+import { GET_PERMISSIONS, GET_USER } from './user.constant';
 import { EmailService } from '../email/email.service';
 import { JwtService } from '@nestjs/jwt';
 import { ITEMS_PER_PAGE } from '@shared/constants';
-import { FRONTEND_URL } from 'src/constants';
+import { addressNullableFields, FRONTEND_URL } from 'src/constants';
 import {
   CreateInput,
   FindManyInput,
@@ -53,7 +49,6 @@ export class UserService {
       password: await this.encryptPassword({
         password: this.generateRandomPassword(),
       }),
-      fullName: userCreateInDto.fullName,
     };
 
     if (address) {
@@ -139,6 +134,14 @@ export class UserService {
       findManyWhere.where['archivedAt'] = { not: null };
     } else {
       findManyWhere.where['archivedAt'] = null;
+    }
+    const startDate = userFindManyInDto?.startDate;
+    const endDate = userFindManyInDto?.endDate;
+    if (startDate || endDate) {
+      findManyWhere.where['createdAt'] = {
+        ...(startDate && { gte: new Date(startDate) }),
+        ...(endDate && { lte: new Date(endDate) }),
+      };
     }
 
     const [data, total] = await Promise.all([

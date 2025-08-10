@@ -4,12 +4,8 @@ import { AuthService } from './auth.service';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../../infra/database/prisma.service';
 import { EmailService } from '../email/email.service';
-import {
-  AUTH_REQUEST_DEFAULT,
-  POPULATE_ENTERPRISE_PRIMARY_ID,
-  POPULATE_USER_DEFAULT,
-  RANDOM_URL,
-} from '../../constants';
+import { AUTH_REQUEST_DEFAULT, RANDOM_URL } from 'src/constants';
+import { POPULATE_ENTERPRISE, POPULATE_USER } from 'src/constants/populate';
 import { AuthRequestResetPassword } from './auth.type';
 import { UserService } from 'src/entities/user/user.service';
 import { StoreService } from 'src/entities/store/store.service';
@@ -19,9 +15,10 @@ describe('AuthController', () => {
   let authController: AuthController;
   let prismaService: PrismaService;
   let userService: UserService;
+  let module: TestingModule;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    module = await Test.createTestingModule({
       controllers: [AuthController],
       providers: [
         AuthService,
@@ -49,10 +46,15 @@ describe('AuthController', () => {
     userService = module.get<UserService>(UserService);
   });
 
+  afterAll(async () => {
+    await prismaService.$disconnect();
+    await module.close();
+  });
+
   it('should signin', async () => {
     const response = await authController.signIn({
-      email: POPULATE_USER_DEFAULT.email,
-      password: POPULATE_USER_DEFAULT.password,
+      email: POPULATE_USER.ADM.email,
+      password: POPULATE_USER.ADM.password,
     });
 
     expect(response).toBeUndefined();
@@ -90,8 +92,8 @@ describe('AuthController', () => {
       Reflect.set(userService, 'prismaService', transaction);
 
       const resetPasswordPayload = {
-        email: POPULATE_USER_DEFAULT.email,
-        enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+        email: POPULATE_USER.ADM.email,
+        enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
       };
 
       expect(

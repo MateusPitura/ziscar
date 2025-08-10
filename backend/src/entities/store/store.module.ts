@@ -1,19 +1,13 @@
-import { PrismaService } from 'src/infra/database/prisma.service';
-import { StoreRepository } from 'src/repositories/store-repository';
 import { StoreService } from './store.service';
 import { Module } from '@nestjs/common';
 import { StoreController } from './store.controller';
+import { DatabaseModule } from 'src/infra/database/database.module';
+import { UserModule } from '../user/user.module';
 
 @Module({
+  imports: [UserModule, DatabaseModule],
   controllers: [StoreController],
-  providers: [
-    PrismaService,
-    {
-      provide: StoreRepository,
-      useClass: StoreService,
-    },
-    StoreService,
-  ],
-  exports: [StoreRepository, StoreService],
+  providers: [StoreService],
+  exports: [StoreService],
 })
 export class StoreModule {}
