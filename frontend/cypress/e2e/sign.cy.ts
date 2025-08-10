@@ -34,6 +34,8 @@ describe("Sign", () => {
     cy.get('input[name="password"]').type("Senha12345@");
     cy.get('button[type="submit"]').click();
 
+    cy.url().should("include", "/vehicles");
+
     cy.visit("/stores");
 
     cy.get('[data-cy="snackbar-title"]').should("contain", "Ocorreu um erro");

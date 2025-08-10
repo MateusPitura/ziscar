@@ -426,4 +426,37 @@ describe("User", () => {
       removeUserAddress(userId as unknown as string);
     });
   });
+
+  it("should filter user by start date", () => {
+    cy.visit("/users");
+
+    cy.get('[data-cy="button-table-filter"]').click();
+
+    cy.get('input[name="startDate"]').type("2000-01-01");
+
+    cy.intercept(
+      "GET",
+      "http://localhost:3000/user?page=1&orderBy=fullName&status=active&startDate=2000-01-01"
+    ).as("getUsersPage");
+
+    cy.get('[data-cy="side-sheet-primary-button"').click();
+
+    cy.wait("@getUsersPage");
+  });
+
+  it("should not allow end date before start date", () => {
+    cy.visit("/users");
+
+    cy.get('[data-cy="button-table-filter"]').click();
+
+    cy.get('input[name="startDate"]').type("2010-01-01");
+    cy.get('input[name="endDate"]').type("2000-01-01");
+
+    cy.get('[data-cy="side-sheet-primary-button"').click();
+
+    cy.get('[data-cy="input-error-endDate"]').should(
+      "contain",
+      "Data final deve ser após a data inicial"
+    );
+  });
 });

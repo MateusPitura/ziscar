@@ -6,8 +6,8 @@ export const SchemaStoresFilterForm = s
     name: s.string().or(s.empty()),
     orderBy: s.radio(["name", "email"]),
     status: s.radio(["active", "inactive"]),
-    startDate: s.date().or(s.empty()),
-    endDate: s.date().or(s.empty()),
+    startDate: s.dateString().or(s.empty()),
+    endDate: s.dateString().or(s.empty()),
   })
   .refine(...s.dateRangeRule);
 
