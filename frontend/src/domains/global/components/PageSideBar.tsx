@@ -87,6 +87,7 @@ function PageSideBar(): ReactElement {
                 navigate(route.path);
               }}
               fullWidth
+              data-cy={`button-${route.path}`}
             />
           );
         })}

@@ -9,6 +9,57 @@ describe("Sign", () => {
     cy.url().should("include", "/vehicles");
   });
 
+  it("should sales sign in successfully", () => {
+    cy.visit("/");
+
+    cy.get('input[name="email"]').type("john.sales@email.com");
+    cy.get('input[name="password"]').type("Senha12345@");
+    cy.get('button[type="submit"]').click();
+
+    cy.get('[data-cy="button-/vehicles"]').should("exist");
+    cy.get('[data-cy="button-/vehicle-sale"]').should("exist");
+    cy.get('[data-cy="button-/profile/edit"]').should("exist");
+    cy.get('[data-cy="button-/customers"]').should("exist");
+  
+    cy.get('[data-cy="button-/stores"]').should("not.exist");
+    cy.get('[data-cy="button-/accounts-payable"]').should("not.exist");
+    cy.get('[data-cy="button-/accounts-receivable"]').should("not.exist");
+    cy.get('[data-cy="button-/users"]').should("not.exist");
+  });
+
+  it("should redirect to vehicles if sales try to access a page that do not have permission", () => {
+    cy.visit("/");
+
+    cy.get('input[name="email"]').type("john.sales@email.com");
+    cy.get('input[name="password"]').type("Senha12345@");
+    cy.get('button[type="submit"]').click();
+
+    cy.visit("/stores");
+
+    cy.get('[data-cy="snackbar-title"]').should("contain", "Ocorreu um erro");
+    cy.get('[data-cy="snackbar-description"]').should(
+      "contain",
+      "Você não pode visualizar lojas"
+    );
+
+    cy.url().should("include", "/");
+
+    cy.url().should("include", "/vehicles");
+
+  });
+
+  it("should redirect to sign in if try to access an route without authentication", () => {
+    cy.visit("vehicles/");
+
+    cy.get('[data-cy="snackbar-title"]').should("contain", "Ocorreu um erro");
+    cy.get('[data-cy="snackbar-description"]').should(
+      "contain",
+      "Sem autenticação, faça o sign-in novamente"
+    );
+
+    cy.url().should("include", "/");
+  });
+
   it("should warn if not fill one field on sign in", () => {
     cy.visit("/");
 
