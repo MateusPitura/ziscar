@@ -1,43 +1,44 @@
 import { faker } from "@faker-js/faker";
+import { generateCnpj } from "../../../shared/src/test/generateCnpj";
 
-describe("User", () => {
+describe("Store", () => {
   beforeEach(() => {
     cy.login();
   });
 
-  it("should disable and user", () => {
-    cy.visit("/users");
+  it("should disable store", () => {
+    cy.visit("/stores");
 
-    cy.get('[data-cy^="button-disable-user-"]')
+    cy.get('[data-cy^="button-disable-store-"]')
       .first()
       .invoke("attr", "data-cy")
       .then((dataCy) => {
-        const userId = dataCy.split("-").pop();
-        cy.wrap(userId).as("userId");
+        const storeId = dataCy.split("-").pop();
+        cy.wrap(storeId).as("storeId");
       });
 
-    cy.get("@userId").then((userId) => {
-      cy.intercept("DELETE", `http://localhost:3000/user/${userId}`, (req) => {
+    cy.get("@storeId").then((storeId) => {
+      cy.intercept("DELETE", `http://localhost:3000/store/${storeId}`, (req) => {
         expect(req.body).to.have.property("archivedAt");
         expect(req.body.archivedAt).to.be.a("string");
-      }).as("disableUser");
+      }).as("disableStore");
 
-      cy.get(`[data-cy="button-disable-user-${userId}"]`).click();
+      cy.get(`[data-cy="button-disable-store-${storeId}"]`).click();
 
       cy.get('[data-cy="dialog-footer-button-primary"]').click();
 
-      cy.get('[data-cy="snackbar-title"]').should("contain", "Usuário");
+      cy.get('[data-cy="snackbar-title"]').should("contain", "Loja");
       cy.get('[data-cy="snackbar-title"]').should(
         "contain",
-        "desativado com sucesso"
+        "desativada com sucesso"
       );
 
-      cy.wait("@disableUser");
+      cy.wait("@disableStore");
     });
   });
 
-  it("should enable user", () => {
-    cy.visit("/users");
+  it("should enable store", () => {
+    cy.visit("/stores");
 
     cy.get('[data-cy="button-table-filter"]').click();
 
@@ -45,86 +46,75 @@ describe("User", () => {
 
     cy.get('[data-cy="side-sheet-primary-button"').click();
 
-    cy.get('[data-cy^="button-enable-user-"]')
+    cy.get('[data-cy^="button-enable-store-"]')
       .first()
       .invoke("attr", "data-cy")
       .then((dataCy) => {
-        const userId = dataCy.split("-").pop();
-        cy.wrap(userId).as("userId");
+        const storeId = dataCy.split("-").pop();
+        cy.wrap(storeId).as("storeId");
       });
 
-    cy.get("@userId").then((userId) => {
-      cy.intercept("DELETE", `http://localhost:3000/user/${userId}`, (req) => {
+    cy.get("@storeId").then((storeId) => {
+      cy.intercept("DELETE", `http://localhost:3000/store/${storeId}`, (req) => {
         expect(req.body).to.deep.equal({
           archivedAt: null,
         });
-      }).as("enableUser");
+      }).as("enableStore");
 
-      cy.get(`[data-cy="button-enable-user-${userId}"]`).click();
+      cy.get(`[data-cy="button-enable-store-${storeId}"]`).click();
 
-      cy.get('[data-cy="snackbar-title"]').should("contain", "Usuário");
+      cy.get('[data-cy="snackbar-title"]').should("contain", "Loja");
       cy.get('[data-cy="snackbar-title"]').should(
         "contain",
-        "ativado com sucesso"
+        "ativada com sucesso"
       );
 
-      cy.wait("@enableUser");
+      cy.wait("@enableStore");
     });
   });
 
-  it("should create user without address", () => {
-    const fullName = faker.person.fullName();
-    const email = faker.internet.email();
+  it("should create store without address", () => {
+    const name = faker.company.name();
+    const cnpj = generateCnpj();
 
-    cy.intercept("POST", "http://localhost:3000/user", (req) => {
+    cy.intercept("POST", "http://localhost:3000/store", (req) => {
       expect(req.body).to.deep.equal({
-        fullName,
-        email,
+        name,
+        cnpj,
+        email: null,
         phone: null,
-        cpf: null,
-        roleId: "1",
         address: null,
       });
-    }).as("createUser");
+    }).as("createStore");
 
-    cy.visit("/users");
+    cy.visit("/stores");
 
-    cy.get('[data-cy="new-user-button"]').click();
+    cy.get('[data-cy="new-store-button"]').click();
 
     cy.get('button[type="submit"]').should("be.disabled");
 
-    cy.get('input[name="fullName"]').type(fullName);
-    cy.get('input[name="email"]').type(email);
+    cy.get('input[name="name"]').type(name);
+    cy.get('input[name="cnpj"]').type(cnpj);
 
     cy.get('button[type="submit"]').should("be.enabled");
 
     cy.get('button[type="submit"]').click();
 
-    cy.get('[data-cy="snackbar-title"]').should(
-      "have.text",
-      "Um email será enviado"
-    );
-    cy.get('[data-cy="snackbar-description"]').should(
-      "have.text",
-      "Confira também a caixa de spam"
-    );
-
-    cy.wait("@createUser");
+    cy.wait("@createStore");
   });
 
-  it("should create user with address", () => {
-    const fullName = faker.person.fullName();
-    const email = faker.internet.email();
+  it("should create store with address", () => {
+    const name = faker.company.name();
+    const cnpj = generateCnpj();
     const cep = "65043420";
     const number = "123";
 
-    cy.intercept("POST", "http://localhost:3000/user", (req) => {
+    cy.intercept("POST", "http://localhost:3000/store", (req) => {
       expect(req.body).to.deep.equal({
-        fullName,
-        email,
+        name,
+        cnpj,
+        email: null,
         phone: null,
-        cpf: null,
-        roleId: "1",
         address: {
           cep,
           number,
@@ -133,7 +123,7 @@ describe("User", () => {
           cityIbgeCode: "2111300",
         },
       });
-    }).as("createUser");
+    }).as("createStore");
 
     cy.intercept("GET", "https://viacep.com.br/ws/65043-420/json/").as(
       "cepApi"
@@ -143,14 +133,14 @@ describe("User", () => {
       "https://servicodados.ibge.gov.br/api/v1/localidades/estados/MA/municipios"
     ).as("citiesAPi");
 
-    cy.visit("/users");
+    cy.visit("/stores");
 
-    cy.get('[data-cy="new-user-button"]').click();
+    cy.get('[data-cy="new-store-button"]').click();
 
     cy.get('button[type="submit"]').should("be.disabled");
 
-    cy.get('input[name="fullName"]').type(fullName);
-    cy.get('input[name="email"]').type(email);
+    cy.get('input[name="name"]').type(name);
+    cy.get('input[name="cnpj"]').type(cnpj);
 
     cy.get('[data-cy="button-append-address"]').click();
 
@@ -163,38 +153,29 @@ describe("User", () => {
     cy.wait("@citiesAPi");
     cy.get('button[type="submit"]').click();
 
-    cy.get('[data-cy="snackbar-title"]').should(
-      "have.text",
-      "Um email será enviado"
-    );
-    cy.get('[data-cy="snackbar-description"]').should(
-      "have.text",
-      "Confira também a caixa de spam"
-    );
-
-    cy.wait("@createUser");
+    cy.wait("@createStore");
   });
 
-  it("should navigate in user table", () => {
-    cy.visit("/users");
+  it("should navigate in store table", () => {
+    cy.visit("/stores");
 
     cy.intercept(
       "GET",
-      "http://localhost:3000/user?page=1&orderBy=fullName&status=active"
-    ).as("getUsersPage1");
+      "http://localhost:3000/store?page=1&orderBy=name&status=active"
+    ).as("getStoresPage1");
 
-    cy.wait("@getUsersPage1");
+    cy.wait("@getStoresPage1");
 
     cy.get('[data-cy="table-navigate-before"]').should("be.disabled");
 
     cy.intercept(
       "GET",
-      "http://localhost:3000/user?page=2&orderBy=fullName&status=active"
-    ).as("getUsersPage2");
+      "http://localhost:3000/store?page=2&orderBy=name&status=active"
+    ).as("getStoresPage2");
 
     cy.get('[data-cy="table-navigate-next"]').click();
 
-    cy.wait("@getUsersPage2");
+    cy.wait("@getStoresPage2");
 
     cy.get('[data-cy="table-navigate-before"]').should("be.enabled");
 
@@ -203,45 +184,15 @@ describe("User", () => {
     cy.get('[data-cy="table-navigate-before"]').should("be.disabled");
   });
 
-  it("should generate user report", () => {
-    cy.visit("/users");
-
-    cy.intercept(
-      "GET",
-      "http://localhost:3000/user?page=1&orderBy=fullName&status=active"
-    ).as("getUsersPage1");
-
-    cy.intercept(
-      "GET",
-      "http://localhost:3000/user?page=1&orderBy=fullName&status=active"
-    ).as("getUsersPage2");
-
-    cy.wait("@getUsersPage1");
-
-    cy.get('[data-cy="export-button"]').click();
-
-    cy.wait("@getUsersPage2");
-
-    cy.task("downloads:folder").then((downloadsFolder) => {
-      cy.task("list:files", downloadsFolder).then((files) => {
-        const pdfFile = files.find(
-          (file) =>
-            file.startsWith("Relatório Usuários") && file.endsWith(".pdf")
-        );
-        expect(pdfFile).to.exist;
-      });
-    });
-  });
-
-  it("should edit user, add address, edit address and remove address", () => {
-    const fullName = faker.person.fullName();
+  it("should edit store, add address, edit address and remove address", () => {
+    const name = faker.company.name();
     const cep = "65043420";
     const number = faker.string.numeric(3);
 
     cy.intercept(
       "GET",
-      "http://localhost:3000/user?page=1&orderBy=fullName&status=active"
-    ).as("getUsersPage");
+      "http://localhost:3000/store?page=1&orderBy=name&status=active"
+    ).as("getStoresPage");
 
     cy.intercept("GET", "https://viacep.com.br/ws/65043-420/json/").as(
       "cepApi"
@@ -251,54 +202,54 @@ describe("User", () => {
       "https://servicodados.ibge.gov.br/api/v1/localidades/estados/MA/municipios"
     ).as("citiesAPi");
 
-    cy.visit("/users");
+    cy.visit("/stores");
 
-    cy.get('[data-cy^="button-edit-user-"]')
+    cy.get('[data-cy^="button-edit-store-"]')
       .first()
       .invoke("attr", "data-cy")
       .then((dataCy) => {
-        const userId = dataCy.split("-").pop();
-        cy.wrap(userId).as("userId");
+        const storeId = dataCy.split("-").pop();
+        cy.wrap(storeId).as("storeId");
       });
 
-    cy.get("@userId").then((userId) => {
-      cy.intercept("GET", `http://localhost:3000/user/${userId}`).as("getUser");
+    cy.get("@storeId").then((storeId) => {
+      cy.intercept("GET", `http://localhost:3000/store/${storeId}`).as("getStore");
 
       // Edit
-      cy.intercept("PATCH", `http://localhost:3000/user/${userId}`, (req) => {
-        if (!req.body.fullName) return;
+      cy.intercept("PATCH", `http://localhost:3000/store/${storeId}`, (req) => {
+        if (!req.body.name) return;
 
         expect(req.body).to.deep.equal({
-          fullName,
+          name,
         });
-      }).as("editUser");
+      }).as("editStore");
 
-      cy.get(`[data-cy="button-edit-user-${userId}"]`).click();
+      cy.get(`[data-cy="button-edit-store-${storeId}"]`).click();
 
-      cy.wait("@getUser");
+      cy.wait("@getStore");
 
       cy.get('button[type="submit"]').should("be.disabled");
 
-      cy.get('input[name="fullName"]').clear().type(fullName);
+      cy.get('input[name="name"]').clear().type(name);
 
       cy.get('button[type="submit"]').should("be.enabled");
 
       cy.get('button[type="submit"]').click();
 
-      cy.wait("@editUser");
+      cy.wait("@editStore");
 
-      cy.get('[data-cy="snackbar-title"]').should("contain", "Usuário");
+      cy.get('[data-cy="snackbar-title"]').should("contain", "Loja");
       cy.get('[data-cy="snackbar-title"]').should(
         "contain",
-        "atualizado com sucesso"
+        "atualizada com sucesso"
       );
 
-      cy.wait("@getUsersPage");
+      cy.wait("@getStoresPage");
 
       // Add address
-      cy.visit(`/users/edit/${userId}`);
+      cy.visit(`/stores/edit/${storeId}`);
 
-      cy.intercept("PATCH", `http://localhost:3000/user/${userId}`, (req) => {
+      cy.intercept("PATCH", `http://localhost:3000/store/${storeId}`, (req) => {
         if (!req.body.address.add) return;
 
         expect(req.body).to.deep.equal({
@@ -314,7 +265,7 @@ describe("User", () => {
         });
       }).as("addAddress");
 
-      cy.wait("@getUser");
+      cy.wait("@getStore");
 
       cy.get('button[type="submit"]').should("be.disabled");
 
@@ -331,18 +282,18 @@ describe("User", () => {
 
       cy.wait("@addAddress");
 
-      cy.get('[data-cy="snackbar-title"]').should("contain", "Usuário");
+      cy.get('[data-cy="snackbar-title"]').should("contain", "Loja");
       cy.get('[data-cy="snackbar-title"]').should(
         "contain",
-        "atualizado com sucesso"
+        "atualizada com sucesso"
       );
 
-      cy.wait("@getUsersPage");
+      cy.wait("@getStoresPage");
 
       // Edit address
-      cy.visit(`/users/edit/${userId}`);
+      cy.visit(`/stores/edit/${storeId}`);
 
-      cy.intercept("PATCH", `http://localhost:3000/user/${userId}`, (req) => {
+      cy.intercept("PATCH", `http://localhost:3000/store/${storeId}`, (req) => {
         if (!req.body.address.update) return;
 
         expect(req.body).to.deep.equal({
@@ -358,7 +309,7 @@ describe("User", () => {
         });
       }).as("updateAddress");
 
-      cy.wait("@getUser");
+      cy.wait("@getStore");
 
       cy.get('button[type="submit"]').should("be.disabled");
 
@@ -372,18 +323,18 @@ describe("User", () => {
 
       cy.wait("@updateAddress");
 
-      cy.get('[data-cy="snackbar-title"]').should("contain", "Usuário");
+      cy.get('[data-cy="snackbar-title"]').should("contain", "Loja");
       cy.get('[data-cy="snackbar-title"]').should(
         "contain",
-        "atualizado com sucesso"
+        "atualizada com sucesso"
       );
 
-      cy.wait("@getUsersPage");
+      cy.wait("@getStoresPage");
 
       // Remove address
-      cy.visit(`/users/edit/${userId}`);
+      cy.visit(`/stores/edit/${storeId}`);
 
-      cy.intercept("PATCH", `http://localhost:3000/user/${userId}`, (req) => {
+      cy.intercept("PATCH", `http://localhost:3000/store/${storeId}`, (req) => {
         if (!req.body.address.remove) return;
 
         expect(req.body).to.deep.equal({
@@ -393,7 +344,7 @@ describe("User", () => {
         });
       }).as("removeAddress");
 
-      cy.wait("@getUser");
+      cy.wait("@getStore");
       cy.wait("@cepApi");
       cy.wait("@citiesAPi");
 
@@ -407,13 +358,13 @@ describe("User", () => {
 
       cy.wait("@removeAddress");
 
-      cy.get('[data-cy="snackbar-title"]').should("contain", "Usuário");
+      cy.get('[data-cy="snackbar-title"]').should("contain", "Loja");
       cy.get('[data-cy="snackbar-title"]').should(
         "contain",
-        "atualizado com sucesso"
+        "atualizada com sucesso"
       );
 
-      cy.wait("@getUsersPage");
+      cy.wait("@getStoresPage");
     });
   });
 });

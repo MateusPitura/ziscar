@@ -6,6 +6,7 @@ import {
 } from '../src/constants/populate';
 import { faker } from '@faker-js/faker';
 import { SEED_ROLE_SALES_ID } from '../../shared/src/constants';
+import { generateCnpj } from '../../shared/src/test/generateCnpj';
 import { encryptPassword } from '../src/entities/user/user.utils';
 import {
   POPULATE_INACTIVE_ENTITIES_AMOUNT,
@@ -39,7 +40,7 @@ async function populate() {
       { length: POPULATE_OTHER_ENTITIES_AMOUNT },
       (_, index) => ({
         name: faker.company.name(),
-        cnpj: faker.string.numeric(14),
+        cnpj: generateCnpj(),
         archivedAt:
           index < POPULATE_INACTIVE_ENTITIES_AMOUNT ? new Date() : null,
         enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
