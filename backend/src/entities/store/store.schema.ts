@@ -20,8 +20,8 @@ const SchemaStoreFindManyInDto = s
     status: s.radio(['active', 'inactive']).optional(),
     name: s.string().optional(),
     orderBy: s.radio(['name', 'email']).optional(),
-    startDate: s.date().optional(),
-    endDate: s.date().optional(),
+    startDate: s.dateString().optional(),
+    endDate: s.dateString().optional(),
   })
   .refine(...s.dateRangeRule);
 
@@ -36,8 +36,8 @@ const SchemaStoreUpdateInDto = SchemaStorePostInDto.extend({
   archivedAt: s.date().nullable(),
 }).partial();
 
-const SchemaStoreDeleteInDto = s.object({
-  archivedAt: s.date().nullable(),
+export const SchemaStoreDeleteInDto = SchemaStoreUpdateInDto.pick({
+  archivedAt: true,
 });
 
 export const SchemaStorePatchInDto = SchemaStoreUpdateInDto.omit({

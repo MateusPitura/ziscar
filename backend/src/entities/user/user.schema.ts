@@ -21,8 +21,8 @@ const SchemaUserFindManyInDto = s
     status: s.radio(['active', 'inactive']).optional(),
     fullName: s.fullName().optional(),
     orderBy: s.radio(['fullName', 'email']).optional(),
-    startDate: s.date().optional(),
-    endDate: s.date().optional(),
+    startDate: s.dateString().optional(),
+    endDate: s.dateString().optional(),
   })
   .refine(...s.dateRangeRule);
 
@@ -46,8 +46,8 @@ const SchemaProfilePatchInDto = SchemaUserUpdateInDto.omit({
   archivedAt: true,
 });
 
-const SchemaUserDeleteInDto = s.object({
-  archivedAt: s.date().nullable(),
+export const SchemaUserDeleteInDto = SchemaUserUpdateInDto.pick({
+  archivedAt: true,
 });
 
 export const SchemaUserPatchInDto = SchemaUserUpdateInDto.omit({

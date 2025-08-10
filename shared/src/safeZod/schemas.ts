@@ -45,18 +45,18 @@ export const number = () =>
     .int({ message: "Número inválido" })
     .positive({ message: "Número inválido" });
 
-export const baseDte = () =>
+export const date = () =>
   z.coerce.date({
     errorMap: (issue, { defaultError }) => ({
       message: issue.code === "invalid_date" ? "Data inválida" : defaultError,
     }),
   });
 
-export const date = () =>
-  baseDte().transform((date) => date.toISOString().split("T")[0]);
+export const dateString = () =>
+  date().transform((date) => date.toISOString().split("T")[0]);
 
 export const birthDate = () =>
-  baseDte()
+  date()
     .min(new Date("1900-01-01"), { message: "Data de nascimento inválida" })
     .max(new Date(), { message: "Data de nascimento inválida" });
 
