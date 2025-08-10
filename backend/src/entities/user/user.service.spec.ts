@@ -12,21 +12,21 @@ import {
   SEED_ROLE_ADMIN_ID,
   SEED_ROLE_SALES_ID,
 } from '@shared/constants';
-import { addressNullableFields } from './user.constant';
 import { PrismaService } from 'src/infra/database/prisma.service';
 import {
-  POPULATE_ENTERPRISE_PRIMARY_ID,
-  POPULATE_ENTERPRISE_SECONDARY_ID,
-  POPULATE_USER_DEFAULT,
-  POPULATE_USER_INACTIVE,
+  addressNullableFields,
+  POPULATE_INACTIVE_ENTITIES_AMOUNT,
+  POPULATE_OTHER_ENTITIES_AMOUNT,
 } from 'src/constants';
+import { POPULATE_ENTERPRISE, POPULATE_USER } from 'src/constants/populate';
 
 describe('UserService', () => {
   let userService: UserService;
   let prismaService: PrismaService;
+  let module: TestingModule;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    module = await Test.createTestingModule({
       providers: [
         UserService,
         PrismaService,
@@ -49,6 +49,11 @@ describe('UserService', () => {
     prismaService = module.get<PrismaService>(PrismaService);
   });
 
+  afterAll(async () => {
+    await prismaService.$disconnect();
+    await module.close();
+  });
+
   it('should create an user with minimal data', async () => {
     await prismaService.transaction(async (transaction) => {
       Reflect.set(userService, 'prismaService', transaction);
@@ -64,7 +69,7 @@ describe('UserService', () => {
           userCreateInDto: {
             email: 'jane.doe@email.com',
             fullName: 'Jane Doe',
-            enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+            enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
             roleId: SEED_ROLE_SALES_ID,
           },
         }),
@@ -81,9 +86,9 @@ describe('UserService', () => {
     await expect(
       userService.create({
         userCreateInDto: {
-          email: POPULATE_USER_DEFAULT.email,
+          email: POPULATE_USER.ADM.email,
           fullName: 'John Doe',
-          enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+          enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
           roleId: SEED_ROLE_SALES_ID,
         },
       }),
@@ -94,9 +99,9 @@ describe('UserService', () => {
     await expect(
       userService.create({
         userCreateInDto: {
-          email: POPULATE_USER_INACTIVE.email,
+          email: POPULATE_USER.INACTIVE.email,
           fullName: 'Tony Stark',
-          enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+          enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
           roleId: SEED_ROLE_SALES_ID,
         },
       }),
@@ -109,8 +114,8 @@ describe('UserService', () => {
         userCreateInDto: {
           email: 'jane.doe@email.com',
           fullName: 'John Doe',
-          cpf: POPULATE_USER_INACTIVE.cpf,
-          enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+          cpf: POPULATE_USER.INACTIVE.cpf,
+          enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
           roleId: SEED_ROLE_SALES_ID,
         },
       }),
@@ -138,7 +143,7 @@ describe('UserService', () => {
               cep: '12345678',
               number: '123',
             },
-            enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+            enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
             roleId: SEED_ROLE_SALES_ID,
           },
         }),
@@ -175,7 +180,7 @@ describe('UserService', () => {
               cityIbgeCode: 4119905,
               neighborhood: 'Manhattan',
             },
-            enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+            enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
             roleId: SEED_ROLE_SALES_ID,
           },
         }),
@@ -195,12 +200,12 @@ describe('UserService', () => {
       expect(
         await userService.update({
           where: {
-            id: POPULATE_USER_DEFAULT.id,
+            id: POPULATE_USER.ADM.id,
           },
           userUpdateInDto: {
             fullName: 'Jane Doe',
           },
-          enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+          enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
         }),
       ).toBeTruthy();
 
@@ -213,12 +218,12 @@ describe('UserService', () => {
 
     await userService.update({
       where: {
-        id: POPULATE_USER_DEFAULT.id,
+        id: POPULATE_USER.ADM.id,
       },
       userUpdateInDto: {
         phone: '42988884444',
       },
-      enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+      enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
     });
 
     expect(spy).toHaveBeenCalledTimes(0);
@@ -231,12 +236,12 @@ describe('UserService', () => {
       expect(
         await userService.update({
           where: {
-            id: POPULATE_USER_DEFAULT.id,
+            id: POPULATE_USER.ADM.id,
           },
           userUpdateInDto: {
             cpf: '11111111111',
           },
-          enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+          enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
         }),
       ).toBeTruthy();
 
@@ -245,43 +250,31 @@ describe('UserService', () => {
   });
 
   it('should not update user with cpf that already exist', async () => {
-    await prismaService.transaction(async (transaction) => {
-      Reflect.set(userService, 'prismaService', transaction);
-
-      await expect(
-        userService.update({
-          where: {
-            id: POPULATE_USER_DEFAULT.id,
-          },
-          userUpdateInDto: {
-            cpf: POPULATE_USER_DEFAULT.cpf,
-          },
-          enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
-        }),
-      ).rejects.toThrow(ConflictException);
-
-      transaction.rollback();
-    });
+    await expect(
+      userService.update({
+        where: {
+          id: POPULATE_USER.ADM.id,
+        },
+        userUpdateInDto: {
+          cpf: POPULATE_USER.ADM.cpf,
+        },
+        enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
+      }),
+    ).rejects.toThrow(ConflictException);
   });
 
   it('should not update user with cpf of an inactive user', async () => {
-    await prismaService.transaction(async (transaction) => {
-      Reflect.set(userService, 'prismaService', transaction);
-
-      await expect(
-        userService.update({
-          where: {
-            id: POPULATE_USER_DEFAULT.id,
-          },
-          userUpdateInDto: {
-            cpf: POPULATE_USER_INACTIVE.cpf,
-          },
-          enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
-        }),
-      ).rejects.toThrow(ConflictException);
-
-      transaction.rollback();
-    });
+    await expect(
+      userService.update({
+        where: {
+          id: POPULATE_USER.ADM.id,
+        },
+        userUpdateInDto: {
+          cpf: POPULATE_USER.INACTIVE.cpf,
+        },
+        enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
+      }),
+    ).rejects.toThrow(ConflictException);
   });
 
   it('should update user password', async () => {
@@ -293,12 +286,12 @@ describe('UserService', () => {
       expect(
         await userService.update({
           where: {
-            id: POPULATE_USER_DEFAULT.id,
+            id: POPULATE_USER.ADM.id,
           },
           userUpdateInDto: {
             password: 'Senha12345@',
           },
-          enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+          enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
         }),
       ).toBeTruthy();
 
@@ -309,47 +302,35 @@ describe('UserService', () => {
   });
 
   it('should not update password of an inactive user', async () => {
-    await prismaService.transaction(async (transaction) => {
-      Reflect.set(userService, 'prismaService', transaction);
+    const spy = jest.spyOn(userService, 'encryptPassword');
 
-      const spy = jest.spyOn(userService, 'encryptPassword');
+    await expect(
+      userService.update({
+        where: {
+          id: POPULATE_USER.INACTIVE.id,
+        },
+        userUpdateInDto: {
+          password: 'Senha12345@',
+        },
+        enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
+      }),
+    ).rejects.toThrow(NotFoundException);
 
-      await expect(
-        userService.update({
-          where: {
-            id: POPULATE_USER_INACTIVE.id,
-          },
-          userUpdateInDto: {
-            password: 'Senha12345@',
-          },
-          enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
-        }),
-      ).rejects.toThrow(NotFoundException);
-
-      expect(spy).toHaveBeenCalledTimes(0);
-
-      transaction.rollback();
-    });
+    expect(spy).toHaveBeenCalledTimes(0);
   });
 
   it('should not update user with outer enterprise id provided', async () => {
-    await prismaService.transaction(async (transaction) => {
-      Reflect.set(userService, 'prismaService', transaction);
-
-      await expect(
-        userService.update({
-          where: {
-            id: POPULATE_USER_DEFAULT.id,
-          },
-          userUpdateInDto: {
-            password: 'Senha12345@',
-          },
-          enterpriseId: POPULATE_ENTERPRISE_SECONDARY_ID,
-        }),
-      ).rejects.toThrow(NotFoundException);
-
-      transaction.rollback();
-    });
+    await expect(
+      userService.update({
+        where: {
+          id: POPULATE_USER.ADM.id,
+        },
+        userUpdateInDto: {
+          password: 'Senha12345@',
+        },
+        enterpriseId: POPULATE_ENTERPRISE.OUTER.id,
+      }),
+    ).rejects.toThrow(NotFoundException);
   });
 
   it('should create user address and if already exist update all to null', async () => {
@@ -359,9 +340,9 @@ describe('UserService', () => {
 
       const commonPayload = {
         where: {
-          id: POPULATE_USER_DEFAULT.id,
+          id: POPULATE_USER.ADM.id,
         },
-        enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+        enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
       };
 
       await userService.update({
@@ -402,26 +383,13 @@ describe('UserService', () => {
     });
   });
 
-  it('should create, create if already exist and update user address and update role', async () => {
+  it('should create store address and update user address with role', async () => {
     await prismaService.transaction(async (transaction) => {
       Reflect.set(userService, 'prismaService', transaction);
 
       await userService.update({
         where: {
-          id: POPULATE_USER_DEFAULT.id,
-        },
-        userUpdateInDto: {
-          address: {
-            add: { cep: '12345678', number: '123', cityIbgeCode: 4119905 },
-          },
-          roleId: SEED_ROLE_SALES_ID,
-        },
-        enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
-      });
-
-      await userService.update({
-        where: {
-          id: POPULATE_USER_DEFAULT.id,
+          id: POPULATE_USER.ADM.id,
         },
         userUpdateInDto: {
           address: {
@@ -429,20 +397,20 @@ describe('UserService', () => {
           },
           roleId: SEED_ROLE_SALES_ID,
         },
-        enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+        enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
       });
 
       const user = await userService.update({
         where: {
-          id: POPULATE_USER_DEFAULT.id,
+          id: POPULATE_USER.ADM.id,
         },
         userUpdateInDto: {
           address: {
-            update: { cep: '12345678', number: '123', cityIbgeCode: 4119905 },
+            update: { cityIbgeCode: 4119905 },
           },
           roleId: SEED_ROLE_SALES_ID,
         },
-        enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+        enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
       });
 
       expect(user).toHaveProperty('address.cep', '12345678');
@@ -456,55 +424,20 @@ describe('UserService', () => {
     });
   });
 
-  it('should update user address and if not exist should throw an exception', async () => {
-    await prismaService.transaction(async (transaction) => {
-      Reflect.set(userService, 'prismaService', transaction);
-
-      const commonPayload = {
+  it('should thrown an exception if try to update user address and it not exist', async () => {
+    await expect(
+      userService.update({
         where: {
-          id: POPULATE_USER_DEFAULT.id,
+          id: POPULATE_USER.ADM.id,
         },
-        enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
-      };
-
-      await expect(
-        userService.update({
-          ...commonPayload,
-          userUpdateInDto: {
-            address: {
-              update: { street: 'Broadway' },
-            },
-          },
-        }),
-      ).rejects.toThrow(BadRequestException);
-
-      await userService.update({
-        ...commonPayload,
-        userUpdateInDto: {
-          address: {
-            add: { cep: '12345678', number: '123', cityIbgeCode: 4119905 },
-          },
-        },
-      });
-
-      const user = await userService.update({
-        ...commonPayload,
+        enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
         userUpdateInDto: {
           address: {
             update: { street: 'Broadway' },
           },
         },
-      });
-
-      expect(user).toHaveProperty('address.cep', '12345678');
-      expect(user).toHaveProperty('address.number', '123');
-      expect(user).toHaveProperty('address.street', 'Broadway');
-      expect(user).toHaveProperty('address.city.ibgeCode', 4119905);
-      expect(user).toHaveProperty('address.city.state', 'PR');
-      expect(user).toHaveProperty('address.city.name', 'Ponta Grossa');
-
-      transaction.rollback();
-    });
+      }),
+    ).rejects.toThrow(BadRequestException);
   });
 
   it('should delete user address and if not exist should throw an exception', async () => {
@@ -513,9 +446,9 @@ describe('UserService', () => {
 
       const commonPayload = {
         where: {
-          id: POPULATE_USER_DEFAULT.id,
+          id: POPULATE_USER.ADM.id,
         },
-        enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+        enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
       };
 
       await expect(
@@ -559,12 +492,12 @@ describe('UserService', () => {
 
       const user = await userService.update({
         where: {
-          id: POPULATE_USER_DEFAULT.id,
+          id: POPULATE_USER.ADM.id,
         },
         userUpdateInDto: {
           roleId: SEED_ROLE_ADMIN_ID,
         },
-        enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+        enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
         select: {
           jit: true,
         },
@@ -582,12 +515,12 @@ describe('UserService', () => {
 
       const user = await userService.update({
         where: {
-          id: POPULATE_USER_DEFAULT.id,
+          id: POPULATE_USER.ADM.id,
         },
         userUpdateInDto: {
           password: 'Senha12345@',
         },
-        enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+        enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
         select: {
           jit: true,
         },
@@ -605,12 +538,12 @@ describe('UserService', () => {
 
       const user = await userService.update({
         where: {
-          id: POPULATE_USER_DEFAULT.id,
+          id: POPULATE_USER.ADM.id,
         },
         userUpdateInDto: {
           archivedAt: new Date(),
         },
-        enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+        enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
         select: {
           jit: true,
         },
@@ -629,12 +562,12 @@ describe('UserService', () => {
       expect(
         await userService.update({
           where: {
-            id: POPULATE_USER_DEFAULT.id,
+            id: POPULATE_USER.ADM.id,
           },
           userUpdateInDto: {
             archivedAt: new Date(),
           },
-          enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+          enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
         }),
       ).toBeTruthy();
 
@@ -643,23 +576,17 @@ describe('UserService', () => {
   });
 
   it('should not disable inactive user', async () => {
-    await prismaService.transaction(async (transaction) => {
-      Reflect.set(userService, 'prismaService', transaction);
-
-      await expect(
-        userService.update({
-          where: {
-            id: POPULATE_USER_INACTIVE.id,
-          },
-          userUpdateInDto: {
-            archivedAt: new Date(),
-          },
-          enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
-        }),
-      ).rejects.toThrow(NotFoundException);
-
-      transaction.rollback();
-    });
+    await expect(
+      userService.update({
+        where: {
+          id: POPULATE_USER.INACTIVE.id,
+        },
+        userUpdateInDto: {
+          archivedAt: new Date(),
+        },
+        enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
+      }),
+    ).rejects.toThrow(NotFoundException);
   });
 
   it('should enable inactive user', async () => {
@@ -669,12 +596,12 @@ describe('UserService', () => {
       expect(
         await userService.update({
           where: {
-            id: POPULATE_USER_INACTIVE.id,
+            id: POPULATE_USER.INACTIVE.id,
           },
           userUpdateInDto: {
             archivedAt: null,
           },
-          enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+          enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
         }),
       ).toBeTruthy();
 
@@ -683,23 +610,17 @@ describe('UserService', () => {
   });
 
   it('should not enable active user', async () => {
-    await prismaService.transaction(async (transaction) => {
-      Reflect.set(userService, 'prismaService', transaction);
-
-      await expect(
-        userService.update({
-          where: {
-            id: POPULATE_USER_DEFAULT.id,
-          },
-          userUpdateInDto: {
-            archivedAt: null,
-          },
-          enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
-        }),
-      ).rejects.toThrow(NotFoundException);
-
-      transaction.rollback();
-    });
+    await expect(
+      userService.update({
+        where: {
+          id: POPULATE_USER.ADM.id,
+        },
+        userUpdateInDto: {
+          archivedAt: null,
+        },
+        enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
+      }),
+    ).rejects.toThrow(NotFoundException);
   });
 
   it('should update user with allowed null values', async () => {
@@ -708,13 +629,13 @@ describe('UserService', () => {
 
       const result = await userService.update({
         where: {
-          id: POPULATE_USER_DEFAULT.id,
+          id: POPULATE_USER.ADM.id,
         },
         userUpdateInDto: {
           cpf: null,
           phone: null,
         },
-        enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+        enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
       });
 
       expect(result).toMatchObject(
@@ -728,10 +649,20 @@ describe('UserService', () => {
     });
   });
 
+  it('should find user', async () => {
+    const store = await userService.findOne({
+      where: { id: POPULATE_USER.ADM.id },
+      select: { id: true },
+      onlyActive: false,
+    });
+
+    expect(store).toHaveProperty('id');
+  });
+
   it('should not find inactive user', async () => {
     await expect(
       userService.findOne({
-        where: { id: POPULATE_USER_INACTIVE.id },
+        where: { id: POPULATE_USER.INACTIVE.id },
         select: { id: true },
       }),
     ).rejects.toThrow(NotFoundException);
@@ -739,7 +670,7 @@ describe('UserService', () => {
 
   it('should find inactive user', async () => {
     const user = await userService.findOne({
-      where: { id: POPULATE_USER_INACTIVE.id },
+      where: { id: POPULATE_USER.INACTIVE.id },
       select: { id: true },
       onlyActive: false,
     });
@@ -750,9 +681,9 @@ describe('UserService', () => {
   it('should not find user with outer enterprise id provided', async () => {
     await expect(
       userService.findOne({
-        where: { id: POPULATE_USER_DEFAULT.id },
+        where: { id: POPULATE_USER.ADM.id },
         select: { id: true },
-        enterpriseId: POPULATE_ENTERPRISE_SECONDARY_ID,
+        enterpriseId: POPULATE_ENTERPRISE.OUTER.id,
       }),
     ).rejects.toThrow(NotFoundException);
   });
@@ -760,27 +691,47 @@ describe('UserService', () => {
   it('should find many users with pagination', async () => {
     const result = await userService.findMany({
       userFindManyInDto: { page: 1 },
-      userId: POPULATE_USER_DEFAULT.id,
-      enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+      userId: POPULATE_USER.ADM.id,
+      enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
     });
 
-    expect(result).toHaveProperty('total', 24);
+    const SIGNED_USER = 1;
+
+    const calculatedUsers =
+      POPULATE_OTHER_ENTITIES_AMOUNT +
+      Object.keys(POPULATE_USER).length -
+      POPULATE_INACTIVE_ENTITIES_AMOUNT -
+      Object.values(POPULATE_USER).filter((item) => item.archivedAt !== null)
+        .length -
+      SIGNED_USER;
+
+    expect(result).toHaveProperty('total', calculatedUsers);
     expect(result.data).toHaveLength(ITEMS_PER_PAGE);
   });
 
   it('should find many users without signed user', async () => {
     const result = await userService.findMany({
       userFindManyInDto: { page: 1 },
-      userId: POPULATE_USER_DEFAULT.id,
-      enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+      userId: POPULATE_USER.ADM.id,
+      enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
     });
 
     const signedUser = result.data.find(
-      (item) => item.id === POPULATE_USER_DEFAULT.id,
+      (item) => item.id === POPULATE_USER.ADM.id,
     );
 
+    const SIGNED_USER = 1;
+
+    const calculatedUsers =
+      POPULATE_OTHER_ENTITIES_AMOUNT +
+      Object.keys(POPULATE_USER).length -
+      POPULATE_INACTIVE_ENTITIES_AMOUNT -
+      Object.values(POPULATE_USER).filter((item) => item.archivedAt !== null)
+        .length -
+      SIGNED_USER;
+
     expect(signedUser).toBeUndefined();
-    expect(result).toHaveProperty('total', 24);
+    expect(result).toHaveProperty('total', calculatedUsers);
     expect(result.data).toHaveLength(ITEMS_PER_PAGE);
   });
 
@@ -789,17 +740,17 @@ describe('UserService', () => {
 
     await userService.findMany({
       userFindManyInDto: {
-        fullName: POPULATE_USER_DEFAULT.fullName,
+        fullName: POPULATE_USER.ADM.fullName,
       },
-      userId: POPULATE_USER_DEFAULT.id,
-      enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+      userId: POPULATE_USER.ADM.id,
+      enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
     });
 
     expect(spy).toHaveBeenCalledWith(
       expect.objectContaining({
         where: expect.objectContaining({
           fullName: {
-            contains: POPULATE_USER_DEFAULT.fullName.toLocaleLowerCase(),
+            contains: POPULATE_USER.ADM.fullName.toLocaleLowerCase(),
             mode: 'insensitive',
           },
         }) as object,
@@ -812,8 +763,8 @@ describe('UserService', () => {
 
     await userService.findMany({
       userFindManyInDto: { orderBy: 'fullName' },
-      userId: POPULATE_USER_DEFAULT.id,
-      enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+      userId: POPULATE_USER.ADM.id,
+      enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
     });
 
     expect(spy).toHaveBeenCalledWith(
@@ -824,11 +775,36 @@ describe('UserService', () => {
   it('should find many users by status igual to inactive', async () => {
     const result = await userService.findMany({
       userFindManyInDto: { status: 'inactive' },
-      userId: POPULATE_USER_DEFAULT.id,
-      enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+      userId: POPULATE_USER.ADM.id,
+      enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
     });
 
-    expect(result).toHaveProperty('total', 7);
+    const calculatedUsers =
+      POPULATE_INACTIVE_ENTITIES_AMOUNT +
+      Object.values(POPULATE_USER).filter((item) => item.archivedAt !== null)
+        .length;
+
+    expect(result).toHaveProperty('total', calculatedUsers);
+  });
+
+  it('should find many users by startDate', async () => {
+    const result = await userService.findMany({
+      userFindManyInDto: { startDate: '2000-01-01' },
+      userId: POPULATE_USER.ADM.id,
+      enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
+    });
+
+    const SIGNED_USER = 1;
+
+    const calculatedUsers =
+      POPULATE_OTHER_ENTITIES_AMOUNT +
+      Object.keys(POPULATE_USER).length -
+      POPULATE_INACTIVE_ENTITIES_AMOUNT -
+      Object.values(POPULATE_USER).filter((item) => item.archivedAt !== null)
+        .length -
+      SIGNED_USER;
+
+    expect(result).toHaveProperty('total', calculatedUsers);
   });
 
   it('should find many users with many filters', async () => {
@@ -838,11 +814,12 @@ describe('UserService', () => {
       userFindManyInDto: {
         page: 1,
         status: 'active',
-        fullName: POPULATE_USER_DEFAULT.fullName,
+        fullName: POPULATE_USER.ADM.fullName,
         orderBy: 'fullName',
+        startDate: '2000-01-01',
       },
-      userId: POPULATE_USER_DEFAULT.id,
-      enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+      userId: POPULATE_USER.ADM.id,
+      enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
     });
 
     expect(spy).toHaveBeenCalledWith({
@@ -851,12 +828,15 @@ describe('UserService', () => {
       select: undefined,
       where: {
         fullName: {
-          contains: POPULATE_USER_DEFAULT.fullName.toLocaleLowerCase(),
+          contains: POPULATE_USER.ADM.fullName.toLocaleLowerCase(),
           mode: 'insensitive',
         },
         archivedAt: null,
-        enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
-        id: { not: POPULATE_USER_DEFAULT.id },
+        createdAt: {
+          gte: new Date('2000-01-01'),
+        },
+        enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
+        id: { not: POPULATE_USER.ADM.id },
       },
       orderBy: [{ fullName: 'asc' }],
     });
@@ -865,8 +845,8 @@ describe('UserService', () => {
   it('should not find many users with outer enterprise id provided', async () => {
     const result = await userService.findMany({
       userFindManyInDto: { status: 'active' },
-      userId: POPULATE_USER_DEFAULT.id,
-      enterpriseId: POPULATE_ENTERPRISE_SECONDARY_ID,
+      userId: POPULATE_USER.ADM.id,
+      enterpriseId: POPULATE_ENTERPRISE.OUTER.id,
     });
 
     expect(result).toHaveProperty('total', 0);
@@ -876,16 +856,16 @@ describe('UserService', () => {
   it('should not get user permissions with outer enterprise id provided', async () => {
     await expect(
       userService.getPermissions({
-        userId: POPULATE_USER_DEFAULT.id,
-        enterpriseId: POPULATE_ENTERPRISE_SECONDARY_ID,
+        userId: POPULATE_USER.ADM.id,
+        enterpriseId: POPULATE_ENTERPRISE.OUTER.id,
       }),
     ).rejects.toThrow(NotFoundException);
   });
 
   it('should get user permissions', async () => {
     const permissions = await userService.getPermissions({
-      userId: POPULATE_USER_DEFAULT.id,
-      enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+      userId: POPULATE_USER.ADM.id,
+      enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
     });
 
     expect(permissions).toEqual({

@@ -1,0 +1,53 @@
+###
+POST {{BACKEND_URL}}/store HTTP/1.1
+content-type: application/json
+
+{
+    "name": "John Veículos",
+    "email": "john.doe+1@email.com",
+    "cnpj": "12345678000195",
+    "phone": "42988884444",
+    "address": {
+        "cep": "12345678",
+        "number": "123",
+        "cityIbgeCode": 4119905
+    }
+}
+
+###
+GET {{BACKEND_URL}}/store/1 HTTP/1.1
+content-type: application/json
+
+###
+GET {{BACKEND_URL}}/store?status=active&startDate=2025-01-01 HTTP/1.1
+content-type: application/json
+
+###
+PATCH {{BACKEND_URL}}/store/1 HTTP/1.1
+content-type: application/json
+
+{
+    "phone": "43988884444"
+}
+
+###
+PATCH {{BACKEND_URL}}/store/1 HTTP/1.1
+content-type: application/json
+
+{
+    "address": {
+        "update": {
+            "cep": "12345678",
+            "number": "456",
+            "cityIbgeCode": 4119905
+        }
+    }
+}
+
+###
+DELETE {{BACKEND_URL}}/store/1 HTTP/1.1
+content-type: application/json
+
+{
+    "archivedAt": "2025-01-01"
+}

@@ -1,12 +1,9 @@
-import { createContext, useCallback, useMemo, useState } from "react";
-import { userFilterDefaultValues } from "@/domains/users/constants";
-import { Childrenable, UsersFilter } from "../types";
+import { createContext, useMemo } from "react";
+import { Childrenable } from "../types";
 import { AUTH_CHANNEL, DEFAULT_ROUTE } from "../constants";
 import safeNavigate from "../utils/safeNavigate";
 
 interface GlobalContextValues {
-  usersFilter?: UsersFilter;
-  handleUsersFilter: (value: Partial<UsersFilter>) => void;
   authChannel: BroadcastChannel;
 }
 
@@ -22,25 +19,11 @@ function GlobalProvider({ children }: Childrenable) {
     }
   };
 
-  const [usersFilter, setUsersFilter] = useState<UsersFilter>({
-    page: 1,
-    ...userFilterDefaultValues,
-  });
-
-  const handleUsersFilter = useCallback((value: Partial<UsersFilter>) => {
-    setUsersFilter((prev) => ({
-      ...prev,
-      ...value,
-    }));
-  }, []);
-
   const valuesMemoized = useMemo(
     () => ({
-      usersFilter,
-      handleUsersFilter,
       authChannel,
     }),
-    [usersFilter, handleUsersFilter]
+    []
   );
 
   return (

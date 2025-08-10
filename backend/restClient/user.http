@@ -14,7 +14,7 @@ content-type: application/json
 }
 
 ###
-GET {{BACKEND_URL}}/user/10 HTTP/1.1
+GET {{BACKEND_URL}}/user/1 HTTP/1.1
 content-type: application/json
 
 ###
@@ -22,7 +22,7 @@ GET {{BACKEND_URL}}/profile HTTP/1.1
 content-type: application/json
 
 ###
-GET {{BACKEND_URL}}/user?status=inactive HTTP/1.1
+GET {{BACKEND_URL}}/user?status=inactive&startDate=2025-01-01 HTTP/1.1
 content-type: application/json
 
 ###
@@ -34,7 +34,7 @@ content-type: application/json
 }
 
 ###
-PATCH {{BACKEND_URL}}/user/10 HTTP/1.1
+PATCH {{BACKEND_URL}}/user/1 HTTP/1.1
 content-type: application/json
 
 {

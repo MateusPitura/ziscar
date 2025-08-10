@@ -1,7 +1,7 @@
 import { Permissions } from '@shared/types';
-import { AddressNullableFields } from './user.type';
+import { Prisma } from '@prisma/client';
 
-export const GET_USER = {
+export const GET_USER: Prisma.UserSelect = {
   id: true,
   fullName: true,
   phone: true,
@@ -19,7 +19,7 @@ export const GET_USER = {
   },
 };
 
-export const FETCH_USER = {
+export const FETCH_USER: Prisma.UserSelect = {
   id: true,
   fullName: true,
   phone: true,
@@ -105,10 +105,3 @@ export const DEFAULT_PERMISSIONS: Permissions = {
     DELETE: false,
   },
 };
-
-export const addressNullableFields: Record<keyof AddressNullableFields, null> =
-  {
-    neighborhood: null,
-    cityIbgeCode: null,
-    street: null,
-  };

@@ -1,4 +1,7 @@
+import { StoresFilterFormInputs } from "@/domains/stores/types";
 import { UsersFilterFormInputs } from "@/domains/users/types";
+import { SchemaAddress } from "../schemas";
+import { s } from "@shared/safeZod";
 
 export interface Childrenable {
   children?: React.ReactNode;
@@ -27,9 +30,11 @@ export type QueryKeys =
   | "users"
   | "profile"
   | "permissions"
+  | "stores"
   | "usersSearch";
 
 export interface UsersFilter extends UsersFilterFormInputs, Pageable {}
+export interface StoresFilter extends StoresFilterFormInputs, Pageable {}
 
 export interface PageablePayload<T> {
   data: T[];
@@ -42,3 +47,5 @@ export interface Options {
   value: string;
   label: string;
 }
+
+export type AddressFormInputs = s.infer<typeof SchemaAddress>;

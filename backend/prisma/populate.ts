@@ -1,92 +1,106 @@
 import { PrismaClient } from '@prisma/client';
 import {
-  POPULATE_ENTERPRISE_PRIMARY_ID,
-  POPULATE_STORE_DEFAULT,
-  POPULATE_STORE_INACTIVE,
-  POPULATE_USER_DEFAULT,
-  POPULATE_USER_INACTIVE,
-} from '../src/constants';
+  POPULATE_ENTERPRISE,
+  POPULATE_STORE,
+  POPULATE_USER,
+} from '../src/constants/populate';
 import { faker } from '@faker-js/faker';
-import {
-  SEED_ROLE_ADMIN_ID,
-  SEED_ROLE_SALES_ID,
-} from '../../shared/src/constants';
+import { SEED_ROLE_SALES_ID } from '../../shared/src/constants';
+import { generateCnpj } from '../../shared/src/test/generateCnpj';
 import { encryptPassword } from '../src/entities/user/user.utils';
+import {
+  POPULATE_INACTIVE_ENTITIES_AMOUNT,
+  POPULATE_OTHER_ENTITIES_AMOUNT,
+} from '../src/constants';
 
 const prisma = new PrismaClient();
 
-async function seed() {
+async function populate() {
   await prisma.$transaction(async (tx) => {
     console.log('👥 Starting database population...');
 
-    const enterprise = await tx.enterprise.upsert({
-      where: { id: POPULATE_ENTERPRISE_PRIMARY_ID },
-      update: {},
-      create: {
-        id: POPULATE_ENTERPRISE_PRIMARY_ID,
-      },
+    await tx.enterprise.createMany({
+      data: [{ ...POPULATE_ENTERPRISE.DEFAULT }],
     });
-
-    console.log(`✅ Enterprise "${enterprise.id}" created or verified.`);
 
     await tx.store.createMany({
       data: [
         {
-          ...POPULATE_STORE_DEFAULT,
-          enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+          ...POPULATE_STORE.DEFAULT,
+          enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
         },
         {
-          ...POPULATE_STORE_INACTIVE,
-          enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+          ...POPULATE_STORE.INACTIVE,
+          enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
         },
       ],
+    });
+
+    const otherStores = Array.from(
+      { length: POPULATE_OTHER_ENTITIES_AMOUNT },
+      (_, index) => ({
+        name: faker.company.name(),
+        cnpj: generateCnpj(),
+        archivedAt:
+          index < POPULATE_INACTIVE_ENTITIES_AMOUNT ? new Date() : null,
+        enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
+      }),
+    );
+
+    await tx.store.createMany({
+      data: otherStores,
     });
 
     await tx.user.createMany({
       data: [
         {
-          ...POPULATE_USER_DEFAULT,
+          ...POPULATE_USER.ADM,
           password: await encryptPassword({
-            password: POPULATE_USER_DEFAULT.password,
+            password: POPULATE_USER.ADM.password,
           }),
-          enterpriseId: enterprise.id,
-          roleId: SEED_ROLE_ADMIN_ID,
+          enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
         },
         {
-          ...POPULATE_USER_INACTIVE,
+          ...POPULATE_USER.SALES,
           password: await encryptPassword({
-            password: POPULATE_USER_INACTIVE.password,
+            password: POPULATE_USER.SALES.password,
           }),
-          enterpriseId: enterprise.id,
-          roleId: SEED_ROLE_ADMIN_ID,
+          enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
+        },
+        {
+          ...POPULATE_USER.INACTIVE,
+          password: await encryptPassword({
+            password: POPULATE_USER.INACTIVE.password,
+          }),
+          enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
         },
       ],
-      skipDuplicates: true,
     });
 
-    console.log('✅ Default users created.');
+    const otherUsersPromise = Array.from(
+      { length: POPULATE_OTHER_ENTITIES_AMOUNT },
+      async (_, index) => ({
+        fullName: faker.person.fullName(),
+        email: faker.internet.email(),
+        archivedAt:
+          index < POPULATE_INACTIVE_ENTITIES_AMOUNT ? new Date() : null,
+        password: await encryptPassword({
+          password: faker.internet.password(),
+        }),
+        enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
+        roleId: SEED_ROLE_SALES_ID,
+      }),
+    );
 
-    const usersPromise = Array.from({ length: 30 }, async (_, index) => ({
-      fullName: faker.person.fullName(),
-      email: faker.internet.email(),
-      archivedAt: index > 5 ? null : new Date(),
-      password: await encryptPassword({ password: faker.internet.password() }),
-      enterpriseId: enterprise.id,
-      roleId: SEED_ROLE_SALES_ID,
-    }));
-
-    const usersToCreate = await Promise.all(usersPromise);
+    const otherUsers = await Promise.all(otherUsersPromise);
 
     await tx.user.createMany({
-      data: usersToCreate,
-      skipDuplicates: true,
+      data: otherUsers,
     });
-
-    console.log(`✅ ${usersToCreate.length} fake users created.`);
   });
 }
 
-seed()
+populate()
   .then(() => {
     console.log('👥 Database populated successfully.');
   })

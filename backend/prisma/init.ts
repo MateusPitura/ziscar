@@ -4,36 +4,39 @@ import connect from './connect';
 async function init() {
   await connect();
 
-  if (process.env.NODE_ENV === 'production') {
-    console.log('\n🔧 Setting up database...');
+  // 🌠 Remover comentário depois da banca do projeto
+  // if (process.env.NODE_ENV === 'production') {
+  //   console.log('\n🔧 Setting up database...');
 
-    console.log('📃 Applying migrations...');
-    execSync('npx prisma migrate deploy');
+  //   console.log('📃 Applying migrations...');
+  //   execSync('npx prisma migrate deploy');
 
-    console.log('🔨 Generating prisma client...');
-    execSync('npx prisma generate');
+  //   console.log('🔨 Generating prisma client...');
+  //   execSync('npx prisma generate');
 
-    console.log('🌱 Running seed...');
-    execSync('ts-node ./prisma/seed.ts');
+  //   console.log('🌱 Running seed...');
+  //   execSync('ts-node ./prisma/seed.ts');
 
-    console.log('✅ Successfully set up database');
-  } else {
-    console.log('\n🔧 Setting up database...');
+  //   console.log('✅ Successfully set up database');
 
-    console.log('🔄 Resetting database and applying migrations...');
-    execSync('npx prisma migrate reset --force');
+  //   return;
+  // }
 
-    console.log('🔨 Generating prisma client...');
-    execSync('npx prisma generate');
+  console.log('\n🔧 Setting up database...');
 
-    console.log('🌱 Running seed...');
-    execSync('ts-node ./prisma/seed.ts');
+  console.log('🔄 Resetting database and applying migrations...');
+  execSync('npx prisma migrate reset --force');
 
-    console.log('👥 Running populate...');
-    execSync('ts-node ./prisma/populate.ts');
+  console.log('🔨 Generating prisma client...');
+  execSync('npx prisma generate');
 
-    console.log('✅ Successfully set up database');
-  }
+  console.log('🌱 Running seed...');
+  execSync('ts-node ./prisma/seed.ts');
+
+  console.log('👥 Running populate...');
+  execSync('ts-node ./prisma/populate.ts');
+
+  console.log('✅ Successfully set up database');
 }
 
 void init();
