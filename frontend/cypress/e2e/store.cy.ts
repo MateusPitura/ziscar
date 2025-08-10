@@ -1,6 +1,42 @@
 import { faker } from "@faker-js/faker";
 import { generateCnpj } from "../../../shared/src/test/generateCnpj";
 
+function removeStoreAddress(storeId: string) {
+  cy.visit(`/stores/edit/${storeId}`);
+
+  cy.intercept("PATCH", `http://localhost:3000/store/${storeId}`, (req) => {
+    if (!req.body.address.remove) return;
+
+    expect(req.body).to.deep.equal({
+      address: {
+        remove: true,
+      },
+    });
+  }).as("removeAddress");
+
+  cy.wait("@getStore");
+  cy.wait("@cepApi");
+  cy.wait("@citiesAPi");
+
+  cy.get('button[type="submit"]').should("be.disabled");
+
+  cy.get('[data-cy="button-remove-address"]').click();
+
+  cy.get('button[type="submit"]').should("be.enabled");
+
+  cy.get('button[type="submit"]').click();
+
+  cy.wait("@removeAddress");
+
+  cy.get('[data-cy="snackbar-title"]').should("contain", "Loja");
+  cy.get('[data-cy="snackbar-title"]').should(
+    "contain",
+    "atualizada com sucesso"
+  );
+
+  cy.wait("@getStoresPage");
+}
+
 describe("Store", () => {
   beforeEach(() => {
     cy.login();
@@ -18,10 +54,14 @@ describe("Store", () => {
       });
 
     cy.get("@storeId").then((storeId) => {
-      cy.intercept("DELETE", `http://localhost:3000/store/${storeId}`, (req) => {
-        expect(req.body).to.have.property("archivedAt");
-        expect(req.body.archivedAt).to.be.a("string");
-      }).as("disableStore");
+      cy.intercept(
+        "DELETE",
+        `http://localhost:3000/store/${storeId}`,
+        (req) => {
+          expect(req.body).to.have.property("archivedAt");
+          expect(req.body.archivedAt).to.be.a("string");
+        }
+      ).as("disableStore");
 
       cy.get(`[data-cy="button-disable-store-${storeId}"]`).click();
 
@@ -55,11 +95,15 @@ describe("Store", () => {
       });
 
     cy.get("@storeId").then((storeId) => {
-      cy.intercept("DELETE", `http://localhost:3000/store/${storeId}`, (req) => {
-        expect(req.body).to.deep.equal({
-          archivedAt: null,
-        });
-      }).as("enableStore");
+      cy.intercept(
+        "DELETE",
+        `http://localhost:3000/store/${storeId}`,
+        (req) => {
+          expect(req.body).to.deep.equal({
+            archivedAt: null,
+          });
+        }
+      ).as("enableStore");
 
       cy.get(`[data-cy="button-enable-store-${storeId}"]`).click();
 
@@ -213,7 +257,18 @@ describe("Store", () => {
       });
 
     cy.get("@storeId").then((storeId) => {
-      cy.intercept("GET", `http://localhost:3000/store/${storeId}`).as("getStore");
+      cy.intercept("GET", `http://localhost:3000/store/${storeId}`).as(
+        "getStore"
+      );
+
+      cy.visit(`/stores/edit/${storeId}`);
+      cy.get("body").then(($body) => {
+        if ($body.find('[data-cy="button-remove-address"]').length) {
+          removeStoreAddress(storeId as unknown as string);
+        }
+      });
+
+      cy.visit("/stores");
 
       // Edit
       cy.intercept("PATCH", `http://localhost:3000/store/${storeId}`, (req) => {
@@ -332,39 +387,7 @@ describe("Store", () => {
       cy.wait("@getStoresPage");
 
       // Remove address
-      cy.visit(`/stores/edit/${storeId}`);
-
-      cy.intercept("PATCH", `http://localhost:3000/store/${storeId}`, (req) => {
-        if (!req.body.address.remove) return;
-
-        expect(req.body).to.deep.equal({
-          address: {
-            remove: true,
-          },
-        });
-      }).as("removeAddress");
-
-      cy.wait("@getStore");
-      cy.wait("@cepApi");
-      cy.wait("@citiesAPi");
-
-      cy.get('button[type="submit"]').should("be.disabled");
-
-      cy.get('[data-cy="button-remove-address"]').click();
-
-      cy.get('button[type="submit"]').should("be.enabled");
-
-      cy.get('button[type="submit"]').click();
-
-      cy.wait("@removeAddress");
-
-      cy.get('[data-cy="snackbar-title"]').should("contain", "Loja");
-      cy.get('[data-cy="snackbar-title"]').should(
-        "contain",
-        "atualizada com sucesso"
-      );
-
-      cy.wait("@getStoresPage");
+      removeStoreAddress(storeId as unknown as string);
     });
   });
 });

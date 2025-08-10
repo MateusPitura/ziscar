@@ -174,8 +174,6 @@ describe("Profile", () => {
   });
 
   it("should open request change password modal", () => {
-    const email = "john.doe@email.com";
-
     cy.intercept(
       "POST",
       "http://localhost:3000/auth/request-change-password"

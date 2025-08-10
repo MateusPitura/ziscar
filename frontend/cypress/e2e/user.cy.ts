@@ -1,5 +1,36 @@
 import { faker } from "@faker-js/faker";
 
+function removeUserAddress(userId: string) {
+  cy.visit(`/users/edit/${userId}`);
+
+  cy.intercept("PATCH", `http://localhost:3000/user/${userId}`, (req) => {
+    if (!req.body.address.remove) return;
+
+    expect(req.body).to.deep.equal({
+      address: {
+        remove: true,
+      },
+    });
+  }).as("removeAddress");
+
+  cy.wait("@getUser");
+  cy.wait("@cepApi");
+  cy.wait("@citiesAPi");
+
+  cy.get('button[type="submit"]').should("be.disabled");
+  cy.get('[data-cy="button-remove-address"]').click();
+  cy.get('button[type="submit"]').should("be.enabled");
+  cy.get('button[type="submit"]').click();
+  cy.wait("@removeAddress");
+
+  cy.get('[data-cy="snackbar-title"]').should("contain", "Usuário");
+  cy.get('[data-cy="snackbar-title"]').should(
+    "contain",
+    "atualizado com sucesso"
+  );
+  cy.wait("@getUsersPage");
+}
+
 describe("User", () => {
   beforeEach(() => {
     cy.login();
@@ -228,7 +259,9 @@ describe("User", () => {
           (file) =>
             file.startsWith("Relatório Usuários") && file.endsWith(".pdf")
         );
-        expect(pdfFile).to.exist;
+        if (!pdfFile) {
+          throw new Error("PDF file not found");
+        }
       });
     });
   });
@@ -263,6 +296,15 @@ describe("User", () => {
 
     cy.get("@userId").then((userId) => {
       cy.intercept("GET", `http://localhost:3000/user/${userId}`).as("getUser");
+
+      cy.visit(`/users/edit/${userId}`);
+      cy.get("body").then(($body) => {
+        if ($body.find('[data-cy="button-remove-address"]').length) {
+          removeUserAddress(userId as unknown as string);
+        }
+      });
+
+      cy.visit("/users");
 
       // Edit
       cy.intercept("PATCH", `http://localhost:3000/user/${userId}`, (req) => {
@@ -381,39 +423,7 @@ describe("User", () => {
       cy.wait("@getUsersPage");
 
       // Remove address
-      cy.visit(`/users/edit/${userId}`);
-
-      cy.intercept("PATCH", `http://localhost:3000/user/${userId}`, (req) => {
-        if (!req.body.address.remove) return;
-
-        expect(req.body).to.deep.equal({
-          address: {
-            remove: true,
-          },
-        });
-      }).as("removeAddress");
-
-      cy.wait("@getUser");
-      cy.wait("@cepApi");
-      cy.wait("@citiesAPi");
-
-      cy.get('button[type="submit"]').should("be.disabled");
-
-      cy.get('[data-cy="button-remove-address"]').click();
-
-      cy.get('button[type="submit"]').should("be.enabled");
-
-      cy.get('button[type="submit"]').click();
-
-      cy.wait("@removeAddress");
-
-      cy.get('[data-cy="snackbar-title"]').should("contain", "Usuário");
-      cy.get('[data-cy="snackbar-title"]').should(
-        "contain",
-        "atualizado com sucesso"
-      );
-
-      cy.wait("@getUsersPage");
+      removeUserAddress(userId as unknown as string);
     });
   });
 });

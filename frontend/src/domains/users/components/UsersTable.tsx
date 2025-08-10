@@ -15,6 +15,8 @@ import { PageablePayload } from "@/domains/global/types";
 import ExportButton from "@/domains/pdf/components/ExportButton";
 import useFilterContext from "@/domains/global/hooks/useFilterContext";
 
+const disableReport = true;
+
 export default function UsersTable(): ReactNode {
   const [disableUserInfo, setDisableUserInfo] = useState<DisableUser>({
     userName: "",
@@ -60,7 +62,7 @@ export default function UsersTable(): ReactNode {
     <>
       <DisableUserModal {...disableUserInfo} {...dialog} />
       <div className="flex gap-4 justify-end">
-        {true && (
+        {disableReport && (
           <ExportButton<FetchUser, UsersFilterFormInputs>
             fileName="Relatório Usuários"
             resource="USERS"
