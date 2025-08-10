@@ -15,9 +15,9 @@ import {
 import { GetCallback } from 'src/types';
 import { StoreRepository } from 'src/repositories/store-repository';
 import { ITEMS_PER_PAGE } from '@shared/constants';
-import { addressNullableFields } from '../user/user.constant';
 import { Store } from '@prisma/client';
 import { GET_STORE } from './store.constant';
+import { addressNullableFields } from 'src/constants';
 
 @Injectable()
 export class StoreService implements StoreRepository {

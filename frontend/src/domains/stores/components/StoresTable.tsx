@@ -13,6 +13,7 @@ import selectStoresInfo from "../utils/selectStoresInfo";
 import StoresTableActions from "./StoresTableActions";
 import StoresFilterForm from "../forms/StoresFilterForm";
 import useFilterContext from "@/domains/global/hooks/useFilterContext";
+import { BACKEND_URL } from "@/domains/global/constants";
 
 export default function StoresTable(): ReactNode {
   const [disableStoreInfo, setDisableStoreInfo] = useState<DisableStore>({
@@ -43,24 +44,10 @@ export default function StoresTable(): ReactNode {
   async function getStoresInfo(
     filter?: string
   ): Promise<PageablePayload<FetchStore>> {
-    // 🌠 MOCK
-    // await safeFetch(`${BACKEND_URL}/store?${filter}`, {
-    //   resource: "STORES",
-    //   action: "READ",
-    // });
-
-    return {
-      data: [
-        {
-          id: 1,
-          name: "Loja 1",
-          email: "loja1@email.com",
-          phone: "11999999999",
-          archivedAt: undefined,
-        },
-      ],
-      total: 1,
-    };
+    return await safeFetch(`${BACKEND_URL}/store?${filter}`, {
+      resource: "STORES",
+      action: "READ",
+    });
   }
 
   const { data: storesInfo, isFetching: isFetchingStoresInfo } = useQuery({

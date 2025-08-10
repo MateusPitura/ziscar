@@ -1,6 +1,7 @@
 import { FRONTEND_PORT } from '../../shared/src/constants';
 import { AuthRequest } from './entities/auth/auth.type';
 import { DEFAULT_PERMISSIONS } from './entities/user/user.constant';
+import { AddressNullableFields } from './entities/user/user.type';
 
 export const JWT_EXPIRATION_TIME = 43200; // 12h
 
@@ -46,10 +47,19 @@ export const POPULATE_STORE_DEFAULT = {
   id: 443,
   name: 'Wayne Enterprises',
   cnpj: '12345678901234',
+  email: 'wayne@enterprises.com',
 };
 export const POPULATE_STORE_INACTIVE = {
   id: 984,
   name: 'Stark Industries',
   cnpj: '12345678901235',
+  email: 'stark@industries.com',
   archivedAt: new Date(),
 };
+
+export const addressNullableFields: Record<keyof AddressNullableFields, null> =
+  {
+    neighborhood: null,
+    cityIbgeCode: null,
+    street: null,
+  };

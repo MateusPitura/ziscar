@@ -3,15 +3,11 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import {
-  GET_PERMISSIONS,
-  GET_USER,
-  addressNullableFields,
-} from './user.constant';
+import { GET_PERMISSIONS, GET_USER } from './user.constant';
 import { EmailService } from '../email/email.service';
 import { JwtService } from '@nestjs/jwt';
 import { ITEMS_PER_PAGE } from '@shared/constants';
-import { FRONTEND_URL } from 'src/constants';
+import { addressNullableFields, FRONTEND_URL } from 'src/constants';
 import {
   CreateInput,
   FindManyInput,

@@ -2,7 +2,12 @@ import { BACKEND_URL } from "@/domains/global/constants";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import { Store } from "@/domains/global/types/model";
-import { useIsFetching, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useIsFetching,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { useEffect, type ReactNode } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { StoreFormInputs } from "../types";
@@ -20,20 +25,10 @@ export default function EditStoreContainer(): ReactNode {
   const { storeId } = useParams();
 
   async function getStore(): Promise<Store> {
-    // 🌠 MOCK
-    // await safeFetch(`${BACKEND_URL}/store/${storeId}`, {
-    //   resource: "STORES",
-    //   action: "READ",
-    // });
-
-    return {
-      id: 1,
-      cnpj: "",
-      name: "",
-      phone: "",
-      email: "",
-      address: undefined
-    }
+    return await safeFetch(`${BACKEND_URL}/store/${storeId}`, {
+      resource: "STORES",
+      action: "READ",
+    });
   }
 
   const { data: storeData, isFetching } = useQuery({

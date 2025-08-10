@@ -1,5 +1,4 @@
 import { Permissions } from '@shared/types';
-import { AddressNullableFields } from './user.type';
 import { Prisma } from '@prisma/client';
 
 export const GET_USER: Prisma.UserSelect = {
@@ -107,9 +106,3 @@ export const DEFAULT_PERMISSIONS: Permissions = {
   },
 };
 
-export const addressNullableFields: Record<keyof AddressNullableFields, null> =
-  {
-    neighborhood: null,
-    cityIbgeCode: null,
-    street: null,
-  };

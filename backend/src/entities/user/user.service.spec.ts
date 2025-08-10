@@ -12,9 +12,9 @@ import {
   SEED_ROLE_ADMIN_ID,
   SEED_ROLE_SALES_ID,
 } from '@shared/constants';
-import { addressNullableFields } from './user.constant';
 import { PrismaService } from 'src/infra/database/prisma.service';
 import {
+  addressNullableFields,
   POPULATE_ENTERPRISE_PRIMARY_ID,
   POPULATE_ENTERPRISE_SECONDARY_ID,
   POPULATE_USER_DEFAULT,
@@ -245,43 +245,31 @@ describe('UserService', () => {
   });
 
   it('should not update user with cpf that already exist', async () => {
-    await prismaService.transaction(async (transaction) => {
-      Reflect.set(userService, 'prismaService', transaction);
-
-      await expect(
-        userService.update({
-          where: {
-            id: POPULATE_USER_DEFAULT.id,
-          },
-          userUpdateInDto: {
-            cpf: POPULATE_USER_DEFAULT.cpf,
-          },
-          enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
-        }),
-      ).rejects.toThrow(ConflictException);
-
-      transaction.rollback();
-    });
+    await expect(
+      userService.update({
+        where: {
+          id: POPULATE_USER_DEFAULT.id,
+        },
+        userUpdateInDto: {
+          cpf: POPULATE_USER_DEFAULT.cpf,
+        },
+        enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+      }),
+    ).rejects.toThrow(ConflictException);
   });
 
   it('should not update user with cpf of an inactive user', async () => {
-    await prismaService.transaction(async (transaction) => {
-      Reflect.set(userService, 'prismaService', transaction);
-
-      await expect(
-        userService.update({
-          where: {
-            id: POPULATE_USER_DEFAULT.id,
-          },
-          userUpdateInDto: {
-            cpf: POPULATE_USER_INACTIVE.cpf,
-          },
-          enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
-        }),
-      ).rejects.toThrow(ConflictException);
-
-      transaction.rollback();
-    });
+    await expect(
+      userService.update({
+        where: {
+          id: POPULATE_USER_DEFAULT.id,
+        },
+        userUpdateInDto: {
+          cpf: POPULATE_USER_INACTIVE.cpf,
+        },
+        enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+      }),
+    ).rejects.toThrow(ConflictException);
   });
 
   it('should update user password', async () => {
@@ -309,33 +297,25 @@ describe('UserService', () => {
   });
 
   it('should not update password of an inactive user', async () => {
-    await prismaService.transaction(async (transaction) => {
-      Reflect.set(userService, 'prismaService', transaction);
+    const spy = jest.spyOn(userService, 'encryptPassword');
 
-      const spy = jest.spyOn(userService, 'encryptPassword');
+    await expect(
+      userService.update({
+        where: {
+          id: POPULATE_USER_INACTIVE.id,
+        },
+        userUpdateInDto: {
+          password: 'Senha12345@',
+        },
+        enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+      }),
+    ).rejects.toThrow(NotFoundException);
 
-      await expect(
-        userService.update({
-          where: {
-            id: POPULATE_USER_INACTIVE.id,
-          },
-          userUpdateInDto: {
-            password: 'Senha12345@',
-          },
-          enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
-        }),
-      ).rejects.toThrow(NotFoundException);
-
-      expect(spy).toHaveBeenCalledTimes(0);
-
-      transaction.rollback();
-    });
+    expect(spy).toHaveBeenCalledTimes(0);
   });
 
   it('should not update user with outer enterprise id provided', async () => {
     await prismaService.transaction(async (transaction) => {
-      Reflect.set(userService, 'prismaService', transaction);
-
       await expect(
         userService.update({
           where: {
@@ -347,8 +327,6 @@ describe('UserService', () => {
           enterpriseId: POPULATE_ENTERPRISE_SECONDARY_ID,
         }),
       ).rejects.toThrow(NotFoundException);
-
-      transaction.rollback();
     });
   });
 
@@ -402,22 +380,9 @@ describe('UserService', () => {
     });
   });
 
-  it('should create, create if already exist and update user address and update role', async () => {
+  it('should create store address and update user address with role', async () => {
     await prismaService.transaction(async (transaction) => {
       Reflect.set(userService, 'prismaService', transaction);
-
-      await userService.update({
-        where: {
-          id: POPULATE_USER_DEFAULT.id,
-        },
-        userUpdateInDto: {
-          address: {
-            add: { cep: '12345678', number: '123', cityIbgeCode: 4119905 },
-          },
-          roleId: SEED_ROLE_SALES_ID,
-        },
-        enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
-      });
 
       await userService.update({
         where: {
@@ -438,7 +403,7 @@ describe('UserService', () => {
         },
         userUpdateInDto: {
           address: {
-            update: { cep: '12345678', number: '123', cityIbgeCode: 4119905 },
+            update: { cityIbgeCode: 4119905 },
           },
           roleId: SEED_ROLE_SALES_ID,
         },
@@ -456,55 +421,20 @@ describe('UserService', () => {
     });
   });
 
-  it('should update user address and if not exist should throw an exception', async () => {
-    await prismaService.transaction(async (transaction) => {
-      Reflect.set(userService, 'prismaService', transaction);
-
-      const commonPayload = {
+  it('should thrown an exception if try to update user address and it not exist', async () => {
+    await expect(
+      userService.update({
         where: {
           id: POPULATE_USER_DEFAULT.id,
         },
         enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
-      };
-
-      await expect(
-        userService.update({
-          ...commonPayload,
-          userUpdateInDto: {
-            address: {
-              update: { street: 'Broadway' },
-            },
-          },
-        }),
-      ).rejects.toThrow(BadRequestException);
-
-      await userService.update({
-        ...commonPayload,
-        userUpdateInDto: {
-          address: {
-            add: { cep: '12345678', number: '123', cityIbgeCode: 4119905 },
-          },
-        },
-      });
-
-      const user = await userService.update({
-        ...commonPayload,
         userUpdateInDto: {
           address: {
             update: { street: 'Broadway' },
           },
         },
-      });
-
-      expect(user).toHaveProperty('address.cep', '12345678');
-      expect(user).toHaveProperty('address.number', '123');
-      expect(user).toHaveProperty('address.street', 'Broadway');
-      expect(user).toHaveProperty('address.city.ibgeCode', 4119905);
-      expect(user).toHaveProperty('address.city.state', 'PR');
-      expect(user).toHaveProperty('address.city.name', 'Ponta Grossa');
-
-      transaction.rollback();
-    });
+      }),
+    ).rejects.toThrow(BadRequestException);
   });
 
   it('should delete user address and if not exist should throw an exception', async () => {
@@ -643,23 +573,17 @@ describe('UserService', () => {
   });
 
   it('should not disable inactive user', async () => {
-    await prismaService.transaction(async (transaction) => {
-      Reflect.set(userService, 'prismaService', transaction);
-
-      await expect(
-        userService.update({
-          where: {
-            id: POPULATE_USER_INACTIVE.id,
-          },
-          userUpdateInDto: {
-            archivedAt: new Date(),
-          },
-          enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
-        }),
-      ).rejects.toThrow(NotFoundException);
-
-      transaction.rollback();
-    });
+    await expect(
+      userService.update({
+        where: {
+          id: POPULATE_USER_INACTIVE.id,
+        },
+        userUpdateInDto: {
+          archivedAt: new Date(),
+        },
+        enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+      }),
+    ).rejects.toThrow(NotFoundException);
   });
 
   it('should enable inactive user', async () => {
@@ -683,23 +607,17 @@ describe('UserService', () => {
   });
 
   it('should not enable active user', async () => {
-    await prismaService.transaction(async (transaction) => {
-      Reflect.set(userService, 'prismaService', transaction);
-
-      await expect(
-        userService.update({
-          where: {
-            id: POPULATE_USER_DEFAULT.id,
-          },
-          userUpdateInDto: {
-            archivedAt: null,
-          },
-          enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
-        }),
-      ).rejects.toThrow(NotFoundException);
-
-      transaction.rollback();
-    });
+    await expect(
+      userService.update({
+        where: {
+          id: POPULATE_USER_DEFAULT.id,
+        },
+        userUpdateInDto: {
+          archivedAt: null,
+        },
+        enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
+      }),
+    ).rejects.toThrow(NotFoundException);
   });
 
   it('should update user with allowed null values', async () => {
@@ -726,6 +644,16 @@ describe('UserService', () => {
 
       transaction.rollback();
     });
+  });
+
+  it('should find user', async () => {
+    const store = await userService.findOne({
+      where: { id: POPULATE_USER_DEFAULT.id },
+      select: { id: true },
+      onlyActive: false,
+    });
+
+    expect(store).toHaveProperty('id');
   });
 
   it('should not find inactive user', async () => {

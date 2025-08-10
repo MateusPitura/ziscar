@@ -26,7 +26,6 @@ describe('UserController', () => {
       providers: [
         UserService,
         PrismaService,
-        JwtService,
         {
           provide: EmailService,
           useValue: {
