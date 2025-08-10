@@ -51,23 +51,7 @@ function UsersFilterFormContent(): ReactElement {
   return (
     <>
       <SideSheet.Body className="flex flex-col gap-4">
-        <InputLabel label="Buscar por" />
         <Input<UsersFilterFormInputs> name="fullName" label="Nome completo" />
-        <InputLabel label="Ordenar por" />
-        <div className="flex flex-col gap-2">
-          <Choice hideErrorLabel>
-            <Choice.Radio<UsersFilterFormInputs>
-              name="orderBy"
-              label="Nome"
-              value="fullName"
-            />
-            <Choice.Radio<UsersFilterFormInputs>
-              name="orderBy"
-              label="Email"
-              value="email"
-            />
-          </Choice>
-        </div>
         <InputLabel label="Status" />
         <div className="flex flex-col gap-2">
           <Choice hideErrorLabel>
@@ -80,6 +64,21 @@ function UsersFilterFormContent(): ReactElement {
               name="status"
               label="Inativo"
               value="inactive"
+            />
+          </Choice>
+        </div>
+        <InputLabel label="Ordenar por" />
+        <div className="flex flex-col gap-2">
+          <Choice hideErrorLabel>
+            <Choice.Radio<UsersFilterFormInputs>
+              name="orderBy"
+              label="Nome"
+              value="fullName"
+            />
+            <Choice.Radio<UsersFilterFormInputs>
+              name="orderBy"
+              label="Email"
+              value="email"
             />
           </Choice>
         </div>

@@ -14,12 +14,16 @@ const SchemaStoreCreateInDto = SchemaStorePostInDto.extend({
   enterpriseId: s.id(),
 });
 
-const SchemaStoreFindManyInDto = s.object({
-  page: s.number().optional(),
-  status: s.radio(['active', 'inactive']).optional(),
-  name: s.string().optional(),
-  orderBy: s.radio(['name', 'email']).optional(),
-});
+const SchemaStoreFindManyInDto = s
+  .object({
+    page: s.number().optional(),
+    status: s.radio(['active', 'inactive']).optional(),
+    name: s.string().optional(),
+    orderBy: s.radio(['name', 'email']).optional(),
+    startDate: s.date().optional(),
+    endDate: s.date().optional(),
+  })
+  .refine(...s.dateRangeRule);
 
 const SchemaStoreUpdateInDto = SchemaStorePostInDto.extend({
   address: s

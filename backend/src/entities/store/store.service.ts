@@ -135,6 +135,14 @@ export class StoreService {
     } else {
       findManyWhere.where['archivedAt'] = null;
     }
+    const startDate = storeFindManyInDto?.startDate;
+    const endDate = storeFindManyInDto?.endDate;
+    if (startDate || endDate) {
+      findManyWhere.where['createdAt'] = {
+        ...(startDate && { gte: new Date(startDate) }),
+        ...(endDate && { lte: new Date(endDate) }),
+      };
+    }
 
     const [data, total] = await Promise.all([
       this.prismaService.store.findMany({

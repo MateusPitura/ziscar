@@ -29,6 +29,8 @@ function StoresFilterForm(): ReactNode {
         name: storesFilter?.name || "",
         orderBy: storesFilter?.orderBy || "name",
         status: storesFilter?.status || "active",
+        startDate: storesFilter?.startDate || "",
+        endDate: storesFilter?.endDate || "",
       }}
       replaceEmptyStringToNull={false}
     >
@@ -51,23 +53,7 @@ function StoresFilterFormContent(): ReactElement {
   return (
     <>
       <SideSheet.Body className="flex flex-col gap-4">
-        <InputLabel label="Buscar por" />
         <Input<StoresFilterFormInputs> name="name" label="Nome" />
-        <InputLabel label="Ordenar por" />
-        <div className="flex flex-col gap-2">
-          <Choice hideErrorLabel>
-            <Choice.Radio<StoresFilterFormInputs>
-              name="orderBy"
-              label="Nome"
-              value="name"
-            />
-            <Choice.Radio<StoresFilterFormInputs>
-              name="orderBy"
-              label="Email"
-              value="email"
-            />
-          </Choice>
-        </div>
         <InputLabel label="Status" />
         <div className="flex flex-col gap-2">
           <Choice hideErrorLabel>
@@ -80,6 +66,31 @@ function StoresFilterFormContent(): ReactElement {
               name="status"
               label="Inativo"
               value="inactive"
+            />
+          </Choice>
+        </div>
+        <Input<StoresFilterFormInputs>
+          name="startDate"
+          label="Data inicial"
+          type="date"
+        />
+        <Input<StoresFilterFormInputs>
+          name="endDate"
+          label="Data final"
+          type="date"
+        />
+        <InputLabel label="Ordenar por" />
+        <div className="flex flex-col gap-2">
+          <Choice hideErrorLabel>
+            <Choice.Radio<StoresFilterFormInputs>
+              name="orderBy"
+              label="Nome"
+              value="name"
+            />
+            <Choice.Radio<StoresFilterFormInputs>
+              name="orderBy"
+              label="Email"
+              value="email"
             />
           </Choice>
         </div>

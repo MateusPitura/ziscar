@@ -12,4 +12,6 @@ export const storeFilterDefaultValues: StoresFilterFormInputs = {
   name: "",
   orderBy: "name",
   status: "active",
+  startDate: "",
+  endDate: "",
 };

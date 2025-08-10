@@ -19,7 +19,7 @@ GET {{BACKEND_URL}}/store/1 HTTP/1.1
 content-type: application/json
 
 ###
-GET {{BACKEND_URL}}/store?status=active HTTP/1.1
+GET {{BACKEND_URL}}/store?status=active&startDate=2025-01-01 HTTP/1.1
 content-type: application/json
 
 ###

@@ -72,6 +72,8 @@ export default function StoresTable(): ReactNode {
               name: "Nome completo",
               orderBy: "Ordenar por",
               status: "Status",
+              endDate: "Data final",
+              startDate: "Data inicial",
             }}
             formatFiltersValues={{
               orderBy: {
