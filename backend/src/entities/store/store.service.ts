@@ -17,6 +17,7 @@ import { StoreRepository } from 'src/repositories/store-repository';
 import { ITEMS_PER_PAGE } from '@shared/constants';
 import { addressNullableFields } from '../user/user.constant';
 import { Store } from '@prisma/client';
+import { GET_STORE } from './store.constant';
 
 @Injectable()
 export class StoreService implements StoreRepository {
@@ -155,7 +156,7 @@ export class StoreService implements StoreRepository {
     storeUpdateInDto,
     where,
     enterpriseId,
-    select,
+    select = GET_STORE,
     showNotFoundError,
   }: UpdateInput): Promise<Store | null> {
     if (storeUpdateInDto.cnpj) {
