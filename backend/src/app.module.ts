@@ -17,7 +17,6 @@ import { PaymentMethodPayableModule } from './entities/payment-method-payable/pa
 import { PaymentMethodReceivableModule } from './entities/payment-method-receivable/payment-method-receivable.module';
 import { StoreModule } from './entities/store/store.module';
 import { VehicleModule } from './entities/vehicle/vehicle.module';
-import { VehicleBaseModule } from './entities/vehicle-base/vehicle-base.module';
 import { VehicleBrandModule } from './entities/vehicle-brand/vehicle-brand.module';
 import { VehicleCharacteristicValueModule } from './entities/vehicle-characteristic-value/vehicle-characteristic-value.module';
 import { VehicleExpenseModule } from './entities/vehicle-expense/vehicle-expense.module';
@@ -43,7 +42,6 @@ import { UserModule } from './entities/user/user.module';
     PaymentMethodReceivableModule,
     StoreModule,
     VehicleModule,
-    VehicleBaseModule,
     VehicleBrandModule,
     VehicleCharacteristicValueModule,
     VehicleExpenseModule,

@@ -9,7 +9,8 @@ export class VehicleSaleService implements VehicleSaleRepository {
   constructor(private prisma: PrismaService) {}
 
   async create(data: CreateInput<VehicleSale>): Promise<VehicleSale> {
-    return this.prisma.vehicleSale.create({ data });
+    const input = { ...data, vehicleSnapshot: {}, customerSnapshot: {} };
+    return this.prisma.vehicleSale.create({ data: input });
   }
 
   async findById(id: string): Promise<VehicleSale | null> {
@@ -25,9 +26,10 @@ export class VehicleSaleService implements VehicleSaleRepository {
   }
 
   async update(id: string, data: UpdateInput<VehicleSale>): Promise<void> {
+    const input = { ...data, vehicleSnapshot: {}, customerSnapshot: {} };
     await this.prisma.vehicleSale.update({
       where: { id: Number(id) },
-      data,
+      data: input,
     });
   }
 
