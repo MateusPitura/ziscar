@@ -26,6 +26,7 @@ import Check from "@mui/icons-material/Check";
 import UnfoldMore from "@mui/icons-material/UnfoldMore";
 import Search from '@mui/icons-material/Search';
 import AddBusiness from '@mui/icons-material/AddBusinessOutlined';
+import Add from '@mui/icons-material/Add';
 
 export const icons = {
   FileDownload,
@@ -55,5 +56,6 @@ export const icons = {
   Check,
   UnfoldMore,
   Search,
-  AddBusiness
+  AddBusiness,
+  Add
 };

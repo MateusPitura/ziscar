@@ -34,6 +34,16 @@ export interface Store {
   archivedAt?: Date;
 }
 
+export interface Customer {
+  id: number;
+  fullName: string;
+  email?: string;
+  phone?: string;
+  cpf: string;
+  address?: Address;
+  archivedAt?: Date;
+}
+
 export type FetchUser = Pick<
   User,
   "id" | "fullName" | "email" | "phone" | "archivedAt" | "roleId"
@@ -41,4 +51,8 @@ export type FetchUser = Pick<
 export type FetchStore = Pick<
   Store,
   "id" | "name" | "email" | "phone" | "archivedAt"
+>;
+export type FetchCustomer = Pick<
+  Customer,
+  "id" | "fullName" | "email" | "phone" | "archivedAt"
 >;

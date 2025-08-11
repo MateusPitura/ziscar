@@ -12,7 +12,7 @@ import { BACKEND_URL } from "@/domains/global/constants";
 import { storeDefaultValues } from "../constants";
 import StoreForm from "../forms/StoreForm";
 
-export default function NewStoresContainer(): ReactNode {
+export default function NewStoreContainer(): ReactNode {
   const { safeFetch } = useSafeFetch();
   const isFetching = useIsFetching({ queryKey: ["cepApi"] });
   const queryClient = useQueryClient();

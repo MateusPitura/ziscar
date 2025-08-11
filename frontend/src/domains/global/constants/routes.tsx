@@ -18,7 +18,7 @@ const Vehicles = lazy(
 );
 
 const Users = lazy(() => import("@/domains/users/components/UsersPage"));
-const NewUser = lazy(() => import("@/domains/users/components/NewUsersPage"));
+const NewUser = lazy(() => import("@/domains/users/components/NewUserPage"));
 const EditUser = lazy(() => import("@/domains/users/components/EditUserPage"));
 
 const EditProfile = lazy(
@@ -26,11 +26,19 @@ const EditProfile = lazy(
 );
 
 const Stores = lazy(() => import("@/domains/stores/components/StoresPage"));
-const NewStore = lazy(
-  () => import("@/domains/stores/components/NewStoresPage")
-);
+const NewStore = lazy(() => import("@/domains/stores/components/NewStorePage"));
 const EditStore = lazy(
   () => import("@/domains/stores/components/EditStorePage")
+);
+
+const Customers = lazy(
+  () => import("@/domains/customers/components/CustomersPage")
+);
+const NewCustomer = lazy(
+  () => import("@/domains/customers/components/NewCustomerPage")
+);
+const EditCustomer = lazy(
+  () => import("@/domains/customers/components/EditCustomerPage")
 );
 
 const VehicleSale = lazy(
@@ -47,10 +55,6 @@ const AccountsPayable = lazy(
 
 const AccountsReceivable = lazy(
   () => import("@/domains/accountsReceivable/components/AccountsReceivablePage")
-);
-
-const Customers = lazy(
-  () => import("@/domains/customers/components/CustomersPage")
 );
 
 export const privateRoutes: Route[] = [
@@ -150,6 +154,20 @@ export const privateRoutes: Route[] = [
     entryPage: <Customers />,
     shouldDisplay: true,
     action: "READ",
+    resource: "CUSTOMERS",
+  },
+  {
+    path: "/customers/new",
+    entryPage: <NewCustomer />,
+    shouldDisplay: false,
+    action: "CREATE",
+    resource: "CUSTOMERS",
+  },
+  {
+    path: "/customers/edit/:customerId",
+    entryPage: <EditCustomer />,
+    shouldDisplay: false,
+    action: "UPDATE",
     resource: "CUSTOMERS",
   },
 ];

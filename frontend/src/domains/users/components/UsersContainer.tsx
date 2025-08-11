@@ -12,7 +12,7 @@ export default function UsersContainer(): ReactElement {
       <PageHeader title="Usuários">
         <Button
           label="Adicionar usuário"
-          iconLeft="PersonAdd"
+          iconLeft="Add"
           onClick={() => navigate("/users/new")}
           resource="USERS"
           action="CREATE"
