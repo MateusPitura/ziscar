@@ -22,7 +22,11 @@ RUN npm install
 # Copy the rest of the application files
 COPY backend/ ./
 
-# Generate Prisma client
+# Copy scripts directory for enum generation
+COPY scripts/ /app/scripts/
+
+# Generate Prisma client and enums
 RUN npx prisma generate
+RUN cd /app && node scripts/generate-shared-enums.js
 
 CMD ["sh", "-c", "npm run ${APP_ENV}"]
