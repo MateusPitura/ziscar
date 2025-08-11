@@ -1,1 +1,0 @@
-import{d as a,r as n,D as c}from"./index-BXJS51rz.js";function o(t,u){const e=a(),s=e.getQueryCache();return n.useSyncExternalStore(n.useCallback(r=>s.subscribe(c.batchCalls(r)),[s]),()=>e.isFetching(t),()=>e.isFetching(t))}export{o as u};
