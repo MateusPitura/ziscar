@@ -28,6 +28,11 @@ describe('StoreService', () => {
     prismaService = module.get<PrismaService>(PrismaService);
   });
 
+  afterAll(async () => {
+    await prismaService.$disconnect();
+    await module.close();
+  });
+
   it('should create an store with minimal data', async () => {
     await prismaService.transaction(async (transaction) => {
       Reflect.set(storeService, 'prismaService', transaction);
@@ -44,11 +49,6 @@ describe('StoreService', () => {
 
       transaction.rollback();
     });
-  });
-
-  afterAll(async () => {
-    await prismaService.$disconnect();
-    await module.close();
   });
 
   it('should not create an store with the same email', async () => {
