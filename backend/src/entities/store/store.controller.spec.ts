@@ -47,7 +47,7 @@ describe('StoreController', () => {
     storeService = module.get<StoreService>(StoreService);
   });
 
-  afterAll(async () => {
+  afterEach(async () => {
     await prismaService.$disconnect();
     await module.close();
   });

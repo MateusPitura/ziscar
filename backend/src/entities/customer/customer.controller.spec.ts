@@ -47,7 +47,7 @@ describe('CustomerController', () => {
     customerService = module.get<CustomerService>(CustomerService);
   });
 
-  afterAll(async () => {
+  afterEach(async () => {
     await prismaService.$disconnect();
     await module.close();
   });
