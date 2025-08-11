@@ -1,19 +1,13 @@
-import { PrismaService } from 'src/infra/database/prisma.service';
-import { CustomerRepository } from 'src/repositories/customer-repository';
 import { CustomerService } from './customer.service';
 import { Module } from '@nestjs/common';
 import { CustomerController } from './customer.controller';
+import { UserModule } from '../user/user.module';
+import { DatabaseModule } from 'src/infra/database/database.module';
 
 @Module({
+  imports: [UserModule, DatabaseModule],
   controllers: [CustomerController],
-  providers: [
-    PrismaService,
-    {
-      provide: CustomerRepository,
-      useClass: CustomerService,
-    },
-    CustomerService,
-  ],
-  exports: [CustomerRepository, CustomerService],
+  providers: [CustomerService],
+  exports: [CustomerService],
 })
 export class CustomerModule {}
