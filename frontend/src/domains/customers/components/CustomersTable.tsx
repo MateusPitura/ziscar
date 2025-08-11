@@ -99,7 +99,7 @@ export default function CustomersTable(): ReactNode {
       <Table>
         <Table.Header>
           <Table.Head label="ID" />
-          <Table.Head label="Nome" />
+          <Table.Head label="Nome completo" />
           <Table.Head label="Email" />
           <Table.Head label="Celular" />
           <Table.Head label="Status" />
