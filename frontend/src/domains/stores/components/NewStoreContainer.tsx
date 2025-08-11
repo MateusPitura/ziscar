@@ -11,12 +11,14 @@ import parseAddressToCreate from "@/domains/global/utils/parseAddressToCreate";
 import { BACKEND_URL } from "@/domains/global/constants";
 import { storeDefaultValues } from "../constants";
 import StoreForm from "../forms/StoreForm";
+import useSnackbar from "@/domains/global/hooks/useSnackbar";
 
 export default function NewStoreContainer(): ReactNode {
   const { safeFetch } = useSafeFetch();
   const isFetching = useIsFetching({ queryKey: ["cepApi"] });
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const {showSuccessSnackbar} = useSnackbar()
 
   async function createStore(data: StoreFormInputs) {
     const { address: formAddress, ...rest } = data;
@@ -36,8 +38,10 @@ export default function NewStoreContainer(): ReactNode {
 
   const { mutate, isPending } = useMutation({
     mutationFn: createStore,
-
     onSuccess: () => {
+      showSuccessSnackbar({
+        title: "Loja criada com sucesso",
+      });
       navigate("/stores");
       queryClient.invalidateQueries({ queryKey: ["stores"] });
     },

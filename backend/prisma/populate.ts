@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import {
+  POPULATE_CUSTOMER,
   POPULATE_ENTERPRISE,
   POPULATE_STORE,
   POPULATE_USER,
@@ -7,6 +8,7 @@ import {
 import { faker } from '@faker-js/faker';
 import { SEED_ROLE_SALES_ID } from '../../shared/src/constants';
 import { generateCnpj } from '../../shared/src/test/generateCnpj';
+import { generateCpf } from '../../shared/src/test/generateCpf';
 import { encryptPassword } from '../src/entities/user/user.utils';
 import {
   POPULATE_INACTIVE_ENTITIES_AMOUNT,
@@ -49,6 +51,34 @@ async function populate() {
 
     await tx.store.createMany({
       data: otherStores,
+    });
+
+    await tx.customer.createMany({
+      data: [
+        {
+          ...POPULATE_CUSTOMER.DEFAULT,
+          enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
+        },
+        {
+          ...POPULATE_CUSTOMER.INACTIVE,
+          enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
+        },
+      ],
+    });
+
+    const otherCustomers = Array.from(
+      { length: POPULATE_OTHER_ENTITIES_AMOUNT },
+      (_, index) => ({
+        fullName: faker.person.fullName(),
+        cpf: generateCpf(),
+        archivedAt:
+          index < POPULATE_INACTIVE_ENTITIES_AMOUNT ? new Date() : null,
+        enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
+      }),
+    );
+
+    await tx.customer.createMany({
+      data: otherCustomers,
     });
 
     await tx.user.createMany({
