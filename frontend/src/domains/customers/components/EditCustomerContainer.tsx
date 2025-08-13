@@ -27,7 +27,7 @@ export default function EditCustomerContainer(): ReactNode {
   }
 
   const { data: customerData, isFetching } = useQuery({
-    queryKey: ["customers", customerId],
+    queryKey: ["customer", customerId],
     queryFn: getCustomer,
     select: selectCustomerInfo,
   });
@@ -68,7 +68,7 @@ export default function EditCustomerContainer(): ReactNode {
     () => () => {
       if (isSuccess) {
         queryClient.invalidateQueries({
-          queryKey: ["customers", customerId],
+          queryKey: ["customer", customerId],
         });
       }
     },

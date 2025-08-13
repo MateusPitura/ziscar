@@ -20,6 +20,7 @@ const SchemaCustomerFindManyInDto = s
     status: s.radio(['active', 'inactive']).optional(),
     fullName: s.string().optional(),
     orderBy: s.radio(['fullName', 'email']).optional(),
+    cpf: s.number().optional(),
     startDate: s.dateString().optional(),
     endDate: s.dateString().optional(),
   })

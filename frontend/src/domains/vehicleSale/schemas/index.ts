@@ -4,7 +4,7 @@ export const SchemaVehicleSaleForm = s.object({
   customer: s.object({
     id: s.id().or(s.empty()),
     fullName: s.fullName(),
-    email: s.email(),
+    cpf: s.cpf(),
   }),
   vehicle: s.object({
     model: s.string(),

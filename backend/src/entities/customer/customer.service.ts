@@ -129,6 +129,12 @@ export class CustomerService {
         mode: 'insensitive',
       };
     }
+    const cpf = customerFindManyInDto?.cpf;
+    if (cpf) {
+      findManyWhere.where['cpf'] = {
+        contains: cpf.toString(),
+      };
+    }
     const status = customerFindManyInDto?.status;
     if (status === 'inactive') {
       findManyWhere.where['archivedAt'] = { not: null };

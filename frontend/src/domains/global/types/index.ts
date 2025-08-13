@@ -29,11 +29,13 @@ export type QueryKeys =
   | "ibgeApi"
   | "user"
   | "users"
+  | "store"
+  | "stores"
+  | "customer"
+  | "customers"
   | "profile"
   | "permissions"
-  | "stores"
-  | "customers"
-  | "usersSearch";
+  | "customersSearch"
 
 export interface UsersFilter extends UsersFilterFormInputs, Pageable {}
 export interface StoresFilter extends StoresFilterFormInputs, Pageable {}
@@ -49,6 +51,7 @@ export type DateFormats = "yyyy-MM-dd" | "dd/MM/yyyy" | "HH-mm" | "dd-MM-yyyy";
 export interface Options {
   value: string;
   label: string;
+  description?: string;
 }
 
 export type AddressFormInputs = s.infer<typeof SchemaAddress>;

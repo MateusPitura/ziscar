@@ -4,6 +4,7 @@ import Select from "./Select";
 import { useQuery } from "@tanstack/react-query";
 import { QueryKeys, UnwrapArray } from "@/domains/global/types";
 import { useDebounce } from "@/domains/global/hooks/useDebounce";
+import Button from "../Button";
 
 interface SearchProperties<T, K extends Record<string, unknown>[]> {
   fetchCallback: (search?: string) => Promise<K>;
@@ -13,6 +14,8 @@ interface SearchProperties<T, K extends Record<string, unknown>[]> {
   onChange?: (selectedData?: UnwrapArray<K>) => void;
   valueKey: keyof UnwrapArray<K>;
   labelKey: keyof UnwrapArray<K>;
+  descriptionKey?: keyof UnwrapArray<K>;
+  formatDescriptionKey?: (item: unknown) => string | undefined;
 }
 
 export default function Search<
@@ -26,6 +29,8 @@ export default function Search<
   onChange,
   labelKey,
   valueKey,
+  descriptionKey,
+  formatDescriptionKey,
 }: SearchProperties<T, K>): ReactElement {
   const { value, setValue } = useDebounce();
 
@@ -40,8 +45,9 @@ export default function Search<
     return data?.map((item) => ({
       label: String(item[labelKey as string]),
       value: String(item[valueKey as string]),
+      description: formatDescriptionKey?.(item[descriptionKey as string]),
     }));
-  }, [data, labelKey, valueKey]);
+  }, [data, labelKey, valueKey, descriptionKey]);
 
   return (
     <Select
@@ -52,12 +58,15 @@ export default function Search<
       shouldFilter={false}
       loading={isLoading}
       onChange={(selectedValue) => {
-        const selectedData = data?.find(
+        const selectedItem = data?.find(
           (item) => String(item[valueKey as string]) === selectedValue
         ) as UnwrapArray<K> | undefined;
 
-        onChange?.(selectedData);
+        onChange?.(selectedItem);
       }}
+      notFound={
+        value && <Button label={`Cadastrar "${value}"`} variant="quaternary" />
+      }
     />
   );
 }

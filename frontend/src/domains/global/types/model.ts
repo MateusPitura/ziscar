@@ -54,5 +54,5 @@ export type FetchStore = Pick<
 >;
 export type FetchCustomer = Pick<
   Customer,
-  "id" | "fullName" | "email" | "phone" | "archivedAt"
+  "id" | "fullName" | "email" | "phone" | "archivedAt" | "cpf"
 >;

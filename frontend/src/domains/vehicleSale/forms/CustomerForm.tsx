@@ -16,9 +16,10 @@ export default function CustomerForm(): ReactNode {
         disabled={!!customerIdWatch}
       />
       <Input<VehicleSaleFormInputs>
-        label="Email"
-        name="customer.email"
+        label="CPF"
+        name="customer.cpf"
         disabled={!!customerIdWatch}
+        mask="cpf"
       />
     </>
   );

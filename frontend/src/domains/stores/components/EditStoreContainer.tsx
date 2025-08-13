@@ -32,7 +32,7 @@ export default function EditStoreContainer(): ReactNode {
   }
 
   const { data: storeData, isFetching } = useQuery({
-    queryKey: ["stores", storeId],
+    queryKey: ["store", storeId],
     queryFn: getStore,
     select: selectStoreInfo,
   });
@@ -73,7 +73,7 @@ export default function EditStoreContainer(): ReactNode {
     () => () => {
       if (isSuccess) {
         queryClient.invalidateQueries({
-          queryKey: ["stores", storeId],
+          queryKey: ["store", storeId],
         });
       }
     },

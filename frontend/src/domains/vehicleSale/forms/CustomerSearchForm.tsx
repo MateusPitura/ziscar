@@ -1,21 +1,22 @@
 import Search from "@/design-system/Form/Search";
 import type { ReactElement } from "react";
-import { FetchUser } from "@/domains/global/types/model";
+import { FetchCustomer } from "@/domains/global/types/model";
 import { BACKEND_URL } from "@/domains/global/constants";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import { VehicleSaleFormInputs } from "../types";
 import { useFormContext } from "react-hook-form";
+import { applyMask } from "@/domains/global/utils/applyMask";
 
 export default function CustomerSearchForm(): ReactElement {
   const { safeFetch } = useSafeFetch();
 
   const { setValue, resetField } = useFormContext<VehicleSaleFormInputs>();
 
-  async function getUsersInfo(filter?: string): Promise<FetchUser[]> {
+  async function getCustomersInfo(filter?: string): Promise<FetchCustomer[]> {
     if (!filter) return [];
 
-    const result = await safeFetch(`${BACKEND_URL}/user?fullName=${filter}`, {
-      resource: "USERS",
+    const result = await safeFetch(`${BACKEND_URL}/customer?cpf=${filter}`, {
+      resource: "CUSTOMERS",
       action: "READ",
     });
 
@@ -24,11 +25,11 @@ export default function CustomerSearchForm(): ReactElement {
 
   return (
     <>
-      <Search<VehicleSaleFormInputs, FetchUser[]>
-        label="Nome completo"
+      <Search<VehicleSaleFormInputs, FetchCustomer[]>
+        label="CPF"
         name="customer.id"
-        fetchCallback={getUsersInfo}
-        queryKey="usersSearch"
+        fetchCallback={getCustomersInfo}
+        queryKey="customersSearch"
         onChange={(value) => {
           if (!value) {
             resetField("customer");
@@ -39,13 +40,15 @@ export default function CustomerSearchForm(): ReactElement {
             {
               id: value.id,
               fullName: value.fullName,
-              email: value.email,
+              cpf: value.cpf,
             },
             { shouldDirty: true }
           );
         }}
         labelKey="fullName"
         valueKey="id"
+        descriptionKey="cpf"
+        formatDescriptionKey={(item) => applyMask(item as string, "cpf")}
       />
     </>
   );
