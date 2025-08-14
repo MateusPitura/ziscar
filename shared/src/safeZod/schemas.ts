@@ -15,10 +15,15 @@ export const array = <T extends z.ZodTypeAny>(schema: T, maxItems?: number) => {
   const arraySchema = z.array(schema);
   return maxItems
     ? arraySchema.max(maxItems, {
-        message: `Limite de ${maxItems} excedido`,
-      })
+      message: `Limite de ${maxItems} excedido`,
+    })
     : arraySchema;
 };
+
+
+export const nativeEnum = <T extends Record<string, string>>(e: T) =>
+  z.nativeEnum(e);
+
 
 export const boolean = z.boolean;
 
