@@ -2,6 +2,7 @@ import { Childrenable } from "@/domains/global/types";
 import classNames from "classnames";
 import { type ReactNode } from "react";
 import Button from "./Button";
+import { Action, Resource } from "@shared/types";
 
 function Container({ children }: Childrenable): ReactNode {
   return <div className="flex-1 flex flex-col">{children}</div>;
@@ -12,9 +13,18 @@ interface TabProperties {
   isActive: boolean;
   onClick: () => void;
   hasError?: boolean;
+  resource: Resource;
+  action: Action;
 }
 
-function Tab({ title, isActive, onClick, hasError }: TabProperties): ReactNode {
+function Tab({
+  title,
+  isActive,
+  onClick,
+  hasError,
+  action,
+  resource,
+}: TabProperties): ReactNode {
   return (
     <div
       className={classNames(
@@ -29,6 +39,8 @@ function Tab({ title, isActive, onClick, hasError }: TabProperties): ReactNode {
         variant="quaternary"
         onClick={onClick}
         color={hasError ? "red" : undefined}
+        resource={resource}
+        action={action}
       />
     </div>
   );
@@ -43,7 +55,11 @@ function Header({ children }: Childrenable): ReactNode {
 }
 
 function Body({ children }: Childrenable): ReactNode {
-  return <div className="bg-neutral-50 flex-1 z-10 relative flex justify-center py-4">{children}</div>;
+  return (
+    <div className="bg-neutral-50 flex-1 z-10 relative flex justify-center py-4">
+      {children}
+    </div>
+  );
 }
 
 interface SectionProperties extends Childrenable {

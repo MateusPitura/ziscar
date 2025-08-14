@@ -87,6 +87,7 @@ function PageSideBar(): ReactElement {
                 navigate(route.path);
               }}
               fullWidth
+              data-cy={`button-${route.path}`}
             />
           );
         })}
@@ -98,6 +99,7 @@ function PageSideBar(): ReactElement {
         label={isSideMenuOpen ? "Sair" : undefined}
         state={isPending ? "loading" : undefined}
         fullWidth
+        data-cy="button-sign-out"
       />
     </div>
   );

@@ -1,4 +1,3 @@
-import Button from "@/design-system/Button";
 import Input from "@/design-system/Form/Input";
 import { useEffect, useState, type ReactNode } from "react";
 import { useFormContext } from "react-hook-form";
@@ -8,7 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { addressDefaultValues } from "@/domains/users/constants";
 import { UserFormInputs } from "@/domains/users/types";
 import Select from "@/design-system/Form/Select";
-import { STATES } from "../constants";
+import { CEP_LENGTH_WITH_MASK, STATES } from "../constants";
 import FieldArray from "@/design-system/Form/FieldArray";
 
 interface ViaCepAddress {
@@ -99,6 +98,14 @@ export default function AddressFields(): ReactNode {
     }
   }
 
+  const cepWatch = watch("address.0.cep");
+
+  useEffect(() => {
+    if (cepWatch?.length === CEP_LENGTH_WITH_MASK) {
+      fillAddress();
+    }
+  }, [cepWatch]);
+
   function handleOnSubmitCepField(
     event: React.KeyboardEvent<HTMLInputElement>
   ) {
@@ -117,24 +124,15 @@ export default function AddressFields(): ReactNode {
       appendDefaultValues={addressDefaultValues}
       render={() => (
         <>
-          <div
-            className="flex items-center justify-between gap-1"
-            onKeyDown={handleOnSubmitCepField}
-          >
+          <div onKeyDown={handleOnSubmitCepField}>
             <Input<UserFormInputs>
               label="CEP"
               name="address.0.cep"
               mask="cep"
-              maxLength={9}
+              maxLength={CEP_LENGTH_WITH_MASK}
               required
               forceUnselect
-            />
-            <Button
-              variant="quaternary"
-              label="Preencher automaticamente"
-              onClick={fillAddress}
-              padding="none"
-              state={isFetchingCep ? "loading" : undefined}
+              disabled={isFetchingCep}
             />
           </div>
           <Input<UserFormInputs>
@@ -142,15 +140,24 @@ export default function AddressFields(): ReactNode {
             name="address.0.number"
             required
           />
-          <Input<UserFormInputs> label="Rua" name="address.0.street" />
-          <Input<UserFormInputs> label="Bairro" name="address.0.neighborhood" />
+          <Input<UserFormInputs>
+            label="Rua"
+            name="address.0.street"
+            disabled={isFetchingCep}
+          />
+          <Input<UserFormInputs>
+            label="Bairro"
+            name="address.0.neighborhood"
+            disabled={isFetchingCep}
+          />
           <Select<UserFormInputs>
             label="Estado"
             name="address.0.state"
             options={STATES}
             onChange={() =>
-              setValue(`address.0.cityIbgeCode`, "", { shouldDirty: true })
+              setValue("address.0.cityIbgeCode", "", { shouldDirty: true })
             }
+            disabled={isFetchingCep}
           />
           <Select<UserFormInputs>
             label="Cidade"

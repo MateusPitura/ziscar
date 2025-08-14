@@ -6,14 +6,16 @@ import { FetchUser } from "@/domains/global/types/model";
 import { useQuery } from "@tanstack/react-query";
 import selectUsersInfo from "../utils/selectUsersInfo";
 import UsersFilterForm from "../forms/UsersFilterForm";
-import useGlobalContext from "@/domains/global/hooks/useGlobalContext";
 import formatFilters from "@/domains/global/utils/formatFilters";
 import UsersTableActions from "./UsersTableActions";
-import { DisableUser } from "../types";
+import { DisableUser, UsersFilterFormInputs } from "../types";
 import DisableUserModal from "./DisableUserModal";
 import useDialog from "@/domains/global/hooks/useDialog";
 import { PageablePayload } from "@/domains/global/types";
 import ExportButton from "@/domains/pdf/components/ExportButton";
+import useFilterContext from "@/domains/global/hooks/useFilterContext";
+
+const disableReport = true;
 
 export default function UsersTable(): ReactNode {
   const [disableUserInfo, setDisableUserInfo] = useState<DisableUser>({
@@ -23,7 +25,7 @@ export default function UsersTable(): ReactNode {
 
   const dialog = useDialog();
   const { safeFetch } = useSafeFetch();
-  const { usersFilter, handleUsersFilter } = useGlobalContext();
+  const { usersFilter, handleUsersFilter } = useFilterContext();
 
   function handleDisableUserInfo(user: DisableUser) {
     dialog.openDialog();
@@ -60,19 +62,38 @@ export default function UsersTable(): ReactNode {
     <>
       <DisableUserModal {...disableUserInfo} {...dialog} />
       <div className="flex gap-4 justify-end">
-        <ExportButton
-          fileName="usuarios"
-          resource="USERS"
-          queryKey={["users", filterFormatted]}
-          queryFn={getUsersInfo}
-          formatColumns={{
-            id: "ID",
-            fullName: "Nome",
-            email: "Email",
-            phone: "Celular",
-            archivedAt: "Ativo",
-          }}
-        />
+        {disableReport && (
+          <ExportButton<FetchUser, UsersFilterFormInputs>
+            fileName="Relatório Usuários"
+            resource="USERS"
+            queryKey={["users", filterFormatted]}
+            queryFn={getUsersInfo}
+            formatFilters={{
+              fullName: "Nome completo",
+              orderBy: "Ordenar por",
+              status: "Status",
+              startDate: "Data inicial",
+              endDate: "Data final",
+            }}
+            formatFiltersValues={{
+              orderBy: {
+                email: "Email",
+                fullName: "Nome completo",
+              },
+              status: {
+                active: "Ativo",
+                inactive: "Inativo",
+              },
+            }}
+            formatColumns={{
+              id: "ID",
+              fullName: "Nome",
+              email: "Email",
+              phone: "Celular",
+              archivedAt: "Ativo",
+            }}
+          />
+        )}
         <Table.Filter form={<UsersFilterForm />} />
       </div>
       <Table>

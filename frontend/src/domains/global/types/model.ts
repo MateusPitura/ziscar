@@ -24,4 +24,21 @@ export interface User {
   permissions: Record<Resource, Record<Action, boolean>>;
 }
 
-export type FetchUser = Pick<User, "id" | "fullName" | "email" | "phone" | "archivedAt" | 'roleId'>;
+export interface Store {
+  id: number;
+  name: string;
+  email?: string;
+  phone?: string;
+  cnpj: string;
+  address?: Address;
+  archivedAt?: Date;
+}
+
+export type FetchUser = Pick<
+  User,
+  "id" | "fullName" | "email" | "phone" | "archivedAt" | "roleId"
+>;
+export type FetchStore = Pick<
+  Store,
+  "id" | "name" | "email" | "phone" | "archivedAt"
+>;

@@ -1,263 +1,264 @@
-// import { Test, TestingModule } from '@nestjs/testing';
-// import { UserController } from './user.controller';
-// import { UserService } from './user.service';
-// import { JwtService } from '@nestjs/jwt';
-// import { FETCH_USER, GET_USER } from './user.constant';
-// import { EmailService } from '../email/email.service';
-// import { AuthRequest } from 'src/auth/auth.type';
-// import { ITEMS_PER_PAGE, SEED_ROLE_SALES_ID } from '@shared/constants';
-// import { ForbiddenException, NotFoundException } from '@nestjs/common';
-// import { PrismaService } from 'src/infra/database/prisma.service';
-// import {
-//   AUTH_REQUEST_DEFAULT,
-//   POPULATE_ENTERPRISE_PRIMARY_ID,
-//   POPULATE_USER_DEFAULT,
-//   POPULATE_USER_INACTIVE,
-// } from 'src/constants';
+import { Test, TestingModule } from '@nestjs/testing';
+import { UserController } from './user.controller';
+import { UserService } from './user.service';
+import { JwtService } from '@nestjs/jwt';
+import { FETCH_USER, GET_USER } from './user.constant';
+import { EmailService } from '../email/email.service';
+import { AuthRequest } from 'src/entities/auth/auth.type';
+import { ITEMS_PER_PAGE, SEED_ROLE_SALES_ID } from '@shared/constants';
+import { ForbiddenException, NotFoundException } from '@nestjs/common';
+import { PrismaService } from 'src/infra/database/prisma.service';
+import { AUTH_REQUEST_DEFAULT } from 'src/constants';
+import { POPULATE_ENTERPRISE, POPULATE_USER } from 'src/constants/populate';
 
-// describe('UserController', () => {
-//   let userController: UserController;
-//   let userService: UserService;
-//   let prismaService: PrismaService;
+describe('UserController', () => {
+  let userController: UserController;
+  let userService: UserService;
+  let prismaService: PrismaService;
+  let module: TestingModule;
 
-//   beforeEach(async () => {
-//     const module: TestingModule = await Test.createTestingModule({
-//       controllers: [UserController],
-//       providers: [
-//         UserService,
-//         PrismaService,
-//         JwtService,
-//         {
-//           provide: EmailService,
-//           useValue: {
-//             sendEmail: jest.fn(),
-//           },
-//         },
-//         {
-//           provide: JwtService,
-//           useValue: {
-//             sign: jest.fn().mockReturnValue(''),
-//           },
-//         },
-//       ],
-//     }).compile();
+  beforeEach(async () => {
+    module = await Test.createTestingModule({
+      controllers: [UserController],
+      providers: [
+        UserService,
+        PrismaService,
+        {
+          provide: EmailService,
+          useValue: {
+            sendEmail: jest.fn(),
+          },
+        },
+        {
+          provide: JwtService,
+          useValue: {
+            sign: jest.fn().mockReturnValue(''),
+          },
+        },
+      ],
+    }).compile();
 
-//     userController = module.get<UserController>(UserController);
-//     prismaService = module.get<PrismaService>(PrismaService);
-//     userService = module.get<UserService>(UserService);
-//   });
+    userController = module.get<UserController>(UserController);
+    prismaService = module.get<PrismaService>(PrismaService);
+    userService = module.get<UserService>(UserService);
+  });
 
-//   it('should create an user', async () => {
-//     await prismaService.transaction(async (transaction) => {
-//       Reflect.set(userService, 'prismaService', transaction);
+  afterAll(async () => {
+    await prismaService.$disconnect();
+    await module.close();
+  });
 
-//       expect(
-//         await userController.post(AUTH_REQUEST_DEFAULT, {
-//           email: 'jane.doe@email.com',
-//           fullName: 'Jane Doe',
-//           roleId: SEED_ROLE_SALES_ID,
-//         }),
-//       ).toBeTruthy();
+  it('should create an user', async () => {
+    await prismaService.transaction(async (transaction) => {
+      Reflect.set(userService, 'prismaService', transaction);
 
-//       transaction.rollback();
-//     });
-//   });
+      expect(
+        await userController.post(AUTH_REQUEST_DEFAULT, {
+          email: 'jane.doe@email.com',
+          fullName: 'Jane Doe',
+          roleId: SEED_ROLE_SALES_ID,
+        }),
+      ).toBeTruthy();
 
-//   it('should find signed user', async () => {
-//     const user = await userController.getProfile(AUTH_REQUEST_DEFAULT);
+      transaction.rollback();
+    });
+  });
 
-//     for (const key in GET_USER) {
-//       expect(user).toHaveProperty(key);
-//     }
-//   });
+  it('should find signed user', async () => {
+    const user = await userController.getProfile(AUTH_REQUEST_DEFAULT);
 
-//   it('should not find inactive user', async () => {
-//     await expect(
-//       userController.get(AUTH_REQUEST_DEFAULT, {
-//         id: POPULATE_USER_INACTIVE.id,
-//       }),
-//     ).rejects.toThrow(NotFoundException);
-//   });
+    for (const key in GET_USER) {
+      expect(user).toHaveProperty(key);
+    }
+  });
 
-//   it('should not find signed inactive user', async () => {
-//     const request = {
-//       ...AUTH_REQUEST_DEFAULT,
-//       authToken: {
-//         ...AUTH_REQUEST_DEFAULT.authToken,
-//         userId: POPULATE_USER_INACTIVE.id,
-//       },
-//     } as AuthRequest;
+  it('should not find inactive user', async () => {
+    await expect(
+      userController.get(AUTH_REQUEST_DEFAULT, {
+        id: POPULATE_USER.INACTIVE.id,
+      }),
+    ).rejects.toThrow(NotFoundException);
+  });
 
-//     await expect(userController.getProfile(request)).rejects.toThrow(
-//       NotFoundException,
-//     );
-//   });
+  it('should not find signed inactive user', async () => {
+    const request = {
+      ...AUTH_REQUEST_DEFAULT,
+      authToken: {
+        ...AUTH_REQUEST_DEFAULT.authToken,
+        userId: POPULATE_USER.INACTIVE.id,
+      },
+    } as AuthRequest;
 
-//   it('should find one user by id', async () => {
-//     const request = {
-//       ...AUTH_REQUEST_DEFAULT,
-//       authToken: {
-//         ...AUTH_REQUEST_DEFAULT.authToken,
-//         userId: 1,
-//       },
-//     } as AuthRequest;
+    await expect(userController.getProfile(request)).rejects.toThrow(
+      NotFoundException,
+    );
+  });
 
-//     const user = await userController.get(request, {
-//       id: POPULATE_USER_DEFAULT.id,
-//     });
+  it('should find one user by id', async () => {
+    const request = {
+      ...AUTH_REQUEST_DEFAULT,
+      authToken: {
+        ...AUTH_REQUEST_DEFAULT.authToken,
+        userId: 1,
+      },
+    } as AuthRequest;
 
-//     for (const key in GET_USER) {
-//       expect(user).toHaveProperty(key);
-//     }
-//   });
+    const user = await userController.get(request, {
+      id: POPULATE_USER.ADM.id,
+    });
 
-//   it('should not allow find user by id equal to signed id', async () => {
-//     await expect(
-//       userController.get(AUTH_REQUEST_DEFAULT, {
-//         id: POPULATE_USER_DEFAULT.id,
-//       }),
-//     ).rejects.toThrow(ForbiddenException);
-//   });
+    for (const key in GET_USER) {
+      expect(user).toHaveProperty(key);
+    }
+  });
 
-//   it('should update user and return the same properties of get user', async () => {
-//     await prismaService.transaction(async (transaction) => {
-//       Reflect.set(userService, 'prismaService', transaction);
+  it('should not allow find user by id equal to signed id', async () => {
+    await expect(
+      userController.get(AUTH_REQUEST_DEFAULT, {
+        id: POPULATE_USER.ADM.id,
+      }),
+    ).rejects.toThrow(ForbiddenException);
+  });
 
-//       const request = {
-//         ...AUTH_REQUEST_DEFAULT,
-//         authToken: {
-//           ...AUTH_REQUEST_DEFAULT.authToken,
-//           userId: 1,
-//         },
-//       } as AuthRequest;
+  it('should update user and return the same properties of get user', async () => {
+    await prismaService.transaction(async (transaction) => {
+      Reflect.set(userService, 'prismaService', transaction);
 
-//       const user = await userController.patch(
-//         request,
-//         { id: POPULATE_USER_DEFAULT.id },
-//         {
-//           fullName: 'Jane Doe',
-//         },
-//       );
+      const request = {
+        ...AUTH_REQUEST_DEFAULT,
+        authToken: {
+          ...AUTH_REQUEST_DEFAULT.authToken,
+          userId: 1,
+        },
+      } as AuthRequest;
 
-//       for (const key in GET_USER) {
-//         expect(user).toHaveProperty(key);
-//       }
+      const user = await userController.patch(
+        request,
+        { id: POPULATE_USER.ADM.id },
+        {
+          fullName: 'Jane Doe',
+        },
+      );
 
-//       transaction.rollback();
-//     });
-//   });
+      for (const key in GET_USER) {
+        expect(user).toHaveProperty(key);
+      }
 
-//   it('should not allow update user with id equal to signed id', async () => {
-//     await prismaService.transaction(async (transaction) => {
-//       Reflect.set(userService, 'prismaService', transaction);
+      transaction.rollback();
+    });
+  });
 
-//       await expect(
-//         userController.patch(
-//           AUTH_REQUEST_DEFAULT,
-//           { id: POPULATE_USER_DEFAULT.id },
-//           {
-//             fullName: 'Jane Doe',
-//           },
-//         ),
-//       ).rejects.toThrow(ForbiddenException);
+  it('should not allow update user with id equal to signed id', async () => {
+    await prismaService.transaction(async (transaction) => {
+      Reflect.set(userService, 'prismaService', transaction);
 
-//       transaction.rollback();
-//     });
-//   });
+      await expect(
+        userController.patch(
+          AUTH_REQUEST_DEFAULT,
+          { id: POPULATE_USER.ADM.id },
+          {
+            fullName: 'Jane Doe',
+          },
+        ),
+      ).rejects.toThrow(ForbiddenException);
 
-//   it('should update signed user', async () => {
-//     await prismaService.transaction(async (transaction) => {
-//       Reflect.set(userService, 'prismaService', transaction);
+      transaction.rollback();
+    });
+  });
 
-//       const user = await userController.patchProfile(AUTH_REQUEST_DEFAULT, {
-//         fullName: 'Jane Doe',
-//       });
+  it('should update signed user', async () => {
+    await prismaService.transaction(async (transaction) => {
+      Reflect.set(userService, 'prismaService', transaction);
 
-//       for (const key in GET_USER) {
-//         expect(user).toHaveProperty(key);
-//       }
+      const user = await userController.patchProfile(AUTH_REQUEST_DEFAULT, {
+        fullName: 'Jane Doe',
+      });
 
-//       transaction.rollback();
-//     });
-//   });
+      for (const key in GET_USER) {
+        expect(user).toHaveProperty(key);
+      }
 
-//   it('should find many users with many filters', async () => {
-//     const spy = jest.spyOn(prismaService.user, 'findMany');
+      transaction.rollback();
+    });
+  });
 
-//     await userController.findMany(AUTH_REQUEST_DEFAULT, {
-//       page: 1,
-//       status: 'active',
-//       fullName: POPULATE_USER_DEFAULT.fullName,
-//       orderBy: 'fullName',
-//     });
+  it('should find many users with many filters', async () => {
+    const spy = jest.spyOn(prismaService.user, 'findMany');
 
-//     expect(spy).toHaveBeenCalledWith({
-//       skip: 0,
-//       take: ITEMS_PER_PAGE,
-//       where: {
-//         fullName: {
-//           contains: POPULATE_USER_DEFAULT.fullName.toLocaleLowerCase(),
-//           mode: 'insensitive',
-//         },
-//         archivedAt: null,
-//         enterpriseId: POPULATE_ENTERPRISE_PRIMARY_ID,
-//         id: {
-//           not: POPULATE_USER_DEFAULT.id,
-//         },
-//       },
-//       orderBy: [{ fullName: 'asc' }],
-//       select: FETCH_USER,
-//     });
-//   });
+    await userController.findMany(AUTH_REQUEST_DEFAULT, {
+      page: 1,
+      status: 'active',
+      fullName: POPULATE_USER.ADM.fullName,
+      orderBy: 'fullName',
+    });
 
-//   it('should disable user', async () => {
-//     await prismaService.transaction(async (transaction) => {
-//       Reflect.set(userService, 'prismaService', transaction);
+    expect(spy).toHaveBeenCalledWith({
+      skip: 0,
+      take: ITEMS_PER_PAGE,
+      where: {
+        fullName: {
+          contains: POPULATE_USER.ADM.fullName.toLocaleLowerCase(),
+          mode: 'insensitive',
+        },
+        archivedAt: null,
+        enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
+        id: {
+          not: POPULATE_USER.ADM.id,
+        },
+      },
+      orderBy: [{ fullName: 'asc' }],
+      select: FETCH_USER,
+    });
+  });
 
-//       const request = {
-//         ...AUTH_REQUEST_DEFAULT,
-//         authToken: {
-//           ...AUTH_REQUEST_DEFAULT.authToken,
-//           userId: 1,
-//         },
-//       } as AuthRequest;
+  it('should disable user', async () => {
+    await prismaService.transaction(async (transaction) => {
+      Reflect.set(userService, 'prismaService', transaction);
 
-//       expect(
-//         await userController.disable(
-//           request,
-//           { id: POPULATE_USER_DEFAULT.id },
-//           {
-//             archivedAt: new Date(),
-//           },
-//         ),
-//       ).toBeTruthy();
+      const request = {
+        ...AUTH_REQUEST_DEFAULT,
+        authToken: {
+          ...AUTH_REQUEST_DEFAULT.authToken,
+          userId: 1,
+        },
+      } as AuthRequest;
 
-//       transaction.rollback();
-//     });
-//   });
+      expect(
+        await userController.disable(
+          request,
+          { id: POPULATE_USER.ADM.id },
+          {
+            archivedAt: new Date(),
+          },
+        ),
+      ).toBeTruthy();
 
-//   it('should not allow disable user by id with id equal to signed id ', async () => {
-//     await prismaService.transaction(async (transaction) => {
-//       Reflect.set(userService, 'prismaService', transaction);
+      transaction.rollback();
+    });
+  });
 
-//       await expect(
-//         userController.disable(
-//           AUTH_REQUEST_DEFAULT,
-//           { id: POPULATE_USER_DEFAULT.id },
-//           {
-//             archivedAt: new Date(),
-//           },
-//         ),
-//       ).rejects.toThrow(ForbiddenException);
+  it('should not allow disable user by id with id equal to signed id ', async () => {
+    await prismaService.transaction(async (transaction) => {
+      Reflect.set(userService, 'prismaService', transaction);
 
-//       transaction.rollback();
-//     });
-//   });
+      await expect(
+        userController.disable(
+          AUTH_REQUEST_DEFAULT,
+          { id: POPULATE_USER.ADM.id },
+          {
+            archivedAt: new Date(),
+          },
+        ),
+      ).rejects.toThrow(ForbiddenException);
 
-//   it('should get user permissions', async () => {
-//     const permissions =
-//       await userController.getPermissions(AUTH_REQUEST_DEFAULT);
+      transaction.rollback();
+    });
+  });
 
-//     expect(permissions).toBeTruthy();
-//   });
-// });
+  it('should get user permissions', async () => {
+    const permissions =
+      await userController.getPermissions(AUTH_REQUEST_DEFAULT);
+
+    expect(permissions).toBeTruthy();
+  });
+});

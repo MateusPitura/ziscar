@@ -117,6 +117,7 @@ export default function UserForm({
                   <Section.Header title="Segurança" />
                   <Section.Body>
                     <Button
+                      data-cy="request-change-password-button"
                       label="Alterar senha"
                       onClick={() => dialog.openDialog()}
                     />

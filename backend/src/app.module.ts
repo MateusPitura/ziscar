@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-// import { AuthModule } from './auth/auth.module';
+import { AuthModule } from './entities/auth/auth.module';
 import { DatabaseModule } from './infra/database/database.module';
 import { ConfigModule } from '@nestjs/config';
 import { EmailModule } from './entities/email/email.module';
@@ -15,8 +15,6 @@ import { CityModule } from './entities/city/city.module';
 import { CustomerModule } from './entities/customer/customer.module';
 import { PaymentMethodPayableModule } from './entities/payment-method-payable/payment-method-payable.module';
 import { PaymentMethodReceivableModule } from './entities/payment-method-receivable/payment-method-receivable.module';
-import { PermissionModule } from './entities/permission/permission.module';
-import { RoleModule } from './entities/role/role.module';
 import { StoreModule } from './entities/store/store.module';
 import { VehicleModule } from './entities/vehicle/vehicle.module';
 import { VehicleBaseModule } from './entities/vehicle-base/vehicle-base.module';
@@ -25,15 +23,15 @@ import { VehicleCharacteristicValueModule } from './entities/vehicle-characteris
 import { VehicleExpenseModule } from './entities/vehicle-expense/vehicle-expense.module';
 import { VehiclePurchaseModule } from './entities/vehicle-purchase/vehicle-purchase.module';
 import { VehicleSaleModule } from './entities/vehicle-sale/vehicle-sale.module';
-// import { UserModule } from './entities/user/user.module';
+import { UserModule } from './entities/user/user.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    // AuthModule,
-    // UserModule,
-    // DatabaseModule,
-    // EmailModule,
+    AuthModule,
+    UserModule,
+    DatabaseModule,
+    EmailModule,
     AccountPayableModule,
     AccountPayableInstallmentModule,
     AccountReceivableModule,
@@ -43,8 +41,6 @@ import { VehicleSaleModule } from './entities/vehicle-sale/vehicle-sale.module';
     CustomerModule,
     PaymentMethodPayableModule,
     PaymentMethodReceivableModule,
-    PermissionModule,
-    RoleModule,
     StoreModule,
     VehicleModule,
     VehicleBaseModule,
@@ -62,4 +58,4 @@ import { VehicleSaleModule } from './entities/vehicle-sale/vehicle-sale.module';
   ],
   controllers: [AppController],
 })
-export class AppModule { }
+export class AppModule {}

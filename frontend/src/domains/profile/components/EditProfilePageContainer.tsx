@@ -13,7 +13,7 @@ import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import Spinner from "@/design-system/Spinner";
 import { UserFormInputs } from "@/domains/users/types";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
-import parseAddressPayload from "@/domains/global/utils/parseAddressPayload";
+import parseAddressToUpdate from "@/domains/global/utils/parseAddressToUpdate";
 
 export default function EditProfilePageContainer(): ReactNode {
   const { safeFetch } = useSafeFetch();
@@ -35,11 +35,10 @@ export default function EditProfilePageContainer(): ReactNode {
   async function editUser(data: UserFormInputs) {
     const { address, ...rest } = data;
 
-    const addressPayload = parseAddressPayload({
+    const addressPayload = parseAddressToUpdate({
       newAddress: address,
       oldAddress: profileData?.address,
     });
-    console.log('🌠 C');
 
     await safeFetch(`${BACKEND_URL}/profile`, {
       method: "PATCH",

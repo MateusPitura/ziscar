@@ -207,6 +207,7 @@ function Footer({
         iconLeft="NavigateBefore"
         onClick={handleBefore}
         label="Anterior"
+        data-cy="table-navigate-before"
         state={
           isLoading
             ? "loading"
@@ -232,6 +233,7 @@ function Footer({
         iconRight="NavigateNext"
         onClick={handleNext}
         label="Próxima"
+        data-cy="table-navigate-next"
         state={
           isLoading
             ? "loading"

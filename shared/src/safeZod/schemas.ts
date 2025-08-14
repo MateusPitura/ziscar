@@ -5,6 +5,8 @@ import { removeMask } from "../utils/removeMask";
 
 export type infer<T extends z.ZodTypeAny> = z.infer<T>;
 
+export const nativeEnum = z.nativeEnum;
+
 export const radio = z.enum;
 
 export function checkbox<T extends string>(values: readonly T[]) {
@@ -55,6 +57,32 @@ export const date = () =>
     }),
   });
 
+export const dateString = () =>
+  date().transform((date) => date.toISOString().split("T")[0]);
+
+export const birthDate = () =>
+  date()
+    .min(new Date("1900-01-01"), { message: "Data de nascimento inválida" })
+    .max(new Date(), { message: "Data de nascimento inválida" });
+
+export const dateRangeRule: [
+  (data: Record<string, unknown>) => boolean,
+  object
+] = [
+  (data: Record<string, unknown>) => {
+    const startDate = data["startDate"] as Date | string | null | undefined;
+    const endDate = data["endDate"] as Date | string | null | undefined;
+
+    if (!startDate || !endDate) return true;
+
+    return new Date(endDate) >= new Date(startDate);
+  },
+  {
+    message: "Data final deve ser após a data inicial",
+    path: ["endDate"],
+  },
+];
+
 export const id = () => number();
 
 export const email = () => string().email({ message: "Email inválido" });
@@ -68,12 +96,6 @@ export const cep = () =>
   string(9)
     .transform((cep) => removeMask(cep))
     .refine((cep) => /^\d{8}$/.test(cep), "CEP inválido");
-
-export const birthDate = () =>
-  date()
-    .min(new Date("1900-01-01"), { message: "Data de nascimento inválida" })
-    .max(new Date(), { message: "Data de nascimento inválida" })
-    .transform((date) => date.toISOString().split("T")[0]);
 
 export const cpf = () =>
   string(14)

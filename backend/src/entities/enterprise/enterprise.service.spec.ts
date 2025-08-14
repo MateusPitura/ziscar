@@ -1,18 +1,24 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { EnterpriseService } from './enterprise.service';
-import { PrismaService } from '../infra/database/prisma.service';
+import { PrismaService } from 'src/infra/database/prisma.service';
 
 describe('EnterpriseService', () => {
   let enterpriseService: EnterpriseService;
   let prismaService: PrismaService;
+  let module: TestingModule;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    module = await Test.createTestingModule({
       providers: [EnterpriseService, PrismaService],
     }).compile();
 
     enterpriseService = module.get<EnterpriseService>(EnterpriseService);
     prismaService = module.get<PrismaService>(PrismaService);
+  });
+
+  afterAll(async () => {
+    await prismaService.$disconnect();
+    await module.close();
   });
 
   it('should create enterprise', async () => {

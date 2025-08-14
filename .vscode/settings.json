@@ -5,7 +5,9 @@
       }
     },
     "cSpell.words": [
+      "autoincrement",
       "Childrenable",
+      "datasource",
       "Pageable",
       "Shadcn",
       "Transactionable",

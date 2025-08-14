@@ -24,18 +24,24 @@ export default function VehicleSaleTabs(): ReactElement {
           title="Cliente"
           onClick={() => setActiveTab("CLIENT")}
           hasError={!!errors?.customer}
+          resource="VEHICLE_SALE"
+          action="CREATE"
         />
         <Tabs.Tab
           isActive={activeTab === "VEHICLE"}
           title="Veículo"
           onClick={() => setActiveTab("VEHICLE")}
           hasError={!!errors?.vehicle}
+          resource="VEHICLE_SALE"
+          action="CREATE"
         />
         <Tabs.Tab
           isActive={activeTab === "PAYMENT"}
           title="Pagamento"
           onClick={() => setActiveTab("PAYMENT")}
           hasError={!!errors?.payment}
+          resource="VEHICLE_SALE"
+          action="CREATE"
         />
       </Tabs.Header>
       <Tabs.Body>

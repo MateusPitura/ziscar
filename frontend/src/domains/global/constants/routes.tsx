@@ -16,24 +16,39 @@ interface Route {
 const Vehicles = lazy(
   () => import("@/domains/vehicles/components/VehiclesPage")
 );
+
 const Users = lazy(() => import("@/domains/users/components/UsersPage"));
 const NewUser = lazy(() => import("@/domains/users/components/NewUsersPage"));
 const EditUser = lazy(() => import("@/domains/users/components/EditUserPage"));
+
 const EditProfile = lazy(
   () => import("@/domains/profile/components/EditProfilePage")
 );
+
 const Stores = lazy(() => import("@/domains/stores/components/StoresPage"));
+const NewStore = lazy(
+  () => import("@/domains/stores/components/NewStoresPage")
+);
+const EditStore = lazy(
+  () => import("@/domains/stores/components/EditStorePage")
+);
+
 const VehicleSale = lazy(
   () => import("@/domains/vehicleSale/components/VehicleSalePage")
 );
+
 const NotFound = lazy(() => import("@/domains/global/components/NotFoundPage"));
+
 const Sign = lazy(() => import("@/domains/sign/components/SignPage"));
+
 const AccountsPayable = lazy(
   () => import("@/domains/accountsPayable/components/AccountsPayablePage")
 );
+
 const AccountsReceivable = lazy(
   () => import("@/domains/accountsReceivable/components/AccountsReceivablePage")
 );
+
 const Customers = lazy(
   () => import("@/domains/customers/components/CustomersPage")
 );
@@ -55,6 +70,20 @@ export const privateRoutes: Route[] = [
     entryPage: <Stores />,
     shouldDisplay: true,
     action: "READ",
+    resource: "STORES",
+  },
+  {
+    path: "/stores/new",
+    entryPage: <NewStore />,
+    shouldDisplay: false,
+    action: "CREATE",
+    resource: "STORES",
+  },
+  {
+    path: "/stores/edit/:storeId",
+    entryPage: <EditStore />,
+    shouldDisplay: false,
+    action: "UPDATE",
     resource: "STORES",
   },
   {
@@ -128,6 +157,11 @@ export const privateRoutes: Route[] = [
 export const publicRoutes: Route[] = [
   {
     path: "/",
+    entryPage: <Sign />,
+    shouldDisplay: false,
+  },
+  {
+    path: "/new-account",
     entryPage: <Sign />,
     shouldDisplay: false,
   },

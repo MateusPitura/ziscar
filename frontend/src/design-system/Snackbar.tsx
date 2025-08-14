@@ -60,6 +60,7 @@ export default function Snackbar(): ReactElement {
                         "!text-white": variant === "destructive",
                       }
                     )}
+                    data-cy="snackbar-description"
                   >
                     {description}
                   </span>

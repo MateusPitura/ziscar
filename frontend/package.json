@@ -9,8 +9,8 @@
     "build": "tsc -b && vite build",
     "dev": "vite",
     "lint": "eslint .",
-    "cypress:test": "cypress run --browser chrome",
-    "cypress:open": "cypress open --browser chrome"
+    "cypress:run": "cypress run --browser chrome",
+    "cypress:open": "cypress open --browser chrome --e2e"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

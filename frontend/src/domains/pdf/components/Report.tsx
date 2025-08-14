@@ -1,6 +1,6 @@
-import safeFormat from "@/domains/global/utils/safeFormat";
 import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
 import { ReactElement } from "react";
+import ReportHeader from "./ReportHeader";
 
 const styles = StyleSheet.create({
   page: {
@@ -8,22 +8,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     padding: 30,
   },
-  header: {
-    marginBottom: 20,
-    textAlign: "center",
-    borderBottomWidth: 2,
-    borderBottomColor: "#000000",
-    paddingBottom: 10,
-  },
   title: {
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 5,
   },
-  subtitle: {
-    fontSize: 14,
-    color: "#666666",
-  },
+ 
   section: {
     marginBottom: 15,
   },
@@ -97,19 +87,21 @@ const styles = StyleSheet.create({
 interface ReportProperties<T> {
   data: T[];
   formatColumns: Record<string, string | undefined>;
+  title: string;
+  appliedFilters: Record<string, string>;
 }
 
-function Report<T>({ data, formatColumns }: ReportProperties<T>): ReactElement {
+function Report<T>({
+  data,
+  formatColumns,
+  title,
+  appliedFilters,
+}: ReportProperties<T>): ReactElement {
   if (!data || data.length === 0) {
     return (
       <Document>
         <Page size="A4" orientation="landscape" style={styles.page}>
-          <View style={styles.header}>
-            <Text style={styles.title}>Relatório</Text>
-            <Text style={styles.subtitle}>
-              Gerado em {safeFormat({ date: new Date(), format: "dd/MM/yyyy" })}
-            </Text>
-          </View>
+          <ReportHeader appliedFilters={appliedFilters} title={title} />
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Nenhum dado encontrado</Text>
           </View>
@@ -132,13 +124,7 @@ function Report<T>({ data, formatColumns }: ReportProperties<T>): ReactElement {
   return (
     <Document>
       <Page size="A4" orientation="landscape" style={styles.page}>
-        <View style={styles.header}>
-          <Text style={styles.title}>Relatório</Text>
-          <Text style={styles.subtitle}>
-            Gerado em {safeFormat({ date: new Date(), format: "dd/MM/yyyy" })}
-          </Text>
-        </View>
-
+        <ReportHeader appliedFilters={appliedFilters} title={title} />
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Lista de dados</Text>
 
