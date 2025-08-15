@@ -19,10 +19,6 @@ export default function CustomerSearchForm(): ReactElement {
   async function getCustomersInfo(filter?: string): Promise<FetchCustomer[]> {
     if (!filter) return [];
 
-    const hasOnlyNumbers = /^\d+$/.test(filter);
-
-    if (!hasOnlyNumbers) return [];
-
     const result = await safeFetch(`${BACKEND_URL}/customer?cpf=${filter}`, {
       resource: "CUSTOMERS",
       action: "READ",
@@ -54,6 +50,11 @@ export default function CustomerSearchForm(): ReactElement {
         onClickNotFound={(value) => {
           setCustomerCpf(applyMask(value, "cpf") ?? "");
           dialog.openDialog();
+        }}
+        formatSearch={(search) => {
+          const hasOnlyValidCpfCharacters = /^[0-9.-]+$/.test(search);
+          if (!hasOnlyValidCpfCharacters) return undefined;
+          return search.replace(/\D/g, "");
         }}
       />
     </>

@@ -7,7 +7,7 @@ export const SchemaParam = s.object({
 const SchemaAddress = s.object({
   street: s.string().nullish(),
   neighborhood: s.string().nullish(),
-  cityIbgeCode: s.number().nullish(),
+  cityIbgeCode: s.numberPositive().nullish(),
 });
 
 export const SchemaAddressToCreate = s.SchemaAddress.extend({

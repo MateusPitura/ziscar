@@ -18,6 +18,7 @@ interface SearchProperties<T, K extends Record<string, unknown>[]> {
   descriptionKey?: keyof UnwrapArray<K>;
   onClickNotFound: (_: string) => void;
   select?: (item: K) => K;
+  formatSearch: (search: string) => string | undefined;
 }
 
 export default function Search<
@@ -35,6 +36,7 @@ export default function Search<
   descriptionKey,
   select,
   onClickNotFound,
+  formatSearch,
 }: SearchProperties<T, K>): ReactElement {
   const { value, setValue } = useDebounce();
 
@@ -57,7 +59,11 @@ export default function Search<
   return (
     <Select
       name={name}
-      onSearchChange={setValue}
+      onSearchChange={(value) => {
+        const formattedValue = formatSearch(value);
+        if (!formattedValue) return;
+        setValue(formattedValue);
+      }}
       label={label}
       options={dataFormatted}
       shouldFilter={false}
