@@ -4,17 +4,16 @@ import { FetchCustomer } from "@/domains/global/types/model";
 import { BACKEND_URL } from "@/domains/global/constants";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import { VehicleSaleFormInputs } from "../types";
-import { useFormContext } from "react-hook-form";
 import { applyMask } from "@/domains/global/utils/applyMask";
 import NewCustomerModal from "../components/NewCustomerModal";
 import useDialog from "@/domains/global/hooks/useDialog";
+import useVehicleSalePageContext from "../hooks/useVehicleSalePageContext";
 
 export default function CustomerSearchForm(): ReactElement {
   const { safeFetch } = useSafeFetch();
   const dialog = useDialog();
   const [customerCpf, setCustomerCpf] = useState("");
-
-  const { setValue, resetField } = useFormContext<VehicleSaleFormInputs>();
+  const { handleCustomer } = useVehicleSalePageContext();
 
   async function getCustomersInfo(filter?: string): Promise<FetchCustomer[]> {
     if (!filter) return [];
@@ -41,21 +40,14 @@ export default function CustomerSearchForm(): ReactElement {
         queryKey="customersSearch"
         onChange={(value) => {
           if (!value) {
-            resetField("customer");
+            handleCustomer(null);
             return;
           }
-          setValue(
-            "customer",
-            {
-              id: value.id,
-              fullName: value.fullName,
-              cpf: value.cpf,
-            },
-            { shouldDirty: true }
-          );
+          handleCustomer(value);
         }}
         labelKey="fullName"
         valueKey="id"
+        required
         descriptionKey="cpf"
         formatDescriptionKey={(item) => applyMask(item as string, "cpf")}
         onClickNotFound={(value) => {

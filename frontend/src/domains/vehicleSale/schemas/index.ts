@@ -2,9 +2,7 @@ import { s } from "@shared/safeZod";
 
 export const SchemaVehicleSaleForm = s.object({
   customer: s.object({
-    id: s.id().or(s.empty()),
-    fullName: s.fullName(),
-    cpf: s.cpf(),
+    id: s.string(),
   }),
   vehicle: s.object({
     model: s.string(),

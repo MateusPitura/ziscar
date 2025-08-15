@@ -12,6 +12,7 @@ interface SearchProperties<T, K extends Record<string, unknown>[]> {
   label: string;
   queryKey: QueryKeys;
   onChange?: (selectedData?: UnwrapArray<K>) => void;
+  required?: boolean;
   valueKey: keyof UnwrapArray<K>;
   labelKey: keyof UnwrapArray<K>;
   descriptionKey?: keyof UnwrapArray<K>;
@@ -28,6 +29,7 @@ export default function Search<
   label,
   queryKey,
   onChange,
+  required,
   labelKey,
   valueKey,
   descriptionKey,
@@ -59,6 +61,7 @@ export default function Search<
       options={dataFormatted}
       shouldFilter={false}
       loading={isLoading}
+      required={required}
       onChange={(selectedValue) => {
         const selectedItem = data?.find(
           (item) => String(item[valueKey as string]) === selectedValue
