@@ -9,6 +9,7 @@ import useDialog from "@/domains/global/hooks/useDialog";
 import useVehicleSalePageContext from "../hooks/useVehicleSalePageContext";
 import selectCustomersInfo from "../utils/selectCustomersInfo";
 import { applyMask } from "@/domains/global/utils/applyMask";
+import { cpfSearchSchema } from "../schemas";
 
 export default function CustomerSearchForm(): ReactElement {
   const { safeFetch } = useSafeFetch();
@@ -52,9 +53,11 @@ export default function CustomerSearchForm(): ReactElement {
           dialog.openDialog();
         }}
         formatSearch={(search) => {
-          const hasOnlyValidCpfCharacters = /^[0-9.-]+$/.test(search);
-          if (!hasOnlyValidCpfCharacters) return undefined;
-          return search.replace(/\D/g, "");
+          const result = cpfSearchSchema.safeParse(search);
+          if (result.success) {
+            return result.data;
+          }
+          return undefined;
         }}
       />
     </>

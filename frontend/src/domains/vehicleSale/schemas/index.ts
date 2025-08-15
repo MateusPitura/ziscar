@@ -30,3 +30,8 @@ export const SchemaVehicleSaleForm = s.object({
     installments: s.number().positive(),
   }),
 });
+
+export const cpfSearchSchema = s
+  .string()
+  .regex(/^[0-9.-]+$/)
+  .transform((value) => value.replace(/\D/g, ""));
