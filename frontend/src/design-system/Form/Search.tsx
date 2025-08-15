@@ -19,6 +19,7 @@ interface SearchProperties<T, K extends Record<string, unknown>[]> {
   onClickNotFound: (_: string) => void;
   select?: (item: K) => K;
   formatSearch: (search: string) => string | undefined;
+  formatNotFound: (search: string) => string;
 }
 
 export default function Search<
@@ -37,6 +38,7 @@ export default function Search<
   select,
   onClickNotFound,
   formatSearch,
+  formatNotFound,
 }: SearchProperties<T, K>): ReactElement {
   const { value, setValue } = useDebounce();
 
@@ -55,6 +57,10 @@ export default function Search<
       description: String(item[descriptionKey as string]),
     }));
   }, [data, labelKey, valueKey, descriptionKey]);
+
+  const formattedValue = useMemo(() => {
+    return formatNotFound(value);
+  }, [value]);
 
   return (
     <Select
@@ -77,11 +83,11 @@ export default function Search<
         onChange?.(selectedItem);
       }}
       notFound={
-        value && (
+        formattedValue && (
           <Button
-            label={`Cadastrar "${value}"`}
+            label={`Cadastrar "${formattedValue}"`}
             variant="quaternary"
-            onClick={() => onClickNotFound(value)}
+            onClick={() => onClickNotFound(formattedValue)}
           />
         )
       }

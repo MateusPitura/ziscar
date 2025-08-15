@@ -49,9 +49,10 @@ export default function CustomerSearchForm(): ReactElement {
         required
         select={selectCustomersInfo}
         onClickNotFound={(value) => {
-          setCustomerCpf(applyMask(value, "cpf") ?? "");
+          setCustomerCpf(value);
           dialog.openDialog();
         }}
+        formatNotFound={(value) => applyMask(value, "cpf") ?? ""}
         formatSearch={(search) => {
           const result = cpfSearchSchema.safeParse(search);
           if (result.success) {
