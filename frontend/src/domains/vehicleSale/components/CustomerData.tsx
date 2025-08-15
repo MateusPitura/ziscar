@@ -11,7 +11,6 @@ export default function CustomerData(): ReactNode {
       <DataField label="CPF" value={customer?.cpf}/>
       <DataField label="Email" value={customer?.email}/>
       <DataField label="Celular" value={customer?.phone}/>
-      <DataField label="Endereço" value={customer?.address?.cep}/>
     </>
   );
 }

@@ -59,11 +59,10 @@ export class CustomerService {
           },
         },
       },
+      select: GET_CUSTOMER,
     });
 
-    return {
-      customerId: customer.id,
-    };
+    return customer;
   }
 
   async findOne({

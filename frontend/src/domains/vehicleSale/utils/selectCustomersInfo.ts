@@ -1,21 +1,18 @@
-import { PageablePayload } from "@/domains/global/types";
 import { FetchCustomer } from "@/domains/global/types/model";
 import { applyMask } from "@/domains/global/utils/applyMask";
 
 export default function selectCustomersInfo(
-  payload: PageablePayload<FetchCustomer>
-): PageablePayload<FetchCustomer> {
+  payload: FetchCustomer[]
+): FetchCustomer[] {
   const itemsFiltered = [];
 
-  for (const customer of payload.data) {
+  for (const customer of payload) {
     itemsFiltered.push({
       ...customer,
+      cpf: applyMask(customer?.cpf, "cpf") ?? "",
       phone: applyMask(customer?.phone, "phone") ?? "",
     });
   }
 
-  return {
-    total: payload.total,
-    data: itemsFiltered,
-  };
+  return itemsFiltered;
 }

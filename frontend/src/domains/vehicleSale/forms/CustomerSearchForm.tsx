@@ -4,10 +4,11 @@ import { FetchCustomer } from "@/domains/global/types/model";
 import { BACKEND_URL } from "@/domains/global/constants";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import { VehicleSaleFormInputs } from "../types";
-import { applyMask } from "@/domains/global/utils/applyMask";
 import NewCustomerModal from "../components/NewCustomerModal";
 import useDialog from "@/domains/global/hooks/useDialog";
 import useVehicleSalePageContext from "../hooks/useVehicleSalePageContext";
+import selectCustomersInfo from "../utils/selectCustomersInfo";
+import { applyMask } from "@/domains/global/utils/applyMask";
 
 export default function CustomerSearchForm(): ReactElement {
   const { safeFetch } = useSafeFetch();
@@ -37,7 +38,7 @@ export default function CustomerSearchForm(): ReactElement {
         label="CPF"
         name="customer.id"
         fetchCallback={getCustomersInfo}
-        queryKey="customersSearch"
+        queryKey="customers"
         onChange={(value) => {
           if (!value) {
             handleCustomer(null);
@@ -47,11 +48,11 @@ export default function CustomerSearchForm(): ReactElement {
         }}
         labelKey="fullName"
         valueKey="id"
-        required
         descriptionKey="cpf"
-        formatDescriptionKey={(item) => applyMask(item as string, "cpf")}
+        required
+        select={selectCustomersInfo}
         onClickNotFound={(value) => {
-          setCustomerCpf(value);
+          setCustomerCpf(applyMask(value, "cpf") ?? "");
           dialog.openDialog();
         }}
       />

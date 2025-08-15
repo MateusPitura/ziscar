@@ -16,8 +16,8 @@ interface SearchProperties<T, K extends Record<string, unknown>[]> {
   valueKey: keyof UnwrapArray<K>;
   labelKey: keyof UnwrapArray<K>;
   descriptionKey?: keyof UnwrapArray<K>;
-  formatDescriptionKey?: (item: unknown) => string | undefined;
   onClickNotFound: (_: string) => void;
+  select?: (item: K) => K;
 }
 
 export default function Search<
@@ -33,7 +33,7 @@ export default function Search<
   labelKey,
   valueKey,
   descriptionKey,
-  formatDescriptionKey,
+  select,
   onClickNotFound,
 }: SearchProperties<T, K>): ReactElement {
   const { value, setValue } = useDebounce();
@@ -41,6 +41,7 @@ export default function Search<
   const { data, isLoading } = useQuery({
     queryKey: [queryKey, value],
     queryFn: ({ queryKey }) => fetchCallback(queryKey[1] as string),
+    select,
   });
 
   const dataFormatted = useMemo(() => {
@@ -49,7 +50,7 @@ export default function Search<
     return data?.map((item) => ({
       label: String(item[labelKey as string]),
       value: String(item[valueKey as string]),
-      description: formatDescriptionKey?.(item[descriptionKey as string]),
+      description: String(item[descriptionKey as string]),
     }));
   }, [data, labelKey, valueKey, descriptionKey]);
 

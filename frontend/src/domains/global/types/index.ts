@@ -35,7 +35,6 @@ export type QueryKeys =
   | "customers"
   | "profile"
   | "permissions"
-  | "customersSearch"
 
 export interface UsersFilter extends UsersFilterFormInputs, Pageable {}
 export interface StoresFilter extends StoresFilterFormInputs, Pageable {}

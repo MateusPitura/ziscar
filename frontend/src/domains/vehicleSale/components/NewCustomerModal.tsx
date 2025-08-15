@@ -8,10 +8,13 @@ import { BACKEND_URL } from "@/domains/global/constants";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import { DialogProps } from "@/domains/global/types";
-import { Customer } from "@/domains/global/types/model";
+import { FetchCustomer } from "@/domains/global/types/model";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { ReactNode } from "react";
 import useVehicleSalePageContext from "../hooks/useVehicleSalePageContext";
+import selectCustomerInfo from "../utils/selectCustomerInfo";
+import { useFormContext } from "react-hook-form";
+import { VehicleSaleFormInputs } from "../types";
 
 interface NewCustomerModalProperties extends DialogProps {
   customerCpf: string;
@@ -25,17 +28,22 @@ export default function NewCustomerModal({
   const { showSuccessSnackbar } = useSnackbar();
   const queryClient = useQueryClient();
   const { handleCustomer } = useVehicleSalePageContext();
+  const { setValue } = useFormContext<VehicleSaleFormInputs>();
 
-  async function createCustomer(data: CustomerFormInputsType): Promise<Customer> {
+  async function createCustomer(
+    data: CustomerFormInputsType
+  ): Promise<FetchCustomer> {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { address, ...rest } = data;
 
-    return await safeFetch(`${BACKEND_URL}/customer`, {
+    const response = await safeFetch(`${BACKEND_URL}/customer`, {
       method: "POST",
       body: rest,
       resource: "CUSTOMERS",
       action: "CREATE",
     });
+
+    return selectCustomerInfo(response);
   }
 
   const { mutate, isPending } = useMutation({
@@ -45,9 +53,9 @@ export default function NewCustomerModal({
         title: "Cliente criado com sucesso",
       });
       queryClient.invalidateQueries({ queryKey: ["customers"] });
-      queryClient.invalidateQueries({ queryKey: ["customersSearch"] });
       handleCustomer(response);
-      dialog.closeDialog()
+      setValue("customer.id", String(response.id));
+      dialog.closeDialog();
     },
   });
 

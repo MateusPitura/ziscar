@@ -1,19 +1,19 @@
 import { Childrenable } from "@/domains/global/types";
-import { Customer } from "@/domains/global/types/model";
 import { createContext, useMemo, useState } from "react";
+import { CustomerForVehicleSale } from "../types";
 
 interface VehicleSalePageContextValues {
-  customer: Customer | null;
-  handleCustomer: (customer: Customer | null) => void;
+  customer: CustomerForVehicleSale | null;
+  handleCustomer: (customer: CustomerForVehicleSale | null) => void;
 }
 
 const VehicleSalePageContext =
   createContext<VehicleSalePageContextValues | null>(null);
 
 function VehicleSalePageProvider({ children }: Childrenable) {
-  const [customer, setCustomer] = useState<Customer | null>(null);
+  const [customer, setCustomer] = useState<CustomerForVehicleSale | null>(null);
 
-  function handleCustomer(customer: Customer | null) {
+  function handleCustomer(customer: CustomerForVehicleSale | null) {
     setCustomer(customer);
   }
 
