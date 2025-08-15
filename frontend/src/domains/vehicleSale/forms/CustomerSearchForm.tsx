@@ -20,7 +20,7 @@ export default function CustomerSearchForm(): ReactElement {
   async function getCustomersInfo(filter?: string): Promise<FetchCustomer[]> {
     if (!filter) return [];
 
-    const result = await safeFetch(`${BACKEND_URL}/customer?cpf=${filter}`, {
+    const result = await safeFetch(`${BACKEND_URL}/customer?cpf=${filter}&orderBy=fullName`, {
       resource: "CUSTOMERS",
       action: "READ",
     });

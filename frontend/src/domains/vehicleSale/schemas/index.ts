@@ -5,6 +5,7 @@ export const SchemaVehicleSaleForm = s.object({
     id: s.string(),
   }),
   vehicle: s.object({
+    storeId: s.string(),
     model: s.string(),
     price: s.money(),
     color: s.color(),
