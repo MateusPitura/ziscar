@@ -15,6 +15,10 @@ export default function CustomerSearchForm(): ReactElement {
   async function getCustomersInfo(filter?: string): Promise<FetchCustomer[]> {
     if (!filter) return [];
 
+    const hasOnlyNumbers = /^\d+$/.test(filter);
+
+    if(!hasOnlyNumbers) return [];
+
     const result = await safeFetch(`${BACKEND_URL}/customer?cpf=${filter}`, {
       resource: "CUSTOMERS",
       action: "READ",
