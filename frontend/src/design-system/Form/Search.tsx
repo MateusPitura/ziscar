@@ -16,6 +16,7 @@ interface SearchProperties<T, K extends Record<string, unknown>[]> {
   labelKey: keyof UnwrapArray<K>;
   descriptionKey?: keyof UnwrapArray<K>;
   formatDescriptionKey?: (item: unknown) => string | undefined;
+  onClickNotFound: (_: string) => void;
 }
 
 export default function Search<
@@ -31,6 +32,7 @@ export default function Search<
   valueKey,
   descriptionKey,
   formatDescriptionKey,
+  onClickNotFound,
 }: SearchProperties<T, K>): ReactElement {
   const { value, setValue } = useDebounce();
 
@@ -65,7 +67,13 @@ export default function Search<
         onChange?.(selectedItem);
       }}
       notFound={
-        value && <Button label={`Cadastrar "${value}"`} variant="quaternary" />
+        value && (
+          <Button
+            label={`Cadastrar "${value}"`}
+            variant="quaternary"
+            onClick={() => onClickNotFound(value)}
+          />
+        )
       }
     />
   );

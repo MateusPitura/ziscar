@@ -1,20 +1,20 @@
 import type { ReactNode } from "react";
-import { CustomerFormInputs } from "../types";
+import { CustomerFormInputs as CustomerFormInputsType } from "../types";
 import { Action, Resource } from "@shared/types";
 import Form from "@/design-system/Form";
 import { SchemaCustomerForm } from "../schemas";
 import PageHeader from "@/domains/global/components/PageHeader";
 import Section from "@/domains/global/components/Section";
-import Input from "@/design-system/Form/Input";
 import AddressFields from "@/domains/global/components/AddressFields";
 import PageFooter from "@/domains/global/components/PageFooter";
 import Button from "@/design-system/Button";
 import { PREVIOUS_PAGE } from "@/domains/global/constants";
 import { useNavigate } from "react-router-dom";
+import CustomerFormInputs from "./CustomerFormInputs";
 
 interface CustomerFormProperties {
-  defaultValues: Partial<CustomerFormInputs>;
-  onSubmit: (data: CustomerFormInputs) => void;
+  defaultValues: Partial<CustomerFormInputsType>;
+  onSubmit: (data: CustomerFormInputsType) => void;
   isPending: boolean;
   headerTitle: string;
   isEdit?: boolean;
@@ -35,7 +35,7 @@ export default function CustomerForm({
 
   return (
     <div className="flex flex-col gap-4 w-full">
-      <Form<CustomerFormInputs>
+      <Form<CustomerFormInputsType>
         schema={SchemaCustomerForm}
         defaultValues={defaultValues}
         onSubmit={onSubmit}
@@ -48,31 +48,7 @@ export default function CustomerForm({
             <Section.Group>
               <Section.Header title="Dados" />
               <Section.Body>
-                <Input<CustomerFormInputs>
-                  name="fullName"
-                  label="Nome completo"
-                  required
-                  autoFocus
-                />
-                <Input<CustomerFormInputs>
-                  name="cpf"
-                  label="CPF"
-                  mask="cpf"
-                  maxLength={18}
-                  required
-                />
-                <Input<CustomerFormInputs>
-                  name="email"
-                  label="Email"
-                  type="email"
-                />
-                <Input<CustomerFormInputs>
-                  name="phone"
-                  label="Celular"
-                  mask="phone"
-                  maxLength={15}
-                  type="tel"
-                />
+                <CustomerFormInputs/>
               </Section.Body>
             </Section.Group>
             <Section.Group>
