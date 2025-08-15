@@ -74,7 +74,7 @@ export default function ExportButton<T, U extends FieldValues>({
       action="READ"
       data-cy="export-button"
       onClick={async () => {
-        showSuccessSnackbar({
+        const snackbar = showSuccessSnackbar({
           title: "O PDF está sendo gerado",
           actionBtnAction: "READ",
           actionBtnResource: resource,
@@ -97,6 +97,8 @@ export default function ExportButton<T, U extends FieldValues>({
               appliedFilters={appliedFilters}
             />
           ).toBlob();
+
+          snackbar.dismiss()
 
           const url = URL.createObjectURL(blob);
           const link = document.createElement("a");
