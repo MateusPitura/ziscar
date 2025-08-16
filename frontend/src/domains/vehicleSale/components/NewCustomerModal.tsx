@@ -74,10 +74,11 @@ export default function NewCustomerModal({
           <CustomerFormInputs />
           <Dialog.Footer
             labelPrimaryBtn="Criar"
-            labelSecondaryBtn="Cancelar"
             className="px-0"
             dirty
             primaryBtnState={isPending ? "loading" : undefined}
+            primaryBtnResource="CUSTOMERS"
+            primaryBtnAction="CREATE"
           />
         </Form>
       </Dialog.Body>

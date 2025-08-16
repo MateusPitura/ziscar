@@ -56,6 +56,9 @@ const AccountsPayable = lazy(
 const AccountsReceivable = lazy(
   () => import("@/domains/accountsReceivable/components/AccountsReceivablePage")
 );
+const AccountsReceivableInstallments = lazy(
+  () => import("@/domains/accountsReceivable/components/AccountsReceivableInstallmentsPage")
+);
 
 export const privateRoutes: Route[] = [
   {
@@ -114,6 +117,13 @@ export const privateRoutes: Route[] = [
     icon: "CreditCard",
     entryPage: <AccountsReceivable />,
     shouldDisplay: true,
+    action: "READ",
+    resource: "ACCOUNTS_RECEIVABLE",
+  },
+  {
+    path: "/accounts-receivable/installments/:accountReceivableId",
+    entryPage: <AccountsReceivableInstallments />,
+    shouldDisplay: false,
     action: "READ",
     resource: "ACCOUNTS_RECEIVABLE",
   },

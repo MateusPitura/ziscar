@@ -14,6 +14,7 @@ import StoresTableActions from "./StoresTableActions";
 import StoresFilterForm from "../forms/StoresFilterForm";
 import useFilterContext from "@/domains/global/hooks/useFilterContext";
 import { BACKEND_URL } from "@/domains/global/constants";
+import selectStoresInfoForReport from "../utils/selectStoresInfoForReport";
 
 const enableReport = false;
 
@@ -68,6 +69,7 @@ export default function StoresTable(): ReactNode {
             resource="STORES"
             queryKey={["stores", filterFormatted]}
             queryFn={getStoresInfo}
+            selectQueryFn={selectStoresInfoForReport}
             formatFilters={{
               name: "Nome completo",
               orderBy: "Ordenar por",

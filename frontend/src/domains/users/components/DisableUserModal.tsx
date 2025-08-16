@@ -59,7 +59,7 @@ export default function DisableUserModal({
         onClickPrimaryBtn={mutate}
         primaryBtnState={isPending ? "loading" : undefined}
         primaryBtnColor="red"
-        primaryBtResource="USERS"
+        primaryBtnResource="USERS"
         primaryBtnAction="DELETE"
       />
     </Dialog>

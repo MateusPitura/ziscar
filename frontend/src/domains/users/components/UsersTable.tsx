@@ -14,6 +14,7 @@ import useDialog from "@/domains/global/hooks/useDialog";
 import { PageablePayload } from "@/domains/global/types";
 import ExportButton from "@/domains/pdf/components/ExportButton";
 import useFilterContext from "@/domains/global/hooks/useFilterContext";
+import selectUsersInfoForReport from "../utils/selectUsersInfoForReport";
 
 const enableReport = true;
 
@@ -68,6 +69,7 @@ export default function UsersTable(): ReactNode {
             resource="USERS"
             queryKey={["users", filterFormatted]}
             queryFn={getUsersInfo}
+            selectQueryFn={selectUsersInfoForReport}
             formatFilters={{
               fullName: "Nome completo",
               orderBy: "Ordenar por",

@@ -14,6 +14,7 @@ import selectCustomersInfo from "../utils/selectCustomersInfo";
 import DisableCustomerModal from "./DisableCustomerModal";
 import CustomersFilterForm from "./CustomersFilterForm";
 import CustomersTableActions from "./CustomersTableActions";
+import selectCustomersInfoForReport from "../utils/selectCustomersInfoForReport";
 
 const enableReport = true;
 
@@ -68,6 +69,7 @@ export default function CustomersTable(): ReactNode {
             resource="CUSTOMERS"
             queryKey={["customers", filterFormatted]}
             queryFn={getCustomersInfo}
+            selectQueryFn={selectCustomersInfoForReport}
             formatFilters={{
               fullName: "Nome completo",
               orderBy: "Ordenar por",
