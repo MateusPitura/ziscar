@@ -3,6 +3,7 @@ import { UsersFilterFormInputs } from "@/domains/users/types";
 import { SchemaAddress } from "../schemas";
 import { s } from "@shared/safeZod";
 import { CustomersFilterFormInputs } from "@/domains/customers/types";
+import { AccountsReceivableFilterFormInputs } from "@/domains/accountsReceivable/types";
 
 export interface Childrenable {
   children?: React.ReactNode;
@@ -27,18 +28,20 @@ export type Mask = "phone" | "cpf" | "cep" | "cnpj" | "money";
 export type QueryKeys =
   | "cepApi"
   | "ibgeApi"
+  | "profile"
+  | "permissions"
   | "user"
   | "users"
   | "store"
   | "stores"
   | "customer"
   | "customers"
-  | "profile"
-  | "permissions"
+  | 'accounts-receivable'
 
 export interface UsersFilter extends UsersFilterFormInputs, Pageable {}
 export interface StoresFilter extends StoresFilterFormInputs, Pageable {}
 export interface CustomersFilter extends CustomersFilterFormInputs, Pageable {}
+export interface AccountsReceivableFilter extends AccountsReceivableFilterFormInputs, Pageable {}
 
 export interface PageablePayload<T> {
   data: T[];
@@ -54,3 +57,5 @@ export interface Options {
 }
 
 export type AddressFormInputs = s.infer<typeof SchemaAddress>;
+
+export type AccountStatus = "PAID" | "PENDING";

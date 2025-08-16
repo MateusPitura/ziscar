@@ -116,6 +116,7 @@ export default function ExportButton<T, U extends FieldValues>({
           link.click();
           URL.revokeObjectURL(url);
         } catch {
+          snackbar.dismiss()
           showErrorSnackbar({
             description: "Ocorreu um erro ao gerar o PDF",
           });

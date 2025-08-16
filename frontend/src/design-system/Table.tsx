@@ -67,7 +67,7 @@ function Header({ children, className, gridColumns }: HeaderProps) {
 interface CellProps {
   className?: string;
   colSpan?: number;
-  label?: string;
+  label?: ReactNode;
 }
 
 function Cell({ label, className, colSpan }: CellProps) {

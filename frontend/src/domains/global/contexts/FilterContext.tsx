@@ -1,6 +1,7 @@
 import { createContext, useCallback, useMemo, useState } from "react";
 import { userFilterDefaultValues } from "@/domains/users/constants";
 import {
+  AccountsReceivableFilter,
   Childrenable,
   CustomersFilter,
   StoresFilter,
@@ -8,6 +9,7 @@ import {
 } from "../types";
 import { storeFilterDefaultValues } from "@/domains/stores/constants";
 import { customerFilterDefaultValues } from "@/domains/customers/constants";
+import { accountReceivableFilterDefaultValues } from "@/domains/accountsReceivable/constants";
 
 interface FilterContextValues {
   usersFilter?: UsersFilter;
@@ -16,6 +18,8 @@ interface FilterContextValues {
   handleStoresFilter: (value: Partial<StoresFilter>) => void;
   customersFilter?: CustomersFilter;
   handleCustomersFilter: (value: Partial<CustomersFilter>) => void;
+  accountsReceivableFilter?: AccountsReceivableFilter;
+  handleAccountsReceivableFilter: (value: Partial<AccountsReceivableFilter>) => void;
 }
 
 const FilterContext = createContext<FilterContextValues | null>(null);
@@ -60,6 +64,21 @@ function FilterProvider({ children }: Childrenable) {
     []
   );
 
+  const [accountsReceivableFilter, setAccountsReceivableFilter] = useState<AccountsReceivableFilter>({
+    page: 1,
+    ...accountReceivableFilterDefaultValues,
+  });
+
+  const handleAccountsReceivableFilter = useCallback(
+    (value: Partial<AccountsReceivableFilter>) => {
+      setAccountsReceivableFilter((prev) => ({
+        ...prev,
+        ...value,
+      }));
+    },
+    []
+  );
+
   const valuesMemoized = useMemo(
     () => ({
       usersFilter,
@@ -68,6 +87,8 @@ function FilterProvider({ children }: Childrenable) {
       handleStoresFilter,
       customersFilter,
       handleCustomersFilter,
+      accountsReceivableFilter,
+      handleAccountsReceivableFilter,
     }),
     [
       usersFilter,
@@ -76,6 +97,8 @@ function FilterProvider({ children }: Childrenable) {
       handleStoresFilter,
       customersFilter,
       handleCustomersFilter,
+      accountsReceivableFilter,
+      handleAccountsReceivableFilter,
     ]
   );
 
