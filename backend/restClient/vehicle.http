@@ -1,3 +1,210 @@
-###
+### Get Vehicle Brands
 GET {{BACKEND_URL}}/vehicles/brands HTTP/1.1
-content-type: application/json
+Content-Type: application/json
+
+### Search Vehicles (with all filters)
+GET {{BACKEND_URL}}/vehicles?page=1&limit=10&storeId=1&brandId=1&status=IN_STOCK&category=CAR&modelYear=2023&yearOfManufacture=2022&modelName=Civic&plateNumber=ABC1234&announcedPriceMin=50000&announcedPriceMax=100000&startDate=2025-01-01&endDate=2025-12-31 HTTP/1.1
+Content-Type: application/json
+
+### Search Vehicles (minimal filters)
+GET {{BACKEND_URL}}/vehicles?page=1&limit=10 HTTP/1.1
+Content-Type: application/json
+
+### Create Vehicle
+POST {{BACKEND_URL}}/vehicles HTTP/1.1
+Content-Type: application/json
+
+{
+  "chassiNumber": "1HGBH41JXMN109186",
+  "modelYear": 2023,
+  "yearOfManufacture": 2022,
+  "modelName": "Civic EXL",
+  "brandId": 1,
+  "category": "CAR",
+  "kilometers": 15000,
+  "plateNumber": "ABC1234",
+  "announcedPrice": 85000,
+  "minimumPrice": 80000,
+  "commissionValue": 5000,
+  "color": "preto",
+  "fuelType": "FLEX",
+  "status": "IN_STOCK",
+  "storeId": 1
+}
+
+### Create Vehicle (with nullables)
+POST {{BACKEND_URL}}/vehicles HTTP/1.1
+Content-Type: application/json
+
+{
+  "chassiNumber": "2HGBH41JXMN109187",
+  "modelYear": null,
+  "yearOfManufacture": null,
+  "modelName": null,
+  "brandId": 1,
+  "category": null,
+  "kilometers": null,
+  "plateNumber": "XYZ5678",
+  "announcedPrice": null,
+  "minimumPrice": null,
+  "commissionValue": 3000,
+  "color": null,
+  "fuelType": null,
+  "status": "PURCHASED",
+  "storeId": 1
+}
+
+### Update Vehicle
+PATCH {{BACKEND_URL}}/vehicles/5 HTTP/1.1
+Content-Type: application/json
+
+{
+  "modelYear": 2024,
+  "announcedPrice": 90000,
+  "minimumPrice": 85000,
+  "status": "IN_STOCK",
+  "kilometers": 18000
+}
+
+### Update Vehicle (full update)
+PATCH {{BACKEND_URL}}/vehicles/5 HTTP/1.1
+Content-Type: application/json
+
+{
+  "chassiNumber": "1HGBH41JXMN109186",
+  "modelYear": 2024,
+  "yearOfManufacture": 2023,
+  "modelName": "Civic EXL Updated",
+  "brandId": 2,
+  "category": "CAR",
+  "kilometers": 20000,
+  "plateNumber": "ABC1234",
+  "announcedPrice": 95000,
+  "minimumPrice": 90000,
+  "commissionValue": 6000,
+  "color": "0000FF",
+  "fuelType": "HYBRID",
+  "status": "IN_STOCK",
+  "storeId": 1
+}
+
+### Archive Vehicle
+PATCH {{BACKEND_URL}}/vehicles/5/archive HTTP/1.1
+Content-Type: application/json
+
+{
+  "archived": true
+}
+
+### Unarchive Vehicle
+PATCH {{BACKEND_URL}}/vehicles/5/archive HTTP/1.1
+Content-Type: application/json
+
+{
+  "archived": false
+}
+
+### Insert Vehicle Expense
+POST {{BACKEND_URL}}/vehicles/expense HTTP/1.1
+Content-Type: application/json
+
+{
+  "vehicleId": 5,
+  "category": "MAINTENANCE",
+  "observations": "Troca de óleo e filtros",
+  "description": "Manutenção preventiva completa",
+  "paidTo": "Oficina do João",
+  "totalValue": 50000,
+  "installments": [
+    {
+      "dueDate": "2025-08-15T00:00:00.000Z",
+      "value": 25000,
+      "isUpfront": true,
+      "paymentMethods": [
+        {
+          "type": "PIX",
+          "value": 25000,
+          "paymentDate": "2025-08-12T00:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "dueDate": "2025-09-15T00:00:00.000Z",
+      "value": 25000,
+      "isUpfront": false,
+      "paymentMethods": null
+    }
+  ]
+}
+
+### Insert Vehicle Expense (IPVA)
+POST {{BACKEND_URL}}/vehicles/expense HTTP/1.1
+Content-Type: application/json
+
+{
+  "vehicleId": 5,
+  "category": "IPVA",
+  "observations": null,
+  "description": "IPVA 2025",
+  "paidTo": "Governo do Estado",
+  "totalValue": 180000,
+  "installments": [
+    {
+      "dueDate": "2025-03-31T00:00:00.000Z",
+      "value": 180000,
+      "isUpfront": false,
+      "paymentMethods": [
+        {
+          "type": "BANK_SLIP",
+          "value": 180000,
+          "paymentDate": "2025-03-25T00:00:00.000Z"
+        }
+      ]
+    }
+  ]
+}
+
+### Make Vehicle Sale
+POST {{BACKEND_URL}}/vehicles/sale HTTP/1.1
+Content-Type: application/json
+
+{
+  "vehicleId": 5,
+  "customerId": 1,
+  "accountReceivableId": 1,
+  "accountPayableId": 1,
+  "date": "2025-08-12T00:00:00.000Z"
+}
+
+### Examples of invalid requests (for testing validation)
+
+### Invalid Vehicle - Missing required fields
+POST {{BACKEND_URL}}/vehicles HTTP/1.1
+Content-Type: application/json
+
+{
+  "chassiNumber": "1HGBH41JXMN109186",
+  "brandId": 1,
+  "algo": "asdadasdsad"
+  // Missing: plateNumber, commissionValue, status, storeId
+}
+
+### Invalid Vehicle - Invalid enum values
+POST {{BACKEND_URL}}/vehicles HTTP/1.1
+Content-Type: application/json
+
+{
+  "chassiNumber": "1HGBH41JXMN109186",
+  "modelYear": 2023,
+  "brandId": 1,
+  "category": "INVALID_CATEGORY",
+  "plateNumber": "ABC1234",
+  "commissionValue": 5000,
+  "fuelType": "INVALID_FUEL",
+  "status": "INVALID_STATUS",
+  "storeId": 1
+}
+
+### Invalid Search - Invalid parameters
+GET {{BACKEND_URL}}/vehicles?page=-1&limit=0&status=INVALID_STATUS&announcedPriceMin=abc HTTP/1.1
+Content-Type: application/json

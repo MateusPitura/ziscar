@@ -6,8 +6,8 @@ export const BaseIdSchema = s.object({
 });
 
 export const BasePaginationSchema = s.object({
-  page: s.number().min(0).optional().default(0),
-  limit: s.number().min(1).max(100).optional().default(20),
+  page: s.number(),
+  limit: s.number().max(1000),
 });
 
 export const BaseDateRangeSchema = s.object({

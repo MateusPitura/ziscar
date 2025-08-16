@@ -59,7 +59,7 @@ export class VehicleService implements VehicleRepository {
   ): Promise<SearchVehiclesResponseDto> {
     const page = params.page;
     const take = params.limit;
-    const skip = page * take;
+    const skip = (page - 1) * take;
 
     const where: Prisma.VehicleWhereInput = {};
 
