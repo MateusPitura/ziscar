@@ -5,7 +5,7 @@ import { removeMask } from "../utils/removeMask";
 
 export type infer<T extends z.ZodTypeAny> = z.infer<T>;
 
-export const nativeEnum = z.nativeEnum;
+// export const nativeEnum = z.nativeEnum;
 
 export const radio = z.enum;
 
@@ -69,19 +69,19 @@ export const dateRangeRule: [
   (data: Record<string, unknown>) => boolean,
   object
 ] = [
-  (data: Record<string, unknown>) => {
-    const startDate = data["startDate"] as Date | string | null | undefined;
-    const endDate = data["endDate"] as Date | string | null | undefined;
+    (data: Record<string, unknown>) => {
+      const startDate = data["startDate"] as Date | string | null | undefined;
+      const endDate = data["endDate"] as Date | string | null | undefined;
 
-    if (!startDate || !endDate) return true;
+      if (!startDate || !endDate) return true;
 
-    return new Date(endDate) >= new Date(startDate);
-  },
-  {
-    message: "Data final deve ser após a data inicial",
-    path: ["endDate"],
-  },
-];
+      return new Date(endDate) >= new Date(startDate);
+    },
+    {
+      message: "Data final deve ser após a data inicial",
+      path: ["endDate"],
+    },
+  ];
 
 export const id = () => number();
 
