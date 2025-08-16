@@ -144,7 +144,19 @@ describe("Store", () => {
 
     cy.get('button[type="submit"]').click();
 
-    cy.wait("@createStore");
+    cy.get('[data-cy="snackbar-title"]').should("contain", "Loja criada com sucesso");
+
+     cy.wait("@createStore").then((interception) => {
+      const responseBody = interception.response.body;
+
+      const storeId = responseBody.id;
+
+      cy.intercept("GET", `http://localhost:3000/store/${storeId}`).as("getStore");
+
+      cy.visit(`/stores/edit/${storeId}`);
+
+       cy.wait("@getStore")
+    });
   });
 
   it("should create store with address", () => {
@@ -198,6 +210,8 @@ describe("Store", () => {
     cy.get('button[type="submit"]').click();
 
     cy.wait("@createStore");
+
+    cy.get('[data-cy="snackbar-title"]').should("contain", "Loja criada com sucesso");
   });
 
   it("should navigate in store table", () => {

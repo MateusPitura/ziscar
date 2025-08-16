@@ -4,15 +4,19 @@ import { generateCpf } from "../../../shared/src/test/generateCpf";
 function removeCustomerAddress(customerId: string) {
   cy.visit(`/customers/edit/${customerId}`);
 
-  cy.intercept("PATCH", `http://localhost:3000/customer/${customerId}`, (req) => {
-    if (!req.body.address.remove) return;
+  cy.intercept(
+    "PATCH",
+    `http://localhost:3000/customer/${customerId}`,
+    (req) => {
+      if (!req.body.address.remove) return;
 
-    expect(req.body).to.deep.equal({
-      address: {
-        remove: true,
-      },
-    });
-  }).as("removeAddress");
+      expect(req.body).to.deep.equal({
+        address: {
+          remove: true,
+        },
+      });
+    }
+  ).as("removeAddress");
 
   cy.wait("@getCustomer");
   cy.wait("@cepApi");
@@ -144,7 +148,24 @@ describe("Customer", () => {
 
     cy.get('button[type="submit"]').click();
 
-    cy.wait("@createCustomer");
+    cy.get('[data-cy="snackbar-title"]').should(
+      "contain",
+      "Cliente criado com sucesso"
+    );
+
+    cy.wait("@createCustomer").then((interception) => {
+      const responseBody = interception.response.body;
+
+      const customerId = responseBody.id;
+
+      cy.intercept("GET", `http://localhost:3000/customer/${customerId}`).as(
+        "getCustomer"
+      );
+
+      cy.visit(`/customers/edit/${customerId}`);
+
+      cy.wait("@getCustomer");
+    });
   });
 
   it("should create customer with address", () => {
@@ -271,13 +292,17 @@ describe("Customer", () => {
       cy.visit("/customers");
 
       // Edit
-      cy.intercept("PATCH", `http://localhost:3000/customer/${customerId}`, (req) => {
-        if (!req.body.fullName) return;
+      cy.intercept(
+        "PATCH",
+        `http://localhost:3000/customer/${customerId}`,
+        (req) => {
+          if (!req.body.fullName) return;
 
-        expect(req.body).to.deep.equal({
-          fullName,
-        });
-      }).as("editCustomer");
+          expect(req.body).to.deep.equal({
+            fullName,
+          });
+        }
+      ).as("editCustomer");
 
       cy.get(`[data-cy="button-edit-customer-${customerId}"]`).click();
 
@@ -304,21 +329,25 @@ describe("Customer", () => {
       // Add address
       cy.visit(`/customers/edit/${customerId}`);
 
-      cy.intercept("PATCH", `http://localhost:3000/customer/${customerId}`, (req) => {
-        if (!req.body.address.add) return;
+      cy.intercept(
+        "PATCH",
+        `http://localhost:3000/customer/${customerId}`,
+        (req) => {
+          if (!req.body.address.add) return;
 
-        expect(req.body).to.deep.equal({
-          address: {
-            add: {
-              cep,
-              number,
-              street: "Rua Sete",
-              neighborhood: "COHEB do Sacavém",
-              cityIbgeCode: "2111300",
+          expect(req.body).to.deep.equal({
+            address: {
+              add: {
+                cep,
+                number,
+                street: "Rua Sete",
+                neighborhood: "COHEB do Sacavém",
+                cityIbgeCode: "2111300",
+              },
             },
-          },
-        });
-      }).as("addAddress");
+          });
+        }
+      ).as("addAddress");
 
       cy.wait("@getCustomer");
 
@@ -348,21 +377,25 @@ describe("Customer", () => {
       // Edit address
       cy.visit(`/customers/edit/${customerId}`);
 
-      cy.intercept("PATCH", `http://localhost:3000/customer/${customerId}`, (req) => {
-        if (!req.body.address.update) return;
+      cy.intercept(
+        "PATCH",
+        `http://localhost:3000/customer/${customerId}`,
+        (req) => {
+          if (!req.body.address.update) return;
 
-        expect(req.body).to.deep.equal({
-          address: {
-            update: {
-              cep,
-              number: "1234",
-              street: "Rua Sete",
-              neighborhood: "COHEB do Sacavém",
-              cityIbgeCode: "2111300",
+          expect(req.body).to.deep.equal({
+            address: {
+              update: {
+                cep,
+                number: "1234",
+                street: "Rua Sete",
+                neighborhood: "COHEB do Sacavém",
+                cityIbgeCode: "2111300",
+              },
             },
-          },
-        });
-      }).as("updateAddress");
+          });
+        }
+      ).as("updateAddress");
 
       cy.wait("@getCustomer");
 

@@ -1,18 +1,19 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import {
-    BadRequestException,
-    ConflictException,
-    NotFoundException,
+  BadRequestException,
+  ConflictException,
+  NotFoundException,
 } from '@nestjs/common';
 import { StoreService } from './store.service';
 import { PrismaService } from 'src/infra/database/prisma.service';
 import {
-    addressNullableFields,
-    POPULATE_INACTIVE_ENTITIES_AMOUNT,
-    POPULATE_OTHER_ENTITIES_AMOUNT,
+  addressNullableFields,
+  POPULATE_INACTIVE_ENTITIES_AMOUNT,
+  POPULATE_OTHER_ENTITIES_AMOUNT,
 } from 'src/constants';
 import { POPULATE_ENTERPRISE, POPULATE_STORE } from 'src/constants/populate';
 import { ITEMS_PER_PAGE } from '@shared/constants';
+import { GET_STORE } from './store.constant';
 
 describe('StoreService', () => {
   let storeService: StoreService;
@@ -45,7 +46,9 @@ describe('StoreService', () => {
         },
       });
 
-      expect(store).toHaveProperty('storeId');
+      for (const key in GET_STORE) {
+        expect(store).toHaveProperty(key);
+      }
 
       transaction.rollback();
     });
@@ -119,7 +122,9 @@ describe('StoreService', () => {
         },
       });
 
-      expect(store).toHaveProperty('storeId');
+      for (const key in GET_STORE) {
+        expect(store).toHaveProperty(key);
+      }
 
       transaction.rollback();
     });
@@ -146,7 +151,9 @@ describe('StoreService', () => {
         },
       });
 
-      expect(store).toHaveProperty('storeId');
+      for (const key in GET_STORE) {
+        expect(store).toHaveProperty(key);
+      }
 
       transaction.rollback();
     });

@@ -140,7 +140,17 @@ describe("User", () => {
       "Confira também a caixa de spam"
     );
 
-    cy.wait("@createUser");
+    cy.wait("@createUser").then((interception) => {
+      const responseBody = interception.response.body;
+
+      const userId = responseBody.id;
+
+      cy.intercept("GET", `http://localhost:3000/user/${userId}`).as("getUser");
+
+      cy.visit(`/users/edit/${userId}`);
+
+       cy.wait("@getUser")
+    });
   });
 
   it("should create user with address", () => {
@@ -251,6 +261,11 @@ describe("User", () => {
 
     cy.get('[data-cy="export-button"]').click();
 
+    cy.get('[data-cy="snackbar-title"]').should(
+      "contain",
+      "O PDF está sendo gerado"
+    );
+
     cy.wait("@getUsersPage2");
 
     cy.task("downloads:folder").then((downloadsFolder) => {
@@ -264,6 +279,10 @@ describe("User", () => {
         }
       });
     });
+
+    cy.contains('[data-cy="snackbar-title"]', "O PDF está sendo gerado").should(
+      "not.exist"
+    );
   });
 
   it("should edit user, add address, edit address and remove address", () => {
