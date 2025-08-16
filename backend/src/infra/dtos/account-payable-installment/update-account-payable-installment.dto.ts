@@ -1,4 +1,4 @@
-import { updateAccountPayableInstallmentDTO } from '@shared/dtos/account-payable.dto';
+import { updateAccountPayableInstallmentDTO } from '@shared/dtos';
 import { createZodDto } from 'nestjs-zod';
 
 export class UpdateAccountPayableInstallmentDTO extends createZodDto(
