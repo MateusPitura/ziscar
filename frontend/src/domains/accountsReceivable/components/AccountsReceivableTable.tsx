@@ -11,6 +11,7 @@ import selectAccountsReceivableInfo from "../utils/selectAccountsReceivableInfo"
 import AccountsReceivableTableActions from "./AccountsReceivableTableActions";
 import AccountsReceivableFilterForm from "./AccountsReceivableFilterForm";
 import AccountStatus from "@/domains/global/components/AccountStatus";
+import selectAccountsReceivableInfoForReport from "../utils/selectAccountsReceivableInfoForReport";
 // import { BACKEND_URL } from "@/domains/global/constants";
 // import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 
@@ -86,12 +87,18 @@ export default function AccountsReceivableTable(): ReactNode {
           resource="ACCOUNTS_RECEIVABLE"
           queryKey={["accounts-receivable", filterFormatted]}
           queryFn={getAccountsReceivableInfo}
+          selectQueryFn={selectAccountsReceivableInfoForReport}
           formatFilters={{
             endDate: "Data final",
             startDate: "Data inicial",
             overallStatus: "Status geral",
           }}
-          formatFiltersValues={{}}
+          formatFiltersValues={{
+            overallStatus: {
+              PAID: "Pago",
+              PENDING: "Pendente",
+            },
+          }}
           formatColumns={{
             id: "ID",
             description: "Descrição",

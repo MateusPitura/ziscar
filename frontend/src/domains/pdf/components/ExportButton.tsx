@@ -17,6 +17,7 @@ type ExportButtonProperties<T, U extends FieldValues> = {
     resource: Resource;
     queryKey: QueryKey;
     queryFn: (filter?: string) => Promise<PageablePayload<T>>;
+    selectQueryFn: (payload: PageablePayload<T>) => Record<string, unknown>[];
     formatColumns: Partial<Record<keyof T, string>>;
     formatFilters: Record<Path<U>, string>;
     formatFiltersValues: Partial<Record<K, Record<PathValue<U, K>, string>>>;
@@ -28,6 +29,7 @@ export default function ExportButton<T, U extends FieldValues>({
   resource,
   queryKey,
   queryFn: customQueryFn,
+  selectQueryFn,
   formatColumns,
   formatFilters,
   formatFiltersValues,
@@ -51,16 +53,16 @@ export default function ExportButton<T, U extends FieldValues>({
       const regex = /page=\d+/;
       const filterFormatted = filter?.replace(regex, `page=${i}`);
 
-      fetchPromises.push(
-        queryClient.fetchQuery({
-          queryKey: [queryKey[0], filterFormatted],
-          queryFn: ({ queryKey }) => customQueryFn(queryKey[1]),
-        })
-      );
+      const result = queryClient.fetchQuery({
+        queryKey: [queryKey[0], filterFormatted],
+        queryFn: ({ queryKey }) => customQueryFn(queryKey[1]),
+      });
+
+      fetchPromises.push(result);
     }
 
     const results = await Promise.all(fetchPromises);
-    return results.flatMap((result) => result.data);
+    return results.flatMap((result) => selectQueryFn(result));
   }
 
   return (
@@ -98,7 +100,7 @@ export default function ExportButton<T, U extends FieldValues>({
             />
           ).toBlob();
 
-          snackbar.dismiss()
+          snackbar.dismiss();
 
           const url = URL.createObjectURL(blob);
           const link = document.createElement("a");
@@ -116,7 +118,7 @@ export default function ExportButton<T, U extends FieldValues>({
           link.click();
           URL.revokeObjectURL(url);
         } catch {
-          snackbar.dismiss()
+          snackbar.dismiss();
           showErrorSnackbar({
             description: "Ocorreu um erro ao gerar o PDF",
           });
