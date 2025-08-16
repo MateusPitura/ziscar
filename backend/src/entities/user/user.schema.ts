@@ -17,7 +17,7 @@ const SchemaUserCreateInDto = SchemaUserPostInDto.extend({
 
 const SchemaUserFindManyInDto = s
   .object({
-    page: s.number().optional(),
+    page: s.numberPositive().optional(),
     status: s.radio(['active', 'inactive']).optional(),
     fullName: s.fullName().optional(),
     orderBy: s.radio(['fullName', 'email']).optional(),

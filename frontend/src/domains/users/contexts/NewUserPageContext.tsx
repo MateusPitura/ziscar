@@ -1,16 +1,16 @@
 import { Childrenable } from "@/domains/global/types";
 import { createContext, useMemo, useState } from "react";
 
-interface NewUsersPageContextValues {
+interface NewUserPageContextValues {
   example: string;
   handleExample: (value: string) => void;
 }
 
-const NewUsersPageContext = createContext<NewUsersPageContextValues | null>(
+const NewUserPageContext = createContext<NewUserPageContextValues | null>(
   null
 );
 
-function NewUsersPageProvider({ children }: Childrenable) {
+function NewUserPageProvider({ children }: Childrenable) {
   const [example, setExample] = useState("");
 
   function handleExample(value: string) {
@@ -26,10 +26,10 @@ function NewUsersPageProvider({ children }: Childrenable) {
   );
 
   return (
-    <NewUsersPageContext.Provider value={valuesMemoized}>
+    <NewUserPageContext.Provider value={valuesMemoized}>
       {children}
-    </NewUsersPageContext.Provider>
+    </NewUserPageContext.Provider>
   );
 }
 
-export { NewUsersPageContext, NewUsersPageProvider };
+export { NewUserPageContext, NewUserPageProvider };

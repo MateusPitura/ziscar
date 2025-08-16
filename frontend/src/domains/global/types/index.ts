@@ -2,6 +2,7 @@ import { StoresFilterFormInputs } from "@/domains/stores/types";
 import { UsersFilterFormInputs } from "@/domains/users/types";
 import { SchemaAddress } from "../schemas";
 import { s } from "@shared/safeZod";
+import { CustomersFilterFormInputs } from "@/domains/customers/types";
 
 export interface Childrenable {
   children?: React.ReactNode;
@@ -28,13 +29,16 @@ export type QueryKeys =
   | "ibgeApi"
   | "user"
   | "users"
+  | "store"
+  | "stores"
+  | "customer"
+  | "customers"
   | "profile"
   | "permissions"
-  | "stores"
-  | "usersSearch";
 
 export interface UsersFilter extends UsersFilterFormInputs, Pageable {}
 export interface StoresFilter extends StoresFilterFormInputs, Pageable {}
+export interface CustomersFilter extends CustomersFilterFormInputs, Pageable {}
 
 export interface PageablePayload<T> {
   data: T[];
@@ -46,6 +50,7 @@ export type DateFormats = "yyyy-MM-dd" | "dd/MM/yyyy" | "HH-mm" | "dd-MM-yyyy";
 export interface Options {
   value: string;
   label: string;
+  description?: string;
 }
 
 export type AddressFormInputs = s.infer<typeof SchemaAddress>;

@@ -15,7 +15,7 @@ import StoresFilterForm from "../forms/StoresFilterForm";
 import useFilterContext from "@/domains/global/hooks/useFilterContext";
 import { BACKEND_URL } from "@/domains/global/constants";
 
-const disableReport = true;
+const enableReport = false;
 
 export default function StoresTable(): ReactNode {
   const [disableStoreInfo, setDisableStoreInfo] = useState<DisableStore>({
@@ -62,7 +62,7 @@ export default function StoresTable(): ReactNode {
     <>
       <DisableStoreModal {...disableStoreInfo} {...dialog} />
       <div className="flex gap-4 justify-end">
-        {disableReport && (
+        {enableReport && (
           <ExportButton<FetchStore, StoresFilterFormInputs>
             fileName="Relatório Lojas"
             resource="STORES"

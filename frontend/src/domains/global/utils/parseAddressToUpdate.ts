@@ -1,4 +1,4 @@
-import { AddressFormInputs } from "@/domains/users/types";
+import { AddressFormInputs } from "../types";
 
 interface ParseAddressToUpdateProperties {
   newAddress?: AddressFormInputs[];
