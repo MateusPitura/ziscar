@@ -1,18 +1,19 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import {
-    BadRequestException,
-    ConflictException,
-    NotFoundException,
+  BadRequestException,
+  ConflictException,
+  NotFoundException,
 } from '@nestjs/common';
 import { CustomerService } from './customer.service';
 import { PrismaService } from 'src/infra/database/prisma.service';
 import {
-    addressNullableFields,
-    POPULATE_INACTIVE_ENTITIES_AMOUNT,
-    POPULATE_OTHER_ENTITIES_AMOUNT,
+  addressNullableFields,
+  POPULATE_INACTIVE_ENTITIES_AMOUNT,
+  POPULATE_OTHER_ENTITIES_AMOUNT,
 } from 'src/constants';
 import { POPULATE_ENTERPRISE, POPULATE_CUSTOMER } from 'src/constants/populate';
 import { ITEMS_PER_PAGE } from '@shared/constants';
+import { GET_CUSTOMER } from './customer.constant';
 
 describe('CustomerService', () => {
   let customerService: CustomerService;
@@ -45,7 +46,9 @@ describe('CustomerService', () => {
         },
       });
 
-      expect(customer).toHaveProperty('customerId');
+      for (const key in GET_CUSTOMER) {
+        expect(customer).toHaveProperty(key);
+      }
 
       transaction.rollback();
     });
@@ -119,7 +122,9 @@ describe('CustomerService', () => {
         },
       });
 
-      expect(customer).toHaveProperty('customerId');
+      for (const key in GET_CUSTOMER) {
+        expect(customer).toHaveProperty(key);
+      }
 
       transaction.rollback();
     });
@@ -146,7 +151,9 @@ describe('CustomerService', () => {
         },
       });
 
-      expect(customer).toHaveProperty('customerId');
+      for (const key in GET_CUSTOMER) {
+        expect(customer).toHaveProperty(key);
+      }
 
       transaction.rollback();
     });
@@ -618,6 +625,15 @@ describe('CustomerService', () => {
     expect(result).toHaveProperty('total', calculatedCustomers);
   });
 
+  it('should find many customers by CPF', async () => {
+    const result = await customerService.findMany({
+      customerFindManyInDto: { cpf: 123 },
+      enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
+    });
+
+    expect(result).toHaveProperty('total', expect.any(Number));
+  });
+
   it('should find many customers with many filters', async () => {
     const spy = jest.spyOn(prismaService.customer, 'findMany');
 
@@ -628,6 +644,7 @@ describe('CustomerService', () => {
         fullName: POPULATE_CUSTOMER.DEFAULT.fullName,
         orderBy: 'fullName',
         startDate: '2000-01-01',
+        cpf: 123,
       },
       enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
     });
@@ -646,6 +663,9 @@ describe('CustomerService', () => {
           gte: new Date('2000-01-01'),
         },
         enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
+        cpf: {
+          contains: '123',
+        },
       },
       orderBy: [{ fullName: 'asc' }],
     });
