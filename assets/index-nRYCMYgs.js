@@ -1,1 +1,0 @@
-import{o as s,c as o,d as m,p as n,e as i,s as t,f as a,g as e,r,h as c,S as d}from"./index-D0UprIr6.js";const S=s({name:t().or(a()),orderBy:r(["name","email"]),status:r(["active","inactive"]),startDate:e().or(a()),endDate:e().or(a())}).refine(...c),h=s({name:t(),email:i().or(a()),phone:n().or(a()),cnpj:m(),address:o(d).max(1)});export{S,h as a};
