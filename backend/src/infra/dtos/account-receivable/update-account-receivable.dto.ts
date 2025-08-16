@@ -1,9 +1,11 @@
-import { s } from "@shared/safeZod";
-import { createZodDto } from "nestjs-zod";
+import { s } from '@shared/safeZod';
+import { createZodDto } from 'nestjs-zod';
 
 const updateAccountReceivableDTO = s.object({
-    description: s.string(),
-    receivedFrom: s.string(),
-})
+  description: s.string(),
+  receivedFrom: s.string(),
+});
 
-export class UpdateAccountReceivableDTO extends createZodDto(updateAccountReceivableDTO) { }
+export class UpdateAccountReceivableDTO extends createZodDto(
+  updateAccountReceivableDTO,
+) {}
