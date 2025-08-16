@@ -13,6 +13,7 @@ import {
 } from 'src/constants';
 import { POPULATE_ENTERPRISE, POPULATE_STORE } from 'src/constants/populate';
 import { ITEMS_PER_PAGE } from '@shared/constants';
+import { GET_STORE } from './store.constant';
 
 describe('StoreService', () => {
   let storeService: StoreService;
@@ -28,6 +29,11 @@ describe('StoreService', () => {
     prismaService = module.get<PrismaService>(PrismaService);
   });
 
+  afterEach(async () => {
+    await prismaService.$disconnect();
+    await module.close();
+  });
+
   it('should create an store with minimal data', async () => {
     await prismaService.transaction(async (transaction) => {
       Reflect.set(storeService, 'prismaService', transaction);
@@ -40,15 +46,12 @@ describe('StoreService', () => {
         },
       });
 
-      expect(store).toHaveProperty('storeId');
+      for (const key in GET_STORE) {
+        expect(store).toHaveProperty(key);
+      }
 
       transaction.rollback();
     });
-  });
-
-  afterAll(async () => {
-    await prismaService.$disconnect();
-    await module.close();
   });
 
   it('should not create an store with the same email', async () => {
@@ -119,7 +122,9 @@ describe('StoreService', () => {
         },
       });
 
-      expect(store).toHaveProperty('storeId');
+      for (const key in GET_STORE) {
+        expect(store).toHaveProperty(key);
+      }
 
       transaction.rollback();
     });
@@ -146,7 +151,9 @@ describe('StoreService', () => {
         },
       });
 
-      expect(store).toHaveProperty('storeId');
+      for (const key in GET_STORE) {
+        expect(store).toHaveProperty(key);
+      }
 
       transaction.rollback();
     });

@@ -67,7 +67,7 @@ export class UserService {
       };
     }
 
-    await database.user.create({
+    const user = await database.user.create({
       data: {
         ...createPayload,
         enterprise: {
@@ -81,6 +81,7 @@ export class UserService {
           },
         },
       },
+      select: GET_USER,
     });
 
     const token = this.jwtService.sign({ email: userCreateInDto.email });
@@ -91,7 +92,7 @@ export class UserService {
       body: `${FRONTEND_URL}/?token=${token}`,
     });
 
-    return true;
+    return user;
   }
 
   async findMany({

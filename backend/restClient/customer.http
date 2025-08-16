@@ -1,0 +1,53 @@
+###
+POST {{BACKEND_URL}}/customer HTTP/1.1
+content-type: application/json
+
+{
+    "fullName": "John Doe",
+    "email": "john.doe+1@email.com",
+    "cpf": "12345678909",
+    "phone": "42988884444",
+    "address": {
+        "cep": "12345678",
+        "number": "123",
+        "cityIbgeCode": 4119905
+    }
+}
+
+###
+GET {{BACKEND_URL}}/customer/1 HTTP/1.1
+content-type: application/json
+
+###
+GET {{BACKEND_URL}}/customer?status=active&startDate=2025-01-01 HTTP/1.1
+content-type: application/json
+
+###
+PATCH {{BACKEND_URL}}/customer/1 HTTP/1.1
+content-type: application/json
+
+{
+    "phone": "43988884444"
+}
+
+###
+PATCH {{BACKEND_URL}}/customer/1 HTTP/1.1
+content-type: application/json
+
+{
+    "address": {
+        "update": {
+            "cep": "12345678",
+            "number": "456",
+            "cityIbgeCode": 4119905
+        }
+    }
+}
+
+###
+DELETE {{BACKEND_URL}}/customer/1 HTTP/1.1
+content-type: application/json
+
+{
+    "archivedAt": "2025-01-01"
+}

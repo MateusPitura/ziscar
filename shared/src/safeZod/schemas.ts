@@ -47,8 +47,10 @@ export const number = () =>
       required_error: "Campo obrigatório",
       message: "Número inválido",
     })
-    .int({ message: "Número inválido" })
-    .positive({ message: "Número inválido" });
+    .int({ message: "Número inválido" });
+
+export const numberPositive = () =>
+  number().positive({ message: "Número inválido" });
 
 export const date = () =>
   z.coerce.date({
@@ -83,7 +85,7 @@ export const dateRangeRule: [
     },
   ];
 
-export const id = () => number();
+export const id = () => numberPositive();
 
 export const email = () => string().email({ message: "Email inválido" });
 

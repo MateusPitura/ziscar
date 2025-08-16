@@ -59,11 +59,10 @@ export class StoreService {
           },
         },
       },
+      select: GET_STORE,
     });
 
-    return {
-      storeId: store.id,
-    };
+    return store;
   }
 
   async findOne({

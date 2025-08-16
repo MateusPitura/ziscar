@@ -12,7 +12,7 @@ export default function StoresContainer(): ReactElement {
       <PageHeader title="Lojas">
         <Button
           label="Adicionar loja"
-          iconLeft="AddBusiness"
+          iconLeft="Add"
           onClick={() => navigate("/stores/new")}
           resource="STORES"
           action="CREATE"

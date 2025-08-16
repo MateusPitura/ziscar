@@ -2,11 +2,10 @@ import { s } from "@shared/safeZod";
 
 export const SchemaVehicleSaleForm = s.object({
   customer: s.object({
-    id: s.id().or(s.empty()),
-    fullName: s.fullName(),
-    email: s.email(),
+    id: s.string(),
   }),
   vehicle: s.object({
+    storeId: s.string(),
     model: s.string(),
     price: s.money(),
     color: s.color(),
@@ -32,3 +31,8 @@ export const SchemaVehicleSaleForm = s.object({
     installments: s.number().positive(),
   }),
 });
+
+export const cpfSearchSchema = s
+  .string()
+  .regex(/^[0-9.-]+$/)
+  .transform((value) => value.replace(/\D/g, ""));
