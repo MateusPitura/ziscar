@@ -5,7 +5,7 @@ import { AccountPayableService } from 'src/entities/account-payable/account-paya
 import { AccountPayableInstallmentService } from 'src/entities/account-payable-installment/account-payable-installment.service';
 import { PaymentMethodPayableService } from 'src/entities/payment-method-payable/payment-method-payable.service';
 import { VehicleExpenseService } from 'src/entities/vehicle-expense/vehicle-expense.service';
-import type {
+import {
   InsertVehicleExpenseRequestDto,
   InsertVehicleExpenseResponseDto,
 } from '../dtos';

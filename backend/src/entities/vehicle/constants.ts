@@ -4,8 +4,6 @@ export const GET_VEHICLE = {
   modelYear: true,
   yearOfManufacture: true,
   modelName: true,
-  brandId: true,
-  brand: true,
   category: true,
   kilometers: true,
   plateNumber: true,
@@ -17,4 +15,16 @@ export const GET_VEHICLE = {
   status: true,
   storeId: true,
   store: true,
+  vehicleCharacteristicValues: {
+    select: {
+      id: true,
+      characteristic: true,
+    },
+  },
+  brand: {
+    select: {
+      id: true,
+      name: true,
+    },
+  },
 };

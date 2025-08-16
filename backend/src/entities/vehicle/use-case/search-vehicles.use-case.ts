@@ -1,9 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { VehicleService } from '../vehicle.service';
-import type {
-  SearchVehiclesRequestDto,
-  SearchVehiclesResponseDto,
-} from '../dtos';
+import { SearchVehiclesRequestDto, SearchVehiclesResponseDto } from '../dtos';
 
 @Injectable()
 export class SearchVehiclesUseCase {

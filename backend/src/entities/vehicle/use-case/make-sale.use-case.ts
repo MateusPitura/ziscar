@@ -1,8 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import type {
-  MakeVehicleSaleRequestDto,
-  MakeVehicleSaleResponseDto,
-} from '../dtos';
+import { MakeVehicleSaleRequestDto, MakeVehicleSaleResponseDto } from '../dtos';
 
 @Injectable()
 export class MakeSaleUseCase {

@@ -1,9 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { VehicleRepository } from 'src/repositories/vehicle-repository';
-import type {
-  UpdateVehicleRequestDto,
-  UpdateVehicleResponseDto,
-} from '../dtos';
+import { UpdateVehicleRequestDto, UpdateVehicleResponseDto } from '../dtos';
 
 @Injectable()
 export class UpdateVehicleUseCase {
@@ -16,6 +13,17 @@ export class UpdateVehicleUseCase {
     id: string,
     data: UpdateVehicleRequestDto,
   ): Promise<UpdateVehicleResponseDto> {
-    return await this.vehicleRepository.update(id, data);
+    const { characteristics, ...vehicleData } = data;
+
+    const updatedVehicle = await this.vehicleRepository.update(id, vehicleData);
+
+    if (characteristics) {
+      await this.vehicleRepository.updateCharacteristics(
+        updatedVehicle.id,
+        characteristics,
+      );
+    }
+
+    return updatedVehicle;
   }
 }

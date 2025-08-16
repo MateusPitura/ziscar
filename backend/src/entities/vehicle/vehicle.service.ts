@@ -131,4 +131,76 @@ export class VehicleService implements VehicleRepository {
 
     return { data: mappedRows, totalCount: total };
   }
+
+  async insertCharacteristics(
+    vehicleId: number,
+    characteristics: string[],
+  ): Promise<void> {
+    const data = characteristics.map((characteristic) => ({
+      vehicleId: Number(vehicleId),
+      characteristic,
+    }));
+
+    await this.prisma.vehicleCharacteristicValue.createMany({
+      data,
+      skipDuplicates: true,
+    });
+  }
+
+  async updateCharacteristics(
+    vehicleId: number,
+    characteristics: Array<{ id?: number; characteristic: string }>,
+  ): Promise<void> {
+    const vehicleIdNumber = Number(vehicleId);
+
+    const existingCharacteristics =
+      await this.prisma.vehicleCharacteristicValue.findMany({
+        where: { vehicleId: vehicleIdNumber },
+        select: { id: true },
+      });
+
+    const existingIds = existingCharacteristics.map((char) => char.id);
+    const providedIds = characteristics
+      .filter((char) => char.id !== undefined)
+      .map((char) => char.id!);
+
+    const idsToDelete = existingIds.filter((id) => !providedIds.includes(id));
+
+    const characteristicsToUpdate = characteristics.filter(
+      (char) => char.id !== undefined && existingIds.includes(char.id),
+    );
+
+    const characteristicsToInsert = characteristics.filter(
+      (char) => char.id === undefined,
+    );
+
+    await this.prisma.$transaction(async (prisma) => {
+      if (idsToDelete.length > 0) {
+        await prisma.vehicleCharacteristicValue.deleteMany({
+          where: {
+            id: { in: idsToDelete },
+            vehicleId: vehicleIdNumber,
+          },
+        });
+      }
+
+      for (const char of characteristicsToUpdate) {
+        await prisma.vehicleCharacteristicValue.update({
+          where: { id: char.id! },
+          data: { characteristic: char.characteristic },
+        });
+      }
+
+      if (characteristicsToInsert.length > 0) {
+        const dataToInsert = characteristicsToInsert.map((char) => ({
+          vehicleId: vehicleIdNumber,
+          characteristic: char.characteristic,
+        }));
+
+        await prisma.vehicleCharacteristicValue.createMany({
+          data: dataToInsert,
+        });
+      }
+    });
+  }
 }

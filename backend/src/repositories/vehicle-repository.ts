@@ -16,4 +16,12 @@ export abstract class VehicleRepository {
   abstract search(
     params: SearchVehiclesRequestDto,
   ): Promise<SearchVehiclesResponseDto>;
+  abstract insertCharacteristics(
+    vehicleId: number,
+    characteristics: string[],
+  ): Promise<void>;
+  abstract updateCharacteristics(
+    vehicleId: number,
+    characteristics: Array<{ id?: number; characteristic: string }>,
+  ): Promise<void>;
 }

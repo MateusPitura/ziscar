@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { VehicleService } from '../vehicle.service';
-import type {
+import {
   UnarchiveVehicleRequestDto,
   UnarchiveVehicleResponseDto,
 } from '../dtos';

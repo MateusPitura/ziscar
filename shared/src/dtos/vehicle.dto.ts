@@ -34,6 +34,7 @@ export const InsertVehicleRequestSchema = s.object({
   fuelType: s.radio(FUELTYPE_VALUES).nullable(),
   status: s.radio(VEHICLESTATUS_VALUES),
   storeId: s.id(),
+  characteristics: s.array(s.string()).optional(),
 });
 
 export const InsertVehicleResponseSchema = BaseIdResponseSchema;
@@ -61,13 +62,32 @@ const VehicleItemSchema = s.object({
   modelYear: s.number().nullable(),
   yearOfManufacture: s.number().nullable(),
   modelName: s.string().nullable(),
-  brandId: s.id(),
   storeId: s.id(),
   status: s.radio(VEHICLESTATUS_VALUES),
   category: s.radio(VEHICLECATEGORY_VALUES).nullable(),
   announcedPrice: s.number().nullable(),
   plateNumber: s.string(7),
   archivedAt: s.date().nullable().optional(),
+  vehicleCharacteristicValues: s
+    .array(
+      s.object({
+        id: s.id(),
+        characteristic: s.string(),
+      })
+    )
+    .optional(),
+  brand: s
+    .object({
+      id: s.id(),
+      name: s.string(),
+    })
+    .optional(),
+  store: s
+    .object({
+      id: s.id(),
+      name: s.string(),
+    })
+    .optional(),
 });
 
 export const SearchVehiclesResponseSchema =
@@ -120,7 +140,20 @@ export const MakeVehicleSaleRequestSchema = s.object({
 
 export const MakeVehicleSaleResponseSchema = BaseIdResponseSchema;
 
-export const UpdateVehicleRequestSchema = InsertVehicleRequestSchema.partial();
+export const UpdateVehicleRequestSchema = InsertVehicleRequestSchema.omit({
+  characteristics: true,
+})
+  .partial()
+  .extend({
+    characteristics: s
+      .array(
+        s.object({
+          id: s.id().optional(),
+          characteristic: s.string(127),
+        })
+      )
+      .optional(),
+  });
 
 export const UpdateVehicleResponseSchema = BaseIdResponseSchema;
 

@@ -1,9 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { VehicleService } from '../vehicle.service';
-import type {
-  ArchiveVehicleRequestDto,
-  ArchiveVehicleResponseDto,
-} from '../dtos';
+import { ArchiveVehicleRequestDto, ArchiveVehicleResponseDto } from '../dtos';
 
 @Injectable()
 export class ArchiveVehicleUseCase {
