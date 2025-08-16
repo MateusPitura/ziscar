@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { AccountReceivable } from '@prisma/client';
 import { PrismaService } from 'src/infra/database/prisma.service';
 import { AccountReceivableRepository } from 'src/repositories/account_receivable-repository';
@@ -20,7 +20,7 @@ export class AccountReceivableService implements AccountReceivableRepository {
     });
 
     if (!accountReceivable) {
-      return null;
+      throw new NotFoundException('Conta a receber não encontrada');
     }
 
     return accountReceivable;

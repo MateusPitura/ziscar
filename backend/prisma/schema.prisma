@@ -200,7 +200,9 @@ model Customer {
   fullName     String        @db.VarChar(127)
   phone        String?       @db.VarChar(11)
   email        String?       @db.VarChar(127)
-  cpf          String?       @unique @db.VarChar(11)
+  cpf          String        @unique @db.VarChar(11)
+  enterpriseId Int
+  enterprise   Enterprise    @relation(fields: [enterpriseId], references: [id])
   addressId    Int?
   address      Address?      @relation(fields: [addressId], references: [id])
   vehicleSales VehicleSale[]
@@ -250,12 +252,13 @@ model AccountReceivableInstallment {
 }
 
 model Enterprise {
-  id     Int     @id @default(autoincrement())
-  users  User[]
-  stores Store[]
+  id        Int        @id @default(autoincrement())
+  users     User[]
+  stores    Store[]
+  customers Customer[]
 
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
   archivedAt DateTime?
 }
 

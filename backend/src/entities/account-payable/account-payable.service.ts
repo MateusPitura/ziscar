@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { AccountPayable } from '@prisma/client';
 import { PrismaService } from 'src/infra/database/prisma.service';
 import { AccountPayableRepository } from 'src/repositories/account_payable-repository';
@@ -16,7 +16,7 @@ export class AccountPayableService implements AccountPayableRepository {
     });
 
     if (!accountPayable) {
-      return null;
+      throw new NotFoundException('Conta a pagar não encontrada.');
     }
 
     return accountPayable;

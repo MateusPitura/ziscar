@@ -19,6 +19,7 @@ import {
   POPULATE_OTHER_ENTITIES_AMOUNT,
 } from 'src/constants';
 import { POPULATE_ENTERPRISE, POPULATE_USER } from 'src/constants/populate';
+import { GET_USER } from './user.constant';
 
 describe('UserService', () => {
   let userService: UserService;
@@ -49,7 +50,7 @@ describe('UserService', () => {
     prismaService = module.get<PrismaService>(PrismaService);
   });
 
-  afterAll(async () => {
+  afterEach(async () => {
     await prismaService.$disconnect();
     await module.close();
   });
@@ -64,19 +65,21 @@ describe('UserService', () => {
         'generateRandomPassword',
       );
 
-      expect(
-        await userService.create({
-          userCreateInDto: {
-            email: 'jane.doe@email.com',
-            fullName: 'Jane Doe',
-            enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
-            roleId: SEED_ROLE_SALES_ID,
-          },
-        }),
-      ).toBeTruthy();
+      const user = await userService.create({
+        userCreateInDto: {
+          email: 'jane.doe@email.com',
+          fullName: 'Jane Doe',
+          enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
+          roleId: SEED_ROLE_SALES_ID,
+        },
+      });
 
       expect(spyEncryptPassword).toHaveBeenCalled();
       expect(spyGenerateRandomPassword).toHaveBeenCalled();
+
+      for (const key in GET_USER) {
+        expect(user).toHaveProperty(key);
+      }
 
       transaction.rollback();
     });
@@ -132,25 +135,27 @@ describe('UserService', () => {
         'generateRandomPassword',
       );
 
-      expect(
-        await userService.create({
-          userCreateInDto: {
-            fullName: 'Jane Doe',
-            email: 'jane.doe@email.com',
-            cpf: '11111111111',
-            phone: '42988884444',
-            address: {
-              cep: '12345678',
-              number: '123',
-            },
-            enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
-            roleId: SEED_ROLE_SALES_ID,
+      const user = await userService.create({
+        userCreateInDto: {
+          fullName: 'Jane Doe',
+          email: 'jane.doe@email.com',
+          cpf: '11111111111',
+          phone: '42988884444',
+          address: {
+            cep: '12345678',
+            number: '123',
           },
-        }),
-      ).toBeTruthy();
+          enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
+          roleId: SEED_ROLE_SALES_ID,
+        },
+      });
 
       expect(spyEncryptPassword).toHaveBeenCalled();
       expect(spyGenerateRandomPassword).toHaveBeenCalled();
+
+      for (const key in GET_USER) {
+        expect(user).toHaveProperty(key);
+      }
 
       transaction.rollback();
     });
@@ -166,28 +171,30 @@ describe('UserService', () => {
         'generateRandomPassword',
       );
 
-      expect(
-        await userService.create({
-          userCreateInDto: {
-            fullName: 'Jane Doe',
-            email: 'jane.doe@email.com',
-            cpf: '11111111111',
-            phone: '42988884444',
-            address: {
-              cep: '12345678',
-              number: '123',
-              street: 'Broadway',
-              cityIbgeCode: 4119905,
-              neighborhood: 'Manhattan',
-            },
-            enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
-            roleId: SEED_ROLE_SALES_ID,
+      const user = await userService.create({
+        userCreateInDto: {
+          fullName: 'Jane Doe',
+          email: 'jane.doe@email.com',
+          cpf: '11111111111',
+          phone: '42988884444',
+          address: {
+            cep: '12345678',
+            number: '123',
+            street: 'Broadway',
+            cityIbgeCode: 4119905,
+            neighborhood: 'Manhattan',
           },
-        }),
-      ).toBeTruthy();
+          enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
+          roleId: SEED_ROLE_SALES_ID,
+        },
+      });
 
       expect(spyEncryptPassword).toHaveBeenCalled();
       expect(spyGenerateRandomPassword).toHaveBeenCalled();
+
+      for (const key in GET_USER) {
+        expect(user).toHaveProperty(key);
+      }
 
       transaction.rollback();
     });

@@ -13,7 +13,7 @@ import { BACKEND_URL } from "@/domains/global/constants";
 import { userDefaultValues } from "../constants";
 import parseAddressToCreate from "@/domains/global/utils/parseAddressToCreate";
 
-export default function NewUsersContainer(): ReactElement {
+export default function NewUserContainer(): ReactElement {
   const { safeFetch } = useSafeFetch();
   const { showSuccessSnackbar } = useSnackbar();
   const isFetching = useIsFetching({ queryKey: ["cepApi"] });

@@ -46,7 +46,7 @@ describe('AuthController', () => {
     userService = module.get<UserService>(UserService);
   });
 
-  afterAll(async () => {
+  afterEach(async () => {
     await prismaService.$disconnect();
     await module.close();
   });

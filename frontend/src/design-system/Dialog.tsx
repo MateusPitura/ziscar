@@ -14,6 +14,7 @@ import useButtonState from "@/domains/global/hooks/useButtonState";
 import { Childrenable, DialogProps } from "@/domains/global/types";
 import { Action, Resource } from "@shared/types";
 import { ButtonColor, ButtonState } from "./types";
+import classNames from "classnames";
 
 interface ContainerProps extends DialogProps, Childrenable {}
 
@@ -60,6 +61,7 @@ interface FooterProps {
   labelSecondaryBtn?: string;
   secondaryBtnState?: ButtonState;
   dirty?: boolean;
+  className?: string;
 }
 
 function Footer({
@@ -73,6 +75,7 @@ function Footer({
   secondaryBtnState,
   primaryBtnColor,
   dirty,
+  className,
 }: FooterProps): ReactElement {
   const primaryBtnStateParsed = useButtonState({
     dirty,
@@ -80,7 +83,7 @@ function Footer({
   });
 
   return (
-    <DialogFooter className="flex px-6 pb-6 pt-2">
+    <DialogFooter className={classNames("flex px-6 pb-6 pt-2", className)}>
       {onClickSecondaryBtn ? (
         <Button
           variant="quaternary"
@@ -106,7 +109,7 @@ function Footer({
         resource={primaryBtResource}
         action={primaryBtnAction}
         color={primaryBtnColor}
-        data-cy={'dialog-footer-button-primary'}
+        data-cy={"dialog-footer-button-primary"}
       />
     </DialogFooter>
   );

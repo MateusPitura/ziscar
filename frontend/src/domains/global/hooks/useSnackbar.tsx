@@ -33,7 +33,7 @@ export default function useSnackbar() {
       actionBtnResource,
       actionBtnAction,
     }: ShowSuccessSnackbarProps) => {
-      toast({
+      return toast({
         title,
         description,
         action: onActionClick && (
@@ -61,7 +61,7 @@ export default function useSnackbar() {
       actionBtnResource,
       actionBtnAction,
     }: ShowErrorSnackbarProps) => {
-      toast({
+      return toast({
         variant: "destructive",
         title: "Ocorreu um erro",
         description,

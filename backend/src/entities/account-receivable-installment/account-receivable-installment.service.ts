@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { AccountReceivableInstallment } from '@prisma/client';
 import { PrismaService } from 'src/infra/database/prisma.service';
 import { AccountReceivableInstallmentRepository } from 'src/repositories/account_receivable_installment-repository';
@@ -23,7 +23,7 @@ export class AccountReceivableInstallmentService
       });
 
     if (!installment) {
-      return null;
+      throw new NotFoundException('Parcela a receber não encontrada');
     }
 
     return installment;

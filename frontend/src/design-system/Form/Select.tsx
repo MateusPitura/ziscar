@@ -32,6 +32,7 @@ interface SelectProperties<T> {
   onChange?: (value?: string) => void;
   onSearchChange?: (search: string) => void;
   shouldFilter?: boolean;
+  notFound?: ReactNode;
 }
 
 export default function Select<T extends FieldValues>({
@@ -45,6 +46,7 @@ export default function Select<T extends FieldValues>({
   onChange,
   onSearchChange,
   shouldFilter = true,
+  notFound,
 }: SelectProperties<T>): ReactNode {
   const [isOpen, setIsOpen] = useState(false);
   const { register, control } = useFormContext<T>();
@@ -54,7 +56,7 @@ export default function Select<T extends FieldValues>({
     control,
   });
 
-  const watch = useWatch({
+  const selectedValue = useWatch({
     name,
   });
 
@@ -72,7 +74,8 @@ export default function Select<T extends FieldValues>({
           <Button
             variant="secondary"
             label={
-              (watch && options.find((item) => item.value === watch)?.label) ||
+              (selectedValue &&
+                options.find((item) => item.value === selectedValue)?.label) ||
               "Selecione um item"
             }
             iconRight="UnfoldMore"
@@ -101,7 +104,7 @@ export default function Select<T extends FieldValues>({
               ) : (
                 <>
                   <CommandEmpty className="text-neutral-700 flex items-center justify-center p-2 text-body-medium min-h-14">
-                    Nenhum item encontrado
+                    {notFound || "Nenhum item encontrado"}
                   </CommandEmpty>
                   {options.map((option) => {
                     return (
@@ -109,7 +112,7 @@ export default function Select<T extends FieldValues>({
                         key={option.value}
                         value={option.value}
                         onSelect={(value) => {
-                          if (value === watch) {
+                          if (value === selectedValue) {
                             onChange?.(undefined);
                             field.onChange("");
                             return;
@@ -117,11 +120,20 @@ export default function Select<T extends FieldValues>({
                           onChange?.(value);
                           field.onChange(value);
                         }}
-                        className="flex !text-neutral-700"
+                        className="flex !text-neutral-700 text-body-medium"
                         keywords={[option.label]}
                       >
-                        <span className="flex-1">{option.label}</span>
-                        {watch === option.value && <Icon iconName="Check" />}
+                        <div className="flex-1">
+                          <p>{option.label}</p>
+                          {option.description && (
+                            <p className="text-label-medium text-neutral-500">
+                              {option.description}
+                            </p>
+                          )}
+                        </div>
+                        {selectedValue === option.value && (
+                          <Icon iconName="Check" />
+                        )}
                       </CommandItem>
                     );
                   })}

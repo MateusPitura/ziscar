@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { AccountPayableInstallment } from '@prisma/client';
 import { PrismaService } from 'src/infra/database/prisma.service';
 import { AccountPayableInstallmentRepository } from 'src/repositories/account_payable_installment-repository';
@@ -22,7 +22,7 @@ export class AccountPayableInstallmentService
     });
 
     if (!installment) {
-      return null;
+      throw new NotFoundException('Parcela não encontrada.');
     }
 
     return installment;

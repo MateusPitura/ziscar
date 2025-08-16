@@ -1,21 +1,27 @@
 import Search from "@/design-system/Form/Search";
-import type { ReactElement } from "react";
-import { FetchUser } from "@/domains/global/types/model";
+import { useState, type ReactElement } from "react";
+import { FetchCustomer } from "@/domains/global/types/model";
 import { BACKEND_URL } from "@/domains/global/constants";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import { VehicleSaleFormInputs } from "../types";
-import { useFormContext } from "react-hook-form";
+import NewCustomerModal from "../components/NewCustomerModal";
+import useDialog from "@/domains/global/hooks/useDialog";
+import useVehicleSalePageContext from "../hooks/useVehicleSalePageContext";
+import selectCustomersInfo from "../utils/selectCustomersInfo";
+import { applyMask } from "@/domains/global/utils/applyMask";
+import { cpfSearchSchema } from "../schemas";
 
 export default function CustomerSearchForm(): ReactElement {
   const { safeFetch } = useSafeFetch();
+  const dialog = useDialog();
+  const [customerCpf, setCustomerCpf] = useState("");
+  const { handleCustomer } = useVehicleSalePageContext();
 
-  const { setValue, resetField } = useFormContext<VehicleSaleFormInputs>();
-
-  async function getUsersInfo(filter?: string): Promise<FetchUser[]> {
+  async function getCustomersInfo(filter?: string): Promise<FetchCustomer[]> {
     if (!filter) return [];
 
-    const result = await safeFetch(`${BACKEND_URL}/user?fullName=${filter}`, {
-      resource: "USERS",
+    const result = await safeFetch(`${BACKEND_URL}/customer?cpf=${filter}&orderBy=fullName`, {
+      resource: "CUSTOMERS",
       action: "READ",
     });
 
@@ -24,28 +30,36 @@ export default function CustomerSearchForm(): ReactElement {
 
   return (
     <>
-      <Search<VehicleSaleFormInputs, FetchUser[]>
-        label="Nome completo"
+      <NewCustomerModal {...dialog} customerCpf={customerCpf} />
+      <Search<VehicleSaleFormInputs, FetchCustomer[]>
+        label="CPF"
         name="customer.id"
-        fetchCallback={getUsersInfo}
-        queryKey="usersSearch"
+        fetchCallback={getCustomersInfo}
+        queryKey="customers"
         onChange={(value) => {
           if (!value) {
-            resetField("customer");
+            handleCustomer(null);
             return;
           }
-          setValue(
-            "customer",
-            {
-              id: value.id,
-              fullName: value.fullName,
-              email: value.email,
-            },
-            { shouldDirty: true }
-          );
+          handleCustomer(value);
         }}
         labelKey="fullName"
         valueKey="id"
+        descriptionKey="cpf"
+        required
+        select={selectCustomersInfo}
+        onClickNotFound={(value) => {
+          setCustomerCpf(value);
+          dialog.openDialog();
+        }}
+        formatNotFound={(value) => applyMask(value, "cpf") ?? ""}
+        formatSearch={(search) => {
+          const result = cpfSearchSchema.safeParse(search);
+          if (result.success) {
+            return result.data;
+          }
+          return undefined;
+        }}
       />
     </>
   );
