@@ -27,4 +27,5 @@ export class AccountReceivableInstallmentController {
         return this.accountReceivableInstallmentService.delete(id);
     }
 
+    //aaa
 }
