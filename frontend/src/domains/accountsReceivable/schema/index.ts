@@ -7,3 +7,17 @@ export const SchemaAccountsReceivableFilterForm = s
     endDate: s.dateString().or(s.empty()),
   })
   .refine(...s.dateRangeRule);
+
+export const SchemaPaymentMethodForm = s.object({
+  type: s.radio([
+    "TRANSFER",
+    "PIX",
+    "BANK_SLIP",
+    "CREDIT_CARD",
+    "DEBIT_CARD",
+    "TED",
+    "DOC",
+    "CASH",
+  ]),
+  paymentDate: s.dateString(),
+});

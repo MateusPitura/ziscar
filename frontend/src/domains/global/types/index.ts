@@ -36,13 +36,16 @@ export type QueryKeys =
   | "stores"
   | "customer"
   | "customers"
-  | 'accounts-receivable'
-  | 'accounts-receivable-installments'
+  | "accounts-receivable"
+  | "accounts-receivable-installments"
+  | "accounts-receivable-payment-method";
 
 export interface UsersFilter extends UsersFilterFormInputs, Pageable {}
 export interface StoresFilter extends StoresFilterFormInputs, Pageable {}
 export interface CustomersFilter extends CustomersFilterFormInputs, Pageable {}
-export interface AccountsReceivableFilter extends AccountsReceivableFilterFormInputs, Pageable {}
+export interface AccountsReceivableFilter
+  extends AccountsReceivableFilterFormInputs,
+    Pageable {}
 
 export interface PageablePayload<T> {
   data: T[];
@@ -60,3 +63,13 @@ export interface Options {
 export type AddressFormInputs = s.infer<typeof SchemaAddress>;
 
 export type AccountStatus = "PAID" | "PENDING";
+
+export type PaymentMethodType =
+  | "TRANSFER"
+  | "PIX"
+  | "BANK_SLIP"
+  | "CREDIT_CARD"
+  | "DEBIT_CARD"
+  | "TED"
+  | "DOC"
+  | "CASH";

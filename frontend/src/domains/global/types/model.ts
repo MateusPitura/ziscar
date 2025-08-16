@@ -1,5 +1,5 @@
 import { Action, Resource } from "@shared/types";
-import { AccountStatus } from ".";
+import { AccountStatus, PaymentMethodType } from ".";
 
 export type Address = {
   cep: string;
@@ -62,6 +62,13 @@ export interface AccountReceivableInstallment {
   isUpfront?: boolean;
   status: AccountStatus;
 }
+
+export interface PaymentMethod {
+  id: number;
+  type: PaymentMethodType;
+  paymentDate: string;
+}
+
 
 export type FetchUser = Pick<
   User,

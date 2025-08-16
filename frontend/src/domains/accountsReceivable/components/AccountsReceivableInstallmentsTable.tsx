@@ -1,21 +1,37 @@
 import Table from "@/design-system/Table";
 import AccountStatus from "@/domains/global/components/AccountStatus";
 import { PageablePayload } from "@/domains/global/types";
-import { FetchAccountReceivableInstallment } from "@/domains/global/types/model";
+import {
+  AccountReceivableInstallment,
+  FetchAccountReceivableInstallment,
+} from "@/domains/global/types/model";
 import { useQuery } from "@tanstack/react-query";
-import { type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import selectAccountsReceivableInstallmentsInfo from "../utils/selectAccountsReceivableInstallmentsInfo";
 import AccountsReceivableInstallmentsTableActions from "./AccountsReceivableTableInstallmentsActions";
 import { useParams } from "react-router-dom";
+import useDialog from "@/domains/global/hooks/useDialog";
+import PaymentMethodModal from "./PaymentMethodModal";
 // import { BACKEND_URL } from "@/domains/global/constants";
 // import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 
 export default function AccountsReceivableInstallmentsTable(): ReactNode {
   //   const { safeFetch } = useSafeFetch();
   const { accountReceivableId } = useParams();
+  const [installmentToPaymentMethod, setInstallmentToPaymentMethod] =
+    useState<AccountReceivableInstallment | null>(null);
+
+  const dialog = useDialog();
+
+  function handleInstallmentToPaymentMethodInfo(
+    installment: AccountReceivableInstallment
+  ) {
+    dialog.openDialog();
+    setInstallmentToPaymentMethod(installment);
+  }
 
   async function getAccountsReceivableInstallmentsInfo(): Promise<
-    PageablePayload<FetchAccountReceivableInstallment>
+    PageablePayload<FetchAccountReceivableInstallment> // 🌠 não é pageable
   > {
     // return await safeFetch(`${BACKEND_URL}/account-receivable-installments/${accountReceivableId}`, {
     //   resource: "ACCOUNTS_RECEIVABLE",
@@ -74,42 +90,53 @@ export default function AccountsReceivableInstallmentsTable(): ReactNode {
   });
 
   return (
-    <Table>
-      <Table.Header>
-        <Table.Head label="ID" />
-        <Table.Head label="Sequência" />
-        <Table.Head label="Vencimento" />
-        <Table.Head label="Valor" />
-        <Table.Head label="Status" />
-        <Table.Head action />
-      </Table.Header>
-      <Table.Body
-        isLoading={isFetchingAccountsReceivableInstallmentsInfo}
-        isEmpty={!accountsReceivableInstallmentsInfo?.total}
-        resource="ACCOUNTS_RECEIVABLE"
-        action="READ"
-      >
-        {accountsReceivableInstallmentsInfo?.data.map((installment) => (
-          <Table.Row key={installment.id}>
-            <Table.Cell label={String(installment.id)} />
-            <Table.Cell
-              label={
-                installment.isUpfront
-                  ? "Entrada"
-                  : `${installment.installmentSequence}/${accountsReceivableInstallmentsInfo?.total}`
-              }
-            />
-            <Table.Cell label={installment.dueDate} />
-            <Table.Cell label={installment.value} />
-            <Table.Cell label={<AccountStatus status={installment.status} />} />
-            <Table.Action>
-              <AccountsReceivableInstallmentsTableActions
-                installmentId={String(installment.id)}
+    <>
+      <PaymentMethodModal
+        installment={installmentToPaymentMethod}
+        {...dialog}
+      />
+      <Table>
+        <Table.Header>
+          <Table.Head label="ID" />
+          <Table.Head label="Sequência" />
+          <Table.Head label="Vencimento" />
+          <Table.Head label="Valor" />
+          <Table.Head label="Status" />
+          <Table.Head action />
+        </Table.Header>
+        <Table.Body
+          isLoading={isFetchingAccountsReceivableInstallmentsInfo}
+          isEmpty={!accountsReceivableInstallmentsInfo?.total}
+          resource="ACCOUNTS_RECEIVABLE"
+          action="READ"
+        >
+          {accountsReceivableInstallmentsInfo?.data.map((installment) => (
+            <Table.Row key={installment.id}>
+              <Table.Cell label={String(installment.id)} />
+              <Table.Cell
+                label={
+                  installment.isUpfront
+                    ? "Entrada"
+                    : `${installment.installmentSequence}/${accountsReceivableInstallmentsInfo?.total}`
+                }
               />
-            </Table.Action>
-          </Table.Row>
-        ))}
-      </Table.Body>
-    </Table>
+              <Table.Cell label={installment.dueDate} />
+              <Table.Cell label={installment.value} />
+              <Table.Cell
+                label={<AccountStatus status={installment.status} />}
+              />
+              <Table.Action>
+                <AccountsReceivableInstallmentsTableActions
+                  installment={installment}
+                  handleInstallmentToPaymentMethodInfo={
+                    handleInstallmentToPaymentMethodInfo
+                  }
+                />
+              </Table.Action>
+            </Table.Row>
+          ))}
+        </Table.Body>
+      </Table>
+    </>
   );
 }

@@ -55,7 +55,7 @@ interface FooterProps {
   labelPrimaryBtn: string;
   primaryBtnState?: ButtonState;
   primaryBtnColor?: ButtonColor;
-  primaryBtResource?: Resource;
+  primaryBtnResource?: Resource;
   primaryBtnAction?: Action;
   onClickSecondaryBtn?: () => void;
   labelSecondaryBtn?: string;
@@ -68,7 +68,7 @@ function Footer({
   onClickPrimaryBtn,
   labelPrimaryBtn,
   primaryBtnState,
-  primaryBtResource,
+  primaryBtnResource,
   primaryBtnAction,
   onClickSecondaryBtn,
   labelSecondaryBtn = "Cancelar",
@@ -106,7 +106,7 @@ function Footer({
         label={labelPrimaryBtn}
         state={primaryBtnStateParsed}
         type="submit"
-        resource={primaryBtResource}
+        resource={primaryBtnResource}
         action={primaryBtnAction}
         color={primaryBtnColor}
         data-cy={"dialog-footer-button-primary"}

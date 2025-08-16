@@ -60,7 +60,7 @@ export default function DisableCustomerModal({
         onClickPrimaryBtn={mutate}
         primaryBtnState={isPending ? "loading" : undefined}
         primaryBtnColor="red"
-        primaryBtResource="CUSTOMERS"
+        primaryBtnResource="CUSTOMERS"
         primaryBtnAction="DELETE"
       />
     </Dialog>

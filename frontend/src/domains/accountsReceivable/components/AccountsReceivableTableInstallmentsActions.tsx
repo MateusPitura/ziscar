@@ -1,28 +1,41 @@
 import Button from "@/design-system/Button";
 import Tooltip from "@/design-system/Tooltip";
 import type { ReactNode } from "react";
-import { useNavigate } from "react-router-dom";
+import { AccountReceivableInstallment } from "@/domains/global/types/model";
 
 interface AccountsReceivableInstallmentsTableActionsProperties {
-    installmentId: string;
+  installment: AccountReceivableInstallment;
+  handleInstallmentToPaymentMethodInfo: (
+    installment: AccountReceivableInstallment
+  ) => void;
 }
 
 export default function AccountsReceivableInstallmentsTableActions({
-    installmentId
+  installment,
+  handleInstallmentToPaymentMethodInfo,
 }: AccountsReceivableInstallmentsTableActionsProperties): ReactNode {
-  const navigate = useNavigate();
-
-  return (
-    // 🌠 payment methods/change status
-    <Tooltip content="Visualizar detalhes">
+  return installment.status === "PAID" ? (
+    <Tooltip content="Visualizar método de pagamento">
       <Button
         variant="quaternary"
-        iconLeft="Visibility"
-        onClick={() => navigate(`/accounts-receivable/installments/${installmentId}`)}
+        iconLeft="Receipt"
+        onClick={() => handleInstallmentToPaymentMethodInfo(installment)}
         resource="ACCOUNTS_RECEIVABLE"
-        action="UPDATE" // 🌠 change
+        action="UPDATE"
         padding="none"
-        data-cy={`button-edit-accountReceivable-${installmentId}`}
+        data-cy={`button-edit-viewPaymentMethod-${installment.id}`}
+      />
+    </Tooltip>
+  ) : (
+    <Tooltip content="Adicionar método de pagamento">
+      <Button
+        variant="quaternary"
+        iconLeft="AddCard"
+        onClick={() => handleInstallmentToPaymentMethodInfo(installment)}
+        resource="ACCOUNTS_RECEIVABLE"
+        action="READ"
+        padding="none"
+        data-cy={`button-edit-addPaymentMethod-${installment.id}`}
       />
     </Tooltip>
   );
