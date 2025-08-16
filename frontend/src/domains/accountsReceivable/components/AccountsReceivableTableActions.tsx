@@ -19,7 +19,7 @@ export default function AccountsReceivableTableActions({
         iconLeft="Visibility"
         onClick={() => navigate(`/accounts-receivable/installments/${accountReceivableId}`)}
         resource="ACCOUNTS_RECEIVABLE"
-        action="UPDATE"
+        action="READ"
         padding="none"
         data-cy={`button-edit-accountReceivable-${accountReceivableId}`}
       />

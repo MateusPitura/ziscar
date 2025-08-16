@@ -10,11 +10,11 @@ export default function AccountStatus({
 }: AccountStatusProperties): ReactNode {
   return status === "PAID" ? (
     <div className="p-1 px-2 text-body-medium rounded-md w-fit h-fit bg-green-600 text-white border border-green-700">
-      Pendente
+      Pago
     </div>
   ) : (
     <div className="p-1 px-2 text-body-medium rounded-md w-fit h-fit bg-amber-500 text-white border border-amber-600">
-      Pago
+      Pendente
     </div>
   );
 }

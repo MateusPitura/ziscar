@@ -53,6 +53,16 @@ export interface AccountReceivable {
   overallStatus: AccountStatus;
 }
 
+export interface AccountReceivableInstallment {
+  id: number;
+  installmentSequence: number;
+  dueDate: string;
+  value: string;
+  isRefund?: boolean;
+  isUpfront?: boolean;
+  status: AccountStatus;
+}
+
 export type FetchUser = Pick<
   User,
   "id" | "fullName" | "email" | "phone" | "archivedAt" | "roleId"
@@ -67,5 +77,9 @@ export type FetchCustomer = Pick<
 >;
 export type FetchAccountReceivable = Pick<
   AccountReceivable,
-  "id" | "description" | "receivedFrom" | 'totalValue' | 'overallStatus'
+  "id" | "description" | "receivedFrom" | "totalValue" | "overallStatus"
+>;
+export type FetchAccountReceivableInstallment = Pick<
+  AccountReceivableInstallment,
+  "id" | "installmentSequence" | "dueDate" | "value" | "status" | "isRefund" | "isUpfront"
 >;

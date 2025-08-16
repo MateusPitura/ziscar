@@ -84,7 +84,7 @@ export default function AccountsReceivableTable(): ReactNode {
         >
           fileName="Relatório Contas a Receber"
           resource="ACCOUNTS_RECEIVABLE"
-          queryKey={["stores", filterFormatted]}
+          queryKey={["accounts-receivable", filterFormatted]}
           queryFn={getAccountsReceivableInfo}
           formatFilters={{
             endDate: "Data final",

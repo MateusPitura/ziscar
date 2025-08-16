@@ -37,6 +37,7 @@ export type QueryKeys =
   | "customer"
   | "customers"
   | 'accounts-receivable'
+  | 'accounts-receivable-installments'
 
 export interface UsersFilter extends UsersFilterFormInputs, Pageable {}
 export interface StoresFilter extends StoresFilterFormInputs, Pageable {}
