@@ -19,7 +19,7 @@ import { ToggleArchiveVehicleUseCase } from './use-case/toggle-archive-vehicle.u
 import { AuthGuard } from 'src/entities/auth/auth.guard';
 import { RoleGuard } from 'src/entities/auth/role.guard';
 import { Actions, Resources } from '@prisma/client';
-import type {
+import {
   InsertVehicleRequestDto,
   InsertVehicleExpenseRequestDto,
   SearchVehiclesRequestDto,
