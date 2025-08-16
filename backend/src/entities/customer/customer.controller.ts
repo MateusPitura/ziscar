@@ -27,7 +27,7 @@ import { FETCH_CUSTOMER, GET_CUSTOMER } from './customer.constant';
 @Controller('customer')
 @UseGuards(AuthGuard)
 export class CustomerController {
-  constructor(private readonly customerService: CustomerService) {}
+  constructor(private readonly customerService: CustomerService) { }
 
   @RoleGuard(Resources.CUSTOMERS, Actions.CREATE)
   @Post()

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { AccountReceivableInstallment } from '@prisma/client';
 import { PrismaService } from 'src/infra/database/prisma.service';
 import { AccountReceivableInstallmentRepository } from 'src/repositories/account_receivable_installment-repository';
@@ -6,9 +6,8 @@ import { CreateInput, UpdateInput } from 'src/types';
 
 @Injectable()
 export class AccountReceivableInstallmentService
-  implements AccountReceivableInstallmentRepository
-{
-  constructor(private prisma: PrismaService) {}
+  implements AccountReceivableInstallmentRepository {
+  constructor(private prisma: PrismaService) { }
 
   async create(
     data: CreateInput<AccountReceivableInstallment>,
@@ -23,7 +22,7 @@ export class AccountReceivableInstallmentService
       });
 
     if (!installment) {
-      return null;
+      throw new NotFoundException("Parcela a receber não encontrada");
     }
 
     return installment;
