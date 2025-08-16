@@ -1,6 +1,5 @@
 import Table from "@/design-system/Table";
 import AccountStatus from "@/domains/global/components/AccountStatus";
-import { PageablePayload } from "@/domains/global/types";
 import {
   AccountReceivableInstallment,
   FetchAccountReceivableInstallment,
@@ -30,54 +29,49 @@ export default function AccountsReceivableInstallmentsTable(): ReactNode {
     setInstallmentToPaymentMethod(installment);
   }
 
-  async function getAccountsReceivableInstallmentsInfo(): Promise<
-    PageablePayload<FetchAccountReceivableInstallment> // 🌠 não é pageable
-  > {
+  async function getAccountsReceivableInstallmentsInfo(): Promise<FetchAccountReceivableInstallment[]> {
     // return await safeFetch(`${BACKEND_URL}/account-receivable-installments/${accountReceivableId}`, {
     //   resource: "ACCOUNTS_RECEIVABLE",
     //   action: "READ",
     // });
-    return {
-      total: 3,
-      data: [
-        {
-          id: 1,
-          dueDate: "2025-01-01",
-          installmentSequence: 0,
-          status: "PAID",
-          value: "10000",
-          isRefund: false,
-          isUpfront: true,
-        },
-        {
-          id: 2,
-          dueDate: "2025-01-01",
-          installmentSequence: 1,
-          status: "PAID",
-          value: "10000",
-          isRefund: false,
-          isUpfront: false,
-        },
-        {
-          id: 3,
-          dueDate: "2025-02-01",
-          installmentSequence: 2,
-          status: "PENDING",
-          value: "10000",
-          isRefund: false,
-          isUpfront: false,
-        },
-        {
-          id: 4,
-          dueDate: "2025-03-01",
-          installmentSequence: 3,
-          status: "PENDING",
-          value: "10000",
-          isRefund: false,
-          isUpfront: false,
-        },
-      ],
-    };
+    return [
+      {
+        id: 1,
+        dueDate: "2025-01-01",
+        installmentSequence: 0,
+        status: "PAID",
+        value: "10000",
+        isRefund: false,
+        isUpfront: true,
+      },
+      {
+        id: 2,
+        dueDate: "2025-01-01",
+        installmentSequence: 1,
+        status: "PAID",
+        value: "10000",
+        isRefund: false,
+        isUpfront: false,
+      },
+      {
+        id: 3,
+        dueDate: "2025-02-01",
+        installmentSequence: 2,
+        status: "PENDING",
+        value: "10000",
+        isRefund: false,
+        isUpfront: false,
+      },
+      {
+        id: 4,
+        dueDate: "2025-03-01",
+        installmentSequence: 3,
+        status: "PENDING",
+        value: "10000",
+        isRefund: false,
+        isUpfront: false,
+      },
+    ];
   }
 
   const {
@@ -106,18 +100,18 @@ export default function AccountsReceivableInstallmentsTable(): ReactNode {
         </Table.Header>
         <Table.Body
           isLoading={isFetchingAccountsReceivableInstallmentsInfo}
-          isEmpty={!accountsReceivableInstallmentsInfo?.total}
+          isEmpty={!accountsReceivableInstallmentsInfo?.length}
           resource="ACCOUNTS_RECEIVABLE"
           action="READ"
         >
-          {accountsReceivableInstallmentsInfo?.data.map((installment) => (
+          {accountsReceivableInstallmentsInfo?.map((installment) => (
             <Table.Row key={installment.id}>
               <Table.Cell label={String(installment.id)} />
               <Table.Cell
                 label={
                   installment.isUpfront
                     ? "Entrada"
-                    : `${installment.installmentSequence}/${accountsReceivableInstallmentsInfo?.total}`
+                    : `${installment.installmentSequence}/${accountsReceivableInstallmentsInfo?.length}`
                 }
               />
               <Table.Cell label={installment.dueDate} />

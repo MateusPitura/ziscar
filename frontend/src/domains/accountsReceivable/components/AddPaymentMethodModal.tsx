@@ -72,7 +72,7 @@ export default function AddPaymentMethodModal({
         >
           <Input<PaymentMethodFormInputs>
             name="paymentDate"
-            label="Data do pagamento" // 🌠 should be before today
+            label="Data do pagamento"
             required
             type="date"
           />

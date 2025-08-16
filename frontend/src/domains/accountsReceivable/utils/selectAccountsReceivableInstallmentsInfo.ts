@@ -1,14 +1,13 @@
-import { PageablePayload } from "@/domains/global/types";
 import { FetchAccountReceivableInstallment } from "@/domains/global/types/model";
 import { applyMask } from "@/domains/global/utils/applyMask";
 import safeFormat from "@/domains/global/utils/safeFormat";
 
 export default function selectAccountsReceivableInstallmentsInfo(
-  payload: PageablePayload<FetchAccountReceivableInstallment>
-): PageablePayload<FetchAccountReceivableInstallment> {
+  payload: FetchAccountReceivableInstallment[]
+): FetchAccountReceivableInstallment[] {
   const itemsFiltered = [];
 
-  for (const accountReceivable of payload.data) {
+  for (const accountReceivable of payload) {
     itemsFiltered.push({
       ...accountReceivable,
       dueDate:
@@ -18,8 +17,5 @@ export default function selectAccountsReceivableInstallmentsInfo(
     });
   }
 
-  return {
-    total: payload.total,
-    data: itemsFiltered,
-  };
+  return itemsFiltered;
 }

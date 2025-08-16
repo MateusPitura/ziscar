@@ -19,5 +19,5 @@ export const SchemaPaymentMethodForm = s.object({
     "DOC",
     "CASH",
   ]),
-  paymentDate: s.dateString(),
+  paymentDate: s.paymentDate(),
 });

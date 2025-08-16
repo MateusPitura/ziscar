@@ -203,7 +203,6 @@ export class CustomerService {
     }
 
     if (address?.remove) {
-      // 🌠 create a function to handle address
       if (!customerBeforeUpdate.addressId) {
         throw new BadRequestException(
           'Não é possível excluir, endereço não encontrado',
