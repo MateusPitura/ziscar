@@ -5,14 +5,14 @@ import { EmailService } from '../email/email.service';
 import { PrismaService } from '../../infra/database/prisma.service';
 import { FRONTEND_URL } from 'src/constants';
 import {
-    POPULATE_ENTERPRISE,
-    POPULATE_STORE,
-    POPULATE_USER,
+  POPULATE_ENTERPRISE,
+  POPULATE_STORE,
+  POPULATE_USER,
 } from 'src/constants/populate';
 import {
-    ConflictException,
-    NotFoundException,
-    UnauthorizedException,
+  ConflictException,
+  NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { UserService } from 'src/entities/user/user.service';
 import { EnterpriseService } from 'src/entities/enterprise/enterprise.service';
