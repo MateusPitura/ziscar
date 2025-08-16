@@ -6,7 +6,7 @@ import { CreateInput, UpdateInput } from 'src/types';
 
 @Injectable()
 export class AccountReceivableService implements AccountReceivableRepository {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
   async create(
     data: CreateInput<AccountReceivable>,
@@ -20,7 +20,7 @@ export class AccountReceivableService implements AccountReceivableRepository {
     });
 
     if (!accountReceivable) {
-      throw new NotFoundException("Conta a receber não encontrada");
+      throw new NotFoundException('Conta a receber não encontrada');
     }
 
     return accountReceivable;

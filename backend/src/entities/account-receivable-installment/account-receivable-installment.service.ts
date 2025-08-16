@@ -6,8 +6,9 @@ import { CreateInput, UpdateInput } from 'src/types';
 
 @Injectable()
 export class AccountReceivableInstallmentService
-  implements AccountReceivableInstallmentRepository {
-  constructor(private prisma: PrismaService) { }
+  implements AccountReceivableInstallmentRepository
+{
+  constructor(private prisma: PrismaService) {}
 
   async create(
     data: CreateInput<AccountReceivableInstallment>,
@@ -22,7 +23,7 @@ export class AccountReceivableInstallmentService
       });
 
     if (!installment) {
-      throw new NotFoundException("Parcela a receber não encontrada");
+      throw new NotFoundException('Parcela a receber não encontrada');
     }
 
     return installment;

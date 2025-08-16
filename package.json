@@ -15,8 +15,5 @@
     "prod:down:db": "npm run dev:down:db",
     "prod:backend": "APP_ENV=prod RESTART_POLICY=always docker-compose up --build -d backend",
     "prod:down:backend": "docker-compose down backend"
-  },
-  "dependencies": {
-    "@faker-js/faker": "^9.9.0"
   }
 }

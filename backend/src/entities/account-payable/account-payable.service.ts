@@ -6,7 +6,7 @@ import { CreateInput, UpdateInput } from 'src/types';
 
 @Injectable()
 export class AccountPayableService implements AccountPayableRepository {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
   async create(data: CreateInput<AccountPayable>): Promise<AccountPayable> {
     return this.prisma.accountPayable.create({ data });
   }
@@ -16,7 +16,7 @@ export class AccountPayableService implements AccountPayableRepository {
     });
 
     if (!accountPayable) {
-      throw new NotFoundException("Conta a pagar não encontrada.");
+      throw new NotFoundException('Conta a pagar não encontrada.');
     }
 
     return accountPayable;
