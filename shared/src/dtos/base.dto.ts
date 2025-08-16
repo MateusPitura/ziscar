@@ -19,7 +19,9 @@ export const BaseSuccessResponseSchema = s.object({
   success: s.boolean().default(true),
 });
 
-export const BaseIdResponseSchema = BaseIdSchema;
+export const BaseIdResponseSchema = s.object({
+  id: s.id(),
+});
 
 export const BasePaginatedResponseSchema = <T extends z.ZodTypeAny>(
   dataSchema: T

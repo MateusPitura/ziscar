@@ -9,11 +9,22 @@ import { InsertExpenseUseCase } from './use-case/insert-expense.use-case';
 import { FetchBrandsUseCase } from './use-case/fetch-brands.use-case';
 import { MakeSaleUseCase } from './use-case/make-sale.use-case';
 import { UpdateVehicleUseCase } from './use-case/update-vehicle.use-case';
-import { ToggleArchiveVehicleUseCase } from './use-case/toggle-archive-vehicle.use-case';
+import { ArchiveVehicleUseCase } from './use-case/archive-vehicle.use-case';
+import { UnarchiveVehicleUseCase } from './use-case/unarchive-vehicle.use-case';
 import { UserModule } from '../user/user.module';
+import { AccountPayableModule } from '../account-payable/account-payable.module';
+import { AccountPayableInstallmentModule } from '../account-payable-installment/account-payable-installment.module';
+import { PaymentMethodPayableModule } from '../payment-method-payable/payment-method-payable.module';
+import { VehicleExpenseModule } from '../vehicle-expense/vehicle-expense.module';
 
 @Module({
-  imports: [UserModule],
+  imports: [
+    UserModule,
+    AccountPayableModule,
+    AccountPayableInstallmentModule,
+    PaymentMethodPayableModule,
+    VehicleExpenseModule,
+  ],
   controllers: [VehicleController],
   providers: [
     PrismaService,
@@ -28,7 +39,8 @@ import { UserModule } from '../user/user.module';
     FetchBrandsUseCase,
     MakeSaleUseCase,
     UpdateVehicleUseCase,
-    ToggleArchiveVehicleUseCase,
+    ArchiveVehicleUseCase,
+    UnarchiveVehicleUseCase,
   ],
   exports: [
     VehicleRepository,
@@ -39,7 +51,8 @@ import { UserModule } from '../user/user.module';
     FetchBrandsUseCase,
     MakeSaleUseCase,
     UpdateVehicleUseCase,
-    ToggleArchiveVehicleUseCase,
+    ArchiveVehicleUseCase,
+    UnarchiveVehicleUseCase,
   ],
 })
 export class VehicleModule {}

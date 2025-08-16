@@ -15,7 +15,8 @@ import { InsertExpenseUseCase } from './use-case/insert-expense.use-case';
 import { FetchBrandsUseCase } from './use-case/fetch-brands.use-case';
 import { MakeSaleUseCase } from './use-case/make-sale.use-case';
 import { UpdateVehicleUseCase } from './use-case/update-vehicle.use-case';
-import { ToggleArchiveVehicleUseCase } from './use-case/toggle-archive-vehicle.use-case';
+import { ArchiveVehicleUseCase } from './use-case/archive-vehicle.use-case';
+import { UnarchiveVehicleUseCase } from './use-case/unarchive-vehicle.use-case';
 import { AuthGuard } from 'src/entities/auth/auth.guard';
 import { RoleGuard } from 'src/entities/auth/role.guard';
 import { Actions, Resources } from '@prisma/client';
@@ -25,7 +26,14 @@ import {
   SearchVehiclesRequestDto,
   MakeVehicleSaleRequestDto,
   UpdateVehicleRequestDto,
-  ToggleArchiveVehicleRequestDto,
+  UnarchiveVehicleResponseDto,
+  UpdateVehicleResponseDto,
+  SearchVehiclesResponseDto,
+  MakeVehicleSaleResponseDto,
+  InsertVehicleResponseDto,
+  InsertVehicleExpenseResponseDto,
+  FetchVehicleBrandsResponseDto,
+  ArchiveVehicleResponseDto,
 } from './dtos';
 import { AuthRequest } from '../auth/auth.type';
 
@@ -39,18 +47,23 @@ export class VehicleController {
     private readonly fetchBrands: FetchBrandsUseCase,
     private readonly makeSale: MakeSaleUseCase,
     private readonly updateVehicle: UpdateVehicleUseCase,
-    private readonly toggleArchiveVehicle: ToggleArchiveVehicleUseCase,
+    private readonly archiveVehicle: ArchiveVehicleUseCase,
+    private readonly unarchiveVehicle: UnarchiveVehicleUseCase,
   ) {}
 
   @Post()
   @RoleGuard(Resources.VEHICLES, Actions.CREATE)
-  async create(@Body() input: InsertVehicleRequestDto) {
+  async create(
+    @Body() input: InsertVehicleRequestDto,
+  ): Promise<InsertVehicleResponseDto> {
     return this.insertVehicle.execute(input);
   }
 
   @Get()
   @RoleGuard(Resources.VEHICLES, Actions.READ)
-  async search(@Query() query: SearchVehiclesRequestDto) {
+  async search(
+    @Query() query: SearchVehiclesRequestDto,
+  ): Promise<SearchVehiclesResponseDto> {
     return this.searchVehicles.execute(query);
   }
 
@@ -59,20 +72,22 @@ export class VehicleController {
   async insertVehicleExpense(
     @Body() input: InsertVehicleExpenseRequestDto,
     @Req() req: AuthRequest,
-  ) {
+  ): Promise<InsertVehicleExpenseResponseDto> {
     const { userId } = req.authToken;
     return this.insertExpense.execute(input, userId);
   }
 
   @Get('brands')
   @RoleGuard(Resources.VEHICLES, Actions.READ)
-  async brands() {
+  async brands(): Promise<FetchVehicleBrandsResponseDto> {
     return this.fetchBrands.execute();
   }
 
   @Post('sale')
   @RoleGuard(Resources.VEHICLE_SALE, Actions.CREATE)
-  async sale(@Body() input: MakeVehicleSaleRequestDto) {
+  async sale(
+    @Body() input: MakeVehicleSaleRequestDto,
+  ): Promise<MakeVehicleSaleResponseDto> {
     return this.makeSale.execute(input);
   }
 
@@ -80,19 +95,24 @@ export class VehicleController {
   @RoleGuard(Resources.VEHICLES, Actions.UPDATE)
   async update(
     @Param('id') id: string,
-    @Body() input: Omit<UpdateVehicleRequestDto, 'id'>,
-  ) {
-    const payload = { ...input, id: Number(id) };
-    return this.updateVehicle.execute(payload);
+    @Body() input: UpdateVehicleRequestDto,
+  ): Promise<UpdateVehicleResponseDto> {
+    return this.updateVehicle.execute(id, input);
   }
 
   @Patch(':id/archive')
   @RoleGuard(Resources.VEHICLES, Actions.UPDATE)
-  async toggleArchive(
+  async archive(@Param('id') id: string): Promise<ArchiveVehicleResponseDto> {
+    const payload = { id: Number(id) };
+    return this.archiveVehicle.execute(payload);
+  }
+
+  @Patch(':id/unarchive')
+  @RoleGuard(Resources.VEHICLES, Actions.UPDATE)
+  async unarchive(
     @Param('id') id: string,
-    @Body() input: Omit<ToggleArchiveVehicleRequestDto, 'id'>,
-  ) {
-    const payload = { ...input, id: Number(id) };
-    return this.toggleArchiveVehicle.execute(payload);
+  ): Promise<UnarchiveVehicleResponseDto> {
+    const payload = { id: Number(id) };
+    return this.unarchiveVehicle.execute(payload);
   }
 }

@@ -15,8 +15,6 @@ export class InsertVehicleUseCase {
   async execute(
     input: InsertVehicleRequestDto,
   ): Promise<InsertVehicleResponseDto> {
-    const createdVehicle = await this.vehicleRepository.create(input);
-
-    return { id: createdVehicle.id };
+    return await this.vehicleRepository.create(input);
   }
 }

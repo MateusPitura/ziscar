@@ -1,6 +1,8 @@
 import {
-  ToggleArchiveVehicleResponseSchema,
-  ToggleArchiveVehicleRequestSchema,
+  ArchiveVehicleResponseSchema,
+  UnarchiveVehicleResponseSchema,
+  ArchiveVehicleRequestSchema,
+  UnarchiveVehicleRequestSchema,
   InsertVehicleRequestSchema,
   InsertVehicleResponseSchema,
   SearchVehiclesRequestSchema,
@@ -31,8 +33,11 @@ export class MakeVehicleSaleRequestDto extends createZodDto(
 export class UpdateVehicleRequestDto extends createZodDto(
   UpdateVehicleRequestSchema,
 ) {}
-export class ToggleArchiveVehicleRequestDto extends createZodDto(
-  ToggleArchiveVehicleRequestSchema,
+export class ArchiveVehicleRequestDto extends createZodDto(
+  ArchiveVehicleRequestSchema,
+) {}
+export class UnarchiveVehicleRequestDto extends createZodDto(
+  UnarchiveVehicleRequestSchema,
 ) {}
 
 export type InsertVehicleResponseDto = z.infer<
@@ -50,8 +55,11 @@ export type MakeVehicleSaleResponseDto = z.infer<
 export type UpdateVehicleResponseDto = z.infer<
   typeof UpdateVehicleResponseSchema
 >;
-export type ToggleArchiveVehicleResponseDto = z.infer<
-  typeof ToggleArchiveVehicleResponseSchema
+export type ArchiveVehicleResponseDto = z.infer<
+  typeof ArchiveVehicleResponseSchema
+>;
+export type UnarchiveVehicleResponseDto = z.infer<
+  typeof UnarchiveVehicleResponseSchema
 >;
 export type FetchVehicleBrandsResponseDto = z.infer<
   typeof FetchVehicleBrandsResponseSchema

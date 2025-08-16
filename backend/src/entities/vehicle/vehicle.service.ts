@@ -17,6 +17,7 @@ import type {
   SearchVehiclesResponseDto,
   FetchVehicleBrandsResponseDto,
 } from './dtos';
+import { GET_VEHICLE } from './constants';
 
 @Injectable()
 export class VehicleService implements VehicleRepository {
@@ -38,10 +39,28 @@ export class VehicleService implements VehicleRepository {
     return vehicle;
   }
 
-  async update(id: string, data: UpdateInput<Vehicle>): Promise<void> {
-    await this.prisma.vehicle.update({
+  async update(id: string, data: UpdateInput<Vehicle>): Promise<Vehicle> {
+    return await this.prisma.vehicle.update({
       where: { id: Number(id) },
       data,
+    });
+  }
+
+  async archive(id: string): Promise<Vehicle> {
+    return await this.prisma.vehicle.update({
+      where: { id: Number(id) },
+      data: {
+        archivedAt: new Date(),
+      },
+    });
+  }
+
+  async unarchive(id: string): Promise<Vehicle> {
+    return await this.prisma.vehicle.update({
+      where: { id: Number(id) },
+      data: {
+        archivedAt: null,
+      },
     });
   }
 
@@ -99,20 +118,7 @@ export class VehicleService implements VehicleRepository {
         skip,
         take,
         orderBy: { id: 'desc' },
-        select: {
-          id: true,
-          chassiNumber: true,
-          modelYear: true,
-          yearOfManufacture: true,
-          modelName: true,
-          brandId: true,
-          storeId: true,
-          status: true,
-          category: true,
-          announcedPrice: true,
-          plateNumber: true,
-          archivedAt: true,
-        },
+        select: GET_VEHICLE,
       }),
       this.prisma.vehicle.count({ where }),
     ]);

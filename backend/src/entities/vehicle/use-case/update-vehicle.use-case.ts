@@ -13,12 +13,9 @@ export class UpdateVehicleUseCase {
   ) {}
 
   async execute(
-    input: UpdateVehicleRequestDto,
+    id: string,
+    data: UpdateVehicleRequestDto,
   ): Promise<UpdateVehicleResponseDto> {
-    const { id, ...updateData } = input;
-
-    await this.vehicleRepository.update(id.toString(), updateData);
-
-    return { id };
+    return await this.vehicleRepository.update(id, data);
   }
 }

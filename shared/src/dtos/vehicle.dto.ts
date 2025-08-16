@@ -1,10 +1,10 @@
 import { s } from "../safeZod";
 import {
-  BaseIdSchema,
   BasePaginationSchema,
   BaseDateRangeSchema,
   BaseIdResponseSchema,
   BasePaginatedResponseSchema,
+  BaseIdSchema,
 } from "./base.dto";
 import {
   VEHICLECATEGORY_VALUES,
@@ -13,6 +13,10 @@ import {
   EXPENSECATEGORY_VALUES,
   PAYMENTMETHODPAYABLETYPE_VALUES,
 } from "../enums";
+import {
+  createAccountPayableDTO,
+  createAccountPayableInstallmentDTO,
+} from "./account-payable.dto";
 
 export const InsertVehicleRequestSchema = s.object({
   chassiNumber: s.string(17),
@@ -69,30 +73,33 @@ const VehicleItemSchema = s.object({
 export const SearchVehiclesResponseSchema =
   BasePaginatedResponseSchema(VehicleItemSchema);
 
-export const InsertVehicleExpenseRequestSchema = s.object({
-  vehicleId: s.id(),
-  category: s.radio(EXPENSECATEGORY_VALUES),
-  observations: s.string().nullable(),
-  description: s.string().nullable(),
-  paidTo: s.string().nullable(),
-  totalValue: s.number(),
-  installments: s.array(
-    s.object({
-      dueDate: s.date(),
-      value: s.number(),
-      isUpfront: s.boolean().nullable(),
-      paymentMethods: s
-        .array(
-          s.object({
-            type: s.radio(PAYMENTMETHODPAYABLETYPE_VALUES),
-            value: s.number(),
-            paymentDate: s.date().nullable(),
-          })
-        )
-        .nullable(),
-    })
-  ),
-});
+export const InsertVehicleExpenseRequestSchema = s
+  .object({
+    vehicleId: s.id(),
+    category: s.radio(EXPENSECATEGORY_VALUES),
+    observations: s.string().nullable(),
+    installments: s.array(
+      createAccountPayableInstallmentDTO
+        .omit({
+          accountPayableId: true,
+          status: true,
+          isRefund: true,
+          refundAccountPayableInstallmentId: true,
+        })
+        .extend({
+          paymentMethods: s
+            .array(
+              s.object({
+                type: s.radio(PAYMENTMETHODPAYABLETYPE_VALUES),
+                value: s.number(),
+                paymentDate: s.date().nullable(),
+              })
+            )
+            .nullable(),
+        })
+    ),
+  })
+  .merge(createAccountPayableDTO);
 
 export const InsertVehicleExpenseResponseSchema = BaseIdResponseSchema;
 
@@ -106,26 +113,27 @@ export const FetchVehicleBrandsResponseSchema = s.array(
 export const MakeVehicleSaleRequestSchema = s.object({
   vehicleId: s.id(),
   customerId: s.id(),
-  accountReceivableId: s.id(),
-  accountPayableId: s.id(),
+  userId: s.id(),
+
   date: s.date(),
 });
 
 export const MakeVehicleSaleResponseSchema = BaseIdResponseSchema;
 
-export const UpdateVehicleRequestSchema =
-  InsertVehicleRequestSchema.partial().extend({
-    id: s.id(),
-  });
+export const UpdateVehicleRequestSchema = InsertVehicleRequestSchema.partial();
 
 export const UpdateVehicleResponseSchema = BaseIdResponseSchema;
 
-export const ToggleArchiveVehicleRequestSchema = s.object({
+export const ArchiveVehicleRequestSchema = BaseIdSchema;
+
+export const UnarchiveVehicleRequestSchema = BaseIdSchema;
+
+export const ArchiveVehicleResponseSchema = s.object({
   id: s.id(),
-  archived: s.boolean(),
+  archivedAt: s.date(),
 });
 
-export const ToggleArchiveVehicleResponseSchema = s.object({
+export const UnarchiveVehicleResponseSchema = s.object({
   id: s.id(),
   archivedAt: s.date().nullable(),
 });
