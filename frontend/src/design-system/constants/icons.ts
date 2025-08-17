@@ -29,7 +29,7 @@ import AddBusiness from '@mui/icons-material/AddBusinessOutlined';
 import Add from '@mui/icons-material/Add';
 import ArrowBack from '@mui/icons-material/ArrowBack';
 import AddCard from '@mui/icons-material/AddCard';
-import Receipt from '@mui/icons-material/Receipt';
+import ReceiptLong from '@mui/icons-material/ReceiptLongOutlined';
 
 export const icons = {
   FileDownload,
@@ -63,5 +63,5 @@ export const icons = {
   Add,
   ArrowBack,
   AddCard,
-  Receipt
+  ReceiptLong
 };

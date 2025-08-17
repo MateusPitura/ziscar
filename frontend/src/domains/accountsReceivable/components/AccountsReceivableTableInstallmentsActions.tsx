@@ -18,7 +18,7 @@ export default function AccountsReceivableInstallmentsTableActions({
     <Tooltip content="Visualizar método de pagamento">
       <Button
         variant="quaternary"
-        iconLeft="Receipt"
+        iconLeft="ReceiptLong"
         onClick={() => handleInstallmentToPaymentMethodInfo(installment)}
         resource="ACCOUNTS_RECEIVABLE"
         action="UPDATE"

@@ -57,7 +57,10 @@ const AccountsReceivable = lazy(
   () => import("@/domains/accountsReceivable/components/AccountsReceivablePage")
 );
 const AccountsReceivableInstallments = lazy(
-  () => import("@/domains/accountsReceivable/components/AccountsReceivableInstallmentsPage")
+  () =>
+    import(
+      "@/domains/accountsReceivable/components/AccountsReceivableInstallmentsPage"
+    )
 );
 
 export const privateRoutes: Route[] = [
@@ -69,29 +72,6 @@ export const privateRoutes: Route[] = [
     shouldDisplay: true,
     action: "READ",
     resource: "VEHICLES",
-  },
-  {
-    path: "/stores",
-    displayName: "Lojas",
-    icon: "Store",
-    entryPage: <Stores />,
-    shouldDisplay: true,
-    action: "READ",
-    resource: "STORES",
-  },
-  {
-    path: "/stores/new",
-    entryPage: <NewStore />,
-    shouldDisplay: false,
-    action: "CREATE",
-    resource: "STORES",
-  },
-  {
-    path: "/stores/edit/:storeId",
-    entryPage: <EditStore />,
-    shouldDisplay: false,
-    action: "UPDATE",
-    resource: "STORES",
   },
   {
     path: "/vehicle-sale",
@@ -128,6 +108,29 @@ export const privateRoutes: Route[] = [
     resource: "ACCOUNTS_RECEIVABLE",
   },
   {
+    path: "/stores",
+    displayName: "Lojas",
+    icon: "Store",
+    entryPage: <Stores />,
+    shouldDisplay: true,
+    action: "READ",
+    resource: "STORES",
+  },
+  {
+    path: "/stores/new",
+    entryPage: <NewStore />,
+    shouldDisplay: false,
+    action: "CREATE",
+    resource: "STORES",
+  },
+  {
+    path: "/stores/edit/:storeId",
+    entryPage: <EditStore />,
+    shouldDisplay: false,
+    action: "UPDATE",
+    resource: "STORES",
+  },
+  {
     path: "/users",
     displayName: "Usuários",
     icon: "Person",
@@ -151,13 +154,6 @@ export const privateRoutes: Route[] = [
     resource: "USERS",
   },
   {
-    path: "/profile/edit",
-    entryPage: <EditProfile />,
-    shouldDisplay: true,
-    icon: "Settings",
-    displayName: "Conta",
-  },
-  {
     path: "/customers",
     displayName: "Clientes",
     icon: "People",
@@ -179,6 +175,13 @@ export const privateRoutes: Route[] = [
     shouldDisplay: false,
     action: "UPDATE",
     resource: "CUSTOMERS",
+  },
+  {
+    path: "/profile/edit",
+    entryPage: <EditProfile />,
+    shouldDisplay: true,
+    icon: "Settings",
+    displayName: "Conta",
   },
 ];
 
