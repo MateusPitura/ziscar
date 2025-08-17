@@ -30,6 +30,7 @@ import Add from '@mui/icons-material/Add';
 import ArrowBack from '@mui/icons-material/ArrowBack';
 import AddCard from '@mui/icons-material/AddCard';
 import ReceiptLong from '@mui/icons-material/ReceiptLongOutlined';
+import History from '@mui/icons-material/History';
 
 export const icons = {
   FileDownload,
@@ -63,5 +64,6 @@ export const icons = {
   Add,
   ArrowBack,
   AddCard,
-  ReceiptLong
+  ReceiptLong,
+  History
 };

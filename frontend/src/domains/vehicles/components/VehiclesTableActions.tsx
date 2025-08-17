@@ -58,6 +58,17 @@ export default function VehiclesTableActions({
           data-cy={`button-edit-vehicle-${vehicleId}`}
         />
       </Tooltip>
+      <Tooltip content="Histórico">
+        <Button
+          variant="quaternary"
+          iconLeft="History"
+          onClick={() => navigate(`/vehicles/history/${vehicleId}`)}
+          resource="VEHICLES"
+          action="READ"
+          padding="none"
+          data-cy={`button-vehicle-history-${vehicleId}`}
+        />
+      </Tooltip>
       <Tooltip content="Desativar">
         <Button
           variant="primary"

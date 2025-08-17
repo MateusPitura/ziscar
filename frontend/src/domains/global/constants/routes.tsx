@@ -16,6 +16,15 @@ interface Route {
 const Vehicles = lazy(
   () => import("@/domains/vehicles/components/VehiclesPage")
 );
+const NewVehicle = lazy(
+  () => import("@/domains/vehicles/components/NewVehiclePage")
+);
+const EditVehicle = lazy(
+  () => import("@/domains/vehicles/components/EditVehiclePage")
+);
+const VehicleHistory = lazy(
+  () => import("@/domains/vehicles/components/VehicleHistoryPage")
+);
 
 const Users = lazy(() => import("@/domains/users/components/UsersPage"));
 const NewUser = lazy(() => import("@/domains/users/components/NewUserPage"));
@@ -70,6 +79,27 @@ export const privateRoutes: Route[] = [
     icon: "DirectionsCar",
     entryPage: <Vehicles />,
     shouldDisplay: true,
+    action: "READ",
+    resource: "VEHICLES",
+  },
+  {
+    path: '/vehicles/new',
+    entryPage: <NewVehicle />,
+    shouldDisplay: false,
+    action: "CREATE",
+    resource: "VEHICLES",
+  },
+  {
+    path: '/vehicles/edit/:vehicleId',
+    entryPage: <EditVehicle />,
+    shouldDisplay: false,
+    action: "UPDATE",
+    resource: "VEHICLES",
+  },
+  {
+    path: '/vehicles/history/:vehicleId',
+    entryPage: <VehicleHistory />,
+    shouldDisplay: false,
     action: "READ",
     resource: "VEHICLES",
   },
