@@ -13,6 +13,7 @@ import selectVehiclesInfoForReport from "../utils/selectVehiclesInfoForReport";
 import DisableVehicleModal from "./DisableVehicleModal";
 import VehiclesTableActions from "./VehiclesTableActions";
 import VehiclesFilterForm from "./VehiclesFilterForm";
+import { VehicleStatusText } from "../constants";
 // import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 // import { BACKEND_URL } from "@/domains/global/constants";
 
@@ -133,7 +134,7 @@ export default function VehiclesTable(): ReactNode {
               <Table.Cell label={vehicle.modelName} />
               <Table.Cell label={vehicle.plateNumber} />
               <Table.Cell label={vehicle.modelYear} />
-              <Table.Cell label={vehicle.status} />
+              <Table.Cell label={VehicleStatusText[vehicle.status]} />
               <Table.Action>
                 <VehiclesTableActions
                   isActive={!vehicle.archivedAt}
