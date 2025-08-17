@@ -2,14 +2,14 @@ import { useCallback } from "react";
 import useSnackbar from "./useSnackbar";
 import { formatDeniedMessage } from "@shared/utils/formatDeniedMessage";
 import checkPermission from "../utils/checkPermission";
-import { Action, Resource } from "@shared/types";
 import usePermissions from "./usePermissions";
+import { ActionsType, ResourcesType } from "@shared/enums";
 
 interface Request {
   method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
   body?: unknown;
-  resource?: Resource;
-  action?: Action;
+  resource?: ResourcesType;
+  action?: ActionsType;
   enableCookie?: boolean;
   isExport?: boolean;
 }

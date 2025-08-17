@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import { StoreFormInputs } from "../types";
-import { Action, Resource } from "@shared/types";
 import Form from "@/design-system/Form";
 import { SchemaStoreForm } from "../schemas";
 import PageHeader from "@/domains/global/components/PageHeader";
@@ -11,6 +10,7 @@ import AddressFields from "@/domains/global/components/AddressFields";
 import PageFooter from "@/domains/global/components/PageFooter";
 import Button from "@/design-system/Button";
 import { PREVIOUS_PAGE } from "@/domains/global/constants";
+import { ActionsType, ResourcesType } from "@shared/enums";
 
 interface StoreFormProperties {
   defaultValues: Partial<StoreFormInputs>;
@@ -18,8 +18,8 @@ interface StoreFormProperties {
   isPending: boolean;
   headerTitle: string;
   isEdit?: boolean;
-  resource?: Resource;
-  action?: Action;
+  resource?: ResourcesType;
+  action?: ActionsType;
 }
 
 export default function StoreForm({

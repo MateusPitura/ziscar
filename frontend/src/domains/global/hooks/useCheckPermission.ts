@@ -1,11 +1,11 @@
 import { useMemo } from "react";
 import checkPermission from "../utils/checkPermission";
-import { Action, Resource } from "@shared/types";
 import usePermissions from "./usePermissions";
+import { ActionsType, ResourcesType } from "@shared/enums";
 
 export default function useCheckPermission(
-  resource?: Resource,
-  action?: Action
+  resource?: ResourcesType,
+  action?: ActionsType
 ): boolean {
   const { userPermissions } = usePermissions();
 

@@ -304,6 +304,12 @@ export class UserService {
     return userAfterUpdate;
   }
 
+  async findUnique(id: number) {
+    return await this.prismaService.user.findUnique({
+      where: { id },
+    });
+  }
+
   async verifyDuplicated({ email, cpf }: VerifyDuplicatedInput) {
     await verifyDuplicated({
       properties: { email, cpf },

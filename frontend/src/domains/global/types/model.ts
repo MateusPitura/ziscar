@@ -1,5 +1,4 @@
-import { Action, Resource } from "@shared/types";
-import { AccountStatus, PaymentMethodType } from ".";
+import { ActionsType, InstallmentStatusType, PaymentMethodReceivableTypeType, ResourcesType } from "@shared/enums";
 
 export type Address = {
   cep: string;
@@ -22,7 +21,7 @@ export interface User {
   address?: Address;
   archivedAt?: Date;
   roleId?: string;
-  permissions: Record<Resource, Record<Action, boolean>>;
+  permissions: Record<ResourcesType, Record<ActionsType, boolean>>;
 }
 
 export interface Store {
@@ -50,7 +49,7 @@ export interface AccountReceivable {
   description?: string;
   receivedFrom?: string;
   totalValue?: string;
-  overallStatus: AccountStatus;
+  overallStatus: InstallmentStatusType;
 }
 
 export interface AccountReceivableInstallment {
@@ -60,12 +59,12 @@ export interface AccountReceivableInstallment {
   value: string;
   isRefund?: boolean;
   isUpfront?: boolean;
-  status: AccountStatus;
+  status: InstallmentStatusType;
 }
 
 export interface PaymentMethod {
   id: number;
-  type: PaymentMethodType;
+  type: PaymentMethodReceivableTypeType;
   paymentDate: string;
 }
 

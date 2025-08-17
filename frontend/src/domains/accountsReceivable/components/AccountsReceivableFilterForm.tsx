@@ -10,6 +10,7 @@ import useFilterContext from "@/domains/global/hooks/useFilterContext";
 import { SchemaAccountsReceivableFilterForm } from "../schema";
 import InputLabel from "@/design-system/Form/InputLabel";
 import Choice from "@/design-system/Form/Choice";
+import { InstallmentStatus } from "@shared/enums";
 
 function AccountsReceivableFilterForm(): ReactNode {
   const { accountsReceivableFilter, handleAccountsReceivableFilter } =
@@ -29,7 +30,7 @@ function AccountsReceivableFilterForm(): ReactNode {
       defaultValues={{
         startDate: accountsReceivableFilter?.startDate || "",
         endDate: accountsReceivableFilter?.endDate || "",
-        overallStatus: accountsReceivableFilter?.overallStatus || "PENDING",
+        overallStatus: accountsReceivableFilter?.overallStatus || InstallmentStatus.PAID,
       }}
       replaceEmptyStringToNull={false}
     >
@@ -68,12 +69,12 @@ function AccountsReceivableFilterFormContent(): ReactElement {
             <Choice.Radio<AccountsReceivableFilterFormInputs>
               name="overallStatus"
               label="Pago"
-              value="PAID"
+              value={InstallmentStatus.PAID}
             />
             <Choice.Radio<AccountsReceivableFilterFormInputs>
               name="overallStatus"
               label="Pendente"
-              value="PENDING"
+              value={InstallmentStatus.PENDING}
             />
           </Choice>
         </div>

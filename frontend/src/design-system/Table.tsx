@@ -8,9 +8,9 @@ import useDialog from "@/domains/global/hooks/useDialog";
 import Loading from "./Loading";
 import useCheckPermission from "@/domains/global/hooks/useCheckPermission";
 import { formatDeniedMessage } from "@shared/utils/formatDeniedMessage";
-import { Resource, Action as ActionProp } from "@shared/types";
 import { ButtonState } from "./types";
 import { ITEMS_PER_PAGE } from "@shared/constants";
+import { ActionsType, ResourcesType } from "@shared/enums";
 
 function Container({ children }: Childrenable): ReactElement {
   return (
@@ -131,8 +131,8 @@ function Head({ label, className, action = false, colSpan }: HeadProps) {
 interface BodyProps extends Childrenable {
   isEmpty?: boolean;
   isLoading?: boolean;
-  resource?: Resource;
-  action?: ActionProp;
+  resource?: ResourcesType;
+  action?: ActionsType;
 }
 
 function Body({ children, isEmpty, isLoading, action, resource }: BodyProps) {

@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
-import { AccountStatus as AccountStatusType } from "../types";
+import { InstallmentStatusType } from "@shared/enums";
 
 interface AccountStatusProperties {
-  status: AccountStatusType;
+  status: InstallmentStatusType;
 }
 
 export default function AccountStatus({

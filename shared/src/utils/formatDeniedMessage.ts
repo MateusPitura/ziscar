@@ -1,13 +1,13 @@
-import { Action, Resource } from "../types";
+import { Actions, ActionsType, Resources, ResourcesType } from "../enums";
 
-const actionFormatted: Record<Action, string> = {
+const actionFormatted: Record<Actions, string> = {
   CREATE: "criar",
   READ: "visualizar",
   UPDATE: "editar",
   DELETE: "excluir",
 };
 
-const resourceFormatted: Record<Resource, string> = {
+const resourceFormatted: Record<Resources, string> = {
   USERS: "usuários",
   ACCOUNTS_PAYABLE: "contas a pagar",
   ACCOUNTS_RECEIVABLE: "contas a receber",
@@ -20,8 +20,8 @@ const resourceFormatted: Record<Resource, string> = {
 };
 
 interface FormatDeniedMessageProperties {
-  resource?: Resource;
-  action?: Action;
+  resource?: ResourcesType;
+  action?: ActionsType;
 }
 
 export function formatDeniedMessage({

@@ -35,46 +35,35 @@ model VehicleCharacteristicValue {
   archivedAt DateTime?
 }
 
-model VehicleBase {
-  id                Int              @id @default(autoincrement())
-  chassiNumber      String           @unique @db.VarChar(17)
-  modelYear         Int?
-  yearOfManufacture Int?
-  modelName         String?          @db.VarChar(127)
-  brandId           Int
-  brand             VehicleBrand     @relation(fields: [brandId], references: [id])
-  category          VehicleCategory?
-  vehicles          Vehicle[]
-
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  archivedAt DateTime?
-}
-
 model VehicleBrand {
-  id           Int           @id @default(autoincrement())
-  name         String        @unique @db.VarChar(127)
-  vehicleBases VehicleBase[]
-
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  archivedAt DateTime?
+  id           Int        @id @default(autoincrement())
+  name         String     @unique @db.VarChar(127)
+  vehicles     Vehicle[]
+  
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  archivedAt   DateTime?
 }
 
 model Vehicle {
-  id              Int           @id @default(autoincrement())
-  kilometers      Int?
-  plateNumber     String        @db.VarChar(7)
-  announcedPrice  Int?
-  minimumPrice    Int?
-  commissionValue Int
-  color           String?       @db.VarChar(6)
-  fuelType        FuelType?
-  status          VehicleStatus
-  vehicleBaseId   Int
-  vehicleBase     VehicleBase   @relation(fields: [vehicleBaseId], references: [id])
-  storeId         Int
-  store           Store         @relation(fields: [storeId], references: [id])
+  id                Int            @id @default(autoincrement())
+  chassiNumber      String         @unique @db.VarChar(17)
+  modelYear         Int?
+  yearOfManufacture Int?
+  modelName         String?        @db.VarChar(127)
+  brandId           Int
+  brand             VehicleBrand   @relation(fields: [brandId], references: [id])
+  category          VehicleCategory?
+  kilometers        Int?
+  plateNumber       String         @db.VarChar(7)
+  announcedPrice    Int?
+  minimumPrice      Int?
+  commissionValue   Int
+  color             String?        @db.VarChar(6)
+  fuelType          FuelType?
+  status            VehicleStatus
+  storeId           Int
+  store             Store          @relation(fields: [storeId], references: [id])
 
   vehiclePurchases            VehiclePurchase[]
   vehicleExpenses             VehicleExpense[]
@@ -131,6 +120,9 @@ model VehicleSale {
   accountReceivable   AccountReceivable @relation(fields: [accountReceivableId], references: [id])
   accountPayableId    Int
   accountPayable      AccountPayable    @relation(fields: [accountPayableId], references: [id])
+
+  vehicleSnapshot     Json
+  customerSnapshot    Json
 
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
