@@ -11,6 +11,7 @@ import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AccountReceivableInstallment } from "@/domains/global/types/model";
 import InputLabel from "@/design-system/Form/InputLabel";
+import { PaymentMethodReceivableType } from "@shared/enums";
 // import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 // import { BACKEND_URL } from "@/domains/global/constants";
 
@@ -80,44 +81,44 @@ export default function AddPaymentMethodModal({
           <div className="flex flex-col gap-2">
             <Choice required>
               <Choice.Radio<PaymentMethodFormInputs>
-                label={PaymentMethodText['BANK_SLIP']}
+                label={PaymentMethodText["BANK_SLIP"]}
                 name="type"
-                value="BANK_SLIP"
+                value={PaymentMethodReceivableType.BANK_SLIP}
               />
               <Choice.Radio<PaymentMethodFormInputs>
-                label={PaymentMethodText['CREDIT_CARD']}
+                label={PaymentMethodText["CREDIT_CARD"]}
                 name="type"
-                value="CREDIT_CARD"
+                value={PaymentMethodReceivableType.CREDIT_CARD}
               />
               <Choice.Radio<PaymentMethodFormInputs>
-                label={PaymentMethodText['DEBIT_CARD']}
+                label={PaymentMethodText["DEBIT_CARD"]}
                 name="type"
-                value="DEBIT_CARD"
+                value={PaymentMethodReceivableType.DEBIT_CARD}
               />
               <Choice.Radio<PaymentMethodFormInputs>
-                label={PaymentMethodText['CASH']}
+                label={PaymentMethodText["CASH"]}
                 name="type"
-                value="CASH"
+                value={PaymentMethodReceivableType.CASH}
               />
               <Choice.Radio<PaymentMethodFormInputs>
-                label={PaymentMethodText['DOC']}
+                label={PaymentMethodText["DOC"]}
                 name="type"
-                value="DOC"
+                value={PaymentMethodReceivableType.DOC}
               />
               <Choice.Radio<PaymentMethodFormInputs>
-                label={PaymentMethodText['PIX']}
+                label={PaymentMethodText["PIX"]}
                 name="type"
-                value="PIX"
+                value={PaymentMethodReceivableType.PIX}
               />
               <Choice.Radio<PaymentMethodFormInputs>
-                label={PaymentMethodText['TED']}
+                label={PaymentMethodText["TED"]}
                 name="type"
-                value="TED"
+                value={PaymentMethodReceivableType.TED}
               />
               <Choice.Radio<PaymentMethodFormInputs>
-                label={PaymentMethodText['TRANSFER']}
+                label={PaymentMethodText["TRANSFER"]}
                 name="type"
-                value="TRANSFER"
+                value={PaymentMethodReceivableType.TRANSFER}
               />
             </Choice>
           </div>

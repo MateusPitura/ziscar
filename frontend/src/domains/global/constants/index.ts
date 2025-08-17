@@ -1,4 +1,5 @@
 import { BACKEND_PORT, API_URL } from "@shared/constants";
+import { BrazilianState } from "@shared/enums";
 
 export const BLANK = " ";
 
@@ -14,34 +15,34 @@ export const AUTH_CHANNEL = {
 export const DEFAULT_ROUTE = "/vehicles";
 
 export const STATES = [
-  { value: "AC", label: "Acre" },
-  { value: "AL", label: "Alagoas" },
-  { value: "AP", label: "Amapá" },
-  { value: "AM", label: "Amazonas" },
-  { value: "BA", label: "Bahia" },
-  { value: "CE", label: "Ceará" },
-  { value: "DF", label: "Distrito Federal" },
-  { value: "ES", label: "Espírito Santo" },
-  { value: "GO", label: "Goiás" },
-  { value: "MA", label: "Maranhão" },
-  { value: "MT", label: "Mato Grosso" },
-  { value: "MS", label: "Mato Grosso do Sul" },
-  { value: "MG", label: "Minas Gerais" },
-  { value: "PA", label: "Pará" },
-  { value: "PB", label: "Paraíba" },
-  { value: "PR", label: "Paraná" },
-  { value: "PE", label: "Pernambuco" },
-  { value: "PI", label: "Piauí" },
-  { value: "RJ", label: "Rio de Janeiro" },
-  { value: "RN", label: "Rio Grande do Norte" },
-  { value: "RS", label: "Rio Grande do Sul" },
-  { value: "RO", label: "Rondônia" },
-  { value: "RR", label: "Roraima" },
-  { value: "SC", label: "Santa Catarina" },
-  { value: "SP", label: "São Paulo" },
-  { value: "SE", label: "Sergipe" },
-  { value: "TO", label: "Tocantins" },
+  { value: BrazilianState.AC, label: "Acre" },
+  { value: BrazilianState.AL, label: "Alagoas" },
+  { value: BrazilianState.AP, label: "Amapá" },
+  { value: BrazilianState.AM, label: "Amazonas" },
+  { value: BrazilianState.BA, label: "Bahia" },
+  { value: BrazilianState.CE, label: "Ceará" },
+  { value: BrazilianState.DF, label: "Distrito Federal" },
+  { value: BrazilianState.ES, label: "Espírito Santo" },
+  { value: BrazilianState.GO, label: "Goiás" },
+  { value: BrazilianState.MA, label: "Maranhão" },
+  { value: BrazilianState.MT, label: "Mato Grosso" },
+  { value: BrazilianState.MS, label: "Mato Grosso do Sul" },
+  { value: BrazilianState.MG, label: "Minas Gerais" },
+  { value: BrazilianState.PA, label: "Pará" },
+  { value: BrazilianState.PB, label: "Paraíba" },
+  { value: BrazilianState.PR, label: "Paraná" },
+  { value: BrazilianState.PE, label: "Pernambuco" },
+  { value: BrazilianState.PI, label: "Piauí" },
+  { value: BrazilianState.RJ, label: "Rio de Janeiro" },
+  { value: BrazilianState.RN, label: "Rio Grande do Norte" },
+  { value: BrazilianState.RS, label: "Rio Grande do Sul" },
+  { value: BrazilianState.RO, label: "Rondônia" },
+  { value: BrazilianState.RR, label: "Roraima" },
+  { value: BrazilianState.SC, label: "Santa Catarina" },
+  { value: BrazilianState.SP, label: "São Paulo" },
+  { value: BrazilianState.SE, label: "Sergipe" },
+  { value: BrazilianState.TO, label: "Tocantins" },
 ];
 
 export const PREVIOUS_PAGE = -1;
-export const CEP_LENGTH_WITH_MASK = 9
+export const CEP_LENGTH_WITH_MASK = 9;

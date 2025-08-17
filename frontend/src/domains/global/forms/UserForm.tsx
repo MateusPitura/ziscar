@@ -9,12 +9,12 @@ import { useNavigate } from "react-router-dom";
 import { SchemaUserForm } from "../../users/schemas";
 import { UserFormInputs } from "../../users/types";
 import { SEED_ROLE_ADMIN_ID, SEED_ROLE_SALES_ID } from "@shared/constants";
-import { Action, Resource } from "@shared/types";
 import PageFooter from "../components/PageFooter";
 import Button from "@/design-system/Button";
 import useDialog from "../hooks/useDialog";
 import RequestChangePasswordModal from "@/domains/profile/components/RequestChangePasswordModal";
 import { PREVIOUS_PAGE } from "../constants";
+import { ActionsType, ResourcesType } from "@shared/enums";
 
 interface UserFormProperties {
   defaultValues: Partial<UserFormInputs>;
@@ -22,8 +22,8 @@ interface UserFormProperties {
   isPending: boolean;
   headerTitle: string;
   isEdit?: boolean;
-  resource?: Resource;
-  action?: Action;
+  resource?: ResourcesType;
+  action?: ActionsType;
   allowEditRole?: boolean;
   allowChangePassword?: boolean;
 }

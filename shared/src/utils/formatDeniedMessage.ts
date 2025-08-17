@@ -1,4 +1,4 @@
-import { Actions, Resources } from "../enums";
+import { Actions, ActionsType, Resources, ResourcesType } from "../enums";
 
 const actionFormatted: Record<Actions, string> = {
   CREATE: "criar",
@@ -20,8 +20,8 @@ const resourceFormatted: Record<Resources, string> = {
 };
 
 interface FormatDeniedMessageProperties {
-  resource: Resources;
-  action: Actions;
+  resource?: ResourcesType;
+  action?: ActionsType;
 }
 
 export function formatDeniedMessage({

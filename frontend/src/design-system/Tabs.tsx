@@ -2,7 +2,7 @@ import { Childrenable } from "@/domains/global/types";
 import classNames from "classnames";
 import { type ReactNode } from "react";
 import Button from "./Button";
-import { Action, Resource } from "@shared/types";
+import { ActionsType, ResourcesType } from "@shared/enums";
 
 function Container({ children }: Childrenable): ReactNode {
   return <div className="flex-1 flex flex-col">{children}</div>;
@@ -13,8 +13,8 @@ interface TabProperties {
   isActive: boolean;
   onClick: () => void;
   hasError?: boolean;
-  resource: Resource;
-  action: Action;
+  resource: ResourcesType;
+  action: ActionsType;
 }
 
 function Tab({
