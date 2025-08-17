@@ -39,6 +39,13 @@ export class VehicleService implements VehicleRepository {
     return vehicle;
   }
 
+  async findUnique(id: number): Promise<Vehicle | null> {
+    return await this.prisma.vehicle.findUnique({
+      where: { id },
+      include: { brand: true, vehicleCharacteristicValues: true },
+    });
+  }
+
   async update(id: string, data: UpdateInput<Vehicle>): Promise<Vehicle> {
     return await this.prisma.vehicle.update({
       where: { id: Number(id) },

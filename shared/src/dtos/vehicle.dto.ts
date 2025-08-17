@@ -12,11 +12,16 @@ import {
   VEHICLESTATUS_VALUES,
   EXPENSECATEGORY_VALUES,
   PAYMENTMETHODPAYABLETYPE_VALUES,
+  PAYMENTMETHODRECEIVABLETYPE_VALUES,
 } from "../enums";
 import {
   createAccountPayableDTO,
   createAccountPayableInstallmentDTO,
 } from "./account-payable.dto";
+import {
+  createAccountReceivableDTO,
+  createAccountReceivableInstallmentDTO,
+} from "./account-receivable.dto";
 
 export const InsertVehicleRequestSchema = s.object({
   chassiNumber: s.string(17),
@@ -133,9 +138,30 @@ export const FetchVehicleBrandsResponseSchema = s.array(
 export const MakeVehicleSaleRequestSchema = s.object({
   vehicleId: s.id(),
   customerId: s.id(),
-  userId: s.id(),
-
   date: s.date(),
+  commissionValue: s.number().min(0),
+  accountReceivable: createAccountReceivableDTO,
+  installments: s.array(
+    createAccountReceivableInstallmentDTO
+      .omit({
+        installmentSequence: true,
+        accountReceivableId: true,
+        status: true,
+        isRefund: true,
+        refundAccountReceivableInstallmentId: true,
+      })
+      .extend({
+        paymentMethods: s
+          .array(
+            s.object({
+              type: s.radio(PAYMENTMETHODRECEIVABLETYPE_VALUES),
+              value: s.number(),
+              paymentDate: s.date().nullable(),
+            })
+          )
+          .nullable(),
+      })
+  ),
 });
 
 export const MakeVehicleSaleResponseSchema = BaseIdResponseSchema;

@@ -92,17 +92,9 @@ Content-Type: application/json
 PATCH {{BACKEND_URL}}/vehicles/5/archive HTTP/1.1
 Content-Type: application/json
 
-{
-  "archived": true
-}
-
 ### Unarchive Vehicle
-PATCH {{BACKEND_URL}}/vehicles/5/archive HTTP/1.1
+PATCH {{BACKEND_URL}}/vehicles/5/unarchive HTTP/1.1
 Content-Type: application/json
-
-{
-  "archived": false
-}
 
 ### Insert Vehicle Expense
 POST {{BACKEND_URL}}/vehicles/expense HTTP/1.1
@@ -164,16 +156,68 @@ Content-Type: application/json
   ]
 }
 
-### Make Vehicle Sale
+### Make Vehicle Sale (new contract)
 POST {{BACKEND_URL}}/vehicles/sale HTTP/1.1
 Content-Type: application/json
 
 {
   "vehicleId": 5,
   "customerId": 1,
-  "accountReceivableId": 1,
-  "accountPayableId": 1,
-  "date": "2025-08-12T00:00:00.000Z"
+  "date": "2025-08-12T00:00:00.000Z",
+  "commissionValue": 5000,
+  "accountReceivable": {
+    "description": "Venda do veículo ABC-1234",
+    "receivedFrom": "Cliente João"
+  },
+  "installments": [
+    {
+      "dueDate": "2025-09-12T00:00:00.000Z",
+      "value": 45000,
+      "isUpfront": true,
+      "paymentMethods": [
+        {
+          "type": "PIX",
+          "value": 45000,
+          "paymentDate": "2025-08-12T00:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "dueDate": "2025-10-12T00:00:00.000Z",
+      "value": 5000,
+      "isUpfront": false,
+      "paymentMethods": null
+    }
+  ]
+}
+
+### Make Vehicle Sale (one-off full payment)
+POST {{BACKEND_URL}}/vehicles/sale HTTP/1.1
+Content-Type: application/json
+
+{
+  "vehicleId": 6,
+  "customerId": 2,
+  "date": "2025-08-16T00:00:00.000Z",
+  "commissionValue": 3000,
+  "accountReceivable": {
+    "description": "Venda à vista",
+    "receivedFrom": "Cliente Maria"
+  },
+  "installments": [
+    {
+      "dueDate": "2025-08-16T00:00:00.000Z",
+      "value": 70000,
+      "isUpfront": true,
+      "paymentMethods": [
+        {
+          "type": "BANK_SLIP",
+          "value": 70000,
+          "paymentDate": "2025-08-16T00:00:00.000Z"
+        }
+      ]
+    }
+  ]
 }
 
 ### Update Vehicle (basic fields only)
@@ -216,14 +260,6 @@ Content-Type: application/json
   "characteristics": []
 }
 
-### Archive Vehicle
-PATCH {{BACKEND_URL}}/vehicles/1/archive HTTP/1.1
-Content-Type: application/json
-
-### Unarchive Vehicle
-PATCH {{BACKEND_URL}}/vehicles/1/unarchive HTTP/1.1
-Content-Type: application/json
-
 ### Examples of invalid requests (for testing validation)
 
 ### Invalid Vehicle - Missing required fields
@@ -237,22 +273,13 @@ Content-Type: application/json
   // Missing: plateNumber, commissionValue, status, storeId
 }
 
-### Invalid Vehicle - Invalid enum values
-POST {{BACKEND_URL}}/vehicles HTTP/1.1
+### Invalid Make Sale - missing commissionValue / accountReceivable
+POST {{BACKEND_URL}}/vehicles/sale HTTP/1.1
 Content-Type: application/json
 
 {
-  "chassiNumber": "1HGBH41JXMN109186",
-  "modelYear": 2023,
-  "brandId": 1,
-  "category": "INVALID_CATEGORY",
-  "plateNumber": "ABC1234",
-  "commissionValue": 5000,
-  "fuelType": "INVALID_FUEL",
-  "status": "INVALID_STATUS",
-  "storeId": 1
+  "vehicleId": 5,
+  "customerId": 1,
+  "date": "2025-08-12T00:00:00.000Z"
+  // Missing commissionValue, accountReceivable and installments
 }
-
-### Invalid Search - Invalid parameters
-GET {{BACKEND_URL}}/vehicles?page=-1&limit=0&status=INVALID_STATUS&announcedPriceMin=abc HTTP/1.1
-Content-Type: application/json

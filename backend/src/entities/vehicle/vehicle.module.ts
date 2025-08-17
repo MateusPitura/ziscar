@@ -16,6 +16,10 @@ import { AccountPayableModule } from '../account-payable/account-payable.module'
 import { AccountPayableInstallmentModule } from '../account-payable-installment/account-payable-installment.module';
 import { PaymentMethodPayableModule } from '../payment-method-payable/payment-method-payable.module';
 import { VehicleExpenseModule } from '../vehicle-expense/vehicle-expense.module';
+import { AccountReceivableModule } from '../account-receivable/account-receivable.module';
+import { AccountReceivableInstallmentModule } from '../account-receivable-installment/account-receivable-installment.module';
+import { PaymentMethodReceivableModule } from '../payment-method-receivable/payment-method-receivable.module';
+import { CustomerModule } from '../customer/customer.module';
 
 @Module({
   imports: [
@@ -24,6 +28,10 @@ import { VehicleExpenseModule } from '../vehicle-expense/vehicle-expense.module'
     AccountPayableInstallmentModule,
     PaymentMethodPayableModule,
     VehicleExpenseModule,
+    AccountReceivableModule,
+    AccountReceivableInstallmentModule,
+    PaymentMethodReceivableModule,
+    CustomerModule,
   ],
   controllers: [VehicleController],
   providers: [

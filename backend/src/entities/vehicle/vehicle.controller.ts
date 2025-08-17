@@ -87,8 +87,10 @@ export class VehicleController {
   @RoleGuard(Resources.VEHICLE_SALE, Actions.CREATE)
   async sale(
     @Body() input: MakeVehicleSaleRequestDto,
+    @Req() req: AuthRequest,
   ): Promise<MakeVehicleSaleResponseDto> {
-    return this.makeSale.execute(input);
+    const { userId } = req.authToken;
+    return this.makeSale.execute(input, userId);
   }
 
   @Patch(':id')

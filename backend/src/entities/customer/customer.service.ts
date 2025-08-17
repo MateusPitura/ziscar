@@ -95,6 +95,13 @@ export class CustomerService {
     return customer;
   }
 
+  async findUnique(id: number) {
+    return await this.prismaService.customer.findUnique({
+      where: { id },
+      include: { address: true },
+    });
+  }
+
   async findMany({
     customerFindManyInDto,
     enterpriseId,
