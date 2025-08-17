@@ -4,6 +4,7 @@ import { SchemaAddress } from "../schemas";
 import { s } from "@shared/safeZod";
 import { CustomersFilterFormInputs } from "@/domains/customers/types";
 import { AccountsReceivableFilterFormInputs } from "@/domains/accountsReceivable/types";
+import { VehiclesFilterFormInputs } from "@/domains/vehicles/types";
 
 export interface Childrenable {
   children?: React.ReactNode;
@@ -36,6 +37,7 @@ export type QueryKeys =
   | "stores"
   | "customer"
   | "customers"
+  | "vehicles"
   | "accounts-receivable"
   | "accounts-receivable-installments"
   | "accounts-receivable-payment-method";
@@ -46,6 +48,7 @@ export interface CustomersFilter extends CustomersFilterFormInputs, Pageable {}
 export interface AccountsReceivableFilter
   extends AccountsReceivableFilterFormInputs,
     Pageable {}
+export interface VehiclesFilter extends VehiclesFilterFormInputs, Pageable {}
 
 export interface PageablePayload<T> {
   data: T[];
@@ -73,3 +76,14 @@ export type PaymentMethodType =
   | "TED"
   | "DOC"
   | "CASH";
+
+export type FuelType = "GASOLINE" | "ETHANOL" | "FLEX" | "ELECTRIC" | "GNV";
+
+export type VehicleStatus =
+  | "PURCHASED"
+  | "IN_STOCK"
+  | "MAINTENANCE"
+  | "SOLD"
+  | "DELIVERED";
+
+export type VehicleCategory = "CAR" | "MOTORCYCLE" | "TRUCK" | "VAN" | "BUS";

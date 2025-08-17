@@ -6,10 +6,12 @@ import {
   CustomersFilter,
   StoresFilter,
   UsersFilter,
+  VehiclesFilter,
 } from "../types";
 import { storeFilterDefaultValues } from "@/domains/stores/constants";
 import { customerFilterDefaultValues } from "@/domains/customers/constants";
 import { accountReceivableFilterDefaultValues } from "@/domains/accountsReceivable/constants";
+import { vehicleFilterDefaultValues } from "@/domains/vehicles/constants";
 
 interface FilterContextValues {
   usersFilter?: UsersFilter;
@@ -19,7 +21,11 @@ interface FilterContextValues {
   customersFilter?: CustomersFilter;
   handleCustomersFilter: (value: Partial<CustomersFilter>) => void;
   accountsReceivableFilter?: AccountsReceivableFilter;
-  handleAccountsReceivableFilter: (value: Partial<AccountsReceivableFilter>) => void;
+  handleAccountsReceivableFilter: (
+    value: Partial<AccountsReceivableFilter>
+  ) => void;
+  vehiclesFilter?: VehiclesFilter;
+  handleVehiclesFilter: (value: Partial<VehiclesFilter>) => void;
 }
 
 const FilterContext = createContext<FilterContextValues | null>(null);
@@ -64,10 +70,11 @@ function FilterProvider({ children }: Childrenable) {
     []
   );
 
-  const [accountsReceivableFilter, setAccountsReceivableFilter] = useState<AccountsReceivableFilter>({
-    page: 1,
-    ...accountReceivableFilterDefaultValues,
-  });
+  const [accountsReceivableFilter, setAccountsReceivableFilter] =
+    useState<AccountsReceivableFilter>({
+      page: 1,
+      ...accountReceivableFilterDefaultValues,
+    });
 
   const handleAccountsReceivableFilter = useCallback(
     (value: Partial<AccountsReceivableFilter>) => {
@@ -79,6 +86,18 @@ function FilterProvider({ children }: Childrenable) {
     []
   );
 
+  const [vehiclesFilter, setVehiclesFilter] = useState<VehiclesFilter>({
+    page: 1,
+    ...vehicleFilterDefaultValues,
+  });
+
+  const handleVehiclesFilter = useCallback((value: Partial<VehiclesFilter>) => {
+    setVehiclesFilter((prev) => ({
+      ...prev,
+      ...value,
+    }));
+  }, []);
+
   const valuesMemoized = useMemo(
     () => ({
       usersFilter,
@@ -89,6 +108,8 @@ function FilterProvider({ children }: Childrenable) {
       handleCustomersFilter,
       accountsReceivableFilter,
       handleAccountsReceivableFilter,
+      vehiclesFilter,
+      handleVehiclesFilter,
     }),
     [
       usersFilter,
@@ -99,6 +120,8 @@ function FilterProvider({ children }: Childrenable) {
       handleCustomersFilter,
       accountsReceivableFilter,
       handleAccountsReceivableFilter,
+      vehiclesFilter,
+      handleVehiclesFilter,
     ]
   );
 
