@@ -57,10 +57,11 @@ export const date = () =>
 export const dateString = () =>
   date().transform((date) => date.toISOString().split("T")[0]);
 
-export const birthDate = () =>
+export const paymentDate = () =>
   date()
-    .min(new Date("1900-01-01"), { message: "Data de nascimento inválida" })
-    .max(new Date(), { message: "Data de nascimento inválida" });
+    .min(new Date("1900-01-01"), { message: "Data de pagamento inválida" })
+    .max(new Date(), { message: "Data de pagamento inválida" })
+    .transform((date) => date.toISOString().split("T")[0]);
 
 export const dateRangeRule: [
   (data: Record<string, unknown>) => boolean,

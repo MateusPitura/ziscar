@@ -60,7 +60,7 @@ export default function DisableStoreModal({
         onClickPrimaryBtn={mutate}
         primaryBtnState={isPending ? "loading" : undefined}
         primaryBtnColor="red"
-        primaryBtResource="STORES"
+        primaryBtnResource="STORES"
         primaryBtnAction="DELETE"
       />
     </Dialog>

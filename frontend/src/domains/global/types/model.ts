@@ -1,4 +1,5 @@
 import { Action, Resource } from "@shared/types";
+import { AccountStatus, PaymentMethodType } from ".";
 
 export type Address = {
   cep: string;
@@ -44,6 +45,31 @@ export interface Customer {
   archivedAt?: Date;
 }
 
+export interface AccountReceivable {
+  id: number;
+  description?: string;
+  receivedFrom?: string;
+  totalValue?: string;
+  overallStatus: AccountStatus;
+}
+
+export interface AccountReceivableInstallment {
+  id: number;
+  installmentSequence: number;
+  dueDate: string;
+  value: string;
+  isRefund?: boolean;
+  isUpfront?: boolean;
+  status: AccountStatus;
+}
+
+export interface PaymentMethod {
+  id: number;
+  type: PaymentMethodType;
+  paymentDate: string;
+}
+
+
 export type FetchUser = Pick<
   User,
   "id" | "fullName" | "email" | "phone" | "archivedAt" | "roleId"
@@ -55,4 +81,12 @@ export type FetchStore = Pick<
 export type FetchCustomer = Pick<
   Customer,
   "id" | "fullName" | "email" | "phone" | "archivedAt" | "cpf"
+>;
+export type FetchAccountReceivable = Pick<
+  AccountReceivable,
+  "id" | "description" | "receivedFrom" | "totalValue" | "overallStatus"
+>;
+export type FetchAccountReceivableInstallment = Pick<
+  AccountReceivableInstallment,
+  "id" | "installmentSequence" | "dueDate" | "value" | "status" | "isRefund" | "isUpfront"
 >;
