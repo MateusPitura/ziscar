@@ -1,4 +1,12 @@
-import { ActionsType, InstallmentStatusType, PaymentMethodReceivableTypeType, ResourcesType } from "@shared/enums";
+import {
+  ActionsType,
+  FuelTypeType,
+  InstallmentStatusType,
+  PaymentMethodReceivableTypeType,
+  ResourcesType,
+  VehicleCategoryType,
+  VehicleStatusType,
+} from "@shared/enums";
 
 export type Address = {
   cep: string;
@@ -76,14 +84,14 @@ export interface Vehicle {
   minimumPrice: string;
   commissionValue: string;
   color: string;
-  fuelType: FuelType;
-  status: VehicleStatus;
+  fuelType: FuelTypeType;
+  status: VehicleStatusType;
   storeId: number;
   chassiNumber: string;
   modelYear: string;
   yearOfManufacture: string;
   modelName: string;
-  category: VehicleCategory;
+  category: VehicleCategoryType;
   brandId: number;
   archivedAt?: Date;
 }

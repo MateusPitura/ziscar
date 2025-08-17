@@ -64,14 +64,3 @@ export interface Options {
 }
 
 export type AddressFormInputs = s.infer<typeof SchemaAddress>;
-
-export type FuelType = "GASOLINE" | "ETHANOL" | "FLEX" | "ELECTRIC" | "GNV";
-
-export type VehicleStatus =
-  | "PURCHASED"
-  | "IN_STOCK"
-  | "MAINTENANCE"
-  | "SOLD"
-  | "DELIVERED";
-
-export type VehicleCategory = "CAR" | "MOTORCYCLE" | "TRUCK" | "VAN" | "BUS";
