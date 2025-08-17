@@ -12,7 +12,7 @@ COPY shared/ ./
 
 # Copy backend prisma schema and scripts for enum generation
 COPY backend/prisma/schema.prisma /app/backend/prisma/schema.prisma
-COPY scripts/ /app/scripts/generate-shared-enums.js
+COPY scripts/generate-shared-enums.js /app/scripts/
 # Generate enums from Prisma schema
 RUN cd /app && node scripts/generate-shared-enums.js
 

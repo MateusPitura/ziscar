@@ -3,27 +3,27 @@
 set -e
 
 echo "Linting backend"
-(cd backend && npm run lint)
+(cd ../backend && npm run lint)
 
 echo "Linting frontend"
-(cd frontend && npm run lint)
+(cd ../frontend && npm run lint)
 
 echo "Running unit tests"
 npm run test:db
-(cd backend && npm run test:db-init)
-(cd backend && npm run test)
+(cd ../backend && npm run test:db-init)
+(cd ../backend && npm run test)
 
 echo "Starting Docker"
-npm run dev
+(cd .. && npm run dev)
 
 echo "Waiting for servers to start"
 sleep 10
 
-(cd backend && npm run dev:db-init)
+(cd ../backend && npm run dev:db-init)
 
 echo "Running e2e tests"
-(cd frontend && npm run cypress:run)
+(cd ../frontend && npm run cypress:run)
 
 echo "Stopping Docker"
-npm run dev:down
+(cd .. && npm run dev:down)
 

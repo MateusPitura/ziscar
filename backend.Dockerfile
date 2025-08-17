@@ -23,7 +23,7 @@ RUN npm install
 COPY backend/ ./
 
 # Copy scripts directory for enum generation
-COPY scripts/ /app/scripts/generate-shared-enums.js
+COPY scripts/generate-shared-enums.js /app/scripts/
 
 # Generate Prisma client and enums
 RUN npx prisma generate
