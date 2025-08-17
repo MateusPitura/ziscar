@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "nest start --debug --watch",
     "prod": "npm run build && NODE_ENV=production node dist/backend/src/cluster",
-    "build": "npm run generate:enums && nest build",
+    "build": "nest build",
     "dev:migration-generate": "prisma migrate dev --create-only",
     "dev:migration-run": "prisma migrate deploy && npx prisma generate && npm run generate:enums",
     "prod:db-init": "NODE_ENV=production ts-node ./prisma/init.ts",
