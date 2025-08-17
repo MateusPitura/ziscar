@@ -1,7 +1,7 @@
 import { lazy, ReactNode } from "react";
-import { Action, Resource } from "@shared/types";
 import { IconsName } from "@/design-system/types";
 import { DEFAULT_ROUTE } from ".";
+import { ActionsType, ResourcesType } from "@shared/enums";
 
 interface Route {
   path: string;
@@ -9,8 +9,8 @@ interface Route {
   icon?: IconsName;
   entryPage: ReactNode;
   shouldDisplay: boolean;
-  resource?: Resource;
-  action?: Action;
+  resource?: ResourcesType;
+  action?: ActionsType;
 }
 
 const Vehicles = lazy(

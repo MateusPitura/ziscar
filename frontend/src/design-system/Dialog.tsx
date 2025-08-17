@@ -12,9 +12,9 @@ import { DialogClose } from "@radix-ui/react-dialog";
 import { DialogProvider } from "@/domains/global/contexts/DialogContext";
 import useButtonState from "@/domains/global/hooks/useButtonState";
 import { Childrenable, DialogProps } from "@/domains/global/types";
-import { Action, Resource } from "@shared/types";
 import { ButtonColor, ButtonState } from "./types";
 import classNames from "classnames";
+import { ActionsType, ResourcesType } from "@shared/enums";
 
 interface ContainerProps extends DialogProps, Childrenable {}
 
@@ -55,8 +55,8 @@ interface FooterProps {
   labelPrimaryBtn: string;
   primaryBtnState?: ButtonState;
   primaryBtnColor?: ButtonColor;
-  primaryBtnResource?: Resource;
-  primaryBtnAction?: Action;
+  primaryBtnResource?: ResourcesType;
+  primaryBtnAction?: ActionsType;
   onClickSecondaryBtn?: () => void;
   labelSecondaryBtn?: string;
   secondaryBtnState?: ButtonState;

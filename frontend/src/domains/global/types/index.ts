@@ -65,18 +65,6 @@ export interface Options {
 
 export type AddressFormInputs = s.infer<typeof SchemaAddress>;
 
-export type AccountStatus = "PAID" | "PENDING";
-
-export type PaymentMethodType =
-  | "TRANSFER"
-  | "PIX"
-  | "BANK_SLIP"
-  | "CREDIT_CARD"
-  | "DEBIT_CARD"
-  | "TED"
-  | "DOC"
-  | "CASH";
-
 export type FuelType = "GASOLINE" | "ETHANOL" | "FLEX" | "ELECTRIC" | "GNV";
 
 export type VehicleStatus =

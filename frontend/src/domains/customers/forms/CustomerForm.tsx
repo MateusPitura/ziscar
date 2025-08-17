@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
 import { CustomerFormInputs as CustomerFormInputsType } from "../types";
-import { Action, Resource } from "@shared/types";
 import Form from "@/design-system/Form";
 import { SchemaCustomerForm } from "../schemas";
 import PageHeader from "@/domains/global/components/PageHeader";
@@ -11,6 +10,7 @@ import Button from "@/design-system/Button";
 import { PREVIOUS_PAGE } from "@/domains/global/constants";
 import { useNavigate } from "react-router-dom";
 import CustomerFormInputs from "./CustomerFormInputs";
+import { ActionsType, ResourcesType } from "@shared/enums";
 
 interface CustomerFormProperties {
   defaultValues: Partial<CustomerFormInputsType>;
@@ -18,8 +18,8 @@ interface CustomerFormProperties {
   isPending: boolean;
   headerTitle: string;
   isEdit?: boolean;
-  resource?: Resource;
-  action?: Action;
+  resource?: ResourcesType;
+  action?: ActionsType;
 }
 
 export default function CustomerForm({

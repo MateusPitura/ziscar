@@ -3,18 +3,18 @@ import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import { PageablePayload } from "@/domains/global/types";
 import { pdf } from "@react-pdf/renderer";
 import { ITEMS_PER_PAGE } from "@shared/constants";
-import { Resource } from "@shared/types";
 import { QueryKey, useIsFetching, useQueryClient } from "@tanstack/react-query";
 import { type ReactElement } from "react";
 import Report from "./Report";
 import safeFormat from "@/domains/global/utils/safeFormat";
 import { FieldValues, Path, PathValue } from "react-hook-form";
 import { formatAppliedFilters } from "../utils";
+import { ResourcesType } from "@shared/enums";
 
 type ExportButtonProperties<T, U extends FieldValues> = {
   [K in Path<U>]: {
     fileName: string;
-    resource: Resource;
+    resource: ResourcesType;
     queryKey: QueryKey;
     queryFn: (filter?: string) => Promise<PageablePayload<T>>;
     selectQueryFn: (payload: PageablePayload<T>) => Record<string, unknown>[];

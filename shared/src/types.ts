@@ -1,14 +1,3 @@
-export type Resource =
-  | "USERS"
-  | "VEHICLES"
-  | "STORES"
-  | "VEHICLE_PURCHASE"
-  | "VEHICLE_EXPENSE"
-  | "VEHICLE_SALE"
-  | "ACCOUNTS_PAYABLE"
-  | "ACCOUNTS_RECEIVABLE"
-  | "CUSTOMERS";
+import { Resources, Actions } from "./enums";
 
-export type Action = "CREATE" | "READ" | "UPDATE" | "DELETE";
-
-export type Permissions = Record<Resource, Record<Action, boolean>>;
+export type Permissions = Record<Resources, Record<Actions, boolean>>;

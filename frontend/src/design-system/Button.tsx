@@ -3,9 +3,9 @@ import { forwardRef, ReactNode } from "react";
 import Tooltip from "./Tooltip";
 import useCheckPermission from "@/domains/global/hooks/useCheckPermission";
 import { ButtonColor, ButtonState, IconsName } from "./types";
-import { Action, Resource } from "@shared/types";
 import { formatDeniedMessage } from "@shared/utils/formatDeniedMessage";
 import Icon from "./Icon";
+import { ActionsType, ResourcesType } from "@shared/enums";
 
 interface BaseButtonProps {
   state?: ButtonState;
@@ -161,8 +161,8 @@ const ButtonVariant = forwardRef(
 );
 
 interface ButtonProps extends ButtonVariantProps {
-  resource?: Resource;
-  action?: Action;
+  resource?: ResourcesType;
+  action?: ActionsType;
 }
 
 const Button = forwardRef(

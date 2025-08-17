@@ -5,9 +5,10 @@ import Spinner from "@/design-system/Spinner";
 import useSafeFetch from "../hooks/useSafeFetch";
 import { BACKEND_URL, DEFAULT_ROUTE } from "../constants";
 import { useQuery } from "@tanstack/react-query";
-import { Action, Permissions, Resource } from "@shared/types";
+import { Permissions } from "@shared/types";
 import useSnackbar from "../hooks/useSnackbar";
 import { formatDeniedMessage } from "@shared/utils/formatDeniedMessage";
+import { ActionsType, ResourcesType } from "@shared/enums";
 
 export default function PrivatePageLayout(): ReactElement {
   const matches = useMatches();
@@ -33,8 +34,8 @@ export default function PrivatePageLayout(): ReactElement {
     if (!userPermissions) return;
 
     const routeHandle = matches[matches.length - 1].handle as {
-      resource?: Resource;
-      action?: Action;
+      resource?: ResourcesType;
+      action?: ActionsType;
     };
 
     const resource = routeHandle?.["resource"];
