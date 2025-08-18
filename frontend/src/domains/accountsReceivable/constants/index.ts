@@ -7,7 +7,7 @@ import { InstallmentStatus, PaymentMethodReceivableType } from "@shared/enums";
 
 export const paymentMethodDefaultValues: PaymentMethodFormInputs = {
   paymentDate: safeFormat({ date: new Date(), format: "yyyy-MM-dd" }),
-  type: PaymentMethodReceivableType.TRANSFER,
+  type: PaymentMethodReceivableType.CREDIT_CARD,
 };
 
 export const accountReceivableFilterDefaultValues: AccountsReceivableFilterFormInputs =

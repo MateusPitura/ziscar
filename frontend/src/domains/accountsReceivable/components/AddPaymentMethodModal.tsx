@@ -9,8 +9,10 @@ import Input from "@/design-system/Form/Input";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AccountReceivableInstallment } from "@/domains/global/types/model";
-import Select from "@/design-system/Form/Select";
-import { PAYMENT_METHODS } from "@/domains/global/constants";
+import { PaymentMethodText } from "@/domains/global/constants";
+import InputLabel from "@/design-system/Form/InputLabel";
+import Choice from "@/design-system/Form/Choice";
+import { PaymentMethodReceivableType } from "@shared/enums";
 // import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 // import { BACKEND_URL } from "@/domains/global/constants";
 
@@ -76,12 +78,19 @@ export default function AddPaymentMethodModal({
             required
             type="date"
           />
-          <Select<PaymentMethodFormInputs>
-            label="Forma de pagamento"
-            name="type"
-            options={PAYMENT_METHODS}
-            required
-          />
+          <InputLabel label="Forma de pagamento" required />
+          <div className="flex flex-col gap-2">
+            <Choice required>
+              {Object.values(PaymentMethodReceivableType).map((type) => (
+                <Choice.Radio<PaymentMethodFormInputs>
+                  key={type}
+                  label={PaymentMethodText[type]}
+                  name="type"
+                  value={type}
+                />
+              ))}
+            </Choice>
+          </div>
           <Dialog.Footer
             labelPrimaryBtn="Adicionar"
             className="px-0"
