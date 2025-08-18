@@ -3,15 +3,14 @@ import type { ReactNode } from "react";
 import { PaymentMethodFormInputs } from "../types";
 import Dialog from "@/design-system/Dialog";
 import Form from "@/design-system/Form";
-import { SchemaPaymentMethodForm } from "../schema";
-import { paymentMethodDefaultValues, PaymentMethodText } from "../constants";
+import { SchemaPaymentMethodForm } from "../schemas";
+import { paymentMethodDefaultValues } from "../constants";
 import Input from "@/design-system/Form/Input";
-import Choice from "@/design-system/Form/Choice";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AccountReceivableInstallment } from "@/domains/global/types/model";
-import InputLabel from "@/design-system/Form/InputLabel";
-import { PaymentMethodReceivableType } from "@shared/enums";
+import Select from "@/design-system/Form/Select";
+import { PAYMENT_METHODS } from "@/domains/global/constants";
 // import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 // import { BACKEND_URL } from "@/domains/global/constants";
 
@@ -77,51 +76,12 @@ export default function AddPaymentMethodModal({
             required
             type="date"
           />
-          <InputLabel label="Forma de pagamento" required />
-          <div className="flex flex-col gap-2">
-            <Choice required>
-              <Choice.Radio<PaymentMethodFormInputs>
-                label={PaymentMethodText["BANK_SLIP"]}
-                name="type"
-                value={PaymentMethodReceivableType.BANK_SLIP}
-              />
-              <Choice.Radio<PaymentMethodFormInputs>
-                label={PaymentMethodText["CREDIT_CARD"]}
-                name="type"
-                value={PaymentMethodReceivableType.CREDIT_CARD}
-              />
-              <Choice.Radio<PaymentMethodFormInputs>
-                label={PaymentMethodText["DEBIT_CARD"]}
-                name="type"
-                value={PaymentMethodReceivableType.DEBIT_CARD}
-              />
-              <Choice.Radio<PaymentMethodFormInputs>
-                label={PaymentMethodText["CASH"]}
-                name="type"
-                value={PaymentMethodReceivableType.CASH}
-              />
-              <Choice.Radio<PaymentMethodFormInputs>
-                label={PaymentMethodText["DOC"]}
-                name="type"
-                value={PaymentMethodReceivableType.DOC}
-              />
-              <Choice.Radio<PaymentMethodFormInputs>
-                label={PaymentMethodText["PIX"]}
-                name="type"
-                value={PaymentMethodReceivableType.PIX}
-              />
-              <Choice.Radio<PaymentMethodFormInputs>
-                label={PaymentMethodText["TED"]}
-                name="type"
-                value={PaymentMethodReceivableType.TED}
-              />
-              <Choice.Radio<PaymentMethodFormInputs>
-                label={PaymentMethodText["TRANSFER"]}
-                name="type"
-                value={PaymentMethodReceivableType.TRANSFER}
-              />
-            </Choice>
-          </div>
+          <Select<PaymentMethodFormInputs>
+            label="Forma de pagamento"
+            name="type"
+            options={PAYMENT_METHODS}
+            required
+          />
           <Dialog.Footer
             labelPrimaryBtn="Adicionar"
             className="px-0"

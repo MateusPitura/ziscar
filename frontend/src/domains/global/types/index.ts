@@ -5,6 +5,7 @@ import { s } from "@shared/safeZod";
 import { CustomersFilterFormInputs } from "@/domains/customers/types";
 import { AccountsReceivableFilterFormInputs } from "@/domains/accountsReceivable/types";
 import { VehiclesFilterFormInputs } from "@/domains/vehicles/types";
+import { BRAZILIANSTATE_VALUES } from "@shared/enums";
 
 export interface Childrenable {
   children?: React.ReactNode;
@@ -64,3 +65,5 @@ export interface Options {
 }
 
 export type AddressFormInputs = s.infer<typeof SchemaAddress>;
+
+export type BrazilianState = (typeof BRAZILIANSTATE_VALUES)[number]

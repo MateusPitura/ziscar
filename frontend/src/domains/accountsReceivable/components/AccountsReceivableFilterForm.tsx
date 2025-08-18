@@ -7,7 +7,7 @@ import { useFormContext } from "react-hook-form";
 import useDialogContext from "@/domains/global/hooks/useDialogContext";
 import { AccountsReceivableFilterFormInputs } from "../types";
 import useFilterContext from "@/domains/global/hooks/useFilterContext";
-import { SchemaAccountsReceivableFilterForm } from "../schema";
+import { SchemaAccountsReceivableFilterForm } from "../schemas";
 import InputLabel from "@/design-system/Form/InputLabel";
 import Choice from "@/design-system/Form/Choice";
 import { InstallmentStatus } from "@shared/enums";

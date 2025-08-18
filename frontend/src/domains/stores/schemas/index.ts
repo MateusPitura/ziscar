@@ -4,8 +4,8 @@ import { s } from "@shared/safeZod";
 export const SchemaStoresFilterForm = s
   .object({
     name: s.string().or(s.empty()),
-    orderBy: s.radio(["name", "email"]),
-    status: s.radio(["active", "inactive"]),
+    orderBy: s.enumeration(["name", "email"]),
+    status: s.enumeration(["active", "inactive"]),
     startDate: s.dateString().or(s.empty()),
     endDate: s.dateString().or(s.empty()),
   })

@@ -29,15 +29,15 @@ export const InsertVehicleRequestSchema = s.object({
   yearOfManufacture: s.number().nullable(),
   modelName: s.string(127).nullable(),
   brandId: s.id(),
-  category: s.radio(VEHICLECATEGORY_VALUES).nullable(),
+  category: s.enumeration(VEHICLECATEGORY_VALUES).nullable(),
   kilometers: s.number().nullable(),
   plateNumber: s.string(7),
   announcedPrice: s.number().nullable(),
   minimumPrice: s.number().nullable(),
   commissionValue: s.number(),
   color: s.string(6).nullable(),
-  fuelType: s.radio(FUELTYPE_VALUES).nullable(),
-  status: s.radio(VEHICLESTATUS_VALUES),
+  fuelType: s.enumeration(FUELTYPE_VALUES).nullable(),
+  status: s.enumeration(VEHICLESTATUS_VALUES),
   storeId: s.id(),
   characteristics: s.array(s.string()).optional(),
 });
@@ -50,8 +50,8 @@ export const SearchVehiclesRequestSchema = BasePaginationSchema.merge(
   .extend({
     storeId: s.id().optional(),
     brandId: s.id().optional(),
-    status: s.radio(VEHICLESTATUS_VALUES).optional(),
-    category: s.radio(VEHICLECATEGORY_VALUES).optional(),
+    status: s.enumeration(VEHICLESTATUS_VALUES).optional(),
+    category: s.enumeration(VEHICLECATEGORY_VALUES).optional(),
     modelYear: s.number().optional(),
     yearOfManufacture: s.number().optional(),
     modelName: s.string().optional(),
@@ -68,8 +68,8 @@ const VehicleItemSchema = s.object({
   yearOfManufacture: s.number().nullable(),
   modelName: s.string().nullable(),
   storeId: s.id(),
-  status: s.radio(VEHICLESTATUS_VALUES),
-  category: s.radio(VEHICLECATEGORY_VALUES).nullable(),
+  status: s.enumeration(VEHICLESTATUS_VALUES),
+  category: s.enumeration(VEHICLECATEGORY_VALUES).nullable(),
   announcedPrice: s.number().nullable(),
   plateNumber: s.string(7),
   archivedAt: s.date().nullable().optional(),
@@ -101,7 +101,7 @@ export const SearchVehiclesResponseSchema =
 export const InsertVehicleExpenseRequestSchema = s
   .object({
     vehicleId: s.id(),
-    category: s.radio(EXPENSECATEGORY_VALUES),
+    category: s.enumeration(EXPENSECATEGORY_VALUES),
     observations: s.string().nullable(),
     installments: s.array(
       createAccountPayableInstallmentDTO
@@ -115,7 +115,7 @@ export const InsertVehicleExpenseRequestSchema = s
           paymentMethods: s
             .array(
               s.object({
-                type: s.radio(PAYMENTMETHODPAYABLETYPE_VALUES),
+                type: s.enumeration(PAYMENTMETHODPAYABLETYPE_VALUES),
                 value: s.number(),
                 paymentDate: s.date().nullable(),
               })
@@ -154,7 +154,7 @@ export const MakeVehicleSaleRequestSchema = s.object({
         paymentMethods: s
           .array(
             s.object({
-              type: s.radio(PAYMENTMETHODRECEIVABLETYPE_VALUES),
+              type: s.enumeration(PAYMENTMETHODRECEIVABLETYPE_VALUES),
               value: s.number(),
               paymentDate: s.date().nullable(),
             })

@@ -1,5 +1,5 @@
 import { useMemo, type ReactElement } from "react";
-import { FieldValues, Path } from "react-hook-form";
+import { FieldValues, Path, PathValue } from "react-hook-form";
 import Select from "./Select";
 import { useQuery } from "@tanstack/react-query";
 import { QueryKeys, UnwrapArray } from "@/domains/global/types";
@@ -53,7 +53,7 @@ export default function Search<
 
     return data?.map((item) => ({
       label: String(item[labelKey as string]),
-      value: String(item[valueKey as string]),
+      value: String(item[valueKey as string]) as UnwrapArray<PathValue<T, Path<T>>>,
       description: String(item[descriptionKey as string]),
     }));
   }, [data, labelKey, valueKey, descriptionKey]);

@@ -17,9 +17,9 @@ const SchemaCustomerCreateInDto = SchemaCustomerPostInDto.extend({
 const SchemaCustomerFindManyInDto = s
   .object({
     page: s.numberPositive().optional(),
-    status: s.radio(['active', 'inactive']).optional(),
+    status: s.enumeration(['active', 'inactive']).optional(),
     fullName: s.string().optional(),
-    orderBy: s.radio(['fullName', 'email']).optional(),
+    orderBy: s.enumeration(['fullName', 'email']).optional(),
     cpf: s.number().nonnegative().optional(),
     startDate: s.dateString().optional(),
     endDate: s.dateString().optional(),

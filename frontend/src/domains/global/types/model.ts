@@ -1,12 +1,12 @@
 import {
-  ActionsType,
-  FuelTypeType,
+  ActionsType, FuelTypeType,
   InstallmentStatusType,
   PaymentMethodReceivableTypeType,
   ResourcesType,
   VehicleCategoryType,
-  VehicleStatusType,
+  VehicleStatusType
 } from "@shared/enums";
+import { BrazilianState } from ".";
 
 export type Address = {
   cep: string;
@@ -15,7 +15,7 @@ export type Address = {
   neighborhood?: string;
   city?: {
     ibgeCode: number;
-    state: string;
+    state: BrazilianState;
     name: string;
   };
 };

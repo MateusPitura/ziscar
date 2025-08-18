@@ -1,5 +1,9 @@
 import { BACKEND_PORT, API_URL } from "@shared/constants";
-import { BrazilianState } from "@shared/enums";
+import {
+  BrazilianState,
+  PaymentMethodReceivableType,
+  PaymentMethodReceivableTypeType,
+} from "@shared/enums";
 
 export const BLANK = " ";
 
@@ -46,3 +50,48 @@ export const STATES = [
 
 export const PREVIOUS_PAGE = -1;
 export const CEP_LENGTH_WITH_MASK = 9;
+
+export const PaymentMethodText: Record<
+  PaymentMethodReceivableTypeType,
+  string
+> = {
+  BANK_SLIP: "Boleto Bancário",
+  CASH: "Dinheiro",
+  CREDIT_CARD: "Cartão de Crédito",
+  DEBIT_CARD: "Cartão de Débito",
+  DOC: "DOC",
+  PIX: "Pix",
+  TED: "TED",
+  TRANSFER: "Transferência Bancária",
+};
+
+export const PAYMENT_METHODS = [
+  {
+    label: PaymentMethodText[PaymentMethodReceivableType.CASH],
+    value: PaymentMethodReceivableType.CASH,
+  },
+  {
+    label: PaymentMethodText[PaymentMethodReceivableType.CREDIT_CARD],
+    value: PaymentMethodReceivableType.CREDIT_CARD,
+  },
+  {
+    label: PaymentMethodText[PaymentMethodReceivableType.DEBIT_CARD],
+    value: PaymentMethodReceivableType.DEBIT_CARD,
+  },
+  {
+    label: PaymentMethodText[PaymentMethodReceivableType.DOC],
+    value: PaymentMethodReceivableType.DOC,
+  },
+  {
+    label: PaymentMethodText[PaymentMethodReceivableType.PIX],
+    value: PaymentMethodReceivableType.PIX,
+  },
+  {
+    label: PaymentMethodText[PaymentMethodReceivableType.TED],
+    value: PaymentMethodReceivableType.TED,
+  },
+  {
+    label: PaymentMethodText[PaymentMethodReceivableType.TRANSFER],
+    value: PaymentMethodReceivableType.TRANSFER,
+  },
+];

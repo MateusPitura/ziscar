@@ -1,0 +1,17 @@
+import {
+  INSTALLMENTSTATUS_VALUES, PAYMENTMETHODRECEIVABLETYPE_VALUES
+} from "@shared/enums";
+import { s } from "@shared/safeZod";
+
+export const SchemaAccountsReceivableFilterForm = s
+  .object({
+    overallStatus: s.enumeration(INSTALLMENTSTATUS_VALUES),
+    startDate: s.dateString().or(s.empty()),
+    endDate: s.dateString().or(s.empty()),
+  })
+  .refine(...s.dateRangeRule);
+
+export const SchemaPaymentMethodForm = s.object({
+  type: s.enumeration(PAYMENTMETHODRECEIVABLETYPE_VALUES),
+  paymentDate: s.paymentDate(),
+});
