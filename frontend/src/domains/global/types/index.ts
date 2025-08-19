@@ -39,6 +39,7 @@ export type QueryKeys =
   | "customer"
   | "customers"
   | "vehicles"
+  | "vehicle-expenses"
   | "accounts-receivable"
   | "accounts-receivable-installments"
   | "accounts-receivable-payment-method";

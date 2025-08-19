@@ -1,0 +1,115 @@
+import Table from "@/design-system/Table";
+import useDialog from "@/domains/global/hooks/useDialog";
+import { useQuery } from "@tanstack/react-query";
+import { useState, type ReactNode } from "react";
+import { DisableVehicleExpense } from "../types";
+import { FetchVehicleExpense } from "@/domains/global/types/model";
+import { ExpenseCategory } from "@shared/enums";
+import DisableVehicleExpenseModal from "./DisableVehicleExpenseModal";
+import VehicleExpenseTableActions from "./VehicleExpenseTableActions";
+import { ExpenseCategoryText } from "../constants";
+import selectVehicleExpensesInfo from "../utils/selectVehicleExpensesInfo";
+// import { BACKEND_URL } from "@/domains/global/constants";
+// import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
+
+export default function VehicleExpenseTable(): ReactNode {
+  const [disableVehicleExpenseInfo, setDisableVehicleExpenseInfo] =
+    useState<DisableVehicleExpense>({
+      vehicleExpenseId: "",
+      vehicleCategory: "",
+    });
+
+  const dialog = useDialog();
+  //   const { safeFetch } = useSafeFetch();
+
+  function handleDisableVehicleExpenseInfo(
+    vehicleExpense: DisableVehicleExpense
+  ) {
+    dialog.openDialog();
+    setDisableVehicleExpenseInfo(vehicleExpense);
+  }
+
+  async function getVehicleExpenseInfo(): Promise<FetchVehicleExpense[]> {
+    // return await safeFetch(`${BACKEND_URL}/vehicle-expense`, {
+    //   resource: "VEHICLE_EXPENSE",
+    //   action: "READ",
+    // });
+
+    return [
+      {
+        id: 1,
+        category: ExpenseCategory.MAINTENANCE,
+        observations: "Troca de óleo",
+        archivedAt: undefined,
+        totalValue: "1500",
+        competencyDate: "2023-10-01",
+      },
+      {
+        id: 2,
+        category: ExpenseCategory.FUEL,
+        observations: "Abastecimento",
+        archivedAt: undefined,
+        totalValue: "300",
+        competencyDate: "2023-10-05",
+      },
+      {
+        id: 3,
+        category: ExpenseCategory.INSURANCE,
+        observations: "Seguro anual",
+        archivedAt: undefined,
+        totalValue: "1200",
+        competencyDate: "2023-10-10",
+      },
+    ];
+  }
+
+  const {
+    data: vehicleExpensesInfo,
+    isFetching: isFetchingVehicleExpensesInfo,
+  } = useQuery({
+    queryKey: ["vehicle-expenses"],
+    queryFn: getVehicleExpenseInfo,
+    select: selectVehicleExpensesInfo,
+  });
+
+  return (
+    <>
+      <DisableVehicleExpenseModal {...disableVehicleExpenseInfo} {...dialog} />
+      <Table>
+        <Table.Header>
+          <Table.Head label="ID" />
+          <Table.Head label="Observações" />
+          <Table.Head label="Categoria" />
+          <Table.Head label="Valor" />
+          <Table.Head label="Data" />
+          <Table.Head action />
+        </Table.Header>
+        <Table.Body
+          isLoading={isFetchingVehicleExpensesInfo}
+          isEmpty={!vehicleExpensesInfo?.length}
+          resource="VEHICLE_EXPENSE"
+          action="READ"
+        >
+          {vehicleExpensesInfo?.map((expense) => (
+            <Table.Row key={expense.id}>
+              <Table.Cell label={String(expense.id)} />
+              <Table.Cell label={expense.observations} />
+              <Table.Cell label={ExpenseCategoryText[expense.category]} />
+              <Table.Cell label={expense.totalValue} />
+              <Table.Cell label={expense.competencyDate} />
+              <Table.Action>
+                <VehicleExpenseTableActions
+                  vehicleExpenseId={String(expense.id)}
+                  vehicleCategory={ExpenseCategoryText[expense.category]}
+                  handleDisableVehicleExpenseInfo={
+                    handleDisableVehicleExpenseInfo
+                  }
+                />
+              </Table.Action>
+            </Table.Row>
+          ))}
+        </Table.Body>
+      </Table>
+    </>
+  );
+}

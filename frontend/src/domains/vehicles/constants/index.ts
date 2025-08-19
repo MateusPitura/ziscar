@@ -1,4 +1,9 @@
-import { FuelTypeType, VehicleCategoryType, VehicleStatusType } from "@shared/enums";
+import {
+  ExpenseCategoryType,
+  FuelTypeType,
+  VehicleCategoryType,
+  VehicleStatusType,
+} from "@shared/enums";
 import { VehiclesFilterFormInputs } from "../types";
 
 export const vehicleFilterDefaultValues: VehiclesFilterFormInputs = {
@@ -21,7 +26,7 @@ export const FuelTypeText: Record<FuelTypeType, string> = {
   GNV: "GNV",
   HYBRID: "Híbrido",
   ELECTRIC: "Elétrico",
-}
+};
 
 export const VehicleCategoryText: Record<VehicleCategoryType, string> = {
   CAR: "Carro",
@@ -29,4 +34,16 @@ export const VehicleCategoryText: Record<VehicleCategoryType, string> = {
   TRUCK: "Caminhão",
   BUS: "Ônibus",
   VAN: "Van",
-}
+};
+
+export const ExpenseCategoryText: Record<ExpenseCategoryType, string> = {
+  MAINTENANCE: "Manutenção",
+  FUEL: "Combustível",
+  INSURANCE: "Seguro",
+  OTHER: "Outro",
+  AGENCY_FEES: "Despachante",
+  FINE: "Multa",
+  IPVA: "IPVA",
+  LICENSING: "Licenciamento",
+  LOGISTICS: "Logística",
+};

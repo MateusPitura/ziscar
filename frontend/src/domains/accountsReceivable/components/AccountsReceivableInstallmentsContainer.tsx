@@ -17,6 +17,7 @@ export default function AccountsReceivableInstallmentsContainer(): ReactNode {
           onClick={() => navigate("/accounts-receivable")}
           action="READ"
           resource="ACCOUNTS_RECEIVABLE"
+          data-cy="back-accounts-receivable-button"
         />
       </PageHeader>
       <AccountsReceivableInstallmentsTable />

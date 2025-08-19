@@ -62,11 +62,11 @@ export default function VehiclesTableActions({
         <Button
           variant="quaternary"
           iconLeft="History"
-          onClick={() => navigate(`/vehicles/history/${vehicleId}`)}
+          onClick={() => navigate(`/vehicles/expense/${vehicleId}`)}
           resource="VEHICLES"
           action="READ"
           padding="none"
-          data-cy={`button-vehicle-history-${vehicleId}`}
+          data-cy={`button-vehicle-expense-${vehicleId}`}
         />
       </Tooltip>
       <Tooltip content="Desativar">

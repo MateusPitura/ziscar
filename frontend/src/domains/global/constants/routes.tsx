@@ -22,8 +22,8 @@ const NewVehicle = lazy(
 const EditVehicle = lazy(
   () => import("@/domains/vehicles/components/EditVehiclePage")
 );
-const VehicleHistory = lazy(
-  () => import("@/domains/vehicles/components/VehicleHistoryPage")
+const VehicleExpense = lazy(
+  () => import("@/domains/vehicles/components/VehicleExpensePage")
 );
 
 const Users = lazy(() => import("@/domains/users/components/UsersPage"));
@@ -97,8 +97,8 @@ export const privateRoutes: Route[] = [
     resource: "VEHICLES",
   },
   {
-    path: '/vehicles/history/:vehicleId',
-    entryPage: <VehicleHistory />,
+    path: '/vehicles/expense/:vehicleId',
+    entryPage: <VehicleExpense />,
     shouldDisplay: false,
     action: "READ",
     resource: "VEHICLES",

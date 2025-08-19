@@ -6,6 +6,11 @@ export interface DisableVehicle {
   vehicleId: string;
 }
 
+export interface DisableVehicleExpense {
+  vehicleExpenseId: string;
+  vehicleCategory?: string;
+}
+
 export type VehiclesFilterFormInputs = s.infer<typeof SchemaVehiclesFilterForm>;
 
 export type NewVehicleFormInputs = s.infer<typeof SchemaNewVehicleForm>;
