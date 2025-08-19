@@ -65,33 +65,9 @@ export const PaymentMethodText: Record<
   TRANSFER: "Transferência Bancária",
 };
 
-export const PAYMENT_METHODS = [
-  {
-    label: PaymentMethodText[PaymentMethodReceivableType.CASH],
-    value: PaymentMethodReceivableType.CASH,
-  },
-  {
-    label: PaymentMethodText[PaymentMethodReceivableType.CREDIT_CARD],
-    value: PaymentMethodReceivableType.CREDIT_CARD,
-  },
-  {
-    label: PaymentMethodText[PaymentMethodReceivableType.DEBIT_CARD],
-    value: PaymentMethodReceivableType.DEBIT_CARD,
-  },
-  {
-    label: PaymentMethodText[PaymentMethodReceivableType.DOC],
-    value: PaymentMethodReceivableType.DOC,
-  },
-  {
-    label: PaymentMethodText[PaymentMethodReceivableType.PIX],
-    value: PaymentMethodReceivableType.PIX,
-  },
-  {
-    label: PaymentMethodText[PaymentMethodReceivableType.TED],
-    value: PaymentMethodReceivableType.TED,
-  },
-  {
-    label: PaymentMethodText[PaymentMethodReceivableType.TRANSFER],
-    value: PaymentMethodReceivableType.TRANSFER,
-  },
-];
+export const PAYMENT_METHODS = Object.values(PaymentMethodReceivableType).map(
+  (method) => ({
+    label: PaymentMethodText[method],
+    value: method,
+  })
+);

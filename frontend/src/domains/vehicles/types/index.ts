@@ -1,5 +1,9 @@
 import { s } from "@shared/safeZod";
-import { SchemaNewVehicleForm, SchemaVehiclesFilterForm } from "../schemas";
+import {
+  SchemaNewVehicleForm,
+  SchemaVehicleExpenseForm,
+  SchemaVehiclesFilterForm,
+} from "../schemas";
 
 export interface DisableVehicle {
   plateNumber: string;
@@ -12,5 +16,5 @@ export interface DisableVehicleExpense {
 }
 
 export type VehiclesFilterFormInputs = s.infer<typeof SchemaVehiclesFilterForm>;
-
 export type NewVehicleFormInputs = s.infer<typeof SchemaNewVehicleForm>;
+export type VehicleExpenseFormInputs = s.infer<typeof SchemaVehicleExpenseForm>;

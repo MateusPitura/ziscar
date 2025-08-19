@@ -16,7 +16,7 @@ import CustomersFilterForm from "./CustomersFilterForm";
 import CustomersTableActions from "./CustomersTableActions";
 import selectCustomersInfoForReport from "../utils/selectCustomersInfoForReport";
 
-const enableReport = true;
+const enableReport = false;
 
 export default function CustomersTable(): ReactNode {
   const [disableCustomerInfo, setDisableCustomerInfo] = useState<DisableCustomer>({

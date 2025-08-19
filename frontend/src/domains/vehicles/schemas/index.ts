@@ -1,4 +1,5 @@
 import {
+  EXPENSECATEGORY_VALUES,
   FUELTYPE_VALUES,
   INSTALLMENTSTATUS_VALUES,
   PAYMENTMETHODRECEIVABLETYPE_VALUES,
@@ -62,5 +63,17 @@ export const SchemaNewVehicleForm = s.object({
       }),
       10
     ),
+  }),
+});
+
+export const SchemaVehicleExpenseForm = s.object({
+  observations: s.string(),
+  category: s.enumeration(EXPENSECATEGORY_VALUES),
+  payment: s.object({
+    dueDate: s.paymentDate(),
+    value: s.money(),
+    status: s.enumeration(INSTALLMENTSTATUS_VALUES),
+    paymentDate: s.paymentDate(),
+    paymentMethod: s.enumeration(PAYMENTMETHODRECEIVABLETYPE_VALUES),
   }),
 });

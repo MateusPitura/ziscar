@@ -97,7 +97,7 @@ export default function AddPaymentMethodModal({
             dirty={false}
             primaryBtnState={isPending ? "loading" : undefined}
             primaryBtnResource="ACCOUNTS_RECEIVABLE"
-            primaryBtnAction="DELETE"
+            primaryBtnAction="CREATE"
           />
         </Form>
       </Dialog.Body>
