@@ -1,0 +1,1 @@
+import{r as t,j as i}from"./index-CwQymCQa.js";import{U as m}from"./schemas-BL4SC9at.js";function l({primaryBtnState:e,dirty:r,children:s}){const o=m({dirty:r,buttonState:e}),[a,...n]=t.Children.toArray(s);return i.jsxs("div",{className:"w-full py-4 flex justify-end gap-4",children:[t.cloneElement(a,{state:o,type:"submit"}),n]})}export{l as P};

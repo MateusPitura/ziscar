@@ -1,0 +1,1 @@
+import{al as r}from"./index-CwQymCQa.js";import{a3 as s,e as t,s as o,f as e}from"./schemas-BL4SC9at.js";const d=s.extend({street:o().or(e()),neighborhood:o().or(e()),cityIbgeCode:o().or(e()),state:t(r).or(e())});export{d as S};
