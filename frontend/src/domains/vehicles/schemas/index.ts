@@ -30,21 +30,21 @@ export const SchemaNewVehicleForm = s.object({
     }),
   }),
   vehicle: s.object({
-    kilometers: s.number(), // 🌠 validação
     plateNumber: s.string(), // 🌠 validação para placa,
+    chassiNumber: s.string(), // 🌠 validação para chassi
     announcedPrice: s.money(),
     minimumPrice: s.money(),
     commissionValue: s.money(),
+    storeId: s.string(),
+    kilometers: s.number(), // 🌠 validação da kilometragem
+    modelName: s.string(),
+    brandId: s.string(),
     color: s.string(),
-    fuelType: s.enumeration(FUELTYPE_VALUES),
-    status: s.enumeration(VEHICLESTATUS_VALUES),
-    chassiNumber: s.string(), // 🌠 validação para chassi
     modelYear: s.string(), // 🌠 validação para ano do modelo
     yearOfManufacture: s.string(), // 🌠 validação para ano de fabricação
-    modelName: s.string(),
+    fuelType: s.enumeration(FUELTYPE_VALUES),
+    status: s.enumeration(VEHICLESTATUS_VALUES),
     category: s.enumeration(VEHICLECATEGORY_VALUES),
-    storeId: s.string(),
-    brandId: s.string(),
   }),
   characteristics: s.object({
     commonCharacteristics: s.checkbox([

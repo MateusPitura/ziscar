@@ -50,7 +50,7 @@ export default function VehiclesTable(): ReactNode {
     //   resource: "VEHICLES",
     //   action: "READ",
     // });
-    console.log("🌠 filter: ", filter);
+    console.log("filter: ", filter);
     return {
       total: 3,
       data: [
@@ -68,7 +68,7 @@ export default function VehiclesTable(): ReactNode {
           plateNumber: "XYZ-5678",
           modelYear: "2020",
           status: "IN_STOCK",
-          archivedAt: new Date(),
+          archivedAt: undefined,
         },
         {
           id: 3,

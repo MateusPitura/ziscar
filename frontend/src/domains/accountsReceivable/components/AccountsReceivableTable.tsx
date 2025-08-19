@@ -38,7 +38,7 @@ export default function AccountsReceivableTable(): ReactNode {
     //   resource: "ACCOUNTS_RECEIVABLE",
     //   action: "READ",
     // });
-    console.log("🌠 filter: ", filter);
+    console.log("filter: ", filter);
     return {
       total: 3,
       data: [

@@ -17,7 +17,7 @@ export default function NewVehicleContainer(): ReactNode {
     <div className="flex flex-col gap-4 w-full">
       <Form<NewVehicleFormInputs>
         onSubmit={(data) => {
-          console.log("🌠 data: ", data);
+          console.log("data: ", data);
         }}
         className="flex-1 flex flex-col gap-4"
         schema={SchemaNewVehicleForm}

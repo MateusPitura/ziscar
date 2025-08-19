@@ -40,7 +40,7 @@ export default function AddPaymentMethodModal({
     //     action: "CREATE",
     //   }
     // );
-    console.log("🌠 data: ", data);
+    console.log("data: ", data);
   }
 
   const { mutate, isPending } = useMutation({
