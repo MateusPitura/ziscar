@@ -95,12 +95,12 @@ export default function NewVehicleForm(): ReactNode {
         ]}
       />
       <Input<NewVehicleFormInputs>
-        name="vehicle.modelYear"
-        label="Ano do modelo"
-      />
-      <Input<NewVehicleFormInputs>
         name="vehicle.yearOfManufacture"
         label="Ano de fabricação" // 🌠 talvez um select
+      />
+      <Input<NewVehicleFormInputs>
+        name="vehicle.modelYear"
+        label="Ano do modelo"
       />
       <ColorPicker<NewVehicleFormInputs> label="Cor" name="vehicle.color" />
       <Select<NewVehicleFormInputs>

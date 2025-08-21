@@ -122,7 +122,7 @@ export default function VehiclesTable(): ReactNode {
           <Table.Head label="Placa" />
           <Table.Head label="Ano do modelo" />
           <Table.Head label="Status" />
-          <Table.Head label="Preço anúncio" colSpan={1} />
+          <Table.Head label="Preço anunciado" colSpan={1} />
           <Table.Head action />
         </Table.Header>
         <Table.Body
