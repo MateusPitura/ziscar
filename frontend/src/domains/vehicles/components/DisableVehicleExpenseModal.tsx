@@ -54,7 +54,7 @@ export default function DisableVehicleExpenseModal({
         </span>
       </Dialog.Body>
       <Dialog.Footer
-        labelPrimaryBtn="Desativar"
+        labelPrimaryBtn="Remover"
         onClickPrimaryBtn={mutate}
         primaryBtnState={isPending ? "loading" : undefined}
         primaryBtnColor="red"

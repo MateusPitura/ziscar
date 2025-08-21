@@ -88,7 +88,7 @@ export default function StoresTable(): ReactNode {
               },
             }}
             formatColumns={{
-              id: "ID",
+              cnpj: "CNPJ",
               name: "Nome",
               email: "Email",
               phone: "Celular",
@@ -100,8 +100,8 @@ export default function StoresTable(): ReactNode {
       </div>
       <Table>
         <Table.Header>
-          <Table.Head label="ID" />
           <Table.Head label="Nome" />
+          <Table.Head label="CNPJ" />
           <Table.Head label="Email" />
           <Table.Head label="Celular" />
           <Table.Head label="Status" />
@@ -115,8 +115,8 @@ export default function StoresTable(): ReactNode {
         >
           {storesInfo?.data.map((store) => (
             <Table.Row key={store.id}>
-              <Table.Cell label={String(store.id)} />
               <Table.Cell label={store.name} />
+              <Table.Cell label={store.cnpj} />
               <Table.Cell label={store.email} />
               <Table.Cell label={store.phone} />
               <Table.Cell label={store.archivedAt ? "Inativo" : "Ativo"} />

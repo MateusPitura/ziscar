@@ -11,6 +11,7 @@ export default function selectCustomersInfo(
     itemsFiltered.push({
       ...customer,
       phone: applyMask(customer?.phone, "phone") ?? "",
+      cpf: applyMask(customer?.cpf, "cpf") ?? "",
     });
   }
 

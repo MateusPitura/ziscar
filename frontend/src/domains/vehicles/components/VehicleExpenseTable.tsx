@@ -76,12 +76,11 @@ export default function VehicleExpenseTable(): ReactNode {
     <>
       <DisableVehicleExpenseModal {...disableVehicleExpenseInfo} {...dialog} />
       <Table>
-        <Table.Header>
-          <Table.Head label="ID" />
+        <Table.Header gridColumns={8}>
+          <Table.Head label="Data" />
           <Table.Head label="Observações" />
           <Table.Head label="Categoria" />
-          <Table.Head label="Valor" />
-          <Table.Head label="Data" />
+          <Table.Head label="Valor" colSpan={1} />
           <Table.Head action />
         </Table.Header>
         <Table.Body
@@ -91,12 +90,15 @@ export default function VehicleExpenseTable(): ReactNode {
           action="READ"
         >
           {vehicleExpensesInfo?.map((expense) => (
-            <Table.Row key={expense.id}>
-              <Table.Cell label={String(expense.id)} />
+            <Table.Row key={expense.id} gridColumns={8}>
+              <Table.Cell label={expense.competencyDate} />
               <Table.Cell label={expense.observations} />
               <Table.Cell label={ExpenseCategoryText[expense.category]} />
-              <Table.Cell label={expense.totalValue} />
-              <Table.Cell label={expense.competencyDate} />
+              <Table.Cell
+                label={expense.totalValue}
+                className="text-end"
+                colSpan={1}
+              />
               <Table.Action>
                 <VehicleExpenseTableActions
                   vehicleExpenseId={String(expense.id)}

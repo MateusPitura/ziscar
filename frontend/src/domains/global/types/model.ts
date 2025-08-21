@@ -3,10 +3,9 @@ import {
   ExpenseCategoryType,
   FuelTypeType,
   InstallmentStatusType,
-  PaymentMethodReceivableTypeType,
-  ResourcesType,
+  PaymentMethodPayableTypeType, ResourcesType,
   VehicleCategoryType,
-  VehicleStatusType,
+  VehicleStatusType
 } from "@shared/enums";
 import { BrazilianState } from ".";
 
@@ -60,6 +59,7 @@ export interface AccountReceivable {
   receivedFrom?: string;
   totalValue?: string;
   overallStatus: InstallmentStatusType;
+  installmentsNumber: number;
 }
 
 export interface AccountReceivableInstallment {
@@ -70,11 +70,12 @@ export interface AccountReceivableInstallment {
   isRefund?: boolean;
   isUpfront?: boolean;
   status: InstallmentStatusType;
+  paymentMethod?: PaymentMethodPayableTypeType;
 }
 
 export interface PaymentMethod {
   id: number;
-  type: PaymentMethodReceivableTypeType;
+  type: PaymentMethodPayableTypeType;
   paymentDate: string;
 }
 
@@ -109,22 +110,27 @@ export interface VehicleExpense {
 
 export type FetchUser = Pick<
   User,
-  "id" | "fullName" | "email" | "phone" | "archivedAt" | "roleId"
+  "id" | "cpf" | "fullName" | "email" | "phone" | "archivedAt" | "roleId"
 >;
 
 export type FetchStore = Pick<
   Store,
-  "id" | "name" | "email" | "phone" | "archivedAt"
+  "id" | "name" | "cnpj" | "email" | "phone" | "archivedAt"
 >;
 
 export type FetchCustomer = Pick<
   Customer,
-  "id" | "fullName" | "email" | "phone" | "archivedAt" | "cpf"
+  "id" | "fullName" | "cpf" | "email" | "phone" | "archivedAt" | "cpf"
 >;
 
 export type FetchAccountReceivable = Pick<
   AccountReceivable,
-  "id" | "description" | "receivedFrom" | "totalValue" | "overallStatus"
+  | "id"
+  | "installmentsNumber"
+  | "description"
+  | "receivedFrom"
+  | "totalValue"
+  | "overallStatus"
 >;
 
 export type FetchAccountReceivableInstallment = Pick<
@@ -136,11 +142,18 @@ export type FetchAccountReceivableInstallment = Pick<
   | "status"
   | "isRefund"
   | "isUpfront"
+  | "paymentMethod"
 >;
 
 export type FetchVehicle = Pick<
   Vehicle,
-  "id" | "modelName" | "plateNumber" | "modelYear" | "status" | "archivedAt"
+  | "id"
+  | "modelName"
+  | "announcedPrice"
+  | "plateNumber"
+  | "modelYear"
+  | "status"
+  | "archivedAt"
 >;
 
 export type FetchVehicleExpense = Pick<

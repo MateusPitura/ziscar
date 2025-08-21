@@ -57,6 +57,7 @@ export default function VehiclesTable(): ReactNode {
         {
           id: 1,
           modelName: "Fusca",
+          announcedPrice: "2000000",
           plateNumber: "ABC-1234",
           modelYear: "1970",
           status: "DELIVERED",
@@ -65,6 +66,7 @@ export default function VehiclesTable(): ReactNode {
         {
           id: 2,
           modelName: "Civic",
+          announcedPrice: "8000000",
           plateNumber: "XYZ-5678",
           modelYear: "2020",
           status: "IN_STOCK",
@@ -73,6 +75,7 @@ export default function VehiclesTable(): ReactNode {
         {
           id: 3,
           modelName: "Corolla",
+          announcedPrice: "90000000",
           plateNumber: "LMN-9101",
           modelYear: "2021",
           status: "MAINTENANCE",
@@ -104,7 +107,7 @@ export default function VehiclesTable(): ReactNode {
           }}
           formatFiltersValues={{}}
           formatColumns={{
-            id: "ID",
+            announcedPrice: "Preço anunciado",
             modelName: "Modelo",
             plateNumber: "Placa",
             modelYear: "Ano do modelo",
@@ -114,12 +117,12 @@ export default function VehiclesTable(): ReactNode {
         <Table.Filter form={<VehiclesFilterForm />} />
       </div>
       <Table>
-        <Table.Header>
-          <Table.Head label="ID" />
+        <Table.Header gridColumns={10}>
           <Table.Head label="Modelo" />
           <Table.Head label="Placa" />
           <Table.Head label="Ano do modelo" />
           <Table.Head label="Status" />
+          <Table.Head label="Preço anúncio" colSpan={1} />
           <Table.Head action />
         </Table.Header>
         <Table.Body
@@ -129,12 +132,16 @@ export default function VehiclesTable(): ReactNode {
           action="READ"
         >
           {vehiclesInfo?.data.map((vehicle) => (
-            <Table.Row key={vehicle.id}>
-              <Table.Cell label={String(vehicle.id)} />
+            <Table.Row key={vehicle.id} gridColumns={10}>
               <Table.Cell label={vehicle.modelName} />
               <Table.Cell label={vehicle.plateNumber} />
               <Table.Cell label={vehicle.modelYear} />
               <Table.Cell label={VehicleStatusText[vehicle.status]} />
+              <Table.Cell
+                label={vehicle.announcedPrice}
+                className="text-end"
+                colSpan={1}
+              />
               <Table.Action>
                 <VehiclesTableActions
                   isActive={!vehicle.archivedAt}

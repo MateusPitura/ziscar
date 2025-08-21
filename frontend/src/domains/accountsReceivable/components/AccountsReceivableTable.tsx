@@ -48,6 +48,7 @@ export default function AccountsReceivableTable(): ReactNode {
           receivedFrom: "Cliente A",
           totalValue: "10000",
           overallStatus: "PENDING",
+          installmentsNumber: 2,
         },
         {
           id: 2,
@@ -55,6 +56,7 @@ export default function AccountsReceivableTable(): ReactNode {
           receivedFrom: "Cliente B",
           totalValue: "5000",
           overallStatus: "PENDING",
+          installmentsNumber: 1,
         },
         {
           id: 3,
@@ -62,6 +64,7 @@ export default function AccountsReceivableTable(): ReactNode {
           receivedFrom: "Cliente C",
           totalValue: "15000",
           overallStatus: "PAID",
+          installmentsNumber: 3,
         },
       ],
     };
@@ -100,7 +103,7 @@ export default function AccountsReceivableTable(): ReactNode {
             },
           }}
           formatColumns={{
-            id: "ID",
+            installmentsNumber: "Número de parcelas",
             description: "Descrição",
             receivedFrom: "Recebido de",
             totalValue: "Valor total",
@@ -110,12 +113,12 @@ export default function AccountsReceivableTable(): ReactNode {
         <Table.Filter form={<AccountsReceivableFilterForm />} />
       </div>
       <Table>
-        <Table.Header>
-          <Table.Head label="ID" />
+        <Table.Header gridColumns={10}>
           <Table.Head label="Descrição" />
+          <Table.Head label="Número de parcelas" />
           <Table.Head label="Recebido de" />
-          <Table.Head label="Valor total" />
           <Table.Head label="Status geral" />
+          <Table.Head label="Valor total" colSpan={1} />
           <Table.Head action />
         </Table.Header>
         <Table.Body
@@ -125,15 +128,19 @@ export default function AccountsReceivableTable(): ReactNode {
           action="READ"
         >
           {accountsReceivableInfo?.data.map((accountReceivable) => (
-            <Table.Row key={accountReceivable.id}>
-              <Table.Cell label={String(accountReceivable.id)} />
+            <Table.Row key={accountReceivable.id} gridColumns={10}>
               <Table.Cell label={accountReceivable.description} />
+              <Table.Cell label={accountReceivable.installmentsNumber} />
               <Table.Cell label={accountReceivable.receivedFrom} />
-              <Table.Cell label={accountReceivable.totalValue} />
               <Table.Cell
                 label={
                   <AccountStatus status={accountReceivable.overallStatus} />
                 }
+              />
+              <Table.Cell
+                label={accountReceivable.totalValue}
+                className="text-end"
+                colSpan={1}
               />
               <Table.Action>
                 <AccountsReceivableTableActions

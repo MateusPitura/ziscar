@@ -88,8 +88,8 @@ export default function UsersTable(): ReactNode {
               },
             }}
             formatColumns={{
-              id: "ID",
               fullName: "Nome",
+              cpf: "CPF",
               email: "Email",
               phone: "Celular",
               archivedAt: "Ativo",
@@ -100,8 +100,8 @@ export default function UsersTable(): ReactNode {
       </div>
       <Table>
         <Table.Header>
-          <Table.Head label="ID" />
           <Table.Head label="Nome completo" />
+          <Table.Head label="CPF" />
           <Table.Head label="Email" />
           <Table.Head label="Celular" />
           <Table.Head label="Status" />
@@ -115,8 +115,8 @@ export default function UsersTable(): ReactNode {
         >
           {usersInfo?.data.map((user) => (
             <Table.Row key={user.id}>
-              <Table.Cell label={String(user.id)} />
               <Table.Cell label={user.fullName} />
+              <Table.Cell label={user.cpf} />
               <Table.Cell label={user.email} />
               <Table.Cell label={user.phone} />
               <Table.Cell label={user.archivedAt ? "Inativo" : "Ativo"} />

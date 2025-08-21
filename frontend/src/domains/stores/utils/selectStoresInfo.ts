@@ -10,7 +10,8 @@ export default function selectStoresInfo(
   for (const store of payload.data) {
     itemsFiltered.push({
       ...store,
-      phone: applyMask(store?.phone, "phone"),
+      phone: applyMask(store?.phone, "phone") ?? "",
+      cnpj: applyMask(store?.cnpj, "cnpj") ?? "",
     });
   }
 

@@ -28,7 +28,7 @@ interface RowProps extends Childrenable {
 function Row({ children, className, gridColumns = "default" }: RowProps) {
   let gridColumnsCount = gridColumns;
   if (gridColumns === "default") {
-    gridColumnsCount = 10;
+    gridColumnsCount = 11;
   } else if (gridColumns === "auto") {
     gridColumnsCount = (Children.count(children) - 2) * 2 + 2;
   }
@@ -36,7 +36,7 @@ function Row({ children, className, gridColumns = "default" }: RowProps) {
   return (
     <div
       className={classNames(
-        "p-4 grid gap-2 bg-neutral-50 h-[72px] items-center border-b border-neutral-300 last:border-b-0",
+        "px-4 py-1 grid gap-2 bg-neutral-50 h-14 items-center border-b border-neutral-300 last:border-b-0",
         className
       )}
       style={{
@@ -77,10 +77,7 @@ function Cell({ label, className, colSpan }: CellProps) {
     <span
       className={classNames(
         "text-neutral-700 text-body-medium overflow-x-hidden",
-        className,
-        {
-          "first:!col-span-1": !colSpan,
-        }
+        className
       )}
       style={{
         gridColumn: `span ${colSpanAux} / span ${colSpanAux}`,

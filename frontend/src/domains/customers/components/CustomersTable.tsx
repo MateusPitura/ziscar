@@ -19,10 +19,11 @@ import selectCustomersInfoForReport from "../utils/selectCustomersInfoForReport"
 const enableReport = false;
 
 export default function CustomersTable(): ReactNode {
-  const [disableCustomerInfo, setDisableCustomerInfo] = useState<DisableCustomer>({
-    customerFullName: "",
-    customerId: "",
-  });
+  const [disableCustomerInfo, setDisableCustomerInfo] =
+    useState<DisableCustomer>({
+      customerFullName: "",
+      customerId: "",
+    });
 
   const dialog = useDialog();
   const { safeFetch } = useSafeFetch();
@@ -53,11 +54,13 @@ export default function CustomersTable(): ReactNode {
     });
   }
 
-  const { data: customersInfo, isFetching: isFetchingCustomersInfo } = useQuery({
-    queryKey: ["customers", filterFormatted],
-    queryFn: ({ queryKey }) => getCustomersInfo(queryKey[1]),
-    select: selectCustomersInfo,
-  });
+  const { data: customersInfo, isFetching: isFetchingCustomersInfo } = useQuery(
+    {
+      queryKey: ["customers", filterFormatted],
+      queryFn: ({ queryKey }) => getCustomersInfo(queryKey[1]),
+      select: selectCustomersInfo,
+    }
+  );
 
   return (
     <>
@@ -88,7 +91,7 @@ export default function CustomersTable(): ReactNode {
               },
             }}
             formatColumns={{
-              id: "ID",
+              cpf: "CPF",
               fullName: "Nome completo",
               email: "Email",
               phone: "Celular",
@@ -100,8 +103,8 @@ export default function CustomersTable(): ReactNode {
       </div>
       <Table>
         <Table.Header>
-          <Table.Head label="ID" />
           <Table.Head label="Nome completo" />
+          <Table.Head label="CPF" />
           <Table.Head label="Email" />
           <Table.Head label="Celular" />
           <Table.Head label="Status" />
@@ -115,8 +118,8 @@ export default function CustomersTable(): ReactNode {
         >
           {customersInfo?.data.map((customer) => (
             <Table.Row key={customer.id}>
-              <Table.Cell label={String(customer.id)} />
               <Table.Cell label={customer.fullName} />
+              <Table.Cell label={customer.cpf} />
               <Table.Cell label={customer.email} />
               <Table.Cell label={customer.phone} />
               <Table.Cell label={customer.archivedAt ? "Inativo" : "Ativo"} />
