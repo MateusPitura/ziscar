@@ -5,7 +5,7 @@ import AccountsReceivableTable from "./AccountsReceivableTable";
 export default function AccountsReceivableContainer(): ReactElement {
   return (
     <div className="flex flex-col gap-4 h-full w-full">
-      <PageHeader title="Contas a Receber"/>
+      <PageHeader title="Vendas"/>
       <AccountsReceivableTable />
     </div>
   );

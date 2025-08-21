@@ -9,7 +9,7 @@ import Input from "@/design-system/Form/Input";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AccountReceivableInstallment } from "@/domains/global/types/model";
-import { PaymentMethodText } from "@/domains/global/constants";
+import { PaymentMethodReceivableText } from "@/domains/global/constants";
 import InputLabel from "@/design-system/Form/InputLabel";
 import Choice from "@/design-system/Form/Choice";
 import { PaymentMethodReceivableType } from "@shared/enums";
@@ -84,7 +84,7 @@ export default function AddPaymentMethodModal({
               {Object.values(PaymentMethodReceivableType).map((type) => (
                 <Choice.Radio<PaymentMethodFormInputs>
                   key={type}
-                  label={PaymentMethodText[type]}
+                  label={PaymentMethodReceivableText[type]}
                   name="type"
                   value={type}
                 />

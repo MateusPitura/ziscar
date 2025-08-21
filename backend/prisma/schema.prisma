@@ -366,6 +366,7 @@ enum FuelType {
   ELECTRIC
   GNV
   HYBRID
+  DIESEL
 }
 
 enum VehicleStatus {

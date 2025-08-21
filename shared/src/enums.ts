@@ -42,6 +42,7 @@ export enum FuelType {
   ELECTRIC = "ELECTRIC",
   GNV = "GNV",
   HYBRID = "HYBRID",
+  DIESEL = "DIESEL",
 }
 
 export enum VehicleStatus {
@@ -125,7 +126,7 @@ export const ROLETYPE_VALUES = [RoleType.ADMIN, RoleType.SELLER] as const;
 export const RESOURCES_VALUES = [Resources.USERS, Resources.VEHICLES, Resources.STORES, Resources.VEHICLE_PURCHASE, Resources.VEHICLE_EXPENSE, Resources.VEHICLE_SALE, Resources.ACCOUNTS_PAYABLE, Resources.ACCOUNTS_RECEIVABLE, Resources.CUSTOMERS] as const;
 export const ACTIONS_VALUES = [Actions.CREATE, Actions.READ, Actions.UPDATE, Actions.DELETE] as const;
 export const VEHICLECATEGORY_VALUES = [VehicleCategory.CAR, VehicleCategory.MOTORCYCLE, VehicleCategory.TRUCK, VehicleCategory.VAN, VehicleCategory.BUS] as const;
-export const FUELTYPE_VALUES = [FuelType.GASOLINE, FuelType.ETHANOL, FuelType.FLEX, FuelType.ELECTRIC, FuelType.GNV, FuelType.HYBRID] as const;
+export const FUELTYPE_VALUES = [FuelType.GASOLINE, FuelType.ETHANOL, FuelType.FLEX, FuelType.ELECTRIC, FuelType.GNV, FuelType.HYBRID, FuelType.DIESEL] as const;
 export const VEHICLESTATUS_VALUES = [VehicleStatus.PURCHASED, VehicleStatus.IN_STOCK, VehicleStatus.MAINTENANCE, VehicleStatus.SOLD, VehicleStatus.DELIVERED] as const;
 export const EXPENSECATEGORY_VALUES = [ExpenseCategory.IPVA, ExpenseCategory.MAINTENANCE, ExpenseCategory.FUEL, ExpenseCategory.FINE, ExpenseCategory.LICENSING, ExpenseCategory.INSURANCE, ExpenseCategory.AGENCY_FEES, ExpenseCategory.LOGISTICS, ExpenseCategory.OTHER] as const;
 export const INSTALLMENTSTATUS_VALUES = [InstallmentStatus.PAID, InstallmentStatus.PENDING] as const;

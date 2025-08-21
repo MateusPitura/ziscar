@@ -2,9 +2,8 @@ import {
   EXPENSECATEGORY_VALUES,
   FUELTYPE_VALUES,
   INSTALLMENTSTATUS_VALUES,
-  PAYMENTMETHODRECEIVABLETYPE_VALUES,
-  VEHICLECATEGORY_VALUES,
-  VEHICLESTATUS_VALUES,
+  PAYMENTMETHODPAYABLETYPE_VALUES, VEHICLECATEGORY_VALUES,
+  VEHICLESTATUS_VALUES
 } from "@shared/enums";
 import { s } from "@shared/safeZod";
 
@@ -27,7 +26,7 @@ export const SchemaNewVehicleForm = s.object({
       value: s.money(),
       status: s.enumeration(INSTALLMENTSTATUS_VALUES),
       paymentDate: s.paymentDate(),
-      paymentMethod: s.enumeration(PAYMENTMETHODRECEIVABLETYPE_VALUES),
+      paymentMethod: s.enumeration(PAYMENTMETHODPAYABLETYPE_VALUES),
     }),
   }),
   vehicle: s.object({
@@ -74,6 +73,6 @@ export const SchemaVehicleExpenseForm = s.object({
     value: s.money(),
     status: s.enumeration(INSTALLMENTSTATUS_VALUES),
     paymentDate: s.paymentDate(),
-    paymentMethod: s.enumeration(PAYMENTMETHODRECEIVABLETYPE_VALUES),
+    paymentMethod: s.enumeration(PAYMENTMETHODPAYABLETYPE_VALUES),
   }),
 });

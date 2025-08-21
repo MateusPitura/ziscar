@@ -4,7 +4,7 @@ import { VehicleExpenseFormInputs } from "../types";
 import Section from "@/domains/global/components/Section";
 import Select from "@/design-system/Form/Select";
 import { ExpenseCategory, InstallmentStatus } from "@shared/enums";
-import { PAYMENT_METHODS } from "@/domains/global/constants";
+import { PAYMENT_METHODS_PAYABLE } from "@/domains/global/constants";
 import Input from "@/design-system/Form/Input";
 import { ExpenseCategoryText, INSTALMENT_STATUS } from "../constants";
 
@@ -60,7 +60,7 @@ export default function VehicleExpenseForm(): ReactNode {
               <Select<VehicleExpenseFormInputs>
                 label="Forma de pagamento"
                 name="payment.paymentMethod"
-                options={PAYMENT_METHODS}
+                options={PAYMENT_METHODS_PAYABLE}
                 required
               />
             </>

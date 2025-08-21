@@ -8,7 +8,7 @@ import PageFooter from "@/domains/global/components/PageFooter";
 import Button from "@/design-system/Button";
 import { PREVIOUS_PAGE } from "@/domains/global/constants";
 import NewVehicleTabs from "./NewVehicleTabs";
-import { FuelType, InstallmentStatus, PaymentMethodReceivableType, VehicleCategory, VehicleStatus } from "@shared/enums";
+import { FuelType, InstallmentStatus, PaymentMethodPayableType, VehicleCategory, VehicleStatus } from "@shared/enums";
 
 export default function NewVehicleContainer(): ReactNode {
   const navigate = useNavigate();
@@ -34,7 +34,7 @@ export default function NewVehicleContainer(): ReactNode {
               value: "0",
               status: InstallmentStatus.PENDING,
               paymentDate: "",
-              paymentMethod: PaymentMethodReceivableType.CREDIT_CARD,
+              paymentMethod: PaymentMethodPayableType.CREDIT_CARD,
             },
           },
           vehicle: {

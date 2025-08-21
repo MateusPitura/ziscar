@@ -27,6 +27,7 @@ export const FuelTypeText: Record<FuelTypeType, string> = {
   GNV: "GNV",
   HYBRID: "Híbrido",
   ELECTRIC: "Elétrico",
+  DIESEL: "Diesel",
 };
 
 export const VehicleCategoryText: Record<VehicleCategoryType, string> = {

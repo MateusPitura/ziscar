@@ -9,7 +9,7 @@ import {
 import DataField from "@/domains/global/components/DataField";
 import Spinner from "@/design-system/Spinner";
 import selectPaymentMethodInfo from "../utils/selectPaymentMethodInfo";
-import { PaymentMethodText } from "@/domains/global/constants";
+import { PaymentMethodReceivableText } from "@/domains/global/constants";
 // import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 // import { BACKEND_URL } from "@/domains/global/constants";
 
@@ -63,7 +63,7 @@ export default function ViewPaymentMethodModal({
                 label="Forma de pagamento"
                 value={
                   paymentMethodData &&
-                  PaymentMethodText[paymentMethodData?.type]
+                  PaymentMethodReceivableText[paymentMethodData?.type]
                 }
               />
             </>
