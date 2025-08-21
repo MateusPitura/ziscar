@@ -6,6 +6,7 @@ import Select from "@/design-system/Form/Select";
 import { useFormContext } from "react-hook-form";
 import { InstallmentStatus } from "@shared/enums";
 import { PAYMENT_METHODS } from "@/domains/global/constants";
+import { INSTALMENT_STATUS } from "../constants";
 
 export default function VehiclePurchaseForm(): ReactNode {
   const { watch } = useFormContext<NewVehicleFormInputs>();
@@ -41,16 +42,7 @@ export default function VehiclePurchaseForm(): ReactNode {
           <Select<NewVehicleFormInputs> // 🌠 when change reset others field
             label="Status"
             name="purchase.installment.status"
-            options={[
-              {
-                label: "Pago",
-                value: InstallmentStatus.PAID,
-              },
-              {
-                label: "Pendente",
-                value: InstallmentStatus.PENDING,
-              },
-            ]}
+            options={INSTALMENT_STATUS}
             required
           />
           {statusWatch === InstallmentStatus.PAID ? (

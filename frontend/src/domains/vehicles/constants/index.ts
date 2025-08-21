@@ -1,6 +1,7 @@
 import {
   ExpenseCategoryType,
   FuelTypeType,
+  InstallmentStatus,
   VehicleCategoryType,
   VehicleStatusType,
 } from "@shared/enums";
@@ -47,3 +48,15 @@ export const ExpenseCategoryText: Record<ExpenseCategoryType, string> = {
   LICENSING: "Licenciamento",
   LOGISTICS: "Logística",
 };
+
+export const InstallmentStatusText: Record<InstallmentStatus, string> = {
+  PAID: "Pago",
+  PENDING: "Pendente",
+};
+
+export const INSTALMENT_STATUS = Object.values(InstallmentStatus).map(
+  (status) => ({
+    label: InstallmentStatusText[status],
+    value: status,
+  })
+);
