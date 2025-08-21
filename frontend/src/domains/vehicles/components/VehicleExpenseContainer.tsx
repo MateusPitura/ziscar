@@ -2,10 +2,11 @@ import Button from "@/design-system/Button";
 import PageHeader from "@/domains/global/components/PageHeader";
 import type { ReactNode } from "react";
 import VehicleExpenseTable from "./VehicleExpenseTable";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function VehicleExpenseContainer(): ReactNode {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
 
   return (
     <div className="flex flex-col gap-4 h-full w-full">
@@ -22,7 +23,7 @@ export default function VehicleExpenseContainer(): ReactNode {
         <Button
           label="Adicionar gasto"
           iconLeft="Add"
-          // onClick={() => navigate("/vehicle/new")} // 🌠 open modal
+          onClick={() => navigate(`${pathname}/new`)}
           resource="VEHICLE_EXPENSE"
           action="CREATE"
           color="green"

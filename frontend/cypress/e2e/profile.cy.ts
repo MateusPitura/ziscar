@@ -14,7 +14,7 @@ describe("Profile", () => {
       });
     }).as("updateFullName");
 
-    cy.visit("/profile/edit");
+    cy.visit("/profile");
 
     cy.get('button[type="submit"]').should("be.disabled");
 
@@ -66,7 +66,7 @@ describe("Profile", () => {
       "https://servicodados.ibge.gov.br/api/v1/localidades/estados/MA/municipios"
     ).as("citiesAPi");
 
-    cy.visit("/profile/edit");
+    cy.visit("/profile");
 
     cy.get('button[type="submit"]').should("be.disabled");
 
@@ -115,7 +115,7 @@ describe("Profile", () => {
       "https://servicodados.ibge.gov.br/api/v1/localidades/estados/MA/municipios"
     ).as("citiesAPi");
 
-    cy.visit("/profile/edit");
+    cy.visit("/profile");
 
     cy.get('button[type="submit"]').should("be.disabled");
 
@@ -152,7 +152,7 @@ describe("Profile", () => {
       "https://servicodados.ibge.gov.br/api/v1/localidades/estados/MA/municipios"
     ).as("citiesAPi");
 
-    cy.visit("/profile/edit");
+    cy.visit("/profile");
 
     cy.wait("@cepApi");
     cy.wait("@citiesAPi");
@@ -179,7 +179,7 @@ describe("Profile", () => {
       "http://localhost:3000/auth/request-change-password"
     ).as("requestChangePassword");
 
-    cy.visit("/profile/edit");
+    cy.visit("/profile");
 
     cy.get('[data-cy="request-change-password-button"]').click();
 

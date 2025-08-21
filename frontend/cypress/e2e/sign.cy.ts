@@ -18,7 +18,7 @@ describe("Sign", () => {
 
     cy.get('[data-cy="button-/vehicles"]').should("exist");
     cy.get('[data-cy="button-/vehicle-sale"]').should("exist");
-    cy.get('[data-cy="button-/profile/edit"]').should("exist");
+    cy.get('[data-cy="button-/profile"]').should("exist");
     cy.get('[data-cy="button-/customers"]').should("exist");
   
     cy.get('[data-cy="button-/stores"]').should("not.exist");

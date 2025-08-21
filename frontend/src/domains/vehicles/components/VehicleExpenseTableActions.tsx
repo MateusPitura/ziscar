@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import Tooltip from "@/design-system/Tooltip";
 import Button from "@/design-system/Button";
 import { DisableVehicleExpense } from "../types";
+import { useLocation, useNavigate } from "react-router-dom";
 
 interface VehicleExpenseTableActionsProperties {
   vehicleExpenseId: string;
@@ -14,13 +15,16 @@ export default function VehicleExpenseTableActions({
   vehicleCategory,
   handleDisableVehicleExpenseInfo,
 }: VehicleExpenseTableActionsProperties): ReactNode {
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+
   return (
     <>
       <Tooltip content="Editar">
         <Button
           variant="quaternary"
           iconLeft="Edit"
-          //   onClick={() => navigate(`/stores/edit/${storeId}`)}
+          onClick={() => navigate(`${pathname}/edit/${vehicleExpenseId}`)}
           resource="VEHICLE_EXPENSE"
           action="UPDATE"
           padding="none"

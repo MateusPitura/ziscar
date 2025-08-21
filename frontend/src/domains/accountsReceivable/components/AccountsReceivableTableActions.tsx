@@ -17,7 +17,7 @@ export default function AccountsReceivableTableActions({
       <Button
         variant="quaternary"
         iconLeft="Visibility"
-        onClick={() => navigate(`/accounts-receivable/installments/${accountReceivableId}`)}
+        onClick={() => navigate(`/accounts-receivable/${accountReceivableId}/installments`)}
         resource="ACCOUNTS_RECEIVABLE"
         action="READ"
         padding="none"

@@ -25,6 +25,12 @@ const EditVehicle = lazy(
 const VehicleExpense = lazy(
   () => import("@/domains/vehicles/components/VehicleExpensePage")
 );
+const NewVehicleExpense = lazy(
+  () => import("@/domains/vehicles/components/NewVehicleExpensePage")
+);
+const EditVehicleExpense = lazy(
+  () => import("@/domains/vehicles/components/EditVehicleExpensePage")
+);
 
 const Users = lazy(() => import("@/domains/users/components/UsersPage"));
 const NewUser = lazy(() => import("@/domains/users/components/NewUserPage"));
@@ -104,6 +110,20 @@ export const privateRoutes: Route[] = [
     resource: "VEHICLES",
   },
   {
+    path: '/vehicles/expense/:vehicleId/new',
+    entryPage: <NewVehicleExpense />,
+    shouldDisplay: false,
+    action: "READ",
+    resource: "VEHICLES",
+  },
+  {
+    path: '/vehicles/expense/:vehicleId/edit/:expenseId',
+    entryPage: <EditVehicleExpense />,
+    shouldDisplay: false,
+    action: "READ",
+    resource: "VEHICLES",
+  },
+  {
     path: "/vehicle-sale",
     displayName: "Realizar Venda",
     icon: "CurrencyExchange",
@@ -131,7 +151,7 @@ export const privateRoutes: Route[] = [
     resource: "ACCOUNTS_RECEIVABLE",
   },
   {
-    path: "/accounts-receivable/installments/:accountReceivableId",
+    path: "/accounts-receivable/:accountReceivableId/installments",
     entryPage: <AccountsReceivableInstallments />,
     shouldDisplay: false,
     action: "READ",
@@ -207,7 +227,7 @@ export const privateRoutes: Route[] = [
     resource: "CUSTOMERS",
   },
   {
-    path: "/profile/edit",
+    path: "/profile",
     entryPage: <EditProfile />,
     shouldDisplay: true,
     icon: "Settings",
