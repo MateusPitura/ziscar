@@ -63,7 +63,7 @@ export default function VehiclesTableActions({
           variant="quaternary"
           iconLeft="History"
           onClick={() => navigate(`/vehicles/expense/${vehicleId}`)}
-          resource="VEHICLES"
+          resource="VEHICLE_EXPENSE"
           action="READ"
           padding="none"
           data-cy={`button-vehicle-expense-${vehicleId}`}

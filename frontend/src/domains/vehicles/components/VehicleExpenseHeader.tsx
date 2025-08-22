@@ -45,8 +45,8 @@ export default function VehicleExpenseHeader(): ReactNode {
         label="Voltar"
         iconLeft="ArrowBack"
         onClick={() => navigate("/vehicles")}
-        resource="VEHICLE_EXPENSE"
-        action="CREATE"
+        resource="VEHICLES"
+        action="READ"
         variant="quaternary"
         data-cy="back-vehicle-expense-button"
       />
