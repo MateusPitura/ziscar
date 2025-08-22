@@ -38,8 +38,10 @@ export type QueryKeys =
   | "stores"
   | "customer"
   | "customers"
+  | "vehicle"
   | "vehicles"
   | "vehicle-expenses"
+  | "account-receivable"
   | "accounts-receivable"
   | "accounts-receivable-installments"
   | "accounts-receivable-payment-method";
@@ -67,4 +69,4 @@ export interface Options {
 
 export type AddressFormInputs = s.infer<typeof SchemaAddress>;
 
-export type BrazilianState = (typeof BRAZILIANSTATE_VALUES)[number]
+export type BrazilianState = (typeof BRAZILIANSTATE_VALUES)[number];

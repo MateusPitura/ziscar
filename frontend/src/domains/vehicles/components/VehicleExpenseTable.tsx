@@ -9,6 +9,7 @@ import DisableVehicleExpenseModal from "./DisableVehicleExpenseModal";
 import VehicleExpenseTableActions from "./VehicleExpenseTableActions";
 import { ExpenseCategoryText } from "../constants";
 import selectVehicleExpensesInfo from "../utils/selectVehicleExpensesInfo";
+// import { useParams } from "react-router-dom";
 // import { BACKEND_URL } from "@/domains/global/constants";
 // import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 
@@ -21,6 +22,7 @@ export default function VehicleExpenseTable(): ReactNode {
 
   const dialog = useDialog();
   //   const { safeFetch } = useSafeFetch();
+  // const { vehicleId } = useParams();
 
   function handleDisableVehicleExpenseInfo(
     vehicleExpense: DisableVehicleExpense
@@ -30,7 +32,7 @@ export default function VehicleExpenseTable(): ReactNode {
   }
 
   async function getVehicleExpenseInfo(): Promise<FetchVehicleExpense[]> {
-    // return await safeFetch(`${BACKEND_URL}/vehicle-expense`, {
+    // return await safeFetch(`${BACKEND_URL}/vehicle-expense/${vehicleId}`, {
     //   resource: "VEHICLE_EXPENSE",
     //   action: "READ",
     // });

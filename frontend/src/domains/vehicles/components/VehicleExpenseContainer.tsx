@@ -1,35 +1,25 @@
-import Button from "@/design-system/Button";
-import PageHeader from "@/domains/global/components/PageHeader";
 import type { ReactNode } from "react";
+import VehicleExpenseHeader from "./VehicleExpenseHeader";
 import VehicleExpenseTable from "./VehicleExpenseTable";
-import { useLocation, useNavigate } from "react-router-dom";
+import Spinner from "@/design-system/Spinner";
+import { useIsFetching } from "@tanstack/react-query";
 
 export default function VehicleExpenseContainer(): ReactNode {
-  const navigate = useNavigate();
-  const { pathname } = useLocation();
+  const isFetching = useIsFetching({
+    queryKey: ["vehicle"],
+  });
+
+  if (isFetching) {
+    return (
+      <div className="flex justify-center items-center h-full w-full">
+        <Spinner />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-4 h-full w-full">
-      <PageHeader title="Gastos do Veículo">
-        <Button
-          label="Voltar"
-          iconLeft="ArrowBack"
-          onClick={() => navigate("/vehicles")}
-          resource="VEHICLE_EXPENSE"
-          action="CREATE"
-          variant="quaternary"
-          data-cy="back-vehicle-expense-button"
-        />
-        <Button
-          label="Adicionar gasto"
-          iconLeft="Add"
-          onClick={() => navigate(`${pathname}/new`)}
-          resource="VEHICLE_EXPENSE"
-          action="CREATE"
-          color="green"
-          data-cy="new-vehicle-expense-button"
-        />
-      </PageHeader>
+      <VehicleExpenseHeader />
       <VehicleExpenseTable />
     </div>
   );

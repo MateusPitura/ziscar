@@ -116,7 +116,9 @@ export default function AccountsReceivableInstallmentsTable(): ReactNode {
                   installment.isUpfront
                     ? "Entrada"
                     : `${installment.installmentSequence}/${
-                        accountsReceivableInstallmentsInfo?.length - 1
+                        accountsReceivableInstallmentsInfo.filter(
+                          (account) => !account.isUpfront
+                        )?.length
                       }`
                 }
               />
