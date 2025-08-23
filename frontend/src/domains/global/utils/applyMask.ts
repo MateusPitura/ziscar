@@ -19,6 +19,8 @@ export function applyMask(
       return applyMoneyMask(value);
     case "plateNumber":
       return applyPlateNumberMask(value);
+    case "chassi":
+      return applyChassiMask(value);
     default:
       return value;
   }
@@ -119,4 +121,10 @@ function applyPlateNumberMask(value: string): string {
   }
 
   return chars;
+}
+
+function applyChassiMask(value: string): string {
+  const chars = value.toUpperCase().replace(/[^A-HJ-NPR-Z0-9]/g, "");
+
+  return chars.slice(0, 17);
 }

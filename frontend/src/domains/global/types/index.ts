@@ -25,7 +25,14 @@ export interface DialogProps {
   handleOpen: (state: boolean) => void;
 }
 
-export type Mask = "phone" | "cpf" | "cep" | "cnpj" | "money" | "plateNumber";
+export type Mask =
+  | "phone"
+  | "cpf"
+  | "cep"
+  | "cnpj"
+  | "money"
+  | "plateNumber"
+  | "chassi";
 
 export type QueryKeys =
   | "cepApi"

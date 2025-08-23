@@ -103,6 +103,8 @@ export default function NewVehicleForm(): ReactNode {
         name="vehicle.chassiNumber"
         label="Número do chassi"
         required
+        mask="chassi"
+        maxLength={17}
       />
       <Input<NewVehicleFormInputs>
         name="vehicle.announcedPrice"

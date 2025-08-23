@@ -33,7 +33,7 @@ export const SchemaNewVehicleForm = s.object({
   }),
   vehicle: s.object({
     plateNumber: s.plateNumber(),
-    chassiNumber: s.string(), // 🌠 validação para chassi
+    chassiNumber: s.chassi(),
     announcedPrice: s.money(),
     minimumPrice: s.money(),
     commissionValue: s.money(),

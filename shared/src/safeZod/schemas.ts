@@ -136,9 +136,16 @@ export const plateNumber = () =>
   string(8)
     .transform((plateNumber) => plateNumber.replace(/[^A-Z0-9]/gi, ""))
     .refine(
-      (cep) => /^([A-Z]{3}\d{4}|[A-Z]{3}\d[A-Z]\d{2})$/.test(cep),
+      (plateNumber) =>
+        /^([A-Z]{3}\d{4}|[A-Z]{3}\d[A-Z]\d{2})$/.test(plateNumber),
       "Placa inválida"
     );
+
+export const chassi = () =>
+  string(17).refine(
+    (chassi) => /^[A-HJ-NPR-Z0-9]{17}$/.test(chassi),
+    "Chassi inválido"
+  );
 
 export const SchemaPassword = object({
   newPassword: password(),
