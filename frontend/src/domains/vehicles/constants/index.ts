@@ -61,3 +61,29 @@ export const INSTALMENT_STATUS = Object.values(InstallmentStatus).map(
     value: status,
   })
 );
+
+const currentYear = new Date().getFullYear();
+
+export const YEARS_OF_MANUFACTURE = Array.from({ length: 100 }, (_, i) =>
+  String(currentYear - i)
+) as [string, ...string[]];
+
+export const MODEL_YEARS = [
+  String(currentYear + 1),
+  ...YEARS_OF_MANUFACTURE,
+] as [string, ...string[]];
+
+export const YEARS_OF_MANUFACTURE_OPTIONS = YEARS_OF_MANUFACTURE.map(
+  (year) => ({
+    label: year,
+    value: year,
+  })
+);
+
+export const MODEL_YEARS_OPTIONS = [
+  {
+    label: String(currentYear + 1),
+    value: String(currentYear + 1),
+  },
+  ...YEARS_OF_MANUFACTURE_OPTIONS,
+];

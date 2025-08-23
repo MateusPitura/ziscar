@@ -1,16 +1,95 @@
-import Input from "@/design-system/Form/Input";
-import type { ReactNode } from "react";
-import { NewVehicleFormInputs } from "../types";
 import ColorPicker from "@/design-system/ColorPicker";
+import Input from "@/design-system/Form/Input";
 import Select from "@/design-system/Form/Select";
 import { FuelType, VehicleCategory, VehicleStatus } from "@shared/enums";
+import type { ReactNode } from "react";
 import {
   FuelTypeText,
+  MODEL_YEARS_OPTIONS,
   VehicleCategoryText,
   VehicleStatusText,
+  YEARS_OF_MANUFACTURE_OPTIONS,
 } from "../constants";
+import { NewVehicleFormInputs } from "../types";
+import { useFormContext } from "react-hook-form";
+import { PageablePayload } from "@/domains/global/types";
+import { FetchBrand, FetchStore } from "@/domains/global/types/model";
+import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
+import { BACKEND_URL } from "@/domains/global/constants";
+import { useQuery } from "@tanstack/react-query";
+import selectStoresInfo from "@/domains/stores/utils/selectStoresInfo";
+import selectBrandsInfo from "../utils/selectBrandsInfo";
 
 export default function NewVehicleForm(): ReactNode {
+  const { setValue } = useFormContext<NewVehicleFormInputs>();
+  const { safeFetch } = useSafeFetch();
+
+  async function getStoresInfo(): Promise<PageablePayload<FetchStore>> {
+    return await safeFetch(`${BACKEND_URL}/store?orderBy=name`, {
+      resource: "STORES",
+      action: "READ",
+    });
+  }
+
+  const { data: storesInfo, isFetching: isFetchingStoresInfo } = useQuery({
+    queryKey: ["stores"],
+    queryFn: getStoresInfo,
+    select: selectStoresInfo,
+  });
+
+  async function getBrandsInfo(): Promise<FetchBrand[]> {
+    // return await safeFetch(`${BACKEND_URL}/brands?orderBy=name`);
+
+    return [
+      {
+        id: 1,
+        name: "Chevrolet",
+      },
+      {
+        id: 2,
+        name: "Fiat",
+      },
+      {
+        id: 3,
+        name: "Ford",
+      },
+      {
+        id: 4,
+        name: "Honda",
+      },
+      {
+        id: 5,
+        name: "Hyundai",
+      },
+      {
+        id: 6,
+        name: "Jeep",
+      },
+      {
+        id: 7,
+        name: "Nissan",
+      },
+      {
+        id: 8,
+        name: "Renault",
+      },
+      {
+        id: 9,
+        name: "Toyota",
+      },
+      {
+        id: 10,
+        name: "Volkswagen",
+      },
+    ];
+  }
+
+  const { data: brandsInfo, isFetching: isFetchingBrandsInfo } = useQuery({
+    queryKey: ["brands"],
+    queryFn: getBrandsInfo,
+    select: selectBrandsInfo,
+  });
+
   return (
     <>
       <Input<NewVehicleFormInputs>
@@ -44,22 +123,14 @@ export default function NewVehicleForm(): ReactNode {
       <Select<NewVehicleFormInputs>
         name="vehicle.storeId"
         label="Loja"
-        options={[
-          // 🌠 get stores from database
-          {
-            value: "1",
-            label: "Loja A",
-          },
-          {
-            value: "2",
-            label: "Loja B",
-          },
-          {
-            value: "3",
-            label: "Loja C",
-          },
-        ]}
+        options={
+          storesInfo?.data.map((store) => ({
+            value: String(store.id),
+            label: String(store.name),
+          })) ?? []
+        }
         required
+        loading={isFetchingStoresInfo}
       />
       <Select<NewVehicleFormInputs>
         name="vehicle.status"
@@ -78,29 +149,26 @@ export default function NewVehicleForm(): ReactNode {
       <Select<NewVehicleFormInputs>
         name="vehicle.brandId"
         label="Marca"
-        options={[
-          // 🌠 get brand from database
-          {
-            value: "1",
-            label: "Chevrolet",
-          },
-          {
-            value: "2",
-            label: "Volkswagen",
-          },
-          {
-            value: "3",
-            label: "Honda",
-          },
-        ]}
+        options={brandsInfo ?? []}
+        loading={isFetchingBrandsInfo}
       />
-      <Input<NewVehicleFormInputs>
+      <Select<NewVehicleFormInputs>
         name="vehicle.yearOfManufacture"
-        label="Ano de fabricação" // 🌠 talvez um select
+        label="Ano de fabricação"
+        options={YEARS_OF_MANUFACTURE_OPTIONS}
+        onChange={(option) => {
+          if (!option) {
+            setValue("vehicle.modelYear", "");
+            return;
+          }
+
+          setValue("vehicle.modelYear", String(Number(option) + 1));
+        }}
       />
-      <Input<NewVehicleFormInputs>
+      <Select<NewVehicleFormInputs>
         name="vehicle.modelYear"
         label="Ano do modelo"
+        options={MODEL_YEARS_OPTIONS}
       />
       <ColorPicker<NewVehicleFormInputs> label="Cor" name="vehicle.color" />
       <Select<NewVehicleFormInputs>

@@ -109,8 +109,8 @@ export class CustomerService {
     select,
   }: FindManyInput) {
     const pagination = {};
-    if (paginate) {
-      const { page = 1 } = customerFindManyInDto;
+    const { page } = customerFindManyInDto;
+    if (paginate && page) {
       pagination['skip'] = (page - 1) * ITEMS_PER_PAGE;
       pagination['take'] = ITEMS_PER_PAGE;
     }

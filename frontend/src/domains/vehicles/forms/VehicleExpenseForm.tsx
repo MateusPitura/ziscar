@@ -1,12 +1,12 @@
+import Input from "@/design-system/Form/Input";
+import Select from "@/design-system/Form/Select";
+import Section from "@/domains/global/components/Section";
+import { PAYMENT_METHODS_PAYABLE_TYPE_OPTIONS } from "@/domains/global/constants";
+import { ExpenseCategory, InstallmentStatus } from "@shared/enums";
 import type { ReactNode } from "react";
 import { useFormContext } from "react-hook-form";
-import { VehicleExpenseFormInputs } from "../types";
-import Section from "@/domains/global/components/Section";
-import Select from "@/design-system/Form/Select";
-import { ExpenseCategory, InstallmentStatus } from "@shared/enums";
-import { PAYMENT_METHODS_PAYABLE } from "@/domains/global/constants";
-import Input from "@/design-system/Form/Input";
 import { ExpenseCategoryText, INSTALMENT_STATUS } from "../constants";
+import { VehicleExpenseFormInputs } from "../types";
 
 export default function VehicleExpenseForm(): ReactNode {
   const { watch } = useFormContext<VehicleExpenseFormInputs>();
@@ -44,7 +44,7 @@ export default function VehicleExpenseForm(): ReactNode {
             required
           />
           <Select<VehicleExpenseFormInputs> // 🌠 when change reset others field
-            label="Status"
+            label="Status do pagamento"
             name="payment.status"
             options={INSTALMENT_STATUS}
             required
@@ -60,7 +60,7 @@ export default function VehicleExpenseForm(): ReactNode {
               <Select<VehicleExpenseFormInputs>
                 label="Forma de pagamento"
                 name="payment.paymentMethod"
-                options={PAYMENT_METHODS_PAYABLE}
+                options={PAYMENT_METHODS_PAYABLE_TYPE_OPTIONS}
                 required
               />
             </>

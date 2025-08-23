@@ -102,8 +102,8 @@ export class StoreService {
     select,
   }: FindManyInput) {
     const pagination = {};
-    if (paginate) {
-      const { page = 1 } = storeFindManyInDto;
+    const { page } = storeFindManyInDto;
+    if (paginate && page) {
       pagination['skip'] = (page - 1) * ITEMS_PER_PAGE;
       pagination['take'] = ITEMS_PER_PAGE;
     }

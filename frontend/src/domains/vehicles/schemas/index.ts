@@ -2,10 +2,12 @@ import {
   EXPENSECATEGORY_VALUES,
   FUELTYPE_VALUES,
   INSTALLMENTSTATUS_VALUES,
-  PAYMENTMETHODPAYABLETYPE_VALUES, VEHICLECATEGORY_VALUES,
-  VEHICLESTATUS_VALUES
+  PAYMENTMETHODPAYABLETYPE_VALUES,
+  VEHICLECATEGORY_VALUES,
+  VEHICLESTATUS_VALUES,
 } from "@shared/enums";
 import { s } from "@shared/safeZod";
+import { MODEL_YEARS, YEARS_OF_MANUFACTURE } from "../constants";
 
 export const SchemaVehiclesFilterForm = s
   .object({
@@ -37,11 +39,11 @@ export const SchemaNewVehicleForm = s.object({
     commissionValue: s.money(),
     storeId: s.string(),
     kilometers: s.number(), // 🌠 validação da kilometragem
-    modelName: s.string(),
-    brandId: s.string(),
-    color: s.string(),
-    modelYear: s.string(), // 🌠 validação para ano do modelo
-    yearOfManufacture: s.string(), // 🌠 validação para ano de fabricação
+    modelName: s.string().or(s.empty()),
+    brandId: s.string().or(s.empty()),
+    color: s.string().or(s.empty()),
+    modelYear: s.enumeration(MODEL_YEARS).or(s.empty()),
+    yearOfManufacture: s.enumeration(YEARS_OF_MANUFACTURE).or(s.empty()),
     fuelType: s.enumeration(FUELTYPE_VALUES),
     status: s.enumeration(VEHICLESTATUS_VALUES),
     category: s.enumeration(VEHICLECATEGORY_VALUES),

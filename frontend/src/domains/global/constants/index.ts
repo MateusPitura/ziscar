@@ -1,4 +1,4 @@
-import { BACKEND_PORT, API_URL } from "@shared/constants";
+import { API_URL, BACKEND_PORT } from "@shared/constants";
 import {
   BrazilianState,
   PaymentMethodPayableType,
@@ -74,14 +74,14 @@ export const PaymentMethodReceivableText: Record<
   TRANSFER: "Transferência Bancária",
 };
 
-export const PAYMENT_METHODS_RECEIVABLE = Object.values(
+export const PAYMENT_METHODS_RECEIVABLE_TYPE_OPTIONS = Object.values(
   PaymentMethodReceivableType
 ).map((method) => ({
   label: PaymentMethodReceivableText[method],
   value: method,
 }));
 
-export const PAYMENT_METHODS_PAYABLE = Object.values(
+export const PAYMENT_METHODS_PAYABLE_TYPE_OPTIONS = Object.values(
   PaymentMethodPayableType
 ).map((method) => ({
   label: PaymentMethodReceivableText[method],

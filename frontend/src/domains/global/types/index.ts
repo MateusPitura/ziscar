@@ -32,6 +32,7 @@ export type QueryKeys =
   | "ibgeApi"
   | "profile"
   | "permissions"
+  | "brands"
   | "user"
   | "users"
   | "store"

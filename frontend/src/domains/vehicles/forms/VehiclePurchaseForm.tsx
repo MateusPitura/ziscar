@@ -1,12 +1,12 @@
 import Input from "@/design-system/Form/Input";
-import type { ReactNode } from "react";
-import { NewVehicleFormInputs } from "../types";
-import Section from "@/domains/global/components/Section";
 import Select from "@/design-system/Form/Select";
-import { useFormContext } from "react-hook-form";
+import Section from "@/domains/global/components/Section";
+import { PAYMENT_METHODS_PAYABLE_TYPE_OPTIONS } from "@/domains/global/constants";
 import { InstallmentStatus } from "@shared/enums";
-import { PAYMENT_METHODS_PAYABLE } from "@/domains/global/constants";
+import type { ReactNode } from "react";
+import { useFormContext } from "react-hook-form";
 import { INSTALMENT_STATUS } from "../constants";
+import { NewVehicleFormInputs } from "../types";
 
 export default function VehiclePurchaseForm(): ReactNode {
   const { watch } = useFormContext<NewVehicleFormInputs>();
@@ -56,7 +56,7 @@ export default function VehiclePurchaseForm(): ReactNode {
               <Select<NewVehicleFormInputs>
                 label="Forma de pagamento"
                 name="purchase.installment.paymentMethod"
-                options={PAYMENT_METHODS_PAYABLE}
+                options={PAYMENT_METHODS_PAYABLE_TYPE_OPTIONS}
                 required
               />
             </>

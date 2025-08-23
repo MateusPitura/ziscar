@@ -110,6 +110,11 @@ export interface VehicleExpense {
   archivedAt?: Date;
 }
 
+export interface Brand {
+  id: number;
+  name: string;
+}
+
 export type FetchUser = Pick<
   User,
   "id" | "cpf" | "fullName" | "email" | "phone" | "archivedAt" | "roleId"
@@ -168,3 +173,5 @@ export type FetchVehicleExpense = Pick<
   | "competencyDate"
   | "archivedAt"
 >;
+
+export type FetchBrand = Pick<Brand, "id" | "name">;

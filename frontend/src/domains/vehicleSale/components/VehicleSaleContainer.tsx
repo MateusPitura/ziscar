@@ -5,17 +5,19 @@ import PageHeader from "@/domains/global/components/PageHeader";
 import { PREVIOUS_PAGE } from "@/domains/global/constants";
 import { applyMask } from "@/domains/global/utils/applyMask";
 import { type ReactElement } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
 import { SchemaVehicleSaleForm } from "../schemas";
 import { VehicleSaleFormInputs } from "../types";
 import VehicleSaleTabs from "./VehicleSaleTabs";
-import { VehicleSaleState } from "@/domains/global/types";
+import {
+  // useLocation,
+  useNavigate,
+} from "react-router-dom";
+// import { VehicleSaleState } from "@/domains/global/types";
 
 export default function VehicleSaleContainer(): ReactElement {
   const navigate = useNavigate();
-  const location = useLocation();
-  const { vehicleId } = (location.state as VehicleSaleState) || {};
-  console.log("🌠 vehicleId: ", vehicleId);
+  // const location = useLocation();
+  // const { vehicleId } = (location.state as VehicleSaleState) || {};
 
   return (
     <div className="flex flex-col gap-4 w-full">

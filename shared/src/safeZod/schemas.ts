@@ -7,10 +7,12 @@ export type infer<T extends z.ZodTypeAny> = z.infer<T>;
 
 export const nativeEnum = z.nativeEnum;
 
-export const enumeration = z.enum;
+export function enumeration<T extends string>(values: readonly T[]) {
+  return z.enum(values as [T, ...T[]], { message: "Opção inválida" });
+}
 
 export function checkbox<T extends string>(values: readonly T[]) {
-  return z.array(z.enum(values as [T, ...T[]]));
+  return z.array(enumeration(values as [T, ...T[]]));
 }
 
 export const array = <T extends z.ZodTypeAny>(schema: T, maxItems?: number) => {
