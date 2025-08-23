@@ -48,7 +48,7 @@ export default function CustomersTable(): ReactNode {
   async function getCustomersInfo(
     filter?: string
   ): Promise<PageablePayload<FetchCustomer>> {
-    return await safeFetch(`${BACKEND_URL}/customer?${filter}`, {
+    return await safeFetch(`${BACKEND_URL}/customer?${filter}&orderBy=fullName`, {
       resource: "CUSTOMERS",
       action: "READ",
     });
@@ -75,16 +75,11 @@ export default function CustomersTable(): ReactNode {
             selectQueryFn={selectCustomersInfoForReport}
             formatFilters={{
               fullName: "Nome completo",
-              orderBy: "Ordenar por",
               status: "Status",
               endDate: "Data final",
               startDate: "Data inicial",
             }}
             formatFiltersValues={{
-              orderBy: {
-                email: "Email",
-                fullName: "Nome completo",
-              },
               status: {
                 active: "Ativo",
                 inactive: "Inativo",

@@ -27,7 +27,6 @@ function StoresFilterForm(): ReactNode {
       className="flex-1 flex flex-col"
       defaultValues={{
         name: storesFilter?.name || "",
-        orderBy: storesFilter?.orderBy || "name",
         status: storesFilter?.status || "active",
         startDate: storesFilter?.startDate || "",
         endDate: storesFilter?.endDate || "",
@@ -79,21 +78,6 @@ function StoresFilterFormContent(): ReactElement {
           label="Data final"
           type="date"
         />
-        <InputLabel label="Ordenar por" />
-        <div className="flex flex-col gap-2">
-          <Choice hideErrorLabel>
-            <Choice.Radio<StoresFilterFormInputs>
-              name="orderBy"
-              label="Nome"
-              value="name"
-            />
-            <Choice.Radio<StoresFilterFormInputs>
-              name="orderBy"
-              label="Email"
-              value="email"
-            />
-          </Choice>
-        </div>
       </SideSheet.Body>
       <SideSheet.Footer
         primaryLabel="Aplicar"

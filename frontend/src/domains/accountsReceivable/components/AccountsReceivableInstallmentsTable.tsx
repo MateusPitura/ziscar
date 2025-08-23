@@ -96,9 +96,9 @@ export default function AccountsReceivableInstallmentsTable(): ReactNode {
       />
       <Table>
         <Table.Header gridColumns={10}>
+          <Table.Head label="Vencimento" />
           <Table.Head label="Sequência" />
           <Table.Head label="Método de pagamento" />
-          <Table.Head label="Vencimento" />
           <Table.Head label="Status" />
           <Table.Head label="Valor" colSpan={1} />
           <Table.Head action />
@@ -111,6 +111,7 @@ export default function AccountsReceivableInstallmentsTable(): ReactNode {
         >
           {accountsReceivableInstallmentsInfo?.map((installment) => (
             <Table.Row key={installment.id} gridColumns={10}>
+              <Table.Cell label={installment.dueDate} />
               <Table.Cell
                 label={
                   installment.isUpfront
@@ -129,7 +130,6 @@ export default function AccountsReceivableInstallmentsTable(): ReactNode {
                     : ""
                 }
               />
-              <Table.Cell label={installment.dueDate} />
               <Table.Cell
                 label={<AccountStatus status={installment.status} />}
               />

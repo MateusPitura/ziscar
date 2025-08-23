@@ -47,7 +47,7 @@ export default function UsersTable(): ReactNode {
   async function getUsersInfo(
     filter?: string
   ): Promise<PageablePayload<FetchUser>> {
-    return await safeFetch(`${BACKEND_URL}/user?${filter}`, {
+    return await safeFetch(`${BACKEND_URL}/user?${filter}&orderBy=fullName`, {
       resource: "USERS",
       action: "READ",
     });
@@ -72,16 +72,11 @@ export default function UsersTable(): ReactNode {
             selectQueryFn={selectUsersInfoForReport}
             formatFilters={{
               fullName: "Nome completo",
-              orderBy: "Ordenar por",
               status: "Status",
               startDate: "Data inicial",
               endDate: "Data final",
             }}
             formatFiltersValues={{
-              orderBy: {
-                email: "Email",
-                fullName: "Nome completo",
-              },
               status: {
                 active: "Ativo",
                 inactive: "Inativo",

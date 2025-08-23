@@ -47,7 +47,7 @@ export default function StoresTable(): ReactNode {
   async function getStoresInfo(
     filter?: string
   ): Promise<PageablePayload<FetchStore>> {
-    return await safeFetch(`${BACKEND_URL}/store?${filter}`, {
+    return await safeFetch(`${BACKEND_URL}/store?${filter}&orderBy=name`, {
       resource: "STORES",
       action: "READ",
     });
@@ -72,16 +72,11 @@ export default function StoresTable(): ReactNode {
             selectQueryFn={selectStoresInfoForReport}
             formatFilters={{
               name: "Nome completo",
-              orderBy: "Ordenar por",
               status: "Status",
               endDate: "Data final",
               startDate: "Data inicial",
             }}
             formatFiltersValues={{
-              orderBy: {
-                email: "Email",
-                name: "Nome",
-              },
               status: {
                 active: "Ativo",
                 inactive: "Inativo",

@@ -5,7 +5,6 @@ import { s } from "@shared/safeZod";
 export const SchemaUsersFilterForm = s
   .object({
     fullName: s.fullName().or(s.empty()),
-    orderBy: s.enumeration(["fullName", "email"]),
     status: s.enumeration(["active", "inactive"]),
     startDate: s.dateString().or(s.empty()),
     endDate: s.dateString().or(s.empty()),

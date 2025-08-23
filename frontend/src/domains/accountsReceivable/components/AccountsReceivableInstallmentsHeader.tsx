@@ -22,6 +22,7 @@ export default function AccountsReceivableInstallmentsHeader(): ReactNode {
       totalValue: "10000",
       overallStatus: "PENDING",
       installmentsNumber: 2,
+      vehicleSaleId: 1,
     };
   }
 
