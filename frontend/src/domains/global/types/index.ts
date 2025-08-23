@@ -70,3 +70,7 @@ export interface Options {
 export type AddressFormInputs = s.infer<typeof SchemaAddress>;
 
 export type BrazilianState = (typeof BRAZILIANSTATE_VALUES)[number];
+
+export interface VehicleSaleState {
+  vehicleId: string;
+}

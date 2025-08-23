@@ -7,6 +7,7 @@ import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { DisableVehicle } from "../types";
+import { VehicleSaleState } from "@/domains/global/types";
 
 interface VehiclesTableActionsProperties {
   isActive?: boolean;
@@ -47,6 +48,22 @@ export default function VehiclesTableActions({
 
   return isActive ? (
     <>
+      <Tooltip content="Vender">
+        <Button
+          variant="quaternary"
+          iconLeft="CurrencyExchange"
+          onClick={() => {
+            const state: VehicleSaleState = { vehicleId };
+            navigate(`/vehicle-sale`, {
+              state,
+            });
+          }}
+          resource="VEHICLE_SALE"
+          action="CREATE"
+          padding="none"
+          data-cy={`button-vehicleSale-${vehicleId}`}
+        />
+      </Tooltip>
       <Tooltip content="Editar">
         <Button
           variant="quaternary"
