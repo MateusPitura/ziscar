@@ -1,70 +1,58 @@
+import Button from "@/design-system/Button";
 import Form from "@/design-system/Form";
+import PageFooter from "@/domains/global/components/PageFooter";
+import PageHeader from "@/domains/global/components/PageHeader";
+import { BACKEND_URL, PREVIOUS_PAGE } from "@/domains/global/constants";
+import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
+import useSnackbar from "@/domains/global/hooks/useSnackbar";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
-import { NewVehicleFormInputs } from "../types";
+import { newVehicleDefaultValues } from "../constants";
 import { SchemaNewVehicleForm } from "../schemas";
-import PageHeader from "@/domains/global/components/PageHeader";
-import PageFooter from "@/domains/global/components/PageFooter";
-import Button from "@/design-system/Button";
-import { PREVIOUS_PAGE } from "@/domains/global/constants";
+import { NewVehicleFormInputs } from "../types";
 import NewVehicleTabs from "./NewVehicleTabs";
-import {
-  FuelType,
-  InstallmentStatus,
-  PaymentMethodPayableType,
-  VehicleCategory,
-  VehicleStatus,
-} from "@shared/enums";
 
 export default function NewVehicleContainer(): ReactNode {
   const navigate = useNavigate();
+  const { safeFetch } = useSafeFetch();
+  const { showSuccessSnackbar } = useSnackbar();
+  const queryClient = useQueryClient();
+
+  async function createVehicle(data: NewVehicleFormInputs) {
+    await safeFetch(`${BACKEND_URL}/vehicle`, {
+      method: "POST",
+      body: data,
+      resource: "VEHICLES",
+      action: "CREATE",
+    });
+  }
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: createVehicle,
+    onSuccess: () => {
+      showSuccessSnackbar({
+        title: "Veículo criado com sucesso",
+      });
+      navigate("/vehicles");
+      queryClient.invalidateQueries({ queryKey: ["vehicles"] });
+    },
+  });
 
   return (
     <div className="flex flex-col gap-4 w-full">
       <Form<NewVehicleFormInputs>
         onSubmit={(data) => {
           console.log("data: ", data);
+          mutate(data);
         }}
         className="flex-1 flex flex-col gap-4"
         schema={SchemaNewVehicleForm}
-        defaultValues={{
-          characteristics: {
-            commonCharacteristics: [],
-            newCharacteristics: [],
-          },
-          purchase: {
-            paidTo: "",
-            purchaseDate: "",
-            installment: {
-              dueDate: "",
-              value: "0",
-              status: InstallmentStatus.PENDING,
-              paymentDate: "",
-              paymentMethod: PaymentMethodPayableType.CREDIT_CARD,
-            },
-          },
-          vehicle: {
-            kilometers: "0",
-            plateNumber: "",
-            announcedPrice: "0",
-            minimumPrice: "0",
-            commissionValue: "0",
-            color: "",
-            fuelType: FuelType.FLEX,
-            status: VehicleStatus.PURCHASED,
-            chassiNumber: "",
-            modelYear: "",
-            yearOfManufacture: "",
-            modelName: "",
-            category: VehicleCategory.CAR,
-            storeId: "",
-            brandId: "",
-          },
-        }}
+        defaultValues={newVehicleDefaultValues}
       >
         <PageHeader title="Cadastrar veículo" />
         <NewVehicleTabs />
-        <PageFooter dirty>
+        <PageFooter dirty primaryBtnState={isPending ? "loading" : undefined}>
           <Button color="lightBlue" iconRight="Save" label="Salvar" />
           <Button
             color="red"

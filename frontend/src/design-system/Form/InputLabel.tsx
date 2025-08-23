@@ -11,8 +11,8 @@ export default function InputLabel({
   required,
 }: InputLabelProperties): ReactElement {
   return (
-    <div className="flex items-center gap-1">
-      <span className="text-body-medium text-neutral-700 p-1">{label}</span>
+    <div className="flex items-center gap-1 p-1">
+      <span className="text-body-medium text-neutral-700">{label}</span>
       {required && (
         <Icon
           iconName="Emergency"

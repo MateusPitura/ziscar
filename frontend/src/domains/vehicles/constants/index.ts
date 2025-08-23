@@ -1,11 +1,16 @@
 import {
   ExpenseCategoryType,
+  FuelType,
   FuelTypeType,
   InstallmentStatus,
+  PaymentMethodPayableType,
+  VehicleCategory,
   VehicleCategoryType,
+  VehicleStatus,
   VehicleStatusType,
 } from "@shared/enums";
 import { VehiclesFilterFormInputs } from "../types";
+import { applyMask } from "@/domains/global/utils/applyMask";
 
 export const vehicleFilterDefaultValues: VehiclesFilterFormInputs = {
   startDate: "",
@@ -87,3 +92,38 @@ export const MODEL_YEARS_OPTIONS = [
   },
   ...YEARS_OF_MANUFACTURE_OPTIONS,
 ];
+
+export const newVehicleDefaultValues = {
+  characteristics: {
+    commonCharacteristics: [],
+    newCharacteristics: [],
+  },
+  purchase: {
+    paidTo: "",
+    purchaseDate: "",
+    installment: {
+      dueDate: "",
+      value: applyMask("0", "money"),
+      status: InstallmentStatus.PENDING,
+      paymentDate: "",
+      paymentMethod: PaymentMethodPayableType.CREDIT_CARD,
+    },
+  },
+  vehicle: {
+    kilometers: "0",
+    plateNumber: "",
+    announcedPrice: applyMask("0", "money"),
+    minimumPrice: applyMask("0", "money"),
+    commissionValue: applyMask("0", "money"),
+    color: "",
+    fuelType: FuelType.FLEX,
+    status: VehicleStatus.PURCHASED,
+    chassiNumber: "",
+    modelYear: "",
+    yearOfManufacture: "",
+    modelName: "",
+    category: VehicleCategory.CAR,
+    storeId: "",
+    brandId: "",
+  },
+};

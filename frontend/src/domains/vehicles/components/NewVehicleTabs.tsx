@@ -64,7 +64,7 @@ export default function NewVehicleTabs(): ReactNode {
           <Section>
             <Section.Group>
               <Section.Header title="Informações do veículo" />
-              <Section.Body>
+              <Section.Body className="grid-cols-3">
                 <NewVehicleForm />
               </Section.Body>
             </Section.Group>

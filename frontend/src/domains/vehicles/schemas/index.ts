@@ -103,6 +103,36 @@ export const SchemaNewVehicleForm = s
         );
       }
     }
+  })
+  .superRefine((data, ctx) => {
+    const { vehicle, purchase } = data;
+
+    if (Number(vehicle.minimumPrice) <= Number(purchase.installment.value)) {
+      addIssue<NewVehicleFormInputs>(
+        ctx,
+        "vehicle.minimumPrice",
+        "Preço mínimo menor que o valor de compra"
+      );
+    }
+
+    if (Number(vehicle.announcedPrice) < Number(vehicle.minimumPrice)) {
+      addIssue<NewVehicleFormInputs>(
+        ctx,
+        "vehicle.announcedPrice",
+        "Preço anunciado menor que o preço mínimo"
+      );
+    }
+
+    if (
+      Number(vehicle.commissionValue) >=
+      Number(vehicle.minimumPrice) - Number(purchase.installment.value)
+    ) {
+      addIssue<NewVehicleFormInputs>(
+        ctx,
+        "vehicle.commissionValue",
+        "Comissão maior que o lucro"
+      );
+    }
   });
 
 export const SchemaVehicleExpenseForm = s

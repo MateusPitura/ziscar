@@ -11,6 +11,7 @@ export default function selectVehiclesInfo(
     itemsFiltered.push({
       ...vehicle,
       announcedPrice: applyMask(vehicle.announcedPrice, "money") ?? "",
+      plateNumber: applyMask(vehicle.plateNumber, "plateNumber") ?? "",
     });
   }
 

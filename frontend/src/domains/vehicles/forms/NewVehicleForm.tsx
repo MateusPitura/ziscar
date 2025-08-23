@@ -106,24 +106,6 @@ export default function NewVehicleForm(): ReactNode {
         mask="chassi"
         maxLength={17}
       />
-      <Input<NewVehicleFormInputs>
-        name="vehicle.announcedPrice"
-        label="Preço anunciado"
-        mask="money"
-        required
-      />
-      <Input<NewVehicleFormInputs>
-        name="vehicle.minimumPrice"
-        label="Preço mínimo"
-        mask="money"
-        required
-      />
-      <Input<NewVehicleFormInputs>
-        name="vehicle.commissionValue"
-        label="Valor da comissão"
-        mask="money"
-        required
-      />
       <Select<NewVehicleFormInputs>
         name="vehicle.storeId"
         label="Loja"
@@ -135,6 +117,24 @@ export default function NewVehicleForm(): ReactNode {
         }
         required
         loading={isFetchingStoresInfo}
+      />
+      <Input<NewVehicleFormInputs>
+        name="vehicle.minimumPrice"
+        label="Preço mínimo"
+        mask="money"
+        required
+      />
+      <Input<NewVehicleFormInputs>
+        name="vehicle.announcedPrice"
+        label="Preço anunciado"
+        mask="money"
+        required
+      />
+      <Input<NewVehicleFormInputs>
+        name="vehicle.commissionValue"
+        label="Valor da comissão"
+        mask="money"
+        required
       />
       <Select<NewVehicleFormInputs>
         name="vehicle.status"
@@ -150,6 +150,14 @@ export default function NewVehicleForm(): ReactNode {
         label="Quilometragem"
         mask="number"
       />
+      <Select<NewVehicleFormInputs>
+        name="vehicle.category"
+        label="Categoria"
+        options={Object.values(VehicleCategory).map((vehicleCategory) => ({
+          value: vehicleCategory,
+          label: VehicleCategoryText[vehicleCategory],
+        }))}
+      />
       <Input<NewVehicleFormInputs> name="vehicle.modelName" label="Modelo" />
       <Select<NewVehicleFormInputs>
         name="vehicle.brandId"
@@ -157,6 +165,7 @@ export default function NewVehicleForm(): ReactNode {
         options={brandsInfo ?? []}
         loading={isFetchingBrandsInfo}
       />
+      <ColorPicker<NewVehicleFormInputs> label="Cor" name="vehicle.color" />
       <Select<NewVehicleFormInputs>
         name="vehicle.yearOfManufacture"
         label="Ano de fabricação"
@@ -175,21 +184,12 @@ export default function NewVehicleForm(): ReactNode {
         label="Ano do modelo"
         options={MODEL_YEARS_OPTIONS}
       />
-      <ColorPicker<NewVehicleFormInputs> label="Cor" name="vehicle.color" />
       <Select<NewVehicleFormInputs>
         name="vehicle.fuelType"
         label="Tipo de combustível"
         options={Object.values(FuelType).map((fuelType) => ({
           value: fuelType,
           label: FuelTypeText[fuelType],
-        }))}
-      />
-      <Select<NewVehicleFormInputs>
-        name="vehicle.category"
-        label="Categoria"
-        options={Object.values(VehicleCategory).map((vehicleCategory) => ({
-          value: vehicleCategory,
-          label: VehicleCategoryText[vehicleCategory],
         }))}
       />
     </>
