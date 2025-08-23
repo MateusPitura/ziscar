@@ -38,7 +38,7 @@ export const SchemaNewVehicleForm = s
       chassiNumber: s.chassi(),
       announcedPrice: s.numberString(),
       minimumPrice: s.numberString(),
-      commissionValue: s.numberString(),
+      commissionValue: s.numberString(0),
       storeId: s.string(),
       kilometers: s.numberString(0, 1_000_000),
       modelName: s.string().or(s.empty()),

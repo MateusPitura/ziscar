@@ -1,4 +1,5 @@
 import type { ReactElement } from "react";
+import Icon from "../Icon";
 
 interface InputLabelProperties {
   label: string;
@@ -10,9 +11,15 @@ export default function InputLabel({
   required,
 }: InputLabelProperties): ReactElement {
   return (
-    <div>
+    <div className="flex items-center gap-1">
       <span className="text-body-medium text-neutral-700 p-1">{label}</span>
-      {required && <span className="text-red-500 text-body-small">(obrigatório)</span>}
+      {required && (
+        <Icon
+          iconName="Emergency"
+          fontSize="inherit"
+          className="text-red-500 text-label-small"
+        />
+      )}
     </div>
   );
 }
