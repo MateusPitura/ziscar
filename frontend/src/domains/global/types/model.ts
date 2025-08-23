@@ -106,7 +106,7 @@ export interface VehicleExpense {
   observations: string;
   category: ExpenseCategoryType;
   totalValue: string;
-  competencyDate: string; // 🌠 isso não existe
+  competencyDate: string;
   archivedAt?: Date;
 }
 

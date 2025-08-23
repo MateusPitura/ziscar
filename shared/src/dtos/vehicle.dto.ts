@@ -103,6 +103,7 @@ export const InsertVehicleExpenseRequestSchema = s
     vehicleId: s.id(),
     category: s.enumeration(EXPENSECATEGORY_VALUES),
     observations: s.string().nullable(),
+    competencyDate: s.date(),
     installments: s.array(
       createAccountPayableInstallmentDTO
         .omit({

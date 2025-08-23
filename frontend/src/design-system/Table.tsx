@@ -15,7 +15,7 @@ import { ActionsType, ResourcesType } from "@shared/enums";
 function Container({ children }: Childrenable): ReactElement {
   return (
     <div className="overflow-x-auto flex flex-1">
-      <div className="min-w-[50rem] w-full flex flex-col">{children}</div>
+      <div className="min-w-[85rem] w-full flex flex-col">{children}</div>
     </div>
   );
 }

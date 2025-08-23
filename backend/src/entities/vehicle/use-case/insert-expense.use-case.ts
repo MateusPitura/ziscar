@@ -30,6 +30,7 @@ export class InsertExpenseUseCase {
       paidTo,
       vehicleId,
       observations,
+      competencyDate,
       installments,
     } = input;
     let vehicleExpenseId: number;
@@ -73,9 +74,10 @@ export class InsertExpenseUseCase {
       const createdVehicleExpense = await this.vehicleExpenseService.create({
         vehicleId,
         category,
-        observations: observations,
+        observations,
         accountPayableId: accountPayable.id,
         userId,
+        competencyDate,
       });
 
       vehicleExpenseId = createdVehicleExpense.id;
