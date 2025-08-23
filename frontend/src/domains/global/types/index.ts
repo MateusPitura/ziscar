@@ -32,7 +32,8 @@ export type Mask =
   | "cnpj"
   | "money"
   | "plateNumber"
-  | "chassi";
+  | "chassi"
+  | "number";
 
 export type QueryKeys =
   | "cepApi"

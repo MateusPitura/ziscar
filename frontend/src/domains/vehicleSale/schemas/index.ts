@@ -7,7 +7,7 @@ export const SchemaVehicleSaleForm = s.object({
   vehicle: s.object({
     storeId: s.string(),
     model: s.string(),
-    price: s.money(),
+    price: s.numberString(),
     color: s.color(),
     commonCharacteristics: s.checkbox([
       "Direção hidráulica",

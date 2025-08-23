@@ -1,7 +1,7 @@
 import { z } from "zod";
-import { validateCpf } from "../utils/validateCpf";
-import { validateCnpj } from "../utils/validateCnpj";
 import { removeMask } from "../utils/removeMask";
+import { validateCnpj } from "../utils/validateCnpj";
+import { validateCpf } from "../utils/validateCpf";
 
 export type infer<T extends z.ZodTypeAny> = z.infer<T>;
 
@@ -45,6 +45,19 @@ export const number = () =>
       message: "Número inválido",
     })
     .int({ message: "Número inválido" });
+
+export function numberString(min = 1, max = 100_000_000_000) {
+  return string()
+    .transform((number) => removeMask(number))
+    .refine(
+      (number) => {
+        return parseInt(number, 10) >= min && parseInt(number, 10) < max;
+      },
+      {
+        message: "Número inválido",
+      }
+    );
+}
 
 export const numberPositive = () =>
   number().positive({ message: "Número inválido" });
@@ -124,16 +137,6 @@ export const password = () =>
 
 export const color = () =>
   string(7).regex(/^#[0-9A-Fa-f]{6}$/, { message: "Cor inválida" });
-
-export const money = () =>
-  string()
-    .transform((money) => removeMask(money))
-    .refine(
-      (money) => parseInt(money, 10) > 0 && parseInt(money, 10) < 100_000_000_000,
-      {
-        message: "Valor monetário inválido",
-      }
-    );
 
 export const plateNumber = () =>
   string(8)

@@ -44,7 +44,7 @@ export default function NewVehicleContainer(): ReactNode {
             },
           },
           vehicle: {
-            kilometers: 0,
+            kilometers: "0",
             plateNumber: "",
             announcedPrice: "0",
             minimumPrice: "0",

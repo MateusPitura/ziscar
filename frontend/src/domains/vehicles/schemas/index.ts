@@ -25,7 +25,7 @@ export const SchemaNewVehicleForm = s.object({
     paidTo: s.string().or(s.empty()),
     installment: s.object({
       dueDate: s.paymentDate(),
-      value: s.money(),
+      value: s.numberString(),
       status: s.enumeration(INSTALLMENTSTATUS_VALUES),
       paymentDate: s.paymentDate(),
       paymentMethod: s.enumeration(PAYMENTMETHODPAYABLETYPE_VALUES),
@@ -34,11 +34,11 @@ export const SchemaNewVehicleForm = s.object({
   vehicle: s.object({
     plateNumber: s.plateNumber(),
     chassiNumber: s.chassi(),
-    announcedPrice: s.money(),
-    minimumPrice: s.money(),
-    commissionValue: s.money(),
+    announcedPrice: s.numberString(),
+    minimumPrice: s.numberString(),
+    commissionValue: s.numberString(),
     storeId: s.string(),
-    kilometers: s.number(), // 🌠 validação da kilometragem
+    kilometers: s.numberString(0, 1_000_000),
     modelName: s.string().or(s.empty()),
     brandId: s.string().or(s.empty()),
     color: s.string().or(s.empty()),
@@ -72,7 +72,7 @@ export const SchemaVehicleExpenseForm = s.object({
   category: s.enumeration(EXPENSECATEGORY_VALUES),
   payment: s.object({
     dueDate: s.paymentDate(),
-    value: s.money(),
+    value: s.numberString(),
     status: s.enumeration(INSTALLMENTSTATUS_VALUES),
     paymentDate: s.paymentDate(),
     paymentMethod: s.enumeration(PAYMENTMETHODPAYABLETYPE_VALUES),

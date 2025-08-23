@@ -148,6 +148,7 @@ export default function NewVehicleForm(): ReactNode {
       <Input<NewVehicleFormInputs>
         name="vehicle.kilometers"
         label="Quilometragem"
+        mask="number"
       />
       <Input<NewVehicleFormInputs> name="vehicle.modelName" label="Modelo" />
       <Select<NewVehicleFormInputs>
