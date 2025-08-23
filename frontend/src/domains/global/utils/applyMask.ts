@@ -17,6 +17,8 @@ export function applyMask(
       return applyCnpjMask(value);
     case "money":
       return applyMoneyMask(value);
+    case "plateNumber":
+      return applyPlateNumberMask(value);
     default:
       return value;
   }
@@ -89,4 +91,32 @@ function applyMoneyMask(value: string): string {
   });
 
   return `R$ ${formattedValue}`;
+}
+
+function applyPlateNumberMask(value: string): string {
+  const chars = value.replace(/[^A-Z0-9]/gi, "").toUpperCase();
+
+  if (/^[A-Z]{0,3}\d{0,4}$/.test(chars)) {
+    if (chars.length <= 3) {
+      return chars;
+    } else {
+      return chars.slice(0, 3) + "-" + chars.slice(3, 7);
+    }
+  }
+
+  if (/^[A-Z]{0,3}\d{0,1}[A-Z]{0,1}\d{0,2}$/.test(chars)) {
+    let masked = "";
+    if (chars.length <= 3) {
+      masked = chars;
+    } else if (chars.length <= 4) {
+      masked = chars.slice(0, 3) + chars.slice(3);
+    } else if (chars.length <= 5) {
+      masked = chars.slice(0, 3) + chars.slice(3, 4) + chars.slice(4);
+    } else if (chars.length <= 7) {
+      masked = chars.slice(0, 3) + chars.slice(3, 4) + chars.slice(4);
+    }
+    return masked;
+  }
+
+  return chars;
 }

@@ -96,6 +96,8 @@ export default function NewVehicleForm(): ReactNode {
         name="vehicle.plateNumber"
         label="Número da placa"
         required
+        mask="plateNumber"
+        maxLength={8}
       />
       <Input<NewVehicleFormInputs>
         name="vehicle.chassiNumber"

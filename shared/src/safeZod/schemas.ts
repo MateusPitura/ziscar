@@ -127,10 +127,18 @@ export const color = () =>
 
 export const money = () =>
   string()
-    .transform((money) => money.replace(/\D/g, ""))
+    .transform((money) => removeMask(money))
     .refine((money) => parseInt(money, 10) > 0, {
       message: "Valor monetário inválido",
     });
+
+export const plateNumber = () =>
+  string(8)
+    .transform((plateNumber) => plateNumber.replace(/[^A-Z0-9]/gi, ""))
+    .refine(
+      (cep) => /^([A-Z]{3}\d{4}|[A-Z]{3}\d[A-Z]\d{2})$/.test(cep),
+      "Placa inválida"
+    );
 
 export const SchemaPassword = object({
   newPassword: password(),

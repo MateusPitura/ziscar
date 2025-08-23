@@ -32,7 +32,7 @@ export const SchemaNewVehicleForm = s.object({
     }),
   }),
   vehicle: s.object({
-    plateNumber: s.string(), // 🌠 validação para placa,
+    plateNumber: s.plateNumber(),
     chassiNumber: s.string(), // 🌠 validação para chassi
     announcedPrice: s.money(),
     minimumPrice: s.money(),
