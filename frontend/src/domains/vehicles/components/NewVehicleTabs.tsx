@@ -1,12 +1,13 @@
-import { useState, type ReactNode } from "react";
-import { useFormState } from "react-hook-form";
-import { NewVehicleFormInputs } from "../types";
 import Tabs from "@/design-system/Tabs";
 import Section from "@/domains/global/components/Section";
-import VehiclePurchaseForm from "../forms/VehiclePurchaseForm";
-import NewVehicleForm from "../forms/NewVehicleForm";
 import VehicleCommonCharacteristicForm from "@/domains/vehicles/forms/VehicleCommonCharacteristicForm";
 import VehicleNewCharacteristicForm from "@/domains/vehicles/forms/VehicleNewCharacteristicForm";
+import { useState, type ReactNode } from "react";
+import { useFormState } from "react-hook-form";
+import NewVehicleForm from "../forms/NewVehicleForm";
+import VehiclePurchaseDetailsForm from "../forms/VehiclePurchaseDetailsForm";
+import VehiclePurchasePaymentForm from "../forms/VehiclePurchasePaymentForm";
+import { NewVehicleFormInputs } from "../types";
 
 type NewVehicleTabs = "PURCHASE" | "INFORMATION" | "CHARACTERISTICS";
 
@@ -45,7 +46,18 @@ export default function NewVehicleTabs(): ReactNode {
       <Tabs.Body>
         <Tabs.Section isActive={activeTab === "PURCHASE"}>
           <Section>
-            <VehiclePurchaseForm />
+            <Section.Group>
+              <Section.Header title="Informações da compra" />
+              <Section.Body>
+                <VehiclePurchaseDetailsForm />
+              </Section.Body>
+            </Section.Group>
+            <Section.Group>
+              <Section.Header title="Informações do pagamento" />
+              <Section.Body>
+                <VehiclePurchasePaymentForm />
+              </Section.Body>
+            </Section.Group>
           </Section>
         </Tabs.Section>
         <Tabs.Section isActive={activeTab === "INFORMATION"}>
