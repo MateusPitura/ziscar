@@ -36,8 +36,8 @@ export default function AccountsReceivableInstallmentsHeader(): ReactNode {
     <PageHeader
       title={
         data?.description
-          ? `Detalhes da Venda "${data.description}"`
-          : "Detalhes da Venda"
+          ? `Detalhes do Pagamento da Venda "${data.description}"`
+          : "Detalhes do Pagamento da Venda"
       }
     >
       <Button

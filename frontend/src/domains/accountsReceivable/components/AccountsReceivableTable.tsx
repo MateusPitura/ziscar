@@ -119,7 +119,7 @@ export default function AccountsReceivableTable(): ReactNode {
           <Table.Head label="Descrição" />
           <Table.Head label="Número de parcelas" />
           <Table.Head label="Recebido de" />
-          <Table.Head label="Status geral" />
+          <Table.Head label="Status geral do pagamento" />
           <Table.Head label="Valor total" colSpan={1} />
           <Table.Head action />
         </Table.Header>

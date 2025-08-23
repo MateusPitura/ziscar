@@ -99,7 +99,7 @@ export default function AccountsReceivableInstallmentsTable(): ReactNode {
           <Table.Head label="Vencimento" />
           <Table.Head label="Sequência" />
           <Table.Head label="Método de pagamento" />
-          <Table.Head label="Status" />
+          <Table.Head label="Status do pagamento" />
           <Table.Head label="Valor" colSpan={1} />
           <Table.Head action />
         </Table.Header>

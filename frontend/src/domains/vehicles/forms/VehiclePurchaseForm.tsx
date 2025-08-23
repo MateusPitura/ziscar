@@ -40,7 +40,7 @@ export default function VehiclePurchaseForm(): ReactNode {
             required
           />
           <Select<NewVehicleFormInputs> // 🌠 when change reset others field
-            label="Status"
+            label="Status do pagamento"
             name="purchase.installment.status"
             options={INSTALMENT_STATUS}
             required

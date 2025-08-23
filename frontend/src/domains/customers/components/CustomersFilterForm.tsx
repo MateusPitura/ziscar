@@ -73,12 +73,12 @@ function CustomersFilterFormContent(): ReactElement {
         </div>
         <Input<CustomersFilterFormInputs>
           name="startDate"
-          label="Data inicial"
+          label="Data inicial de criação"
           type="date"
         />
         <Input<CustomersFilterFormInputs>
           name="endDate"
-          label="Data final"
+          label="Data final de criação"
           type="date"
         />
       </SideSheet.Body>

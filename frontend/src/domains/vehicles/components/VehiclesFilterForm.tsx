@@ -50,12 +50,12 @@ function VehiclesFilterFormContent(): ReactElement {
       <SideSheet.Body className="flex flex-col gap-4">
         <Input<VehiclesFilterFormInputs>
           name="startDate"
-          label="Data inicial"
+          label="Data inicial de criação"
           type="date"
         />
         <Input<VehiclesFilterFormInputs>
           name="endDate"
-          label="Data final"
+          label="Data final de criação"
           type="date"
         />
       </SideSheet.Body>

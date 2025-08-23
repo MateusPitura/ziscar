@@ -55,12 +55,12 @@ function AccountsReceivableFilterFormContent(): ReactElement {
       <SideSheet.Body className="flex flex-col gap-4">
         <Input<AccountsReceivableFilterFormInputs>
           name="startDate"
-          label="Data inicial"
+          label="Data inicial de criação"
           type="date"
         />
         <Input<AccountsReceivableFilterFormInputs>
           name="endDate"
-          label="Data final"
+          label="Data final de criação"
           type="date"
         />
         <InputLabel label="Status geral" />
