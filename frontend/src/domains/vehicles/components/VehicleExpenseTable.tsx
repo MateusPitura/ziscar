@@ -9,6 +9,8 @@ import DisableVehicleExpenseModal from "./DisableVehicleExpenseModal";
 import VehicleExpenseTableActions from "./VehicleExpenseTableActions";
 import { ExpenseCategoryText } from "../constants";
 import selectVehicleExpensesInfo from "../utils/selectVehicleExpensesInfo";
+import DataField from "@/domains/global/components/DataField";
+import { applyMask } from "@/domains/global/utils/applyMask";
 // import { useParams } from "react-router-dom";
 // import { BACKEND_URL } from "@/domains/global/constants";
 // import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
@@ -77,6 +79,12 @@ export default function VehicleExpenseTable(): ReactNode {
   return (
     <>
       <DisableVehicleExpenseModal {...disableVehicleExpenseInfo} {...dialog} />
+      <div className="w-fit">
+        <DataField
+          label="Total de gastos"
+          value={applyMask("1000000", "money")}
+        />
+      </div>
       <Table>
         <Table.Header gridColumns={8}>
           <Table.Head label="Data" />
