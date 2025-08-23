@@ -66,7 +66,6 @@ export default function StoresTable(): ReactNode {
         {enableReport && (
           <ExportButton<FetchStore, StoresFilterFormInputs>
             fileName="Relatório Lojas"
-            resource="STORES"
             queryKey={["stores", filterFormatted]}
             queryFn={getStoresInfo}
             selectQueryFn={selectStoresInfoForReport}

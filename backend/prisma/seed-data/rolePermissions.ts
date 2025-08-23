@@ -38,6 +38,7 @@ export const rolePermissions: Record<
     { resource: Resources.CUSTOMERS, action: Actions.READ },
     { resource: Resources.CUSTOMERS, action: Actions.UPDATE },
     { resource: Resources.CUSTOMERS, action: Actions.DELETE },
+    { resource: Resources.REPORTS, action: Actions.CREATE },
   ],
   [RoleType.SELLER]: [
     { resource: Resources.VEHICLES, action: Actions.READ },

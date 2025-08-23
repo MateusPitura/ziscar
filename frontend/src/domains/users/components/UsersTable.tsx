@@ -66,7 +66,6 @@ export default function UsersTable(): ReactNode {
         {enableReport && (
           <ExportButton<FetchUser, UsersFilterFormInputs>
             fileName="Relatório Usuários"
-            resource="USERS"
             queryKey={["users", filterFormatted]}
             queryFn={getUsersInfo}
             selectQueryFn={selectUsersInfoForReport}

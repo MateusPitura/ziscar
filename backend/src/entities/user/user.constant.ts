@@ -104,4 +104,10 @@ export const DEFAULT_PERMISSIONS: Permissions = {
     UPDATE: false,
     DELETE: false,
   },
+  REPORTS: {
+    CREATE: false,
+    READ: false,
+    UPDATE: false,
+    DELETE: false,
+  },
 };

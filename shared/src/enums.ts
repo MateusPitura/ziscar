@@ -18,6 +18,7 @@ export enum Resources {
   ACCOUNTS_PAYABLE = "ACCOUNTS_PAYABLE",
   ACCOUNTS_RECEIVABLE = "ACCOUNTS_RECEIVABLE",
   CUSTOMERS = "CUSTOMERS",
+  REPORTS = "REPORTS",
 }
 
 export enum Actions {
@@ -123,7 +124,7 @@ export enum BrazilianState {
 
 // Const arrays for zod validation
 export const ROLETYPE_VALUES = [RoleType.ADMIN, RoleType.SELLER] as const;
-export const RESOURCES_VALUES = [Resources.USERS, Resources.VEHICLES, Resources.STORES, Resources.VEHICLE_PURCHASE, Resources.VEHICLE_EXPENSE, Resources.VEHICLE_SALE, Resources.ACCOUNTS_PAYABLE, Resources.ACCOUNTS_RECEIVABLE, Resources.CUSTOMERS] as const;
+export const RESOURCES_VALUES = [Resources.USERS, Resources.VEHICLES, Resources.STORES, Resources.VEHICLE_PURCHASE, Resources.VEHICLE_EXPENSE, Resources.VEHICLE_SALE, Resources.ACCOUNTS_PAYABLE, Resources.ACCOUNTS_RECEIVABLE, Resources.CUSTOMERS, Resources.REPORTS] as const;
 export const ACTIONS_VALUES = [Actions.CREATE, Actions.READ, Actions.UPDATE, Actions.DELETE] as const;
 export const VEHICLECATEGORY_VALUES = [VehicleCategory.CAR, VehicleCategory.MOTORCYCLE, VehicleCategory.TRUCK, VehicleCategory.VAN, VehicleCategory.BUS] as const;
 export const FUELTYPE_VALUES = [FuelType.GASOLINE, FuelType.ETHANOL, FuelType.FLEX, FuelType.ELECTRIC, FuelType.GNV, FuelType.HYBRID, FuelType.DIESEL] as const;

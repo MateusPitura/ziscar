@@ -97,7 +97,6 @@ export default function VehiclesTable(): ReactNode {
       <div className="flex gap-4 justify-end">
         <ExportButton<FetchVehicle, VehiclesFilterFormInputs>
           fileName="Relatório Veículos"
-          resource="VEHICLES"
           queryKey={["vehicles", filterFormatted]}
           queryFn={getVehiclesInfo}
           selectQueryFn={selectVehiclesInfoForReport}

@@ -69,7 +69,6 @@ export default function CustomersTable(): ReactNode {
         {enableReport && (
           <ExportButton<FetchCustomer, CustomersFilterFormInputs>
             fileName="Relatório Clientes"
-            resource="CUSTOMERS"
             queryKey={["customers", filterFormatted]}
             queryFn={getCustomersInfo}
             selectQueryFn={selectCustomersInfoForReport}
