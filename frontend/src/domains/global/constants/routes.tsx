@@ -1,7 +1,7 @@
-import { lazy, ReactNode } from "react";
 import { IconsName } from "@/design-system/types";
-import { DEFAULT_ROUTE } from ".";
 import { ActionsType, ResourcesType } from "@shared/enums";
+import { lazy, ReactNode } from "react";
+import { DEFAULT_ROUTE } from ".";
 
 interface Route {
   path: string;
@@ -59,6 +59,9 @@ const EditCustomer = lazy(
 const VehicleSale = lazy(
   () => import("@/domains/vehicleSale/components/VehicleSalePage")
 );
+const ViewVehicleSale = lazy(
+  () => import("@/domains/vehicleSale/components/ViewVehicleSalePage")
+);
 
 const NotFound = lazy(() => import("@/domains/global/components/NotFoundPage"));
 
@@ -66,6 +69,12 @@ const Sign = lazy(() => import("@/domains/sign/components/SignPage"));
 
 const AccountsPayable = lazy(
   () => import("@/domains/accountsPayable/components/AccountsPayablePage")
+);
+const AccountsPayableInstallments = lazy(
+  () =>
+    import(
+      "@/domains/accountsPayable/components/AccountsPayableInstallmentsPage"
+    )
 );
 
 const AccountsReceivable = lazy(
@@ -133,6 +142,13 @@ export const privateRoutes: Route[] = [
     resource: "VEHICLE_SALE",
   },
   {
+    path: "/vehicle-sale/:vehicleSaleId",
+    entryPage: <ViewVehicleSale />,
+    shouldDisplay: false,
+    action: "READ",
+    resource: "VEHICLE_SALE",
+  },
+  {
     path: "/accounts-receivable",
     displayName: "Vendas",
     icon: "CreditCard",
@@ -154,6 +170,13 @@ export const privateRoutes: Route[] = [
     icon: "CreditCardOff",
     entryPage: <AccountsPayable />,
     shouldDisplay: true,
+    action: "READ",
+    resource: "ACCOUNTS_PAYABLE",
+  },
+  {
+    path: "/accounts-payable/:accountPayableId/installments",
+    entryPage: <AccountsPayableInstallments />,
+    shouldDisplay: false,
     action: "READ",
     resource: "ACCOUNTS_PAYABLE",
   },

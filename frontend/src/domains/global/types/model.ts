@@ -3,9 +3,10 @@ import {
   ExpenseCategoryType,
   FuelTypeType,
   InstallmentStatusType,
-  PaymentMethodPayableTypeType, ResourcesType,
+  PaymentMethodPayableTypeType,
+  ResourcesType,
   VehicleCategoryType,
-  VehicleStatusType
+  VehicleStatusType,
 } from "@shared/enums";
 import { BrazilianState } from ".";
 
@@ -60,6 +61,7 @@ export interface AccountReceivable {
   totalValue?: string;
   overallStatus: InstallmentStatusType;
   installmentsNumber: number;
+  vehicleSaleId: number;
 }
 
 export interface AccountReceivableInstallment {
@@ -131,6 +133,7 @@ export type FetchAccountReceivable = Pick<
   | "receivedFrom"
   | "totalValue"
   | "overallStatus"
+  | "vehicleSaleId"
 >;
 
 export type FetchAccountReceivableInstallment = Pick<

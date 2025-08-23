@@ -49,6 +49,7 @@ export default function AccountsReceivableTable(): ReactNode {
           totalValue: "10000",
           overallStatus: "PENDING",
           installmentsNumber: 2,
+          vehicleSaleId: 1,
         },
         {
           id: 2,
@@ -57,6 +58,7 @@ export default function AccountsReceivableTable(): ReactNode {
           totalValue: "5000",
           overallStatus: "PENDING",
           installmentsNumber: 1,
+          vehicleSaleId: 3,
         },
         {
           id: 3,
@@ -65,6 +67,7 @@ export default function AccountsReceivableTable(): ReactNode {
           totalValue: "15000",
           overallStatus: "PAID",
           installmentsNumber: 3,
+          vehicleSaleId: 4,
         },
       ],
     };
@@ -145,6 +148,7 @@ export default function AccountsReceivableTable(): ReactNode {
               <Table.Action>
                 <AccountsReceivableTableActions
                   accountReceivableId={String(accountReceivable.id)}
+                  vehicleSaleId={String(accountReceivable.vehicleSaleId)}
                 />
               </Table.Action>
             </Table.Row>
