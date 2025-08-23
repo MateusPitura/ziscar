@@ -354,29 +354,29 @@ enum Actions {
 }
 
 enum VehicleCategory {
+  TRUCK
   CAR
   MOTORCYCLE
-  TRUCK
-  VAN
   BUS
+  VAN
 }
 
 enum FuelType {
-  GASOLINE
+  DIESEL
+  ELECTRIC
   ETHANOL
   FLEX
-  ELECTRIC
+  GASOLINE
   GNV
   HYBRID
-  DIESEL
 }
 
 enum VehicleStatus {
   PURCHASED
   IN_STOCK
+  DELIVERED
   MAINTENANCE
   SOLD
-  DELIVERED
 }
 
 enum ExpenseCategory {
@@ -397,24 +397,24 @@ enum InstallmentStatus {
 }
 
 enum PaymentMethodReceivableType {
-  TRANSFER
-  PIX
   BANK_SLIP
   CREDIT_CARD
   DEBIT_CARD
-  TED
-  DOC
   CASH
+  DOC
+  PIX
+  TED
+  TRANSFER
 }
 
 enum PaymentMethodPayableType {
-  PIX
   BANK_SLIP
   CREDIT_CARD
   DEBIT_CARD
-  TED
-  DOC
   CASH
+  DOC
+  PIX
+  TED
 }
 
 enum BrazilianState {

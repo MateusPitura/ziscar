@@ -128,9 +128,12 @@ export const color = () =>
 export const money = () =>
   string()
     .transform((money) => removeMask(money))
-    .refine((money) => parseInt(money, 10) > 0, {
-      message: "Valor monetário inválido",
-    });
+    .refine(
+      (money) => parseInt(money, 10) > 0 && parseInt(money, 10) < 100_000_000_000,
+      {
+        message: "Valor monetário inválido",
+      }
+    );
 
 export const plateNumber = () =>
   string(8)
