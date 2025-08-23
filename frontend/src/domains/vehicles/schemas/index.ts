@@ -90,6 +90,19 @@ export const SchemaNewVehicleForm = s
       }
     }
     return true;
+  })
+  .superRefine((data, ctx) => {
+    const { modelYear, yearOfManufacture } = data.vehicle;
+
+    if (modelYear !== "" && yearOfManufacture !== "") {
+      if (Number(modelYear) < Number(yearOfManufacture)) {
+        addIssue<NewVehicleFormInputs>(
+          ctx,
+          "vehicle.modelYear",
+          "O ano do modelo deve ser maior ou igual ao ano de fabricação"
+        );
+      }
+    }
   });
 
 export const SchemaVehicleExpenseForm = s

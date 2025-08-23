@@ -11,11 +11,12 @@ export const SchemaAddress = s.SchemaAddress.extend({
 
 export function addIssue<T extends FieldValues>(
   ctx: s.RefinementCtx,
-  path: Path<T>
+  path: Path<T>,
+  message: string = "Campo obrigatório"
 ) {
   ctx.addIssue({
     code: "custom",
-    message: "Campo obrigatório",
+    message,
     path: path.split("."),
   });
 }
