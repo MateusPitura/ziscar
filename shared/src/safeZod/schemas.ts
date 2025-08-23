@@ -5,6 +5,8 @@ import { validateCpf } from "../utils/validateCpf";
 
 export type infer<T extends z.ZodTypeAny> = z.infer<T>;
 
+export type RefinementCtx = z.RefinementCtx;
+
 export const nativeEnum = z.nativeEnum;
 
 export function enumeration<T extends string>(values: readonly T[]) {

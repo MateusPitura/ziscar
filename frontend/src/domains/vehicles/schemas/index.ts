@@ -8,6 +8,8 @@ import {
 } from "@shared/enums";
 import { s } from "@shared/safeZod";
 import { MODEL_YEARS, YEARS_OF_MANUFACTURE } from "../constants";
+import { addIssue } from "@/domains/global/schemas";
+import { NewVehicleFormInputs, VehicleExpenseFormInputs } from "../types";
 
 export const SchemaVehiclesFilterForm = s
   .object({
@@ -68,22 +70,27 @@ export const SchemaNewVehicleForm = s
       ),
     }),
   })
-  .refine(
-    (data) => {
-      const { status, paymentDate, paymentMethod, dueDate } =
-        data.purchase.installment;
+  .superRefine((data, ctx) => {
+    const { status, paymentDate, paymentMethod, dueDate } =
+      data.purchase.installment;
 
-      if (status === "PAID") {
-        return paymentDate !== "" && paymentMethod !== "";
-      } else if (status === "PENDING") {
-        return dueDate !== "";
+    if (status === "PAID") {
+      if (paymentDate === "") {
+        addIssue<NewVehicleFormInputs>(ctx, "purchase.installment.paymentDate");
       }
-      return true;
-    },
-    {
-      path: ["purchase", "installment"],
+      if (paymentMethod === "") {
+        addIssue<NewVehicleFormInputs>(
+          ctx,
+          "purchase.installment.paymentMethod"
+        );
+      }
+    } else if (status === "PENDING") {
+      if (dueDate === "") {
+        addIssue<NewVehicleFormInputs>(ctx, "purchase.installment.dueDate");
+      }
     }
-  );
+    return true;
+  });
 
 export const SchemaVehicleExpenseForm = s
   .object({
@@ -99,18 +106,20 @@ export const SchemaVehicleExpenseForm = s
         .or(s.empty()),
     }),
   })
-  .refine(
-    (data) => {
-      const { status, paymentDate, paymentMethod, dueDate } = data.payment;
+  .superRefine((data, ctx) => {
+    const { status, paymentDate, paymentMethod, dueDate } = data.payment;
 
-      if (status === "PAID") {
-        return paymentDate !== "" && paymentMethod !== "";
-      } else if (status === "PENDING") {
-        return dueDate !== "";
+    if (status === "PAID") {
+      if (paymentDate === "") {
+        addIssue<VehicleExpenseFormInputs>(ctx, "payment.paymentDate");
       }
-      return true;
-    },
-    {
-      path: ["payment"],
+      if (paymentMethod === "") {
+        addIssue<VehicleExpenseFormInputs>(ctx, "payment.paymentMethod");
+      }
+    } else if (status === "PENDING") {
+      if (dueDate === "") {
+        addIssue<VehicleExpenseFormInputs>(ctx, "payment.dueDate");
+      }
     }
-  );
+    return true;
+  });
