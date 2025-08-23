@@ -2,14 +2,14 @@ import Input from "@/design-system/Form/Input";
 import Select from "@/design-system/Form/Select";
 import Section from "@/domains/global/components/Section";
 import { PAYMENT_METHODS_PAYABLE_TYPE_OPTIONS } from "@/domains/global/constants";
-import { InstallmentStatus } from "@shared/enums";
+import { InstallmentStatus, PaymentMethodPayableType } from "@shared/enums";
 import type { ReactNode } from "react";
 import { useFormContext } from "react-hook-form";
 import { INSTALMENT_STATUS } from "../constants";
 import { NewVehicleFormInputs } from "../types";
 
 export default function VehiclePurchaseForm(): ReactNode {
-  const { watch } = useFormContext<NewVehicleFormInputs>();
+  const { watch, setValue } = useFormContext<NewVehicleFormInputs>();
   const statusWatch = watch("purchase.installment.status");
 
   return (
@@ -39,17 +39,28 @@ export default function VehiclePurchaseForm(): ReactNode {
             mask="money"
             required
           />
-          <Select<NewVehicleFormInputs> // 🌠 when change reset others field
+          <Select<NewVehicleFormInputs>
             label="Status do pagamento"
             name="purchase.installment.status"
             options={INSTALMENT_STATUS}
             required
+            onChange={(status) => {
+              if (status === InstallmentStatus.PENDING) {
+                setValue("purchase.installment.paymentDate", "");
+                setValue(
+                  "purchase.installment.paymentMethod",
+                  PaymentMethodPayableType.CREDIT_CARD
+                );
+              } else if (status === InstallmentStatus.PAID) {
+                setValue("purchase.installment.dueDate", "");
+              }
+            }}
           />
           {statusWatch === InstallmentStatus.PAID ? (
             <>
               <Input<NewVehicleFormInputs>
                 label="Data de pagamento"
-                name="purchase.installment.dueDate"
+                name="purchase.installment.paymentDate"
                 type="date"
                 required
               />
@@ -63,7 +74,7 @@ export default function VehiclePurchaseForm(): ReactNode {
           ) : (
             <Input<NewVehicleFormInputs>
               label="Data de vencimento"
-              name="purchase.installment.paymentDate"
+              name="purchase.installment.dueDate"
               type="date"
               required
             />

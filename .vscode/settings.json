@@ -6,11 +6,20 @@
     },
     "cSpell.words": [
       "autoincrement",
+      "BRAZILIANSTATE",
       "Childrenable",
       "datasource",
+      "EXPENSECATEGORY",
+      "FUELTYPE",
+      "INSTALLMENTSTATUS",
       "Pageable",
+      "PAYMENTMETHODPAYABLETYPE",
+      "PAYMENTMETHODRECEIVABLETYPE",
+      "ROLETYPE",
       "Shadcn",
       "Transactionable",
+      "VEHICLECATEGORY",
+      "VEHICLESTATUS",
       "Ziscar"
     ]
   }
