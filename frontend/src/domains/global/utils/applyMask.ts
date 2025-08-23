@@ -132,7 +132,10 @@ function applyChassiMask(value: string): string {
 }
 
 function applyNumberMask(value: string): string {
-  const digits = value.replace(/\D/g, "");
-
+  let digits = value.replace(/\D/g, "");
+  if (digits.length > 1) {
+    digits = digits.replace(/^0+/, "");
+    if (digits === "") digits = "0";
+  }
   return digits.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }

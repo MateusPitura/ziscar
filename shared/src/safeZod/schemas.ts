@@ -48,6 +48,7 @@ export const number = () =>
 
 export function numberString(min = 1, max = 100_000_000_000) {
   return string()
+    .or(empty())
     .transform((number) => removeMask(number))
     .refine(
       (number) => {
