@@ -38,50 +38,7 @@ export default function NewVehicleForm(): ReactNode {
   });
 
   async function getBrandsInfo(): Promise<FetchBrand[]> {
-    // return await safeFetch(`${BACKEND_URL}/brands?orderBy=name`);
-
-    return [
-      {
-        id: 1,
-        name: "Chevrolet",
-      },
-      {
-        id: 2,
-        name: "Fiat",
-      },
-      {
-        id: 3,
-        name: "Ford",
-      },
-      {
-        id: 4,
-        name: "Honda",
-      },
-      {
-        id: 5,
-        name: "Hyundai",
-      },
-      {
-        id: 6,
-        name: "Jeep",
-      },
-      {
-        id: 7,
-        name: "Nissan",
-      },
-      {
-        id: 8,
-        name: "Renault",
-      },
-      {
-        id: 9,
-        name: "Toyota",
-      },
-      {
-        id: 10,
-        name: "Volkswagen",
-      },
-    ];
+    return await safeFetch(`${BACKEND_URL}/vehicles/brands`);
   }
 
   const { data: brandsInfo, isFetching: isFetchingBrandsInfo } = useQuery({
