@@ -47,7 +47,7 @@ export default function UsersTable(): ReactNode {
   async function getUsersInfo(
     filter?: string
   ): Promise<PageablePayload<FetchUser>> {
-    return await safeFetch(`${BACKEND_URL}/user?${filter}`, {
+    return await safeFetch(`${BACKEND_URL}/user?${filter}&orderBy=fullName`, {
       resource: "USERS",
       action: "READ",
     });
@@ -66,30 +66,24 @@ export default function UsersTable(): ReactNode {
         {enableReport && (
           <ExportButton<FetchUser, UsersFilterFormInputs>
             fileName="Relatório Usuários"
-            resource="USERS"
             queryKey={["users", filterFormatted]}
             queryFn={getUsersInfo}
             selectQueryFn={selectUsersInfoForReport}
             formatFilters={{
               fullName: "Nome completo",
-              orderBy: "Ordenar por",
               status: "Status",
               startDate: "Data inicial",
               endDate: "Data final",
             }}
             formatFiltersValues={{
-              orderBy: {
-                email: "Email",
-                fullName: "Nome completo",
-              },
               status: {
                 active: "Ativo",
                 inactive: "Inativo",
               },
             }}
             formatColumns={{
-              id: "ID",
               fullName: "Nome",
+              cpf: "CPF",
               email: "Email",
               phone: "Celular",
               archivedAt: "Ativo",
@@ -100,8 +94,8 @@ export default function UsersTable(): ReactNode {
       </div>
       <Table>
         <Table.Header>
-          <Table.Head label="ID" />
           <Table.Head label="Nome completo" />
+          <Table.Head label="CPF" />
           <Table.Head label="Email" />
           <Table.Head label="Celular" />
           <Table.Head label="Status" />
@@ -115,8 +109,8 @@ export default function UsersTable(): ReactNode {
         >
           {usersInfo?.data.map((user) => (
             <Table.Row key={user.id}>
-              <Table.Cell label={String(user.id)} />
               <Table.Cell label={user.fullName} />
+              <Table.Cell label={user.cpf} />
               <Table.Cell label={user.email} />
               <Table.Cell label={user.phone} />
               <Table.Cell label={user.archivedAt ? "Inativo" : "Ativo"} />

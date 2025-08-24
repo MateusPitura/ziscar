@@ -1,15 +1,15 @@
-import useFilterContext from '@/domains/global/hooks/useFilterContext';
-import { memo, type ReactElement, type ReactNode } from 'react';
-import { CustomersFilterFormInputs } from '../types';
-import Form from '@/design-system/Form';
-import { useFormContext } from 'react-hook-form';
-import useDialogContext from '@/domains/global/hooks/useDialogContext';
-import SideSheet from '@/design-system/SideSheet';
-import Input from '@/design-system/Form/Input';
-import Choice from '@/design-system/Form/Choice';
-import InputLabel from '@/design-system/Form/InputLabel';
-import { SchemaCustomersFilterForm } from '../schemas';
-import { customerFilterDefaultValues } from '../constants';
+import useFilterContext from "@/domains/global/hooks/useFilterContext";
+import { memo, type ReactElement, type ReactNode } from "react";
+import { CustomersFilterFormInputs } from "../types";
+import Form from "@/design-system/Form";
+import { useFormContext } from "react-hook-form";
+import useDialogContext from "@/domains/global/hooks/useDialogContext";
+import SideSheet from "@/design-system/SideSheet";
+import Input from "@/design-system/Form/Input";
+import Choice from "@/design-system/Form/Choice";
+import InputLabel from "@/design-system/Form/InputLabel";
+import { SchemaCustomersFilterForm } from "../schemas";
+import { customerFilterDefaultValues } from "../constants";
 
 function CustomersFilterForm(): ReactNode {
   const { customersFilter, handleCustomersFilter } = useFilterContext();
@@ -27,7 +27,6 @@ function CustomersFilterForm(): ReactNode {
       className="flex-1 flex flex-col"
       defaultValues={{
         fullName: customersFilter?.fullName || "",
-        orderBy: customersFilter?.orderBy || "fullName",
         status: customersFilter?.status || "active",
         startDate: customersFilter?.startDate || "",
         endDate: customersFilter?.endDate || "",
@@ -53,7 +52,10 @@ function CustomersFilterFormContent(): ReactElement {
   return (
     <>
       <SideSheet.Body className="flex flex-col gap-4">
-        <Input<CustomersFilterFormInputs> name="fullName" label="Nome completo" />
+        <Input<CustomersFilterFormInputs>
+          name="fullName"
+          label="Nome completo"
+        />
         <InputLabel label="Status" />
         <div className="flex flex-col gap-2">
           <Choice hideErrorLabel>
@@ -71,29 +73,14 @@ function CustomersFilterFormContent(): ReactElement {
         </div>
         <Input<CustomersFilterFormInputs>
           name="startDate"
-          label="Data inicial"
+          label="Data inicial de criação"
           type="date"
         />
         <Input<CustomersFilterFormInputs>
           name="endDate"
-          label="Data final"
+          label="Data final de criação"
           type="date"
         />
-        <InputLabel label="Ordenar por" />
-        <div className="flex flex-col gap-2">
-          <Choice hideErrorLabel>
-            <Choice.Radio<CustomersFilterFormInputs>
-              name="orderBy"
-              label="Nome"
-              value="fullName"
-            />
-            <Choice.Radio<CustomersFilterFormInputs>
-              name="orderBy"
-              label="Email"
-              value="email"
-            />
-          </Choice>
-        </div>
       </SideSheet.Body>
       <SideSheet.Footer
         primaryLabel="Aplicar"

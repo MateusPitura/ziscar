@@ -3,8 +3,13 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { Store } from '@prisma/client';
+import { ITEMS_PER_PAGE } from '@shared/constants';
+import { addressNullableFields } from 'src/constants';
 import { PrismaService } from 'src/infra/database/prisma.service';
+import { GetCallback } from 'src/types';
 import { verifyDuplicated } from 'src/utils/verifyDuplicated';
+import { GET_STORE } from './store.constant';
 import {
   CreateInput,
   FindManyInput,
@@ -12,11 +17,6 @@ import {
   UpdateInput,
   VerifyDuplicatedInput,
 } from './store.type';
-import { GetCallback } from 'src/types';
-import { ITEMS_PER_PAGE } from '@shared/constants';
-import { Store } from '@prisma/client';
-import { GET_STORE } from './store.constant';
-import { addressNullableFields } from 'src/constants';
 
 @Injectable()
 export class StoreService {
@@ -95,15 +95,10 @@ export class StoreService {
     return store;
   }
 
-  async findMany({
-    storeFindManyInDto,
-    enterpriseId,
-    paginate = true,
-    select,
-  }: FindManyInput) {
+  async findMany({ storeFindManyInDto, enterpriseId, select }: FindManyInput) {
     const pagination = {};
-    if (paginate) {
-      const { page = 1 } = storeFindManyInDto;
+    const { page } = storeFindManyInDto;
+    if (page) {
       pagination['skip'] = (page - 1) * ITEMS_PER_PAGE;
       pagination['take'] = ITEMS_PER_PAGE;
     }

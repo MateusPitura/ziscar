@@ -716,6 +716,33 @@ describe('UserService', () => {
     expect(result.data).toHaveLength(ITEMS_PER_PAGE);
   });
 
+  it('should find many users without pagination', async () => {
+    const spy = jest.spyOn(prismaService.user, 'findMany');
+
+    const result = await userService.findMany({
+      userFindManyInDto: {},
+      userId: POPULATE_USER.ADM.id,
+      enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
+    });
+
+    expect(spy).not.toHaveBeenLastCalledWith(
+      expect.objectContaining({ skip: 0, take: ITEMS_PER_PAGE }),
+    );
+
+    const SIGNED_USER = 1;
+
+    const calculatedUsers =
+      POPULATE_OTHER_ENTITIES_AMOUNT +
+      Object.keys(POPULATE_USER).length -
+      POPULATE_INACTIVE_ENTITIES_AMOUNT -
+      Object.values(POPULATE_USER).filter((item) => item.archivedAt !== null)
+        .length -
+      SIGNED_USER;
+
+    expect(result).toHaveProperty('total', calculatedUsers);
+    expect(result.data).toHaveLength(calculatedUsers);
+  });
+
   it('should find many users without signed user', async () => {
     const result = await userService.findMany({
       userFindManyInDto: { page: 1 },
@@ -929,6 +956,12 @@ describe('UserService', () => {
         DELETE: false,
         READ: true,
         UPDATE: true,
+      },
+      REPORTS: {
+        CREATE: true,
+        DELETE: false,
+        READ: false,
+        UPDATE: false,
       },
     });
   });

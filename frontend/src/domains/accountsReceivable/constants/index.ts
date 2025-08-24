@@ -3,11 +3,11 @@ import {
   AccountsReceivableFilterFormInputs,
   PaymentMethodFormInputs,
 } from "../types";
-import { InstallmentStatus, PaymentMethodReceivableType, PaymentMethodReceivableTypeType } from "@shared/enums";
+import { InstallmentStatus, PaymentMethodReceivableType } from "@shared/enums";
 
 export const paymentMethodDefaultValues: PaymentMethodFormInputs = {
   paymentDate: safeFormat({ date: new Date(), format: "yyyy-MM-dd" }),
-  type: PaymentMethodReceivableType.TRANSFER,
+  type: PaymentMethodReceivableType.CREDIT_CARD,
 };
 
 export const accountReceivableFilterDefaultValues: AccountsReceivableFilterFormInputs =
@@ -17,13 +17,3 @@ export const accountReceivableFilterDefaultValues: AccountsReceivableFilterFormI
     overallStatus: InstallmentStatus.PENDING,
   };
 
-export const PaymentMethodText: Record<PaymentMethodReceivableTypeType, string> = {
-  BANK_SLIP: "Boleto Bancário",
-  CASH: "Dinheiro",
-  CREDIT_CARD: "Cartão de Crédito",
-  DEBIT_CARD: "Cartão de Débito",
-  DOC: "DOC",
-  PIX: "Pix",
-  TED: "TED",
-  TRANSFER: "Transferência Bancária",
-};

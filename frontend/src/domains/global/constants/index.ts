@@ -1,5 +1,11 @@
-import { BACKEND_PORT, API_URL } from "@shared/constants";
-import { BrazilianState } from "@shared/enums";
+import { API_URL, BACKEND_PORT } from "@shared/constants";
+import {
+  BrazilianState,
+  PaymentMethodPayableType,
+  PaymentMethodPayableTypeType,
+  PaymentMethodReceivableType,
+  PaymentMethodReceivableTypeType,
+} from "@shared/enums";
 
 export const BLANK = " ";
 
@@ -46,3 +52,38 @@ export const STATES = [
 
 export const PREVIOUS_PAGE = -1;
 export const CEP_LENGTH_WITH_MASK = 9;
+
+export const PaymentMethodPayableText: Record<
+  PaymentMethodPayableTypeType,
+  string
+> = {
+  BANK_SLIP: "Boleto Bancário",
+  CASH: "Dinheiro",
+  CREDIT_CARD: "Cartão de Crédito",
+  DEBIT_CARD: "Cartão de Débito",
+  DOC: "DOC",
+  PIX: "Pix",
+  TED: "TED",
+};
+
+export const PaymentMethodReceivableText: Record<
+  PaymentMethodReceivableTypeType,
+  string
+> = {
+  ...PaymentMethodPayableText,
+  TRANSFER: "Transferência Bancária",
+};
+
+export const PAYMENT_METHODS_RECEIVABLE_TYPE_OPTIONS = Object.values(
+  PaymentMethodReceivableType
+).map((method) => ({
+  label: PaymentMethodReceivableText[method],
+  value: method,
+}));
+
+export const PAYMENT_METHODS_PAYABLE_TYPE_OPTIONS = Object.values(
+  PaymentMethodPayableType
+).map((method) => ({
+  label: PaymentMethodReceivableText[method],
+  value: method,
+}));

@@ -11,29 +11,36 @@ import {
 import {
   FieldValues,
   Path,
+  PathValue,
   useController,
   useFormContext,
   useWatch,
 } from "react-hook-form";
-import { Options } from "@/domains/global/types";
+import { UnwrapArray } from "@/domains/global/types";
 import Icon from "../Icon";
 import Spinner from "../Spinner";
 import InputError from "./InputError";
 import InputLabel from "./InputLabel";
 
-interface SelectProperties<T> {
-  options: Options[];
-  name: Path<T>;
-  disabled?: boolean;
-  loading?: boolean;
-  hideErrorLabel?: boolean;
-  label: string;
-  required?: boolean;
-  onChange?: (value?: string) => void;
-  onSearchChange?: (search: string) => void;
-  shouldFilter?: boolean;
-  notFound?: ReactNode;
-}
+type SelectProperties<T extends FieldValues | undefined = undefined> = {
+  [K in Path<T>]: {
+    options: {
+      value: UnwrapArray<PathValue<T, K>>;
+      label: string;
+      description?: string;
+    }[];
+    name: K;
+    disabled?: boolean;
+    loading?: boolean;
+    hideErrorLabel?: boolean;
+    label: string;
+    required?: boolean;
+    onChange?: (value?: string) => void;
+    onSearchChange?: (search: string) => void;
+    shouldFilter?: boolean;
+    notFound?: ReactNode;
+  };
+}[Path<T>];
 
 export default function Select<T extends FieldValues>({
   options,

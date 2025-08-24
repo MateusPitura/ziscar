@@ -9,12 +9,13 @@ import { UserFormInputs } from "@/domains/users/types";
 import Select from "@/design-system/Form/Select";
 import { CEP_LENGTH_WITH_MASK, STATES } from "../constants";
 import FieldArray from "@/design-system/Form/FieldArray";
+import { BrazilianState } from "../types";
 
 interface ViaCepAddress {
   logradouro: string;
   bairro: string;
   ibge: string;
-  uf: string;
+  uf: BrazilianState;
   erro: boolean;
 }
 

@@ -1,20 +1,18 @@
 import Button from "@/design-system/Button";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import { PageablePayload } from "@/domains/global/types";
+import safeFormat from "@/domains/global/utils/safeFormat";
 import { pdf } from "@react-pdf/renderer";
 import { ITEMS_PER_PAGE } from "@shared/constants";
 import { QueryKey, useIsFetching, useQueryClient } from "@tanstack/react-query";
 import { type ReactElement } from "react";
-import Report from "./Report";
-import safeFormat from "@/domains/global/utils/safeFormat";
 import { FieldValues, Path, PathValue } from "react-hook-form";
 import { formatAppliedFilters } from "../utils";
-import { ResourcesType } from "@shared/enums";
+import Report from "./Report";
 
 type ExportButtonProperties<T, U extends FieldValues> = {
   [K in Path<U>]: {
     fileName: string;
-    resource: ResourcesType;
     queryKey: QueryKey;
     queryFn: (filter?: string) => Promise<PageablePayload<T>>;
     selectQueryFn: (payload: PageablePayload<T>) => Record<string, unknown>[];
@@ -26,7 +24,6 @@ type ExportButtonProperties<T, U extends FieldValues> = {
 
 export default function ExportButton<T, U extends FieldValues>({
   fileName,
-  resource,
   queryKey,
   queryFn: customQueryFn,
   selectQueryFn,
@@ -72,14 +69,14 @@ export default function ExportButton<T, U extends FieldValues>({
       label="Gerar relatório PDF"
       iconRight="FileDownload"
       state={isFetching ? "loading" : undefined}
-      resource={resource}
-      action="READ"
+      resource="REPORTS"
+      action="CREATE"
       data-cy="export-button"
       onClick={async () => {
         const snackbar = showSuccessSnackbar({
           title: "O PDF está sendo gerado",
-          actionBtnAction: "READ",
-          actionBtnResource: resource,
+          actionBtnAction: "CREATE",
+          actionBtnResource: "REPORTS",
         });
 
         try {

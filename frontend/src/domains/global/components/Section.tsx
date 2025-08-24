@@ -2,7 +2,7 @@ import classNames from "classnames";
 import { Childrenable } from "../types";
 
 function Container({ children }: Childrenable) {
-  return <div className="flex flex-col gap-4 w-[56rem]">{children}</div>;
+  return <div className="flex flex-col gap-x-4 gap-y-2 w-[56rem]">{children}</div>;
 }
 
 function Group({ children }: Childrenable) {
@@ -15,7 +15,7 @@ interface HeaderProps {
 
 function Header({ title }: HeaderProps) {
   return (
-    <div className="p-4">
+    <div className="px-4 py-2">
       <span className="text-body-large text-neutral-700 font-bold">{title}</span>
     </div>
   );
@@ -27,7 +27,7 @@ interface SectionBodyProps extends Childrenable {
 
 function Body({ children, className }: SectionBodyProps) {
   return (
-    <div className={classNames("p-4 grid grid-cols-2 gap-4", className)}>
+    <div className={classNames("px-4 py-2 grid grid-cols-2 gap-x-4 gap-y-2", className)}>
       {children}
     </div>
   );

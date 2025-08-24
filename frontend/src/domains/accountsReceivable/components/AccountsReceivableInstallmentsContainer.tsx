@@ -1,24 +1,25 @@
-import PageHeader from "@/domains/global/components/PageHeader";
+import Spinner from "@/design-system/Spinner";
 import type { ReactNode } from "react";
+import AccountsReceivableInstallmentsHeader from "./AccountsReceivableInstallmentsHeader";
 import AccountsReceivableInstallmentsTable from "./AccountsReceivableInstallmentsTable";
-import Button from "@/design-system/Button";
-import { useNavigate } from "react-router-dom";
+import { useIsFetching } from "@tanstack/react-query";
 
 export default function AccountsReceivableInstallmentsContainer(): ReactNode {
-  const navigate = useNavigate();
+  const isFetching = useIsFetching({
+    queryKey: ["account-receivable"],
+  });
+
+  if (isFetching) {
+    return (
+      <div className="flex justify-center items-center h-full w-full">
+        <Spinner />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-4 h-full w-full">
-      <PageHeader title="Detalhes da Conta a Receber">
-        <Button
-          variant="quaternary"
-          label="Voltar"
-          iconLeft="ArrowBack"
-          onClick={() => navigate("/accounts-receivable")}
-          action="READ"
-          resource="ACCOUNTS_RECEIVABLE"
-        />
-      </PageHeader>
+      <AccountsReceivableInstallmentsHeader />
       <AccountsReceivableInstallmentsTable />
     </div>
   );

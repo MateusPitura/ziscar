@@ -13,7 +13,6 @@ export interface CreateInput extends Transactionable {
 export interface FindManyInput {
   storeFindManyInDto: StoreFindManyInDto;
   enterpriseId: number;
-  paginate?: boolean;
   select?: Prisma.StoreSelect;
 }
 

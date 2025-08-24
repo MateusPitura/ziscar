@@ -4,11 +4,13 @@ import { icons } from "./constants/icons";
 
 interface IconProperties {
   iconName: IconsName;
+  fontSize?: "small" | "medium" | "large" | "inherit";
   className?: string;
 }
 
 export default function Icon({
   iconName,
+  fontSize = "medium",
   className,
 }: IconProperties): ReactNode {
   const BareIcon = icons[iconName];
@@ -16,7 +18,7 @@ export default function Icon({
 
   return (
     <div className={className}>
-      <BareIcon color="inherit" fontSize="medium"/>
+      <BareIcon color="inherit" fontSize={fontSize} />
     </div>
   );
 }

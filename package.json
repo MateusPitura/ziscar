@@ -2,8 +2,8 @@
   "name": "ziscar",
   "private": true,
   "scripts": {
-    "start": "npm run generate:enums && npm run dev:db & npm --prefix frontend run dev & npm --prefix backend run dev",
-    "dev": "npm run generate:enums && npm run dev:db && docker-compose up --build -d backend frontend",
+    "start": "npm run dev:db & npm --prefix frontend run dev & npm --prefix backend run dev",
+    "dev": "npm run dev:db && docker-compose up --build -d backend frontend",
     "dev:down": "docker-compose down backend frontend database",
     "dev:db": "docker-compose up --build -d database",
     "dev:down:db": "docker-compose down database",
@@ -13,7 +13,7 @@
     "test:down:load": "docker-compose down k6",
     "prod:db": "RESTART_POLICY=always npm run dev:db",
     "prod:down:db": "npm run dev:down:db",
-    "prod:backend": "npm run generate:enums && APP_ENV=prod RESTART_POLICY=always docker-compose up --build -d backend",
+    "prod:backend": "APP_ENV=prod RESTART_POLICY=always docker-compose up --build -d backend",
     "prod:down:backend": "docker-compose down backend",
     "generate:enums": "node scripts/generate-shared-enums.js",
     "generate:enums:force": "node scripts/generate-shared-enums.js --force"

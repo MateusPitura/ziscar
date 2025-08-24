@@ -557,6 +557,29 @@ describe('StoreService', () => {
     expect(result.data).toHaveLength(ITEMS_PER_PAGE);
   });
 
+  it('should find many stores without pagination', async () => {
+    const spy = jest.spyOn(prismaService.store, 'findMany');
+
+    const result = await storeService.findMany({
+      storeFindManyInDto: {},
+      enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
+    });
+
+    expect(spy).not.toHaveBeenLastCalledWith(
+      expect.objectContaining({ skip: 0, take: ITEMS_PER_PAGE }),
+    );
+
+    const calculatedStores =
+      POPULATE_OTHER_ENTITIES_AMOUNT +
+      Object.keys(POPULATE_STORE).length -
+      POPULATE_INACTIVE_ENTITIES_AMOUNT -
+      Object.values(POPULATE_STORE).filter((item) => item.archivedAt !== null)
+        .length;
+
+    expect(result).toHaveProperty('total', calculatedStores);
+    expect(result.data).toHaveLength(calculatedStores);
+  });
+
   it('should find many stores by name', async () => {
     const spy = jest.spyOn(prismaService.store, 'findMany');
 

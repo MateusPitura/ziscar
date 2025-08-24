@@ -36,34 +36,34 @@ model VehicleCharacteristicValue {
 }
 
 model VehicleBrand {
-  id           Int        @id @default(autoincrement())
-  name         String     @unique @db.VarChar(127)
-  vehicles     Vehicle[]
-  
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
-  archivedAt   DateTime?
+  id       Int       @id @default(autoincrement())
+  name     String    @unique @db.VarChar(127)
+  vehicles Vehicle[]
+
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  archivedAt DateTime?
 }
 
 model Vehicle {
-  id                Int            @id @default(autoincrement())
-  chassiNumber      String         @unique @db.VarChar(17)
+  id                Int              @id @default(autoincrement())
+  chassiNumber      String           @unique @db.VarChar(17)
   modelYear         Int?
   yearOfManufacture Int?
-  modelName         String?        @db.VarChar(127)
+  modelName         String?          @db.VarChar(127)
   brandId           Int
-  brand             VehicleBrand   @relation(fields: [brandId], references: [id])
+  brand             VehicleBrand     @relation(fields: [brandId], references: [id])
   category          VehicleCategory?
   kilometers        Int?
-  plateNumber       String         @db.VarChar(7)
+  plateNumber       String           @db.VarChar(7)
   announcedPrice    Int?
   minimumPrice      Int?
   commissionValue   Int
-  color             String?        @db.VarChar(6)
+  color             String?          @db.VarChar(6)
   fuelType          FuelType?
   status            VehicleStatus
   storeId           Int
-  store             Store          @relation(fields: [storeId], references: [id])
+  store             Store            @relation(fields: [storeId], references: [id])
 
   vehiclePurchases            VehiclePurchase[]
   vehicleExpenses             VehicleExpense[]
@@ -95,6 +95,7 @@ model VehicleExpense {
   id               Int             @id @default(autoincrement())
   observations     String?
   category         ExpenseCategory
+  competencyDate   DateTime        @db.Date
   accountPayableId Int
   accountPayable   AccountPayable  @relation(fields: [accountPayableId], references: [id])
   userId           Int
@@ -121,8 +122,8 @@ model VehicleSale {
   accountPayableId    Int
   accountPayable      AccountPayable    @relation(fields: [accountPayableId], references: [id])
 
-  vehicleSnapshot     Json
-  customerSnapshot    Json
+  vehicleSnapshot  Json
+  customerSnapshot Json
 
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
@@ -257,8 +258,8 @@ model Enterprise {
   stores    Store[]
   customers Customer[]
 
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
   archivedAt DateTime?
 }
 
@@ -342,6 +343,7 @@ enum Resources {
   ACCOUNTS_PAYABLE
   ACCOUNTS_RECEIVABLE
   CUSTOMERS
+  REPORTS
 }
 
 enum Actions {
@@ -352,18 +354,19 @@ enum Actions {
 }
 
 enum VehicleCategory {
+  TRUCK
   CAR
   MOTORCYCLE
-  TRUCK
-  VAN
   BUS
+  VAN
 }
 
 enum FuelType {
-  GASOLINE
+  DIESEL
+  ELECTRIC
   ETHANOL
   FLEX
-  ELECTRIC
+  GASOLINE
   GNV
   HYBRID
 }
@@ -371,9 +374,9 @@ enum FuelType {
 enum VehicleStatus {
   PURCHASED
   IN_STOCK
+  DELIVERED
   MAINTENANCE
   SOLD
-  DELIVERED
 }
 
 enum ExpenseCategory {
@@ -394,24 +397,24 @@ enum InstallmentStatus {
 }
 
 enum PaymentMethodReceivableType {
-  TRANSFER
-  PIX
   BANK_SLIP
   CREDIT_CARD
   DEBIT_CARD
-  TED
-  DOC
   CASH
+  DOC
+  PIX
+  TED
+  TRANSFER
 }
 
 enum PaymentMethodPayableType {
-  PIX
   BANK_SLIP
   CREDIT_CARD
   DEBIT_CARD
-  TED
-  DOC
   CASH
+  DOC
+  PIX
+  TED
 }
 
 enum BrazilianState {

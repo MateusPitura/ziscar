@@ -10,7 +10,6 @@ export const customerDefaultValues: CustomerFormInputs = {
 
 export const customerFilterDefaultValues: CustomersFilterFormInputs = {
   fullName: "",
-  orderBy: "fullName",
   status: "active",
   startDate: "",
   endDate: "",

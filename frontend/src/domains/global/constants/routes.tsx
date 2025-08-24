@@ -1,7 +1,7 @@
-import { lazy, ReactNode } from "react";
 import { IconsName } from "@/design-system/types";
-import { DEFAULT_ROUTE } from ".";
 import { ActionsType, ResourcesType } from "@shared/enums";
+import { lazy, ReactNode } from "react";
+import { DEFAULT_ROUTE } from ".";
 
 interface Route {
   path: string;
@@ -15,6 +15,21 @@ interface Route {
 
 const Vehicles = lazy(
   () => import("@/domains/vehicles/components/VehiclesPage")
+);
+const NewVehicle = lazy(
+  () => import("@/domains/vehicles/components/NewVehiclePage")
+);
+const EditVehicle = lazy(
+  () => import("@/domains/vehicles/components/EditVehiclePage")
+);
+const VehicleExpense = lazy(
+  () => import("@/domains/vehicles/components/VehicleExpensePage")
+);
+const NewVehicleExpense = lazy(
+  () => import("@/domains/vehicles/components/NewVehicleExpensePage")
+);
+const EditVehicleExpense = lazy(
+  () => import("@/domains/vehicles/components/EditVehicleExpensePage")
 );
 
 const Users = lazy(() => import("@/domains/users/components/UsersPage"));
@@ -44,6 +59,9 @@ const EditCustomer = lazy(
 const VehicleSale = lazy(
   () => import("@/domains/vehicleSale/components/VehicleSalePage")
 );
+const ViewVehicleSale = lazy(
+  () => import("@/domains/vehicleSale/components/ViewVehicleSalePage")
+);
 
 const NotFound = lazy(() => import("@/domains/global/components/NotFoundPage"));
 
@@ -52,12 +70,21 @@ const Sign = lazy(() => import("@/domains/sign/components/SignPage"));
 const AccountsPayable = lazy(
   () => import("@/domains/accountsPayable/components/AccountsPayablePage")
 );
+const AccountsPayableInstallments = lazy(
+  () =>
+    import(
+      "@/domains/accountsPayable/components/AccountsPayableInstallmentsPage"
+    )
+);
 
 const AccountsReceivable = lazy(
   () => import("@/domains/accountsReceivable/components/AccountsReceivablePage")
 );
 const AccountsReceivableInstallments = lazy(
-  () => import("@/domains/accountsReceivable/components/AccountsReceivableInstallmentsPage")
+  () =>
+    import(
+      "@/domains/accountsReceivable/components/AccountsReceivableInstallmentsPage"
+    )
 );
 
 export const privateRoutes: Route[] = [
@@ -69,6 +96,89 @@ export const privateRoutes: Route[] = [
     shouldDisplay: true,
     action: "READ",
     resource: "VEHICLES",
+  },
+  {
+    path: "/vehicles/new",
+    entryPage: <NewVehicle />,
+    shouldDisplay: false,
+    action: "CREATE",
+    resource: "VEHICLES",
+  },
+  {
+    path: "/vehicles/edit/:vehicleId",
+    entryPage: <EditVehicle />,
+    shouldDisplay: false,
+    action: "UPDATE",
+    resource: "VEHICLES",
+  },
+  {
+    path: "/vehicles/expense/:vehicleId",
+    entryPage: <VehicleExpense />,
+    shouldDisplay: false,
+    action: "READ",
+    resource: "VEHICLES",
+  },
+  {
+    path: "/vehicles/expense/:vehicleId/new",
+    entryPage: <NewVehicleExpense />,
+    shouldDisplay: false,
+    action: "READ",
+    resource: "VEHICLES",
+  },
+  {
+    path: "/vehicles/expense/:vehicleId/edit/:expenseId",
+    entryPage: <EditVehicleExpense />,
+    shouldDisplay: false,
+    action: "READ",
+    resource: "VEHICLES",
+  },
+  {
+    path: "/vehicle-sale",
+    displayName: "Realizar Venda",
+    icon: "CurrencyExchange",
+    entryPage: <VehicleSale />,
+    shouldDisplay: true,
+    action: "CREATE",
+    resource: "VEHICLE_SALE",
+  },
+  {
+    path: "/vehicle-sale/:vehicleSaleId",
+    entryPage: <ViewVehicleSale />,
+    shouldDisplay: false,
+    action: "READ",
+    resource: "VEHICLE_SALE",
+  },
+  {
+    path: "/accounts-receivable",
+    displayName: "Vendas",
+    icon: "CreditCard",
+    entryPage: <AccountsReceivable />,
+    shouldDisplay: true,
+    action: "READ",
+    resource: "ACCOUNTS_RECEIVABLE",
+  },
+  {
+    path: "/accounts-receivable/:accountReceivableId/installments",
+    entryPage: <AccountsReceivableInstallments />,
+    shouldDisplay: false,
+    action: "READ",
+    resource: "ACCOUNTS_RECEIVABLE",
+  },
+  {
+    path: "/accounts-payable",
+    displayName: "Pagamentos",
+    icon: "CreditCardOff",
+    entryPage: <AccountsPayable />,
+    shouldDisplay: true,
+    action: "READ",
+    resource: "ACCOUNTS_PAYABLE",
+  },
+  {
+    path: "/accounts-payable/:accountPayableId/installments",
+    entryPage: <AccountsPayableInstallments />,
+    shouldDisplay: false,
+    action: "READ",
+    resource: "ACCOUNTS_PAYABLE",
   },
   {
     path: "/stores",
@@ -94,40 +204,6 @@ export const privateRoutes: Route[] = [
     resource: "STORES",
   },
   {
-    path: "/vehicle-sale",
-    displayName: "Realizar Venda",
-    icon: "CurrencyExchange",
-    entryPage: <VehicleSale />,
-    shouldDisplay: true,
-    action: "CREATE",
-    resource: "VEHICLE_SALE",
-  },
-  {
-    path: "/accounts-payable",
-    displayName: "Contas a Pagar",
-    icon: "CreditCardOff",
-    entryPage: <AccountsPayable />,
-    shouldDisplay: true,
-    action: "READ",
-    resource: "ACCOUNTS_PAYABLE",
-  },
-  {
-    path: "/accounts-receivable",
-    displayName: "Contas a Receber",
-    icon: "CreditCard",
-    entryPage: <AccountsReceivable />,
-    shouldDisplay: true,
-    action: "READ",
-    resource: "ACCOUNTS_RECEIVABLE",
-  },
-  {
-    path: "/accounts-receivable/installments/:accountReceivableId",
-    entryPage: <AccountsReceivableInstallments />,
-    shouldDisplay: false,
-    action: "READ",
-    resource: "ACCOUNTS_RECEIVABLE",
-  },
-  {
     path: "/users",
     displayName: "Usuários",
     icon: "Person",
@@ -151,13 +227,6 @@ export const privateRoutes: Route[] = [
     resource: "USERS",
   },
   {
-    path: "/profile/edit",
-    entryPage: <EditProfile />,
-    shouldDisplay: true,
-    icon: "Settings",
-    displayName: "Conta",
-  },
-  {
     path: "/customers",
     displayName: "Clientes",
     icon: "People",
@@ -179,6 +248,13 @@ export const privateRoutes: Route[] = [
     shouldDisplay: false,
     action: "UPDATE",
     resource: "CUSTOMERS",
+  },
+  {
+    path: "/profile",
+    entryPage: <EditProfile />,
+    shouldDisplay: true,
+    icon: "Settings",
+    displayName: "Conta",
   },
 ];
 

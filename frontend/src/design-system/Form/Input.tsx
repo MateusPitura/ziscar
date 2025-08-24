@@ -93,7 +93,7 @@ export default function Input<T extends FieldValues>({
           </div>
         )}
       </div>
-      {hideErrorLabel || <InputError name={name} required={required} />}
+      {hideErrorLabel || <InputError name={name} />}
     </label>
   );
 }

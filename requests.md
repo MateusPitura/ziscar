@@ -3,7 +3,7 @@
 # Buscar contas a receber com filtro
 
 endpoint: 
-GET /account-receivable?page=1&startDate=2025-08-01&endDate=2025-08-08&overallStatus=PAID
+GET /account-receivable?page=1&startDate=2025-08-01&endDate=2025-08-08&overallStatus=PAID&orderBy=description
 
 payload:
 {
@@ -29,7 +29,7 @@ payload:
 # Buscar parcelas de uma conta a receber
 
 endpoint: 
-GET /account-receivable-installments/${accountReceivableId}
+GET /account-receivable-installments/${accountReceivableId}?orderBy=dueDate
 
 payload:
 [ // aqui não precisa ser paginado pois não haverá muitas
@@ -41,6 +41,7 @@ payload:
         value: "10000", // o valor deve vir em centavos
         isRefund: false, // no momento pode trazer sempre false
         isUpfront: true,
+        vehicleSaleId: 1, // id da venda
     },
     {
         id: 2,
@@ -50,6 +51,7 @@ payload:
         value: "10000",
         isRefund: false,
         isUpfront: false,
+        vehicleSaleId: 2
     },
     {
         id: 3,
@@ -59,6 +61,7 @@ payload:
         value: "10000",
         isRefund: false,
         isUpfront: false,
+        vehicleSaleId: 3
     },
     {
         id: 4,
@@ -68,8 +71,26 @@ payload:
         value: "10000",
         isRefund: false,
         isUpfront: false,
+        vehicleSaleId: 4
     },
 ]
+
+# Buscar informações de uma conta
+
+endpoint:
+GET /account-receivable/${installmentId}
+
+payload:
+{
+    id: 1,
+    dueDate: "2025-01-01",
+    installmentSequence: 0,
+    status: "PAID",
+    value: "10000",
+    isRefund: false,
+    isUpfront: true,
+    vehicleSaleId: 1,
+}
 
 # Buscar método de pagamento de uma parcela
 

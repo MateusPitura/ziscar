@@ -226,7 +226,7 @@ describe("Customer", () => {
 
     cy.intercept(
       "GET",
-      "http://localhost:3000/customer?page=1&orderBy=fullName&status=active"
+      "http://localhost:3000/customer?page=1&status=active&orderBy=fullName"
     ).as("getCustomersPage1");
 
     cy.wait("@getCustomersPage1");
@@ -235,7 +235,7 @@ describe("Customer", () => {
 
     cy.intercept(
       "GET",
-      "http://localhost:3000/customer?page=2&orderBy=fullName&status=active"
+      "http://localhost:3000/customer?page=2&status=active&orderBy=fullName"
     ).as("getCustomersPage2");
 
     cy.get('[data-cy="table-navigate-next"]').click();
@@ -256,7 +256,7 @@ describe("Customer", () => {
 
     cy.intercept(
       "GET",
-      "http://localhost:3000/customer?page=1&orderBy=fullName&status=active"
+      "http://localhost:3000/customer?page=1&status=active&orderBy=fullName"
     ).as("getCustomersPage");
 
     cy.intercept("GET", "https://viacep.com.br/ws/65043-420/json/").as(
@@ -433,7 +433,7 @@ describe("Customer", () => {
 
     cy.intercept(
       "GET",
-      "http://localhost:3000/customer?page=1&orderBy=fullName&status=active&startDate=2000-01-01"
+      "http://localhost:3000/customer?page=1&status=active&startDate=2000-01-01&orderBy=fullName"
     ).as("getCustomersPage");
 
     cy.get('[data-cy="side-sheet-primary-button"').click();

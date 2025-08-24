@@ -17,6 +17,7 @@ const resourceFormatted: Record<Resources, string> = {
   VEHICLES: "veículos",
   VEHICLE_PURCHASE: "compra de veículo",
   VEHICLE_SALE: "venda de veículo",
+  REPORTS: "relatórios",
 };
 
 interface FormatDeniedMessageProperties {

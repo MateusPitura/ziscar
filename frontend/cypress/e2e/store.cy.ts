@@ -219,7 +219,7 @@ describe("Store", () => {
 
     cy.intercept(
       "GET",
-      "http://localhost:3000/store?page=1&orderBy=name&status=active"
+      "http://localhost:3000/store?page=1&status=active&orderBy=name"
     ).as("getStoresPage1");
 
     cy.wait("@getStoresPage1");
@@ -228,7 +228,7 @@ describe("Store", () => {
 
     cy.intercept(
       "GET",
-      "http://localhost:3000/store?page=2&orderBy=name&status=active"
+      "http://localhost:3000/store?page=2&status=active&orderBy=name"
     ).as("getStoresPage2");
 
     cy.get('[data-cy="table-navigate-next"]').click();
@@ -249,7 +249,7 @@ describe("Store", () => {
 
     cy.intercept(
       "GET",
-      "http://localhost:3000/store?page=1&orderBy=name&status=active"
+      "http://localhost:3000/store?page=1&status=active&orderBy=name"
     ).as("getStoresPage");
 
     cy.intercept("GET", "https://viacep.com.br/ws/65043-420/json/").as(
@@ -414,7 +414,7 @@ describe("Store", () => {
 
     cy.intercept(
       "GET",
-      "http://localhost:3000/store?page=1&orderBy=name&status=active&startDate=2000-01-01"
+      "http://localhost:3000/store?page=1&status=active&startDate=2000-01-01&orderBy=name"
     ).as("getStoresPage");
 
     cy.get('[data-cy="side-sheet-primary-button"').click();

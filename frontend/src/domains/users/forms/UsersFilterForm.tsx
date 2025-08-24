@@ -27,7 +27,6 @@ function UsersFilterForm(): ReactNode {
       className="flex-1 flex flex-col"
       defaultValues={{
         fullName: usersFilter?.fullName || "",
-        orderBy: usersFilter?.orderBy || "fullName",
         status: usersFilter?.status || "active",
         startDate: usersFilter?.startDate || "",
         endDate: usersFilter?.endDate || "",
@@ -71,29 +70,14 @@ function UsersFilterFormContent(): ReactElement {
         </div>
         <Input<UsersFilterFormInputs>
           name="startDate"
-          label="Data inicial"
+          label="Data inicial de criação"
           type="date"
         />
         <Input<UsersFilterFormInputs>
           name="endDate"
-          label="Data final"
+          label="Data final de criação"
           type="date"
         />
-        <InputLabel label="Ordenar por" />
-        <div className="flex flex-col gap-2">
-          <Choice hideErrorLabel>
-            <Choice.Radio<UsersFilterFormInputs>
-              name="orderBy"
-              label="Nome"
-              value="fullName"
-            />
-            <Choice.Radio<UsersFilterFormInputs>
-              name="orderBy"
-              label="Email"
-              value="email"
-            />
-          </Choice>
-        </div>
       </SideSheet.Body>
       <SideSheet.Footer
         primaryLabel="Aplicar"

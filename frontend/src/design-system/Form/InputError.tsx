@@ -9,20 +9,9 @@ interface InputErrorProperties {
   required?: boolean;
 }
 
-function handleRequired(
-  message?: string,
-  required?: boolean
-): string | undefined {
-  if (message === "Campo obrigatório" && required) {
-    return "";
-  }
-  return message;
-}
-
 export default function InputError({
   name,
   isFieldArray,
-  required,
 }: InputErrorProperties): ReactNode {
   const { errors } = useFormState({
     name,
@@ -38,9 +27,8 @@ export default function InputError({
       data-cy={`input-error-${name}`}
     >
       {isFieldArray
-        ? handleRequired(errorsFormatted?.root?.message?.toString(), required)
-        : handleRequired(errorsFormatted?.message?.toString(), required) ??
-          "Campo inválido"}
+        ? errorsFormatted?.root?.message?.toString()
+        : errorsFormatted?.message?.toString() ?? "Campo inválido"}
     </span>
   );
 }

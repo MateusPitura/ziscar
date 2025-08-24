@@ -1,4 +1,14 @@
-import { ActionsType, InstallmentStatusType, PaymentMethodReceivableTypeType, ResourcesType } from "@shared/enums";
+import {
+  ActionsType,
+  ExpenseCategoryType,
+  FuelTypeType,
+  InstallmentStatusType,
+  PaymentMethodPayableTypeType,
+  ResourcesType,
+  VehicleCategoryType,
+  VehicleStatusType,
+} from "@shared/enums";
+import { BrazilianState } from ".";
 
 export type Address = {
   cep: string;
@@ -7,7 +17,7 @@ export type Address = {
   neighborhood?: string;
   city?: {
     ibgeCode: number;
-    state: string;
+    state: BrazilianState;
     name: string;
   };
 };
@@ -48,8 +58,10 @@ export interface AccountReceivable {
   id: number;
   description?: string;
   receivedFrom?: string;
-  totalValue?: string;
+  totalValue: string;
   overallStatus: InstallmentStatusType;
+  installmentsNumber: number;
+  vehicleSaleId: number;
 }
 
 export interface AccountReceivableInstallment {
@@ -60,32 +72,106 @@ export interface AccountReceivableInstallment {
   isRefund?: boolean;
   isUpfront?: boolean;
   status: InstallmentStatusType;
+  paymentMethod?: PaymentMethodPayableTypeType;
 }
 
 export interface PaymentMethod {
   id: number;
-  type: PaymentMethodReceivableTypeType;
+  type: PaymentMethodPayableTypeType;
   paymentDate: string;
 }
 
+export interface Vehicle {
+  id: number;
+  kilometers: number;
+  plateNumber: string;
+  announcedPrice: string;
+  minimumPrice: string;
+  commissionValue: string;
+  color: string;
+  fuelType: FuelTypeType;
+  status: VehicleStatusType;
+  storeId: number;
+  chassiNumber: string;
+  modelYear: string;
+  yearOfManufacture: string;
+  modelName: string;
+  category: VehicleCategoryType;
+  brandId: number;
+  archivedAt?: Date;
+}
+
+export interface VehicleExpense {
+  id: number;
+  observations: string;
+  category: ExpenseCategoryType;
+  totalValue: string;
+  competencyDate: string;
+  archivedAt?: Date;
+}
+
+export interface Brand {
+  id: number;
+  name: string;
+}
 
 export type FetchUser = Pick<
   User,
-  "id" | "fullName" | "email" | "phone" | "archivedAt" | "roleId"
+  "id" | "cpf" | "fullName" | "email" | "phone" | "archivedAt" | "roleId"
 >;
+
 export type FetchStore = Pick<
   Store,
-  "id" | "name" | "email" | "phone" | "archivedAt"
+  "id" | "name" | "cnpj" | "email" | "phone" | "archivedAt"
 >;
+
 export type FetchCustomer = Pick<
   Customer,
-  "id" | "fullName" | "email" | "phone" | "archivedAt" | "cpf"
+  "id" | "fullName" | "cpf" | "email" | "phone" | "archivedAt" | "cpf"
 >;
+
 export type FetchAccountReceivable = Pick<
   AccountReceivable,
-  "id" | "description" | "receivedFrom" | "totalValue" | "overallStatus"
+  | "id"
+  | "installmentsNumber"
+  | "description"
+  | "receivedFrom"
+  | "totalValue"
+  | "overallStatus"
+  | "vehicleSaleId"
 >;
+
 export type FetchAccountReceivableInstallment = Pick<
   AccountReceivableInstallment,
-  "id" | "installmentSequence" | "dueDate" | "value" | "status" | "isRefund" | "isUpfront"
+  | "id"
+  | "installmentSequence"
+  | "dueDate"
+  | "value"
+  | "status"
+  | "isRefund"
+  | "isUpfront"
+  | "paymentMethod"
 >;
+
+export type FetchVehicle = Pick<
+  Vehicle,
+  | "id"
+  | "modelName"
+  | "announcedPrice"
+  | "plateNumber"
+  | "modelYear"
+  | "status"
+  | "archivedAt"
+>;
+
+export type FetchVehicleExpense = Pick<
+  VehicleExpense,
+  | "id"
+  | "observations"
+  | "category"
+  | "totalValue"
+  | "competencyDate"
+  | "archivedAt"
+>;
+
+export type FetchBrand = Pick<Brand, "id" | "name">;

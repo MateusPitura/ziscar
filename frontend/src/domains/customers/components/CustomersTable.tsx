@@ -16,13 +16,14 @@ import CustomersFilterForm from "./CustomersFilterForm";
 import CustomersTableActions from "./CustomersTableActions";
 import selectCustomersInfoForReport from "../utils/selectCustomersInfoForReport";
 
-const enableReport = true;
+const enableReport = false;
 
 export default function CustomersTable(): ReactNode {
-  const [disableCustomerInfo, setDisableCustomerInfo] = useState<DisableCustomer>({
-    customerFullName: "",
-    customerId: "",
-  });
+  const [disableCustomerInfo, setDisableCustomerInfo] =
+    useState<DisableCustomer>({
+      customerFullName: "",
+      customerId: "",
+    });
 
   const dialog = useDialog();
   const { safeFetch } = useSafeFetch();
@@ -47,17 +48,19 @@ export default function CustomersTable(): ReactNode {
   async function getCustomersInfo(
     filter?: string
   ): Promise<PageablePayload<FetchCustomer>> {
-    return await safeFetch(`${BACKEND_URL}/customer?${filter}`, {
+    return await safeFetch(`${BACKEND_URL}/customer?${filter}&orderBy=fullName`, {
       resource: "CUSTOMERS",
       action: "READ",
     });
   }
 
-  const { data: customersInfo, isFetching: isFetchingCustomersInfo } = useQuery({
-    queryKey: ["customers", filterFormatted],
-    queryFn: ({ queryKey }) => getCustomersInfo(queryKey[1]),
-    select: selectCustomersInfo,
-  });
+  const { data: customersInfo, isFetching: isFetchingCustomersInfo } = useQuery(
+    {
+      queryKey: ["customers", filterFormatted],
+      queryFn: ({ queryKey }) => getCustomersInfo(queryKey[1]),
+      select: selectCustomersInfo,
+    }
+  );
 
   return (
     <>
@@ -66,29 +69,23 @@ export default function CustomersTable(): ReactNode {
         {enableReport && (
           <ExportButton<FetchCustomer, CustomersFilterFormInputs>
             fileName="Relatório Clientes"
-            resource="CUSTOMERS"
             queryKey={["customers", filterFormatted]}
             queryFn={getCustomersInfo}
             selectQueryFn={selectCustomersInfoForReport}
             formatFilters={{
               fullName: "Nome completo",
-              orderBy: "Ordenar por",
               status: "Status",
               endDate: "Data final",
               startDate: "Data inicial",
             }}
             formatFiltersValues={{
-              orderBy: {
-                email: "Email",
-                fullName: "Nome completo",
-              },
               status: {
                 active: "Ativo",
                 inactive: "Inativo",
               },
             }}
             formatColumns={{
-              id: "ID",
+              cpf: "CPF",
               fullName: "Nome completo",
               email: "Email",
               phone: "Celular",
@@ -100,8 +97,8 @@ export default function CustomersTable(): ReactNode {
       </div>
       <Table>
         <Table.Header>
-          <Table.Head label="ID" />
           <Table.Head label="Nome completo" />
+          <Table.Head label="CPF" />
           <Table.Head label="Email" />
           <Table.Head label="Celular" />
           <Table.Head label="Status" />
@@ -115,8 +112,8 @@ export default function CustomersTable(): ReactNode {
         >
           {customersInfo?.data.map((customer) => (
             <Table.Row key={customer.id}>
-              <Table.Cell label={String(customer.id)} />
               <Table.Cell label={customer.fullName} />
+              <Table.Cell label={customer.cpf} />
               <Table.Cell label={customer.email} />
               <Table.Cell label={customer.phone} />
               <Table.Cell label={customer.archivedAt ? "Inativo" : "Ativo"} />

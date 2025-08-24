@@ -4,6 +4,8 @@ import { SchemaAddress } from "../schemas";
 import { s } from "@shared/safeZod";
 import { CustomersFilterFormInputs } from "@/domains/customers/types";
 import { AccountsReceivableFilterFormInputs } from "@/domains/accountsReceivable/types";
+import { VehiclesFilterFormInputs } from "@/domains/vehicles/types";
+import { BRAZILIANSTATE_VALUES } from "@shared/enums";
 
 export interface Childrenable {
   children?: React.ReactNode;
@@ -23,19 +25,32 @@ export interface DialogProps {
   handleOpen: (state: boolean) => void;
 }
 
-export type Mask = "phone" | "cpf" | "cep" | "cnpj" | "money";
+export type Mask =
+  | "phone"
+  | "cpf"
+  | "cep"
+  | "cnpj"
+  | "money"
+  | "plateNumber"
+  | "chassi"
+  | "number";
 
 export type QueryKeys =
   | "cepApi"
   | "ibgeApi"
   | "profile"
   | "permissions"
+  | "brands"
   | "user"
   | "users"
   | "store"
   | "stores"
   | "customer"
   | "customers"
+  | "vehicle"
+  | "vehicles"
+  | "vehicle-expenses"
+  | "account-receivable"
   | "accounts-receivable"
   | "accounts-receivable-installments"
   | "accounts-receivable-payment-method";
@@ -46,6 +61,7 @@ export interface CustomersFilter extends CustomersFilterFormInputs, Pageable {}
 export interface AccountsReceivableFilter
   extends AccountsReceivableFilterFormInputs,
     Pageable {}
+export interface VehiclesFilter extends VehiclesFilterFormInputs, Pageable {}
 
 export interface PageablePayload<T> {
   data: T[];
@@ -61,3 +77,9 @@ export interface Options {
 }
 
 export type AddressFormInputs = s.infer<typeof SchemaAddress>;
+
+export type BrazilianState = (typeof BRAZILIANSTATE_VALUES)[number];
+
+export interface VehicleSaleState {
+  vehicleId: string;
+}

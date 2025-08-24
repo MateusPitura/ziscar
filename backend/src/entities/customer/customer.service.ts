@@ -105,12 +105,11 @@ export class CustomerService {
   async findMany({
     customerFindManyInDto,
     enterpriseId,
-    paginate = true,
     select,
   }: FindManyInput) {
     const pagination = {};
-    if (paginate) {
-      const { page = 1 } = customerFindManyInDto;
+    const { page } = customerFindManyInDto;
+    if (page) {
       pagination['skip'] = (page - 1) * ITEMS_PER_PAGE;
       pagination['take'] = ITEMS_PER_PAGE;
     }

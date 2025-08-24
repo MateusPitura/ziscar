@@ -17,9 +17,9 @@ const SchemaStoreCreateInDto = SchemaStorePostInDto.extend({
 const SchemaStoreFindManyInDto = s
   .object({
     page: s.numberPositive().optional(),
-    status: s.radio(['active', 'inactive']).optional(),
+    status: s.enumeration(['active', 'inactive']).optional(),
     name: s.string().optional(),
-    orderBy: s.radio(['name', 'email']).optional(),
+    orderBy: s.enumeration(['name', 'email']).optional(),
     startDate: s.dateString().optional(),
     endDate: s.dateString().optional(),
   })
