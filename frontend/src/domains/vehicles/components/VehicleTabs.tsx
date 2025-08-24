@@ -11,7 +11,13 @@ import { VehicleFormInputs } from "../types";
 
 type VehicleTabs = "PURCHASE" | "INFORMATION" | "CHARACTERISTICS";
 
-export default function VehicleTabs(): ReactNode {
+interface VehicleTabsProperties {
+  isEdit?: boolean;
+}
+
+export default function VehicleTabs({
+  isEdit,
+}: VehicleTabsProperties): ReactNode {
   const [activeTab, setActiveTab] = useState<VehicleTabs>("PURCHASE");
   const { errors } = useFormState<VehicleFormInputs>();
 
@@ -52,12 +58,14 @@ export default function VehicleTabs(): ReactNode {
                 <VehiclePurchaseDetailsForm />
               </Section.Body>
             </Section.Group>
-            <Section.Group>
-              <Section.Header title="Informações do pagamento" />
-              <Section.Body>
-                <VehiclePurchasePaymentForm />
-              </Section.Body>
-            </Section.Group>
+            {!isEdit && (
+              <Section.Group>
+                <Section.Header title="Informações do pagamento" />
+                <Section.Body>
+                  <VehiclePurchasePaymentForm />
+                </Section.Body>
+              </Section.Group>
+            )}
           </Section>
         </Tabs.Section>
         <Tabs.Section isActive={activeTab === "INFORMATION"}>
