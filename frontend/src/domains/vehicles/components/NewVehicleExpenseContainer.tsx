@@ -33,6 +33,7 @@ export default function NewVehicleExpenseContainer(): ReactNode {
       });
       navigate(pathname.replace("/new", ""));
       queryClient.invalidateQueries({ queryKey: ["vehicle-expenses"] });
+      queryClient.invalidateQueries({ queryKey: ["accounts-payable"] });
     },
   });
 
@@ -44,6 +45,7 @@ export default function NewVehicleExpenseContainer(): ReactNode {
       headerTitle="Novo gasto"
       resource="VEHICLE_EXPENSE"
       action="CREATE"
+      onClose={() => navigate(pathname.replace("/new", ""))}
     />
   );
 }

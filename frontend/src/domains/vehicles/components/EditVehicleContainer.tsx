@@ -1,5 +1,5 @@
-import type { ReactNode } from "react";
+import { ReactNode } from "react";
 
 export default function EditVehicleContainer(): ReactNode {
-  return <div>Edit Vehicle</div>;
+  return <div>EditVehicleContainer</div>;
 }

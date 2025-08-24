@@ -75,7 +75,7 @@ export default function VehiclesTableActions({
           data-cy={`button-edit-vehicle-${vehicleId}`}
         />
       </Tooltip>
-      <Tooltip content="Histórico">
+      <Tooltip content="Gastos">
         <Button
           variant="quaternary"
           iconLeft="History"

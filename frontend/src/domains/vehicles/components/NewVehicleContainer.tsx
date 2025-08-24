@@ -36,6 +36,7 @@ export default function NewVehicleContainer(): ReactNode {
       });
       navigate("/vehicles");
       queryClient.invalidateQueries({ queryKey: ["vehicles"] });
+      queryClient.invalidateQueries({ queryKey: ["accounts-receivable"] });
     },
   });
 

@@ -5,7 +5,6 @@ import PageHeader from "@/domains/global/components/PageHeader";
 import Section from "@/domains/global/components/Section";
 import { ActionsType, ResourcesType } from "@shared/enums";
 import type { ReactNode } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
 import { SchemaVehicleExpenseForm } from "../schemas";
 import { VehicleExpenseFormInputs } from "../types";
 import VehicleExpenseDetailsForm from "./VehicleExpenseDetailsForm";
@@ -19,6 +18,7 @@ interface ExpenseFormProperties {
   isEdit?: boolean;
   resource?: ResourcesType;
   action?: ActionsType;
+  onClose: () => void;
 }
 
 export default function ExpenseForm({
@@ -29,10 +29,8 @@ export default function ExpenseForm({
   isEdit = false,
   resource,
   action,
+  onClose,
 }: ExpenseFormProperties): ReactNode {
-  const navigate = useNavigate();
-  const { pathname } = useLocation();
-
   return (
     <div className="flex flex-col gap-4 w-full">
       <Form<VehicleExpenseFormInputs>
@@ -71,7 +69,7 @@ export default function ExpenseForm({
             color="red"
             iconRight="Close"
             label="Cancelar"
-            onClick={() => navigate(pathname.replace("/new", ""))}
+            onClick={onClose}
           />
         </PageFooter>
       </Form>

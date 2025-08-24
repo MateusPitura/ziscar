@@ -16,7 +16,7 @@ export default function AccountsReceivableTableActions({
 
   return (
     <>
-      <Tooltip content="Visualizar venda">
+      <Tooltip content="Veículo">
         <Button
           variant="quaternary"
           iconLeft="DirectionsCar"
@@ -27,7 +27,7 @@ export default function AccountsReceivableTableActions({
           data-cy={`button-view-vehicleSale-${vehicleSaleId}`}
         />
       </Tooltip>
-      <Tooltip content="Visualizar detalhes">
+      <Tooltip content="Pagamento">
         <Button
           variant="quaternary"
           iconLeft="Visibility"

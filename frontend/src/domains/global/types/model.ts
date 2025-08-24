@@ -1,12 +1,11 @@
 import {
   ActionsType,
-  ExpenseCategoryType,
-  FuelTypeType,
+  ExpenseCategory, FuelTypeType,
   InstallmentStatusType,
   PaymentMethodPayableTypeType,
   ResourcesType,
   VehicleCategoryType,
-  VehicleStatusType,
+  VehicleStatusType
 } from "@shared/enums";
 import { BrazilianState } from ".";
 
@@ -67,7 +66,7 @@ export interface AccountReceivable {
 export interface AccountReceivableInstallment {
   id: number;
   installmentSequence: number;
-  dueDate: string;
+  dueDate?: string;
   value: string;
   isRefund?: boolean;
   isUpfront?: boolean;
@@ -104,7 +103,7 @@ export interface Vehicle {
 export interface VehicleExpense {
   id: number;
   observations: string;
-  category: ExpenseCategoryType;
+  category: ExpenseCategory;
   totalValue: string;
   competencyDate: string;
   archivedAt?: Date;
