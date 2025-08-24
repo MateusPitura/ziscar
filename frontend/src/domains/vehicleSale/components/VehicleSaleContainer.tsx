@@ -3,17 +3,15 @@ import Form from "@/design-system/Form";
 import PageFooter from "@/domains/global/components/PageFooter";
 import PageHeader from "@/domains/global/components/PageHeader";
 import { type ReactElement } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { vehicleSaleDefaultValues } from "../constants";
 import { SchemaVehicleSaleForm } from "../schemas";
 import { VehicleSaleFormInputs } from "../types";
 import VehicleSaleTabs from "./VehicleSaleTabs";
-import { VehicleSaleState } from "@/domains/global/types";
 
 export default function VehicleSaleContainer(): ReactElement {
   const navigate = useNavigate();
-  const location = useLocation();
-  const { vehicleId } = (location.state as VehicleSaleState) || {};
+  const { vehicleId } = useParams()
 
   return (
     <div className="flex flex-col gap-4 w-full">

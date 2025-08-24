@@ -96,6 +96,7 @@ export interface Vehicle {
   category: VehicleCategory;
   brandId: number;
   archivedAt?: Date;
+  characteristics?: string[];
 }
 
 export interface VehicleExpense {

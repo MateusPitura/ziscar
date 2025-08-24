@@ -133,11 +133,9 @@ export const privateRoutes: Route[] = [
     resource: "VEHICLES",
   },
   {
-    path: "/vehicle-sale",
-    displayName: "Realizar Venda",
-    icon: "CurrencyExchange",
+    path: "/vehicle-sale/:vehicleId",
     entryPage: <VehicleSale />,
-    shouldDisplay: true,
+    shouldDisplay: false,
     action: "CREATE",
     resource: "VEHICLE_SALE",
   },

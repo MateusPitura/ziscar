@@ -4,9 +4,9 @@ import { useState, type ReactElement } from "react";
 import { useFormState } from "react-hook-form";
 import CustomerSearchForm from "../forms/CustomerSearchForm";
 import PaymentForm from "../forms/PaymentForm";
-import VehicleSearchForm from "../forms/VehicleSearchForm";
 import { VehicleSaleFormInputs } from "../types";
 import CustomerData from "./CustomerData";
+import VehicleData from "./VehicleData";
 
 type VehicleSaleTabs = "CLIENT" | "VEHICLE" | "PAYMENT";
 
@@ -62,14 +62,10 @@ export default function VehicleSaleTabs(): ReactElement {
         <Tabs.Section isActive={activeTab === "VEHICLE"}>
           <Section>
             <Section.Group>
-              <Section.Header title="Busque pelo veículo" />
-              <Section.Body>
-                <VehicleSearchForm />
-              </Section.Body>
-            </Section.Group>
-            <Section.Group>
               <Section.Header title="Dados do veículo" />
-              <Section.Body></Section.Body>
+              <Section.Body className="grid-cols-3">
+                <VehicleData />
+              </Section.Body>
             </Section.Group>
           </Section>
         </Tabs.Section>

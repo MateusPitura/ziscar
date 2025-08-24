@@ -1,11 +1,11 @@
+import { AccountsReceivableFilterFormInputs } from "@/domains/accountsReceivable/types";
+import { CustomersFilterFormInputs } from "@/domains/customers/types";
 import { StoresFilterFormInputs } from "@/domains/stores/types";
 import { UsersFilterFormInputs } from "@/domains/users/types";
-import { SchemaAddress } from "../schemas";
-import { s } from "@shared/safeZod";
-import { CustomersFilterFormInputs } from "@/domains/customers/types";
-import { AccountsReceivableFilterFormInputs } from "@/domains/accountsReceivable/types";
 import { VehiclesFilterFormInputs } from "@/domains/vehicles/types";
 import { BRAZILIANSTATE_VALUES } from "@shared/enums";
+import { s } from "@shared/safeZod";
+import { SchemaAddress } from "../schemas";
 
 export interface Childrenable {
   children?: React.ReactNode;
@@ -84,7 +84,3 @@ export interface Options {
 export type AddressFormInputs = s.infer<typeof SchemaAddress>;
 
 export type BrazilianState = (typeof BRAZILIANSTATE_VALUES)[number];
-
-export interface VehicleSaleState {
-  vehicleId: string;
-}
