@@ -25,8 +25,14 @@ export default function VehicleExpenseHeader(): ReactNode {
       modelYear: "1970",
       status: VehicleStatus.DELIVERED,
       archivedAt: undefined,
-      brandId: 1,
-      storeId: 1,
+      brand: {
+        id: 10,
+        name: "Volkswagen",
+      },
+      store: {
+        id: 1,
+        name: "Loja 1",
+      },
       category: VehicleCategory.CAR,
       color: "#FFFFFF",
       chassiNumber: "AAAAAAAAAAAAAAAAA",

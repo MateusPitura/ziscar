@@ -37,16 +37,22 @@ export default function EditVehicleContainer(): ReactNode {
       modelYear: "1970",
       status: VehicleStatus.DELIVERED,
       archivedAt: undefined,
-      brandId: 10,
-      storeId: 10,
+      brand: {
+        id: 10,
+        name: "Volkswagen",
+      },
+      store: {
+        id: 1,
+        name: "Loja 1",
+      },
       category: VehicleCategory.CAR,
-      color: '#FFFFFF',
-      chassiNumber: 'AAAAAAAAAAAAAAAAA',
-      commissionValue: '1000',
+      color: "#FFFFFF",
+      chassiNumber: "AAAAAAAAAAAAAAAAA",
+      commissionValue: "1000",
       fuelType: FuelType.FLEX,
       kilometers: 0,
-      minimumPrice: '8000000',
-      yearOfManufacture: '1970',
+      minimumPrice: "8000000",
+      yearOfManufacture: "1970",
     };
   }
 

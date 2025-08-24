@@ -31,8 +31,14 @@ export default function VehicleData(): ReactNode {
       modelYear: "1970",
       status: VehicleStatus.DELIVERED,
       archivedAt: undefined,
-      brandId: 10,
-      storeId: 10,
+      brand: {
+        id: 10,
+        name: "Volkswagen",
+      },
+      store: {
+        id: 1,
+        name: "Loja 1",
+      },
       category: VehicleCategory.CAR,
       color: "#FFFFFF",
       chassiNumber: "AAAAAAAAAAAAAAAAA",
@@ -63,7 +69,7 @@ export default function VehicleData(): ReactNode {
       <>
         <DataField label="Número da placa" value={vehicleData.plateNumber} />
         <DataField label="Número do chassi" value={vehicleData.chassiNumber} />
-        <DataField label="Loja" value={String(vehicleData.storeId)} />
+        <DataField label="Loja" value={vehicleData.store.name} />
         <DataField label="Preço mínimo" value={vehicleData.minimumPrice} />
         <DataField label="Preço anunciado" value={vehicleData.announcedPrice} />
         <DataField
@@ -83,7 +89,7 @@ export default function VehicleData(): ReactNode {
           value={VehicleCategoryText[vehicleData.category]}
         />
         <DataField label="Modelo" value={vehicleData.modelName} />
-        <DataField label="Marca" value={String(vehicleData.brandId)} />
+        <DataField label="Marca" value={vehicleData.brand.name} />
         <DataField label="Cor" value={vehicleData.color} />
         <DataField
           label="Ano de fabricação"

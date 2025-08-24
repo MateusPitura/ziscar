@@ -88,13 +88,19 @@ export interface Vehicle {
   color: string;
   fuelType: FuelType;
   status: VehicleStatus;
-  storeId: number;
+  store: {
+    id: number;
+    name: string;
+  };
   chassiNumber: string;
   modelYear: string;
   yearOfManufacture: string;
   modelName: string;
   category: VehicleCategory;
-  brandId: number;
+  brand: {
+    id: number;
+    name: string;
+  };
   archivedAt?: Date;
   characteristics?: string[];
 }

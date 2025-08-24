@@ -29,8 +29,8 @@ export default function selectVehicleInfo(
       yearOfManufacture: payload.yearOfManufacture,
       modelName: payload.modelName,
       category: payload.category,
-      storeId: String(payload.storeId),
-      brandId: String(payload.brandId),
+      storeId: String(payload.store.id),
+      brandId: String(payload.brand.id),
     },
   };
 }
