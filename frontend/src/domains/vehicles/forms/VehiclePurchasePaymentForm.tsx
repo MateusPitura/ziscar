@@ -5,10 +5,10 @@ import { InstallmentStatus, PaymentMethodPayableType } from "@shared/enums";
 import { useEffect, type ReactNode } from "react";
 import { useFormContext } from "react-hook-form";
 import { INSTALMENT_STATUS } from "../constants";
-import { NewVehicleFormInputs } from "../types";
+import { VehicleFormInputs } from "../types";
 
 export default function VehiclePurchasePaymentForm(): ReactNode {
-  const { watch, setValue } = useFormContext<NewVehicleFormInputs>();
+  const { watch, setValue } = useFormContext<VehicleFormInputs>();
   const statusWatch = watch("purchase.installment.status");
 
   useEffect(() => {
@@ -26,13 +26,13 @@ export default function VehiclePurchasePaymentForm(): ReactNode {
 
   return (
     <>
-      <Input<NewVehicleFormInputs>
+      <Input<VehicleFormInputs>
         label="Valor"
         name="purchase.installment.value"
         mask="money"
         required
       />
-      <Select<NewVehicleFormInputs>
+      <Select<VehicleFormInputs>
         label="Status do pagamento"
         name="purchase.installment.status"
         options={INSTALMENT_STATUS}
@@ -40,13 +40,13 @@ export default function VehiclePurchasePaymentForm(): ReactNode {
       />
       {statusWatch === InstallmentStatus.PAID ? (
         <>
-          <Input<NewVehicleFormInputs>
+          <Input<VehicleFormInputs>
             label="Data de pagamento"
             name="purchase.installment.paymentDate"
             type="date"
             required
           />
-          <Select<NewVehicleFormInputs>
+          <Select<VehicleFormInputs>
             label="Forma de pagamento"
             name="purchase.installment.paymentMethod"
             options={PAYMENT_METHODS_PAYABLE_TYPE_OPTIONS}
@@ -54,7 +54,7 @@ export default function VehiclePurchasePaymentForm(): ReactNode {
           />
         </>
       ) : (
-        <Input<NewVehicleFormInputs>
+        <Input<VehicleFormInputs>
           label="Data de vencimento"
           name="purchase.installment.dueDate"
           type="date"

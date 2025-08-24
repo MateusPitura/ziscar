@@ -4,16 +4,16 @@ import VehicleCommonCharacteristicForm from "@/domains/vehicles/forms/VehicleCom
 import VehicleNewCharacteristicForm from "@/domains/vehicles/forms/VehicleNewCharacteristicForm";
 import { useState, type ReactNode } from "react";
 import { useFormState } from "react-hook-form";
-import NewVehicleForm from "../forms/NewVehicleForm";
+import VehicleForm from "../forms/VehicleForm";
 import VehiclePurchaseDetailsForm from "../forms/VehiclePurchaseDetailsForm";
 import VehiclePurchasePaymentForm from "../forms/VehiclePurchasePaymentForm";
-import { NewVehicleFormInputs } from "../types";
+import { VehicleFormInputs } from "../types";
 
-type NewVehicleTabs = "PURCHASE" | "INFORMATION" | "CHARACTERISTICS";
+type VehicleTabs = "PURCHASE" | "INFORMATION" | "CHARACTERISTICS";
 
-export default function NewVehicleTabs(): ReactNode {
-  const [activeTab, setActiveTab] = useState<NewVehicleTabs>("PURCHASE");
-  const { errors } = useFormState<NewVehicleFormInputs>();
+export default function VehicleTabs(): ReactNode {
+  const [activeTab, setActiveTab] = useState<VehicleTabs>("PURCHASE");
+  const { errors } = useFormState<VehicleFormInputs>();
 
   return (
     <Tabs>
@@ -65,7 +65,7 @@ export default function NewVehicleTabs(): ReactNode {
             <Section.Group>
               <Section.Header title="Informações do veículo" />
               <Section.Body className="grid-cols-3">
-                <NewVehicleForm />
+                <VehicleForm />
               </Section.Body>
             </Section.Group>
           </Section>

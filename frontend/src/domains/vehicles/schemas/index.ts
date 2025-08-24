@@ -1,3 +1,4 @@
+import { addIssue } from "@/domains/global/schemas";
 import {
   EXPENSECATEGORY_VALUES,
   FUELTYPE_VALUES,
@@ -8,8 +9,7 @@ import {
 } from "@shared/enums";
 import { s } from "@shared/safeZod";
 import { MODEL_YEARS, YEARS_OF_MANUFACTURE } from "../constants";
-import { addIssue } from "@/domains/global/schemas";
-import { NewVehicleFormInputs, VehicleExpenseFormInputs } from "../types";
+import { VehicleExpenseFormInputs, VehicleFormInputs } from "../types";
 
 export const SchemaVehiclesFilterForm = s
   .object({
@@ -20,20 +20,22 @@ export const SchemaVehiclesFilterForm = s
   })
   .refine(...s.dateRangeRule);
 
-export const SchemaNewVehicleForm = s
+export const SchemaVehicleForm = s
   .object({
     purchase: s.object({
       purchaseDate: s.paymentDate(),
       paidTo: s.string().or(s.empty()),
-      installment: s.object({
-        value: s.numberString(),
-        status: s.enumeration(INSTALLMENTSTATUS_VALUES),
-        dueDate: s.paymentDate().or(s.empty()),
-        paymentDate: s.paymentDate().or(s.empty()),
-        paymentMethod: s
-          .enumeration(PAYMENTMETHODPAYABLETYPE_VALUES)
-          .or(s.empty()),
-      }),
+      installment: s
+        .object({
+          value: s.numberString(),
+          status: s.enumeration(INSTALLMENTSTATUS_VALUES),
+          dueDate: s.paymentDate().or(s.empty()),
+          paymentDate: s.paymentDate().or(s.empty()),
+          paymentMethod: s
+            .enumeration(PAYMENTMETHODPAYABLETYPE_VALUES)
+            .or(s.empty()),
+        })
+        .nullable(),
     }),
     vehicle: s.object({
       plateNumber: s.plateNumber(),
@@ -71,22 +73,21 @@ export const SchemaNewVehicleForm = s
     }),
   })
   .superRefine((data, ctx) => {
+    if (data.purchase.installment === null) return true;
+
     const { status, paymentDate, paymentMethod, dueDate } =
       data.purchase.installment;
 
     if (status === "PAID") {
       if (paymentDate === "") {
-        addIssue<NewVehicleFormInputs>(ctx, "purchase.installment.paymentDate");
+        addIssue<VehicleFormInputs>(ctx, "purchase.installment.paymentDate");
       }
       if (paymentMethod === "") {
-        addIssue<NewVehicleFormInputs>(
-          ctx,
-          "purchase.installment.paymentMethod"
-        );
+        addIssue<VehicleFormInputs>(ctx, "purchase.installment.paymentMethod");
       }
     } else if (status === "PENDING") {
       if (dueDate === "") {
-        addIssue<NewVehicleFormInputs>(ctx, "purchase.installment.dueDate");
+        addIssue<VehicleFormInputs>(ctx, "purchase.installment.dueDate");
       }
     }
     return true;
@@ -96,7 +97,7 @@ export const SchemaNewVehicleForm = s
 
     if (modelYear !== "" && yearOfManufacture !== "") {
       if (Number(modelYear) < Number(yearOfManufacture)) {
-        addIssue<NewVehicleFormInputs>(
+        addIssue<VehicleFormInputs>(
           ctx,
           "vehicle.modelYear",
           "O ano do modelo deve ser maior ou igual ao ano de fabricação"
@@ -107,8 +108,10 @@ export const SchemaNewVehicleForm = s
   .superRefine((data, ctx) => {
     const { vehicle, purchase } = data;
 
+    if (purchase.installment === null) return true;
+
     if (Number(vehicle.minimumPrice) <= Number(purchase.installment.value)) {
-      addIssue<NewVehicleFormInputs>(
+      addIssue<VehicleFormInputs>(
         ctx,
         "vehicle.minimumPrice",
         "Preço mínimo menor que o valor de compra"
@@ -116,7 +119,7 @@ export const SchemaNewVehicleForm = s
     }
 
     if (Number(vehicle.announcedPrice) < Number(vehicle.minimumPrice)) {
-      addIssue<NewVehicleFormInputs>(
+      addIssue<VehicleFormInputs>(
         ctx,
         "vehicle.announcedPrice",
         "Preço anunciado menor que o preço mínimo"
@@ -127,7 +130,7 @@ export const SchemaNewVehicleForm = s
       Number(vehicle.commissionValue) >=
       Number(vehicle.minimumPrice) - Number(purchase.installment.value)
     ) {
-      addIssue<NewVehicleFormInputs>(
+      addIssue<VehicleFormInputs>(
         ctx,
         "vehicle.commissionValue",
         "Comissão maior que o lucro"

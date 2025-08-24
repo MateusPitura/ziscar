@@ -11,8 +11,8 @@ import {
   VehicleStatusType,
 } from "@shared/enums";
 import {
-  NewVehicleFormInputs,
   VehicleExpenseFormInputs,
+  VehicleFormInputs,
   VehiclesFilterFormInputs,
 } from "../types";
 
@@ -97,7 +97,7 @@ export const MODEL_YEARS_OPTIONS = [
   ...YEARS_OF_MANUFACTURE_OPTIONS,
 ];
 
-export const newVehicleDefaultValues: NewVehicleFormInputs = {
+export const vehicleDefaultValues: VehicleFormInputs = {
   characteristics: {
     commonCharacteristics: [],
     newCharacteristics: [],
