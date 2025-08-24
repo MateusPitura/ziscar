@@ -1,19 +1,20 @@
-import { useMemo, useState, type ReactNode } from "react";
-import { DisableVehicle, VehiclesFilterFormInputs } from "../types";
+import Table from "@/design-system/Table";
 import useDialog from "@/domains/global/hooks/useDialog";
 import useFilterContext from "@/domains/global/hooks/useFilterContext";
-import formatFilters from "@/domains/global/utils/formatFilters";
 import { PageablePayload } from "@/domains/global/types";
-import { useQuery } from "@tanstack/react-query";
-import ExportButton from "@/domains/pdf/components/ExportButton";
-import Table from "@/design-system/Table";
 import { FetchVehicle } from "@/domains/global/types/model";
+import formatFilters from "@/domains/global/utils/formatFilters";
+import ExportButton from "@/domains/pdf/components/ExportButton";
+import { useQuery } from "@tanstack/react-query";
+import { useMemo, useState, type ReactNode } from "react";
+import { VehicleStatusText } from "../constants";
+import { DisableVehicle, VehiclesFilterFormInputs } from "../types";
 import selectVehiclesInfo from "../utils/selectVehiclesInfo";
 import selectVehiclesInfoForReport from "../utils/selectVehiclesInfoForReport";
 import DisableVehicleModal from "./DisableVehicleModal";
-import VehiclesTableActions from "./VehiclesTableActions";
 import VehiclesFilterForm from "./VehiclesFilterForm";
-import { VehicleStatusText } from "../constants";
+import VehiclesTableActions from "./VehiclesTableActions";
+import { BLANK } from "@/domains/global/constants";
 // import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 // import { BACKEND_URL } from "@/domains/global/constants";
 
@@ -57,7 +58,7 @@ export default function VehiclesTable(): ReactNode {
         {
           id: 1,
           modelName: "Fusca",
-          announcedPrice: "2000000",
+          announcedPrice: "800000000",
           plateNumber: "ABC1234",
           modelYear: "1970",
           status: "DELIVERED",
@@ -91,6 +92,11 @@ export default function VehiclesTable(): ReactNode {
     select: selectVehiclesInfo,
   });
 
+  const biggestValueLength = useMemo(() => {
+    if (!vehiclesInfo?.data.length) return 0;
+    return Math.max(...vehiclesInfo.data.map((v) => v.announcedPrice.length));
+  }, [vehiclesInfo?.data]);
+
   return (
     <>
       <DisableVehicleModal {...disableVehicleInfo} {...dialog} />
@@ -111,17 +117,19 @@ export default function VehiclesTable(): ReactNode {
             plateNumber: "Placa",
             modelYear: "Ano do modelo",
             status: "Status",
+            archivedAt: "Ativo",
           }}
         />
         <Table.Filter form={<VehiclesFilterForm />} />
       </div>
       <Table>
-        <Table.Header gridColumns={10}>
+        <Table.Header gridColumns={8}>
           <Table.Head label="Modelo" />
-          <Table.Head label="Placa" />
-          <Table.Head label="Ano do modelo" />
-          <Table.Head label="Status" />
+          <Table.Head label="Placa" colSpan={1} />
+          <Table.Head label="Ano do modelo" colSpan={1} />
+          <Table.Head label="Status" colSpan={1} />
           <Table.Head label="Preço anunciado" colSpan={1} />
+          <Table.Head label="Status" colSpan={1} />
           <Table.Head action />
         </Table.Header>
         <Table.Body
@@ -131,14 +139,24 @@ export default function VehiclesTable(): ReactNode {
           action="READ"
         >
           {vehiclesInfo?.data.map((vehicle) => (
-            <Table.Row key={vehicle.id} gridColumns={10}>
+            <Table.Row key={vehicle.id} gridColumns={8}>
               <Table.Cell label={vehicle.modelName} />
-              <Table.Cell label={vehicle.plateNumber} />
-              <Table.Cell label={vehicle.modelYear} />
-              <Table.Cell label={VehicleStatusText[vehicle.status]} />
+              <Table.Cell label={vehicle.plateNumber} colSpan={1} />
+              <Table.Cell label={vehicle.modelYear} colSpan={1} />
               <Table.Cell
-                label={vehicle.announcedPrice}
-                className="text-end"
+                label={VehicleStatusText[vehicle.status]}
+                colSpan={1}
+              />
+              <Table.Cell
+                label={vehicle.announcedPrice.padStart(
+                  biggestValueLength,
+                  BLANK
+                )}
+                className="font-mono whitespace-pre"
+                colSpan={1}
+              />
+              <Table.Cell
+                label={vehicle.archivedAt ? "Inativo" : "Ativo"}
                 colSpan={1}
               />
               <Table.Action>

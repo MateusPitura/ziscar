@@ -5,13 +5,13 @@ import {
   FetchAccountReceivableInstallment,
 } from "@/domains/global/types/model";
 import { useQuery } from "@tanstack/react-query";
-import { useState, type ReactNode } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import selectAccountsReceivableInstallmentsInfo from "../utils/selectAccountsReceivableInstallmentsInfo";
 import AccountsReceivableInstallmentsTableActions from "./AccountsReceivableTableInstallmentsActions";
 import { useParams } from "react-router-dom";
 import useDialog from "@/domains/global/hooks/useDialog";
 import PaymentMethodModal from "./PaymentMethodModal";
-import { PaymentMethodPayableText } from "@/domains/global/constants";
+import { BLANK, PaymentMethodPayableText } from "@/domains/global/constants";
 // import { BACKEND_URL } from "@/domains/global/constants";
 // import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 
@@ -88,6 +88,13 @@ export default function AccountsReceivableInstallmentsTable(): ReactNode {
     select: selectAccountsReceivableInstallmentsInfo,
   });
 
+  const biggestValueLength = useMemo(() => {
+    if (!accountsReceivableInstallmentsInfo?.length) return 0;
+    return Math.max(
+      ...accountsReceivableInstallmentsInfo.map((v) => v.value.length)
+    );
+  }, [accountsReceivableInstallmentsInfo]);
+
   return (
     <>
       <PaymentMethodModal
@@ -134,9 +141,9 @@ export default function AccountsReceivableInstallmentsTable(): ReactNode {
                 label={<AccountStatus status={installment.status} />}
               />
               <Table.Cell
-                label={installment.value}
+                label={installment.value.padStart(biggestValueLength, BLANK)}
+                className="font-mono whitespace-pre"
                 colSpan={1}
-                className="text-end"
               />
               <Table.Action>
                 <AccountsReceivableInstallmentsTableActions

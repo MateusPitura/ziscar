@@ -1,7 +1,7 @@
 import Table from "@/design-system/Table";
 import useDialog from "@/domains/global/hooks/useDialog";
 import { useQuery } from "@tanstack/react-query";
-import { useState, type ReactNode } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import { DisableVehicleExpense } from "../types";
 import { FetchVehicleExpense } from "@/domains/global/types/model";
 import { ExpenseCategory } from "@shared/enums";
@@ -11,6 +11,7 @@ import { ExpenseCategoryText } from "../constants";
 import selectVehicleExpensesInfo from "../utils/selectVehicleExpensesInfo";
 import DataField from "@/domains/global/components/DataField";
 import { applyMask } from "@/domains/global/utils/applyMask";
+import { BLANK } from "@/domains/global/constants";
 // import { useParams } from "react-router-dom";
 // import { BACKEND_URL } from "@/domains/global/constants";
 // import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
@@ -76,6 +77,11 @@ export default function VehicleExpenseTable(): ReactNode {
     select: selectVehicleExpensesInfo,
   });
 
+  const biggestValueLength = useMemo(() => {
+    if (!vehicleExpensesInfo?.length) return 0;
+    return Math.max(...vehicleExpensesInfo.map((v) => v.totalValue.length));
+  }, [vehicleExpensesInfo]);
+
   return (
     <>
       <DisableVehicleExpenseModal {...disableVehicleExpenseInfo} {...dialog} />
@@ -105,8 +111,8 @@ export default function VehicleExpenseTable(): ReactNode {
               <Table.Cell label={expense.observations} />
               <Table.Cell label={ExpenseCategoryText[expense.category]} />
               <Table.Cell
-                label={expense.totalValue}
-                className="text-end"
+                label={expense.totalValue.padStart(biggestValueLength, BLANK)}
+                className="font-mono whitespace-pre"
                 colSpan={1}
               />
               <Table.Action>

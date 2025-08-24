@@ -58,7 +58,7 @@ export interface AccountReceivable {
   id: number;
   description?: string;
   receivedFrom?: string;
-  totalValue?: string;
+  totalValue: string;
   overallStatus: InstallmentStatusType;
   installmentsNumber: number;
   vehicleSaleId: number;

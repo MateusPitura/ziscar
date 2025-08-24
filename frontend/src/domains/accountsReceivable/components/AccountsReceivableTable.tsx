@@ -12,6 +12,7 @@ import AccountsReceivableTableActions from "./AccountsReceivableTableActions";
 import AccountsReceivableFilterForm from "./AccountsReceivableFilterForm";
 import AccountStatus from "@/domains/global/components/AccountStatus";
 import selectAccountsReceivableInfoForReport from "../utils/selectAccountsReceivableInfoForReport";
+import { BLANK } from "@/domains/global/constants";
 // import { BACKEND_URL } from "@/domains/global/constants";
 // import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 
@@ -82,6 +83,13 @@ export default function AccountsReceivableTable(): ReactNode {
     select: selectAccountsReceivableInfo,
   });
 
+  const biggestValueLength = useMemo(() => {
+    if (!accountsReceivableInfo?.data.length) return 0;
+    return Math.max(
+      ...accountsReceivableInfo.data.map((v) => v.totalValue.length)
+    );
+  }, [accountsReceivableInfo?.data]);
+
   return (
     <>
       <div className="flex gap-4 justify-end">
@@ -140,8 +148,11 @@ export default function AccountsReceivableTable(): ReactNode {
                 }
               />
               <Table.Cell
-                label={accountReceivable.totalValue}
-                className="text-end"
+                label={accountReceivable.totalValue.padStart(
+                  biggestValueLength,
+                  BLANK
+                )}
+                className="font-mono whitespace-pre"
                 colSpan={1}
               />
               <Table.Action>
