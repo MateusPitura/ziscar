@@ -1,14 +1,24 @@
 import { Vehicle } from "@/domains/global/types/model";
 import { applyMask } from "@/domains/global/utils/applyMask";
 import { VehicleFormInputs } from "../types";
+import { defaultCommonCharacteristics } from "../constants";
 
-export default function selectVehicleInfo(
-  payload: Vehicle
-): VehicleFormInputs {
+export default function selectVehicleInfo(payload: Vehicle): VehicleFormInputs {
+  const commonCharacteristics = [];
+  const newCharacteristics = [];
+
+  for (const characteristic of payload.characteristics) {
+    if (defaultCommonCharacteristics.includes(characteristic)) {
+      commonCharacteristics.push(characteristic);
+    } else {
+      newCharacteristics.push({ description: characteristic });
+    }
+  }
+
   return {
     characteristics: {
-      commonCharacteristics: [],
-      newCharacteristics: [],
+      commonCharacteristics,
+      newCharacteristics,
     },
     purchase: {
       paidTo: "",

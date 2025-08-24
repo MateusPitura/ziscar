@@ -41,6 +41,7 @@ export default function VehicleExpenseHeader(): ReactNode {
       kilometers: 0,
       minimumPrice: "0",
       yearOfManufacture: "1970",
+      characteristics: []
     };
   }
 

@@ -8,7 +8,7 @@ import {
   VEHICLESTATUS_VALUES,
 } from "@shared/enums";
 import { s } from "@shared/safeZod";
-import { MODEL_YEARS, YEARS_OF_MANUFACTURE } from "../constants";
+import { defaultCommonCharacteristics, MODEL_YEARS, YEARS_OF_MANUFACTURE } from "../constants";
 import { VehicleExpenseFormInputs, VehicleFormInputs } from "../types";
 
 export const SchemaVehiclesFilterForm = s
@@ -53,15 +53,7 @@ export const SchemaVehicleForm = s
       category: s.enumeration(VEHICLECATEGORY_VALUES).or(s.empty()),
     }),
     characteristics: s.object({
-      commonCharacteristics: s.checkbox([
-        "Direção hidráulica",
-        "Janelas elétricas",
-        "Ar condicionado",
-        "Travas elétricas",
-        "Câmera de ré",
-        "Air bag",
-        "Rodas de liga leve",
-      ]),
+      commonCharacteristics: s.checkbox(defaultCommonCharacteristics),
       newCharacteristics: s.array(
         s.object({
           description: s.string(),

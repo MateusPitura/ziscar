@@ -144,3 +144,13 @@ export const vehicleExpenseDefaultValues: VehicleExpenseFormInputs = {
     value: applyMask("0", "money") ?? "",
   },
 };
+
+export const defaultCommonCharacteristics = [
+  "Direção hidráulica",
+  "Janelas elétricas",
+  "Ar condicionado",
+  "Travas elétricas",
+  "Câmera de ré",
+  "Air bag",
+  "Rodas de liga leve",
+];

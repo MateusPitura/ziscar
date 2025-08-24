@@ -53,6 +53,14 @@ export default function EditVehicleContainer(): ReactNode {
       kilometers: 0,
       minimumPrice: "8000000",
       yearOfManufacture: "1970",
+      characteristics: [
+        "Direção hidráulica",
+        "Janelas elétricas",
+        "Ar condicionado",
+        "Piloto automático",
+        "Vidros elétricos",
+        "Freios ABS",
+      ],
     };
   }
 

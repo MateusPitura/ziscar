@@ -47,6 +47,15 @@ export default function VehicleData(): ReactNode {
       kilometers: 0,
       minimumPrice: "8000000",
       yearOfManufacture: "1970",
+      characteristics: [
+        "Direção hidráulica",
+        "Janelas elétricas",
+        "Ar condicionado",
+        "Travas elétricas",
+        "Câmera de ré",
+        "Air bag",
+        "Rodas de liga leve",
+      ],
     };
   }
 
@@ -100,6 +109,12 @@ export default function VehicleData(): ReactNode {
           label="Tipo de combustível"
           value={FuelTypeText[vehicleData.fuelType]}
         />
+        <div className="col-span-3">
+          <DataField
+            label="Características"
+            value={vehicleData.characteristics.join(", ")}
+          />
+        </div>
       </>
     )
   );

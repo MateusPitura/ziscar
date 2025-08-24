@@ -101,8 +101,8 @@ export interface Vehicle {
     id: number;
     name: string;
   };
+  characteristics: string[];
   archivedAt?: Date;
-  characteristics?: string[];
 }
 
 export interface VehicleExpense {
