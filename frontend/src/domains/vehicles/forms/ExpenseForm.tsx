@@ -49,12 +49,14 @@ export default function ExpenseForm({
                 <VehicleExpenseDetailsForm />
               </Section.Body>
             </Section.Group>
-            <Section.Group>
-              <Section.Header title="Informações do pagamento" />
-              <Section.Body>
-                <VehicleExpensePaymentForm />
-              </Section.Body>
-            </Section.Group>
+            {!isEdit && (
+              <Section.Group>
+                <Section.Header title="Informações do pagamento" />
+                <Section.Body>
+                  <VehicleExpensePaymentForm />
+                </Section.Body>
+              </Section.Group>
+            )}
           </Section>
         </div>
         <PageFooter primaryBtnState={isPending ? "loading" : undefined} dirty>

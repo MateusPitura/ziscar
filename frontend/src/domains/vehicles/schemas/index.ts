@@ -140,17 +140,21 @@ export const SchemaVehicleExpenseForm = s
     observations: s.string().or(s.empty()),
     category: s.enumeration(EXPENSECATEGORY_VALUES),
     competencyDate: s.dateString(),
-    payment: s.object({
-      value: s.numberString(),
-      status: s.enumeration(INSTALLMENTSTATUS_VALUES),
-      dueDate: s.paymentDate().or(s.empty()),
-      paymentDate: s.paymentDate().or(s.empty()),
-      paymentMethod: s
-        .enumeration(PAYMENTMETHODPAYABLETYPE_VALUES)
-        .or(s.empty()),
-    }),
+    payment: s
+      .object({
+        value: s.numberString(),
+        status: s.enumeration(INSTALLMENTSTATUS_VALUES),
+        dueDate: s.paymentDate().or(s.empty()),
+        paymentDate: s.paymentDate().or(s.empty()),
+        paymentMethod: s
+          .enumeration(PAYMENTMETHODPAYABLETYPE_VALUES)
+          .or(s.empty()),
+      })
+      .nullable(),
   })
   .superRefine((data, ctx) => {
+    if (data.payment === null) return true;
+
     const { status, paymentDate, paymentMethod, dueDate } = data.payment;
 
     if (status === "PAID") {
