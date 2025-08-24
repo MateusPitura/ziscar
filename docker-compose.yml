@@ -53,8 +53,8 @@ services:
       - path: .env
         required: false
     environment:
-      - EMAIL=${APP_EMAIL}
-      - PASSWORD=${APP_PASSWORD}
+      - K6_EMAIL=${K6_EMAIL}
+      - K6_PASSWORD=${K6_PASSWORD}
 
 volumes:
   db-data:
