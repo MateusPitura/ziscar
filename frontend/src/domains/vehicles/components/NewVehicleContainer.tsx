@@ -2,7 +2,7 @@ import Button from "@/design-system/Button";
 import Form from "@/design-system/Form";
 import PageFooter from "@/domains/global/components/PageFooter";
 import PageHeader from "@/domains/global/components/PageHeader";
-import { BACKEND_URL, PREVIOUS_PAGE } from "@/domains/global/constants";
+import { BACKEND_URL } from "@/domains/global/constants";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -58,7 +58,7 @@ export default function NewVehicleContainer(): ReactNode {
             color="red"
             iconRight="Close"
             label="Cancelar"
-            onClick={() => navigate(PREVIOUS_PAGE)}
+            onClick={() => navigate('/vehicles')}
           />
         </PageFooter>
       </Form>

@@ -18,10 +18,12 @@ export default function VehicleExpenseDetailsForm(): ReactNode {
         }))}
       />
       <Input<VehicleExpenseFormInputs>
-        label="Detalhes"
-        name="observations"
+        label="Data de competência"
+        name="competencyDate"
+        type="date"
         required
       />
+      <Input<VehicleExpenseFormInputs> label="Detalhes" name="observations" />
     </>
   );
 }

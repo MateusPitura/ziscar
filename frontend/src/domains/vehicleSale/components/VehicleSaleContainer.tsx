@@ -2,16 +2,15 @@ import Button from "@/design-system/Button";
 import Form from "@/design-system/Form";
 import PageFooter from "@/domains/global/components/PageFooter";
 import PageHeader from "@/domains/global/components/PageHeader";
-import { PREVIOUS_PAGE } from "@/domains/global/constants";
 import { applyMask } from "@/domains/global/utils/applyMask";
 import { type ReactElement } from "react";
-import { SchemaVehicleSaleForm } from "../schemas";
-import { VehicleSaleFormInputs } from "../types";
-import VehicleSaleTabs from "./VehicleSaleTabs";
 import {
   // useLocation,
   useNavigate,
 } from "react-router-dom";
+import { SchemaVehicleSaleForm } from "../schemas";
+import { VehicleSaleFormInputs } from "../types";
+import VehicleSaleTabs from "./VehicleSaleTabs";
 // import { VehicleSaleState } from "@/domains/global/types";
 
 export default function VehicleSaleContainer(): ReactElement {
@@ -67,7 +66,7 @@ export default function VehicleSaleContainer(): ReactElement {
             color="red"
             iconRight="Close"
             label="Cancelar"
-            onClick={() => navigate(PREVIOUS_PAGE)}
+            onClick={() => navigate('/accounts-receivable')}
           />
         </PageFooter>
       </Form>

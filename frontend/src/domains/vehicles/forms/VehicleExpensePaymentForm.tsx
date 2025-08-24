@@ -1,11 +1,8 @@
 import Input from "@/design-system/Form/Input";
 import Select from "@/design-system/Form/Select";
 import { PAYMENT_METHODS_PAYABLE_TYPE_OPTIONS } from "@/domains/global/constants";
-import {
-  InstallmentStatus,
-  PaymentMethodPayableType
-} from "@shared/enums";
-import type { ReactNode } from "react";
+import { InstallmentStatus, PaymentMethodPayableType } from "@shared/enums";
+import { useEffect, type ReactNode } from "react";
 import { useFormContext } from "react-hook-form";
 import { INSTALMENT_STATUS } from "../constants";
 import { VehicleExpenseFormInputs } from "../types";
@@ -13,6 +10,16 @@ import { VehicleExpenseFormInputs } from "../types";
 export default function VehicleExpensePaymentForm(): ReactNode {
   const { watch, setValue } = useFormContext<VehicleExpenseFormInputs>();
   const statusWatch = watch("payment.status");
+
+  useEffect(() => {
+    if (statusWatch === InstallmentStatus.PENDING) {
+      setValue("payment.paymentDate", "");
+      setValue("payment.paymentMethod", "");
+    } else if (statusWatch === InstallmentStatus.PAID) {
+      setValue("payment.dueDate", "");
+      setValue("payment.paymentMethod", PaymentMethodPayableType.CREDIT_CARD);
+    }
+  }, [statusWatch, setValue]);
 
   return (
     <>
@@ -27,17 +34,6 @@ export default function VehicleExpensePaymentForm(): ReactNode {
         name="payment.status"
         options={INSTALMENT_STATUS}
         required
-        onChange={(status) => {
-          if (status === InstallmentStatus.PENDING) {
-            setValue("payment.paymentDate", "");
-            setValue(
-              "payment.paymentMethod",
-              PaymentMethodPayableType.CREDIT_CARD
-            );
-          } else if (status === InstallmentStatus.PAID) {
-            setValue("payment.dueDate", "");
-          }
-        }}
       />
       {statusWatch === InstallmentStatus.PAID ? (
         <>

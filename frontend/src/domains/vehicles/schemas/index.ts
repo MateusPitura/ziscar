@@ -137,8 +137,9 @@ export const SchemaNewVehicleForm = s
 
 export const SchemaVehicleExpenseForm = s
   .object({
-    observations: s.string(),
+    observations: s.string().or(s.empty()),
     category: s.enumeration(EXPENSECATEGORY_VALUES),
+    competencyDate: s.dateString(),
     payment: s.object({
       value: s.numberString(),
       status: s.enumeration(INSTALLMENTSTATUS_VALUES),

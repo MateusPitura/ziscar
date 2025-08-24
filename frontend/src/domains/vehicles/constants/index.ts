@@ -1,16 +1,20 @@
+import { applyMask } from "@/domains/global/utils/applyMask";
 import {
+  ExpenseCategory,
   ExpenseCategoryType,
   FuelType,
   FuelTypeType,
   InstallmentStatus,
-  PaymentMethodPayableType,
   VehicleCategory,
   VehicleCategoryType,
   VehicleStatus,
   VehicleStatusType,
 } from "@shared/enums";
-import { VehiclesFilterFormInputs } from "../types";
-import { applyMask } from "@/domains/global/utils/applyMask";
+import {
+  NewVehicleFormInputs,
+  VehicleExpenseFormInputs,
+  VehiclesFilterFormInputs,
+} from "../types";
 
 export const vehicleFilterDefaultValues: VehiclesFilterFormInputs = {
   startDate: "",
@@ -93,7 +97,7 @@ export const MODEL_YEARS_OPTIONS = [
   ...YEARS_OF_MANUFACTURE_OPTIONS,
 ];
 
-export const newVehicleDefaultValues = {
+export const newVehicleDefaultValues: NewVehicleFormInputs = {
   characteristics: {
     commonCharacteristics: [],
     newCharacteristics: [],
@@ -103,18 +107,18 @@ export const newVehicleDefaultValues = {
     purchaseDate: "",
     installment: {
       dueDate: "",
-      value: applyMask("0", "money"),
+      value: applyMask("0", "money") ?? "",
       status: InstallmentStatus.PENDING,
       paymentDate: "",
-      paymentMethod: PaymentMethodPayableType.CREDIT_CARD,
+      paymentMethod: "",
     },
   },
   vehicle: {
     kilometers: "0",
     plateNumber: "",
-    announcedPrice: applyMask("0", "money"),
-    minimumPrice: applyMask("0", "money"),
-    commissionValue: applyMask("0", "money"),
+    announcedPrice: applyMask("0", "money") ?? "",
+    minimumPrice: applyMask("0", "money") ?? "",
+    commissionValue: applyMask("0", "money") ?? "",
     color: "",
     fuelType: FuelType.FLEX,
     status: VehicleStatus.PURCHASED,
@@ -125,5 +129,18 @@ export const newVehicleDefaultValues = {
     category: VehicleCategory.CAR,
     storeId: "",
     brandId: "",
+  },
+};
+
+export const vehicleExpenseDefaultValues: VehicleExpenseFormInputs = {
+  category: ExpenseCategory.MAINTENANCE,
+  observations: "",
+  competencyDate: "",
+  payment: {
+    dueDate: "",
+    paymentDate: "",
+    paymentMethod: "",
+    status: InstallmentStatus.PENDING,
+    value: applyMask("0", "money") ?? "",
   },
 };

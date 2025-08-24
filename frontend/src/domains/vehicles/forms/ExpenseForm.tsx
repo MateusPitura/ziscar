@@ -1,19 +1,19 @@
 import Button from "@/design-system/Button";
 import Form from "@/design-system/Form";
-import Input from "@/design-system/Form/Input";
-import AddressFields from "@/domains/global/components/AddressFields";
 import PageFooter from "@/domains/global/components/PageFooter";
 import PageHeader from "@/domains/global/components/PageHeader";
 import Section from "@/domains/global/components/Section";
 import { ActionsType, ResourcesType } from "@shared/enums";
 import type { ReactNode } from "react";
-import { useNavigate } from "react-router-dom";
-import { SchemaStoreForm } from "../schemas";
-import { StoreFormInputs } from "../types";
+import { useLocation, useNavigate } from "react-router-dom";
+import { SchemaVehicleExpenseForm } from "../schemas";
+import { VehicleExpenseFormInputs } from "../types";
+import VehicleExpenseDetailsForm from "./VehicleExpenseDetailsForm";
+import VehicleExpensePaymentForm from "./VehicleExpensePaymentForm";
 
-interface StoreFormProperties {
-  defaultValues: Partial<StoreFormInputs>;
-  onSubmit: (data: StoreFormInputs) => void;
+interface ExpenseFormProperties {
+  defaultValues: Partial<VehicleExpenseFormInputs>;
+  onSubmit: (data: VehicleExpenseFormInputs) => void;
   isPending: boolean;
   headerTitle: string;
   isEdit?: boolean;
@@ -21,7 +21,7 @@ interface StoreFormProperties {
   action?: ActionsType;
 }
 
-export default function StoreForm({
+export default function ExpenseForm({
   defaultValues,
   onSubmit,
   isPending,
@@ -29,13 +29,14 @@ export default function StoreForm({
   isEdit = false,
   resource,
   action,
-}: StoreFormProperties): ReactNode {
+}: ExpenseFormProperties): ReactNode {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
 
   return (
     <div className="flex flex-col gap-4 w-full">
-      <Form<StoreFormInputs>
-        schema={SchemaStoreForm}
+      <Form<VehicleExpenseFormInputs>
+        schema={SchemaVehicleExpenseForm}
         defaultValues={defaultValues}
         onSubmit={onSubmit}
         className="gap-4 flex flex-col flex-1"
@@ -45,39 +46,15 @@ export default function StoreForm({
         <div className="flex justify-center flex-1">
           <Section>
             <Section.Group>
-              <Section.Header title="Dados" />
+              <Section.Header title="Informações do gasto" />
               <Section.Body>
-                <Input<StoreFormInputs>
-                  name="name"
-                  label="Nome"
-                  required
-                  autoFocus
-                />
-                <Input<StoreFormInputs>
-                  name="cnpj"
-                  label="CNPJ"
-                  mask="cnpj"
-                  maxLength={18}
-                  required
-                />
-                <Input<StoreFormInputs>
-                  name="email"
-                  label="Email"
-                  type="email"
-                />
-                <Input<StoreFormInputs>
-                  name="phone"
-                  label="Celular"
-                  mask="phone"
-                  maxLength={15}
-                  type="tel"
-                />
+                <VehicleExpenseDetailsForm />
               </Section.Body>
             </Section.Group>
             <Section.Group>
-              <Section.Header title="Endereço" />
+              <Section.Header title="Informações do pagamento" />
               <Section.Body>
-                <AddressFields />
+                <VehicleExpensePaymentForm />
               </Section.Body>
             </Section.Group>
           </Section>
@@ -94,7 +71,7 @@ export default function StoreForm({
             color="red"
             iconRight="Close"
             label="Cancelar"
-            onClick={() => navigate('/stores')}
+            onClick={() => navigate(pathname.replace("/new", ""))}
           />
         </PageFooter>
       </Form>
