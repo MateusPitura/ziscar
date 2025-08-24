@@ -221,7 +221,7 @@ describe("User", () => {
 
     cy.intercept(
       "GET",
-      "http://localhost:3000/user?page=1&orderBy=fullName&status=active"
+      "http://localhost:3000/user?page=1&status=active&orderBy=fullName"
     ).as("getUsersPage1");
 
     cy.wait("@getUsersPage1");
@@ -230,7 +230,7 @@ describe("User", () => {
 
     cy.intercept(
       "GET",
-      "http://localhost:3000/user?page=2&orderBy=fullName&status=active"
+      "http://localhost:3000/user?page=2&status=active&orderBy=fullName"
     ).as("getUsersPage2");
 
     cy.get('[data-cy="table-navigate-next"]').click();
@@ -249,12 +249,12 @@ describe("User", () => {
 
     cy.intercept(
       "GET",
-      "http://localhost:3000/user?page=1&orderBy=fullName&status=active"
+      "http://localhost:3000/user?page=1&status=active&orderBy=fullName"
     ).as("getUsersPage1");
 
     cy.intercept(
       "GET",
-      "http://localhost:3000/user?page=1&orderBy=fullName&status=active"
+      "http://localhost:3000/user?page=1&status=active&orderBy=fullName"
     ).as("getUsersPage2");
 
     cy.wait("@getUsersPage1");
@@ -292,7 +292,7 @@ describe("User", () => {
 
     cy.intercept(
       "GET",
-      "http://localhost:3000/user?page=1&orderBy=fullName&status=active"
+      "http://localhost:3000/user?page=1&status=active&orderBy=fullName"
     ).as("getUsersPage");
 
     cy.intercept("GET", "https://viacep.com.br/ws/65043-420/json/").as(
@@ -455,7 +455,7 @@ describe("User", () => {
 
     cy.intercept(
       "GET",
-      "http://localhost:3000/user?page=1&orderBy=fullName&status=active&startDate=2000-01-01"
+      "http://localhost:3000/user?page=1&status=active&startDate=2000-01-01&orderBy=fullName"
     ).as("getUsersPage");
 
     cy.get('[data-cy="side-sheet-primary-button"').click();
