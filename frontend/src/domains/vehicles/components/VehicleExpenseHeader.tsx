@@ -38,7 +38,7 @@ export default function VehicleExpenseHeader(): ReactNode {
       chassiNumber: "AAAAAAAAAAAAAAAAA",
       commissionValue: "0",
       fuelType: FuelType.FLEX,
-      kilometers: 0,
+      kilometers: "0",
       minimumPrice: "0",
       yearOfManufacture: "1970",
       characteristics: []

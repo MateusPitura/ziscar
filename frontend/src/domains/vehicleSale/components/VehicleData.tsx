@@ -44,7 +44,7 @@ export default function VehicleData(): ReactNode {
       chassiNumber: "AAAAAAAAAAAAAAAAA",
       commissionValue: "1000",
       fuelType: FuelType.FLEX,
-      kilometers: 0,
+      kilometers: "1000",
       minimumPrice: "8000000",
       yearOfManufacture: "1970",
       characteristics: [
@@ -91,7 +91,7 @@ export default function VehicleData(): ReactNode {
         />
         <DataField
           label="Quilometragem"
-          value={String(vehicleData.kilometers)}
+          value={vehicleData.kilometers}
         />
         <DataField
           label="Categoria"

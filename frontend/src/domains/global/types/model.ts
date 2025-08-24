@@ -80,7 +80,7 @@ export interface PaymentMethod {
 
 export interface Vehicle {
   id: number;
-  kilometers: number;
+  kilometers: string;
   plateNumber: string;
   announcedPrice: string;
   minimumPrice: string;

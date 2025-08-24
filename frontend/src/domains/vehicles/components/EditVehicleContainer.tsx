@@ -50,7 +50,7 @@ export default function EditVehicleContainer(): ReactNode {
       chassiNumber: "AAAAAAAAAAAAAAAAA",
       commissionValue: "1000",
       fuelType: FuelType.FLEX,
-      kilometers: 0,
+      kilometers: "1000",
       minimumPrice: "8000000",
       yearOfManufacture: "1970",
       characteristics: [

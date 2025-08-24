@@ -26,7 +26,7 @@ export default function selectVehicleInfo(payload: Vehicle): VehicleFormInputs {
       installment: null,
     },
     vehicle: {
-      kilometers: String(payload.kilometers),
+      kilometers: applyMask(payload.kilometers, "number") ?? "",
       plateNumber: applyMask(payload.plateNumber, "plateNumber") ?? "",
       announcedPrice: applyMask(payload.announcedPrice, "money") ?? "",
       minimumPrice: applyMask(payload.minimumPrice, "money") ?? "",
