@@ -2,60 +2,30 @@ import Button from "@/design-system/Button";
 import Form from "@/design-system/Form";
 import PageFooter from "@/domains/global/components/PageFooter";
 import PageHeader from "@/domains/global/components/PageHeader";
-import { applyMask } from "@/domains/global/utils/applyMask";
 import { type ReactElement } from "react";
-import {
-  // useLocation,
-  useNavigate,
-} from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { vehicleSaleDefaultValues } from "../constants";
 import { SchemaVehicleSaleForm } from "../schemas";
 import { VehicleSaleFormInputs } from "../types";
 import VehicleSaleTabs from "./VehicleSaleTabs";
-// import { VehicleSaleState } from "@/domains/global/types";
+import { VehicleSaleState } from "@/domains/global/types";
 
 export default function VehicleSaleContainer(): ReactElement {
   const navigate = useNavigate();
-  // const location = useLocation();
-  // const { vehicleId } = (location.state as VehicleSaleState) || {};
+  const location = useLocation();
+  const { vehicleId } = (location.state as VehicleSaleState) || {};
 
   return (
     <div className="flex flex-col gap-4 w-full">
       <Form<VehicleSaleFormInputs>
         onSubmit={(data) => {
-          const { commonCharacteristics, ...rest } = data.vehicle;
-
-          const formattedCharacteristics = commonCharacteristics.map(
-            (item) => ({
-              label: item,
-              value: "Sim",
-            })
-          );
-
-          const payload = {
-            ...data,
-            vehicle: {
-              ...rest,
-              characteristics: [
-                ...data.vehicle.characteristics,
-                ...formattedCharacteristics,
-              ],
-            },
-          };
-
-          return payload;
+          console.log(data);
         }}
         className="flex-1 flex flex-col gap-4"
         schema={SchemaVehicleSaleForm}
         defaultValues={{
-          customer: { id: "" },
-          vehicle: {
-            model: "Ford",
-            price: applyMask("10000", "money"),
-            color: "#FFFFFF",
-            commonCharacteristics: [],
-            characteristics: [],
-          },
-          payment: { isUpfront: true, installments: 1 },
+          ...vehicleSaleDefaultValues,
+          vehicle: { id: vehicleId ?? "" },
         }}
       >
         <PageHeader title="Realizar venda" />
@@ -66,7 +36,7 @@ export default function VehicleSaleContainer(): ReactElement {
             color="red"
             iconRight="Close"
             label="Cancelar"
-            onClick={() => navigate('/accounts-receivable')}
+            onClick={() => navigate("/vehicles")}
           />
         </PageFooter>
       </Form>

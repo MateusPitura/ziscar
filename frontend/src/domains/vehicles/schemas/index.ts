@@ -13,8 +13,6 @@ import { VehicleExpenseFormInputs, VehicleFormInputs } from "../types";
 
 export const SchemaVehiclesFilterForm = s
   .object({
-    // name: s.string().or(s.empty()),
-    // status: s.enumeration(["active", "inactive"]),
     startDate: s.dateString().or(s.empty()),
     endDate: s.dateString().or(s.empty()),
   })

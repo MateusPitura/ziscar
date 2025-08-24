@@ -1,10 +1,12 @@
 import { Childrenable } from "@/domains/global/types";
 import { createContext, useMemo, useState } from "react";
-import { CustomerForVehicleSale } from "../types";
+import { CustomerForVehicleSale, VehicleForVehicleSale } from "../types";
 
 interface VehicleSalePageContextValues {
   customer: CustomerForVehicleSale | null;
   handleCustomer: (customer: CustomerForVehicleSale | null) => void;
+  vehicle: VehicleForVehicleSale | null;
+  handleVehicle: (vehicle: VehicleForVehicleSale | null) => void;
 }
 
 const VehicleSalePageContext =
@@ -17,12 +19,20 @@ function VehicleSalePageProvider({ children }: Childrenable) {
     setCustomer(customer);
   }
 
+  const [vehicle, setVehicle] = useState<VehicleForVehicleSale | null>(null);
+
+  function handleVehicle(vehicle: VehicleForVehicleSale | null) {
+    setVehicle(vehicle);
+  }
+
   const valuesMemoized = useMemo(
     () => ({
       customer,
       handleCustomer,
+      vehicle,
+      handleVehicle,
     }),
-    [customer]
+    [customer, vehicle]
   );
 
   return (
