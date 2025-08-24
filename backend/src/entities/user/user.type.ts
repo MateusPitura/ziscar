@@ -18,7 +18,6 @@ export interface FindManyInput {
   userFindManyInDto: UserFindManyInDto;
   userId: number;
   enterpriseId: number;
-  paginate?: boolean;
   select?: Prisma.UserSelect;
 }
 

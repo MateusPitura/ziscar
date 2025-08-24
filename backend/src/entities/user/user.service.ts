@@ -99,12 +99,11 @@ export class UserService {
     userFindManyInDto,
     userId,
     enterpriseId,
-    paginate = true,
     select,
   }: FindManyInput) {
     const pagination = {};
-    if (paginate) {
-      const { page = 1 } = userFindManyInDto;
+    const { page } = userFindManyInDto;
+    if (page) {
       pagination['skip'] = (page - 1) * ITEMS_PER_PAGE;
       pagination['take'] = ITEMS_PER_PAGE;
     }

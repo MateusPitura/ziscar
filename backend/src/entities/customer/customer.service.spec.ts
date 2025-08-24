@@ -558,6 +558,30 @@ describe('CustomerService', () => {
     expect(result.data).toHaveLength(ITEMS_PER_PAGE);
   });
 
+  it('should find many users without pagination', async () => {
+    const spy = jest.spyOn(prismaService.customer, 'findMany');
+
+    const result = await customerService.findMany({
+      customerFindManyInDto: {},
+      enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
+    });
+
+    expect(spy).not.toHaveBeenLastCalledWith(
+      expect.objectContaining({ skip: 0, take: ITEMS_PER_PAGE }),
+    );
+
+    const calculatedCustomers =
+      POPULATE_OTHER_ENTITIES_AMOUNT +
+      Object.keys(POPULATE_CUSTOMER).length -
+      POPULATE_INACTIVE_ENTITIES_AMOUNT -
+      Object.values(POPULATE_CUSTOMER).filter(
+        (item) => item.archivedAt !== null,
+      ).length;
+
+    expect(result).toHaveProperty('total', calculatedCustomers);
+    expect(result.data).toHaveLength(calculatedCustomers);
+  });
+
   it('should find many customers by fullName', async () => {
     const spy = jest.spyOn(prismaService.customer, 'findMany');
 
