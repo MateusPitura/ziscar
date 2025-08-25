@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 
 interface DataFieldProperties {
   label: string;
-  value?: string;
+  value?: ReactNode;
 }
 
 export default function DataField({

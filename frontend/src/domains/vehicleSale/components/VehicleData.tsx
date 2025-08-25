@@ -11,6 +11,7 @@ import { useQuery } from "@tanstack/react-query";
 import type { ReactNode } from "react";
 import { useParams } from "react-router-dom";
 import selectVehicleInfo from "../utils/selectVehicleInfo";
+import ColorPreview from "@/design-system/ColorPreview";
 // import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 
 export default function VehicleData(): ReactNode {
@@ -40,7 +41,7 @@ export default function VehicleData(): ReactNode {
         name: "Loja 1",
       },
       category: VehicleCategory.CAR,
-      color: "#FFFFFF",
+      color: "#FF0000",
       chassiNumber: "AAAAAAAAAAAAAAAAA",
       commissionValue: "1000",
       fuelType: FuelType.FLEX,
@@ -89,17 +90,17 @@ export default function VehicleData(): ReactNode {
           label="Status"
           value={VehicleStatusText[vehicleData.status]}
         />
-        <DataField
-          label="Quilometragem"
-          value={vehicleData.kilometers}
-        />
+        <DataField label="Quilometragem" value={vehicleData.kilometers} />
         <DataField
           label="Categoria"
           value={VehicleCategoryText[vehicleData.category]}
         />
         <DataField label="Modelo" value={vehicleData.modelName} />
         <DataField label="Marca" value={vehicleData.brand.name} />
-        <DataField label="Cor" value={vehicleData.color} />
+        <DataField
+          label="Cor"
+          value={<ColorPreview color={vehicleData.color} />}
+        />
         <DataField
           label="Ano de fabricação"
           value={vehicleData.yearOfManufacture}

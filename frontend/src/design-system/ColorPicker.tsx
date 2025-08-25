@@ -11,6 +11,7 @@ import { Popover } from "./Popover";
 import Button from "./Button";
 import InputLabel from "./Form/InputLabel";
 import InputError from "./Form/InputError";
+import ColorPreview from "./ColorPreview";
 
 interface ColorPickerProperties<T extends FieldValues> {
   name: Path<T>;
@@ -48,11 +49,8 @@ export default function ColorPicker<T extends FieldValues>({
           <Button
             label={
               watch ? (
-                <div className="flex gap-2 items-center font-mono">
-                  <div
-                    className="h-8 w-16 rounded-md border border-neutral-300"
-                    style={{ backgroundColor: watch }}
-                  />
+                <div className="flex items-center">
+                  <ColorPreview color={watch} />
                 </div>
               ) : (
                 "Selecione uma cor"
