@@ -102,7 +102,7 @@ export const vehicleDefaultValues: VehicleFormInputs = {
     commonCharacteristics: [],
     newCharacteristics: [],
   },
-  purchase: {
+  payment: {
     paidTo: "",
     purchaseDate: "",
     installment: {
@@ -133,15 +133,17 @@ export const vehicleDefaultValues: VehicleFormInputs = {
 };
 
 export const vehicleExpenseDefaultValues: VehicleExpenseFormInputs = {
-  category: ExpenseCategory.MAINTENANCE,
-  observations: "",
-  competencyDate: "",
   payment: {
-    dueDate: "",
-    paymentDate: "",
-    paymentMethod: "",
-    status: InstallmentStatus.PENDING,
-    value: applyMask("0", "money") ?? "",
+    category: ExpenseCategory.MAINTENANCE,
+    observations: "",
+    competencyDate: "",
+    installment: {
+      dueDate: "",
+      paymentDate: "",
+      paymentMethod: "",
+      status: InstallmentStatus.PENDING,
+      value: applyMask("0", "money") ?? "",
+    },
   },
 };
 

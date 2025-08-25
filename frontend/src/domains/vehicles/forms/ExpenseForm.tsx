@@ -3,12 +3,12 @@ import Form from "@/design-system/Form";
 import PageFooter from "@/domains/global/components/PageFooter";
 import PageHeader from "@/domains/global/components/PageHeader";
 import Section from "@/domains/global/components/Section";
+import PaymentForm from "@/domains/global/forms/PaymentForm";
 import { ActionsType, ResourcesType } from "@shared/enums";
 import type { ReactNode } from "react";
 import { SchemaVehicleExpenseForm } from "../schemas";
 import { VehicleExpenseFormInputs } from "../types";
 import VehicleExpenseDetailsForm from "./VehicleExpenseDetailsForm";
-import VehicleExpensePaymentForm from "./VehicleExpensePaymentForm";
 
 interface ExpenseFormProperties {
   defaultValues: Partial<VehicleExpenseFormInputs>;
@@ -53,7 +53,7 @@ export default function ExpenseForm({
               <Section.Group>
                 <Section.Header title="Informações do pagamento" />
                 <Section.Body>
-                  <VehicleExpensePaymentForm />
+                  <PaymentForm />
                 </Section.Body>
               </Section.Group>
             )}

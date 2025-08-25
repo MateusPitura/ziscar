@@ -3,11 +3,11 @@ import Section from "@/domains/global/components/Section";
 import { useState, type ReactElement } from "react";
 import { useFormState } from "react-hook-form";
 import CustomerSearchForm from "../forms/CustomerSearchForm";
-import PaymentForm from "../forms/PaymentForm";
 import { VehicleSaleFormInputs } from "../types";
 import CustomerData from "./CustomerData";
 import VehicleData from "./VehicleData";
 import { Vehicle } from "@/domains/global/types/model";
+import PaymentForm from "@/domains/global/forms/PaymentForm";
 
 type VehicleSaleTabs = "CLIENT" | "VEHICLE" | "PAYMENT";
 
@@ -80,7 +80,7 @@ export default function VehicleSaleTabs({
             <Section.Group>
               <Section.Header title="Informações do pagamento" />
               <Section.Body>
-                <PaymentForm />
+                <PaymentForm isAccountReceivable />
               </Section.Body>
             </Section.Group>
           </Section>

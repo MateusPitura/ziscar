@@ -5,9 +5,11 @@ export default function selectVehicleExpenseInfo(
   payload: FetchVehicleExpense
 ): VehicleExpenseFormInputs {
   return {
-    category: payload.category,
-    competencyDate: payload.competencyDate,
-    observations: payload.observations,
-    payment: null
+    payment: {
+      category: payload.category,
+      competencyDate: payload.competencyDate,
+      observations: payload.observations,
+      installment: null,
+    },
   };
 }

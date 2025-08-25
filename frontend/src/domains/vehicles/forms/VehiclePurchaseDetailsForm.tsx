@@ -7,11 +7,11 @@ export default function VehiclePurchaseDetailsForm(): ReactNode {
     <>
       <Input<VehicleFormInputs>
         label="Data de compra"
-        name="purchase.purchaseDate"
+        name="payment.purchaseDate"
         type="date"
         required
       />
-      <Input<VehicleFormInputs> label="Comprado de" name="purchase.paidTo" />
+      <Input<VehicleFormInputs> label="Comprado de" name="payment.paidTo" />
     </>
   );
 }

@@ -4,9 +4,9 @@ import VehicleCommonCharacteristicForm from "@/domains/vehicles/forms/VehicleCom
 import VehicleNewCharacteristicForm from "@/domains/vehicles/forms/VehicleNewCharacteristicForm";
 import { useState, type ReactNode } from "react";
 import { useFormState } from "react-hook-form";
+import PaymentForm from "../../global/forms/PaymentForm";
 import VehicleForm from "../forms/VehicleForm";
 import VehiclePurchaseDetailsForm from "../forms/VehiclePurchaseDetailsForm";
-import VehiclePurchasePaymentForm from "../forms/VehiclePurchasePaymentForm";
 import { VehicleFormInputs } from "../types";
 
 type VehicleTabs = "PURCHASE" | "INFORMATION" | "CHARACTERISTICS";
@@ -28,7 +28,7 @@ export default function VehicleTabs({
           isActive={activeTab === "PURCHASE"}
           title="Compra"
           onClick={() => setActiveTab("PURCHASE")}
-          hasError={!!errors?.purchase}
+          hasError={!!errors?.payment}
           resource="VEHICLES"
           action="CREATE"
         />
@@ -62,7 +62,7 @@ export default function VehicleTabs({
               <Section.Group>
                 <Section.Header title="Informações do pagamento" />
                 <Section.Body>
-                  <VehiclePurchasePaymentForm />
+                  <PaymentForm />
                 </Section.Body>
               </Section.Group>
             )}

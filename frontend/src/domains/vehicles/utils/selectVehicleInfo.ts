@@ -1,7 +1,7 @@
 import { Vehicle } from "@/domains/global/types/model";
 import { applyMask } from "@/domains/global/utils/applyMask";
-import { VehicleFormInputs } from "../types";
 import { defaultCommonCharacteristics } from "../constants";
+import { VehicleFormInputs } from "../types";
 
 export default function selectVehicleInfo(payload: Vehicle): VehicleFormInputs {
   const commonCharacteristics = [];
@@ -20,7 +20,7 @@ export default function selectVehicleInfo(payload: Vehicle): VehicleFormInputs {
       commonCharacteristics,
       newCharacteristics,
     },
-    purchase: {
+    payment: {
       paidTo: "",
       purchaseDate: "",
       installment: null,

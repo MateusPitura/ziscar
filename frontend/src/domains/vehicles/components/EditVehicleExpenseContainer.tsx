@@ -39,7 +39,7 @@ export default function EditVehicleExpenseContainer(): ReactNode {
   const { data: vehicleExpenseData, isFetching } = useQuery({
     queryKey: ["vehicle-expense", expenseId],
     queryFn: getVehicleExpense,
-    select: selectVehicleExpenseInfo
+    select: selectVehicleExpenseInfo,
   });
 
   async function editVehicleExpense(data: VehicleExpenseFormInputs) {
@@ -54,10 +54,10 @@ export default function EditVehicleExpenseContainer(): ReactNode {
   const { mutate, isPending, isSuccess } = useMutation({
     mutationFn: editVehicleExpense,
     onSuccess: async () => {
-      if (vehicleExpenseData?.category) {
+      if (vehicleExpenseData?.payment.category) {
         showSuccessSnackbar({
           title: `Gasto de ${
-            ExpenseCategoryText[vehicleExpenseData.category]
+            ExpenseCategoryText[vehicleExpenseData.payment.category]
           } atualizado com sucesso`,
         });
       }

@@ -5,7 +5,11 @@ import { UsersFilterFormInputs } from "@/domains/users/types";
 import { VehiclesFilterFormInputs } from "@/domains/vehicles/types";
 import { BRAZILIANSTATE_VALUES } from "@shared/enums";
 import { s } from "@shared/safeZod";
-import { SchemaAddress } from "../schemas";
+import {
+  SchemaAddress,
+  SchemaPayableInstallment,
+  SchemaReceivableInstallment,
+} from "../schemas";
 
 export interface Childrenable {
   children?: React.ReactNode;
@@ -85,3 +89,17 @@ export interface Options {
 export type AddressFormInputs = s.infer<typeof SchemaAddress>;
 
 export type BrazilianState = (typeof BRAZILIANSTATE_VALUES)[number];
+
+type PayableInstallmentFormInputs = s.infer<typeof SchemaPayableInstallment>;
+type ReceivableInstallmentFormInputs = s.infer<
+  typeof SchemaReceivableInstallment
+>;
+
+export interface PaymentFieldRuleData {
+  payment: {
+    installment:
+      | PayableInstallmentFormInputs
+      | ReceivableInstallmentFormInputs
+      | null;
+  };
+}

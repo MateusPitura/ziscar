@@ -1,15 +1,21 @@
-import { addIssue } from "@/domains/global/schemas";
+import {
+  addIssue,
+  paymentFieldsRule,
+  SchemaPayableInstallment,
+} from "@/domains/global/schemas";
 import {
   EXPENSECATEGORY_VALUES,
   FUELTYPE_VALUES,
-  INSTALLMENTSTATUS_VALUES,
-  PAYMENTMETHODPAYABLETYPE_VALUES,
   VEHICLECATEGORY_VALUES,
   VEHICLESTATUS_VALUES,
 } from "@shared/enums";
 import { s } from "@shared/safeZod";
-import { defaultCommonCharacteristics, MODEL_YEARS, YEARS_OF_MANUFACTURE } from "../constants";
-import { VehicleExpenseFormInputs, VehicleFormInputs } from "../types";
+import {
+  defaultCommonCharacteristics,
+  MODEL_YEARS,
+  YEARS_OF_MANUFACTURE,
+} from "../constants";
+import { VehicleFormInputs } from "../types";
 
 export const SchemaVehiclesFilterForm = s
   .object({
@@ -20,20 +26,10 @@ export const SchemaVehiclesFilterForm = s
 
 export const SchemaVehicleForm = s
   .object({
-    purchase: s.object({
+    payment: s.object({
       purchaseDate: s.paymentDate(),
       paidTo: s.string().or(s.empty()),
-      installment: s
-        .object({
-          value: s.numberString(),
-          status: s.enumeration(INSTALLMENTSTATUS_VALUES),
-          dueDate: s.paymentDate().or(s.empty()),
-          paymentDate: s.paymentDate().or(s.empty()),
-          paymentMethod: s
-            .enumeration(PAYMENTMETHODPAYABLETYPE_VALUES)
-            .or(s.empty()),
-        })
-        .nullable(),
+      installment: SchemaPayableInstallment.nullable(),
     }),
     vehicle: s.object({
       plateNumber: s.plateNumber(),
@@ -62,25 +58,7 @@ export const SchemaVehicleForm = s
       ),
     }),
   })
-  .superRefine((data, ctx) => {
-    if (data.purchase.installment === null) return true;
-
-    const { status, paymentDate, paymentMethod, dueDate } =
-      data.purchase.installment;
-
-    if (status === "PAID") {
-      if (paymentDate === "") {
-        addIssue<VehicleFormInputs>(ctx, "purchase.installment.paymentDate");
-      }
-      if (paymentMethod === "") {
-        addIssue<VehicleFormInputs>(ctx, "purchase.installment.paymentMethod");
-      }
-    } else if (status === "PENDING") {
-      if (dueDate === "") {
-        addIssue<VehicleFormInputs>(ctx, "purchase.installment.dueDate");
-      }
-    }
-  })
+  .superRefine(paymentFieldsRule)
   .superRefine((data, ctx) => {
     const { modelYear, yearOfManufacture } = data.vehicle;
 
@@ -95,7 +73,7 @@ export const SchemaVehicleForm = s
     }
   })
   .superRefine((data, ctx) => {
-    const { vehicle, purchase } = data;
+    const { vehicle, payment: purchase } = data;
 
     if (purchase.installment === null) return true;
 
@@ -129,37 +107,11 @@ export const SchemaVehicleForm = s
 
 export const SchemaVehicleExpenseForm = s
   .object({
-    observations: s.string().or(s.empty()),
-    category: s.enumeration(EXPENSECATEGORY_VALUES),
-    competencyDate: s.dateString(),
-    payment: s
-      .object({
-        value: s.numberString(),
-        status: s.enumeration(INSTALLMENTSTATUS_VALUES),
-        dueDate: s.paymentDate().or(s.empty()),
-        paymentDate: s.paymentDate().or(s.empty()),
-        paymentMethod: s
-          .enumeration(PAYMENTMETHODPAYABLETYPE_VALUES)
-          .or(s.empty()),
-      })
-      .nullable(),
+    payment: s.object({
+      observations: s.string().or(s.empty()),
+      category: s.enumeration(EXPENSECATEGORY_VALUES),
+      competencyDate: s.dateString(),
+      installment: SchemaPayableInstallment.nullable(),
+    }),
   })
-  .superRefine((data, ctx) => {
-    if (data.payment === null) return true;
-
-    const { status, paymentDate, paymentMethod, dueDate } = data.payment;
-
-    if (status === "PAID") {
-      if (paymentDate === "") {
-        addIssue<VehicleExpenseFormInputs>(ctx, "payment.paymentDate");
-      }
-      if (paymentMethod === "") {
-        addIssue<VehicleExpenseFormInputs>(ctx, "payment.paymentMethod");
-      }
-    } else if (status === "PENDING") {
-      if (dueDate === "") {
-        addIssue<VehicleExpenseFormInputs>(ctx, "payment.dueDate");
-      }
-    }
-    return true;
-  });
+  .superRefine(paymentFieldsRule);

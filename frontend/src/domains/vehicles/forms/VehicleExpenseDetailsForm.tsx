@@ -10,7 +10,7 @@ export default function VehicleExpenseDetailsForm(): ReactNode {
     <>
       <Select<VehicleExpenseFormInputs>
         label="Categoria"
-        name="category"
+        name="payment.category"
         required
         options={Object.values(ExpenseCategory).map((category) => ({
           label: ExpenseCategoryText[category],
@@ -19,11 +19,14 @@ export default function VehicleExpenseDetailsForm(): ReactNode {
       />
       <Input<VehicleExpenseFormInputs>
         label="Data de competência"
-        name="competencyDate"
+        name="payment.competencyDate"
         type="date"
         required
       />
-      <Input<VehicleExpenseFormInputs> label="Detalhes" name="observations" />
+      <Input<VehicleExpenseFormInputs>
+        label="Detalhes"
+        name="payment.observations"
+      />
     </>
   );
 }
