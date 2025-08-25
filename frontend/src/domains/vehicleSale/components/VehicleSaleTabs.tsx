@@ -7,10 +7,17 @@ import PaymentForm from "../forms/PaymentForm";
 import { VehicleSaleFormInputs } from "../types";
 import CustomerData from "./CustomerData";
 import VehicleData from "./VehicleData";
+import { Vehicle } from "@/domains/global/types/model";
 
 type VehicleSaleTabs = "CLIENT" | "VEHICLE" | "PAYMENT";
 
-export default function VehicleSaleTabs(): ReactElement {
+interface VehicleSaleTabsProperties {
+  vehicleData: Vehicle;
+}
+
+export default function VehicleSaleTabs({
+  vehicleData,
+}: VehicleSaleTabsProperties): ReactElement {
   const [activeTab, setActiveTab] = useState<VehicleSaleTabs>("VEHICLE");
   const { errors } = useFormState<VehicleSaleFormInputs>();
 
@@ -21,7 +28,6 @@ export default function VehicleSaleTabs(): ReactElement {
           isActive={activeTab === "VEHICLE"}
           title="Veículo"
           onClick={() => setActiveTab("VEHICLE")}
-          hasError={!!errors?.vehicle}
           resource="VEHICLE_SALE"
           action="CREATE"
         />
@@ -64,7 +70,7 @@ export default function VehicleSaleTabs(): ReactElement {
             <Section.Group>
               <Section.Header title="Dados do veículo" />
               <Section.Body className="grid-cols-3">
-                <VehicleData />
+                <VehicleData vehicleData={vehicleData} />
               </Section.Body>
             </Section.Group>
           </Section>

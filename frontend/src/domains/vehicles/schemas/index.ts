@@ -80,7 +80,6 @@ export const SchemaVehicleForm = s
         addIssue<VehicleFormInputs>(ctx, "purchase.installment.dueDate");
       }
     }
-    return true;
   })
   .superRefine((data, ctx) => {
     const { modelYear, yearOfManufacture } = data.vehicle;

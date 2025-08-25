@@ -124,11 +124,10 @@ export default function VehiclesTable(): ReactNode {
         <Table.Filter form={<VehiclesFilterForm />} />
       </div>
       <Table>
-        <Table.Header gridColumns={8}>
+        <Table.Header gridColumns={7}>
           <Table.Head label="Modelo" />
           <Table.Head label="Placa" colSpan={1} />
           <Table.Head label="Ano do modelo" colSpan={1} />
-          <Table.Head label="Status" colSpan={1} />
           <Table.Head label="Preço anunciado" colSpan={1} />
           <Table.Head label="Status" colSpan={1} />
           <Table.Head action />
@@ -140,14 +139,10 @@ export default function VehiclesTable(): ReactNode {
           action="READ"
         >
           {vehiclesInfo?.data.map((vehicle) => (
-            <Table.Row key={vehicle.id} gridColumns={8}>
+            <Table.Row key={vehicle.id} gridColumns={7}>
               <Table.Cell label={vehicle.modelName} />
               <Table.Cell label={vehicle.plateNumber} colSpan={1} />
               <Table.Cell label={vehicle.modelYear} colSpan={1} />
-              <Table.Cell
-                label={VehicleStatusText[vehicle.status]}
-                colSpan={1}
-              />
               <Table.Cell
                 label={vehicle.announcedPrice.padStart(
                   biggestValueLength,
@@ -157,7 +152,11 @@ export default function VehiclesTable(): ReactNode {
                 colSpan={1}
               />
               <Table.Cell
-                label={vehicle.archivedAt ? "Inativo" : "Ativo"}
+                label={
+                  vehicle.archivedAt
+                    ? "Inativo"
+                    : VehicleStatusText[vehicle.status]
+                }
                 colSpan={1}
               />
               <Table.Action>
