@@ -133,14 +133,14 @@ export const privateRoutes: Route[] = [
     resource: "VEHICLES",
   },
   {
-    path: "/vehicle-sale/:vehicleId",
+    path: "/vehicle-sale/new/:vehicleId",
     entryPage: <VehicleSale />,
     shouldDisplay: false,
     action: "CREATE",
     resource: "VEHICLE_SALE",
   },
   {
-    path: "/vehicle-sale/:vehicleSaleId",
+    path: "/vehicle-sale/view/:vehicleSaleId",
     entryPage: <ViewVehicleSale />,
     shouldDisplay: false,
     action: "READ",

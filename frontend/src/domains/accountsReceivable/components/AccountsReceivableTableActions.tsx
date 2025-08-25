@@ -20,7 +20,7 @@ export default function AccountsReceivableTableActions({
         <Button
           variant="quaternary"
           iconLeft="DirectionsCar"
-          onClick={() => navigate(`/vehicle-sale/${vehicleSaleId}`)}
+          onClick={() => navigate(`/vehicle-sale/view/${vehicleSaleId}`)}
           resource="VEHICLE_SALE"
           action="READ"
           padding="none"

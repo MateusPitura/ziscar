@@ -51,7 +51,7 @@ export default function VehiclesTableActions({
         <Button
           variant="quaternary"
           iconLeft="CurrencyExchange"
-          onClick={() => navigate(`/vehicle-sale/${vehicleId}`)}
+          onClick={() => navigate(`/vehicle-sale/new/${vehicleId}`)}
           resource="VEHICLE_SALE"
           action="CREATE"
           padding="none"

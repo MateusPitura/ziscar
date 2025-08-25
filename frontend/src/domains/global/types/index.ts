@@ -49,6 +49,7 @@ export type QueryKeys =
   | "customers"
   | "vehicle"
   | "vehicles"
+  | "vehicle-sale"
   | "vehicle-expense"
   | "vehicle-expenses"
   | "account-payable"
