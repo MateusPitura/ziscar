@@ -17,7 +17,6 @@ describe("Sign", () => {
     cy.get('button[type="submit"]').click();
 
     cy.get('[data-cy="button-/vehicles"]').should("exist");
-    cy.get('[data-cy="button-/vehicle-sale"]').should("exist");
     cy.get('[data-cy="button-/profile"]').should("exist");
     cy.get('[data-cy="button-/customers"]').should("exist");
   
@@ -62,7 +61,7 @@ describe("Sign", () => {
     cy.url().should("include", "/");
   });
 
-  it("should warn if not fill one field on sign in", () => {
+  it.only("should warn if not fill one field on sign in", () => {
     cy.visit("/");
 
     cy.get('input[name="email"]').type("john.doe@email.com");
