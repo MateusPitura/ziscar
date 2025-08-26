@@ -80,11 +80,11 @@ export interface PaymentMethod {
 
 export interface Vehicle {
   id: number;
-  kilometers: string;
+  kilometers: number;
   plateNumber: string;
-  announcedPrice: string;
-  minimumPrice: string;
-  commissionValue: string;
+  announcedPrice: number;
+  minimumPrice: number;
+  commissionValue: number;
   color: string;
   fuelType: FuelType;
   status: VehicleStatus;
@@ -93,8 +93,8 @@ export interface Vehicle {
     name: string;
   };
   chassiNumber: string;
-  modelYear: string;
-  yearOfManufacture: string;
+  modelYear: number;
+  yearOfManufacture: number;
   modelName: string;
   category: VehicleCategory;
   brand: {

@@ -25,7 +25,7 @@ export default function ViewPaymentMethodModal({
 
   async function getPaymentMethod(): Promise<PaymentMethod> {
     // return await safeFetch(
-    //   `${BACKEND_URL}/accounts-receivable-installments/payment-method/${installment?.id}`,
+    //   `${BACKEND_URL}/accounts-receivable-installments/payment-method/${installment?.id}`, // 🌠 MOCK
     //   {
     //     resource: "ACCOUNTS_RECEIVABLE",
     //     action: "READ",

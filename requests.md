@@ -114,3 +114,156 @@ payload:
     "type": "CREDIT_CARD",
     "paymentDate": "2025-08-16"
 }
+
+## Veículos
+
+# Buscar venda do veículo
+
+endpoint:
+GET /vehicle-sale/${vehicleSaleId}
+
+payload: 
+{
+    <vehicle>
+}
+
+# Buscar veículo
+
+endpoint:
+GET /vehicle/${vehicleId}
+
+payload:
+{
+    <vehicle>
+}
+
+# Listar veículos
+
+endpoint:
+GET /vehicle?page=1&startDate=2025-08-01&endDate=2025-08-08&orderBy=modelName
+
+payload:
+{
+    total: 0,
+    data: <fetchVehicle>[]
+}
+
+# Listar gastos
+
+endpoint:
+GET /vehicle-expense/${vehicleId}
+
+payload:
+{
+    <vehicleExpense>[]
+}
+
+# Buscar gasto por id do gasto
+
+endpoint:
+GET /vehicle-expense/${expenseId}
+
+payload:
+{
+    <vehicleExpense>
+}
+
+# Ativar veículo
+
+endpoint:
+DELETE /vehicle/${vehicleId}
+
+payload:
+{
+    archivedAt: null
+}
+
+# Desativar veículo
+
+endpoint:
+DELETE /vehicle/${vehicleId}
+
+payload:
+{
+    archivedAt: '2025-01-01'
+}
+
+# Criar veículo
+
+endpoint
+POST /vehicle
+
+payload:
+{
+    payment: {
+        purchaseDate: "2025-01-01",
+        paidTo: "Paid to",
+        installment: <installment>
+    },
+    vehicle: <vehicle>,
+    characteristics: {
+        commonCharacteristics: [],
+        newCharacteristics: []
+    }
+}
+
+# Editar veículo
+
+endpoint:
+PATH /vehicle/${vehicleId}
+
+payload:
+{
+    payment: {
+        purchaseDate: "2025-01-01",
+        paidTo: "Paid to",
+    },
+    vehicle: <vehicle>,
+    characteristics: {
+        commonCharacteristics: [],
+        newCharacteristics: []
+    } 
+}
+
+# Editar gasto do veículo
+
+endpoint:
+PATCH /vehicle-expense/${expenseId}
+
+payload:
+{
+    payment: {
+        observations: "Observations",
+        category: "",
+        competencyDate: "2025-01-01",
+    }
+}
+
+# Criar gasto do veículo
+
+endpoint:
+POST /vehicle-expense
+
+payload:
+{
+    payment: {
+        observations: "Observations",
+        category: "",
+        competencyDate: "2025-01-01",
+        installment: <installment>
+    }
+}
+
+# Vender veículo
+
+# Desativar um gasto do veículo
+
+endpoint:
+DELETE /vehicle-expense/${vehicleId}
+
+payload:
+{
+    archivedAt: "2025-01-01"
+}
+
+# Ativar um gasto do veículo

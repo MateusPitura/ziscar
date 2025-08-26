@@ -32,7 +32,7 @@ export default function AddPaymentMethodModal({
     data: PaymentMethodFormInputs
   ): Promise<void> {
     // await safeFetch(
-    //   `${BACKEND_URL}/accounts-receivable-installments/payment-method/${installment.id}`,
+    //   `${BACKEND_URL}/accounts-receivable-installments/payment-method/${installment.id}`, // 🌠 MOCK
     //   {
     //     method: "POST",
     //     body: data,
