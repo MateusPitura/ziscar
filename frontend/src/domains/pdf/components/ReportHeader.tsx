@@ -4,38 +4,63 @@ import type { ReactNode } from "react";
 
 const styles = StyleSheet.create({
   header: {
-    marginBottom: 20,
-    textAlign: "center",
-    borderBottomWidth: 2,
-    borderBottomColor: "#000000",
-    paddingBottom: 10,
+    flexDirection: "row",
+    marginBottom: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: "#CCCCCC",
+    paddingBottom: 15,
+    backgroundColor: "#FFFFFF",
+  },
+  gridColumn: {
+    flex: 1,
+    minHeight: 50,
+  },
+  logoContainer: {
+    height: 40,
+    backgroundColor: "#F3F4F6",
+    borderRadius: 4,
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 10,
+  },
+  logoText: {
+    fontSize: 8,
+    color: "#9CA3AF",
+  },
+  centerContainer: {
+    alignItems: "center",
+    justifyContent: "center",
   },
   title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 5,
-  },
-  subtitle: {
-    fontSize: 14,
-    color: "#666666",
-  },
-  section: {
-    marginBottom: 15,
-  },
-  sectionTitle: {
     fontSize: 16,
     fontWeight: "bold",
-    marginBottom: 8,
-    color: "#333333",
+    marginBottom: 3,
+    textAlign: "center",
   },
-  summary: {
-    padding: 15,
-    backgroundColor: "#F9FAFB",
-    borderRadius: 4,
+  subtitle: {
+    fontSize: 10,
+    color: "#666666",
+    textAlign: "center",
   },
-  summaryText: {
-    fontSize: 12,
-    marginBottom: 5,
+  filtersContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "flex-end",
+    alignContent: "flex-start",
+    marginLeft: 10,
+  },
+  filterChip: {
+    backgroundColor: "#F3F4F6",
+    borderRadius: 12,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    marginBottom: 3,
+    marginLeft: 3,
+    borderWidth: 1,
+    borderColor: "#E5E7EB",
+  },
+  filterText: {
+    fontSize: 8,
     color: "#374151",
   },
 });
@@ -50,25 +75,35 @@ export default function ReportHeader({
   title,
 }: ReportHeaderProperties): ReactNode {
   return (
-    <>
-      <View style={styles.header}>
-        <Text style={styles.title}>{title}</Text>
-        <Text style={styles.subtitle}>
-          Gerado em {safeFormat({ date: new Date(), format: "dd/MM/yyyy" })}
-        </Text>
+    <View style={styles.header} fixed>
+      <View style={styles.gridColumn}>
+        <View style={styles.logoContainer}>
+          <Text style={styles.logoText}>LOGO</Text>
+        </View>
       </View>
-      {appliedFilters && Object.keys(appliedFilters).length > 0 && (
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Filtros aplicados</Text>
-          <View style={styles.summary}>
+
+      <View style={styles.gridColumn}>
+        <View style={styles.centerContainer}>
+          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.subtitle}>
+            Gerado em {safeFormat({ date: new Date(), format: "dd/MM/yyyy" })}
+          </Text>
+        </View>
+      </View>
+
+      <View style={styles.gridColumn}>
+        {appliedFilters && Object.keys(appliedFilters).length > 0 && (
+          <View style={styles.filtersContainer}>
             {Object.entries(appliedFilters).map(([key, value]) => (
-              <Text key={key} style={styles.summaryText}>
-                • {key}: {value}
-              </Text>
+              <View key={key} style={styles.filterChip}>
+                <Text style={styles.filterText}>
+                  {key}: {value}
+                </Text>
+              </View>
             ))}
           </View>
-        </View>
-      )}
-    </>
+        )}
+      </View>
+    </View>
   );
 }
