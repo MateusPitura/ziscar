@@ -1,12 +1,9 @@
 import {
   ActionsType,
-  ExpenseCategoryType,
-  FuelTypeType,
-  InstallmentStatusType,
+  ExpenseCategory, FuelType, InstallmentStatusType,
   PaymentMethodPayableTypeType,
   ResourcesType,
-  VehicleCategoryType,
-  VehicleStatusType,
+  VehicleCategory, VehicleStatus
 } from "@shared/enums";
 import { BrazilianState } from ".";
 
@@ -67,7 +64,7 @@ export interface AccountReceivable {
 export interface AccountReceivableInstallment {
   id: number;
   installmentSequence: number;
-  dueDate: string;
+  dueDate?: string;
   value: string;
   isRefund?: boolean;
   isUpfront?: boolean;
@@ -83,28 +80,35 @@ export interface PaymentMethod {
 
 export interface Vehicle {
   id: number;
-  kilometers: number;
+  kilometers: string;
   plateNumber: string;
   announcedPrice: string;
   minimumPrice: string;
   commissionValue: string;
   color: string;
-  fuelType: FuelTypeType;
-  status: VehicleStatusType;
-  storeId: number;
+  fuelType: FuelType;
+  status: VehicleStatus;
+  store: {
+    id: number;
+    name: string;
+  };
   chassiNumber: string;
   modelYear: string;
   yearOfManufacture: string;
   modelName: string;
-  category: VehicleCategoryType;
-  brandId: number;
+  category: VehicleCategory;
+  brand: {
+    id: number;
+    name: string;
+  };
+  characteristics: string[];
   archivedAt?: Date;
 }
 
 export interface VehicleExpense {
   id: number;
   observations: string;
-  category: ExpenseCategoryType;
+  category: ExpenseCategory;
   totalValue: string;
   competencyDate: string;
   archivedAt?: Date;

@@ -1,6 +1,7 @@
 import Button from "@/design-system/Button";
 import PageHeader from "@/domains/global/components/PageHeader";
-import { FetchVehicle } from "@/domains/global/types/model";
+import { Vehicle } from "@/domains/global/types/model";
+import { FuelType, VehicleCategory, VehicleStatus } from "@shared/enums";
 import { useQuery } from "@tanstack/react-query";
 import type { ReactNode } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -11,7 +12,7 @@ export default function VehicleExpenseHeader(): ReactNode {
   const { pathname } = useLocation();
   const { vehicleId } = useParams();
 
-  async function getVehicleInfo(): Promise<FetchVehicle> {
+  async function getVehicleInfo(): Promise<Vehicle> {
     // return await safeFetch(`${BACKEND_URL}/vehicle/${vehicleId}`, {
     //   resource: "ACCOUNTS_RECEIVABLE",
     //   action: "READ",
@@ -19,11 +20,28 @@ export default function VehicleExpenseHeader(): ReactNode {
     return {
       id: 1,
       modelName: "Fusca",
-      announcedPrice: "2000000",
-      plateNumber: "ABC-1234",
+      announcedPrice: "800000000",
+      plateNumber: "ABC1234",
       modelYear: "1970",
-      status: "DELIVERED",
+      status: VehicleStatus.DELIVERED,
       archivedAt: undefined,
+      brand: {
+        id: 10,
+        name: "Volkswagen",
+      },
+      store: {
+        id: 1,
+        name: "Loja 1",
+      },
+      category: VehicleCategory.CAR,
+      color: "#FFFFFF",
+      chassiNumber: "AAAAAAAAAAAAAAAAA",
+      commissionValue: "0",
+      fuelType: FuelType.FLEX,
+      kilometers: "0",
+      minimumPrice: "0",
+      yearOfManufacture: "1970",
+      characteristics: []
     };
   }
 
@@ -36,8 +54,8 @@ export default function VehicleExpenseHeader(): ReactNode {
   return (
     <PageHeader
       title={
-        data?.modelName
-          ? `Gastos do Veículo "${data.modelName}"`
+        data?.vehicle.modelName
+          ? `Gastos do Veículo "${data.vehicle.modelName}"`
           : "Gastos do Veículo"
       }
     >

@@ -1,13 +1,12 @@
-import type { ReactNode } from "react";
-import Tooltip from "@/design-system/Tooltip";
 import Button from "@/design-system/Button";
+import Tooltip from "@/design-system/Tooltip";
 import { BACKEND_URL } from "@/domains/global/constants";
-import { useNavigate } from "react-router-dom";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import type { ReactNode } from "react";
+import { useNavigate } from "react-router-dom";
 import { DisableVehicle } from "../types";
-import { VehicleSaleState } from "@/domains/global/types";
 
 interface VehiclesTableActionsProperties {
   isActive?: boolean;
@@ -52,12 +51,7 @@ export default function VehiclesTableActions({
         <Button
           variant="quaternary"
           iconLeft="CurrencyExchange"
-          onClick={() => {
-            const state: VehicleSaleState = { vehicleId };
-            navigate(`/vehicle-sale`, {
-              state,
-            });
-          }}
+          onClick={() => navigate(`/vehicle-sale/new/${vehicleId}`)}
           resource="VEHICLE_SALE"
           action="CREATE"
           padding="none"
@@ -75,7 +69,7 @@ export default function VehiclesTableActions({
           data-cy={`button-edit-vehicle-${vehicleId}`}
         />
       </Tooltip>
-      <Tooltip content="Histórico">
+      <Tooltip content="Gastos">
         <Button
           variant="quaternary"
           iconLeft="History"

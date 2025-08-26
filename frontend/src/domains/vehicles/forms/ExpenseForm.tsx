@@ -1,27 +1,27 @@
 import Button from "@/design-system/Button";
 import Form from "@/design-system/Form";
-import AddressFields from "@/domains/global/components/AddressFields";
 import PageFooter from "@/domains/global/components/PageFooter";
 import PageHeader from "@/domains/global/components/PageHeader";
 import Section from "@/domains/global/components/Section";
+import PaymentForm from "@/domains/global/forms/PaymentForm";
 import { ActionsType, ResourcesType } from "@shared/enums";
 import type { ReactNode } from "react";
-import { useNavigate } from "react-router-dom";
-import { SchemaCustomerForm } from "../schemas";
-import { CustomerFormInputs as CustomerFormInputsType } from "../types";
-import CustomerFormInputs from "./CustomerFormInputs";
+import { SchemaVehicleExpenseForm } from "../schemas";
+import { VehicleExpenseFormInputs } from "../types";
+import VehicleExpenseDetailsForm from "./VehicleExpenseDetailsForm";
 
-interface CustomerFormProperties {
-  defaultValues: Partial<CustomerFormInputsType>;
-  onSubmit: (data: CustomerFormInputsType) => void;
+interface ExpenseFormProperties {
+  defaultValues: Partial<VehicleExpenseFormInputs>;
+  onSubmit: (data: VehicleExpenseFormInputs) => void;
   isPending: boolean;
   headerTitle: string;
   isEdit?: boolean;
   resource?: ResourcesType;
   action?: ActionsType;
+  onClose: () => void;
 }
 
-export default function CustomerForm({
+export default function ExpenseForm({
   defaultValues,
   onSubmit,
   isPending,
@@ -29,13 +29,12 @@ export default function CustomerForm({
   isEdit = false,
   resource,
   action,
-}: CustomerFormProperties): ReactNode {
-  const navigate = useNavigate();
-
+  onClose,
+}: ExpenseFormProperties): ReactNode {
   return (
     <div className="flex flex-col gap-4 w-full">
-      <Form<CustomerFormInputsType>
-        schema={SchemaCustomerForm}
+      <Form<VehicleExpenseFormInputs>
+        schema={SchemaVehicleExpenseForm}
         defaultValues={defaultValues}
         onSubmit={onSubmit}
         className="gap-4 flex flex-col flex-1"
@@ -45,17 +44,19 @@ export default function CustomerForm({
         <div className="flex justify-center flex-1">
           <Section>
             <Section.Group>
-              <Section.Header title="Dados" />
+              <Section.Header title="Informações do gasto" />
               <Section.Body>
-                <CustomerFormInputs/>
+                <VehicleExpenseDetailsForm />
               </Section.Body>
             </Section.Group>
-            <Section.Group>
-              <Section.Header title="Endereço" />
-              <Section.Body>
-                <AddressFields />
-              </Section.Body>
-            </Section.Group>
+            {!isEdit && (
+              <Section.Group>
+                <Section.Header title="Informações do pagamento" />
+                <Section.Body>
+                  <PaymentForm />
+                </Section.Body>
+              </Section.Group>
+            )}
           </Section>
         </div>
         <PageFooter primaryBtnState={isPending ? "loading" : undefined} dirty>
@@ -70,7 +71,7 @@ export default function CustomerForm({
             color="red"
             iconRight="Close"
             label="Cancelar"
-            onClick={() => navigate('/customers')}
+            onClick={onClose}
           />
         </PageFooter>
       </Form>

@@ -1,16 +1,20 @@
+import { applyMask } from "@/domains/global/utils/applyMask";
 import {
+  ExpenseCategory,
   ExpenseCategoryType,
   FuelType,
   FuelTypeType,
   InstallmentStatus,
-  PaymentMethodPayableType,
   VehicleCategory,
   VehicleCategoryType,
   VehicleStatus,
   VehicleStatusType,
 } from "@shared/enums";
-import { VehiclesFilterFormInputs } from "../types";
-import { applyMask } from "@/domains/global/utils/applyMask";
+import {
+  VehicleExpenseFormInputs,
+  VehicleFormInputs,
+  VehiclesFilterFormInputs,
+} from "../types";
 
 export const vehicleFilterDefaultValues: VehiclesFilterFormInputs = {
   startDate: "",
@@ -93,28 +97,28 @@ export const MODEL_YEARS_OPTIONS = [
   ...YEARS_OF_MANUFACTURE_OPTIONS,
 ];
 
-export const newVehicleDefaultValues = {
+export const vehicleDefaultValues: VehicleFormInputs = {
   characteristics: {
     commonCharacteristics: [],
     newCharacteristics: [],
   },
-  purchase: {
+  payment: {
     paidTo: "",
     purchaseDate: "",
     installment: {
       dueDate: "",
-      value: applyMask("0", "money"),
+      value: applyMask("0", "money") ?? "",
       status: InstallmentStatus.PENDING,
       paymentDate: "",
-      paymentMethod: PaymentMethodPayableType.CREDIT_CARD,
+      paymentMethod: "",
     },
   },
   vehicle: {
     kilometers: "0",
     plateNumber: "",
-    announcedPrice: applyMask("0", "money"),
-    minimumPrice: applyMask("0", "money"),
-    commissionValue: applyMask("0", "money"),
+    announcedPrice: applyMask("0", "money") ?? "",
+    minimumPrice: applyMask("0", "money") ?? "",
+    commissionValue: applyMask("0", "money") ?? "",
     color: "",
     fuelType: FuelType.FLEX,
     status: VehicleStatus.PURCHASED,
@@ -127,3 +131,28 @@ export const newVehicleDefaultValues = {
     brandId: "",
   },
 };
+
+export const vehicleExpenseDefaultValues: VehicleExpenseFormInputs = {
+  payment: {
+    category: ExpenseCategory.MAINTENANCE,
+    observations: "",
+    competencyDate: "",
+    installment: {
+      dueDate: "",
+      paymentDate: "",
+      paymentMethod: "",
+      status: InstallmentStatus.PENDING,
+      value: applyMask("0", "money") ?? "",
+    },
+  },
+};
+
+export const defaultCommonCharacteristics = [
+  "Direção hidráulica",
+  "Janelas elétricas",
+  "Ar condicionado",
+  "Travas elétricas",
+  "Câmera de ré",
+  "Air bag",
+  "Rodas de liga leve",
+];

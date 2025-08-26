@@ -1,10 +1,12 @@
 import Table from "@/design-system/Table";
+import { BLANK } from "@/domains/global/constants";
 import useDialog from "@/domains/global/hooks/useDialog";
 import useFilterContext from "@/domains/global/hooks/useFilterContext";
 import { PageablePayload } from "@/domains/global/types";
 import { FetchVehicle } from "@/domains/global/types/model";
 import formatFilters from "@/domains/global/utils/formatFilters";
 import ExportButton from "@/domains/pdf/components/ExportButton";
+import { VehicleStatus } from "@shared/enums";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState, type ReactNode } from "react";
 import { VehicleStatusText } from "../constants";
@@ -14,7 +16,6 @@ import selectVehiclesInfoForReport from "../utils/selectVehiclesInfoForReport";
 import DisableVehicleModal from "./DisableVehicleModal";
 import VehiclesFilterForm from "./VehiclesFilterForm";
 import VehiclesTableActions from "./VehiclesTableActions";
-import { BLANK } from "@/domains/global/constants";
 // import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 // import { BACKEND_URL } from "@/domains/global/constants";
 
@@ -61,7 +62,7 @@ export default function VehiclesTable(): ReactNode {
           announcedPrice: "800000000",
           plateNumber: "ABC1234",
           modelYear: "1970",
-          status: "DELIVERED",
+          status: VehicleStatus.DELIVERED,
           archivedAt: undefined,
         },
         {
@@ -70,7 +71,7 @@ export default function VehiclesTable(): ReactNode {
           announcedPrice: "8000000",
           plateNumber: "XYZ5678",
           modelYear: "2020",
-          status: "IN_STOCK",
+          status: VehicleStatus.IN_STOCK,
           archivedAt: undefined,
         },
         {
@@ -79,7 +80,7 @@ export default function VehiclesTable(): ReactNode {
           announcedPrice: "90000000",
           plateNumber: "BRA2E19",
           modelYear: "2021",
-          status: "MAINTENANCE",
+          status: VehicleStatus.MAINTENANCE,
           archivedAt: undefined,
         },
       ],
@@ -123,11 +124,10 @@ export default function VehiclesTable(): ReactNode {
         <Table.Filter form={<VehiclesFilterForm />} />
       </div>
       <Table>
-        <Table.Header gridColumns={8}>
+        <Table.Header gridColumns={7}>
           <Table.Head label="Modelo" />
           <Table.Head label="Placa" colSpan={1} />
           <Table.Head label="Ano do modelo" colSpan={1} />
-          <Table.Head label="Status" colSpan={1} />
           <Table.Head label="Preço anunciado" colSpan={1} />
           <Table.Head label="Status" colSpan={1} />
           <Table.Head action />
@@ -139,14 +139,10 @@ export default function VehiclesTable(): ReactNode {
           action="READ"
         >
           {vehiclesInfo?.data.map((vehicle) => (
-            <Table.Row key={vehicle.id} gridColumns={8}>
+            <Table.Row key={vehicle.id} gridColumns={7}>
               <Table.Cell label={vehicle.modelName} />
               <Table.Cell label={vehicle.plateNumber} colSpan={1} />
               <Table.Cell label={vehicle.modelYear} colSpan={1} />
-              <Table.Cell
-                label={VehicleStatusText[vehicle.status]}
-                colSpan={1}
-              />
               <Table.Cell
                 label={vehicle.announcedPrice.padStart(
                   biggestValueLength,
@@ -156,7 +152,11 @@ export default function VehiclesTable(): ReactNode {
                 colSpan={1}
               />
               <Table.Cell
-                label={vehicle.archivedAt ? "Inativo" : "Ativo"}
+                label={
+                  vehicle.archivedAt
+                    ? "Inativo"
+                    : VehicleStatusText[vehicle.status]
+                }
                 colSpan={1}
               />
               <Table.Action>

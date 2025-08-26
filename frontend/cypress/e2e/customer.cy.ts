@@ -121,106 +121,6 @@ describe("Customer", () => {
     });
   });
 
-  it("should create customer without address", () => {
-    const fullName = faker.person.fullName();
-    const cpf = generateCpf();
-
-    cy.intercept("POST", "http://localhost:3000/customer", (req) => {
-      expect(req.body).to.deep.equal({
-        fullName,
-        cpf,
-        email: null,
-        phone: null,
-        address: null,
-      });
-    }).as("createCustomer");
-
-    cy.visit("/customers");
-
-    cy.get('[data-cy="new-customer-button"]').click();
-
-    cy.get('button[type="submit"]').should("be.disabled");
-
-    cy.get('input[name="fullName"]').type(fullName);
-    cy.get('input[name="cpf"]').type(cpf);
-
-    cy.get('button[type="submit"]').should("be.enabled");
-
-    cy.get('button[type="submit"]').click();
-
-    cy.get('[data-cy="snackbar-title"]').should(
-      "contain",
-      "Cliente criado com sucesso"
-    );
-
-    cy.wait("@createCustomer").then((interception) => {
-      const responseBody = interception.response.body;
-
-      const customerId = responseBody.id;
-
-      cy.intercept("GET", `http://localhost:3000/customer/${customerId}`).as(
-        "getCustomer"
-      );
-
-      cy.visit(`/customers/edit/${customerId}`);
-
-      cy.wait("@getCustomer");
-    });
-  });
-
-  it("should create customer with address", () => {
-    const fullName = faker.person.fullName();
-    const cpf = generateCpf();
-    const cep = "65043420";
-    const number = "123";
-
-    cy.intercept("POST", "http://localhost:3000/customer", (req) => {
-      expect(req.body).to.deep.equal({
-        fullName,
-        cpf,
-        email: null,
-        phone: null,
-        address: {
-          cep,
-          number,
-          street: "Rua Sete",
-          neighborhood: "COHEB do Sacavém",
-          cityIbgeCode: "2111300",
-        },
-      });
-    }).as("createCustomer");
-
-    cy.intercept("GET", "https://viacep.com.br/ws/65043-420/json/").as(
-      "cepApi"
-    );
-    cy.intercept(
-      "GET",
-      "https://servicodados.ibge.gov.br/api/v1/localidades/estados/MA/municipios"
-    ).as("citiesAPi");
-
-    cy.visit("/customers");
-
-    cy.get('[data-cy="new-customer-button"]').click();
-
-    cy.get('button[type="submit"]').should("be.disabled");
-
-    cy.get('input[name="fullName"]').type(fullName);
-    cy.get('input[name="cpf"]').type(cpf);
-
-    cy.get('[data-cy="button-append-address"]').click();
-
-    cy.get('input[name="address.0.cep"]').type(cep);
-    cy.get('input[name="address.0.number"]').type(number);
-
-    cy.get('button[type="submit"]').should("be.enabled");
-
-    cy.wait("@cepApi");
-    cy.wait("@citiesAPi");
-    cy.get('button[type="submit"]').click();
-
-    cy.wait("@createCustomer");
-  });
-
   it("should navigate in customer table", () => {
     cy.visit("/customers");
 
@@ -281,15 +181,6 @@ describe("Customer", () => {
       cy.intercept("GET", `http://localhost:3000/customer/${customerId}`).as(
         "getCustomer"
       );
-
-      cy.visit(`/customers/edit/${customerId}`);
-      cy.get("body").then(($body) => {
-        if ($body.find('[data-cy="button-remove-address"]').length) {
-          removeCustomerAddress(customerId as unknown as string);
-        }
-      });
-
-      cy.visit("/customers");
 
       // Edit
       cy.intercept(
@@ -455,5 +346,105 @@ describe("Customer", () => {
       "contain",
       "Data final deve ser após a data inicial"
     );
+  });
+
+  it("should create customer without address", () => {
+    const fullName = faker.person.fullName();
+    const cpf = generateCpf();
+
+    cy.intercept("POST", "http://localhost:3000/customer", (req) => {
+      expect(req.body).to.deep.equal({
+        fullName,
+        cpf,
+        email: null,
+        phone: null,
+        address: null,
+      });
+    }).as("createCustomer");
+
+    cy.visit("/customers");
+
+    cy.get('[data-cy="new-customer-button"]').click();
+
+    cy.get('button[type="submit"]').should("be.disabled");
+
+    cy.get('input[name="fullName"]').type(fullName);
+    cy.get('input[name="cpf"]').type(cpf);
+
+    cy.get('button[type="submit"]').should("be.enabled");
+
+    cy.get('button[type="submit"]').click();
+
+    cy.get('[data-cy="snackbar-title"]').should(
+      "contain",
+      "Cliente criado com sucesso"
+    );
+
+    cy.wait("@createCustomer").then((interception) => {
+      const responseBody = interception.response.body;
+
+      const customerId = responseBody.id;
+
+      cy.intercept("GET", `http://localhost:3000/customer/${customerId}`).as(
+        "getCustomer"
+      );
+
+      cy.visit(`/customers/edit/${customerId}`);
+
+      cy.wait("@getCustomer");
+    });
+  });
+
+  it("should create customer with address", () => {
+    const fullName = faker.person.fullName();
+    const cpf = generateCpf();
+    const cep = "65043420";
+    const number = "123";
+
+    cy.intercept("POST", "http://localhost:3000/customer", (req) => {
+      expect(req.body).to.deep.equal({
+        fullName,
+        cpf,
+        email: null,
+        phone: null,
+        address: {
+          cep,
+          number,
+          street: "Rua Sete",
+          neighborhood: "COHEB do Sacavém",
+          cityIbgeCode: "2111300",
+        },
+      });
+    }).as("createCustomer");
+
+    cy.intercept("GET", "https://viacep.com.br/ws/65043-420/json/").as(
+      "cepApi"
+    );
+    cy.intercept(
+      "GET",
+      "https://servicodados.ibge.gov.br/api/v1/localidades/estados/MA/municipios"
+    ).as("citiesAPi");
+
+    cy.visit("/customers");
+
+    cy.get('[data-cy="new-customer-button"]').click();
+
+    cy.get('button[type="submit"]').should("be.disabled");
+
+    cy.get('input[name="fullName"]').type(fullName);
+    cy.get('input[name="cpf"]').type(cpf);
+
+    cy.get('[data-cy="button-append-address"]').click();
+
+    cy.get('input[name="address.0.cep"]').type(cep);
+    cy.get('input[name="address.0.number"]').type(number);
+
+    cy.get('button[type="submit"]').should("be.enabled");
+
+    cy.wait("@cepApi");
+    cy.wait("@citiesAPi");
+    cy.get('button[type="submit"]').click();
+
+    cy.wait("@createCustomer");
   });
 });

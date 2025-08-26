@@ -16,10 +16,10 @@ interface SearchProperties<T, K extends Record<string, unknown>[]> {
   valueKey: keyof UnwrapArray<K>;
   labelKey: keyof UnwrapArray<K>;
   descriptionKey?: keyof UnwrapArray<K>;
-  onClickNotFound: (_: string) => void;
+  onClickNotFound?: (_: string) => void;
   select?: (item: K) => K;
   formatSearch: (search: string) => string | undefined;
-  formatNotFound: (search: string) => string;
+  formatNotFound?: (search: string) => string;
 }
 
 export default function Search<
@@ -53,13 +53,17 @@ export default function Search<
 
     return data?.map((item) => ({
       label: String(item[labelKey as string]),
-      value: String(item[valueKey as string]) as UnwrapArray<PathValue<T, Path<T>>>,
+      value: String(item[valueKey as string]) as UnwrapArray<
+        PathValue<T, Path<T>>
+      >,
       description: String(item[descriptionKey as string]),
     }));
   }, [data, labelKey, valueKey, descriptionKey]);
 
-  const formattedValue = useMemo(() => {
-    return formatNotFound(value);
+  const formattedNotFound = useMemo(() => {
+    if (formatNotFound) {
+      return formatNotFound(value);
+    }
   }, [value]);
 
   return (
@@ -83,11 +87,12 @@ export default function Search<
         onChange?.(selectedItem);
       }}
       notFound={
-        formattedValue && (
+        formattedNotFound &&
+        onClickNotFound && (
           <Button
-            label={`Cadastrar "${formattedValue}"`}
+            label={`Cadastrar "${formattedNotFound}"`}
             variant="quaternary"
-            onClick={() => onClickNotFound(formattedValue)}
+            onClick={() => onClickNotFound(formattedNotFound)}
           />
         )
       }

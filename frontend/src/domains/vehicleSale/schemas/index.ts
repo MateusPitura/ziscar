@@ -1,36 +1,39 @@
+import { addIssue, paymentFieldsRule, SchemaReceivableInstallment } from "@/domains/global/schemas";
 import { s } from "@shared/safeZod";
+import { VehicleSaleFormInputs } from "../types";
 
-export const SchemaVehicleSaleForm = s.object({
-  customer: s.object({
-    id: s.string(),
-  }),
-  vehicle: s.object({
-    storeId: s.string(),
-    model: s.string(),
-    price: s.numberString(),
-    color: s.color(),
-    commonCharacteristics: s.checkbox([
-      "Direção hidráulica",
-      "Janelas elétricas",
-      "Ar condicionado",
-      "Travas elétricas",
-      "Câmera de ré",
-      "Air bag",
-      "Rodas de liga leve",
-    ]),
-    characteristics: s.array(
-      s.object({
-        label: s.string(),
-        value: s.string(),
+interface SchemaVehicleSaleFormProperties {
+  minimumPrice?: string;
+  commissionValue?: string;
+}
+
+export function SchemaVehicleSaleForm({
+  commissionValue,
+  minimumPrice,
+}: SchemaVehicleSaleFormProperties = {}) {
+  return s
+    .object({
+      customer: s.object({
+        id: s.string(),
       }),
-      10
-    ),
-  }),
-  payment: s.object({
-    isUpfront: s.boolean(),
-    installments: s.number().positive(),
-  }),
-});
+      payment: s.object({
+        installment: SchemaReceivableInstallment,
+      }),
+    })
+    .superRefine(paymentFieldsRule)
+    .superRefine((data, ctx) => {
+      const commission = Number(commissionValue?.replace(/\D/g, "") ?? 0);
+      const minimum = Number(minimumPrice?.replace(/\D/g, "") ?? 0);
+
+      if (Number(data.payment.installment.value) <= minimum + commission) {
+        addIssue<VehicleSaleFormInputs>(
+          ctx,
+          "payment.installment.value",
+          "Valor menor que o preço mínimo mais a comissão"
+        );
+      }
+    });
+}
 
 export const cpfSearchSchema = s
   .string()

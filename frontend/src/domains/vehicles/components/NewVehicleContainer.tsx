@@ -2,16 +2,16 @@ import Button from "@/design-system/Button";
 import Form from "@/design-system/Form";
 import PageFooter from "@/domains/global/components/PageFooter";
 import PageHeader from "@/domains/global/components/PageHeader";
-import { BACKEND_URL, PREVIOUS_PAGE } from "@/domains/global/constants";
+import { BACKEND_URL } from "@/domains/global/constants";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
-import { newVehicleDefaultValues } from "../constants";
-import { SchemaNewVehicleForm } from "../schemas";
-import { NewVehicleFormInputs } from "../types";
-import NewVehicleTabs from "./NewVehicleTabs";
+import { vehicleDefaultValues } from "../constants";
+import { SchemaVehicleForm } from "../schemas";
+import { VehicleFormInputs } from "../types";
+import VehicleTabs from "./VehicleTabs";
 
 export default function NewVehicleContainer(): ReactNode {
   const navigate = useNavigate();
@@ -19,7 +19,7 @@ export default function NewVehicleContainer(): ReactNode {
   const { showSuccessSnackbar } = useSnackbar();
   const queryClient = useQueryClient();
 
-  async function createVehicle(data: NewVehicleFormInputs) {
+  async function createVehicle(data: VehicleFormInputs) {
     await safeFetch(`${BACKEND_URL}/vehicle`, {
       method: "POST",
       body: data,
@@ -36,29 +36,27 @@ export default function NewVehicleContainer(): ReactNode {
       });
       navigate("/vehicles");
       queryClient.invalidateQueries({ queryKey: ["vehicles"] });
+      queryClient.invalidateQueries({ queryKey: ["accounts-receivable"] });
     },
   });
 
   return (
     <div className="flex flex-col gap-4 w-full">
-      <Form<NewVehicleFormInputs>
-        onSubmit={(data) => {
-          console.log("data: ", data);
-          mutate(data);
-        }}
+      <Form<VehicleFormInputs>
+        onSubmit={mutate}
         className="flex-1 flex flex-col gap-4"
-        schema={SchemaNewVehicleForm}
-        defaultValues={newVehicleDefaultValues}
+        schema={SchemaVehicleForm}
+        defaultValues={vehicleDefaultValues}
       >
         <PageHeader title="Cadastrar veículo" />
-        <NewVehicleTabs />
+        <VehicleTabs />
         <PageFooter dirty primaryBtnState={isPending ? "loading" : undefined}>
           <Button color="lightBlue" iconRight="Save" label="Salvar" />
           <Button
             color="red"
             iconRight="Close"
             label="Cancelar"
-            onClick={() => navigate(PREVIOUS_PAGE)}
+            onClick={() => navigate('/vehicles')}
           />
         </PageFooter>
       </Form>
