@@ -13,16 +13,16 @@ export default function VehicleExpenseHeader(): ReactNode {
   const { vehicleId } = useParams();
 
   async function getVehicleInfo(): Promise<Vehicle> {
-    // return await safeFetch(`${BACKEND_URL}/vehicle/${vehicleId}`, {
+    // return await safeFetch(`${BACKEND_URL}/vehicle/${vehicleId}`, { // 🌠 MOCK
     //   resource: "ACCOUNTS_RECEIVABLE",
     //   action: "READ",
     // });
     return {
       id: 1,
       modelName: "Fusca",
-      announcedPrice: "800000000",
+      announcedPrice: 800000000,
       plateNumber: "ABC1234",
-      modelYear: "1970",
+      modelYear: 1970,
       status: VehicleStatus.DELIVERED,
       archivedAt: undefined,
       brand: {
@@ -36,11 +36,11 @@ export default function VehicleExpenseHeader(): ReactNode {
       category: VehicleCategory.CAR,
       color: "#FFFFFF",
       chassiNumber: "AAAAAAAAAAAAAAAAA",
-      commissionValue: "0",
+      commissionValue: 0,
       fuelType: FuelType.FLEX,
-      kilometers: "0",
-      minimumPrice: "0",
-      yearOfManufacture: "1970",
+      kilometers: 0,
+      minimumPrice: 0,
+      yearOfManufacture: 1970,
       characteristics: []
     };
   }

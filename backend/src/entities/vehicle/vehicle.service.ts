@@ -137,7 +137,7 @@ export class VehicleService implements VehicleRepository {
       category: row.category as SharedVehicleCategory | null,
     }));
 
-    return { data: mappedRows, totalCount: total };
+    return { data: mappedRows, total: total };
   }
 
   async insertCharacteristics(

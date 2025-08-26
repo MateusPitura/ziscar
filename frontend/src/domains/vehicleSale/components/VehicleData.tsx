@@ -1,15 +1,15 @@
 import ColorPreview from "@/design-system/ColorPreview";
 import DataField from "@/domains/global/components/DataField";
-import { Vehicle } from "@/domains/global/types/model";
 import {
   FuelTypeText,
   VehicleCategoryText,
   VehicleStatusText,
 } from "@/domains/vehicles/constants";
 import type { ReactNode } from "react";
+import { VehicleToString } from "../types";
 
 interface VehicleDataProperties {
-  vehicleData: Vehicle;
+  vehicleData: VehicleToString;
 }
 
 export default function VehicleData({

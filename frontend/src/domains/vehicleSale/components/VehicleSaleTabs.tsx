@@ -1,18 +1,17 @@
 import Tabs from "@/design-system/Tabs";
 import Section from "@/domains/global/components/Section";
+import PaymentForm from "@/domains/global/forms/PaymentForm";
 import { useState, type ReactElement } from "react";
 import { useFormState } from "react-hook-form";
 import CustomerSearchForm from "../forms/CustomerSearchForm";
-import { VehicleSaleFormInputs } from "../types";
+import { VehicleSaleFormInputs, VehicleToString } from "../types";
 import CustomerData from "./CustomerData";
 import VehicleData from "./VehicleData";
-import { Vehicle } from "@/domains/global/types/model";
-import PaymentForm from "@/domains/global/forms/PaymentForm";
 
 type VehicleSaleTabs = "CLIENT" | "VEHICLE" | "PAYMENT";
 
 interface VehicleSaleTabsProperties {
-  vehicleData: Vehicle;
+  vehicleData: VehicleToString;
 }
 
 export default function VehicleSaleTabs({

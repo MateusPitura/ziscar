@@ -1,30 +1,32 @@
 import { Mask } from "../types";
 
 export function applyMask(
-  value: string | undefined,
+  value: string | number | undefined,
   mask: Mask
 ): string | undefined {
-  if (!value) return value;
+  const valueString = String(value);
+
+  if (!valueString) return valueString;
 
   switch (mask) {
     case "cpf":
-      return applyCpfMask(value);
+      return applyCpfMask(valueString);
     case "phone":
-      return applyPhoneMask(value);
+      return applyPhoneMask(valueString);
     case "cep":
-      return applyCepMask(value);
+      return applyCepMask(valueString);
     case "cnpj":
-      return applyCnpjMask(value);
+      return applyCnpjMask(valueString);
     case "money":
-      return applyMoneyMask(value);
+      return applyMoneyMask(valueString);
     case "plateNumber":
-      return applyPlateNumberMask(value);
+      return applyPlateNumberMask(valueString);
     case "chassi":
-      return applyChassiMask(value);
+      return applyChassiMask(valueString);
     case "number":
-      return applyNumberMask(value);
+      return applyNumberMask(valueString);
     default:
-      return value;
+      return valueString;
   }
 }
 

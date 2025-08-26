@@ -21,7 +21,7 @@ export default function VehicleSaleContainer(): ReactNode {
   const { vehicleId } = useParams();
 
   async function getVehicle(): Promise<Vehicle> {
-    // return await safeFetch(`${BACKEND_URL}/vehicle/${vehicleId}`, {
+    // return await safeFetch(`${BACKEND_URL}/vehicle/${vehicleId}`, { // 🌠 MOCK
     //   resource: "VEHICLES",
     //   action: "READ",
     // });
@@ -29,9 +29,9 @@ export default function VehicleSaleContainer(): ReactNode {
     return {
       id: 1,
       modelName: "Fusca",
-      announcedPrice: "9000000",
+      announcedPrice: 9000000,
       plateNumber: "ABC1234",
-      modelYear: "1970",
+      modelYear: 1970,
       status: VehicleStatus.DELIVERED,
       archivedAt: undefined,
       brand: {
@@ -45,11 +45,11 @@ export default function VehicleSaleContainer(): ReactNode {
       category: VehicleCategory.CAR,
       color: "#FF0000",
       chassiNumber: "AAAAAAAAAAAAAAAAA",
-      commissionValue: "0",
+      commissionValue: 0,
       fuelType: FuelType.FLEX,
-      kilometers: "1000",
-      minimumPrice: "8000000",
-      yearOfManufacture: "1970",
+      kilometers: 1000,
+      minimumPrice: 8000000,
+      yearOfManufacture: 1970,
       characteristics: [
         "Direção hidráulica",
         "Janelas elétricas",
@@ -81,7 +81,7 @@ export default function VehicleSaleContainer(): ReactNode {
       <div className="flex flex-col gap-4 w-full">
         <Form<VehicleSaleFormInputs>
           onSubmit={(data) => {
-            console.log(data);
+            console.log(data); // 🌠 MOCK
           }}
           className="flex-1 flex flex-col gap-4"
           schema={SchemaVehicleSaleForm({

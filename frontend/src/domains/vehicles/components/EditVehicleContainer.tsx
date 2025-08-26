@@ -24,7 +24,7 @@ export default function EditVehicleContainer(): ReactNode {
   const { vehicleId } = useParams();
 
   async function getVehicle(): Promise<Vehicle> {
-    // return await safeFetch(`${BACKEND_URL}/vehicle/${vehicleId}`, {
+    // return await safeFetch(`${BACKEND_URL}/vehicle/${vehicleId}`, { // 🌠 MOCK
     //   resource: "VEHICLES",
     //   action: "READ",
     // });
@@ -32,9 +32,9 @@ export default function EditVehicleContainer(): ReactNode {
     return {
       id: 1,
       modelName: "Fusca",
-      announcedPrice: "8000000",
+      announcedPrice: 8000000,
       plateNumber: "ABC1234",
-      modelYear: "1970",
+      modelYear: 1970,
       status: VehicleStatus.DELIVERED,
       archivedAt: undefined,
       brand: {
@@ -48,11 +48,11 @@ export default function EditVehicleContainer(): ReactNode {
       category: VehicleCategory.CAR,
       color: "#FFFFFF",
       chassiNumber: "AAAAAAAAAAAAAAAAA",
-      commissionValue: "1000",
+      commissionValue: 1000,
       fuelType: FuelType.FLEX,
-      kilometers: "1000",
-      minimumPrice: "8000000",
-      yearOfManufacture: "1970",
+      kilometers: 1000,
+      minimumPrice: 8000000,
+      yearOfManufacture: 1970,
       characteristics: [
         "Direção hidráulica",
         "Janelas elétricas",
@@ -71,7 +71,7 @@ export default function EditVehicleContainer(): ReactNode {
   });
 
   async function editVehicle(data: VehicleFormInputs) {
-    await safeFetch(`${BACKEND_URL}/vehicle/${vehicleId}`, {
+    await safeFetch(`${BACKEND_URL}/vehicle/${vehicleId}`, { // 🌠 MOCK
       method: "PATCH",
       body: data,
       resource: "VEHICLES",

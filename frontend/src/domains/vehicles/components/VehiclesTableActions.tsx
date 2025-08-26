@@ -30,7 +30,7 @@ export default function VehiclesTableActions({
     await safeFetch(`${BACKEND_URL}/vehicle/${vehicleId}`, {
       method: "DELETE",
       body: { archivedAt: null },
-      resource: "VEHICLES",
+      resource: "VEHICLES", // 🌠 MOCK
       action: "DELETE",
     });
   }

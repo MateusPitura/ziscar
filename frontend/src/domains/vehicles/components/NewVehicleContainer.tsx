@@ -20,7 +20,7 @@ export default function NewVehicleContainer(): ReactNode {
   const queryClient = useQueryClient();
 
   async function createVehicle(data: VehicleFormInputs) {
-    await safeFetch(`${BACKEND_URL}/vehicle`, {
+    await safeFetch(`${BACKEND_URL}/vehicle`, { // 🌠 MOCK
       method: "POST",
       body: data,
       resource: "VEHICLES",

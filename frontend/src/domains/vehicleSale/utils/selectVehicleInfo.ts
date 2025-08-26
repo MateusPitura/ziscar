@@ -1,7 +1,8 @@
 import { Vehicle } from "@/domains/global/types/model";
 import { applyMask } from "@/domains/global/utils/applyMask";
+import { VehicleToString } from "../types";
 
-export default function selectVehicleInfo(payload: Vehicle): Vehicle {
+export default function selectVehicleInfo(payload: Vehicle): VehicleToString {
   return {
     ...payload,
     kilometers: applyMask(payload.kilometers, "number") ?? "",
