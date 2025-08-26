@@ -10,9 +10,9 @@ export default function selectAccountsReceivableInstallmentsInfo(
   for (const accountReceivable of payload) {
     itemsFiltered.push({
       ...accountReceivable,
-      dueDate:
-        safeFormat({ date: accountReceivable.dueDate, format: "dd/MM/yyyy" }) ??
-        "",
+      dueDate: accountReceivable.dueDate
+        ? safeFormat({ date: accountReceivable.dueDate, format: "dd/MM/yyyy" })
+        : "",
       value: applyMask(accountReceivable.value, "money") ?? "",
     });
   }

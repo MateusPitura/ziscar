@@ -1,39 +1,35 @@
 import {
+  addIssue,
+  paymentFieldsRule,
+  SchemaPayableInstallment,
+} from "@/domains/global/schemas";
+import {
   EXPENSECATEGORY_VALUES,
   FUELTYPE_VALUES,
-  INSTALLMENTSTATUS_VALUES,
-  PAYMENTMETHODPAYABLETYPE_VALUES,
   VEHICLECATEGORY_VALUES,
   VEHICLESTATUS_VALUES,
 } from "@shared/enums";
 import { s } from "@shared/safeZod";
-import { MODEL_YEARS, YEARS_OF_MANUFACTURE } from "../constants";
-import { addIssue } from "@/domains/global/schemas";
-import { NewVehicleFormInputs, VehicleExpenseFormInputs } from "../types";
+import {
+  defaultCommonCharacteristics,
+  MODEL_YEARS,
+  YEARS_OF_MANUFACTURE,
+} from "../constants";
+import { VehicleFormInputs } from "../types";
 
 export const SchemaVehiclesFilterForm = s
   .object({
-    // name: s.string().or(s.empty()),
-    // status: s.enumeration(["active", "inactive"]),
     startDate: s.dateString().or(s.empty()),
     endDate: s.dateString().or(s.empty()),
   })
   .refine(...s.dateRangeRule);
 
-export const SchemaNewVehicleForm = s
+export const SchemaVehicleForm = s
   .object({
-    purchase: s.object({
+    payment: s.object({
       purchaseDate: s.paymentDate(),
       paidTo: s.string().or(s.empty()),
-      installment: s.object({
-        value: s.numberString(),
-        status: s.enumeration(INSTALLMENTSTATUS_VALUES),
-        dueDate: s.paymentDate().or(s.empty()),
-        paymentDate: s.paymentDate().or(s.empty()),
-        paymentMethod: s
-          .enumeration(PAYMENTMETHODPAYABLETYPE_VALUES)
-          .or(s.empty()),
-      }),
+      installment: SchemaPayableInstallment.nullable(),
     }),
     vehicle: s.object({
       plateNumber: s.plateNumber(),
@@ -53,15 +49,7 @@ export const SchemaNewVehicleForm = s
       category: s.enumeration(VEHICLECATEGORY_VALUES).or(s.empty()),
     }),
     characteristics: s.object({
-      commonCharacteristics: s.checkbox([
-        "Direção hidráulica",
-        "Janelas elétricas",
-        "Ar condicionado",
-        "Travas elétricas",
-        "Câmera de ré",
-        "Air bag",
-        "Rodas de liga leve",
-      ]),
+      commonCharacteristics: s.checkbox(defaultCommonCharacteristics),
       newCharacteristics: s.array(
         s.object({
           description: s.string(),
@@ -70,33 +58,13 @@ export const SchemaNewVehicleForm = s
       ),
     }),
   })
-  .superRefine((data, ctx) => {
-    const { status, paymentDate, paymentMethod, dueDate } =
-      data.purchase.installment;
-
-    if (status === "PAID") {
-      if (paymentDate === "") {
-        addIssue<NewVehicleFormInputs>(ctx, "purchase.installment.paymentDate");
-      }
-      if (paymentMethod === "") {
-        addIssue<NewVehicleFormInputs>(
-          ctx,
-          "purchase.installment.paymentMethod"
-        );
-      }
-    } else if (status === "PENDING") {
-      if (dueDate === "") {
-        addIssue<NewVehicleFormInputs>(ctx, "purchase.installment.dueDate");
-      }
-    }
-    return true;
-  })
+  .superRefine(paymentFieldsRule)
   .superRefine((data, ctx) => {
     const { modelYear, yearOfManufacture } = data.vehicle;
 
     if (modelYear !== "" && yearOfManufacture !== "") {
       if (Number(modelYear) < Number(yearOfManufacture)) {
-        addIssue<NewVehicleFormInputs>(
+        addIssue<VehicleFormInputs>(
           ctx,
           "vehicle.modelYear",
           "O ano do modelo deve ser maior ou igual ao ano de fabricação"
@@ -105,10 +73,12 @@ export const SchemaNewVehicleForm = s
     }
   })
   .superRefine((data, ctx) => {
-    const { vehicle, purchase } = data;
+    const { vehicle, payment: purchase } = data;
+
+    if (purchase.installment === null) return true;
 
     if (Number(vehicle.minimumPrice) <= Number(purchase.installment.value)) {
-      addIssue<NewVehicleFormInputs>(
+      addIssue<VehicleFormInputs>(
         ctx,
         "vehicle.minimumPrice",
         "Preço mínimo menor que o valor de compra"
@@ -116,7 +86,7 @@ export const SchemaNewVehicleForm = s
     }
 
     if (Number(vehicle.announcedPrice) < Number(vehicle.minimumPrice)) {
-      addIssue<NewVehicleFormInputs>(
+      addIssue<VehicleFormInputs>(
         ctx,
         "vehicle.announcedPrice",
         "Preço anunciado menor que o preço mínimo"
@@ -127,7 +97,7 @@ export const SchemaNewVehicleForm = s
       Number(vehicle.commissionValue) >=
       Number(vehicle.minimumPrice) - Number(purchase.installment.value)
     ) {
-      addIssue<NewVehicleFormInputs>(
+      addIssue<VehicleFormInputs>(
         ctx,
         "vehicle.commissionValue",
         "Comissão maior que o lucro"
@@ -137,32 +107,11 @@ export const SchemaNewVehicleForm = s
 
 export const SchemaVehicleExpenseForm = s
   .object({
-    observations: s.string(),
-    category: s.enumeration(EXPENSECATEGORY_VALUES),
     payment: s.object({
-      value: s.numberString(),
-      status: s.enumeration(INSTALLMENTSTATUS_VALUES),
-      dueDate: s.paymentDate().or(s.empty()),
-      paymentDate: s.paymentDate().or(s.empty()),
-      paymentMethod: s
-        .enumeration(PAYMENTMETHODPAYABLETYPE_VALUES)
-        .or(s.empty()),
+      observations: s.string().or(s.empty()),
+      category: s.enumeration(EXPENSECATEGORY_VALUES),
+      competencyDate: s.dateString(),
+      installment: SchemaPayableInstallment.nullable(),
     }),
   })
-  .superRefine((data, ctx) => {
-    const { status, paymentDate, paymentMethod, dueDate } = data.payment;
-
-    if (status === "PAID") {
-      if (paymentDate === "") {
-        addIssue<VehicleExpenseFormInputs>(ctx, "payment.paymentDate");
-      }
-      if (paymentMethod === "") {
-        addIssue<VehicleExpenseFormInputs>(ctx, "payment.paymentMethod");
-      }
-    } else if (status === "PENDING") {
-      if (dueDate === "") {
-        addIssue<VehicleExpenseFormInputs>(ctx, "payment.dueDate");
-      }
-    }
-    return true;
-  });
+  .superRefine(paymentFieldsRule);

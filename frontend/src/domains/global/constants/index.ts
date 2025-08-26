@@ -50,7 +50,6 @@ export const STATES = [
   { value: BrazilianState.TO, label: "Tocantins" },
 ];
 
-export const PREVIOUS_PAGE = -1;
 export const CEP_LENGTH_WITH_MASK = 9;
 
 export const PaymentMethodPayableText: Record<

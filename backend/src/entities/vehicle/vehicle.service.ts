@@ -77,6 +77,7 @@ export class VehicleService implements VehicleRepository {
         id: true,
         name: true,
       },
+      orderBy: { name: 'asc' },
     });
   }
 

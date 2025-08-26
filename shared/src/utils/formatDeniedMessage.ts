@@ -13,7 +13,7 @@ const resourceFormatted: Record<Resources, string> = {
   ACCOUNTS_RECEIVABLE: "contas a receber",
   CUSTOMERS: "clientes",
   STORES: "lojas",
-  VEHICLE_EXPENSE: "despesas de veículo",
+  VEHICLE_EXPENSE: "gastos de veículo",
   VEHICLES: "veículos",
   VEHICLE_PURCHASE: "compra de veículo",
   VEHICLE_SALE: "venda de veículo",

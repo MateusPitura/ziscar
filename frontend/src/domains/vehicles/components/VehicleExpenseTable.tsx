@@ -93,7 +93,7 @@ export default function VehicleExpenseTable(): ReactNode {
       </div>
       <Table>
         <Table.Header gridColumns={8}>
-          <Table.Head label="Data" />
+          <Table.Head label="Data de competência" />
           <Table.Head label="Observações" />
           <Table.Head label="Categoria" />
           <Table.Head label="Valor" colSpan={1} />

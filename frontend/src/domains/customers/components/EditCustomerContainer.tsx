@@ -1,14 +1,14 @@
+import Spinner from "@/design-system/Spinner";
 import { BACKEND_URL } from "@/domains/global/constants";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import { Customer } from "@/domains/global/types/model";
+import parseAddressToUpdate from "@/domains/global/utils/parseAddressToUpdate";
 import { useIsFetching, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, type ReactNode } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { CustomerFormInputs } from "../types";
-import parseAddressToUpdate from "@/domains/global/utils/parseAddressToUpdate";
-import Spinner from "@/design-system/Spinner";
 import CustomerForm from "../forms/CustomerForm";
+import { CustomerFormInputs } from "../types";
 import selectCustomerInfo from "../utils/selectCustomerInfo";
 
 export default function EditCustomerContainer(): ReactNode {

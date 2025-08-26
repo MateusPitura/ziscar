@@ -103,119 +103,6 @@ describe("User", () => {
     });
   });
 
-  it("should create user without address", () => {
-    const fullName = faker.person.fullName();
-    const email = faker.internet.email();
-
-    cy.intercept("POST", "http://localhost:3000/user", (req) => {
-      expect(req.body).to.deep.equal({
-        fullName,
-        email,
-        phone: null,
-        cpf: null,
-        roleId: "1",
-        address: null,
-      });
-    }).as("createUser");
-
-    cy.visit("/users");
-
-    cy.get('[data-cy="new-user-button"]').click();
-
-    cy.get('button[type="submit"]').should("be.disabled");
-
-    cy.get('input[name="fullName"]').type(fullName);
-    cy.get('input[name="email"]').type(email);
-
-    cy.get('button[type="submit"]').should("be.enabled");
-
-    cy.get('button[type="submit"]').click();
-
-    cy.get('[data-cy="snackbar-title"]').should(
-      "have.text",
-      "Um email será enviado"
-    );
-    cy.get('[data-cy="snackbar-description"]').should(
-      "have.text",
-      "Confira também a caixa de spam"
-    );
-
-    cy.wait("@createUser").then((interception) => {
-      const responseBody = interception.response.body;
-
-      const userId = responseBody.id;
-
-      cy.intercept("GET", `http://localhost:3000/user/${userId}`).as("getUser");
-
-      cy.visit(`/users/edit/${userId}`);
-
-       cy.wait("@getUser")
-    });
-  });
-
-  it("should create user with address", () => {
-    const fullName = faker.person.fullName();
-    const email = faker.internet.email();
-    const cep = "65043420";
-    const number = "123";
-
-    cy.intercept("POST", "http://localhost:3000/user", (req) => {
-      expect(req.body).to.deep.equal({
-        fullName,
-        email,
-        phone: null,
-        cpf: null,
-        roleId: "1",
-        address: {
-          cep,
-          number,
-          street: "Rua Sete",
-          neighborhood: "COHEB do Sacavém",
-          cityIbgeCode: "2111300",
-        },
-      });
-    }).as("createUser");
-
-    cy.intercept("GET", "https://viacep.com.br/ws/65043-420/json/").as(
-      "cepApi"
-    );
-    cy.intercept(
-      "GET",
-      "https://servicodados.ibge.gov.br/api/v1/localidades/estados/MA/municipios"
-    ).as("citiesAPi");
-
-    cy.visit("/users");
-
-    cy.get('[data-cy="new-user-button"]').click();
-
-    cy.get('button[type="submit"]').should("be.disabled");
-
-    cy.get('input[name="fullName"]').type(fullName);
-    cy.get('input[name="email"]').type(email);
-
-    cy.get('[data-cy="button-append-address"]').click();
-
-    cy.get('input[name="address.0.cep"]').type(cep);
-    cy.get('input[name="address.0.number"]').type(number);
-
-    cy.get('button[type="submit"]').should("be.enabled");
-
-    cy.wait("@cepApi");
-    cy.wait("@citiesAPi");
-    cy.get('button[type="submit"]').click();
-
-    cy.get('[data-cy="snackbar-title"]').should(
-      "have.text",
-      "Um email será enviado"
-    );
-    cy.get('[data-cy="snackbar-description"]').should(
-      "have.text",
-      "Confira também a caixa de spam"
-    );
-
-    cy.wait("@createUser");
-  });
-
   it("should navigate in user table", () => {
     cy.visit("/users");
 
@@ -315,15 +202,6 @@ describe("User", () => {
 
     cy.get("@userId").then((userId) => {
       cy.intercept("GET", `http://localhost:3000/user/${userId}`).as("getUser");
-
-      cy.visit(`/users/edit/${userId}`);
-      cy.get("body").then(($body) => {
-        if ($body.find('[data-cy="button-remove-address"]').length) {
-          removeUserAddress(userId as unknown as string);
-        }
-      });
-
-      cy.visit("/users");
 
       // Edit
       cy.intercept("PATCH", `http://localhost:3000/user/${userId}`, (req) => {
@@ -477,5 +355,118 @@ describe("User", () => {
       "contain",
       "Data final deve ser após a data inicial"
     );
+  });
+
+  it("should create user without address", () => {
+    const fullName = faker.person.fullName();
+    const email = faker.internet.email();
+
+    cy.intercept("POST", "http://localhost:3000/user", (req) => {
+      expect(req.body).to.deep.equal({
+        fullName,
+        email,
+        phone: null,
+        cpf: null,
+        roleId: "1",
+        address: null,
+      });
+    }).as("createUser");
+
+    cy.visit("/users");
+
+    cy.get('[data-cy="new-user-button"]').click();
+
+    cy.get('button[type="submit"]').should("be.disabled");
+
+    cy.get('input[name="fullName"]').type(fullName);
+    cy.get('input[name="email"]').type(email);
+
+    cy.get('button[type="submit"]').should("be.enabled");
+
+    cy.get('button[type="submit"]').click();
+
+    cy.get('[data-cy="snackbar-title"]').should(
+      "have.text",
+      "Um email será enviado"
+    );
+    cy.get('[data-cy="snackbar-description"]').should(
+      "have.text",
+      "Confira também a caixa de spam"
+    );
+
+    cy.wait("@createUser").then((interception) => {
+      const responseBody = interception.response.body;
+
+      const userId = responseBody.id;
+
+      cy.intercept("GET", `http://localhost:3000/user/${userId}`).as("getUser");
+
+      cy.visit(`/users/edit/${userId}`);
+
+      cy.wait("@getUser");
+    });
+  });
+
+  it("should create user with address", () => {
+    const fullName = faker.person.fullName();
+    const email = faker.internet.email();
+    const cep = "65043420";
+    const number = "123";
+
+    cy.intercept("POST", "http://localhost:3000/user", (req) => {
+      expect(req.body).to.deep.equal({
+        fullName,
+        email,
+        phone: null,
+        cpf: null,
+        roleId: "1",
+        address: {
+          cep,
+          number,
+          street: "Rua Sete",
+          neighborhood: "COHEB do Sacavém",
+          cityIbgeCode: "2111300",
+        },
+      });
+    }).as("createUser");
+
+    cy.intercept("GET", "https://viacep.com.br/ws/65043-420/json/").as(
+      "cepApi"
+    );
+    cy.intercept(
+      "GET",
+      "https://servicodados.ibge.gov.br/api/v1/localidades/estados/MA/municipios"
+    ).as("citiesAPi");
+
+    cy.visit("/users");
+
+    cy.get('[data-cy="new-user-button"]').click();
+
+    cy.get('button[type="submit"]').should("be.disabled");
+
+    cy.get('input[name="fullName"]').type(fullName);
+    cy.get('input[name="email"]').type(email);
+
+    cy.get('[data-cy="button-append-address"]').click();
+
+    cy.get('input[name="address.0.cep"]').type(cep);
+    cy.get('input[name="address.0.number"]').type(number);
+
+    cy.get('button[type="submit"]').should("be.enabled");
+
+    cy.wait("@cepApi");
+    cy.wait("@citiesAPi");
+    cy.get('button[type="submit"]').click();
+
+    cy.get('[data-cy="snackbar-title"]').should(
+      "have.text",
+      "Um email será enviado"
+    );
+    cy.get('[data-cy="snackbar-description"]').should(
+      "have.text",
+      "Confira também a caixa de spam"
+    );
+
+    cy.wait("@createUser");
   });
 });
