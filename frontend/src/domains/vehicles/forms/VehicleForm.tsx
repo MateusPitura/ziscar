@@ -102,6 +102,14 @@ export default function VehicleForm(): ReactNode {
         }))}
         required
       />
+      <Select<VehicleFormInputs>
+        name="vehicle.brandId"
+        label="Marca"
+        options={brandsInfo ?? []}
+        loading={isFetchingBrandsInfo}
+        required
+      />
+      <Input<VehicleFormInputs> name="vehicle.modelName" label="Modelo" />
       <Input<VehicleFormInputs>
         name="vehicle.kilometers"
         label="Quilometragem"
@@ -114,13 +122,6 @@ export default function VehicleForm(): ReactNode {
           value: vehicleCategory,
           label: VehicleCategoryText[vehicleCategory],
         }))}
-      />
-      <Input<VehicleFormInputs> name="vehicle.modelName" label="Modelo" />
-      <Select<VehicleFormInputs>
-        name="vehicle.brandId"
-        label="Marca"
-        options={brandsInfo ?? []}
-        loading={isFetchingBrandsInfo}
       />
       <ColorPicker<VehicleFormInputs> label="Cor" name="vehicle.color" />
       <Select<VehicleFormInputs>

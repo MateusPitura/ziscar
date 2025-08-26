@@ -191,20 +191,39 @@ payload:
 # Criar veículo
 
 endpoint
-POST /vehicle
+POST /vehicles
 
 payload:
 {
-    payment: {
-        purchaseDate: "2025-01-01",
-        paidTo: "Paid to",
-        installment: <installment>
+    "payment": { // Faltou dados da compra, a description da conta a pagar pode ser "Compra Veículo <placa>"
+        "purchaseDate": "2000-01-01",
+        "paidTo": "Leilão", // Pode ser null
+        "installment": {
+            "value": "5000000",
+            "status": "PENDING",
+            "dueDate": "2000-01-01", // Pode ser null
+            "paymentDate": null, // Ex.: "2000-01-01"
+            "paymentMethod": null // Ex.: "CREDIT_CARD"
+        }
     },
-    vehicle: <vehicle>,
-    characteristics: {
-        commonCharacteristics: [],
-        newCharacteristics: []
-    }
+    "vehicle": { // Alguns valores estão como string mas era para ser number, porém não deu erro para inserir
+        "plateNumber": "ABC1234", // Validar por placa duplicado
+        "chassiNumber": "AAAAAAAAAAAAAAAAA", // Validar por chassi duplicado
+        "announcedPrice": "6000000",
+        "minimumPrice": "6000000",
+        "commissionValue": "100000",
+        "storeId": "16",
+        "kilometers": "5000",
+        "modelName": "Fusca",
+        "brandId": "42",
+        "color": "c92424",
+        "modelYear": "2026",
+        "yearOfManufacture": "2025",
+        "fuelType": "FLEX",
+        "status": "PURCHASED",
+        "category": "TRUCK"
+    },
+    "characteristics": ["Air bag", "Direção hidráulica"] // As características comuns e customizadas irão juntas aqui
 }
 
 # Editar veículo

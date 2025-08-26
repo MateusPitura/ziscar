@@ -40,7 +40,7 @@ export const SchemaVehicleForm = s
       storeId: s.string(),
       kilometers: s.numberString(0, 1_000_000),
       modelName: s.string().or(s.empty()),
-      brandId: s.string().or(s.empty()),
+      brandId: s.string(),
       color: s.string().or(s.empty()),
       modelYear: s.enumeration(MODEL_YEARS).or(s.empty()),
       yearOfManufacture: s.enumeration(YEARS_OF_MANUFACTURE).or(s.empty()),
