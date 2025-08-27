@@ -122,6 +122,7 @@ export default function VehicleExpenseTable(): ReactNode {
                   handleDisableVehicleExpenseInfo={
                     handleDisableVehicleExpenseInfo
                   }
+                  isActive={!expense.archivedAt}
                 />
               </Table.Action>
             </Table.Row>

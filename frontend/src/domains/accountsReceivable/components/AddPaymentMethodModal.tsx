@@ -32,7 +32,7 @@ export default function AddPaymentMethodModal({
     data: PaymentMethodFormInputs
   ): Promise<void> {
     // await safeFetch(
-    //   `${BACKEND_URL}/accounts-receivable-installments/payment-method/${installment.id}`, // 🌠 MOCK
+    //   `${BACKEND_URL}/accounts-receivable-installments/payment-method/${installment.id}`, 
     //   {
     //     method: "POST",
     //     body: data,
@@ -40,7 +40,7 @@ export default function AddPaymentMethodModal({
     //     action: "CREATE",
     //   }
     // );
-    console.log("data: ", data);
+    console.log("data: ", data); // 🌠 MOCK
   }
 
   const { mutate, isPending } = useMutation({

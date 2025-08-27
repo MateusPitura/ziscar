@@ -10,7 +10,7 @@ export default function ColorPreview({
   return (
     <div
       className="h-6 w-12 rounded-md border border-neutral-300"
-      style={{ backgroundColor: color }}
+      style={{ backgroundColor: `#${color}` }}
     />
   );
 }

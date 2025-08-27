@@ -20,9 +20,10 @@ export default function NewVehicleContainer(): ReactNode {
   const queryClient = useQueryClient();
 
   async function createVehicle(data: VehicleFormInputs) {
-    await safeFetch(`${BACKEND_URL}/vehicle`, { // 🌠 MOCK
+    await safeFetch(`${BACKEND_URL}/vehicles`, {
+      // 🌠 IMPROVE
       method: "POST",
-      body: data,
+      body: data.vehicle,
       resource: "VEHICLES",
       action: "CREATE",
     });
@@ -56,7 +57,7 @@ export default function NewVehicleContainer(): ReactNode {
             color="red"
             iconRight="Close"
             label="Cancelar"
-            onClick={() => navigate('/vehicles')}
+            onClick={() => navigate("/vehicles")}
           />
         </PageFooter>
       </Form>

@@ -1,9 +1,12 @@
 import {
   ActionsType,
-  ExpenseCategory, FuelType, InstallmentStatusType,
+  ExpenseCategory,
+  FuelType,
+  InstallmentStatusType,
   PaymentMethodPayableTypeType,
   ResourcesType,
-  VehicleCategory, VehicleStatus
+  VehicleCategory,
+  VehicleStatus,
 } from "@shared/enums";
 import { BrazilianState } from ".";
 
@@ -103,6 +106,14 @@ export interface Vehicle {
   };
   characteristics: string[];
   archivedAt?: Date;
+}
+
+export interface VehicleWithPayment {
+  vehicle: Vehicle;
+  payment: {
+    purchaseDate: string;
+    paidTo?: string;
+  };
 }
 
 export interface VehicleExpense {

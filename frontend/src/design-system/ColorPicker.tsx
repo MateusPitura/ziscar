@@ -69,7 +69,7 @@ export default function ColorPicker<T extends FieldValues>({
             render={({ field }) => (
               <SketchPicker
                 color={field.value}
-                onChange={(color) => field.onChange(color.hex)}
+                onChange={(color) => field.onChange(color.hex.replace("#", ""))}
                 disableAlpha
                 presetColors={[
                   "#FFFFFF",
