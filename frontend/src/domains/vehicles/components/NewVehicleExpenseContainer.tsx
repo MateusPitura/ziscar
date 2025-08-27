@@ -4,9 +4,10 @@ import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { ReactNode } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { vehicleExpenseDefaultValues } from "../constants";
+import { ExpenseCategoryText, vehicleExpenseDefaultValues } from "../constants";
 import ExpenseForm from "../forms/ExpenseForm";
 import { VehicleExpenseFormInputs } from "../types";
+import { InstallmentStatus } from "@shared/enums";
 
 export default function NewVehicleExpenseContainer(): ReactNode {
   const { safeFetch } = useSafeFetch();
@@ -24,21 +25,23 @@ export default function NewVehicleExpenseContainer(): ReactNode {
         vehicleId,
         category: payment.category,
         observations: payment.observations,
-        description: "",
-        paidTo: "",
-        totalValue: payment.installment?.value,
+        description: `Gasto Veículo ${vehicleId}`, // 🌠 Pegar a placa do veículo
+        paidTo: ExpenseCategoryText[payment.category],
         installments: [
           {
             dueDate: payment.installment?.dueDate,
             value: payment.installment?.value,
             isUpfront: false,
-            paymentMethods: [
-              {
-                type: payment.installment?.paymentMethod,
-                value: payment.installment?.value,
-                paymentDate: payment.installment?.paymentDate,
-              },
-            ],
+            paymentMethods:
+              payment.installment?.status === InstallmentStatus.PAID
+                ? [
+                    {
+                      type: payment.installment?.paymentMethod,
+                      value: payment.installment?.value,
+                      paymentDate: payment.installment?.paymentDate,
+                    },
+                  ]
+                : null,
           },
         ],
       },

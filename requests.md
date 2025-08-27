@@ -157,7 +157,7 @@ GET /vehicle/${vehicleId}
 
 payload: // Daria para ter apenas uma request que retorna tudo isso ou uma com tudo isso e outra só para vehicle
 {
-    payment: { // Detalhes do pagamento
+    payment: { // Detalhes do pagamento, só os dados abaixo
         purchaseDate: "2025-01-01;
         paidTo: "Fulano"; // null
     };
@@ -241,7 +241,7 @@ POST /vehicles
 
 payload:
 {
-    "payment": { // Faltou dados da compra, a description da conta a pagar pode ser "Compra Veículo <placa>"
+    "payment": { // Faltou dados da compra, a description da conta a pagar pode ser "Compra Veículo <placa>". Se quiser pode seguir o modelo da venda
         "purchaseDate": "2000-01-01",
         "paidTo": "Leilão", // Pode ser null
         "installment": {
@@ -280,7 +280,7 @@ PATCH /vehicles/${vehicleId}
 payload:
 {
     "characteristics": ["Ar condicionado", "Câmera de ré"], // Acho que seria mais fácil enviar todas as características sempre e não só o que mudar
-    "payment": { // Faltou edição do pagamento
+    "payment": { // Faltou edição do pagamento, só os campos abaixo
         "paidTo": "Leilão", // null
         "purchaseDate": "2000-01-01"
     },
@@ -308,37 +308,21 @@ payload:
 endpoint:
 PATCH /vehicle-expense/${expenseId}
 
-payload:
-{
-    payment: {
-        observations: "Observations",
-        category: "IPVA",
-        competencyDate: "2025-01-01",
-    }
-}
+payload: // será editado observações, categoria e data de competência
 
 # Criar gasto do veículo
 
 endpoint:
 POST /vehicle-expense
 
-payload:
-// Ao usar a request de exemplo não deu certo. Pode remover description e paidTo, na hora de criar a conta a pagar a description pode ser "Gasto Veículo <placa>" e o paidTo a categoria do gasto. Pode remover o valor total também. Adicionar competencyDate. Nos installments falta o status do pagamento, e paymentDate, dueDate e paymentMethod pode ser null
-{
-    payment: {
-        observations: "Observations",
-        category: "",
-        competencyDate: "2025-01-01",
-        installment: <installment>
-    }
-}
+payload: // Ao usar a request de exemplo não deu certo. Pode remover o valor total. Adicionar competencyDate
 
 # Desativar um gasto do veículo
 
 endpoint:
 DELETE /vehicle-expense/${vehicleId}
 
-payload:
+payload: // pode seguir o modelo do veículo
 {
     archivedAt: "2025-01-01"
 }
