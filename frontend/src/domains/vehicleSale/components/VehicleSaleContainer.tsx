@@ -3,9 +3,17 @@ import Form from "@/design-system/Form";
 import Spinner from "@/design-system/Spinner";
 import PageFooter from "@/domains/global/components/PageFooter";
 import PageHeader from "@/domains/global/components/PageHeader";
+import { BACKEND_URL } from "@/domains/global/constants";
+import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
+import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import { Vehicle } from "@/domains/global/types/model";
-import { FuelType, VehicleCategory, VehicleStatus } from "@shared/enums";
-import { useQuery } from "@tanstack/react-query";
+import {
+  FuelType,
+  InstallmentStatus,
+  VehicleCategory,
+  VehicleStatus,
+} from "@shared/enums";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ReactNode } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { vehicleSaleDefaultValues } from "../constants";
@@ -17,8 +25,10 @@ import VehicleSaleTabs from "./VehicleSaleTabs";
 export default function VehicleSaleContainer(): ReactNode {
   const navigate = useNavigate();
 
-  // const { safeFetch } = useSafeFetch();
+  const { safeFetch } = useSafeFetch();
   const { vehicleId } = useParams();
+  const { showSuccessSnackbar } = useSnackbar();
+  const queryClient = useQueryClient();
 
   async function getVehicle(): Promise<Vehicle> {
     // return await safeFetch(`${BACKEND_URL}/vehicle/${vehicleId}`, { // 🌠 MOCK
@@ -68,6 +78,54 @@ export default function VehicleSaleContainer(): ReactNode {
     select: selectVehicleInfo,
   });
 
+  async function createSale({ payment, customer }: VehicleSaleFormInputs) {
+    await safeFetch(`${BACKEND_URL}/vehicles/sale`, {
+      method: "POST",
+      body: {
+        vehicleId,
+        customerId: customer.id,
+        date: new Date(), // 🌠 Permitir escolher a data
+        commissionValue: 1000, // 🌠 Permitir enviar a comissão
+        accountReceivable: {
+          description: `Venda Veículo ${vehicleData?.plateNumber}`,
+          receivedFrom: "João", // 🌠 Pegar o nome dele,
+        },
+        installments: [
+          {
+            dueDate: payment.installment.dueDate,
+            value: payment.installment.value,
+            isUpfront: false,
+            paymentMethods:
+              payment.installment.status === InstallmentStatus.PAID
+                ? [
+                    {
+                      type: payment.installment.paymentMethod,
+                      value: payment.installment.value,
+                      paymentDate: payment.installment.paymentDate,
+                    },
+                  ]
+                : null,
+          },
+        ],
+      },
+      resource: "VEHICLE_SALE",
+      action: "CREATE",
+    });
+  }
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: createSale,
+    onSuccess: () => {
+      showSuccessSnackbar({
+        title: "Venda realizada com sucesso",
+      });
+      navigate("/vehicles");
+      queryClient.invalidateQueries({ queryKey: ["vehicles"] });
+      queryClient.invalidateQueries({ queryKey: ["accounts-receivable"] });
+      queryClient.invalidateQueries({ queryKey: ["accounts-payable"] });
+    },
+  });
+
   if (isFetching) {
     return (
       <div className="flex justify-center items-center h-full w-full">
@@ -80,9 +138,7 @@ export default function VehicleSaleContainer(): ReactNode {
     vehicleData && (
       <div className="flex flex-col gap-4 w-full">
         <Form<VehicleSaleFormInputs>
-          onSubmit={(data) => {
-            console.log(data); // 🌠 MOCK2
-          }}
+          onSubmit={mutate}
           className="flex-1 flex flex-col gap-4"
           schema={SchemaVehicleSaleForm({
             commissionValue: vehicleData.commissionValue,
@@ -94,7 +150,7 @@ export default function VehicleSaleContainer(): ReactNode {
         >
           <PageHeader title="Realizar venda" />
           <VehicleSaleTabs vehicleData={vehicleData} />
-          <PageFooter dirty>
+          <PageFooter dirty primaryBtnState={isPending ? "loading" : undefined}>
             <Button color="lightBlue" iconRight="Save" label="Salvar" />
             <Button
               color="red"

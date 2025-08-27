@@ -3,7 +3,7 @@ import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { ReactNode } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { vehicleExpenseDefaultValues } from "../constants";
 import ExpenseForm from "../forms/ExpenseForm";
 import { VehicleExpenseFormInputs } from "../types";
@@ -14,12 +14,34 @@ export default function NewVehicleExpenseContainer(): ReactNode {
   const navigate = useNavigate();
   const { showSuccessSnackbar } = useSnackbar();
   const { pathname } = useLocation();
+  const { vehicleId } = useParams();
 
-  async function createExpense(data: VehicleExpenseFormInputs) {
-    console.log(data);
-    await safeFetch(`${BACKEND_URL}/vehicle-expense`, { // 🌠 MOCK2
+  async function createExpense({ payment }: VehicleExpenseFormInputs) {
+    await safeFetch(`${BACKEND_URL}/vehicles/expense`, {
+      // 🌠 IMPROVE
       method: "POST",
-      body: data,
+      body: {
+        vehicleId,
+        category: payment.category,
+        observations: payment.observations,
+        description: "",
+        paidTo: "",
+        totalValue: payment.installment?.value,
+        installments: [
+          {
+            dueDate: payment.installment?.dueDate,
+            value: payment.installment?.value,
+            isUpfront: false,
+            paymentMethods: [
+              {
+                type: payment.installment?.paymentMethod,
+                value: payment.installment?.value,
+                paymentDate: payment.installment?.paymentDate,
+              },
+            ],
+          },
+        ],
+      },
       resource: "VEHICLE_EXPENSE",
       action: "CREATE",
     });

@@ -1,13 +1,17 @@
-import { Vehicle } from "@/domains/global/types/model";
+import { VehicleWithPayment } from "@/domains/global/types/model";
 import { applyMask } from "@/domains/global/utils/applyMask";
 import { defaultCommonCharacteristics } from "../constants";
 import { VehicleFormInputs } from "../types";
 
-export default function selectVehicleInfo(payload: Vehicle): VehicleFormInputs {
+export default function selectVehicleInfo(
+  payload: VehicleWithPayment
+): VehicleFormInputs {
+  const { payment, vehicle } = payload;
+
   const commonCharacteristics = [];
   const newCharacteristics = [];
 
-  for (const characteristic of payload.characteristics) {
+  for (const characteristic of vehicle.characteristics) {
     if (defaultCommonCharacteristics.includes(characteristic)) {
       commonCharacteristics.push(characteristic);
     } else {
@@ -21,26 +25,26 @@ export default function selectVehicleInfo(payload: Vehicle): VehicleFormInputs {
       newCharacteristics,
     },
     payment: {
-      paidTo: "",
-      purchaseDate: "",
+      paidTo: payment.paidTo ?? "",
+      purchaseDate: payment.purchaseDate,
       installment: null,
     },
     vehicle: {
-      kilometers: applyMask(payload.kilometers, "number") ?? "",
-      plateNumber: applyMask(payload.plateNumber, "plateNumber") ?? "",
-      announcedPrice: applyMask(payload.announcedPrice, "money") ?? "",
-      minimumPrice: applyMask(payload.minimumPrice, "money") ?? "",
-      commissionValue: applyMask(payload.commissionValue, "money") ?? "",
-      color: payload.color,
-      fuelType: payload.fuelType,
-      status: payload.status,
-      chassiNumber: applyMask(payload.chassiNumber, "chassi") ?? "",
-      modelYear: String(payload.modelYear),
-      yearOfManufacture: String(payload.yearOfManufacture),
-      modelName: payload.modelName,
-      category: payload.category,
-      storeId: String(payload.store.id),
-      brandId: String(payload.brand.id),
+      kilometers: applyMask(vehicle.kilometers, "number") ?? "",
+      plateNumber: applyMask(vehicle.plateNumber, "plateNumber") ?? "",
+      announcedPrice: applyMask(vehicle.announcedPrice, "money") ?? "",
+      minimumPrice: applyMask(vehicle.minimumPrice, "money") ?? "",
+      commissionValue: applyMask(vehicle.commissionValue, "money") ?? "",
+      color: vehicle.color,
+      fuelType: vehicle.fuelType,
+      status: vehicle.status,
+      chassiNumber: applyMask(vehicle.chassiNumber, "chassi") ?? "",
+      modelYear: String(vehicle.modelYear),
+      yearOfManufacture: String(vehicle.yearOfManufacture),
+      modelName: vehicle.modelName,
+      category: vehicle.category,
+      storeId: String(vehicle.store.id),
+      brandId: String(vehicle.brand.id),
     },
   };
 }

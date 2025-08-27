@@ -35,11 +35,11 @@ export default function AccountsReceivableTable(): ReactNode {
   async function getAccountsReceivableInfo(
     filter?: string
   ): Promise<PageablePayload<FetchAccountReceivable>> {
-    // return await safeFetch(`${BACKEND_URL}/account-receivable?${filter}`, { // 🌠 MOCK
+    // return await safeFetch(`${BACKEND_URL}/account-receivable?${filter}`, {
     //   resource: "ACCOUNTS_RECEIVABLE",
     //   action: "READ",
     // });
-    console.log("filter: ", filter);
+    console.log("filter: ", filter); // 🌠 MOCK
     return {
       total: 3,
       data: [

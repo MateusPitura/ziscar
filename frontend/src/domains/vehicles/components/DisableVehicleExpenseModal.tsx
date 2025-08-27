@@ -21,7 +21,7 @@ export default function DisableVehicleExpenseModal({
   const queryClient = useQueryClient();
 
   async function disableVehicleExpense() {
-    await safeFetch(`${BACKEND_URL}/vehicle-expense/${vehicleExpenseId}`, { // 🌠 MOCK2
+    await safeFetch(`${BACKEND_URL}/vehicle-expense/${vehicleExpenseId}`, { // 🌠 MOCK
       method: "DELETE",
       body: { archivedAt: new Date().toISOString() },
       resource: "VEHICLE_EXPENSE",
