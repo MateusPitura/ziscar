@@ -27,10 +27,9 @@ export default function VehiclesTableActions({
   const queryClient = useQueryClient();
 
   async function enableVehicle() {
-    await safeFetch(`${BACKEND_URL}/vehicle/${vehicleId}`, {
-      method: "DELETE",
-      body: { archivedAt: null },
-      resource: "VEHICLES", // 🌠 MOCK
+    await safeFetch(`${BACKEND_URL}/vehicles/${vehicleId}/unarchive`, {
+      method: "PATCH",
+      resource: "VEHICLES",
       action: "DELETE",
     });
   }

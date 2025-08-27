@@ -81,7 +81,7 @@ export default function VehicleSaleContainer(): ReactNode {
       <div className="flex flex-col gap-4 w-full">
         <Form<VehicleSaleFormInputs>
           onSubmit={(data) => {
-            console.log(data); // 🌠 MOCK
+            console.log(data); // 🌠 MOCK2
           }}
           className="flex-1 flex flex-col gap-4"
           schema={SchemaVehicleSaleForm({

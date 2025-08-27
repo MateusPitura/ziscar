@@ -17,7 +17,7 @@ export default function NewVehicleExpenseContainer(): ReactNode {
 
   async function createExpense(data: VehicleExpenseFormInputs) {
     console.log(data);
-    await safeFetch(`${BACKEND_URL}/vehicle-expense`, { // 🌠 MOCK
+    await safeFetch(`${BACKEND_URL}/vehicle-expense`, { // 🌠 MOCK2
       method: "POST",
       body: data,
       resource: "VEHICLE_EXPENSE",

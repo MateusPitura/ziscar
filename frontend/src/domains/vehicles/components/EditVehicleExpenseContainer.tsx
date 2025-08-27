@@ -21,7 +21,7 @@ export default function EditVehicleExpenseContainer(): ReactNode {
   const { pathname } = useLocation();
 
   async function getVehicleExpense(): Promise<VehicleExpense> {
-    // return await safeFetch(`${BACKEND_URL}/vehicle-expense/${expenseId}`, { // 🌠 MOCK
+    // return await safeFetch(`${BACKEND_URL}/vehicle-expense/${expenseId}`, { // 🌠 MOCK2
     //   resource: "VEHICLE_EXPENSE",
     //   action: "READ",
     // });
@@ -43,7 +43,7 @@ export default function EditVehicleExpenseContainer(): ReactNode {
   });
 
   async function editVehicleExpense(data: VehicleExpenseFormInputs) {
-    await safeFetch(`${BACKEND_URL}/vehicle-expense/${expenseId}`, { // 🌠 MOCK
+    await safeFetch(`${BACKEND_URL}/vehicle-expense/${expenseId}`, { // 🌠 MOCK2
       method: "PATCH",
       body: data,
       resource: "VEHICLE_EXPENSE",

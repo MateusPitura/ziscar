@@ -120,35 +120,81 @@ payload:
 # Buscar venda do veículo
 
 endpoint:
-GET /vehicle-sale/${vehicleSaleId}
+GET /vehicle-sale/${vehicleSaleId} // Aqui iria retornar o snapshot da venda
 
 payload: 
 {
-    <vehicle>
+    id: 1,
+    modelName: "Fusca",
+    announcedPrice: 9000000,
+    plateNumber: "ABC1234",
+    modelYear: 1970,
+    status: "DELIVERED",
+    archivedAt: undefined,
+    brand: {
+        id: 10,
+        name: "Volkswagen",
+    },
+    store: {
+        id: 1,
+        name: "Loja 1",
+    },
+    category: "CAR",
+    color: "#FF0000",
+    chassiNumber: "AAAAAAAAAAAAAAAAA",
+    commissionValue: 0,
+    fuelType: "FLEX",
+    kilometers: 1000,
+    minimumPrice: 8000000,
+    yearOfManufacture: 1970,
+    characteristics: ["Direção hidráulica", "Janelas elétricas"]
 }
 
-# Buscar veículo
+# Buscar veículo pelo ID
 
 endpoint:
 GET /vehicle/${vehicleId}
 
 payload:
 {
-    <vehicle>
+    id: 1,
+    modelName: "Fusca",
+    announcedPrice: 9000000,
+    plateNumber: "ABC1234",
+    modelYear: 1970,
+    status: "DELIVERED",
+    archivedAt: undefined,
+    brand: {
+        id: 10,
+        name: "Volkswagen",
+    },
+    store: {
+        id: 1,
+        name: "Loja 1",
+    },
+    category: "CAR",
+    color: "#FF0000",
+    chassiNumber: "AAAAAAAAAAAAAAAAA",
+    commissionValue: 0,
+    fuelType: "FLEX",
+    kilometers: 1000,
+    minimumPrice: 8000000,
+    yearOfManufacture: 1970,
+    characteristics: ["Direção hidráulica", "Janelas elétricas"]
 }
 
 # Listar veículos
 
 endpoint:
-GET /vehicle?page=1&startDate=2025-08-01&endDate=2025-08-08&orderBy=modelName
+GET /vehicle?page=1&startDate=2025-08-01&endDate=2025-08-08&orderBy=modelName // Adicionar ordenação
 
 payload:
 {
     total: 0,
-    data: <fetchVehicle>[]
+    data: [] // Incluir archivedAt
 }
 
-# Listar gastos
+# Listar gastos PENDING
 
 endpoint:
 GET /vehicle-expense/${vehicleId}
@@ -158,7 +204,7 @@ payload:
     <vehicleExpense>[]
 }
 
-# Buscar gasto por id do gasto
+# Buscar gasto por ID do gasto PENDING
 
 endpoint:
 GET /vehicle-expense/${expenseId}
@@ -166,26 +212,6 @@ GET /vehicle-expense/${expenseId}
 payload:
 {
     <vehicleExpense>
-}
-
-# Ativar veículo
-
-endpoint:
-DELETE /vehicle/${vehicleId}
-
-payload:
-{
-    archivedAt: null
-}
-
-# Desativar veículo
-
-endpoint:
-DELETE /vehicle/${vehicleId}
-
-payload:
-{
-    archivedAt: '2025-01-01'
 }
 
 # Criar veículo
@@ -226,7 +252,7 @@ payload:
     "characteristics": ["Air bag", "Direção hidráulica"] // As características comuns e customizadas irão juntas aqui
 }
 
-# Editar veículo
+# Editar veículo PENDING
 
 endpoint:
 PATH /vehicle/${vehicleId}
@@ -244,7 +270,7 @@ payload:
     } 
 }
 
-# Editar gasto do veículo
+# Editar gasto do veículo PENDING
 
 endpoint:
 PATCH /vehicle-expense/${expenseId}
@@ -258,7 +284,7 @@ payload:
     }
 }
 
-# Criar gasto do veículo
+# Criar gasto do veículo PENDING
 
 endpoint:
 POST /vehicle-expense
@@ -275,7 +301,7 @@ payload:
 
 # Vender veículo
 
-# Desativar um gasto do veículo
+# Desativar um gasto do veículo PENDING
 
 endpoint:
 DELETE /vehicle-expense/${vehicleId}
@@ -285,4 +311,4 @@ payload:
     archivedAt: "2025-01-01"
 }
 
-# Ativar um gasto do veículo
+# Ativar um gasto do veículo PENDING

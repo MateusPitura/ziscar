@@ -35,7 +35,7 @@ export default function VehicleExpenseTable(): ReactNode {
   }
 
   async function getVehicleExpenseInfo(): Promise<FetchVehicleExpense[]> {
-    // return await safeFetch(`${BACKEND_URL}/vehicle-expense/${vehicleId}`, { // 🌠 MOCK
+    // return await safeFetch(`${BACKEND_URL}/vehicle-expense/${vehicleId}`, { // 🌠 MOCK2
     //   resource: "VEHICLE_EXPENSE",
     //   action: "READ",
     // });

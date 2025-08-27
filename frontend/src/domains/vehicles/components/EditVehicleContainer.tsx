@@ -71,7 +71,7 @@ export default function EditVehicleContainer(): ReactNode {
   });
 
   async function editVehicle(data: VehicleFormInputs) {
-    await safeFetch(`${BACKEND_URL}/vehicle/${vehicleId}`, { // 🌠 MOCK
+    await safeFetch(`${BACKEND_URL}/vehicle/${vehicleId}`, { // 🌠 MOCK2
       method: "PATCH",
       body: data,
       resource: "VEHICLES",

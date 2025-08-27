@@ -21,9 +21,8 @@ export default function DisableVehicleModal({
   const { handleVehiclesFilter } = useFilterContext();
 
   async function disableVehicle() {
-    await safeFetch(`${BACKEND_URL}/vehicle/${vehicleId}`, { // 🌠 MOCK
-      method: "DELETE",
-      body: { archivedAt: new Date().toISOString() },
+    await safeFetch(`${BACKEND_URL}/vehicles/${vehicleId}/archive`, {
+      method: "PATCH",
       resource: "VEHICLES",
       action: "DELETE",
     });
