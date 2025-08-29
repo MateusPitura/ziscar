@@ -57,8 +57,6 @@ export class AccountReceivableController {
         throw error;
       }
 
-      // Log do erro para debugging
-      console.error('Error in searchAccountsReceivable:', error);
 
       throw new BadRequestException('Erro ao buscar contas a receber');
     }

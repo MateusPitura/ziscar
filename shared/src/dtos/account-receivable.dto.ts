@@ -1,4 +1,4 @@
-import { InstallmentStatus } from "@shared/enums";
+import { InstallmentStatus } from "../enums";
 import { s } from "../safeZod";
 
 export const createAccountReceivableDTO = s.object({

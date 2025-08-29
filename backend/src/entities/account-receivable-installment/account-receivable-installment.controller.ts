@@ -39,7 +39,6 @@ export class AccountReceivableInstallmentController {
     @Body() body: CreatePaymentMethodDTO,
     @Req() req: AuthRequest
   ) {
-    console.log('req.authToken:', req.authToken); // para debug
 
     return this.accountReceivableInstallmentService.addPaymentMethodToInstallment(installmentId, {
       type: body.type,
