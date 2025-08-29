@@ -1,12 +1,13 @@
 import Table from "@/design-system/Table";
-import { BLANK } from "@/domains/global/constants";
+import { BACKEND_URL, BLANK } from "@/domains/global/constants";
 import useDialog from "@/domains/global/hooks/useDialog";
 import useFilterContext from "@/domains/global/hooks/useFilterContext";
+import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import { PageablePayload } from "@/domains/global/types";
 import { FetchVehicle } from "@/domains/global/types/model";
 import formatFilters from "@/domains/global/utils/formatFilters";
 import ExportButton from "@/domains/pdf/components/ExportButton";
-import { VehicleStatus } from "@shared/enums";
+import { ITEMS_PER_PAGE } from "@shared/constants";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState, type ReactNode } from "react";
 import { VehicleStatusText } from "../constants";
@@ -16,8 +17,6 @@ import selectVehiclesInfoForReport from "../utils/selectVehiclesInfoForReport";
 import DisableVehicleModal from "./DisableVehicleModal";
 import VehiclesFilterForm from "./VehiclesFilterForm";
 import VehiclesTableActions from "./VehiclesTableActions";
-// import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
-// import { BACKEND_URL } from "@/domains/global/constants";
 
 export default function VehiclesTable(): ReactNode {
   const [disableVehicleInfo, setDisableVehicleInfo] = useState<DisableVehicle>({
@@ -26,7 +25,7 @@ export default function VehiclesTable(): ReactNode {
   });
 
   const dialog = useDialog();
-  //   const { safeFetch } = useSafeFetch();
+  const { safeFetch } = useSafeFetch();
   const { vehiclesFilter, handleVehiclesFilter } = useFilterContext();
 
   function handleDisableVehicleInfo(vehicle: DisableVehicle) {
@@ -48,43 +47,13 @@ export default function VehiclesTable(): ReactNode {
   async function getVehiclesInfo(
     filter?: string
   ): Promise<PageablePayload<FetchVehicle>> {
-    // return await safeFetch(`${BACKEND_URL}/vehicle?${filter}`, {
-    //   resource: "VEHICLES",
-    //   action: "READ",
-    // });
-    console.log("filter: ", filter);
-    return {
-      total: 3,
-      data: [
-        {
-          id: 1,
-          modelName: "Fusca",
-          announcedPrice: "800000000",
-          plateNumber: "ABC1234",
-          modelYear: "1970",
-          status: VehicleStatus.DELIVERED,
-          archivedAt: undefined,
-        },
-        {
-          id: 2,
-          modelName: "Civic",
-          announcedPrice: "8000000",
-          plateNumber: "XYZ5678",
-          modelYear: "2020",
-          status: VehicleStatus.IN_STOCK,
-          archivedAt: undefined,
-        },
-        {
-          id: 3,
-          modelName: "Corolla",
-          announcedPrice: "90000000",
-          plateNumber: "BRA2E19",
-          modelYear: "2021",
-          status: VehicleStatus.MAINTENANCE,
-          archivedAt: undefined,
-        },
-      ],
-    };
+    return await safeFetch(
+      `${BACKEND_URL}/vehicles?${filter}&limit=${ITEMS_PER_PAGE}`, // 🌠 Order by model name
+      {
+        resource: "VEHICLES",
+        action: "READ",
+      }
+    );
   }
 
   const { data: vehiclesInfo, isFetching: isFetchingVehiclesInfo } = useQuery({

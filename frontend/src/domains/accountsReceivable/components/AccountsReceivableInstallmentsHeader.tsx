@@ -11,7 +11,7 @@ export default function AccountsReceivableInstallmentsHeader(): ReactNode {
   const { accountReceivableId } = useParams();
 
   async function getAccountReceivableInfo(): Promise<FetchAccountReceivable> {
-    // return await safeFetch(`${BACKEND_URL}/account-receivable/${accountReceivableId}`, {
+    // return await safeFetch(`${BACKEND_URL}/account-receivable/${accountReceivableId}`, { // 🌠 MOCK
     //   resource: "ACCOUNTS_RECEIVABLE",
     //   action: "READ",
     // });

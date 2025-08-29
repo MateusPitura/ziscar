@@ -28,5 +28,5 @@ export const BasePaginatedResponseSchema = <T extends z.ZodTypeAny>(
 ) =>
   s.object({
     data: s.array(dataSchema),
-    totalCount: s.number(),
+    total: s.number(),
   });

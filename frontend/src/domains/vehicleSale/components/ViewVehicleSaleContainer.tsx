@@ -18,7 +18,7 @@ export default function ViewVehicleSaleContainer(): ReactNode {
   const { vehicleSaleId } = useParams();
 
   async function getVehicle(): Promise<Vehicle> {
-    // return await safeFetch(`${BACKEND_URL}/vehicle-sale/${vehicleSaleId}`, {
+    // return await safeFetch(`${BACKEND_URL}/vehicle-sale/${vehicleSaleId}`, { // 🌠 MOCK
     //   resource: "VEHICLE_SALE",
     //   action: "READ",
     // });
@@ -26,9 +26,9 @@ export default function ViewVehicleSaleContainer(): ReactNode {
     return {
       id: 1,
       modelName: "Fusca",
-      announcedPrice: "9000000",
+      announcedPrice: 9000000,
       plateNumber: "ABC1234",
-      modelYear: "1970",
+      modelYear: 1970,
       status: VehicleStatus.DELIVERED,
       archivedAt: undefined,
       brand: {
@@ -42,11 +42,11 @@ export default function ViewVehicleSaleContainer(): ReactNode {
       category: VehicleCategory.CAR,
       color: "#FF0000",
       chassiNumber: "AAAAAAAAAAAAAAAAA",
-      commissionValue: "0",
+      commissionValue: 0,
       fuelType: FuelType.FLEX,
-      kilometers: "1000",
-      minimumPrice: "8000000",
-      yearOfManufacture: "1970",
+      kilometers: 1000,
+      minimumPrice: 8000000,
+      yearOfManufacture: 1970,
       characteristics: [
         "Direção hidráulica",
         "Janelas elétricas",

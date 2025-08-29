@@ -33,7 +33,7 @@ export default function AccountsReceivableInstallmentsTable(): ReactNode {
   async function getAccountsReceivableInstallmentsInfo(): Promise<
     FetchAccountReceivableInstallment[]
   > {
-    // return await safeFetch(`${BACKEND_URL}/account-receivable-installments/${accountReceivableId}`, {
+    // return await safeFetch(`${BACKEND_URL}/account-receivable-installments/${accountReceivableId}`, { // 🌠 MOCK
     //   resource: "ACCOUNTS_RECEIVABLE",
     //   action: "READ",
     // });
