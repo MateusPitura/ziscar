@@ -16,7 +16,7 @@ POST {{BACKEND_URL}}/auth/sign-up HTTP/1.1
 content-type: application/json
 
 {
-    "cnpj": "12345678901237",
+    "cnpj": "50644617000118",
     "name": "Wayne Enterprises",
     "email": "john.doe@email.com",
     "fullName": "John Doe"
