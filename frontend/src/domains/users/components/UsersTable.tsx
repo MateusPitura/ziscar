@@ -16,7 +16,7 @@ import ExportButton from "@/domains/pdf/components/ExportButton";
 import useFilterContext from "@/domains/global/hooks/useFilterContext";
 import selectUsersInfoForReport from "../utils/selectUsersInfoForReport";
 
-const enableReport = true;
+const enableReport = false;
 
 export default function UsersTable(): ReactNode {
   const [disableUserInfo, setDisableUserInfo] = useState<DisableUser>({

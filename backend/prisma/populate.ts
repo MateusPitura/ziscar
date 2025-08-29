@@ -1,19 +1,29 @@
+import { faker } from '@faker-js/faker';
 import { PrismaClient } from '@prisma/client';
+import { SEED_ROLE_SALES_ID } from '../../shared/src/constants';
+import {
+  FUELTYPE_VALUES,
+  VEHICLECATEGORY_VALUES,
+  VEHICLESTATUS_VALUES,
+} from '../../shared/src/enums';
+import {
+  generateChassi,
+  generateCnpj,
+  generateCpf,
+  generatePlateNumber,
+} from '../../shared/src/test/';
+import {
+  POPULATE_INACTIVE_ENTITIES_AMOUNT,
+  POPULATE_OTHER_ENTITIES_AMOUNT,
+} from '../src/constants';
 import {
   POPULATE_CUSTOMER,
   POPULATE_ENTERPRISE,
   POPULATE_STORE,
   POPULATE_USER,
 } from '../src/constants/populate';
-import { faker } from '@faker-js/faker';
-import { SEED_ROLE_SALES_ID } from '../../shared/src/constants';
-import { generateCnpj } from '../../shared/src/test/generateCnpj';
-import { generateCpf } from '../../shared/src/test/generateCpf';
 import { encryptPassword } from '../src/entities/user/user.utils';
-import {
-  POPULATE_INACTIVE_ENTITIES_AMOUNT,
-  POPULATE_OTHER_ENTITIES_AMOUNT,
-} from '../src/constants';
+import { vehicleBrands } from './seed-data/vehicleBrands';
 
 const prisma = new PrismaClient();
 
@@ -126,6 +136,62 @@ async function populate() {
 
     await tx.user.createMany({
       data: otherUsers,
+    });
+
+    const otherVehiclesPromise = Array.from(
+      { length: POPULATE_OTHER_ENTITIES_AMOUNT },
+      (_, index) => {
+        const minimumPrice = faker.number.int({
+          min: 500_000,
+          max: 20_000_000,
+        });
+        const yearOfManufacture = faker.number.int({
+          min: 1990,
+          max: new Date().getFullYear(),
+        });
+
+        return {
+          chassiNumber: generateChassi(),
+          plateNumber: generatePlateNumber(),
+          status:
+            VEHICLESTATUS_VALUES[
+              faker.number.int({ min: 0, max: VEHICLESTATUS_VALUES.length - 1 })
+            ],
+          commissionValue: faker.number.int({ min: 0, max: 100_000 }), // 🌠 precisa conferir o valor de compra
+          announcedPrice:
+            minimumPrice + faker.number.int({ min: 0, max: 1_000_000 }),
+          minimumPrice,
+          brandId: faker.number.int({
+            min: 1,
+            max: vehicleBrands.length,
+          }),
+          storeId: POPULATE_STORE.DEFAULT.id,
+          category:
+            VEHICLECATEGORY_VALUES[
+              faker.number.int({
+                min: 0,
+                max: VEHICLECATEGORY_VALUES.length - 1,
+              })
+            ],
+          fuelType:
+            FUELTYPE_VALUES[
+              faker.number.int({ min: 0, max: FUELTYPE_VALUES.length - 1 })
+            ],
+          color: faker.color.rgb().replace('#', ''),
+          kilometers: faker.number.int({ min: 0, max: 30_000_000 }),
+          modelName: faker.vehicle.model(),
+          modelYear: yearOfManufacture + 1,
+          yearOfManufacture,
+          archivedAt:
+            index < POPULATE_INACTIVE_ENTITIES_AMOUNT ? new Date() : null,
+        };
+      },
+    );
+
+    const otherVehicles = await Promise.all(otherVehiclesPromise);
+
+    await tx.vehicle.createMany({
+      data: otherVehicles,
     });
   });
 }
