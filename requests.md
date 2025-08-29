@@ -74,7 +74,7 @@ payload:
         vehicleSaleId: 4
     },
 ]
-
+<!-- 
 # Buscar informações de uma conta
 
 endpoint:
@@ -90,8 +90,8 @@ payload:
     isRefund: false,
     isUpfront: true,
     vehicleSaleId: 1,
-}
-
+} -->
+<!-- 
 # Buscar método de pagamento de uma parcela
 
 endpoint:
@@ -102,9 +102,9 @@ payload:
     id: 1,
     paymentDate: "2025-01-01",
     type: "CREDIT_CARD",
-}
-
-# Adicionar método de pagamento em uma parcela
+} -->
+ 
+<!-- # Adicionar método de pagamento em uma parcela
 
 endpoint:
 POST /accounts-receivable-installments/payment-method/${installmentId}
@@ -113,4 +113,4 @@ payload:
 { // no banco o método de pagamento também precisa do value, como a parcela terá apenas 1 método de pagamento no momento, o value do método de pagamento pode ser igual ao value da parcela. Ao adicionar um método de pagamento o status da parcela deve passar de PENDING para PAID
     "type": "CREDIT_CARD",
     "paymentDate": "2025-08-16"
-}
+} -->
