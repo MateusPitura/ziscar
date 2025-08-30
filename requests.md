@@ -16,7 +16,7 @@ payload:
             totalValue: "10000",
             overallStatus: "PENDING",
             installmentsNumber: 12, // Total de parcelas
-            vehicleId: 1 // ID do veículo vendido, precisa fazer um JOIN do AccountReceivable com VehicleSale
+            vehicleSaleId: 1 // ID da tabela VehicleSale
         },
         {
             id: 2,
@@ -29,9 +29,47 @@ payload:
     ],
 }
 
-# Buscar parcelas pelo ID da conta
+# Buscar parcelas de uma conta a receber
 
-// Ordenar pela sequentialNumber por padrão
+endpoint: 
+GET /account-receivable-installments/${accountReceivableId}
+
+payload: // Ordenar por padrão pela installmentSequence
+[
+    {
+        id: 1,
+        dueDate: "2025-01-01",
+        installmentSequence: 0,
+        status: "PAID",
+        value: "10000",
+        isRefund: false,
+        isUpfront: true,
+        // Removi vehicleSaleId e movi para o get das contas,
+        "paymentMethodReceivables": [ // Buscar também os métodos de pagamento de uma parcela
+            {
+                "id": 86,
+                "paymentDate": "2020-11-18",
+                "type": "CASH"
+            }
+        ]
+    },
+    {
+        id: 2,
+        dueDate: "2025-01-01",
+        installmentSequence: 1,
+        status: "PAID",
+        value: "10000",
+        isRefund: false,
+        isUpfront: false,
+        "paymentMethodReceivables": [
+            {
+                "id": 85,
+                "paymentDate": "2020-11-18",
+                "type": "CASH"
+            }
+        ]
+    },
+]
 
 ## Veículos
 

@@ -68,9 +68,10 @@ export default function AccountsReceivableInstallmentsTable(): ReactNode {
         {...dialog}
       />
       <Table>
-        <Table.Header gridColumns={10}>
-          <Table.Head label="Sequência" />
-          <Table.Head label="Vencimento" />
+        <Table.Header gridColumns={11}>
+          <Table.Head label="Sequência" colSpan={1} />
+          <Table.Head label="Data de vencimento " />
+          <Table.Head label="Data de pagamento" />
           <Table.Head label="Método de pagamento" />
           <Table.Head label="Status do pagamento" />
           <Table.Head label="Valor" colSpan={1} />
@@ -83,8 +84,9 @@ export default function AccountsReceivableInstallmentsTable(): ReactNode {
           action="READ"
         >
           {accountsReceivableInstallmentsInfo?.map((installment) => (
-            <Table.Row key={installment.id} gridColumns={10}>
+            <Table.Row key={installment.id} gridColumns={11}>
               <Table.Cell
+                colSpan={1}
                 label={
                   installment.isUpfront
                     ? "Entrada"
@@ -98,8 +100,17 @@ export default function AccountsReceivableInstallmentsTable(): ReactNode {
               <Table.Cell label={installment.dueDate} />
               <Table.Cell
                 label={
-                  installment.paymentMethod
-                    ? PaymentMethodPayableText[installment.paymentMethod]
+                  installment.paymentMethodReceivables?.length
+                    ? installment.paymentMethodReceivables[0].paymentDate
+                    : ""
+                }
+              />
+              <Table.Cell
+                label={
+                  installment.paymentMethodReceivables?.length
+                    ? PaymentMethodPayableText[
+                        installment.paymentMethodReceivables[0].type
+                      ]
                     : ""
                 }
               />

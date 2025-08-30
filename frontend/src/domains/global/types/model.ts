@@ -72,8 +72,7 @@ export interface AccountReceivableInstallment {
   isRefund?: boolean;
   isUpfront?: boolean;
   status: InstallmentStatusType;
-  paymentMethod?: PaymentMethodPayableTypeType;
-  paymentMethodReceivables?: PaymentMethod[]
+  paymentMethodReceivables: PaymentMethod[]
 }
 
 export interface PaymentMethod {
@@ -166,7 +165,7 @@ export type FetchAccountReceivableInstallment = Pick<
   | "status"
   | "isRefund"
   | "isUpfront"
-  | "paymentMethod"
+  | "paymentMethodReceivables"
 >;
 
 export type FetchVehicle = Pick<
