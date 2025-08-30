@@ -1,15 +1,17 @@
-import { Vehicle } from "@/domains/global/types/model";
+import { VehicleWithPayment } from "@/domains/global/types/model";
 import { applyMask } from "@/domains/global/utils/applyMask";
 import { VehicleToString } from "../types";
 
-export default function selectVehicleInfo(payload: Vehicle): VehicleToString {
+export default function selectVehicleInfo(payload: VehicleWithPayment): VehicleToString {
+  const { vehicle } = payload;
+
   return {
-    ...payload,
-    kilometers: applyMask(payload.kilometers, "number") ?? "",
-    plateNumber: applyMask(payload.plateNumber, "plateNumber") ?? "",
-    announcedPrice: applyMask(payload.announcedPrice, "money") ?? "",
-    minimumPrice: applyMask(payload.minimumPrice, "money") ?? "",
-    commissionValue: applyMask(payload.commissionValue, "money") ?? "",
-    chassiNumber: applyMask(payload.chassiNumber, "chassi") ?? "",
+    ...vehicle,
+    kilometers: applyMask(vehicle.kilometers, "number") ?? "",
+    plateNumber: applyMask(vehicle.plateNumber, "plateNumber") ?? "",
+    announcedPrice: applyMask(vehicle.announcedPrice, "money") ?? "",
+    minimumPrice: applyMask(vehicle.minimumPrice, "money") ?? "",
+    commissionValue: applyMask(vehicle.commissionValue, "money") ?? "",
+    chassiNumber: applyMask(vehicle.chassiNumber, "chassi") ?? "",
   };
 }

@@ -8,6 +8,7 @@ import { VehicleSaleFormInputs, VehicleToString } from "../types";
 import CustomerData from "./CustomerData";
 import VehicleData from "./VehicleData";
 import VehicleSaleDetailsForm from "../forms/VehicleSaleDetailsForm";
+import UpfrontForm from "@/domains/global/forms/UpfrontForm";
 
 type VehicleSaleTabs = "CLIENT" | "VEHICLE" | "PAYMENT";
 
@@ -81,6 +82,12 @@ export default function VehicleSaleTabs({
               <Section.Header title="Informações da venda" />
               <Section.Body>
                 <VehicleSaleDetailsForm />
+              </Section.Body>
+            </Section.Group>
+            <Section.Group>
+              <Section.Header title="Informações da entrada" />
+              <Section.Body>
+                <UpfrontForm />
               </Section.Body>
             </Section.Group>
             <Section.Group>

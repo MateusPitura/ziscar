@@ -16,6 +16,7 @@ export function vehicleSaleDefaultValues({
     payment: {
       commissionValue,
       saleDate: safeFormat({ date: new Date(), format: "yyyy-MM-dd" }),
+      upfront: [],
       installment: {
         dueDate: "",
         value,

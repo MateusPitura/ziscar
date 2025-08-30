@@ -6,7 +6,7 @@ import PageHeader from "@/domains/global/components/PageHeader";
 import { BACKEND_URL } from "@/domains/global/constants";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
-import { Vehicle } from "@/domains/global/types/model";
+import { VehicleWithPayment } from "@/domains/global/types/model";
 import {
   FuelType,
   InstallmentStatus,
@@ -17,11 +17,11 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ReactNode } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { vehicleSaleDefaultValues } from "../constants";
+import useVehicleSalePageContext from "../hooks/useVehicleSalePageContext";
 import { SchemaVehicleSaleForm } from "../schemas";
 import { VehicleSaleFormInputs } from "../types";
 import selectVehicleInfo from "../utils/selectVehicleInfo";
 import VehicleSaleTabs from "./VehicleSaleTabs";
-import useVehicleSalePageContext from "../hooks/useVehicleSalePageContext";
 
 export default function VehicleSaleContainer(): ReactNode {
   const navigate = useNavigate();
@@ -31,45 +31,50 @@ export default function VehicleSaleContainer(): ReactNode {
   const queryClient = useQueryClient();
   const { customer: customerData } = useVehicleSalePageContext();
 
-  async function getVehicle(): Promise<Vehicle> {
+  async function getVehicle(): Promise<VehicleWithPayment> {
     // return await safeFetch(`${BACKEND_URL}/vehicle/${vehicleId}`, { // 🌠 MOCK
     //   resource: "VEHICLES",
     //   action: "READ",
     // });
 
     return {
-      id: 1,
-      modelName: "Fusca",
-      announcedPrice: 9000000,
-      plateNumber: "ABC1234",
-      modelYear: 1970,
-      status: VehicleStatus.DELIVERED,
-      archivedAt: undefined,
-      brand: {
-        id: 10,
-        name: "Volkswagen",
+      payment: {
+        purchaseDate: "2023-01-01",
+        paidTo: "Fulano de Tal",
       },
-      store: {
+      vehicle: {
         id: 1,
-        name: "Loja 1",
+        modelName: "Fusca",
+        announcedPrice: 8000000,
+        plateNumber: "ABC1234",
+        modelYear: 1970,
+        status: VehicleStatus.DELIVERED,
+        archivedAt: undefined,
+        brand: {
+          id: 10,
+          name: "Volkswagen",
+        },
+        store: {
+          id: 1,
+          name: "Loja 1",
+        },
+        category: VehicleCategory.CAR,
+        color: "#FFFFFF",
+        chassiNumber: "AAAAAAAAAAAAAAAAA",
+        commissionValue: 1000,
+        fuelType: FuelType.FLEX,
+        kilometers: 1000,
+        minimumPrice: 8000000,
+        yearOfManufacture: 1970,
+        characteristics: [
+          "Direção hidráulica",
+          "Janelas elétricas",
+          "Ar condicionado",
+          "Piloto automático",
+          "Vidros elétricos",
+          "Freios ABS",
+        ],
       },
-      category: VehicleCategory.CAR,
-      color: "#FF0000",
-      chassiNumber: "AAAAAAAAAAAAAAAAA",
-      commissionValue: 1000,
-      fuelType: FuelType.FLEX,
-      kilometers: 1000,
-      minimumPrice: 8000000,
-      yearOfManufacture: 1970,
-      characteristics: [
-        "Direção hidráulica",
-        "Janelas elétricas",
-        "Ar condicionado",
-        "Travas elétricas",
-        "Câmera de ré",
-        "Air bag",
-        "Rodas de liga leve",
-      ],
     };
   }
 
@@ -80,6 +85,42 @@ export default function VehicleSaleContainer(): ReactNode {
   });
 
   async function createSale({ payment, customer }: VehicleSaleFormInputs) {
+    const installments = [
+      {
+        dueDate: payment.installment.dueDate,
+        value: payment.installment.value,
+        isUpfront: false,
+        paymentMethods:
+          payment.installment.status === InstallmentStatus.PAID
+            ? [
+                {
+                  type: payment.installment.paymentMethod,
+                  value: payment.installment.value,
+                  paymentDate: payment.installment.paymentDate,
+                },
+              ]
+            : null,
+      },
+    ];
+
+    if (payment.upfront.length) {
+      installments.push({
+        dueDate: payment.upfront[0].dueDate,
+        value: payment.upfront[0].value,
+        isUpfront: true,
+        paymentMethods:
+          payment.upfront[0].status === InstallmentStatus.PAID
+            ? [
+                {
+                  type: payment.upfront[0].paymentMethod,
+                  value: payment.upfront[0].value,
+                  paymentDate: payment.upfront[0].paymentDate,
+                },
+              ]
+            : null,
+      });
+    }
+
     await safeFetch(`${BACKEND_URL}/vehicles/sale`, {
       method: "POST",
       body: {
@@ -91,23 +132,7 @@ export default function VehicleSaleContainer(): ReactNode {
           description: `Venda Veículo ${vehicleData?.plateNumber}`,
           receivedFrom: customerData?.fullName || "",
         },
-        installments: [
-          {
-            dueDate: payment.installment.dueDate,
-            value: payment.installment.value,
-            isUpfront: false,
-            paymentMethods:
-              payment.installment.status === InstallmentStatus.PAID
-                ? [
-                    {
-                      type: payment.installment.paymentMethod,
-                      value: payment.installment.value,
-                      paymentDate: payment.installment.paymentDate,
-                    },
-                  ]
-                : null,
-          },
-        ],
+        installments,
       },
       resource: "VEHICLE_SALE",
       action: "CREATE",

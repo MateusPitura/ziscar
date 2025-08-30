@@ -9,9 +9,24 @@ import { useEffect, type ReactNode } from "react";
 import { useFormContext } from "react-hook-form";
 import { INSTALMENT_STATUS } from "../../vehicles/constants";
 import { VehicleFormInputs } from "../../vehicles/types";
+import DataField from "../components/DataField";
+import { removeMask } from "@shared/utils/removeMask";
+import { applyMask } from "../utils/applyMask";
 
 interface PaymentFormProperties {
   isAccountReceivable?: boolean;
+}
+
+function formatTotalValue(
+  installmentValueWatch: string,
+  upfrontValueWatch?: string
+) {
+  const installmentValue = Number(removeMask(installmentValueWatch)) || 0;
+  const upfrontValue = Number(removeMask(upfrontValueWatch ?? "0")) || 0;
+
+  const totalValue = installmentValue + upfrontValue;
+
+  return applyMask(totalValue.toString(), "money");
 }
 
 export default function PaymentForm({
@@ -19,6 +34,8 @@ export default function PaymentForm({
 }: PaymentFormProperties): ReactNode {
   const { watch, setValue } = useFormContext<VehicleFormInputs>();
   const statusWatch = watch("payment.installment.status");
+  const installmentValueWatch = watch("payment.installment.value");
+  const upfrontValueWatch = watch("payment.upfront.0.value");
 
   useEffect(() => {
     if (statusWatch === InstallmentStatus.PENDING) {
@@ -74,6 +91,12 @@ export default function PaymentForm({
           required
         />
       )}
+      <div className="col-span-full w-fit">
+        <DataField
+          label="Valor total de venda"
+          value={formatTotalValue(installmentValueWatch, upfrontValueWatch)}
+        />
+      </div>
     </>
   );
 }

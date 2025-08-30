@@ -9,6 +9,7 @@ export default function selectVehicleExpenseInfo(
       category: payload.category,
       competencyDate: payload.competencyDate,
       observations: payload.observations,
+      upfront: [],
       installment: null,
     },
   };

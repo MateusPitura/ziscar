@@ -1,3 +1,4 @@
+import Button from "@/design-system/Button";
 import Spinner from "@/design-system/Spinner";
 import PageHeader from "@/domains/global/components/PageHeader";
 import Section from "@/domains/global/components/Section";
@@ -6,9 +7,8 @@ import { FuelType, VehicleCategory, VehicleStatus } from "@shared/enums";
 import { useQuery } from "@tanstack/react-query";
 import type { ReactNode } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import selectVehicleInfo from "../utils/selectVehicleInfo";
+import selectVehicleSaleInfo from "../utils/selectVehicleSaleInfo";
 import VehicleData from "./VehicleData";
-import Button from "@/design-system/Button";
 // import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 
 export default function ViewVehicleSaleContainer(): ReactNode {
@@ -18,15 +18,15 @@ export default function ViewVehicleSaleContainer(): ReactNode {
   const { vehicleSaleId } = useParams();
 
   async function getVehicle(): Promise<Vehicle> {
-    // return await safeFetch(`${BACKEND_URL}/vehicle-sale/${vehicleSaleId}`, { // 🌠 MOCK
-    //   resource: "VEHICLE_SALE",
+    // return await safeFetch(`${BACKEND_URL}/vehicle/${vehicleId}`, { // 🌠 MOCK
+    //   resource: "VEHICLES",
     //   action: "READ",
     // });
 
     return {
       id: 1,
       modelName: "Fusca",
-      announcedPrice: 9000000,
+      announcedPrice: 8000000,
       plateNumber: "ABC1234",
       modelYear: 1970,
       status: VehicleStatus.DELIVERED,
@@ -40,9 +40,9 @@ export default function ViewVehicleSaleContainer(): ReactNode {
         name: "Loja 1",
       },
       category: VehicleCategory.CAR,
-      color: "#FF0000",
+      color: "#FFFFFF",
       chassiNumber: "AAAAAAAAAAAAAAAAA",
-      commissionValue: 0,
+      commissionValue: 1000,
       fuelType: FuelType.FLEX,
       kilometers: 1000,
       minimumPrice: 8000000,
@@ -51,10 +51,9 @@ export default function ViewVehicleSaleContainer(): ReactNode {
         "Direção hidráulica",
         "Janelas elétricas",
         "Ar condicionado",
-        "Travas elétricas",
-        "Câmera de ré",
-        "Air bag",
-        "Rodas de liga leve",
+        "Piloto automático",
+        "Vidros elétricos",
+        "Freios ABS",
       ],
     };
   }
@@ -62,7 +61,7 @@ export default function ViewVehicleSaleContainer(): ReactNode {
   const { data: vehicleData, isFetching } = useQuery({
     queryKey: ["vehicle-sale", vehicleSaleId],
     queryFn: getVehicle,
-    select: selectVehicleInfo,
+    select: selectVehicleSaleInfo,
   });
 
   if (isFetching) {

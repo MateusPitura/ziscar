@@ -8,7 +8,9 @@ import { s } from "@shared/safeZod";
 import {
   SchemaAddress,
   SchemaPayableInstallment,
+  SchemaPayableUpfront,
   SchemaReceivableInstallment,
+  SchemaReceivableUpfront,
 } from "../schemas";
 
 export interface Childrenable {
@@ -95,8 +97,12 @@ type ReceivableInstallmentFormInputs = s.infer<
   typeof SchemaReceivableInstallment
 >;
 
+type PayableUpfrontFormInputs = s.infer<typeof SchemaPayableUpfront>;
+type ReceivableUpfrontFormInputs = s.infer<typeof SchemaReceivableUpfront>;
+
 export interface PaymentFieldRuleData {
   payment: {
+    upfront: PayableUpfrontFormInputs | ReceivableUpfrontFormInputs;
     installment:
       | PayableInstallmentFormInputs
       | ReceivableInstallmentFormInputs

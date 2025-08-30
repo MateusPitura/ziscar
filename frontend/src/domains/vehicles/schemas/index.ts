@@ -1,8 +1,11 @@
 import {
   addIssue,
-  paymentFieldsRule,
+  installmentFieldsRule,
   SchemaPayableInstallment,
+  SchemaPayableUpfront,
+  upfrontFieldsRule,
 } from "@/domains/global/schemas";
+import { applyMask } from "@/domains/global/utils/applyMask";
 import {
   EXPENSECATEGORY_VALUES,
   FUELTYPE_VALUES,
@@ -16,7 +19,6 @@ import {
   YEARS_OF_MANUFACTURE,
 } from "../constants";
 import { VehicleFormInputs } from "../types";
-import { applyMask } from "@/domains/global/utils/applyMask";
 
 export const SchemaVehiclesFilterForm = s
   .object({
@@ -30,6 +32,7 @@ export const SchemaVehicleForm = s
     payment: s.object({
       purchaseDate: s.paymentDate(),
       paidTo: s.string().or(s.empty()),
+      upfront: SchemaPayableUpfront,
       installment: SchemaPayableInstallment.nullable(),
     }),
     vehicle: s.object({
@@ -70,7 +73,8 @@ export const SchemaVehicleForm = s
       ),
     }),
   })
-  .superRefine(paymentFieldsRule)
+  .superRefine(installmentFieldsRule)
+  .superRefine(upfrontFieldsRule)
   .superRefine((data, ctx) => {
     const { modelYear, yearOfManufacture } = data.vehicle;
 
@@ -85,19 +89,13 @@ export const SchemaVehicleForm = s
     }
   })
   .superRefine((data, ctx) => {
-    const { vehicle, payment: purchase } = data;
+    const { vehicle, payment } = data;
 
-    if (purchase.installment === null) return true;
+    const minimumPrice = Number(vehicle.minimumPrice) || 0;
+    const announcedPrice = Number(vehicle.announcedPrice) || 0;
+    const commissionValue = Number(vehicle.commissionValue) || 0;
 
-    if (Number(vehicle.minimumPrice) <= Number(purchase.installment.value)) {
-      addIssue<VehicleFormInputs>(
-        ctx,
-        "vehicle.minimumPrice",
-        "Preço mínimo menor que o valor de compra"
-      );
-    }
-
-    if (Number(vehicle.announcedPrice) < Number(vehicle.minimumPrice)) {
+    if (announcedPrice < minimumPrice) {
       addIssue<VehicleFormInputs>(
         ctx,
         "vehicle.announcedPrice",
@@ -105,14 +103,32 @@ export const SchemaVehicleForm = s
       );
     }
 
-    if (
-      Number(vehicle.commissionValue) >=
-      Number(vehicle.minimumPrice) - Number(purchase.installment.value)
-    ) {
+    if (commissionValue >= minimumPrice) {
       addIssue<VehicleFormInputs>(
         ctx,
         "vehicle.commissionValue",
-        "Comissão maior que o lucro"
+        "Comissão maior ou igual ao preço mínimo"
+      );
+    }
+
+    if (payment.installment === null) return true;
+
+    const value = Number(payment.installment.value) || 0;
+    const upfront = Number(payment.upfront[0]?.value) || 0;
+
+    if (minimumPrice <= value + upfront) {
+      addIssue<VehicleFormInputs>(
+        ctx,
+        "vehicle.minimumPrice",
+        "Mínimo menor ou igual ao valor de compra"
+      );
+    }
+
+    if (commissionValue >= minimumPrice - (value + upfront)) {
+      addIssue<VehicleFormInputs>(
+        ctx,
+        "vehicle.commissionValue",
+        "Comissão maior ou igual ao lucro"
       );
     }
   });
@@ -123,7 +139,9 @@ export const SchemaVehicleExpenseForm = s
       observations: s.string().or(s.empty()),
       category: s.enumeration(EXPENSECATEGORY_VALUES),
       competencyDate: s.dateString(),
+      upfront: SchemaPayableUpfront,
       installment: SchemaPayableInstallment.nullable(),
     }),
   })
-  .superRefine(paymentFieldsRule);
+  .superRefine(installmentFieldsRule)
+  .superRefine(upfrontFieldsRule);

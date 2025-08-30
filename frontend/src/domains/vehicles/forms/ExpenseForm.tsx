@@ -1,11 +1,12 @@
 import Button from "@/design-system/Button";
 import Form from "@/design-system/Form";
 import PageFooter from "@/domains/global/components/PageFooter";
-import PageHeader from "@/domains/global/components/PageHeader";
 import Section from "@/domains/global/components/Section";
 import PaymentForm from "@/domains/global/forms/PaymentForm";
+import UpfrontForm from "@/domains/global/forms/UpfrontForm";
 import { ActionsType, ResourcesType } from "@shared/enums";
 import type { ReactNode } from "react";
+import VehicleExpenseHeader from "../components/VehicleExpenseHeader";
 import { SchemaVehicleExpenseForm } from "../schemas";
 import { VehicleExpenseFormInputs } from "../types";
 import VehicleExpenseDetailsForm from "./VehicleExpenseDetailsForm";
@@ -40,7 +41,7 @@ export default function ExpenseForm({
         className="gap-4 flex flex-col flex-1"
         onlyDirty={isEdit}
       >
-        <PageHeader title={headerTitle} />
+        <VehicleExpenseHeader title={headerTitle} />
         <div className="flex justify-center flex-1">
           <Section>
             <Section.Group>
@@ -50,12 +51,20 @@ export default function ExpenseForm({
               </Section.Body>
             </Section.Group>
             {!isEdit && (
-              <Section.Group>
-                <Section.Header title="Informações do pagamento" />
-                <Section.Body>
-                  <PaymentForm />
-                </Section.Body>
-              </Section.Group>
+              <>
+                <Section.Group>
+                  <Section.Header title="Informações da entrada" />
+                  <Section.Body>
+                    <UpfrontForm />
+                  </Section.Body>
+                </Section.Group>
+                <Section.Group>
+                  <Section.Header title="Informações do pagamento" />
+                  <Section.Body>
+                    <PaymentForm />
+                  </Section.Body>
+                </Section.Group>
+              </>
             )}
           </Section>
         </div>
