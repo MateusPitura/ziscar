@@ -1,17 +1,17 @@
 import Form from "@/design-system/Form";
 import Input from "@/design-system/Form/Input";
+import { BACKEND_URL } from "@/domains/global/constants";
+import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
+import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import { s } from "@shared/safeZod";
+import { useMutation } from "@tanstack/react-query";
 import type { ReactNode } from "react";
 import SignCard from "../components/SignCard";
-import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
-import { useMutation } from "@tanstack/react-query";
-import useSnackbar from "@/domains/global/hooks/useSnackbar";
-import { BACKEND_URL } from "@/domains/global/constants";
 
 const SchemaSignUpForm = s.object({
   name: s.string(),
   cnpj: s.cnpj(),
-  fullName: s.fullName(),
+  fullName: s.name(),
   email: s.email(),
 });
 

@@ -3,7 +3,7 @@ import { s } from "@shared/safeZod";
 
 export const SchemaCustomersFilterForm = s
   .object({
-    fullName: s.string().or(s.empty()),
+    fullName: s.name().or(s.empty()),
     status: s.enumeration(["active", "inactive"]),
     startDate: s.dateString().or(s.empty()),
     endDate: s.dateString().or(s.empty()),
@@ -11,7 +11,7 @@ export const SchemaCustomersFilterForm = s
   .refine(...s.dateRangeRule);
 
 export const SchemaCustomerForm = s.object({
-  fullName: s.string(),
+  fullName: s.fullName(),
   email: s.email().or(s.empty()),
   phone: s.phone().or(s.empty()),
   cpf: s.cpf(),

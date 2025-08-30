@@ -125,8 +125,13 @@ export const id = () => numberPositive();
 
 export const email = () => string().email({ message: "Email inválido" });
 
-export const fullName = () =>
+export const name = () =>
   string().regex(/^[^0-9]+$/, {
+    message: "Nome inválido",
+  });
+
+export const fullName = () =>
+  name().refine((val) => val.trim().includes(" "), {
     message: "Nome completo inválido",
   });
 
