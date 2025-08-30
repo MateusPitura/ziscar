@@ -1,4 +1,4 @@
-import { PaymentMethodReceivableType, Prisma, PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 import { DefaultArgs } from '@prisma/client/runtime/library';
 import { s } from '@shared/safeZod';
 import { SchemaParam } from './schemas';
@@ -36,4 +36,3 @@ export type CreateInput<T> = Omit<
 export type UpdateInput<T> = Partial<CreateInput<T>>;
 
 export type ParamInputs = s.infer<typeof SchemaParam>;
-

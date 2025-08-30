@@ -28,4 +28,4 @@ import { JwtModule } from '@nestjs/jwt';
     AccountReceivableInstallmentService,
   ],
 })
-export class AccountReceivableInstallmentModule { }
+export class AccountReceivableInstallmentModule {}

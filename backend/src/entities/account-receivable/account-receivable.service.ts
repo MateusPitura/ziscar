@@ -1,17 +1,21 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { AccountReceivable } from '@prisma/client';
 import { PrismaService } from 'src/infra/database/prisma.service';
-import { AccountReceivableRepository, SearchRequest, SearchResponse, SearchResponseItem } from 'src/repositories/account_receivable-repository';
+import {
+  AccountReceivableRepository,
+  SearchRequest,
+  SearchResponse,
+  SearchResponseItem,
+} from 'src/repositories/account_receivable-repository';
 import { CreateInput, UpdateInput } from 'src/types';
 
 @Injectable()
 export class AccountReceivableService implements AccountReceivableRepository {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
-
-
-
-  async create(data: CreateInput<AccountReceivable>): Promise<AccountReceivable> {
+  async create(
+    data: CreateInput<AccountReceivable>,
+  ): Promise<AccountReceivable> {
     return this.prisma.accountReceivable.create({ data });
   }
 
@@ -28,17 +32,10 @@ export class AccountReceivableService implements AccountReceivableRepository {
   }
 
   async search(request: SearchRequest): Promise<SearchResponse> {
-    const {
-      page,
-      limit,
-      startDate,
-      endDate,
-      overallStatus,
-      orderBy
-    } = request;
+    const { page, limit, startDate, endDate, overallStatus, orderBy } = request;
 
     // Construir filtros de data
-    const dateFilter: any = {};
+    const dateFilter: Record<string, unknown> = {};
     if (startDate) {
       dateFilter.gte = startDate;
     }
@@ -47,7 +44,7 @@ export class AccountReceivableService implements AccountReceivableRepository {
     }
 
     // Construir filtros where
-    const where: any = {
+    const where: Record<string, unknown> = {
       archivedAt: null, // apenas contas não arquivadas
     };
 
@@ -60,7 +57,7 @@ export class AccountReceivableService implements AccountReceivableRepository {
     const skip = (page - 1) * limit;
 
     // Construir orderBy
-    let prismaOrderBy: any = {};
+    let prismaOrderBy: Record<string, unknown> = {};
     if (orderBy) {
       // Assumindo que orderBy vem como string simples (ex: "description")
       // Se você quiser suportar ordenação desc, pode vir como "description:desc"
@@ -93,27 +90,29 @@ export class AccountReceivableService implements AccountReceivableRepository {
       // Contar total para paginação
       this.prisma.accountReceivable.count({
         where,
-      })
+      }),
     ]);
 
     // Processar dados para calcular totalValue e overallStatus
     const data: SearchResponseItem[] = accountsReceivable
-      .map(account => {
+      .map((account) => {
         // Calcular valor total das parcelas
         const totalValue = account.accountReceivableInstallments.reduce(
           (sum, installment) => sum + installment.value,
-          0
+          0,
         );
 
         // Determinar status geral
         // PAID se todas as parcelas estão PAID, senão PENDING
-        const allInstallmentsPaid = account.accountReceivableInstallments.length > 0 &&
+        const allInstallmentsPaid =
+          account.accountReceivableInstallments.length > 0 &&
           account.accountReceivableInstallments.every(
-            installment => installment.status === 'PAID'
+            (installment) => installment.status === 'PAID',
           );
 
-        const calculatedOverallStatus: 'PAID' | 'PENDING' =
-          allInstallmentsPaid ? 'PAID' : 'PENDING';
+        const calculatedOverallStatus: 'PAID' | 'PENDING' = allInstallmentsPaid
+          ? 'PAID'
+          : 'PENDING';
 
         return {
           id: account.id,
@@ -124,7 +123,7 @@ export class AccountReceivableService implements AccountReceivableRepository {
         };
       })
       // Filtrar por overallStatus se especificado
-      .filter(account => {
+      .filter((account) => {
         if (!overallStatus) return true;
         return account.overallStatus === overallStatus;
       });
@@ -135,15 +134,16 @@ export class AccountReceivableService implements AccountReceivableRepository {
     };
   }
 
-
-  async findByInstallmentId(installmentId: string): Promise<AccountReceivable | null> {
+  async findByInstallmentId(
+    installmentId: string,
+  ): Promise<AccountReceivable | null> {
     const accountReceivable = await this.prisma.accountReceivable.findFirst({
       where: {
         accountReceivableInstallments: {
           some: {
-            id: Number(installmentId)
-          }
-        }
+            id: Number(installmentId),
+          },
+        },
       },
       include: {
         accountReceivableInstallments: {
@@ -155,13 +155,13 @@ export class AccountReceivableService implements AccountReceivableRepository {
             value: true,
             isRefund: true,
             isUpfront: true,
-          }
+          },
         },
         vehicleSales: {
           select: {
-            id: true
-          }
-        }
+            id: true,
+          },
+        },
       },
     });
 
@@ -172,12 +172,10 @@ export class AccountReceivableService implements AccountReceivableRepository {
     return accountReceivable;
   }
 
-
-
-
-
-
-  async update(id: string, data: UpdateInput<AccountReceivable>): Promise<void> {
+  async update(
+    id: string,
+    data: UpdateInput<AccountReceivable>,
+  ): Promise<void> {
     await this.prisma.accountReceivable.update({
       where: { id: Number(id) },
       data,

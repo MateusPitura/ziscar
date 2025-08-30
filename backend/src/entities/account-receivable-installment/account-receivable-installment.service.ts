@@ -1,14 +1,22 @@
-import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
-import { AccountReceivableInstallment, PaymentMethodReceivableType } from '@prisma/client';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { AccountReceivableInstallment } from '@prisma/client';
 import { PrismaService } from 'src/infra/database/prisma.service';
-import { AccountReceivableInstallmentRepository, createPaymentMethodToInstallment } from 'src/repositories/account_receivable_installment-repository';
+import {
+  AccountReceivableInstallmentRepository,
+  createPaymentMethodToInstallment,
+} from 'src/repositories/account_receivable_installment-repository';
 import { CreateInput, UpdateInput } from 'src/types';
 
 @Injectable()
 export class AccountReceivableInstallmentService
-  implements AccountReceivableInstallmentRepository {
-  constructor(private prisma: PrismaService) { }
-
+  implements AccountReceivableInstallmentRepository
+{
+  constructor(private prisma: PrismaService) {}
 
   async create(
     data: CreateInput<AccountReceivableInstallment>,
@@ -16,15 +24,19 @@ export class AccountReceivableInstallmentService
     return this.prisma.accountReceivableInstallment.create({ data });
   }
 
-  async addPaymentMethodToInstallment(installmentId: string, data: createPaymentMethodToInstallment): Promise<AccountReceivableInstallment> {
-    const installment = await this.prisma.accountReceivableInstallment.findUnique({
-      where: {
-        id: Number(installmentId)
-      },
-      include: {
-        paymentMethodReceivables: true
-      }
-    });
+  async addPaymentMethodToInstallment(
+    installmentId: string,
+    data: createPaymentMethodToInstallment,
+  ): Promise<AccountReceivableInstallment> {
+    const installment =
+      await this.prisma.accountReceivableInstallment.findUnique({
+        where: {
+          id: Number(installmentId),
+        },
+        include: {
+          paymentMethodReceivables: true,
+        },
+      });
 
     if (!installment) {
       throw new NotFoundException('Parcela a receber não encontrada');
@@ -36,32 +48,34 @@ export class AccountReceivableInstallmentService
     }
 
     if (installment.paymentMethodReceivables.length > 0) {
-      throw new ConflictException('Esta parcela já possui um método de pagamento');
+      throw new ConflictException(
+        'Esta parcela já possui um método de pagamento',
+      );
     }
 
-    const updatedInstallment = await this.prisma.accountReceivableInstallment.update({
-      where: {
-        id: Number(installmentId)
-      },
-      data: {
-        status: 'PAID',
-        paymentMethodReceivables: {
-          create: {
-            type: data.type,
-            paymentDate: new Date(data.paymentDate),
-            value: installment.value,
-            userId: Number(data.userId) // Converter para number
-          }
-        }
-      },
-      include: {
-        paymentMethodReceivables: true
-      }
-    });
+    const updatedInstallment =
+      await this.prisma.accountReceivableInstallment.update({
+        where: {
+          id: Number(installmentId),
+        },
+        data: {
+          status: 'PAID',
+          paymentMethodReceivables: {
+            create: {
+              type: data.type,
+              paymentDate: new Date(data.paymentDate),
+              value: installment.value,
+              userId: Number(data.userId), // Converter para number
+            },
+          },
+        },
+        include: {
+          paymentMethodReceivables: true,
+        },
+      });
 
     return updatedInstallment;
   }
-
 
   async findById(id: string): Promise<AccountReceivableInstallment | null> {
     const installment =
@@ -76,40 +90,46 @@ export class AccountReceivableInstallmentService
     return installment;
   }
 
-  async findPaymentMethodByInstallmentId(installmentId: string): Promise<AccountReceivableInstallment | null> {
-    const installment = await this.prisma.accountReceivableInstallment.findUnique({
-      where: { id: Number(installmentId) },
-      include: {
-        paymentMethodReceivables: {
-          select: {
-            id: true,
-            paymentDate: true,
-            type: true
-          }
-        }
-      }
-    })
+  async findPaymentMethodByInstallmentId(
+    installmentId: string,
+  ): Promise<AccountReceivableInstallment | null> {
+    const installment =
+      await this.prisma.accountReceivableInstallment.findUnique({
+        where: { id: Number(installmentId) },
+        include: {
+          paymentMethodReceivables: {
+            select: {
+              id: true,
+              paymentDate: true,
+              type: true,
+            },
+          },
+        },
+      });
 
     if (!installment) {
       throw new NotFoundException('Parcela a receber não encontrada');
     }
 
     return installment;
-
   }
 
-
-
-  async findAllByAccountReceivableId(accountReceivableId: string, dueDate: Date) {
-    const installments = await this.prisma.accountReceivableInstallment.findMany({
-      where: {
-        accountReceivableId: Number(accountReceivableId),
-        dueDate: { lte: dueDate },
-      },
-    });
+  async findAllByAccountReceivableId(
+    accountReceivableId: string,
+    dueDate: Date,
+  ) {
+    const installments =
+      await this.prisma.accountReceivableInstallment.findMany({
+        where: {
+          accountReceivableId: Number(accountReceivableId),
+          dueDate: { lte: dueDate },
+        },
+      });
 
     if (!installments || installments.length === 0) {
-      throw new NotFoundException('Nenhuma parcela a receber encontrada para esta conta a receber');
+      throw new NotFoundException(
+        'Nenhuma parcela a receber encontrada para esta conta a receber',
+      );
     }
 
     return installments.map((i) => ({
@@ -123,10 +143,6 @@ export class AccountReceivableInstallmentService
       vehicleSaleId: i.accountReceivableId, // se esse campo for o mesmo da venda
     }));
   }
-
-
-
-
 
   async update(
     id: string,
