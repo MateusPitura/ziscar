@@ -7,7 +7,15 @@ import type { ReactNode } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import selectVehicleInfo from "../utils/selectVehicleInfo";
 
-export default function VehicleExpenseHeader(): ReactNode {
+interface VehicleExpenseHeaderProps {
+  title: string;
+  showActions?: boolean;
+}
+
+export default function VehicleExpenseHeader({
+  title,
+  showActions,
+}: VehicleExpenseHeaderProps): ReactNode {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const { vehicleId } = useParams();
@@ -60,29 +68,31 @@ export default function VehicleExpenseHeader(): ReactNode {
   return (
     <PageHeader
       title={
-        data?.vehicle.modelName
-          ? `Gastos do Veículo "${data.vehicle.modelName}"`
-          : "Gastos do Veículo"
+        data?.vehicle.modelName ? `${title} "${data.vehicle.modelName}"` : title
       }
     >
-      <Button
-        label="Voltar"
-        iconLeft="ArrowBack"
-        onClick={() => navigate("/vehicles")}
-        resource="VEHICLES"
-        action="READ"
-        variant="quaternary"
-        data-cy="back-vehicle-expense-button"
-      />
-      <Button
-        label="Adicionar gasto"
-        iconLeft="Add"
-        onClick={() => navigate(`${pathname}/new`)}
-        resource="VEHICLE_EXPENSE"
-        action="CREATE"
-        color="green"
-        data-cy="new-vehicle-expense-button"
-      />
+      {showActions && (
+        <>
+          <Button
+            label="Voltar"
+            iconLeft="ArrowBack"
+            onClick={() => navigate("/vehicles")}
+            resource="VEHICLES"
+            action="READ"
+            variant="quaternary"
+            data-cy="back-vehicle-expense-button"
+          />
+          <Button
+            label="Adicionar gasto"
+            iconLeft="Add"
+            onClick={() => navigate(`${pathname}/new`)}
+            resource="VEHICLE_EXPENSE"
+            action="CREATE"
+            color="green"
+            data-cy="new-vehicle-expense-button"
+          />
+        </>
+      )}
     </PageHeader>
   );
 }

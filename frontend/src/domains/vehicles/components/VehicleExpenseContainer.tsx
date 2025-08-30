@@ -19,7 +19,7 @@ export default function VehicleExpenseContainer(): ReactNode {
 
   return (
     <div className="flex flex-col gap-4 h-full w-full">
-      <VehicleExpenseHeader />
+      <VehicleExpenseHeader title="Gastos do Veículo" showActions/>
       <VehicleExpenseTable />
     </div>
   );

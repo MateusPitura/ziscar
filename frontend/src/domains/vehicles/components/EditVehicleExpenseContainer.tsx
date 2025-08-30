@@ -96,7 +96,7 @@ export default function EditVehicleExpenseContainer(): ReactNode {
         defaultValues={vehicleExpenseData}
         onSubmit={mutate}
         isPending={isPending}
-        headerTitle="Alterar gasto"
+        headerTitle="Alterar Gasto do Veículo"
         isEdit
         resource="VEHICLE_EXPENSE"
         action="UPDATE"

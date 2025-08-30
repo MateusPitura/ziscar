@@ -1,13 +1,15 @@
 import { BACKEND_URL } from "@/domains/global/constants";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
+import { InstallmentStatus } from "@shared/enums";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { ReactNode } from "react";
+import { ReactNode, useMemo } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ExpenseCategoryText, vehicleExpenseDefaultValues } from "../constants";
 import ExpenseForm from "../forms/ExpenseForm";
 import { VehicleExpenseFormInputs } from "../types";
-import { InstallmentStatus } from "@shared/enums";
+import { VehicleWithPayment } from "@/domains/global/types/model";
+import { applyMask } from "@/domains/global/utils/applyMask";
 
 export default function NewVehicleExpenseContainer(): ReactNode {
   const { safeFetch } = useSafeFetch();
@@ -17,6 +19,10 @@ export default function NewVehicleExpenseContainer(): ReactNode {
   const { pathname } = useLocation();
   const { vehicleId } = useParams();
 
+  const vehicleData = useMemo(() => {
+    return queryClient.getQueryData<VehicleWithPayment>(["vehicle", vehicleId]);
+  }, [queryClient, vehicleId]);
+
   async function createExpense({ payment }: VehicleExpenseFormInputs) {
     await safeFetch(`${BACKEND_URL}/vehicles/expense`, {
       // 🌠 IMPROVE
@@ -25,7 +31,10 @@ export default function NewVehicleExpenseContainer(): ReactNode {
         vehicleId,
         category: payment.category,
         observations: payment.observations,
-        description: `Gasto Veículo ${vehicleId}`, // 🌠 Pegar a placa do veículo
+        description: `Gasto Veículo ${applyMask(
+          vehicleData?.vehicle.plateNumber,
+          "plateNumber"
+        )}`,
         paidTo: ExpenseCategoryText[payment.category],
         installments: [
           {
@@ -67,7 +76,7 @@ export default function NewVehicleExpenseContainer(): ReactNode {
       defaultValues={vehicleExpenseDefaultValues}
       onSubmit={mutate}
       isPending={isPending}
-      headerTitle="Novo gasto"
+      headerTitle="Novo Gasto do Veículo"
       resource="VEHICLE_EXPENSE"
       action="CREATE"
       onClose={() => navigate(pathname.replace("/new", ""))}
