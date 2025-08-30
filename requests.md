@@ -103,7 +103,7 @@ payload:
     paymentDate: "2025-01-01",
     type: "CREDIT_CARD",
 }
-
+ 
 # Adicionar método de pagamento em uma parcela
 
 endpoint:

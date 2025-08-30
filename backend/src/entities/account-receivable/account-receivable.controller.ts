@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -6,10 +7,14 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
-import { AccountReceivableService } from './account-receivable.service';
 import { CreateAccountReceivableDTO } from 'src/infra/dtos/account-receivable/create-account-receivable.dto';
+import { QueryAccountReceivableDTO } from 'src/infra/dtos/account-receivable/query-account-receivable-dto';
 import { UpdateAccountReceivableDTO } from 'src/infra/dtos/account-receivable/update-account-receivable.dto';
+import { SearchResponse } from 'src/repositories/account_receivable-repository';
+import { AccountReceivableService } from './account-receivable.service';
+import { ITEMS_PER_PAGE } from '@shared/constants';
 
 @Controller('account-receivable')
 export class AccountReceivableController {
@@ -22,9 +27,57 @@ export class AccountReceivableController {
     return this.AccountReceivableService.create(body);
   }
 
+  @Get('search')
+  async searchAccountsReceivable(
+    @Query() queryParams: QueryAccountReceivableDTO,
+  ): Promise<SearchResponse> {
+    try {
+      // Os parâmetros já vêm validados pelo ZodValidationPipe
+      const searchRequest = {
+        page: queryParams.page,
+        limit: queryParams.limit ?? ITEMS_PER_PAGE,
+        startDate: queryParams.startDate
+          ? new Date(queryParams.startDate)
+          : undefined,
+        endDate: queryParams.endDate
+          ? new Date(queryParams.endDate)
+          : undefined,
+        overallStatus: queryParams.overallStatus,
+        orderBy: queryParams.orderBy,
+      };
+
+      // Validações adicionais
+      if (
+        searchRequest.startDate &&
+        searchRequest.endDate &&
+        searchRequest.startDate > searchRequest.endDate
+      ) {
+        throw new BadRequestException(
+          'startDate deve ser anterior ou igual à endDate',
+        );
+      }
+
+      // Chamar o service
+      const result = await this.AccountReceivableService.search(searchRequest);
+
+      return result;
+    } catch (error) {
+      if (error instanceof BadRequestException) {
+        throw error;
+      }
+
+      throw new BadRequestException('Erro ao buscar contas a receber');
+    }
+  }
+
   @Get('/:id')
   async findByIdAccountReceivable(@Param('id') id: string) {
     return this.AccountReceivableService.findById(id);
+  }
+
+  @Get('/by-installment/:installmentId')
+  async findByInstallmentId(@Param('installmentId') installmentId: string) {
+    return this.AccountReceivableService.findByInstallmentId(installmentId);
   }
 
   @Put('/:id')
