@@ -14,19 +14,9 @@ export default function AccountsReceivableInstallmentsTableActions({
   installment,
   handleInstallmentToPaymentMethodInfo,
 }: AccountsReceivableInstallmentsTableActionsProperties): ReactNode {
-  return installment.status === "PAID" ? (
-    <Tooltip content="Visualizar método de pagamento">
-      <Button
-        variant="quaternary"
-        iconLeft="ReceiptLong"
-        onClick={() => handleInstallmentToPaymentMethodInfo(installment)}
-        resource="ACCOUNTS_RECEIVABLE"
-        action="UPDATE"
-        padding="none"
-        data-cy={`button-edit-viewPaymentMethod-${installment.id}`}
-      />
-    </Tooltip>
-  ) : (
+  if (installment.paymentMethodReceivables.length) return;
+
+  return (
     <Tooltip content="Adicionar método de pagamento">
       <Button
         variant="quaternary"

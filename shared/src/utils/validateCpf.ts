@@ -1,6 +1,8 @@
+import { removeMask } from "./removeMask";
+
 export function validateCpf(cpf: string) {
   // Remove non-numeric characters
-  const cleanedCPF = cpf.replace(/\D/g, "");
+  const cleanedCPF = removeMask(cpf);
 
   // Check if the CPF has 11 digits
   if (cleanedCPF.length !== 11) return false;

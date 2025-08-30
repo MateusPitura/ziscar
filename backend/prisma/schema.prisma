@@ -213,6 +213,13 @@ model Customer {
   archivedAt DateTime?
 }
 
+model City {
+  ibgeCode  Int            @id
+  name      String         @db.VarChar(127)
+  state     BrazilianState
+  addresses Address[]
+}
+
 model AccountReceivable {
   id                            Int                            @id @default(autoincrement())
   description                   String?                        @db.VarChar(127)
@@ -223,13 +230,6 @@ model AccountReceivable {
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
   archivedAt DateTime?
-}
-
-model City {
-  ibgeCode  Int            @id
-  name      String         @db.VarChar(127)
-  state     BrazilianState
-  addresses Address[]
 }
 
 model AccountReceivableInstallment {
@@ -380,15 +380,15 @@ enum VehicleStatus {
 }
 
 enum ExpenseCategory {
-  IPVA
-  MAINTENANCE
+  AGENCY_FEES
   FUEL
   FINE
+  IPVA
   LICENSING
-  INSURANCE
-  AGENCY_FEES
   LOGISTICS
+  MAINTENANCE
   OTHER
+  INSURANCE
 }
 
 enum InstallmentStatus {

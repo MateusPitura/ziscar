@@ -55,15 +55,15 @@ export enum VehicleStatus {
 }
 
 export enum ExpenseCategory {
-  IPVA = "IPVA",
-  MAINTENANCE = "MAINTENANCE",
+  AGENCY_FEES = "AGENCY_FEES",
   FUEL = "FUEL",
   FINE = "FINE",
+  IPVA = "IPVA",
   LICENSING = "LICENSING",
-  INSURANCE = "INSURANCE",
-  AGENCY_FEES = "AGENCY_FEES",
   LOGISTICS = "LOGISTICS",
+  MAINTENANCE = "MAINTENANCE",
   OTHER = "OTHER",
+  INSURANCE = "INSURANCE",
 }
 
 export enum InstallmentStatus {
@@ -129,7 +129,7 @@ export const ACTIONS_VALUES = [Actions.CREATE, Actions.READ, Actions.UPDATE, Act
 export const VEHICLECATEGORY_VALUES = [VehicleCategory.TRUCK, VehicleCategory.CAR, VehicleCategory.MOTORCYCLE, VehicleCategory.BUS, VehicleCategory.VAN] as const;
 export const FUELTYPE_VALUES = [FuelType.DIESEL, FuelType.ELECTRIC, FuelType.ETHANOL, FuelType.FLEX, FuelType.GASOLINE, FuelType.GNV, FuelType.HYBRID] as const;
 export const VEHICLESTATUS_VALUES = [VehicleStatus.PURCHASED, VehicleStatus.IN_STOCK, VehicleStatus.DELIVERED, VehicleStatus.MAINTENANCE, VehicleStatus.SOLD] as const;
-export const EXPENSECATEGORY_VALUES = [ExpenseCategory.IPVA, ExpenseCategory.MAINTENANCE, ExpenseCategory.FUEL, ExpenseCategory.FINE, ExpenseCategory.LICENSING, ExpenseCategory.INSURANCE, ExpenseCategory.AGENCY_FEES, ExpenseCategory.LOGISTICS, ExpenseCategory.OTHER] as const;
+export const EXPENSECATEGORY_VALUES = [ExpenseCategory.AGENCY_FEES, ExpenseCategory.FUEL, ExpenseCategory.FINE, ExpenseCategory.IPVA, ExpenseCategory.LICENSING, ExpenseCategory.LOGISTICS, ExpenseCategory.MAINTENANCE, ExpenseCategory.OTHER, ExpenseCategory.INSURANCE] as const;
 export const INSTALLMENTSTATUS_VALUES = [InstallmentStatus.PAID, InstallmentStatus.PENDING] as const;
 export const PAYMENTMETHODRECEIVABLETYPE_VALUES = [PaymentMethodReceivableType.BANK_SLIP, PaymentMethodReceivableType.CREDIT_CARD, PaymentMethodReceivableType.DEBIT_CARD, PaymentMethodReceivableType.CASH, PaymentMethodReceivableType.DOC, PaymentMethodReceivableType.PIX, PaymentMethodReceivableType.TED, PaymentMethodReceivableType.TRANSFER] as const;
 export const PAYMENTMETHODPAYABLETYPE_VALUES = [PaymentMethodPayableType.BANK_SLIP, PaymentMethodPayableType.CREDIT_CARD, PaymentMethodPayableType.DEBIT_CARD, PaymentMethodPayableType.CASH, PaymentMethodPayableType.DOC, PaymentMethodPayableType.PIX, PaymentMethodPayableType.TED] as const;

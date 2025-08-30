@@ -21,7 +21,7 @@ export const vehicleBrands = [
   { name: 'Volvo' },
   { name: 'Land Rover' },
   { name: 'GWM' },
-  { name: 'BYD' },
+  { name: 'Subaru' },
   { name: 'Ram' },
   { name: 'JAC' },
   { name: 'Iveco' },

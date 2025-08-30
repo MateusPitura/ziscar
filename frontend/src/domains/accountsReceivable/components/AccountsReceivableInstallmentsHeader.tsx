@@ -1,5 +1,7 @@
 import Button from "@/design-system/Button";
 import PageHeader from "@/domains/global/components/PageHeader";
+import { BACKEND_URL } from "@/domains/global/constants";
+import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import { FetchAccountReceivable } from "@/domains/global/types/model";
 import { useQuery } from "@tanstack/react-query";
 import type { ReactNode } from "react";
@@ -9,21 +11,16 @@ import selectAccountReceivableInfo from "../utils/selectAccountReceivableInfo";
 export default function AccountsReceivableInstallmentsHeader(): ReactNode {
   const navigate = useNavigate();
   const { accountReceivableId } = useParams();
+  const { safeFetch } = useSafeFetch();
 
   async function getAccountReceivableInfo(): Promise<FetchAccountReceivable> {
-    // return await safeFetch(`${BACKEND_URL}/account-receivable/${accountReceivableId}`, {
-    //   resource: "ACCOUNTS_RECEIVABLE",
-    //   action: "READ",
-    // });
-    return {
-      id: 1,
-      description: "Conta a receber 1",
-      receivedFrom: "Cliente A",
-      totalValue: "10000",
-      overallStatus: "PENDING",
-      installmentsNumber: 2,
-      vehicleSaleId: 1,
-    };
+    return await safeFetch(
+      `${BACKEND_URL}/account-receivable/${accountReceivableId}`,
+      {
+        resource: "ACCOUNTS_RECEIVABLE",
+        action: "READ",
+      }
+    );
   }
 
   const { data } = useQuery({
@@ -36,8 +33,8 @@ export default function AccountsReceivableInstallmentsHeader(): ReactNode {
     <PageHeader
       title={
         data?.description
-          ? `Detalhes do Pagamento da Venda "${data.description}"`
-          : "Detalhes do Pagamento da Venda"
+          ? `Detalhes do Pagamento "${data.description}"`
+          : "Detalhes do Pagamento"
       }
     >
       <Button

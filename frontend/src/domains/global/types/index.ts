@@ -1,11 +1,17 @@
+import { AccountsReceivableFilterFormInputs } from "@/domains/accountsReceivable/types";
+import { CustomersFilterFormInputs } from "@/domains/customers/types";
 import { StoresFilterFormInputs } from "@/domains/stores/types";
 import { UsersFilterFormInputs } from "@/domains/users/types";
-import { SchemaAddress } from "../schemas";
-import { s } from "@shared/safeZod";
-import { CustomersFilterFormInputs } from "@/domains/customers/types";
-import { AccountsReceivableFilterFormInputs } from "@/domains/accountsReceivable/types";
 import { VehiclesFilterFormInputs } from "@/domains/vehicles/types";
 import { BRAZILIANSTATE_VALUES } from "@shared/enums";
+import { s } from "@shared/safeZod";
+import {
+  SchemaAddress,
+  SchemaPayableInstallment,
+  SchemaPayableUpfront,
+  SchemaReceivableInstallment,
+  SchemaReceivableUpfront,
+} from "../schemas";
 
 export interface Childrenable {
   children?: React.ReactNode;
@@ -49,7 +55,13 @@ export type QueryKeys =
   | "customers"
   | "vehicle"
   | "vehicles"
+  | "vehicle-sale"
+  | "vehicle-expense"
   | "vehicle-expenses"
+  | "account-payable"
+  | "accounts-payable"
+  | "accounts-payable-installments"
+  | "accounts-payable-payment-method"
   | "account-receivable"
   | "accounts-receivable"
   | "accounts-receivable-installments"
@@ -80,6 +92,24 @@ export type AddressFormInputs = s.infer<typeof SchemaAddress>;
 
 export type BrazilianState = (typeof BRAZILIANSTATE_VALUES)[number];
 
-export interface VehicleSaleState {
-  vehicleId: string;
+type PayableInstallmentFormInputs = s.infer<typeof SchemaPayableInstallment>;
+type ReceivableInstallmentFormInputs = s.infer<
+  typeof SchemaReceivableInstallment
+>;
+
+type PayableUpfrontFormInputs = s.infer<typeof SchemaPayableUpfront>;
+type ReceivableUpfrontFormInputs = s.infer<typeof SchemaReceivableUpfront>;
+
+export interface PaymentFieldRuleData {
+  payment: {
+    upfront: PayableUpfrontFormInputs | ReceivableUpfrontFormInputs;
+    installment:
+      | PayableInstallmentFormInputs
+      | ReceivableInstallmentFormInputs
+      | null;
+  };
 }
+
+export type ToString<T, K extends keyof T> = Omit<T, K> & {
+  [P in K]: string;
+};

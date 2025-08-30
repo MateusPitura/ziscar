@@ -117,103 +117,6 @@ describe("Store", () => {
     });
   });
 
-  it("should create store without address", () => {
-    const name = faker.company.name();
-    const cnpj = generateCnpj();
-
-    cy.intercept("POST", "http://localhost:3000/store", (req) => {
-      expect(req.body).to.deep.equal({
-        name,
-        cnpj,
-        email: null,
-        phone: null,
-        address: null,
-      });
-    }).as("createStore");
-
-    cy.visit("/stores");
-
-    cy.get('[data-cy="new-store-button"]').click();
-
-    cy.get('button[type="submit"]').should("be.disabled");
-
-    cy.get('input[name="name"]').type(name);
-    cy.get('input[name="cnpj"]').type(cnpj);
-
-    cy.get('button[type="submit"]').should("be.enabled");
-
-    cy.get('button[type="submit"]').click();
-
-    cy.get('[data-cy="snackbar-title"]').should("contain", "Loja criada com sucesso");
-
-     cy.wait("@createStore").then((interception) => {
-      const responseBody = interception.response.body;
-
-      const storeId = responseBody.id;
-
-      cy.intercept("GET", `http://localhost:3000/store/${storeId}`).as("getStore");
-
-      cy.visit(`/stores/edit/${storeId}`);
-
-       cy.wait("@getStore")
-    });
-  });
-
-  it("should create store with address", () => {
-    const name = faker.company.name();
-    const cnpj = generateCnpj();
-    const cep = "65043420";
-    const number = "123";
-
-    cy.intercept("POST", "http://localhost:3000/store", (req) => {
-      expect(req.body).to.deep.equal({
-        name,
-        cnpj,
-        email: null,
-        phone: null,
-        address: {
-          cep,
-          number,
-          street: "Rua Sete",
-          neighborhood: "COHEB do Sacavém",
-          cityIbgeCode: "2111300",
-        },
-      });
-    }).as("createStore");
-
-    cy.intercept("GET", "https://viacep.com.br/ws/65043-420/json/").as(
-      "cepApi"
-    );
-    cy.intercept(
-      "GET",
-      "https://servicodados.ibge.gov.br/api/v1/localidades/estados/MA/municipios"
-    ).as("citiesAPi");
-
-    cy.visit("/stores");
-
-    cy.get('[data-cy="new-store-button"]').click();
-
-    cy.get('button[type="submit"]').should("be.disabled");
-
-    cy.get('input[name="name"]').type(name);
-    cy.get('input[name="cnpj"]').type(cnpj);
-
-    cy.get('[data-cy="button-append-address"]').click();
-
-    cy.get('input[name="address.0.cep"]').type(cep);
-    cy.get('input[name="address.0.number"]').type(number);
-
-    cy.get('button[type="submit"]').should("be.enabled");
-
-    cy.wait("@cepApi");
-    cy.wait("@citiesAPi");
-    cy.get('button[type="submit"]').click();
-
-    cy.wait("@createStore");
-
-    cy.get('[data-cy="snackbar-title"]').should("contain", "Loja criada com sucesso");
-  });
-
   it("should navigate in store table", () => {
     cy.visit("/stores");
 
@@ -274,15 +177,6 @@ describe("Store", () => {
       cy.intercept("GET", `http://localhost:3000/store/${storeId}`).as(
         "getStore"
       );
-
-      cy.visit(`/stores/edit/${storeId}`);
-      cy.get("body").then(($body) => {
-        if ($body.find('[data-cy="button-remove-address"]').length) {
-          removeStoreAddress(storeId as unknown as string);
-        }
-      });
-
-      cy.visit("/stores");
 
       // Edit
       cy.intercept("PATCH", `http://localhost:3000/store/${storeId}`, (req) => {
@@ -435,6 +329,111 @@ describe("Store", () => {
     cy.get('[data-cy="input-error-endDate"]').should(
       "contain",
       "Data final deve ser após a data inicial"
+    );
+  });
+
+  it("should create store without address", () => {
+    const name = faker.company.name();
+    const cnpj = generateCnpj();
+
+    cy.intercept("POST", "http://localhost:3000/store", (req) => {
+      expect(req.body).to.deep.equal({
+        name,
+        cnpj,
+        email: null,
+        phone: null,
+        address: null,
+      });
+    }).as("createStore");
+
+    cy.visit("/stores");
+
+    cy.get('[data-cy="new-store-button"]').click();
+
+    cy.get('button[type="submit"]').should("be.disabled");
+
+    cy.get('input[name="name"]').type(name);
+    cy.get('input[name="cnpj"]').type(cnpj);
+
+    cy.get('button[type="submit"]').should("be.enabled");
+
+    cy.get('button[type="submit"]').click();
+
+    cy.get('[data-cy="snackbar-title"]').should(
+      "contain",
+      "Loja criada com sucesso"
+    );
+
+    cy.wait("@createStore").then((interception) => {
+      const responseBody = interception.response.body;
+
+      const storeId = responseBody.id;
+
+      cy.intercept("GET", `http://localhost:3000/store/${storeId}`).as(
+        "getStore"
+      );
+
+      cy.visit(`/stores/edit/${storeId}`);
+
+      cy.wait("@getStore");
+    });
+  });
+
+  it("should create store with address", () => {
+    const name = faker.company.name();
+    const cnpj = generateCnpj();
+    const cep = "65043420";
+    const number = "123";
+
+    cy.intercept("POST", "http://localhost:3000/store", (req) => {
+      expect(req.body).to.deep.equal({
+        name,
+        cnpj,
+        email: null,
+        phone: null,
+        address: {
+          cep,
+          number,
+          street: "Rua Sete",
+          neighborhood: "COHEB do Sacavém",
+          cityIbgeCode: "2111300",
+        },
+      });
+    }).as("createStore");
+
+    cy.intercept("GET", "https://viacep.com.br/ws/65043-420/json/").as(
+      "cepApi"
+    );
+    cy.intercept(
+      "GET",
+      "https://servicodados.ibge.gov.br/api/v1/localidades/estados/MA/municipios"
+    ).as("citiesAPi");
+
+    cy.visit("/stores");
+
+    cy.get('[data-cy="new-store-button"]').click();
+
+    cy.get('button[type="submit"]').should("be.disabled");
+
+    cy.get('input[name="name"]').type(name);
+    cy.get('input[name="cnpj"]').type(cnpj);
+
+    cy.get('[data-cy="button-append-address"]').click();
+
+    cy.get('input[name="address.0.cep"]').type(cep);
+    cy.get('input[name="address.0.number"]').type(number);
+
+    cy.get('button[type="submit"]').should("be.enabled");
+
+    cy.wait("@cepApi");
+    cy.wait("@citiesAPi");
+    cy.get('button[type="submit"]').click();
+
+    cy.wait("@createStore");
+
+    cy.get('[data-cy="snackbar-title"]').should(
+      "contain",
+      "Loja criada com sucesso"
     );
   });
 });

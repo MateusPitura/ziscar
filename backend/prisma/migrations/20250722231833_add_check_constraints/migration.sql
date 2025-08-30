@@ -47,13 +47,13 @@ ALTER TABLE "VehicleSale" ADD CONSTRAINT check_vehiclesale_date
     CHECK (date <= CURRENT_DATE);
 
 ALTER TABLE "AccountPayableInstallment" ADD CONSTRAINT check_accountpayable_installment_sequence 
-    CHECK ("installmentSequence" > 0);
+    CHECK ("installmentSequence" >= 0);
 
 ALTER TABLE "AccountPayableInstallment" ADD CONSTRAINT check_accountpayable_value 
     CHECK (value > 0);
 
 ALTER TABLE "AccountReceivableInstallment" ADD CONSTRAINT check_accountreceivable_installment_sequence 
-    CHECK ("installmentSequence" > 0);
+    CHECK ("installmentSequence" >= 0);
 
 ALTER TABLE "AccountReceivableInstallment" ADD CONSTRAINT check_accountreceivable_value 
     CHECK (value > 0);

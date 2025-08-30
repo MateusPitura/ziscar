@@ -1,20 +1,19 @@
+import Button from "@/design-system/Button";
 import Form from "@/design-system/Form";
 import Choice from "@/design-system/Form/Choice";
 import Input from "@/design-system/Form/Input";
 import AddressFields from "@/domains/global/components/AddressFields";
 import PageHeader from "@/domains/global/components/PageHeader";
 import Section from "@/domains/global/components/Section";
+import RequestChangePasswordModal from "@/domains/profile/components/RequestChangePasswordModal";
+import { SEED_ROLE_ADMIN_ID, SEED_ROLE_SALES_ID } from "@shared/constants";
+import { ActionsType, ResourcesType } from "@shared/enums";
 import type { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import { SchemaUserForm } from "../../users/schemas";
 import { UserFormInputs } from "../../users/types";
-import { SEED_ROLE_ADMIN_ID, SEED_ROLE_SALES_ID } from "@shared/constants";
 import PageFooter from "../components/PageFooter";
-import Button from "@/design-system/Button";
 import useDialog from "../hooks/useDialog";
-import RequestChangePasswordModal from "@/domains/profile/components/RequestChangePasswordModal";
-import { PREVIOUS_PAGE } from "../constants";
-import { ActionsType, ResourcesType } from "@shared/enums";
 
 interface UserFormProperties {
   defaultValues: Partial<UserFormInputs>;
@@ -138,7 +137,7 @@ export default function UserForm({
               color="red"
               iconRight="Close"
               label="Cancelar"
-              onClick={() => navigate(PREVIOUS_PAGE)}
+              onClick={() => navigate('/users')}
             />
           </PageFooter>
         </Form>

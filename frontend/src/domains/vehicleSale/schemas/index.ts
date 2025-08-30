@@ -1,38 +1,60 @@
+import {
+  addIssue,
+  installmentFieldsRule,
+  SchemaReceivableInstallment,
+  SchemaReceivableUpfront,
+  upfrontFieldsRule,
+} from "@/domains/global/schemas";
+import { applyMask } from "@/domains/global/utils/applyMask";
 import { s } from "@shared/safeZod";
+import { removeMask } from "@shared/utils/removeMask";
+import { VehicleSaleFormInputs } from "../types";
 
-export const SchemaVehicleSaleForm = s.object({
-  customer: s.object({
-    id: s.string(),
-  }),
-  vehicle: s.object({
-    storeId: s.string(),
-    model: s.string(),
-    price: s.numberString(),
-    color: s.color(),
-    commonCharacteristics: s.checkbox([
-      "Direção hidráulica",
-      "Janelas elétricas",
-      "Ar condicionado",
-      "Travas elétricas",
-      "Câmera de ré",
-      "Air bag",
-      "Rodas de liga leve",
-    ]),
-    characteristics: s.array(
-      s.object({
-        label: s.string(),
-        value: s.string(),
+interface SchemaVehicleSaleFormProperties {
+  minimumPrice?: string;
+  commissionValue?: string;
+}
+
+export function SchemaVehicleSaleForm({
+  commissionValue,
+  minimumPrice,
+}: SchemaVehicleSaleFormProperties = {}) {
+  return s
+    .object({
+      customer: s.object({
+        id: s.string(),
       }),
-      10
-    ),
-  }),
-  payment: s.object({
-    isUpfront: s.boolean(),
-    installments: s.number().positive(),
-  }),
-});
+      payment: s.object({
+        saleDate: s.paymentDate(),
+        commissionValue: s.numberString({
+          min: 0,
+          max: commissionValue ? Number(removeMask(commissionValue)) : 0,
+          formatter: (value) => applyMask(value, "money") ?? "",
+        }),
+        upfront: SchemaReceivableUpfront,
+        installment: SchemaReceivableInstallment,
+      }),
+    })
+    .superRefine(installmentFieldsRule)
+    .superRefine(upfrontFieldsRule)
+    .superRefine((data, ctx) => {
+      const commission = Number(data.payment.commissionValue) || 0;
+      const upfront = Number(data.payment.upfront[0]?.value) || 0;
+      const value = Number(data.payment.installment?.value) || 0;
+
+      const minimum = Number(removeMask(minimumPrice ?? "0")) || 0;
+      
+      if (upfront + value <= minimum + commission) {
+        addIssue<VehicleSaleFormInputs>(
+          ctx,
+          "payment.installment.value",
+          "Valor menor que o preço mínimo mais a comissão"
+        );
+      }
+    });
+}
 
 export const cpfSearchSchema = s
   .string()
   .regex(/^[0-9.-]+$/)
-  .transform((value) => value.replace(/\D/g, ""));
+  .transform((value) => removeMask(value));

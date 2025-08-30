@@ -48,16 +48,38 @@ export const number = () =>
     })
     .int({ message: "Número inválido" });
 
-export function numberString(min = 1, max = 100_000_000_000) {
+interface NumberStringProperties {
+  min?: number;
+  max?: number;
+  formatter?: (_: number) => string;
+}
+
+export function numberString({
+  min = 1,
+  max = 100_000_000_000,
+  formatter,
+}: NumberStringProperties = {}) {
   return string()
     .or(empty())
     .transform((number) => removeMask(number))
     .refine(
       (number) => {
-        return parseInt(number, 10) >= min && parseInt(number, 10) < max;
+        return parseInt(number, 10) >= min;
       },
       {
-        message: "Número inválido",
+        message: `Deve ser maior ou igual a ${
+          formatter ? formatter(min) : min
+        }`,
+      }
+    )
+    .refine(
+      (number) => {
+        return parseInt(number, 10) <= max;
+      },
+      {
+        message: `Deve ser menor ou igual a ${
+          formatter ? formatter(max) : max
+        }`,
       }
     );
 }
@@ -103,8 +125,13 @@ export const id = () => numberPositive();
 
 export const email = () => string().email({ message: "Email inválido" });
 
-export const fullName = () =>
+export const name = () =>
   string().regex(/^[^0-9]+$/, {
+    message: "Nome inválido",
+  });
+
+export const fullName = () =>
+  name().refine((val) => val.trim().includes(" "), {
     message: "Nome completo inválido",
   });
 

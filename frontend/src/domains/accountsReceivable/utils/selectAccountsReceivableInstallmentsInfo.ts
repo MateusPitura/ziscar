@@ -8,12 +8,26 @@ export default function selectAccountsReceivableInstallmentsInfo(
   const itemsFiltered = [];
 
   for (const accountReceivable of payload) {
+    const paymentMethods = [];
+    for (const paymentMethod of accountReceivable.paymentMethodReceivables) {
+      paymentMethods.push({
+        ...paymentMethod,
+        paymentDate: paymentMethod.paymentDate
+          ? safeFormat({
+              date: paymentMethod.paymentDate,
+              format: "dd/MM/yyyy",
+            })
+          : "",
+      });
+    }
+
     itemsFiltered.push({
       ...accountReceivable,
-      dueDate:
-        safeFormat({ date: accountReceivable.dueDate, format: "dd/MM/yyyy" }) ??
-        "",
+      dueDate: accountReceivable.dueDate
+        ? safeFormat({ date: accountReceivable.dueDate, format: "dd/MM/yyyy" })
+        : "",
       value: applyMask(accountReceivable.value, "money") ?? "",
+      paymentMethodReceivables: paymentMethods,
     });
   }
 

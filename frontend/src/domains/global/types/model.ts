@@ -1,12 +1,12 @@
 import {
   ActionsType,
-  ExpenseCategoryType,
-  FuelTypeType,
+  ExpenseCategory,
+  FuelType,
   InstallmentStatusType,
   PaymentMethodPayableTypeType,
   ResourcesType,
-  VehicleCategoryType,
-  VehicleStatusType,
+  VehicleCategory,
+  VehicleStatus,
 } from "@shared/enums";
 import { BrazilianState } from ".";
 
@@ -67,12 +67,12 @@ export interface AccountReceivable {
 export interface AccountReceivableInstallment {
   id: number;
   installmentSequence: number;
-  dueDate: string;
+  dueDate?: string;
   value: string;
   isRefund?: boolean;
   isUpfront?: boolean;
   status: InstallmentStatusType;
-  paymentMethod?: PaymentMethodPayableTypeType;
+  paymentMethodReceivables: PaymentMethod[]
 }
 
 export interface PaymentMethod {
@@ -85,26 +85,41 @@ export interface Vehicle {
   id: number;
   kilometers: number;
   plateNumber: string;
-  announcedPrice: string;
-  minimumPrice: string;
-  commissionValue: string;
+  announcedPrice: number;
+  minimumPrice: number;
+  commissionValue: number;
   color: string;
-  fuelType: FuelTypeType;
-  status: VehicleStatusType;
-  storeId: number;
+  fuelType: FuelType;
+  status: VehicleStatus;
+  store: {
+    id: number;
+    name: string;
+  };
   chassiNumber: string;
-  modelYear: string;
-  yearOfManufacture: string;
+  modelYear: number;
+  yearOfManufacture: number;
   modelName: string;
-  category: VehicleCategoryType;
-  brandId: number;
+  category: VehicleCategory;
+  brand: {
+    id: number;
+    name: string;
+  };
+  characteristics: string[];
   archivedAt?: Date;
+}
+
+export interface VehicleWithPayment {
+  vehicle: Vehicle;
+  payment: {
+    purchaseDate: string;
+    paidTo?: string;
+  };
 }
 
 export interface VehicleExpense {
   id: number;
   observations: string;
-  category: ExpenseCategoryType;
+  category: ExpenseCategory;
   totalValue: string;
   competencyDate: string;
   archivedAt?: Date;
@@ -150,7 +165,7 @@ export type FetchAccountReceivableInstallment = Pick<
   | "status"
   | "isRefund"
   | "isUpfront"
-  | "paymentMethod"
+  | "paymentMethodReceivables"
 >;
 
 export type FetchVehicle = Pick<

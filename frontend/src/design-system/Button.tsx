@@ -100,18 +100,14 @@ const ButtonVariant = forwardRef(
       case "primary":
         return (
           <BaseButton
-            className={classNames(
-              "text-neutral-100",
-              className,
-              {
-                "!bg-neutral-300": state === "disabled" || state === "loading",
-                "bg-neutral-800": color === "gray",
-                "bg-green-600": color === "green",
-                "bg-blue-800": color === "darkBlue",
-                "bg-sky-500": color === "lightBlue",
-                "bg-red-500": color === "red",
-              }
-            )}
+            className={classNames("text-neutral-100", className, {
+              "!bg-neutral-300": state === "disabled" || state === "loading",
+              "bg-neutral-800": color === "gray",
+              "bg-green-600": color === "green",
+              "bg-blue-800": color === "darkBlue",
+              "bg-sky-500": color === "lightBlue",
+              "bg-red-500": color === "red",
+            })}
             state={state}
             ref={ref}
             {...props}
@@ -163,14 +159,26 @@ const ButtonVariant = forwardRef(
 interface ButtonProps extends ButtonVariantProps {
   resource?: ResourcesType;
   action?: ActionsType;
+  renderIfNoPermission?: boolean;
 }
 
 const Button = forwardRef(
   (
-    { resource, action, onClick, state, ...props }: ButtonProps,
+    {
+      resource,
+      action,
+      onClick,
+      state,
+      renderIfNoPermission = false,
+      ...props
+    }: ButtonProps,
     ref: React.Ref<HTMLButtonElement>
   ) => {
     const hasPermission = useCheckPermission(resource, action);
+
+    if (!renderIfNoPermission && !hasPermission) {
+      return null;
+    }
 
     return (
       <Tooltip

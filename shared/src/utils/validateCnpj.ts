@@ -1,3 +1,5 @@
+import { removeMask } from "./removeMask";
+
 function calcDigit(cnpj: string, weight: number[]) {
   let sum = 0;
   for (let i = 0; i < weight.length; i++) {
@@ -8,7 +10,7 @@ function calcDigit(cnpj: string, weight: number[]) {
 }
 
 export function validateCnpj(cnpj: string) {
-  const cleanedCNPJ = cnpj.replace(/\D/g, "");
+  const cleanedCNPJ = removeMask(cnpj);
 
   if (cleanedCNPJ.length !== 14 || /^(\d)\1+$/.test(cleanedCNPJ)) return false;
 

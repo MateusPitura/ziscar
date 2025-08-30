@@ -1,11 +1,11 @@
-import { type ReactElement } from "react";
 import FieldArray from "@/design-system/Form/FieldArray";
 import Input from "@/design-system/Form/Input";
-import { NewVehicleFormInputs } from "../types";
+import { type ReactElement } from "react";
+import { VehicleFormInputs } from "../types";
 
 export default function VehicleNewCharacteristicForm(): ReactElement {
   return (
-    <FieldArray<NewVehicleFormInputs>
+    <FieldArray<VehicleFormInputs>
       name="characteristics.newCharacteristics"
       appendText="Adicionar característica"
       removeText="Remover característica"
@@ -13,10 +13,11 @@ export default function VehicleNewCharacteristicForm(): ReactElement {
       maxLength={10}
       render={(index) => (
         <div className="col-span-full">
-          <Input<NewVehicleFormInputs>
+          <Input<VehicleFormInputs>
             name={`characteristics.newCharacteristics.${index}.description`}
             label="Característica"
             placeholder="Câmbio automático"
+            required
           />
         </div>
       )}

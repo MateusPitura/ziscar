@@ -1,7 +1,7 @@
 import { s } from "@shared/safeZod";
 import {
-  SchemaNewVehicleForm,
   SchemaVehicleExpenseForm,
+  SchemaVehicleForm,
   SchemaVehiclesFilterForm,
 } from "../schemas";
 
@@ -16,5 +16,5 @@ export interface DisableVehicleExpense {
 }
 
 export type VehiclesFilterFormInputs = s.infer<typeof SchemaVehiclesFilterForm>;
-export type NewVehicleFormInputs = s.infer<typeof SchemaNewVehicleForm>;
+export type VehicleFormInputs = s.infer<typeof SchemaVehicleForm>;
 export type VehicleExpenseFormInputs = s.infer<typeof SchemaVehicleExpenseForm>;

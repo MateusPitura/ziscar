@@ -1,16 +1,15 @@
-import type { ReactNode } from "react";
-import { useNavigate } from "react-router-dom";
-import { StoreFormInputs } from "../types";
+import Button from "@/design-system/Button";
 import Form from "@/design-system/Form";
-import { SchemaStoreForm } from "../schemas";
-import PageHeader from "@/domains/global/components/PageHeader";
-import Section from "@/domains/global/components/Section";
 import Input from "@/design-system/Form/Input";
 import AddressFields from "@/domains/global/components/AddressFields";
 import PageFooter from "@/domains/global/components/PageFooter";
-import Button from "@/design-system/Button";
-import { PREVIOUS_PAGE } from "@/domains/global/constants";
+import PageHeader from "@/domains/global/components/PageHeader";
+import Section from "@/domains/global/components/Section";
 import { ActionsType, ResourcesType } from "@shared/enums";
+import type { ReactNode } from "react";
+import { useNavigate } from "react-router-dom";
+import { SchemaStoreForm } from "../schemas";
+import { StoreFormInputs } from "../types";
 
 interface StoreFormProperties {
   defaultValues: Partial<StoreFormInputs>;
@@ -95,7 +94,7 @@ export default function StoreForm({
             color="red"
             iconRight="Close"
             label="Cancelar"
-            onClick={() => navigate(PREVIOUS_PAGE)}
+            onClick={() => navigate('/stores')}
           />
         </PageFooter>
       </Form>

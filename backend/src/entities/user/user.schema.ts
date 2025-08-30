@@ -19,7 +19,7 @@ const SchemaUserFindManyInDto = s
   .object({
     page: s.numberPositive().optional(),
     status: s.enumeration(['active', 'inactive']).optional(),
-    fullName: s.fullName().optional(),
+    fullName: s.name().optional(),
     orderBy: s.enumeration(['fullName', 'email']).optional(),
     startDate: s.dateString().optional(),
     endDate: s.dateString().optional(),

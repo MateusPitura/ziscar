@@ -18,7 +18,7 @@ const SchemaCustomerFindManyInDto = s
   .object({
     page: s.numberPositive().optional(),
     status: s.enumeration(['active', 'inactive']).optional(),
-    fullName: s.string().optional(),
+    fullName: s.name().optional(),
     orderBy: s.enumeration(['fullName', 'email']).optional(),
     cpf: s.number().nonnegative().optional(),
     startDate: s.dateString().optional(),

@@ -1,19 +1,26 @@
 import Tabs from "@/design-system/Tabs";
 import Section from "@/domains/global/components/Section";
+import UpfrontForm from "@/domains/global/forms/UpfrontForm";
 import VehicleCommonCharacteristicForm from "@/domains/vehicles/forms/VehicleCommonCharacteristicForm";
 import VehicleNewCharacteristicForm from "@/domains/vehicles/forms/VehicleNewCharacteristicForm";
 import { useState, type ReactNode } from "react";
 import { useFormState } from "react-hook-form";
-import NewVehicleForm from "../forms/NewVehicleForm";
+import PaymentForm from "../../global/forms/PaymentForm";
+import VehicleForm from "../forms/VehicleForm";
 import VehiclePurchaseDetailsForm from "../forms/VehiclePurchaseDetailsForm";
-import VehiclePurchasePaymentForm from "../forms/VehiclePurchasePaymentForm";
-import { NewVehicleFormInputs } from "../types";
+import { VehicleFormInputs } from "../types";
 
-type NewVehicleTabs = "PURCHASE" | "INFORMATION" | "CHARACTERISTICS";
+type VehicleTabs = "PURCHASE" | "INFORMATION" | "CHARACTERISTICS";
 
-export default function NewVehicleTabs(): ReactNode {
-  const [activeTab, setActiveTab] = useState<NewVehicleTabs>("PURCHASE");
-  const { errors } = useFormState<NewVehicleFormInputs>();
+interface VehicleTabsProperties {
+  isEdit?: boolean;
+}
+
+export default function VehicleTabs({
+  isEdit,
+}: VehicleTabsProperties): ReactNode {
+  const [activeTab, setActiveTab] = useState<VehicleTabs>("PURCHASE");
+  const { errors } = useFormState<VehicleFormInputs>();
 
   return (
     <Tabs>
@@ -22,7 +29,7 @@ export default function NewVehicleTabs(): ReactNode {
           isActive={activeTab === "PURCHASE"}
           title="Compra"
           onClick={() => setActiveTab("PURCHASE")}
-          hasError={!!errors?.purchase}
+          hasError={!!errors?.payment}
           resource="VEHICLES"
           action="CREATE"
         />
@@ -52,12 +59,22 @@ export default function NewVehicleTabs(): ReactNode {
                 <VehiclePurchaseDetailsForm />
               </Section.Body>
             </Section.Group>
-            <Section.Group>
-              <Section.Header title="Informações do pagamento" />
-              <Section.Body>
-                <VehiclePurchasePaymentForm />
-              </Section.Body>
-            </Section.Group>
+            {!isEdit && (
+              <>
+                <Section.Group>
+                  <Section.Header title="Informações da entrada" />
+                  <Section.Body>
+                    <UpfrontForm />
+                  </Section.Body>
+                </Section.Group>
+                <Section.Group>
+                  <Section.Header title="Informações do pagamento" />
+                  <Section.Body>
+                    <PaymentForm />
+                  </Section.Body>
+                </Section.Group>
+              </>
+            )}
           </Section>
         </Tabs.Section>
         <Tabs.Section isActive={activeTab === "INFORMATION"}>
@@ -65,7 +82,7 @@ export default function NewVehicleTabs(): ReactNode {
             <Section.Group>
               <Section.Header title="Informações do veículo" />
               <Section.Body className="grid-cols-3">
-                <NewVehicleForm />
+                <VehicleForm />
               </Section.Body>
             </Section.Group>
           </Section>

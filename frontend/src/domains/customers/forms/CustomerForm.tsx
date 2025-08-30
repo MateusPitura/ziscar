@@ -1,16 +1,15 @@
-import type { ReactNode } from "react";
-import { CustomerFormInputs as CustomerFormInputsType } from "../types";
+import Button from "@/design-system/Button";
 import Form from "@/design-system/Form";
-import { SchemaCustomerForm } from "../schemas";
-import PageHeader from "@/domains/global/components/PageHeader";
-import Section from "@/domains/global/components/Section";
 import AddressFields from "@/domains/global/components/AddressFields";
 import PageFooter from "@/domains/global/components/PageFooter";
-import Button from "@/design-system/Button";
-import { PREVIOUS_PAGE } from "@/domains/global/constants";
-import { useNavigate } from "react-router-dom";
-import CustomerFormInputs from "./CustomerFormInputs";
+import PageHeader from "@/domains/global/components/PageHeader";
+import Section from "@/domains/global/components/Section";
 import { ActionsType, ResourcesType } from "@shared/enums";
+import type { ReactNode } from "react";
+import { useNavigate } from "react-router-dom";
+import { SchemaCustomerForm } from "../schemas";
+import { CustomerFormInputs as CustomerFormInputsType } from "../types";
+import CustomerFormInputs from "./CustomerFormInputs";
 
 interface CustomerFormProperties {
   defaultValues: Partial<CustomerFormInputsType>;
@@ -71,7 +70,7 @@ export default function CustomerForm({
             color="red"
             iconRight="Close"
             label="Cancelar"
-            onClick={() => navigate(PREVIOUS_PAGE)}
+            onClick={() => navigate('/customers')}
           />
         </PageFooter>
       </Form>

@@ -35,7 +35,7 @@ export default function VehicleExpenseTable(): ReactNode {
   }
 
   async function getVehicleExpenseInfo(): Promise<FetchVehicleExpense[]> {
-    // return await safeFetch(`${BACKEND_URL}/vehicle-expense/${vehicleId}`, {
+    // return await safeFetch(`${BACKEND_URL}/vehicle-expense/${vehicleId}`, { // 🌠 MOCK
     //   resource: "VEHICLE_EXPENSE",
     //   action: "READ",
     // });
@@ -93,7 +93,7 @@ export default function VehicleExpenseTable(): ReactNode {
       </div>
       <Table>
         <Table.Header gridColumns={8}>
-          <Table.Head label="Data" />
+          <Table.Head label="Data de competência" />
           <Table.Head label="Observações" />
           <Table.Head label="Categoria" />
           <Table.Head label="Valor" colSpan={1} />
@@ -122,6 +122,7 @@ export default function VehicleExpenseTable(): ReactNode {
                   handleDisableVehicleExpenseInfo={
                     handleDisableVehicleExpenseInfo
                   }
+                  isActive={!expense.archivedAt}
                 />
               </Table.Action>
             </Table.Row>

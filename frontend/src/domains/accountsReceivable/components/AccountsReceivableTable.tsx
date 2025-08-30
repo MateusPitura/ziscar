@@ -1,23 +1,22 @@
 import Table from "@/design-system/Table";
+import AccountStatus from "@/domains/global/components/AccountStatus";
+import { BACKEND_URL, BLANK } from "@/domains/global/constants";
 import useFilterContext from "@/domains/global/hooks/useFilterContext";
+import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import { PageablePayload } from "@/domains/global/types";
+import { FetchAccountReceivable } from "@/domains/global/types/model";
 import formatFilters from "@/domains/global/utils/formatFilters";
 import ExportButton from "@/domains/pdf/components/ExportButton";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, type ReactNode } from "react";
 import { AccountsReceivableFilterFormInputs } from "../types";
-import { FetchAccountReceivable } from "@/domains/global/types/model";
 import selectAccountsReceivableInfo from "../utils/selectAccountsReceivableInfo";
-import AccountsReceivableTableActions from "./AccountsReceivableTableActions";
-import AccountsReceivableFilterForm from "./AccountsReceivableFilterForm";
-import AccountStatus from "@/domains/global/components/AccountStatus";
 import selectAccountsReceivableInfoForReport from "../utils/selectAccountsReceivableInfoForReport";
-import { BLANK } from "@/domains/global/constants";
-// import { BACKEND_URL } from "@/domains/global/constants";
-// import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
+import AccountsReceivableFilterForm from "./AccountsReceivableFilterForm";
+import AccountsReceivableTableActions from "./AccountsReceivableTableActions";
 
 export default function AccountsReceivableTable(): ReactNode {
-  // const { safeFetch } = useSafeFetch();
+  const { safeFetch } = useSafeFetch();
   const { accountsReceivableFilter, handleAccountsReceivableFilter } =
     useFilterContext();
 
@@ -35,43 +34,10 @@ export default function AccountsReceivableTable(): ReactNode {
   async function getAccountsReceivableInfo(
     filter?: string
   ): Promise<PageablePayload<FetchAccountReceivable>> {
-    // return await safeFetch(`${BACKEND_URL}/account-receivable?${filter}`, {
-    //   resource: "ACCOUNTS_RECEIVABLE",
-    //   action: "READ",
-    // });
-    console.log("filter: ", filter);
-    return {
-      total: 3,
-      data: [
-        {
-          id: 1,
-          description: "Conta a receber 1",
-          receivedFrom: "Cliente A",
-          totalValue: "10000",
-          overallStatus: "PENDING",
-          installmentsNumber: 2,
-          vehicleSaleId: 1,
-        },
-        {
-          id: 2,
-          description: "Conta a receber 2",
-          receivedFrom: "Cliente B",
-          totalValue: "5000",
-          overallStatus: "PENDING",
-          installmentsNumber: 1,
-          vehicleSaleId: 3,
-        },
-        {
-          id: 3,
-          description: "Conta a receber 3",
-          receivedFrom: "Cliente C",
-          totalValue: "15000",
-          overallStatus: "PAID",
-          installmentsNumber: 3,
-          vehicleSaleId: 4,
-        },
-      ],
-    };
+    return await safeFetch(`${BACKEND_URL}/account-receivable/search?${filter}&orderBy=description`, {
+      resource: "ACCOUNTS_RECEIVABLE",
+      action: "READ",
+    });
   }
 
   const {
