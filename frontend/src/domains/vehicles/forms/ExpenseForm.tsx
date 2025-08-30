@@ -9,6 +9,7 @@ import type { ReactNode } from "react";
 import { SchemaVehicleExpenseForm } from "../schemas";
 import { VehicleExpenseFormInputs } from "../types";
 import VehicleExpenseDetailsForm from "./VehicleExpenseDetailsForm";
+import UpfrontForm from "@/domains/global/forms/UpfrontForm";
 
 interface ExpenseFormProperties {
   defaultValues: Partial<VehicleExpenseFormInputs>;
@@ -50,12 +51,20 @@ export default function ExpenseForm({
               </Section.Body>
             </Section.Group>
             {!isEdit && (
-              <Section.Group>
-                <Section.Header title="Informações do pagamento" />
-                <Section.Body>
-                  <PaymentForm />
-                </Section.Body>
-              </Section.Group>
+              <>
+                <Section.Group>
+                  <Section.Header title="Informações da entrada" />
+                  <Section.Body>
+                    <UpfrontForm />
+                  </Section.Body>
+                </Section.Group>
+                <Section.Group>
+                  <Section.Header title="Informações do pagamento" />
+                  <Section.Body>
+                    <PaymentForm />
+                  </Section.Body>
+                </Section.Group>
+              </>
             )}
           </Section>
         </div>

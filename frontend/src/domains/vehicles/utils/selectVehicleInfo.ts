@@ -27,6 +27,7 @@ export default function selectVehicleInfo(
     payment: {
       paidTo: payment.paidTo ?? "",
       purchaseDate: payment.purchaseDate,
+      upfront: [],
       installment: null,
     },
     vehicle: {

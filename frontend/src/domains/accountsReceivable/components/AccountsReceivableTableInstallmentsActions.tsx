@@ -14,7 +14,7 @@ export default function AccountsReceivableInstallmentsTableActions({
   installment,
   handleInstallmentToPaymentMethodInfo,
 }: AccountsReceivableInstallmentsTableActionsProperties): ReactNode {
-  if (installment.status === "PAID") return;
+  if (installment.paymentMethodReceivables.length) return;
 
   return (
     <Tooltip content="Adicionar método de pagamento">

@@ -36,6 +36,10 @@ export const SchemaReceivableInstallment = SchemaInstallment.extend({
     .or(s.empty()),
 });
 
+export const SchemaReceivableUpfront = s.array(SchemaReceivableInstallment, 1);
+
+export const SchemaPayableUpfront = s.array(SchemaPayableInstallment, 1);
+
 export function addIssue<T extends FieldValues>(
   ctx: s.RefinementCtx,
   path: Path<T>,
@@ -48,7 +52,7 @@ export function addIssue<T extends FieldValues>(
   });
 }
 
-export function paymentFieldsRule(
+export function installmentFieldsRule(
   data: PaymentFieldRuleData,
   ctx: s.RefinementCtx
 ) {
@@ -67,6 +71,29 @@ export function paymentFieldsRule(
   } else if (status === "PENDING") {
     if (dueDate === "") {
       addIssue<VehicleFormInputs>(ctx, "payment.installment.dueDate");
+    }
+  }
+}
+
+export function upfrontFieldsRule(
+  data: PaymentFieldRuleData,
+  ctx: s.RefinementCtx
+) {
+  if (!data.payment.upfront.length) return true;
+
+  const { status, paymentDate, paymentMethod, dueDate } =
+    data.payment.upfront[0];
+
+  if (status === "PAID") {
+    if (paymentDate === "") {
+      addIssue<VehicleFormInputs>(ctx, "payment.upfront.0.paymentDate");
+    }
+    if (paymentMethod === "") {
+      addIssue<VehicleFormInputs>(ctx, "payment.upfront.0.paymentMethod");
+    }
+  } else if (status === "PENDING") {
+    if (dueDate === "") {
+      addIssue<VehicleFormInputs>(ctx, "payment.upfront.0.dueDate");
     }
   }
 }

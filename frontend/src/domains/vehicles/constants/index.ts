@@ -105,6 +105,7 @@ export const vehicleDefaultValues: VehicleFormInputs = {
   payment: {
     paidTo: "",
     purchaseDate: "",
+    upfront: [],
     installment: {
       dueDate: "",
       value: applyMask("0", "money") ?? "",
@@ -137,13 +138,8 @@ export const vehicleExpenseDefaultValues: VehicleExpenseFormInputs = {
     category: ExpenseCategory.MAINTENANCE,
     observations: "",
     competencyDate: "",
-    installment: {
-      dueDate: "",
-      paymentDate: "",
-      paymentMethod: "",
-      status: InstallmentStatus.PENDING,
-      value: applyMask("0", "money") ?? "",
-    },
+    upfront: [],
+    installment: vehicleDefaultValues.payment.installment,
   },
 };
 

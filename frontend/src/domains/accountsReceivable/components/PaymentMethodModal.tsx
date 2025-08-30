@@ -14,7 +14,7 @@ export default function PaymentMethodModal({
 }: PaymentMethodModalProperties): ReactNode {
   if (!installment) return;
 
-  if (installment.status === "PAID") {
+  if (installment.paymentMethodReceivables.length) {
     return <ViewPaymentMethodModal installment={installment} {...dialog} />;
   }
 

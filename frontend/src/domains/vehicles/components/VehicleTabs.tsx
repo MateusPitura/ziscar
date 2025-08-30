@@ -1,5 +1,6 @@
 import Tabs from "@/design-system/Tabs";
 import Section from "@/domains/global/components/Section";
+import UpfrontForm from "@/domains/global/forms/UpfrontForm";
 import VehicleCommonCharacteristicForm from "@/domains/vehicles/forms/VehicleCommonCharacteristicForm";
 import VehicleNewCharacteristicForm from "@/domains/vehicles/forms/VehicleNewCharacteristicForm";
 import { useState, type ReactNode } from "react";
@@ -59,12 +60,20 @@ export default function VehicleTabs({
               </Section.Body>
             </Section.Group>
             {!isEdit && (
-              <Section.Group>
-                <Section.Header title="Informações do pagamento" />
-                <Section.Body>
-                  <PaymentForm />
-                </Section.Body>
-              </Section.Group>
+              <>
+                <Section.Group>
+                  <Section.Header title="Informações da entrada" />
+                  <Section.Body>
+                    <UpfrontForm />
+                  </Section.Body>
+                </Section.Group>
+                <Section.Group>
+                  <Section.Header title="Informações do pagamento" />
+                  <Section.Body>
+                    <PaymentForm />
+                  </Section.Body>
+                </Section.Group>
+              </>
             )}
           </Section>
         </Tabs.Section>

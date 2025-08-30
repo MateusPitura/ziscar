@@ -80,6 +80,42 @@ export default function VehicleSaleContainer(): ReactNode {
   });
 
   async function createSale({ payment, customer }: VehicleSaleFormInputs) {
+    const installments = [
+      {
+        dueDate: payment.installment.dueDate,
+        value: payment.installment.value,
+        isUpfront: false,
+        paymentMethods:
+          payment.installment.status === InstallmentStatus.PAID
+            ? [
+                {
+                  type: payment.installment.paymentMethod,
+                  value: payment.installment.value,
+                  paymentDate: payment.installment.paymentDate,
+                },
+              ]
+            : null,
+      },
+    ];
+
+    if (payment.upfront.length) {
+      installments.push({
+        dueDate: payment.upfront[0].dueDate,
+        value: payment.upfront[0].value,
+        isUpfront: true,
+        paymentMethods:
+          payment.upfront[0].status === InstallmentStatus.PAID
+            ? [
+                {
+                  type: payment.upfront[0].paymentMethod,
+                  value: payment.upfront[0].value,
+                  paymentDate: payment.upfront[0].paymentDate,
+                },
+              ]
+            : null,
+      });
+    }
+
     await safeFetch(`${BACKEND_URL}/vehicles/sale`, {
       method: "POST",
       body: {
@@ -91,23 +127,7 @@ export default function VehicleSaleContainer(): ReactNode {
           description: `Venda Veículo ${vehicleData?.plateNumber}`,
           receivedFrom: customerData?.fullName || "",
         },
-        installments: [
-          {
-            dueDate: payment.installment.dueDate,
-            value: payment.installment.value,
-            isUpfront: false,
-            paymentMethods:
-              payment.installment.status === InstallmentStatus.PAID
-                ? [
-                    {
-                      type: payment.installment.paymentMethod,
-                      value: payment.installment.value,
-                      paymentDate: payment.installment.paymentDate,
-                    },
-                  ]
-                : null,
-          },
-        ],
+        installments,
       },
       resource: "VEHICLE_SALE",
       action: "CREATE",
