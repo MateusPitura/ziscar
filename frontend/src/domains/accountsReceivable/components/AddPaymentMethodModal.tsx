@@ -13,8 +13,8 @@ import { PaymentMethodReceivableText } from "@/domains/global/constants";
 import InputLabel from "@/design-system/Form/InputLabel";
 import Choice from "@/design-system/Form/Choice";
 import { PaymentMethodReceivableType } from "@shared/enums";
-// import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
-// import { BACKEND_URL } from "@/domains/global/constants";
+import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
+import { BACKEND_URL } from "@/domains/global/constants";
 
 interface AddPaymentMethodModalProperties extends DialogProps {
   installment: AccountReceivableInstallment;
@@ -24,23 +24,22 @@ export default function AddPaymentMethodModal({
   installment,
   ...dialog
 }: AddPaymentMethodModalProperties): ReactNode {
-  // const { safeFetch } = useSafeFetch();
+  const { safeFetch } = useSafeFetch();
   const { showSuccessSnackbar } = useSnackbar();
   const queryClient = useQueryClient();
 
   async function createPaymentMethod(
     data: PaymentMethodFormInputs
   ): Promise<void> {
-    // await safeFetch(
-    //   `${BACKEND_URL}/accounts-receivable-installments/payment-method/${installment.id}`, 
-    //   {
-    //     method: "POST",
-    //     body: data,
-    //     resource: "ACCOUNTS_RECEIVABLE",
-    //     action: "CREATE",
-    //   }
-    // );
-    console.log("data: ", data); // 🌠 MOCK
+    await safeFetch(
+      `${BACKEND_URL}/account-receivable-installments/payment-method/${installment.id}`, 
+      {
+        method: "POST",
+        body: data,
+        resource: "ACCOUNTS_RECEIVABLE",
+        action: "CREATE",
+      }
+    );
   }
 
   const { mutate, isPending } = useMutation({
