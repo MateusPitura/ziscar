@@ -5,6 +5,37 @@
 endpoint: 
 GET /account-receivable?page=1&startDate=2025-08-01&endDate=2025-08-08&overallStatus=PAID&orderBy=description
 
+// Vi que foi feito uma lógica para buscar do banco as contas com as parcelas e filtrar depois por overallStatus, mas tem um problema nisso
+// Se há 30 contas no banco, você puxa apenas 20 por vez (quantidade de itens por página) e depois sobre essas 20 você filtra pelo overallStatus,
+// aquelas 10 contas que não foram puxadas no banco nunca serão filtradas. Para resolver isso o filtro por overallStatus precisa ser feito no próprio
+// Prisma, e não em um código JS separado, algo mais ou menos assim
+
+// OverallStatus == PAID
+const accounts = await prisma.accountReceivable.findMany({
+    where: {
+        accountReceivableInstallments: {
+            every: {
+                status: 'PAID',
+            },
+        },
+    },
+    skip: (page - 1) * pageSize,
+    take: pageSize,
+});
+
+// OverallStatus == PENDING
+const accounts = await prisma.accountReceivable.findMany({
+    where: {
+        accountReceivableInstallments: {
+            some: {
+                status: 'PENDING',
+            },
+        },
+    },
+    skip: (page - 1) * pageSize,
+    take: pageSize,
+});
+
 payload:
 {
     total: 2,
