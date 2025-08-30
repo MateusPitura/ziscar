@@ -1,6 +1,6 @@
 DEV:
 
-- Configure `.env` e `backend/.env`
+- Configure `.env`
 - Inicie o banco, backend e frontend com `npm start` ou com `npm run dev` para executar com Docker
 - Execute `backend/npm run dev:db-init` para preparar o banco para desenvolvimento, isso irá aplicar migrations, rodar seeds e popular. Use também quando precisar redefinir o banco
 - Instale a extensão [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) para testar requisições através dos arquivos `.http`
@@ -41,5 +41,5 @@ DEPLOY:
 
 - O frontend é hospedado no Git Hub Pages, para realizar o deploy da main faça `frontend/npm run prod`
 - O banco é hospedado em uma VM no OCI. Para fazer o deploy, configure o `.env` e execute o comando de `npm run prod:db` estando conectado na VM
-- O backend é hospedado em uma VM no OCI. Para fazer o deploy, configure o `backend/.env` e execute o comando de `npm run prod:backend` estando conectado na VM.
-- A primeira vez e quando precisar atualizar o banco de produção, use o Bastion com o IP e porta do banco de produção, configure o `backend/.env` com o usuário, senha e porta do banco de produção, mantenha localhost. Então execute `backend/npm run prod:db-init` para aplicar migrations e rodar seeds
+- O backend é hospedado em uma VM no OCI. Para fazer o deploy, configure o `.env` e execute o comando de `npm run prod:backend` estando conectado na VM.
+- A primeira vez e quando precisar atualizar o banco de produção, use o Bastion com o IP e porta do banco de produção, configure o `.env` com o usuário, senha e porta do banco de produção, mantenha localhost. Então execute `backend/npm run prod:db-init` para aplicar migrations e rodar seeds
