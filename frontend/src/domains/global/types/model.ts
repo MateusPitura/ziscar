@@ -73,6 +73,7 @@ export interface AccountReceivableInstallment {
   isUpfront?: boolean;
   status: InstallmentStatusType;
   paymentMethod?: PaymentMethodPayableTypeType;
+  paymentMethodReceivables?: PaymentMethod[]
 }
 
 export interface PaymentMethod {

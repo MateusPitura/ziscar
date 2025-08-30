@@ -1,7 +1,10 @@
 import Dialog from "@/design-system/Dialog";
 import Spinner from "@/design-system/Spinner";
 import DataField from "@/domains/global/components/DataField";
-import { BACKEND_URL, PaymentMethodReceivableText } from "@/domains/global/constants";
+import {
+  BACKEND_URL,
+  PaymentMethodReceivableText,
+} from "@/domains/global/constants";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import { DialogProps } from "@/domains/global/types";
 import {
@@ -23,13 +26,15 @@ export default function ViewPaymentMethodModal({
   const { safeFetch } = useSafeFetch();
 
   async function getPaymentMethod(): Promise<PaymentMethod> {
-    return await safeFetch(
+    const result = await safeFetch(
       `${BACKEND_URL}/account-receivable-installments/payment-method/${installment?.id}`,
       {
         resource: "ACCOUNTS_RECEIVABLE",
         action: "READ",
       }
     );
+
+    return result?.paymentMethodReceivables?.[0];
   }
 
   const { data: paymentMethodData, isFetching } = useQuery({
