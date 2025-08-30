@@ -1,6 +1,6 @@
 services:
   database:
-    image: &postgres postgres:16
+    image: postgres:16
     container_name: ziscar_db
     environment:
       - POSTGRES_USER=${DB_USERNAME}
@@ -14,18 +14,6 @@ services:
       - path: .env
         required: false
     restart: ${RESTART_POLICY:-no}
-
-  test_database:
-    image: *postgres
-    container_name: test_ziscar_db
-    environment:
-      - POSTGRES_USER=test_user
-      - POSTGRES_PASSWORD=test_admin
-      - POSTGRES_DB=test_ziscar
-      - PGPORT=9862
-    volumes:
-      - test-db-data:/var/lib/postgresql/data
-    network_mode: host
 
   frontend:
     build:
@@ -51,18 +39,5 @@ services:
         required: false
     restart: ${RESTART_POLICY:-no}
 
-  k6:
-    image: grafana/k6
-    volumes:
-      - ./shared:/shared
-      - ./test/load:/test/load
-    env_file:
-      - path: .env
-        required: false
-    environment:
-      - K6_EMAIL=${K6_EMAIL}
-      - K6_PASSWORD=${K6_PASSWORD}
-
 volumes:
   db-data:
-  test-db-data:
