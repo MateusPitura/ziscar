@@ -41,6 +41,8 @@ export default function PageFooter({
       <Text
         style={styles.recordsCounter}
         render={({ pageNumber }) => {
+          if (!totalRecords) return;
+
           const startRecord = (pageNumber - 1) * itemsPerPage;
           const endRecord = Math.min(startRecord + itemsPerPage, totalRecords);
 

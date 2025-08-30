@@ -89,7 +89,7 @@ export default function VehicleForm(): ReactNode {
       />
       <Input<VehicleFormInputs>
         name="vehicle.commissionValue"
-        label="Valor da comissão"
+        label="Comissão máxima"
         mask="money"
         required
       />

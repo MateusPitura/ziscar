@@ -16,6 +16,7 @@ import {
   YEARS_OF_MANUFACTURE,
 } from "../constants";
 import { VehicleFormInputs } from "../types";
+import { applyMask } from "@/domains/global/utils/applyMask";
 
 export const SchemaVehiclesFilterForm = s
   .object({
@@ -34,11 +35,22 @@ export const SchemaVehicleForm = s
     vehicle: s.object({
       plateNumber: s.plateNumber(),
       chassiNumber: s.chassi(),
-      announcedPrice: s.numberString(),
-      minimumPrice: s.numberString(),
-      commissionValue: s.numberString(0),
+      announcedPrice: s.numberString({
+        formatter: (value) => applyMask(value, "money") ?? "",
+      }),
+      minimumPrice: s.numberString({
+        formatter: (value) => applyMask(value, "money") ?? "",
+      }),
+      commissionValue: s.numberString({
+        min: 0,
+        formatter: (value) => applyMask(value, "money") ?? "",
+      }),
       storeId: s.string(),
-      kilometers: s.numberString(0, 1_000_000),
+      kilometers: s.numberString({
+        min: 0,
+        max: 1_000_000,
+        formatter: (value) => applyMask(value, "number") ?? "",
+      }),
       modelName: s.string().or(s.empty()),
       brandId: s.string(),
       color: s.string().or(s.empty()),

@@ -336,3 +336,7 @@ payload:
 {
     archivedAt: null
 }
+
+# Venda do veículo
+
+Não está aceitando valor da comissão como 0

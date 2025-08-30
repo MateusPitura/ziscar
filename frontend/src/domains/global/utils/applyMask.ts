@@ -1,3 +1,4 @@
+import { removeMask } from "@shared/utils/removeMask";
 import { Mask } from "../types";
 
 export function applyMask(
@@ -31,7 +32,7 @@ export function applyMask(
 }
 
 function applyCpfMask(value: string): string {
-  const digits = value.replace(/\D/g, "");
+  const digits = removeMask(value);
 
   if (digits.length <= 3) {
     return digits;
@@ -45,7 +46,7 @@ function applyCpfMask(value: string): string {
 }
 
 function applyPhoneMask(value: string): string {
-  const digits = value.replace(/\D/g, "");
+  const digits = removeMask(value);
 
   if (digits.length === 0) {
     return digits;
@@ -59,13 +60,13 @@ function applyPhoneMask(value: string): string {
 }
 
 function applyCepMask(value: string): string {
-  const digits = value.replace(/\D/g, "");
+  const digits = removeMask(value);
 
   return digits?.replace(/(\d{5})(\d{1,3}).*/, "$1-$2");
 }
 
 function applyCnpjMask(value: string): string {
-  const digits = value.replace(/\D/g, "");
+  const digits = removeMask(value);
 
   if (digits.length <= 2) {
     return digits;
@@ -84,7 +85,7 @@ function applyCnpjMask(value: string): string {
 }
 
 function applyMoneyMask(value: string): string {
-  const digits = value.replace(/\D/g, "");
+  const digits = removeMask(value);
 
   if (digits.length === 0) {
     return "R$ 0,00";
@@ -134,7 +135,7 @@ function applyChassiMask(value: string): string {
 }
 
 function applyNumberMask(value: string): string {
-  let digits = value.replace(/\D/g, "");
+  let digits = removeMask(value);
   if (digits.length > 1) {
     digits = digits.replace(/^0+/, "");
     if (digits === "") digits = "0";
