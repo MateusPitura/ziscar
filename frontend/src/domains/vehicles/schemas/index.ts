@@ -91,21 +91,9 @@ export const SchemaVehicleForm = s
   .superRefine((data, ctx) => {
     const { vehicle, payment } = data;
 
-    if (payment.installment === null) return true;
-
-    const value = Number(payment.installment.value) || 0;
-    const upfront = Number(payment.upfront[0]?.value) || 0;
     const minimumPrice = Number(vehicle.minimumPrice) || 0;
-    const commissionValue = Number(vehicle.commissionValue) || 0;
     const announcedPrice = Number(vehicle.announcedPrice) || 0;
-
-    if (minimumPrice <= value + upfront) {
-      addIssue<VehicleFormInputs>(
-        ctx,
-        "vehicle.minimumPrice",
-        "Preço mínimo menor que o valor de compra"
-      );
-    }
+    const commissionValue = Number(vehicle.commissionValue) || 0;
 
     if (announcedPrice < minimumPrice) {
       addIssue<VehicleFormInputs>(
@@ -115,11 +103,32 @@ export const SchemaVehicleForm = s
       );
     }
 
+    if (commissionValue >= minimumPrice) {
+      addIssue<VehicleFormInputs>(
+        ctx,
+        "vehicle.commissionValue",
+        "Comissão maior ou igual ao preço mínimo"
+      );
+    }
+
+    if (payment.installment === null) return true;
+
+    const value = Number(payment.installment.value) || 0;
+    const upfront = Number(payment.upfront[0]?.value) || 0;
+
+    if (minimumPrice <= value + upfront) {
+      addIssue<VehicleFormInputs>(
+        ctx,
+        "vehicle.minimumPrice",
+        "Mínimo menor ou igual ao valor de compra"
+      );
+    }
+
     if (commissionValue >= minimumPrice - (value + upfront)) {
       addIssue<VehicleFormInputs>(
         ctx,
         "vehicle.commissionValue",
-        "Comissão maior que o lucro"
+        "Comissão maior ou igual ao lucro"
       );
     }
   });
