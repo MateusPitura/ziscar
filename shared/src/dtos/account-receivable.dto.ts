@@ -1,3 +1,4 @@
+import { ITEMS_PER_PAGE } from "../constants";
 import { InstallmentStatus, PaymentMethodReceivableType } from "../enums";
 import { s } from "../safeZod";
 
@@ -11,14 +12,20 @@ export const updateAccountReceivableDTO = s.object({
   receivedFrom: s.string(),
 });
 
-
-
 export const queryAccountReceivableDTO = s.object({
-  page: s.string().transform((val) => parseInt(val, 10)).pipe(s.number().min(1)),
-  limit: s.string().transform((val) => parseInt(val, 10)).pipe(s.number().min(1).max(100)).optional().default('10'),
+  page: s
+    .string()
+    .transform((val) => parseInt(val, 10))
+    .pipe(s.number().min(1)),
+  limit: s
+    .string()
+    .transform((val) => parseInt(val, 10))
+    .pipe(s.number().min(1).max(100))
+    .optional()
+    .default(String(ITEMS_PER_PAGE)),
   startDate: s.string().optional(),
   endDate: s.string().optional(),
-  overallStatus: s.enumeration(['PAID', 'PENDING']).optional(),
+  overallStatus: s.enumeration(["PAID", "PENDING"]).optional(),
   orderBy: s.string().optional(),
 });
 
@@ -45,10 +52,10 @@ export const updateAccountReceivableInstallmentDTO = s.object({
 export const createPaymentMethodToInstallmentDTO = s.object({
   paymentDate: s.string(),
   type: s.nativeEnum(PaymentMethodReceivableType),
-})
+});
 
 export const queryAccountReceivableInstallmentsDTO = s.object({
   page: s.string().optional(),
   limit: s.string().optional(),
   dueDate: s.string().optional(),
-})
+});

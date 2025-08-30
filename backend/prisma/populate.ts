@@ -3,6 +3,8 @@ import { PrismaClient } from '@prisma/client';
 import { SEED_ROLE_SALES_ID } from '../../shared/src/constants';
 import {
   FUELTYPE_VALUES,
+  InstallmentStatus,
+  PAYMENTMETHODRECEIVABLETYPE_VALUES,
   VEHICLECATEGORY_VALUES,
   VEHICLESTATUS_VALUES,
 } from '../../shared/src/enums';
@@ -24,8 +26,11 @@ import {
 } from '../src/constants/populate';
 import { encryptPassword } from '../src/entities/user/user.utils';
 import { vehicleBrands } from './seed-data/vehicleBrands';
+import { addMonths, subDays } from 'date-fns';
 
 const prisma = new PrismaClient();
+
+const YEAR_IN_MS = 365 * 24 * 60 * 60 * 1000;
 
 async function populate() {
   await prisma.$transaction(async (tx) => {
@@ -193,6 +198,72 @@ async function populate() {
     await tx.vehicle.createMany({
       data: otherVehicles,
     });
+
+    const otherAccountsReceivablePromise = Array.from(
+      { length: POPULATE_OTHER_ENTITIES_AMOUNT },
+      async () => {
+        const installmentsCount = faker.number.int({ min: 1, max: 12 });
+
+        const paidInstallmentsCount = faker.number.int({
+          min: 0,
+          max: installmentsCount,
+        });
+
+        const hasUpfront = faker.datatype.boolean();
+
+        const firstDueDate = faker.date.between({
+          from: new Date(Date.now() - 5 * YEAR_IN_MS),
+          to: new Date(Date.now() - 2 * YEAR_IN_MS),
+        });
+
+        const installments = Array.from(
+          { length: installmentsCount },
+          (_, i) => {
+            return {
+              installmentSequence: hasUpfront ? i : i + 1,
+              dueDate: addMonths(firstDueDate, i),
+              value: faker.number.int({ min: 500_000, max: 20_000_000 }),
+              isRefund: false,
+              isUpfront: hasUpfront && i === 0,
+              status:
+                i < paidInstallmentsCount
+                  ? InstallmentStatus.PAID
+                  : InstallmentStatus.PENDING,
+              ...(i < paidInstallmentsCount && {
+                paymentMethodReceivables: {
+                  create: {
+                    type: PAYMENTMETHODRECEIVABLETYPE_VALUES[
+                      faker.number.int({
+                        min: 0,
+                        max: PAYMENTMETHODRECEIVABLETYPE_VALUES.length - 1,
+                      })
+                    ],
+                    value: faker.number.int({ min: 500_000, max: 20_000_000 }),
+                    paymentDate: subDays(
+                      addMonths(firstDueDate, i),
+                      faker.number.int({ min: 0, max: 7 }),
+                    ),
+                    userId: POPULATE_USER.ADM.id,
+                  },
+                },
+              }),
+            };
+          },
+        );
+
+        await tx.accountReceivable.create({
+          data: {
+            description: `Venda Veículo ${generatePlateNumber(true)}`,
+            receivedFrom: faker.person.fullName(),
+            accountReceivableInstallments: {
+              create: installments,
+            },
+          },
+        });
+      },
+    );
+
+    await Promise.all(otherAccountsReceivablePromise);
   });
 }
 

@@ -17,6 +17,7 @@ import type { ReactNode } from "react";
 import { paymentMethodDefaultValues } from "../constants";
 import { SchemaPaymentMethodForm } from "../schemas";
 import { PaymentMethodFormInputs } from "../types";
+import { useParams } from "react-router-dom";
 
 interface AddPaymentMethodModalProperties extends DialogProps {
   installment: AccountReceivableInstallment;
@@ -29,6 +30,7 @@ export default function AddPaymentMethodModal({
   const { safeFetch } = useSafeFetch();
   const { showSuccessSnackbar } = useSnackbar();
   const queryClient = useQueryClient();
+  const { accountReceivableId } = useParams();
 
   async function createPaymentMethod(
     data: PaymentMethodFormInputs
@@ -51,7 +53,7 @@ export default function AddPaymentMethodModal({
         title: "Método de pagamento adicionado",
       });
       queryClient.invalidateQueries({
-        queryKey: ["accounts-receivable-installments", String(installment.id)],
+        queryKey: ["accounts-receivable-installments", accountReceivableId],
       });
       queryClient.invalidateQueries({
         queryKey: [
