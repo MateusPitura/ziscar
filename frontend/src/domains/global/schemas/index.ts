@@ -8,6 +8,7 @@ import {
 import { s } from "@shared/safeZod";
 import { FieldValues, Path } from "react-hook-form";
 import { PaymentFieldRuleData } from "../types";
+import { applyMask } from "../utils/applyMask";
 
 export const SchemaAddress = s.SchemaAddress.extend({
   street: s.string().or(s.empty()),
@@ -17,7 +18,9 @@ export const SchemaAddress = s.SchemaAddress.extend({
 });
 
 const SchemaInstallment = s.object({
-  value: s.numberString(),
+  value: s.numberString({
+    formatter: (value) => applyMask(value, "money") ?? "",
+  }),
   status: s.enumeration(INSTALLMENTSTATUS_VALUES),
   dueDate: s.paymentDate().or(s.empty()),
   paymentDate: s.paymentDate().or(s.empty()),

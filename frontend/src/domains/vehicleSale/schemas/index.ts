@@ -1,6 +1,12 @@
-import { addIssue, paymentFieldsRule, SchemaReceivableInstallment } from "@/domains/global/schemas";
+import {
+  addIssue,
+  paymentFieldsRule,
+  SchemaReceivableInstallment,
+} from "@/domains/global/schemas";
 import { s } from "@shared/safeZod";
 import { VehicleSaleFormInputs } from "../types";
+import { removeMask } from "@shared/utils/removeMask";
+import { applyMask } from "@/domains/global/utils/applyMask";
 
 interface SchemaVehicleSaleFormProperties {
   minimumPrice?: string;
@@ -17,13 +23,19 @@ export function SchemaVehicleSaleForm({
         id: s.string(),
       }),
       payment: s.object({
+        saleDate: s.paymentDate(),
+        commissionValue: s.numberString({
+          min: 0,
+          max: commissionValue ? Number(removeMask(commissionValue)) : 0,
+          formatter: (value) => applyMask(value, "money") ?? "",
+        }),
         installment: SchemaReceivableInstallment,
       }),
     })
     .superRefine(paymentFieldsRule)
     .superRefine((data, ctx) => {
-      const commission = Number(commissionValue?.replace(/\D/g, "") ?? 0);
-      const minimum = Number(minimumPrice?.replace(/\D/g, "") ?? 0);
+      const commission = Number(data.payment.commissionValue) || 0;
+      const minimum = Number(removeMask(minimumPrice ?? "0")) || 0;
 
       if (Number(data.payment.installment.value) <= minimum + commission) {
         addIssue<VehicleSaleFormInputs>(
@@ -38,4 +50,4 @@ export function SchemaVehicleSaleForm({
 export const cpfSearchSchema = s
   .string()
   .regex(/^[0-9.-]+$/)
-  .transform((value) => value.replace(/\D/g, ""));
+  .transform((value) => removeMask(value));

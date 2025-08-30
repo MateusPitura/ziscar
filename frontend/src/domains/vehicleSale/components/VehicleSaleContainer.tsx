@@ -21,14 +21,15 @@ import { SchemaVehicleSaleForm } from "../schemas";
 import { VehicleSaleFormInputs } from "../types";
 import selectVehicleInfo from "../utils/selectVehicleInfo";
 import VehicleSaleTabs from "./VehicleSaleTabs";
+import useVehicleSalePageContext from "../hooks/useVehicleSalePageContext";
 
 export default function VehicleSaleContainer(): ReactNode {
   const navigate = useNavigate();
-
   const { safeFetch } = useSafeFetch();
   const { vehicleId } = useParams();
   const { showSuccessSnackbar } = useSnackbar();
   const queryClient = useQueryClient();
+  const { customer: customerData } = useVehicleSalePageContext();
 
   async function getVehicle(): Promise<Vehicle> {
     // return await safeFetch(`${BACKEND_URL}/vehicle/${vehicleId}`, { // 🌠 MOCK
@@ -55,7 +56,7 @@ export default function VehicleSaleContainer(): ReactNode {
       category: VehicleCategory.CAR,
       color: "#FF0000",
       chassiNumber: "AAAAAAAAAAAAAAAAA",
-      commissionValue: 0,
+      commissionValue: 1000,
       fuelType: FuelType.FLEX,
       kilometers: 1000,
       minimumPrice: 8000000,
@@ -84,11 +85,11 @@ export default function VehicleSaleContainer(): ReactNode {
       body: {
         vehicleId,
         customerId: customer.id,
-        date: new Date(), // 🌠 Permitir escolher a data
-        commissionValue: 1000, // 🌠 Permitir enviar a comissão
+        date: payment.saleDate,
+        commissionValue: payment.commissionValue,
         accountReceivable: {
           description: `Venda Veículo ${vehicleData?.plateNumber}`,
-          receivedFrom: "João", // 🌠 Pegar o nome dele,
+          receivedFrom: customerData?.fullName || "",
         },
         installments: [
           {
@@ -146,6 +147,7 @@ export default function VehicleSaleContainer(): ReactNode {
           })}
           defaultValues={vehicleSaleDefaultValues({
             value: vehicleData.announcedPrice,
+            commissionValue: vehicleData.commissionValue,
           })}
         >
           <PageHeader title="Realizar venda" />

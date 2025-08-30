@@ -1,20 +1,23 @@
-import { DialogProps } from "@/domains/global/types";
-import type { ReactNode } from "react";
-import { PaymentMethodFormInputs } from "../types";
 import Dialog from "@/design-system/Dialog";
 import Form from "@/design-system/Form";
-import { SchemaPaymentMethodForm } from "../schemas";
-import { paymentMethodDefaultValues } from "../constants";
-import Input from "@/design-system/Form/Input";
-import useSnackbar from "@/domains/global/hooks/useSnackbar";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { AccountReceivableInstallment } from "@/domains/global/types/model";
-import { PaymentMethodReceivableText } from "@/domains/global/constants";
-import InputLabel from "@/design-system/Form/InputLabel";
 import Choice from "@/design-system/Form/Choice";
-import { PaymentMethodReceivableType } from "@shared/enums";
+import Input from "@/design-system/Form/Input";
+import InputLabel from "@/design-system/Form/InputLabel";
+import {
+  BACKEND_URL,
+  PaymentMethodReceivableText,
+} from "@/domains/global/constants";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
-import { BACKEND_URL } from "@/domains/global/constants";
+import useSnackbar from "@/domains/global/hooks/useSnackbar";
+import { DialogProps } from "@/domains/global/types";
+import { AccountReceivableInstallment } from "@/domains/global/types/model";
+import { PaymentMethodReceivableType } from "@shared/enums";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import type { ReactNode } from "react";
+import { paymentMethodDefaultValues } from "../constants";
+import { SchemaPaymentMethodForm } from "../schemas";
+import { PaymentMethodFormInputs } from "../types";
+import { useParams } from "react-router-dom";
 
 interface AddPaymentMethodModalProperties extends DialogProps {
   installment: AccountReceivableInstallment;
@@ -27,12 +30,13 @@ export default function AddPaymentMethodModal({
   const { safeFetch } = useSafeFetch();
   const { showSuccessSnackbar } = useSnackbar();
   const queryClient = useQueryClient();
+  const { accountReceivableId } = useParams();
 
   async function createPaymentMethod(
     data: PaymentMethodFormInputs
   ): Promise<void> {
     await safeFetch(
-      `${BACKEND_URL}/account-receivable-installments/payment-method/${installment.id}`, 
+      `${BACKEND_URL}/account-receivable-installments/payment-method/${installment.id}`,
       {
         method: "POST",
         body: data,
@@ -49,10 +53,13 @@ export default function AddPaymentMethodModal({
         title: "Método de pagamento adicionado",
       });
       queryClient.invalidateQueries({
-        queryKey: ["accounts-receivable-installments", installment.id],
+        queryKey: ["accounts-receivable-installments", accountReceivableId],
       });
       queryClient.invalidateQueries({
-        queryKey: ["accounts-receivable-payment-method", installment.id],
+        queryKey: [
+          "accounts-receivable-payment-method",
+          String(installment.id),
+        ],
       });
       queryClient.invalidateQueries({
         queryKey: ["accounts-receivable"],

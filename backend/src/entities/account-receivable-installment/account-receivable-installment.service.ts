@@ -114,15 +114,11 @@ export class AccountReceivableInstallmentService
     return installment;
   }
 
-  async findAllByAccountReceivableId(
-    accountReceivableId: string,
-    dueDate: Date,
-  ) {
+  async findAllByAccountReceivableId(accountReceivableId: string) {
     const installments =
       await this.prisma.accountReceivableInstallment.findMany({
         where: {
           accountReceivableId: Number(accountReceivableId),
-          dueDate: { lte: dueDate },
         },
       });
 

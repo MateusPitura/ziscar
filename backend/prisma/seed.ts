@@ -7,6 +7,8 @@ const prisma = new PrismaClient();
 
 async function seed() {
   await prisma.$transaction(async (tx) => {
+    console.log('🌱 Starting database seeding...');
+
     await tx.city.createMany({
       data: citiesData,
       skipDuplicates: true,
@@ -27,8 +29,6 @@ async function seed() {
         }),
       ),
     );
-
-    console.log('✅ Permissions created/verified.');
 
     for (const [roleName, permissions] of Object.entries(rolePermissions)) {
       const permissionsToConnect = await tx.permission.findMany({
@@ -64,10 +64,6 @@ async function seed() {
         },
       });
     }
-
-    console.log(
-      `✅ Role ${RoleType.ADMIN} and ${RoleType.SELLER} created/updated with correct permissions.`,
-    );
   });
 }
 

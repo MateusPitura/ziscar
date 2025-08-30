@@ -23,7 +23,7 @@ export default function VehicleData({
       <DataField label="Preço mínimo" value={vehicleData.minimumPrice} />
       <DataField label="Preço anunciado" value={vehicleData.announcedPrice} />
       <DataField
-        label="Valor da comissão"
+        label="Comissão máxima"
         value={vehicleData.commissionValue}
       />
       <DataField label="Status" value={VehicleStatusText[vehicleData.status]} />

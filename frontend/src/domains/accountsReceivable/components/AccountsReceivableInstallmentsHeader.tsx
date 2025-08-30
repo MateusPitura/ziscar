@@ -14,10 +14,13 @@ export default function AccountsReceivableInstallmentsHeader(): ReactNode {
   const { safeFetch } = useSafeFetch();
 
   async function getAccountReceivableInfo(): Promise<FetchAccountReceivable> {
-    return await safeFetch(`${BACKEND_URL}/account-receivable/${accountReceivableId}`, {
-      resource: "ACCOUNTS_RECEIVABLE",
-      action: "READ",
-    });
+    return await safeFetch(
+      `${BACKEND_URL}/account-receivable/${accountReceivableId}`,
+      {
+        resource: "ACCOUNTS_RECEIVABLE",
+        action: "READ",
+      }
+    );
   }
 
   const { data } = useQuery({
@@ -30,8 +33,8 @@ export default function AccountsReceivableInstallmentsHeader(): ReactNode {
     <PageHeader
       title={
         data?.description
-          ? `Detalhes do Pagamento da Venda "${data.description}"`
-          : "Detalhes do Pagamento da Venda"
+          ? `Detalhes do Pagamento "${data.description}"`
+          : "Detalhes do Pagamento"
       }
     >
       <Button

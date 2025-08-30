@@ -7,6 +7,7 @@ import CustomerSearchForm from "../forms/CustomerSearchForm";
 import { VehicleSaleFormInputs, VehicleToString } from "../types";
 import CustomerData from "./CustomerData";
 import VehicleData from "./VehicleData";
+import VehicleSaleDetailsForm from "../forms/VehicleSaleDetailsForm";
 
 type VehicleSaleTabs = "CLIENT" | "VEHICLE" | "PAYMENT";
 
@@ -76,6 +77,12 @@ export default function VehicleSaleTabs({
         </Tabs.Section>
         <Tabs.Section isActive={activeTab === "PAYMENT"}>
           <Section>
+            <Section.Group>
+              <Section.Header title="Informações da venda" />
+              <Section.Body>
+                <VehicleSaleDetailsForm />
+              </Section.Body>
+            </Section.Group>
             <Section.Group>
               <Section.Header title="Informações do pagamento" />
               <Section.Body>

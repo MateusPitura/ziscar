@@ -17,6 +17,7 @@ export default function VehicleNewCharacteristicForm(): ReactElement {
             name={`characteristics.newCharacteristics.${index}.description`}
             label="Característica"
             placeholder="Câmbio automático"
+            required
           />
         </div>
       )}

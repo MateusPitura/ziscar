@@ -33,7 +33,6 @@ export abstract class AccountReceivableInstallmentRepository {
   abstract findById(id: string): Promise<AccountReceivableInstallment | null>;
   abstract findAllByAccountReceivableId(
     accountReceivableId: string,
-    dueDate: Date,
   ): Promise<AccountReceivableInstallmentPayload[]>;
   abstract findPaymentMethodByInstallmentId(
     installmentId: string,

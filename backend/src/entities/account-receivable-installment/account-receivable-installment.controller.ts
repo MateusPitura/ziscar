@@ -6,7 +6,6 @@ import {
   Param,
   Post,
   Put,
-  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -56,11 +55,9 @@ export class AccountReceivableInstallmentController {
   @Get('/by-account/:accountReceivableId')
   async findAllByAccountReceivableId(
     @Param('accountReceivableId') accountReceivableId: string,
-    @Query('dueDate') dueDate: string,
   ): Promise<AccountReceivableInstallmentPayload[]> {
     return this.accountReceivableInstallmentService.findAllByAccountReceivableId(
       accountReceivableId,
-      new Date(dueDate),
     );
   }
 
