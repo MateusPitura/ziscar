@@ -9,11 +9,12 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
-import { AccountReceivableService } from './account-receivable.service';
 import { CreateAccountReceivableDTO } from 'src/infra/dtos/account-receivable/create-account-receivable.dto';
-import { UpdateAccountReceivableDTO } from 'src/infra/dtos/account-receivable/update-account-receivable.dto';
 import { QueryAccountReceivableDTO } from 'src/infra/dtos/account-receivable/query-account-receivable-dto';
+import { UpdateAccountReceivableDTO } from 'src/infra/dtos/account-receivable/update-account-receivable.dto';
 import { SearchResponse } from 'src/repositories/account_receivable-repository';
+import { AccountReceivableService } from './account-receivable.service';
+import { ITEMS_PER_PAGE } from '@shared/constants';
 
 @Controller('account-receivable')
 export class AccountReceivableController {
@@ -34,7 +35,7 @@ export class AccountReceivableController {
       // Os parâmetros já vêm validados pelo ZodValidationPipe
       const searchRequest = {
         page: queryParams.page,
-        limit: queryParams.limit ?? 10,
+        limit: queryParams.limit ?? ITEMS_PER_PAGE,
         startDate: queryParams.startDate
           ? new Date(queryParams.startDate)
           : undefined,

@@ -1,22 +1,21 @@
 import Table from "@/design-system/Table";
 import AccountStatus from "@/domains/global/components/AccountStatus";
+import { BACKEND_URL, BLANK, PaymentMethodPayableText } from "@/domains/global/constants";
+import useDialog from "@/domains/global/hooks/useDialog";
+import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import {
   AccountReceivableInstallment,
   FetchAccountReceivableInstallment,
 } from "@/domains/global/types/model";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState, type ReactNode } from "react";
+import { useParams } from "react-router-dom";
 import selectAccountsReceivableInstallmentsInfo from "../utils/selectAccountsReceivableInstallmentsInfo";
 import AccountsReceivableInstallmentsTableActions from "./AccountsReceivableTableInstallmentsActions";
-import { useParams } from "react-router-dom";
-import useDialog from "@/domains/global/hooks/useDialog";
 import PaymentMethodModal from "./PaymentMethodModal";
-import { BLANK, PaymentMethodPayableText } from "@/domains/global/constants";
-// import { BACKEND_URL } from "@/domains/global/constants";
-// import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 
 export default function AccountsReceivableInstallmentsTable(): ReactNode {
-  //   const { safeFetch } = useSafeFetch();
+    const { safeFetch } = useSafeFetch();
   const { accountReceivableId } = useParams();
   const [installmentToPaymentMethod, setInstallmentToPaymentMethod] =
     useState<AccountReceivableInstallment | null>(null);
@@ -33,50 +32,10 @@ export default function AccountsReceivableInstallmentsTable(): ReactNode {
   async function getAccountsReceivableInstallmentsInfo(): Promise<
     FetchAccountReceivableInstallment[]
   > {
-    // return await safeFetch(`${BACKEND_URL}/account-receivable-installments/${accountReceivableId}`, { // 🌠 MOCK
-    //   resource: "ACCOUNTS_RECEIVABLE",
-    //   action: "READ",
-    // });
-    return [
-      {
-        id: 1,
-        dueDate: "2025-01-01",
-        installmentSequence: 0,
-        status: "PAID",
-        value: "10000",
-        isRefund: false,
-        isUpfront: true,
-        paymentMethod: "CREDIT_CARD",
-      },
-      {
-        id: 2,
-        dueDate: "2025-01-01",
-        installmentSequence: 1,
-        status: "PAID",
-        value: "10000",
-        isRefund: false,
-        isUpfront: false,
-        paymentMethod: "CREDIT_CARD",
-      },
-      {
-        id: 3,
-        dueDate: "2025-02-01",
-        installmentSequence: 2,
-        status: "PENDING",
-        value: "10000",
-        isRefund: false,
-        isUpfront: false,
-      },
-      {
-        id: 4,
-        dueDate: "2025-03-01",
-        installmentSequence: 3,
-        status: "PENDING",
-        value: "100000",
-        isRefund: false,
-        isUpfront: false,
-      },
-    ];
+    return await safeFetch(`${BACKEND_URL}/account-receivable-installments/by-account/${accountReceivableId}`, {
+      resource: "ACCOUNTS_RECEIVABLE",
+      action: "READ",
+    });
   }
 
   const {

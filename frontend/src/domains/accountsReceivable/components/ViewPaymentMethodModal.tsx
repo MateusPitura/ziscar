@@ -1,17 +1,16 @@
-import { DialogProps } from "@/domains/global/types";
-import type { ReactNode } from "react";
 import Dialog from "@/design-system/Dialog";
-import { useQuery } from "@tanstack/react-query";
+import Spinner from "@/design-system/Spinner";
+import DataField from "@/domains/global/components/DataField";
+import { BACKEND_URL, PaymentMethodReceivableText } from "@/domains/global/constants";
+import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
+import { DialogProps } from "@/domains/global/types";
 import {
   AccountReceivableInstallment,
   PaymentMethod,
 } from "@/domains/global/types/model";
-import DataField from "@/domains/global/components/DataField";
-import Spinner from "@/design-system/Spinner";
+import { useQuery } from "@tanstack/react-query";
+import type { ReactNode } from "react";
 import selectPaymentMethodInfo from "../utils/selectPaymentMethodInfo";
-import { PaymentMethodReceivableText } from "@/domains/global/constants";
-// import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
-// import { BACKEND_URL } from "@/domains/global/constants";
 
 interface ViewPaymentMethodModalProperties extends DialogProps {
   installment: AccountReceivableInstallment;
@@ -21,21 +20,16 @@ export default function ViewPaymentMethodModal({
   installment,
   ...dialog
 }: ViewPaymentMethodModalProperties): ReactNode {
-  // const { safeFetch } = useSafeFetch();
+  const { safeFetch } = useSafeFetch();
 
   async function getPaymentMethod(): Promise<PaymentMethod> {
-    // return await safeFetch(
-    //   `${BACKEND_URL}/accounts-receivable-installments/payment-method/${installment?.id}`, // 🌠 MOCK
-    //   {
-    //     resource: "ACCOUNTS_RECEIVABLE",
-    //     action: "READ",
-    //   }
-    // );
-    return {
-      id: 1,
-      paymentDate: "2025-01-01",
-      type: "CREDIT_CARD",
-    };
+    return await safeFetch(
+      `${BACKEND_URL}/account-receivable-installments/payment-method/${installment?.id}`,
+      {
+        resource: "ACCOUNTS_RECEIVABLE",
+        action: "READ",
+      }
+    );
   }
 
   const { data: paymentMethodData, isFetching } = useQuery({
