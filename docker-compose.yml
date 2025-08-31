@@ -21,6 +21,7 @@ services:
       dockerfile: backend.Dockerfile
       args:
         - STAGE=${STAGE:-staging}
+    image: mateuspitura/backend-ziscar:latest
     environment:
       - JWT_SECRET=${JWT_SECRET}
       - DATABASE_URL=postgresql://${DB_USERNAME}:${DB_PASSWORD}@localhost:${DB_PORT}/${DB_NAME}?schema=public
@@ -38,6 +39,7 @@ services:
     build:
       context: .
       dockerfile: frontend.Dockerfile
+    image: mateuspitura/frontend-ziscar:latest
     container_name: ziscar_frontend
     network_mode: host
 

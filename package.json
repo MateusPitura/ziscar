@@ -4,6 +4,7 @@
   "scripts": {
     "start": "npm run dev:db & npm --prefix frontend run dev & npm --prefix backend run dev",
     "dev": "docker-compose up --build -d",
+    "build": "docker-compose build && docker-compose push",
     "dev:down": "docker-compose down",
     "dev:db": "docker-compose up --build -d database",
     "dev:down:db": "docker-compose down database",
@@ -11,9 +12,9 @@
     "test:down:db": "docker-compose -f docker-compose.test.yml down test_database",
     "test:load": "./test/load/script.sh",
     "test:down:load": "docker-compose -f docker-compose.test.yml down k6",
-    "prod:db": "RESTART_POLICY=always npm run dev:db",
+    "prod:db": "docker-compose pull database && RESTART_POLICY=always npm run dev:db",
     "prod:down:db": "npm run dev:down:db",
-    "prod:backend": "STAGE=production RESTART_POLICY=always docker-compose -f docker-compose.yml -f docker-compose.prod.yml up --build -d backend",
+    "prod:backend": "docker-compose pull backend && STAGE=production RESTART_POLICY=always docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d backend",
     "prod:down:backend": "docker-compose down backend",
     "generate:enums": "node scripts/generate-shared-enums.js",
     "generate:enums:force": "node scripts/generate-shared-enums.js --force"
