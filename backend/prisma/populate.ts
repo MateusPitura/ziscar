@@ -31,6 +31,7 @@ import { addMonths, subDays } from 'date-fns';
 const prisma = new PrismaClient();
 
 const YEAR_IN_MS = 365 * 24 * 60 * 60 * 1000;
+const BATCH_SIZE = 10;
 
 async function populate() {
   await prisma.$transaction(async (tx) => {
@@ -199,71 +200,76 @@ async function populate() {
       data: otherVehicles,
     });
 
-    const otherAccountsReceivablePromise = Array.from(
-      { length: POPULATE_OTHER_ENTITIES_AMOUNT },
-      async () => {
-        const installmentsCount = faker.number.int({ min: 1, max: 12 });
+    for (let i = 0; i < POPULATE_OTHER_ENTITIES_AMOUNT; i += BATCH_SIZE) {
+      const batchPromises = Array.from(
+        { length: Math.min(BATCH_SIZE, POPULATE_OTHER_ENTITIES_AMOUNT - i) },
+        async () => {
+          const installmentsCount = faker.number.int({ min: 1, max: 12 });
 
-        const paidInstallmentsCount = faker.number.int({
-          min: 0,
-          max: installmentsCount,
-        });
+          const paidInstallmentsCount = faker.number.int({
+            min: 0,
+            max: installmentsCount,
+          });
 
-        const hasUpfront = faker.datatype.boolean();
+          const hasUpfront = faker.datatype.boolean();
 
-        const firstDueDate = faker.date.between({
-          from: new Date(Date.now() - 5 * YEAR_IN_MS),
-          to: new Date(Date.now() - 2 * YEAR_IN_MS),
-        });
+          const firstDueDate = faker.date.between({
+            from: new Date(Date.now() - 5 * YEAR_IN_MS),
+            to: new Date(Date.now() - 2 * YEAR_IN_MS),
+          });
 
-        const installments = Array.from(
-          { length: installmentsCount },
-          (_, i) => {
-            return {
-              installmentSequence: hasUpfront ? i : i + 1,
-              dueDate: addMonths(firstDueDate, i),
-              value: faker.number.int({ min: 500_000, max: 20_000_000 }),
-              isRefund: false,
-              isUpfront: hasUpfront && i === 0,
-              status:
-                i < paidInstallmentsCount
-                  ? InstallmentStatus.PAID
-                  : InstallmentStatus.PENDING,
-              ...(i < paidInstallmentsCount && {
-                paymentMethodReceivables: {
-                  create: {
-                    type: PAYMENTMETHODRECEIVABLETYPE_VALUES[
-                      faker.number.int({
-                        min: 0,
-                        max: PAYMENTMETHODRECEIVABLETYPE_VALUES.length - 1,
-                      })
-                    ],
-                    value: faker.number.int({ min: 500_000, max: 20_000_000 }),
-                    paymentDate: subDays(
-                      addMonths(firstDueDate, i),
-                      faker.number.int({ min: 0, max: 7 }),
-                    ),
-                    userId: POPULATE_USER.ADM.id,
+          const installments = Array.from(
+            { length: installmentsCount },
+            (_, idx) => {
+              return {
+                installmentSequence: hasUpfront ? idx : idx + 1,
+                dueDate: addMonths(firstDueDate, idx),
+                value: faker.number.int({ min: 500_000, max: 20_000_000 }),
+                isRefund: false,
+                isUpfront: hasUpfront && idx === 0,
+                status:
+                  idx < paidInstallmentsCount
+                    ? InstallmentStatus.PAID
+                    : InstallmentStatus.PENDING,
+                ...(idx < paidInstallmentsCount && {
+                  paymentMethodReceivables: {
+                    create: {
+                      type: PAYMENTMETHODRECEIVABLETYPE_VALUES[
+                        faker.number.int({
+                          min: 0,
+                          max: PAYMENTMETHODRECEIVABLETYPE_VALUES.length - 1,
+                        })
+                      ],
+                      value: faker.number.int({
+                        min: 500_000,
+                        max: 20_000_000,
+                      }),
+                      paymentDate: subDays(
+                        addMonths(firstDueDate, idx),
+                        faker.number.int({ min: 0, max: 7 }),
+                      ),
+                      userId: POPULATE_USER.ADM.id,
+                    },
                   },
-                },
-              }),
-            };
-          },
-        );
-
-        await tx.accountReceivable.create({
-          data: {
-            description: `Venda Veículo ${generatePlateNumber(true)}`,
-            receivedFrom: faker.person.fullName(),
-            accountReceivableInstallments: {
-              create: installments,
+                }),
+              };
             },
-          },
-        });
-      },
-    );
+          );
 
-    await Promise.all(otherAccountsReceivablePromise);
+          await tx.accountReceivable.create({
+            data: {
+              description: `Venda Veículo ${generatePlateNumber(true)}`,
+              receivedFrom: faker.person.fullName(),
+              accountReceivableInstallments: {
+                create: installments,
+              },
+            },
+          });
+        },
+      );
+
+      await Promise.all(batchPromises);
+    }
   });
 }
 
