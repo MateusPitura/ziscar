@@ -14,7 +14,7 @@
     "prod:build": "docker-compose build && docker-compose push",
     "prod:db": "docker-compose pull database && RESTART_POLICY=always npm run dev:db",
     "prod:down:db": "npm run dev:down:db",
-    "prod:backend": "docker-compose pull backend && STAGE=production RESTART_POLICY=always docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d backend",
+    "prod:backend": "docker-compose pull backend && NODE_ENV=production RESTART_POLICY=always docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d backend",
     "prod:down:backend": "docker-compose down backend",
     "generate:enums": "node scripts/generate-shared-enums.js",
     "generate:enums:force": "node scripts/generate-shared-enums.js --force"

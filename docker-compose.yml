@@ -19,13 +19,12 @@ services:
     build:
       context: .
       dockerfile: backend.Dockerfile
-      args:
-        - STAGE=${STAGE:-staging}
     image: mateuspitura/backend-ziscar:latest
     environment:
       - JWT_SECRET=${JWT_SECRET}
       - DATABASE_URL=postgresql://${DB_USERNAME}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}?schema=public
       - EMAIL_APP_PASSWORD=${EMAIL_APP_PASSWORD}
+      - NODE_ENV=${NODE_ENV:-staging}
     container_name: ziscar_backend
     network_mode: host
     env_file:

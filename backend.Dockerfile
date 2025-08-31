@@ -1,9 +1,6 @@
 # Use the Node.js image
 FROM node:22
 
-ARG STAGE
-ENV STAGE=$STAGE
-
 # Set the working directory for shared
 WORKDIR /app/shared
 # Copy package.json for shared
@@ -31,4 +28,4 @@ RUN cd /app && node scripts/generate-shared-enums.js
 
 RUN sh -c "npm run build"
 
-CMD sh -c "NODE_ENV=${STAGE} npm run start"
+CMD sh -c "npm run start"
