@@ -15,13 +15,6 @@ services:
         required: false
     restart: ${RESTART_POLICY:-no}
 
-  frontend:
-    build:
-      context: .
-      dockerfile: frontend.Dockerfile
-    container_name: ziscar_frontend
-    network_mode: host
-
   backend:
     build:
       context: .
@@ -38,6 +31,15 @@ services:
       - path: .env
         required: false
     restart: ${RESTART_POLICY:-no}
+    depends_on:
+      - database
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend.Dockerfile
+    container_name: ziscar_frontend
+    network_mode: host
 
 volumes:
   db-data:
