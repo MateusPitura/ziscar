@@ -12,7 +12,7 @@
     "test:load": "./test/load/script.sh",
     "test:load:down": "docker-compose -f docker-compose.test.yml down k6",
     "prod:db": "docker-compose pull database && RESTART_POLICY=always npm run dev:db",
-    "prod:db:down": "npm run dev:down:db",
+    "prod:db:down": "npm run dev:db:down",
     "prod:backend": "docker-compose pull backend && NODE_ENV=production RESTART_POLICY=always docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d backend",
     "prod:backend:down": "docker-compose down backend",
     "prod:build": "docker-compose build && docker-compose push",
