@@ -11,9 +11,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ZodType } from "zod";
 import { Childrenable } from "@/domains/global/types";
 
-const DevTool = import.meta.env.PROD
-  ? () => null
-  : lazy(() => import("@/domains/global/components/HookFormDevTool"));
+const DevTool = import.meta.env.DEV
+  ? lazy(() => import("@/domains/global/components/HookFormDevTool"))
+  : () => null;
 
 interface FormProperties<T extends FieldValues> extends Childrenable {
   onSubmit: (data: T) => void;
@@ -72,9 +72,9 @@ export default function Form<T extends FieldValues>({
 }: FormProperties<T>): ReactElement {
   const methods: UseFormReturn<T> = useForm<T>({
     defaultValues,
-    resolver: import.meta.env.PROD
-      ? zodResolver(schema)
-      : loggingResolver(zodResolver(schema)),
+    resolver: import.meta.env.DEV
+      ? loggingResolver(zodResolver(schema))
+      : zodResolver(schema),
   });
 
   const safeOnSubmit = useCallback(

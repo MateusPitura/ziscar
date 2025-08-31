@@ -23,10 +23,14 @@ import { VehicleExpenseModule } from './entities/vehicle-expense/vehicle-expense
 import { VehiclePurchaseModule } from './entities/vehicle-purchase/vehicle-purchase.module';
 import { VehicleSaleModule } from './entities/vehicle-sale/vehicle-sale.module';
 import { UserModule } from './entities/user/user.module';
+import { join } from 'path';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: join(__dirname, '../../.env'),
+    }),
     AuthModule,
     UserModule,
     DatabaseModule,

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Build k6 image using docker-compose at project root
-docker-compose build k6
+docker-compose -f docker-compose.test.yml build k6
 
 # Get the directory of the script and the docker volume
 SCRIPT_DIR=$(dirname "$(realpath "$0")")
@@ -40,7 +40,7 @@ for jsfile in "${jsfiles[@]}"; do
   container_jsfile="/$DOCKER_VOLUME/routes/${relpath}"
 
   # Run the k6 load test using the current jsfile and save the output
-  docker-compose run --rm k6 run "$container_jsfile" 2>&1 | tee "$result_subdir/${TIMESTAMP}.out"
+  docker-compose -f docker-compose.test.yml run --rm k6 run "$container_jsfile" 2>&1 | tee "$result_subdir/${TIMESTAMP}.out"
 
   # Sleep 5 seconds if not the last iteration
   [ "$jsfile" != "${jsfiles[-1]}" ] && sleep 5

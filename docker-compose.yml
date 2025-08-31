@@ -1,6 +1,6 @@
 services:
   database:
-    image: &postgres postgres:16
+    image: postgres:16
     container_name: ziscar_db
     environment:
       - POSTGRES_USER=${DB_USERNAME}
@@ -9,53 +9,41 @@ services:
       - PGPORT=${DB_PORT}
     volumes:
       - db-data:/var/lib/postgresql/data
-    network_mode: host
+    ports:
+    - "${DB_PORT}:${DB_PORT}"
     env_file:
       - path: .env
         required: false
     restart: ${RESTART_POLICY:-no}
-
-  test_database:
-    image: *postgres
-    container_name: test_ziscar_db
-    environment:
-      - POSTGRES_USER=test_user
-      - POSTGRES_PASSWORD=test_admin
-      - POSTGRES_DB=test_ziscar
-      - PGPORT=9862
-    volumes:
-      - test-db-data:/var/lib/postgresql/data
-    network_mode: host
-
-  frontend:
-    build:
-      context: .
-      dockerfile: frontend.Dockerfile
-    container_name: ziscar_frontend
-    network_mode: host
 
   backend:
     build:
       context: .
       dockerfile: backend.Dockerfile
-      args:
-        - APP_ENV=${APP_ENV:-dev}
+    image: mateuspitura/backend-ziscar:latest
+    environment:
+      - JWT_SECRET=${JWT_SECRET}
+      - DATABASE_URL=postgresql://${DB_USERNAME}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}?schema=public
+      - EMAIL_APP_PASSWORD=${EMAIL_APP_PASSWORD}
+      - NODE_ENV=${NODE_ENV:-staging}
     container_name: ziscar_backend
-    network_mode: host
-    restart: ${RESTART_POLICY:-no}
-
-  k6:
-    image: grafana/k6
-    volumes:
-      - ./shared:/shared
-      - ./test/load:/test/load
+    ports:
+      - "3000:3000"
     env_file:
       - path: .env
         required: false
-    environment:
-      - EMAIL=${APP_EMAIL}
-      - PASSWORD=${APP_PASSWORD}
+    restart: ${RESTART_POLICY:-no}
+    depends_on:
+      - database
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend.Dockerfile
+    image: mateuspitura/frontend-ziscar:latest
+    container_name: ziscar_frontend
+    ports:
+      - "5173:5173"
 
 volumes:
   db-data:
-  test-db-data:

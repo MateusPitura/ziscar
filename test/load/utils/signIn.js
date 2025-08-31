@@ -5,8 +5,8 @@ import { API_URL } from "/shared/src/constants.ts";
 
 export function signIn() {
   const response = http.post(`${API_URL}/auth/sign-in`, {
-    email: __ENV.EMAIL,
-    password: __ENV.PASSWORD,
+    email: __ENV.K6_EMAIL,
+    password: __ENV.K6_PASSWORD,
   });
 
   checkResponse(response, 200);

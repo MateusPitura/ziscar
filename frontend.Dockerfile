@@ -25,5 +25,12 @@ RUN npm install
 # Copy the rest of the application files
 COPY frontend/ .
 
-# Start the React app
-CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
+# Build the React app
+RUN npm run build -- --mode staging
+
+# Expose the port for serving the static files
+EXPOSE 5173
+
+# Use serve to serve the static files
+RUN npm install -g serve
+CMD ["serve", "-s", "dist", "-l", "5173"]

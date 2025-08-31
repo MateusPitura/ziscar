@@ -47,7 +47,7 @@ Content-Type: application/json
   "plateNumber": "XYZ5678",
   "announcedPrice": null,
   "minimumPrice": null,
-  "commissionValue": 3000,
+  "commissionValue": 2000,
   "color": null,
   "fuelType": null,
   "status": "PURCHASED",
@@ -199,7 +199,7 @@ Content-Type: application/json
   "vehicleId": 6,
   "customerId": 2,
   "date": "2025-08-16T00:00:00.000Z",
-  "commissionValue": 3000,
+  "commissionValue": 2000,
   "accountReceivable": {
     "description": "Venda à vista",
     "receivedFrom": "Cliente Maria"
