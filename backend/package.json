@@ -6,8 +6,8 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "dev": "nest start --debug --watch",
-    "prod": "npm run build && NODE_ENV=production node dist/backend/src/main",
+    "dev": "NODE_ENV=development nest start --debug --watch",
+    "prod": "npm run build && node dist/backend/src/main",
     "build": "nest build",
     "dev:migration-generate": "prisma migrate dev --create-only",
     "dev:migration-run": "prisma migrate deploy && npx prisma generate && npm run generate:enums",

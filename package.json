@@ -13,7 +13,7 @@
     "test:down:load": "docker-compose -f docker-compose.test.yml down k6",
     "prod:db": "RESTART_POLICY=always npm run dev:db",
     "prod:down:db": "npm run dev:down:db",
-    "prod:backend": "APP_ENV=prod RESTART_POLICY=always docker-compose up --build -d backend",
+    "prod:backend": "STAGE=production RESTART_POLICY=always docker-compose up --build -d backend",
     "prod:down:backend": "docker-compose down backend",
     "generate:enums": "node scripts/generate-shared-enums.js",
     "generate:enums:force": "node scripts/generate-shared-enums.js --force"

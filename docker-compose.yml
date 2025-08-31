@@ -27,7 +27,7 @@ services:
       context: .
       dockerfile: backend.Dockerfile
       args:
-        - APP_ENV=${APP_ENV:-dev}
+        - STAGE=${STAGE:-staging}
     environment:
       - JWT_SECRET=${JWT_SECRET}
       - DATABASE_URL=postgresql://${DB_USERNAME}:${DB_PASSWORD}@localhost:${DB_PORT}/${DB_NAME}?schema=public
