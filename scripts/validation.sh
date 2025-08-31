@@ -19,8 +19,6 @@ echo "Starting Docker"
 echo "Waiting for servers to start"
 sleep 10
 
-(cd ../backend && npm run dev:db-init)
-
 echo "Running e2e tests"
 (cd ../frontend && npm run cypress:run)
 

@@ -26,6 +26,6 @@ COPY scripts/generate-shared-enums.js /app/scripts/
 RUN npx prisma generate
 RUN cd /app && node scripts/generate-shared-enums.js
 
-RUN sh -c "npm run build"
+RUN npm run build
 
-CMD sh -c "npm run start"
+CMD sh -c "npm run dev:db-init && npm run start"

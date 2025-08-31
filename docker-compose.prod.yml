@@ -1,3 +1,4 @@
 services:
   backend:
     depends_on: !reset []
+    command: ["npm" , "run", "start"]
