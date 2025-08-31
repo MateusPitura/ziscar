@@ -28,4 +28,6 @@ RUN cd /app && node scripts/generate-shared-enums.js
 
 RUN npm run build
 
+EXPOSE 3000
+
 CMD sh -c "npm run dev:db-init && npm run start"

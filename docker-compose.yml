@@ -9,7 +9,8 @@ services:
       - PGPORT=${DB_PORT}
     volumes:
       - db-data:/var/lib/postgresql/data
-    network_mode: host
+    ports:
+    - "${DB_PORT}:${DB_PORT}"
     env_file:
       - path: .env
         required: false
@@ -26,7 +27,8 @@ services:
       - EMAIL_APP_PASSWORD=${EMAIL_APP_PASSWORD}
       - NODE_ENV=${NODE_ENV:-staging}
     container_name: ziscar_backend
-    network_mode: host
+    ports:
+      - "3000:3000"
     env_file:
       - path: .env
         required: false
@@ -40,7 +42,8 @@ services:
       dockerfile: frontend.Dockerfile
     image: mateuspitura/frontend-ziscar:latest
     container_name: ziscar_frontend
-    network_mode: host
+    ports:
+      - "5173:5173"
 
 volumes:
   db-data:
