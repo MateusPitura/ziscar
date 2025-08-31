@@ -1,7 +1,17 @@
 import { config } from 'dotenv';
 import { PrismaClient } from '@prisma/client';
 
-const path = process.env.NODE_ENV === 'test' ? '../.env.test' : '../.env';
+let path: string;
+switch (process.env.NODE_ENV) {
+  case 'test':
+    path = '../.env.test';
+    break;
+  case 'production':
+    path = '../.env.prod';
+    break;
+  default:
+    path = '../.env';
+}
 config({ path, override: true });
 
 export default async function () {
