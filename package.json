@@ -4,7 +4,6 @@
   "scripts": {
     "start": "npm run dev:db & npm --prefix frontend run dev & npm --prefix backend run dev",
     "dev": "docker-compose up --build -d",
-    "prod": "docker-compose pull && docker-compose up -d",
     "down": "docker-compose down",
     "dev:db": "docker-compose up --build -d database",
     "dev:db:down": "docker-compose down database",
