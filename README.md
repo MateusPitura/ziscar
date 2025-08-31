@@ -42,4 +42,4 @@ DEPLOY:
 - O frontend é hospedado no Git Hub Pages, para realizar o deploy da main faça `frontend/npm run prod`
 - O banco é hospedado em uma VM no OCI. Faça o build e atualize DockerHub com `npm run build`. Então configure o `.env` e execute o comando de `npm run prod:db` estando conectado na VM
 - O backend é hospedado em uma VM no OCI. Faça o build e atualize o DockerHub com `npm run build`. Então configure o `.env` e execute o comando de `npm run prod:backend` estando conectado na VM
-- A primeira vez e quando precisar atualizar o banco de produção, use o Bastion com o IP e porta do banco de produção, configure o `.env` com o usuário, senha e porta do banco de produção, mantenha localhost. Então execute `backend/npm run prod:db-init` para aplicar migrations e rodar seeds
+- Quando precisar atualizar o banco de produção, use o Bastion com o IP e porta do banco de produção, configure o `.env.prod` com o usuário, senha, porta e nome do banco de produção, mantenha localhost. Então execute `backend/npm run prod:db-init` para aplicar migrations e rodar seeds

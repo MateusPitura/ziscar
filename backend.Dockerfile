@@ -29,4 +29,6 @@ COPY scripts/generate-shared-enums.js /app/scripts/
 RUN npx prisma generate
 RUN cd /app && node scripts/generate-shared-enums.js
 
-CMD ["sh", "-c", "npm run build:run", "-- NODE_ENV=${STAGE}"]
+RUN sh -c "npm run build"
+
+CMD sh -c "NODE_ENV=${STAGE} npm run start"
