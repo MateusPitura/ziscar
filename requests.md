@@ -142,11 +142,12 @@ payload:
 endpoint:
 GET /vehicle/${vehicleId}
 
-payload: // Daria para ter apenas uma request que retorna tudo isso ou uma com tudo isso e outra só para vehicle
+payload:
 {
     payment: { // Detalhes do pagamento, só os dados abaixo
         purchaseDate: "2025-01-01;
         paidTo: "Fulano"; // null
+        value: 7000000; // Valor de compra
     };
     vehicle: {
         id: 1,

@@ -113,6 +113,7 @@ export interface VehicleWithPayment {
   payment: {
     purchaseDate: string;
     paidTo?: string;
+    value: string;
   };
 }
 
