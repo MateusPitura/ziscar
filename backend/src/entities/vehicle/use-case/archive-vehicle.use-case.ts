@@ -11,7 +11,7 @@ export class ArchiveVehicleUseCase {
   ): Promise<ArchiveVehicleResponseDto> {
     const { id } = input;
 
-    const vehicle = await this.vehicleService.findById(String(id));
+    const vehicle = await this.vehicleService.findById(id);
     if (!vehicle) {
       throw new NotFoundException('Vehicle not found');
     }

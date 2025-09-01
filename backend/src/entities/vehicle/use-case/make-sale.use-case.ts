@@ -46,7 +46,7 @@ export class MakeSaleUseCase {
 
     await this.prisma.$transaction(async (prisma) => {
       const [vehicle, customer, user] = await Promise.all([
-        this.vehicleService.findUnique(Number(vehicleId)),
+        this.vehicleService.findById(vehicleId),
         this.customerService.findUnique(Number(customerId)),
         this.userService.findUnique(userId),
       ]);

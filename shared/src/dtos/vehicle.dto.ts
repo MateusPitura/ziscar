@@ -206,9 +206,13 @@ export const UpdateVehicleRequestSchema = InsertVehicleRequestSchema.omit({
   .partial()
   .extend({
     characteristics: s.array(s.string()).optional(),
+    payment: s
+      .object({
+        purchaseDate: s.date().optional(),
+        paidTo: s.string().nullable().optional(),
+      })
+      .optional(),
   });
-
-export const UpdateVehicleResponseSchema = BaseIdResponseSchema;
 
 export const ArchiveVehicleRequestSchema = BaseIdSchema;
 
@@ -288,3 +292,5 @@ export const UpdateVehicleExpenseRequestSchema = s.object({
   category: s.enumeration(EXPENSECATEGORY_VALUES).optional(),
   competencyDate: s.date().optional(),
 });
+
+export const UpdateVehicleResponseSchema = VehicleWithPaymentResponseSchema;

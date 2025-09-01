@@ -43,29 +43,21 @@ export class VehicleService implements VehicleRepository {
     return this.prisma.vehicle.create({ data });
   }
 
-  async findById(id: string): Promise<Vehicle | null> {
-    const vehicle = await this.prisma.vehicle.findUnique({
-      where: { id: Number(id) },
-    });
-
-    if (!vehicle) {
-      return null;
-    }
-
-    return vehicle;
-  }
-
-  async findUnique(id: number): Promise<Vehicle | null> {
+  async findById(id: number): Promise<GetVehicleWithPaymentOutDto | null> {
     return await this.prisma.vehicle.findUnique({
       where: { id },
-      include: { brand: true, vehicleCharacteristicValues: true },
+      select: VEHICLE_WITH_PAYMENT_SELECT,
     });
   }
 
-  async update(id: string, data: UpdateInput<Vehicle>): Promise<Vehicle> {
+  async update(
+    id: string,
+    data: UpdateInput<Vehicle>,
+  ): Promise<GetVehicleWithPaymentOutDto> {
     return await this.prisma.vehicle.update({
       where: { id: Number(id) },
       data,
+      select: VEHICLE_WITH_PAYMENT_SELECT,
     });
   }
 
@@ -264,5 +256,33 @@ export class VehicleService implements VehicleRepository {
     data: CreateInput<VehiclePurchase>,
   ): Promise<VehiclePurchase> {
     return this.prisma.vehiclePurchase.create({ data });
+  }
+
+  async updateVehiclePayment(
+    vehicleId: string,
+    payment: { purchaseDate?: Date; paidTo?: string | null },
+  ): Promise<void> {
+    const vehiclePurchase = await this.prisma.vehiclePurchase.findFirst({
+      where: { vehicleId: Number(vehicleId) },
+      include: { accountPayable: true },
+    });
+
+    if (!vehiclePurchase) {
+      throw new Error('Vehicle purchase not found');
+    }
+
+    if (payment.purchaseDate) {
+      await this.prisma.vehiclePurchase.update({
+        where: { id: vehiclePurchase.id },
+        data: { date: payment.purchaseDate },
+      });
+    }
+
+    if (payment.paidTo !== undefined) {
+      await this.prisma.accountPayable.update({
+        where: { id: vehiclePurchase.accountPayableId },
+        data: { paidTo: payment.paidTo },
+      });
+    }
   }
 }

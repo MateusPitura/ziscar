@@ -16,16 +16,14 @@ export class GetVehicleByIdUseCase {
 
     if (!vehicleResult) throw new NotFoundException('Vehicle not found');
 
-    const payment = vehicleResult.vehiclePurchases?.[0]
+    const { vehiclePurchases, ...vehicle } = vehicleResult;
+
+    const payment = vehiclePurchases?.[0]
       ? {
-          purchaseDate: vehicleResult.vehiclePurchases[0].date,
-          paidTo:
-            vehicleResult.vehiclePurchases[0].accountPayable?.paidTo || null,
+          purchaseDate: vehiclePurchases[0].date,
+          paidTo: vehiclePurchases[0].accountPayable?.paidTo || null,
         }
       : undefined;
-
-    const { vehiclePurchases: _, ...vehicle } = vehicleResult;
-    void _;
 
     return {
       ...vehicle,
