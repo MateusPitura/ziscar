@@ -1,11 +1,30 @@
 import { Injectable } from '@nestjs/common';
-import { Vehicle } from '@prisma/client';
+import { Vehicle, VehicleSale, VehicleExpense, VehiclePurchase, Prisma } from '@prisma/client';
 import type {
   SearchVehiclesRequestDto,
   SearchVehiclesResponseDto,
   FetchVehicleBrandsResponseDto,
+  VehicleWithPaymentResponseDto,
 } from 'src/entities/vehicle/dtos';
 import { CreateInput, UpdateInput } from 'src/types';
+
+export type GetVehicleWithPaymentOutDto = Prisma.VehicleGetPayload<{
+  include: {
+    brand: true;
+    store: true;
+    vehicleCharacteristicValues: true;
+    vehiclePurchases: {
+      include: {
+        accountPayable: {
+          include: {
+            accountPayableInstallments: true;
+          };
+        };
+        user: true;
+      };
+    };
+  };
+}>;
 
 @Injectable()
 export abstract class VehicleRepository {
@@ -22,6 +41,21 @@ export abstract class VehicleRepository {
   ): Promise<void>;
   abstract updateCharacteristics(
     vehicleId: number,
-    characteristics: Array<{ id?: number; characteristic: string }>,
+    characteristics: string[],
   ): Promise<void>;
+  abstract getVehicleSale(vehicleSaleId: string): Promise<VehicleSale | null>;
+  abstract getVehicleWithPayment(
+    vehicleId: string,
+  ): Promise<GetVehicleWithPaymentOutDto | null>;
+  abstract fetchVehicleExpenses(vehicleId: string): Promise<VehicleExpense[]>;
+  abstract fetchVehicleExpenseById(
+    expenseId: string,
+  ): Promise<VehicleExpense | null>;
+  abstract updateVehicleExpense(
+    expenseId: string,
+    data: UpdateInput<VehicleExpense>,
+  ): Promise<VehicleExpense>;
+  abstract archiveVehicleExpense(expenseId: string): Promise<VehicleExpense>;
+  abstract unarchiveVehicleExpense(expenseId: string): Promise<VehicleExpense>;
+  abstract createPurchase(data: CreateInput<VehiclePurchase>): Promise<VehiclePurchase>;
 }

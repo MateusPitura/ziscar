@@ -14,6 +14,7 @@ export const GET_VEHICLE = {
   fuelType: true,
   status: true,
   storeId: true,
+  archivedAt: true,
   store: true,
   vehicleCharacteristicValues: {
     select: {

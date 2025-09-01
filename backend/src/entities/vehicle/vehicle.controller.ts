@@ -17,15 +17,26 @@ import { MakeSaleUseCase } from './use-case/make-sale.use-case';
 import { UpdateVehicleUseCase } from './use-case/update-vehicle.use-case';
 import { ArchiveVehicleUseCase } from './use-case/archive-vehicle.use-case';
 import { UnarchiveVehicleUseCase } from './use-case/unarchive-vehicle.use-case';
+import { ArchiveVehicleExpenseUseCase } from './use-case/archive-vehicle-expense.use-case';
+import { GetVehicleByIdUseCase } from './use-case/get-vehicle-by-id.use-case';
+import { getVehicleExpenseByIdUseCase } from './use-case/get-vehicle-expense-by-id.use-case';
+import { FetchVehicleExpensesUseCase } from './use-case/fetch-vehicle-expenses.use-case';
+import { GetVehicleSaleUseCase } from './use-case/get-vehicle-sale.use-case';
+import { UnarchiveVehicleExpenseUseCase } from './use-case/unarchive-vehicle-expense.use-case';
+import { UpdateVehicleExpenseUseCase } from './use-case/update-vehicle-expense.use-case';
 import { AuthGuard } from 'src/entities/auth/auth.guard';
 import { RoleGuard } from 'src/entities/auth/role.guard';
-import { Actions, Resources } from '@prisma/client';
+import {
+  Actions,
+  Resources,
+} from '@prisma/client';
 import {
   InsertVehicleRequestDto,
   InsertVehicleExpenseRequestDto,
   SearchVehiclesRequestDto,
   MakeVehicleSaleRequestDto,
   UpdateVehicleRequestDto,
+  UpdateVehicleExpenseRequestDto,
   UnarchiveVehicleResponseDto,
   UpdateVehicleResponseDto,
   SearchVehiclesResponseDto,
@@ -34,6 +45,11 @@ import {
   InsertVehicleExpenseResponseDto,
   FetchVehicleBrandsResponseDto,
   ArchiveVehicleResponseDto,
+  ArchiveVehicleExpenseResponseDto,
+  UnarchiveVehicleExpenseResponseDto,
+  VehicleWithPaymentResponseDto,
+  VehicleSaleResponseDto,
+  VehicleExpenseResponseDto,
 } from './dtos';
 import { AuthRequest } from '../auth/auth.type';
 
@@ -49,14 +65,23 @@ export class VehicleController {
     private readonly updateVehicle: UpdateVehicleUseCase,
     private readonly archiveVehicle: ArchiveVehicleUseCase,
     private readonly unarchiveVehicle: UnarchiveVehicleUseCase,
+    private readonly getVehicleSale: GetVehicleSaleUseCase,
+    private readonly fetchVehicleById: GetVehicleByIdUseCase,
+    private readonly fetchVehicleExpenses: FetchVehicleExpensesUseCase,
+    private readonly fetchVehicleExpenseById: getVehicleExpenseByIdUseCase,
+    private readonly updateVehicleExpense: UpdateVehicleExpenseUseCase,
+    private readonly archiveVehicleExpense: ArchiveVehicleExpenseUseCase,
+    private readonly unarchiveVehicleExpense: UnarchiveVehicleExpenseUseCase,
   ) {}
 
   @Post()
   @RoleGuard(Resources.VEHICLES, Actions.CREATE)
   async create(
     @Body() input: InsertVehicleRequestDto,
+    @Req() req: AuthRequest,
   ): Promise<InsertVehicleResponseDto> {
-    return this.insertVehicle.execute(input);
+    const { userId } = req.authToken;
+    return this.insertVehicle.execute(input, userId);
   }
 
   @Get()
@@ -116,5 +141,62 @@ export class VehicleController {
   ): Promise<UnarchiveVehicleResponseDto> {
     const payload = { id: Number(id) };
     return this.unarchiveVehicle.execute(payload);
+  }
+
+  @Get(':id')
+  @RoleGuard(Resources.VEHICLES, Actions.READ)
+  async findById(
+    @Param('id') id: string,
+  ): Promise<VehicleWithPaymentResponseDto> {
+    return this.fetchVehicleById.execute(id);
+  }
+
+  @Get('sale/:saleId')
+  @RoleGuard(Resources.VEHICLE_SALE, Actions.READ)
+  async fetchSale(
+    @Param('saleId') saleId: string,
+  ): Promise<VehicleSaleResponseDto> {
+    return this.getVehicleSale.execute(saleId);
+  }
+
+  @Get('expense/:vehicleId')
+  @RoleGuard(Resources.VEHICLE_EXPENSE, Actions.READ)
+  async fetchExpenses(
+    @Param('vehicleId') vehicleId: string,
+  ): Promise<VehicleExpenseResponseDto[]> {
+    return this.fetchVehicleExpenses.execute(vehicleId);
+  }
+
+  @Get('expense/detail/:expenseId')
+  @RoleGuard(Resources.VEHICLE_EXPENSE, Actions.READ)
+  async fetchExpenseById(
+    @Param('expenseId') expenseId: string,
+  ): Promise<VehicleExpenseResponseDto> {
+    return this.fetchVehicleExpenseById.execute(expenseId);
+  }
+
+  @Patch('expense/:expenseId')
+  @RoleGuard(Resources.VEHICLE_EXPENSE, Actions.UPDATE)
+  async updateExpense(
+    @Param('expenseId') expenseId: string,
+    @Body() input: UpdateVehicleExpenseRequestDto,
+  ): Promise<VehicleExpenseResponseDto> {
+    return this.updateVehicleExpense.execute(expenseId, input);
+  }
+
+  @Patch('expense/:expenseId/archive')
+  @RoleGuard(Resources.VEHICLE_EXPENSE, Actions.UPDATE)
+  async archiveExpense(
+    @Param('expenseId') expenseId: string,
+  ): Promise<ArchiveVehicleExpenseResponseDto> {
+    return this.archiveVehicleExpense.execute(expenseId);
+  }
+
+  @Patch('expense/:expenseId/unarchive')
+  @RoleGuard(Resources.VEHICLE_EXPENSE, Actions.UPDATE)
+  async unarchiveExpense(
+    @Param('expenseId') expenseId: string,
+  ): Promise<UnarchiveVehicleExpenseResponseDto> {
+    return this.unarchiveVehicleExpense.execute(expenseId);
   }
 }
