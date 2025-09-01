@@ -14,9 +14,8 @@ import { CreateInput, UpdateInput } from 'src/types';
 
 @Injectable()
 export class AccountReceivableInstallmentService
-  implements AccountReceivableInstallmentRepository
-{
-  constructor(private prisma: PrismaService) {}
+  implements AccountReceivableInstallmentRepository {
+  constructor(private prisma: PrismaService) { }
 
   async create(
     data: CreateInput<AccountReceivableInstallment>,
@@ -120,6 +119,11 @@ export class AccountReceivableInstallmentService
         where: {
           accountReceivableId: Number(accountReceivableId),
         },
+        include: {
+          paymentMethodReceivables: true,
+        }, orderBy: {
+          installmentSequence: 'asc'
+        }
       });
 
     if (!installments || installments.length === 0) {
@@ -130,13 +134,14 @@ export class AccountReceivableInstallmentService
 
     return installments.map((i) => ({
       id: i.id,
-      dueDate: i.dueDate.toISOString().split('T')[0], // transforma para YYYY-MM-DD
+      dueDate: i.dueDate.toISOString().split('T')[0],
       installmentSequence: i.isUpfront ? 0 : i.installmentSequence,
       status: i.status,
-      value: i.value, // já está em centavos
-      isRefund: false, // fixo por enquanto
+      value: i.value,
+      isRefund: false,
       isUpfront: i.isUpfront,
-      vehicleSaleId: i.accountReceivableId, // se esse campo for o mesmo da venda
+      vehicleSaleId: i.accountReceivableId,
+      paymentMethodReceivables: i.paymentMethodReceivables,
     }));
   }
 
