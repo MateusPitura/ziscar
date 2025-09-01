@@ -30,7 +30,10 @@ export class InsertVehicleUseCase {
       vehicleId = vehicle.id;
 
       if (characteristics?.length) {
-        await this.vehicleService.insertCharacteristics(vehicleId, characteristics);
+        await this.vehicleService.insertCharacteristics(
+          vehicleId,
+          characteristics,
+        );
       }
 
       if (payment) {
@@ -60,7 +63,9 @@ export class InsertVehicleUseCase {
   }
 
   private async createInstallments(
-    installments: NonNullable<InsertVehicleRequestDto['payment']>['installments'],
+    installments: NonNullable<
+      InsertVehicleRequestDto['payment']
+    >['installments'],
     accountPayableId: number,
     userId: number,
   ): Promise<void> {

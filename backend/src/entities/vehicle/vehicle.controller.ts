@@ -26,10 +26,7 @@ import { UnarchiveVehicleExpenseUseCase } from './use-case/unarchive-vehicle-exp
 import { UpdateVehicleExpenseUseCase } from './use-case/update-vehicle-expense.use-case';
 import { AuthGuard } from 'src/entities/auth/auth.guard';
 import { RoleGuard } from 'src/entities/auth/role.guard';
-import {
-  Actions,
-  Resources,
-} from '@prisma/client';
+import { Actions, Resources } from '@prisma/client';
 import {
   InsertVehicleRequestDto,
   InsertVehicleExpenseRequestDto,
@@ -68,7 +65,7 @@ export class VehicleController {
     private readonly getVehicleSale: GetVehicleSaleUseCase,
     private readonly fetchVehicleById: GetVehicleByIdUseCase,
     private readonly fetchVehicleExpenses: FetchVehicleExpensesUseCase,
-    private readonly fetchVehicleExpenseById: getVehicleExpenseByIdUseCase,
+    private readonly getVehicleExpenseById: getVehicleExpenseByIdUseCase,
     private readonly updateVehicleExpense: UpdateVehicleExpenseUseCase,
     private readonly archiveVehicleExpense: ArchiveVehicleExpenseUseCase,
     private readonly unarchiveVehicleExpense: UnarchiveVehicleExpenseUseCase,
@@ -172,7 +169,7 @@ export class VehicleController {
   async fetchExpenseById(
     @Param('expenseId') expenseId: string,
   ): Promise<VehicleExpenseResponseDto> {
-    return this.fetchVehicleExpenseById.execute(expenseId);
+    return this.getVehicleExpenseById.execute(expenseId);
   }
 
   @Patch('expense/:expenseId')

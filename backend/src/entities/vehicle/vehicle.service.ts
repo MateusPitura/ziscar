@@ -9,19 +9,31 @@ import {
   VehiclePurchase,
 } from '@prisma/client';
 import {
+  GetVehicleExpenseByIdOutDto,
+  GetVehicleExpensesOutDto,
+} from 'src/repositories/vehicle-repository';
+import {
   VehicleStatus as SharedVehicleStatus,
   VehicleCategory as SharedVehicleCategory,
-  ExpenseCategory as SharedExpenseCategory,
+  FuelType,
 } from '@shared/enums';
 import { PrismaService } from 'src/infra/database/prisma.service';
-import { GetVehicleWithPaymentOutDto, VehicleRepository } from 'src/repositories/vehicle-repository';
+import {
+  GetVehicleWithPaymentOutDto,
+  VehicleRepository,
+} from 'src/repositories/vehicle-repository';
 import { CreateInput, UpdateInput } from 'src/types';
 import type {
   SearchVehiclesRequestDto,
   SearchVehiclesResponseDto,
   FetchVehicleBrandsResponseDto,
 } from './dtos';
-import { GET_VEHICLE } from './constants';
+import {
+  GET_VEHICLE,
+  VEHICLE_WITH_PAYMENT_SELECT,
+  VEHICLE_EXPENSE_SELECT,
+  VEHICLE_EXPENSE_WITH_VEHICLE_SELECT,
+} from './constants';
 
 @Injectable()
 export class VehicleService implements VehicleRepository {
@@ -139,6 +151,7 @@ export class VehicleService implements VehicleRepository {
       ...row,
       status: row.status as SharedVehicleStatus,
       category: row.category as SharedVehicleCategory | null,
+      fuelType: row.fuelType as FuelType,
     }));
 
     return { data: mappedRows, total: total };
@@ -191,48 +204,31 @@ export class VehicleService implements VehicleRepository {
     });
   }
 
-  async getVehicleWithPayment(vehicleId: string): Promise<GetVehicleWithPaymentOutDto | null> {
+  async getVehicleWithPayment(
+    vehicleId: string,
+  ): Promise<GetVehicleWithPaymentOutDto | null> {
     return await this.prisma.vehicle.findUnique({
       where: { id: Number(vehicleId) },
-      include: {
-        brand: true,
-        store: true,
-        vehicleCharacteristicValues: true,
-        vehiclePurchases: {
-          include: {
-            accountPayable: {
-              include: {
-                accountPayableInstallments: true,
-              },
-            },
-            user: true,
-          },
-        },
-      },
+      select: VEHICLE_WITH_PAYMENT_SELECT,
     });
   }
 
-  async fetchVehicleExpenses(vehicleId: string): Promise<VehicleExpense[]> {
+  async fetchVehicleExpenses(
+    vehicleId: string,
+  ): Promise<GetVehicleExpensesOutDto[]> {
     return await this.prisma.vehicleExpense.findMany({
       where: { vehicleId: Number(vehicleId) },
-      include: {
-        accountPayable: true,
-        user: true,
-      },
+      select: VEHICLE_EXPENSE_SELECT,
       orderBy: { createdAt: 'desc' },
     });
   }
 
-  async fetchVehicleExpenseById(
+  async getVehicleExpenseById(
     expenseId: string,
-  ): Promise<VehicleExpense | null> {
+  ): Promise<GetVehicleExpenseByIdOutDto | null> {
     return await this.prisma.vehicleExpense.findUnique({
       where: { id: Number(expenseId) },
-      include: {
-        accountPayable: true,
-        user: true,
-        vehicle: true,
-      },
+      select: VEHICLE_EXPENSE_WITH_VEHICLE_SELECT,
     });
   }
 
@@ -264,7 +260,9 @@ export class VehicleService implements VehicleRepository {
     });
   }
 
-  async createPurchase(data: CreateInput<VehiclePurchase>): Promise<VehiclePurchase> {
+  async createPurchase(
+    data: CreateInput<VehiclePurchase>,
+  ): Promise<VehiclePurchase> {
     return this.prisma.vehiclePurchase.create({ data });
   }
 }

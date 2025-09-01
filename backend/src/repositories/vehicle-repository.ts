@@ -1,29 +1,33 @@
 import { Injectable } from '@nestjs/common';
-import { Vehicle, VehicleSale, VehicleExpense, VehiclePurchase, Prisma } from '@prisma/client';
+import {
+  Vehicle,
+  VehicleSale,
+  VehicleExpense,
+  VehiclePurchase,
+  Prisma,
+} from '@prisma/client';
 import type {
   SearchVehiclesRequestDto,
   SearchVehiclesResponseDto,
   FetchVehicleBrandsResponseDto,
-  VehicleWithPaymentResponseDto,
 } from 'src/entities/vehicle/dtos';
 import { CreateInput, UpdateInput } from 'src/types';
+import type {
+  VEHICLE_WITH_PAYMENT_SELECT,
+  VEHICLE_EXPENSE_WITH_VEHICLE_SELECT,
+  VEHICLE_EXPENSE_SELECT,
+} from '../entities/vehicle/constants';
 
 export type GetVehicleWithPaymentOutDto = Prisma.VehicleGetPayload<{
-  include: {
-    brand: true;
-    store: true;
-    vehicleCharacteristicValues: true;
-    vehiclePurchases: {
-      include: {
-        accountPayable: {
-          include: {
-            accountPayableInstallments: true;
-          };
-        };
-        user: true;
-      };
-    };
-  };
+  select: typeof VEHICLE_WITH_PAYMENT_SELECT;
+}>;
+
+export type GetVehicleExpenseByIdOutDto = Prisma.VehicleExpenseGetPayload<{
+  select: typeof VEHICLE_EXPENSE_WITH_VEHICLE_SELECT;
+}>;
+
+export type GetVehicleExpensesOutDto = Prisma.VehicleExpenseGetPayload<{
+  select: typeof VEHICLE_EXPENSE_SELECT;
 }>;
 
 @Injectable()
@@ -47,15 +51,19 @@ export abstract class VehicleRepository {
   abstract getVehicleWithPayment(
     vehicleId: string,
   ): Promise<GetVehicleWithPaymentOutDto | null>;
-  abstract fetchVehicleExpenses(vehicleId: string): Promise<VehicleExpense[]>;
-  abstract fetchVehicleExpenseById(
+  abstract fetchVehicleExpenses(
+    vehicleId: string,
+  ): Promise<GetVehicleExpensesOutDto[]>;
+  abstract getVehicleExpenseById(
     expenseId: string,
-  ): Promise<VehicleExpense | null>;
+  ): Promise<GetVehicleExpenseByIdOutDto | null>;
   abstract updateVehicleExpense(
     expenseId: string,
     data: UpdateInput<VehicleExpense>,
   ): Promise<VehicleExpense>;
   abstract archiveVehicleExpense(expenseId: string): Promise<VehicleExpense>;
   abstract unarchiveVehicleExpense(expenseId: string): Promise<VehicleExpense>;
-  abstract createPurchase(data: CreateInput<VehiclePurchase>): Promise<VehiclePurchase>;
+  abstract createPurchase(
+    data: CreateInput<VehiclePurchase>,
+  ): Promise<VehiclePurchase>;
 }

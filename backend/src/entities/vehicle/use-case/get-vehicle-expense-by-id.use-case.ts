@@ -11,12 +11,21 @@ export class getVehicleExpenseByIdUseCase {
   ) {}
 
   async execute(expenseId: string): Promise<VehicleExpenseResponseDto> {
-    const expenseResult =  await this.vehicleRepository.fetchVehicleExpenseById(expenseId);
+    const expenseResult =
+      await this.vehicleRepository.getVehicleExpenseById(expenseId);
 
-    if(!expenseResult) throw new NotFoundException('Expense not found')
+    if (!expenseResult) throw new NotFoundException('Expense not found');
 
-    return {...expenseResult,
-      category: expenseResult.category as ExpenseCategory
-    }
+    const totalValue =
+      expenseResult.accountPayable?.accountPayableInstallments?.reduce(
+        (sum, installment: { value: number }) => sum + installment.value,
+        0,
+      ) || 0;
+
+    return {
+      ...expenseResult,
+      category: expenseResult.category as ExpenseCategory,
+      totalValue,
+    };
   }
 }

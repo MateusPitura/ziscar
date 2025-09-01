@@ -7,7 +7,7 @@ export class ArchiveVehicleExpenseUseCase {
   constructor(private readonly vehicleService: VehicleService) {}
 
   async execute(expenseId: string): Promise<ArchiveVehicleExpenseResponseDto> {
-    const expense = await this.vehicleService.fetchVehicleExpenseById(expenseId);
+    const expense = await this.vehicleService.getVehicleExpenseById(expenseId);
     if (!expense) {
       throw new NotFoundException('Vehicle expense not found');
     }
@@ -16,7 +16,8 @@ export class ArchiveVehicleExpenseUseCase {
       throw new Error('Vehicle expense is already archived');
     }
 
-    const archivedExpense = await this.vehicleService.archiveVehicleExpense(expenseId);
+    const archivedExpense =
+      await this.vehicleService.archiveVehicleExpense(expenseId);
 
     return {
       id: archivedExpense.id,

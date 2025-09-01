@@ -10,10 +10,21 @@ export class GetVehicleSaleUseCase {
   ) {}
 
   async execute(vehicleSaleId: string): Promise<VehicleSaleResponseDto> {
-    const saleResult =  await this.vehicleRepository.getVehicleSale(vehicleSaleId);
+    const saleResult =
+      await this.vehicleRepository.getVehicleSale(vehicleSaleId);
 
-    if(!saleResult) throw new NotFoundException('Vehicle sale not found')
+    if (!saleResult) throw new NotFoundException('Vehicle sale not found');
 
-    return saleResult
+    return {
+      ...saleResult,
+      vehicleSnapshot: saleResult.vehicleSnapshot as Record<
+        string,
+        unknown
+      > | null,
+      customerSnapshot: saleResult.customerSnapshot as Record<
+        string,
+        unknown
+      > | null,
+    };
   }
 }

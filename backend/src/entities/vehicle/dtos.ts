@@ -89,5 +89,3 @@ export type VehicleSaleResponseDto = z.infer<typeof VehicleSaleResponseSchema>;
 export type VehicleWithPaymentResponseDto = z.infer<
   typeof VehicleWithPaymentResponseSchema
 >;
-
-

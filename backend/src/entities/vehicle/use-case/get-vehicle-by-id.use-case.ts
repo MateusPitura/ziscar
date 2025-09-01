@@ -1,5 +1,5 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { VehicleCategory, VehicleStatus } from '@shared/enums';
+import { VehicleCategory, VehicleStatus, FuelType } from '@shared/enums';
 import { VehicleRepository } from 'src/repositories/vehicle-repository';
 import { VehicleWithPaymentResponseDto } from '../dtos';
 
@@ -10,17 +10,29 @@ export class GetVehicleByIdUseCase {
     private readonly vehicleRepository: VehicleRepository,
   ) {}
 
-  async execute(
-    vehicleId: string,
-  ): Promise<VehicleWithPaymentResponseDto> {
-    const vehicleResult =  await this.vehicleRepository.getVehicleWithPayment(vehicleId);
+  async execute(vehicleId: string): Promise<VehicleWithPaymentResponseDto> {
+    const vehicleResult =
+      await this.vehicleRepository.getVehicleWithPayment(vehicleId);
 
-    if(!vehicleResult) throw new NotFoundException('Vehicle not found');
+    if (!vehicleResult) throw new NotFoundException('Vehicle not found');
+
+    const payment = vehicleResult.vehiclePurchases?.[0]
+      ? {
+          purchaseDate: vehicleResult.vehiclePurchases[0].date,
+          paidTo:
+            vehicleResult.vehiclePurchases[0].accountPayable?.paidTo || null,
+        }
+      : undefined;
+
+    const { vehiclePurchases: _, ...vehicle } = vehicleResult;
+    void _;
 
     return {
-      ...vehicleResult,
-      category: vehicleResult.category as VehicleCategory,
-      status: vehicleResult.status as VehicleStatus
-    }
+      ...vehicle,
+      category: vehicle.category as VehicleCategory,
+      status: vehicle.status as VehicleStatus,
+      fuelType: vehicle.fuelType as FuelType | null,
+      payment,
+    };
   }
 }

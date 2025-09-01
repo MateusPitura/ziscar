@@ -6,8 +6,10 @@ import { UnarchiveVehicleExpenseResponseDto } from '../dtos';
 export class UnarchiveVehicleExpenseUseCase {
   constructor(private readonly vehicleService: VehicleService) {}
 
-  async execute(expenseId: string): Promise<UnarchiveVehicleExpenseResponseDto> {
-    const expense = await this.vehicleService.fetchVehicleExpenseById(expenseId);
+  async execute(
+    expenseId: string,
+  ): Promise<UnarchiveVehicleExpenseResponseDto> {
+    const expense = await this.vehicleService.getVehicleExpenseById(expenseId);
     if (!expense) {
       throw new NotFoundException('Vehicle expense not found');
     }
@@ -16,7 +18,8 @@ export class UnarchiveVehicleExpenseUseCase {
       throw new Error('Vehicle expense is not archived');
     }
 
-    const unarchivedExpense = await this.vehicleService.unarchiveVehicleExpense(expenseId);
+    const unarchivedExpense =
+      await this.vehicleService.unarchiveVehicleExpense(expenseId);
 
     return {
       id: unarchivedExpense.id,
