@@ -2,8 +2,7 @@ import Table from "@/design-system/Table";
 import AccountStatus from "@/domains/global/components/AccountStatus";
 import {
   BACKEND_URL,
-  BLANK,
-  PaymentMethodPayableText,
+  BLANK, PaymentMethodReceivableText
 } from "@/domains/global/constants";
 import useDialog from "@/domains/global/hooks/useDialog";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
@@ -108,7 +107,7 @@ export default function AccountsReceivableInstallmentsTable(): ReactNode {
               <Table.Cell
                 label={
                   installment.paymentMethodReceivables?.length
-                    ? PaymentMethodPayableText[
+                    ? PaymentMethodReceivableText[
                         installment.paymentMethodReceivables[0].type
                       ]
                     : ""

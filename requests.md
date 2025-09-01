@@ -65,7 +65,7 @@ payload:
 endpoint: 
 GET /account-receivable-installments/${accountReceivableId}
 
-payload: // Ordenar por padrão pela installmentSequence
+payload:
 [
     {
         id: 1,
@@ -75,8 +75,8 @@ payload: // Ordenar por padrão pela installmentSequence
         value: "10000",
         isRefund: false,
         isUpfront: true,
-        // Removi vehicleSaleId e movi para o get das contas,
-        "paymentMethodReceivables": [ // Buscar também os métodos de pagamento de uma parcela
+        // Remover vehicleSaleId,
+        "paymentMethodReceivables": [
             {
                 "id": 86,
                 "paymentDate": "2020-11-18",

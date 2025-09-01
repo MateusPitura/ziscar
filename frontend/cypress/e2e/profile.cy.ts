@@ -63,7 +63,7 @@ describe("Profile", () => {
     );
     cy.intercept(
       "GET",
-      "https://servicodados.ibge.gov.br/api/v1/localidades/estados/MA/municipios"
+      "https://localhost:3000/city/MA"
     ).as("citiesAPi");
 
     cy.visit("/profile");
@@ -112,7 +112,7 @@ describe("Profile", () => {
     );
     cy.intercept(
       "GET",
-      "https://servicodados.ibge.gov.br/api/v1/localidades/estados/MA/municipios"
+      "https://localhost:3000/city/MA"
     ).as("citiesAPi");
 
     cy.visit("/profile");
@@ -149,7 +149,7 @@ describe("Profile", () => {
     );
     cy.intercept(
       "GET",
-      "https://servicodados.ibge.gov.br/api/v1/localidades/estados/MA/municipios"
+      "https://localhost:3000/city/MA"
     ).as("citiesAPi");
 
     cy.visit("/profile");

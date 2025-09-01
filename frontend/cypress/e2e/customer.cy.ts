@@ -162,10 +162,7 @@ describe("Customer", () => {
     cy.intercept("GET", "https://viacep.com.br/ws/65043-420/json/").as(
       "cepApi"
     );
-    cy.intercept(
-      "GET",
-      "https://servicodados.ibge.gov.br/api/v1/localidades/estados/MA/municipios"
-    ).as("citiesAPi");
+    cy.intercept("GET", "https://localhost:3000/city/MA").as("citiesAPi");
 
     cy.visit("/customers");
 
@@ -420,10 +417,7 @@ describe("Customer", () => {
     cy.intercept("GET", "https://viacep.com.br/ws/65043-420/json/").as(
       "cepApi"
     );
-    cy.intercept(
-      "GET",
-      "https://servicodados.ibge.gov.br/api/v1/localidades/estados/MA/municipios"
-    ).as("citiesAPi");
+    cy.intercept("GET", "https://localhost:3000/city/MA").as("citiesAPi");
 
     cy.visit("/customers");
 
