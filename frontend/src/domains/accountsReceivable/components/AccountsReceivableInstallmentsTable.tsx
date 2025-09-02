@@ -2,7 +2,8 @@ import Table from "@/design-system/Table";
 import AccountStatus from "@/domains/global/components/AccountStatus";
 import {
   BACKEND_URL,
-  BLANK, PaymentMethodReceivableText
+  BLANK,
+  PaymentMethodReceivableText,
 } from "@/domains/global/constants";
 import useDialog from "@/domains/global/hooks/useDialog";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
@@ -16,6 +17,9 @@ import { useParams } from "react-router-dom";
 import selectAccountsReceivableInstallmentsInfo from "../utils/selectAccountsReceivableInstallmentsInfo";
 import AccountsReceivableInstallmentsTableActions from "./AccountsReceivableTableInstallmentsActions";
 import PaymentMethodModal from "./PaymentMethodModal";
+import { ACCOUNTS_RECEIVABLE_INSTALLMENTS_TABLE } from "../constants";
+
+const gridColumns = 11;
 
 export default function AccountsReceivableInstallmentsTable(): ReactNode {
   const { safeFetch } = useSafeFetch();
@@ -67,13 +71,33 @@ export default function AccountsReceivableInstallmentsTable(): ReactNode {
         {...dialog}
       />
       <Table>
-        <Table.Header gridColumns={11}>
-          <Table.Head label="Sequência" colSpan={1} />
-          <Table.Head label="Data de vencimento " />
-          <Table.Head label="Data de pagamento" />
-          <Table.Head label="Método de pagamento" />
-          <Table.Head label="Status do pagamento" />
-          <Table.Head label="Valor" colSpan={1} />
+        <Table.Header gridColumns={gridColumns}>
+          <Table.Head
+            label={
+              ACCOUNTS_RECEIVABLE_INSTALLMENTS_TABLE.installmentSequence.label
+            }
+            colSpan={
+              ACCOUNTS_RECEIVABLE_INSTALLMENTS_TABLE.installmentSequence.colSpan
+            }
+          />
+          <Table.Head
+            label={ACCOUNTS_RECEIVABLE_INSTALLMENTS_TABLE.dueDate.label}
+          />
+          <Table.Head
+            label={ACCOUNTS_RECEIVABLE_INSTALLMENTS_TABLE.paymentDate.label}
+          />
+          <Table.Head
+            label={ACCOUNTS_RECEIVABLE_INSTALLMENTS_TABLE.paymentMethod.label}
+          />
+          <Table.Head
+            label={ACCOUNTS_RECEIVABLE_INSTALLMENTS_TABLE.status.label}
+          />
+          <Table.Head
+            label={ACCOUNTS_RECEIVABLE_INSTALLMENTS_TABLE.value.label}
+            colSpan={
+              ACCOUNTS_RECEIVABLE_INSTALLMENTS_TABLE.installmentSequence.colSpan
+            }
+          />
           <Table.Head action />
         </Table.Header>
         <Table.Body
@@ -83,9 +107,16 @@ export default function AccountsReceivableInstallmentsTable(): ReactNode {
           action="READ"
         >
           {accountsReceivableInstallmentsInfo?.map((installment) => (
-            <Table.Row key={installment.id} gridColumns={11}>
+            <Table.Row key={installment.id} gridColumns={gridColumns}>
               <Table.Cell
-                colSpan={1}
+                columnLabel={
+                  ACCOUNTS_RECEIVABLE_INSTALLMENTS_TABLE.installmentSequence
+                    .label
+                }
+                colSpan={
+                  ACCOUNTS_RECEIVABLE_INSTALLMENTS_TABLE.installmentSequence
+                    .colSpan
+                }
                 label={
                   installment.isUpfront
                     ? "Entrada"
@@ -96,8 +127,16 @@ export default function AccountsReceivableInstallmentsTable(): ReactNode {
                       }`
                 }
               />
-              <Table.Cell label={installment.dueDate} />
               <Table.Cell
+                columnLabel={
+                  ACCOUNTS_RECEIVABLE_INSTALLMENTS_TABLE.dueDate.label
+                }
+                label={installment.dueDate}
+              />
+              <Table.Cell
+                columnLabel={
+                  ACCOUNTS_RECEIVABLE_INSTALLMENTS_TABLE.paymentDate.label
+                }
                 label={
                   installment.paymentMethodReceivables?.length
                     ? installment.paymentMethodReceivables[0].paymentDate
@@ -105,6 +144,9 @@ export default function AccountsReceivableInstallmentsTable(): ReactNode {
                 }
               />
               <Table.Cell
+                columnLabel={
+                  ACCOUNTS_RECEIVABLE_INSTALLMENTS_TABLE.paymentMethod.label
+                }
                 label={
                   installment.paymentMethodReceivables?.length
                     ? PaymentMethodReceivableText[
@@ -114,12 +156,16 @@ export default function AccountsReceivableInstallmentsTable(): ReactNode {
                 }
               />
               <Table.Cell
+                columnLabel={
+                  ACCOUNTS_RECEIVABLE_INSTALLMENTS_TABLE.status.label
+                }
                 label={<AccountStatus status={installment.status} />}
               />
               <Table.Cell
+                columnLabel={ACCOUNTS_RECEIVABLE_INSTALLMENTS_TABLE.value.label}
                 label={installment.value.padStart(biggestValueLength, BLANK)}
                 className="font-mono whitespace-pre"
-                colSpan={1}
+                colSpan={ACCOUNTS_RECEIVABLE_INSTALLMENTS_TABLE.value.colSpan}
               />
               <Table.Action>
                 <AccountsReceivableInstallmentsTableActions

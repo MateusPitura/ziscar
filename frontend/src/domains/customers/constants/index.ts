@@ -14,3 +14,21 @@ export const customerFilterDefaultValues: CustomersFilterFormInputs = {
   startDate: "",
   endDate: "",
 };
+
+export const CUSTOMERS_TABLE = {
+  name: {
+    label: "Nome completo",
+  },
+  cpf: {
+    label: "CPF",
+  },
+  email: {
+    label: "Email",
+  },
+  phone: {
+    label: "Celular",
+  },
+  status: {
+    label: "Status",
+  },
+} as const;

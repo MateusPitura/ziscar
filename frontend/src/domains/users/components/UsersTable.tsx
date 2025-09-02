@@ -15,6 +15,7 @@ import { PageablePayload } from "@/domains/global/types";
 import ExportButton from "@/domains/pdf/components/ExportButton";
 import useFilterContext from "@/domains/global/hooks/useFilterContext";
 import selectUsersInfoForReport from "../utils/selectUsersInfoForReport";
+import { USERS_TABLE } from "../constants";
 
 const enableReport = false;
 
@@ -94,11 +95,11 @@ export default function UsersTable(): ReactNode {
       </div>
       <Table>
         <Table.Header>
-          <Table.Head label="Nome completo" />
-          <Table.Head label="CPF" />
-          <Table.Head label="Email" />
-          <Table.Head label="Celular" />
-          <Table.Head label="Status" />
+          <Table.Head label={USERS_TABLE.name.label} />
+          <Table.Head label={USERS_TABLE.cpf.label} />
+          <Table.Head label={USERS_TABLE.email.label} />
+          <Table.Head label={USERS_TABLE.phone.label} />
+          <Table.Head label={USERS_TABLE.status.label} />
           <Table.Head action />
         </Table.Header>
         <Table.Body
@@ -109,11 +110,26 @@ export default function UsersTable(): ReactNode {
         >
           {usersInfo?.data.map((user) => (
             <Table.Row key={user.id}>
-              <Table.Cell label={user.fullName} />
-              <Table.Cell label={user.cpf} />
-              <Table.Cell label={user.email} />
-              <Table.Cell label={user.phone} />
-              <Table.Cell label={user.archivedAt ? "Inativo" : "Ativo"} />
+              <Table.Cell
+                label={user.fullName}
+                columnLabel={USERS_TABLE.name.label}
+              />
+              <Table.Cell
+                label={user.cpf}
+                columnLabel={USERS_TABLE.cpf.label}
+              />
+              <Table.Cell
+                label={user.email}
+                columnLabel={USERS_TABLE.email.label}
+              />
+              <Table.Cell
+                label={user.phone}
+                columnLabel={USERS_TABLE.phone.label}
+              />
+              <Table.Cell
+                label={user.archivedAt ? "Inativo" : "Ativo"}
+                columnLabel={USERS_TABLE.status.label}
+              />
               <Table.Action>
                 <UsersTableActions
                   isActive={!user.archivedAt}

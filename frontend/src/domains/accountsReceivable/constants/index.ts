@@ -17,3 +17,44 @@ export const accountReceivableFilterDefaultValues: AccountsReceivableFilterFormI
     overallStatus: InstallmentStatus.PENDING,
   };
 
+export const ACCOUNTS_RECEIVABLE_TABLE = {
+  description: {
+    label: "Descrição",
+  },
+  installmentsNumber: {
+    label: "Número de parcelas",
+  },
+  receivedFrom: {
+    label: "Recebido de",
+  },
+  overallStatus: {
+    label: "Status geral",
+  },
+  totalValue: {
+    label: "Valor total",
+    colSpan: 1,
+  },
+} as const;
+
+export const ACCOUNTS_RECEIVABLE_INSTALLMENTS_TABLE = {
+  installmentSequence: {
+    label: "Sequência",
+    colSpan: 1,
+  },
+  dueDate: {
+    label: "Data de vencimento",
+  },
+  paymentDate: {
+    label: "Data de pagamento",
+  },
+  paymentMethod: {
+    label: "Método de pagamento",
+  },
+  status: {
+    label: "Status do pagamento",
+  },
+  value: {
+    label: "Valor",
+    colSpan: 1,
+  },
+} as const;
