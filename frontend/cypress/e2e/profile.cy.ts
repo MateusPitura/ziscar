@@ -63,7 +63,7 @@ describe("Profile", () => {
     );
     cy.intercept(
       "GET",
-      "https://localhost:3000/city/MA"
+      "http://localhost:3000/city/MA"
     ).as("citiesAPi");
 
     cy.visit("/profile");
@@ -112,7 +112,7 @@ describe("Profile", () => {
     );
     cy.intercept(
       "GET",
-      "https://localhost:3000/city/MA"
+      "http://localhost:3000/city/MA"
     ).as("citiesAPi");
 
     cy.visit("/profile");
@@ -149,7 +149,7 @@ describe("Profile", () => {
     );
     cy.intercept(
       "GET",
-      "https://localhost:3000/city/MA"
+      "http://localhost:3000/city/MA"
     ).as("citiesAPi");
 
     cy.visit("/profile");

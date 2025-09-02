@@ -162,7 +162,7 @@ describe("Customer", () => {
     cy.intercept("GET", "https://viacep.com.br/ws/65043-420/json/").as(
       "cepApi"
     );
-    cy.intercept("GET", "https://localhost:3000/city/MA").as("citiesAPi");
+    cy.intercept("GET", "http://localhost:3000/city/MA").as("citiesAPi");
 
     cy.visit("/customers");
 
@@ -417,7 +417,7 @@ describe("Customer", () => {
     cy.intercept("GET", "https://viacep.com.br/ws/65043-420/json/").as(
       "cepApi"
     );
-    cy.intercept("GET", "https://localhost:3000/city/MA").as("citiesAPi");
+    cy.intercept("GET", "http://localhost:3000/city/MA").as("citiesAPi");
 
     cy.visit("/customers");
 

@@ -187,7 +187,7 @@ describe("User", () => {
     );
     cy.intercept(
       "GET",
-      "https://localhost:3000/city/MA"
+      "http://localhost:3000/city/MA"
     ).as("citiesAPi");
 
     cy.visit("/users");
@@ -435,7 +435,7 @@ describe("User", () => {
     );
     cy.intercept(
       "GET",
-      "https://localhost:3000/city/MA"
+      "http://localhost:3000/city/MA"
     ).as("citiesAPi");
 
     cy.visit("/users");
