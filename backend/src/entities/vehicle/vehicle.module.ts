@@ -11,6 +11,13 @@ import { MakeSaleUseCase } from './use-case/make-sale.use-case';
 import { UpdateVehicleUseCase } from './use-case/update-vehicle.use-case';
 import { ArchiveVehicleUseCase } from './use-case/archive-vehicle.use-case';
 import { UnarchiveVehicleUseCase } from './use-case/unarchive-vehicle.use-case';
+import { GetVehicleSaleUseCase } from './use-case/get-vehicle-sale.use-case';
+import { GetVehicleByIdUseCase } from './use-case/get-vehicle-by-id.use-case';
+import { FetchVehicleExpensesUseCase } from './use-case/fetch-vehicle-expenses.use-case';
+import { getVehicleExpenseByIdUseCase } from './use-case/get-vehicle-expense-by-id.use-case';
+import { UpdateVehicleExpenseUseCase } from './use-case/update-vehicle-expense.use-case';
+import { ArchiveVehicleExpenseUseCase } from './use-case/archive-vehicle-expense.use-case';
+import { UnarchiveVehicleExpenseUseCase } from './use-case/unarchive-vehicle-expense.use-case';
 import { UserModule } from '../user/user.module';
 import { AccountPayableModule } from '../account-payable/account-payable.module';
 import { AccountPayableInstallmentModule } from '../account-payable-installment/account-payable-installment.module';
@@ -49,6 +56,13 @@ import { CustomerModule } from '../customer/customer.module';
     UpdateVehicleUseCase,
     ArchiveVehicleUseCase,
     UnarchiveVehicleUseCase,
+    GetVehicleSaleUseCase,
+    GetVehicleByIdUseCase,
+    FetchVehicleExpensesUseCase,
+    getVehicleExpenseByIdUseCase,
+    UpdateVehicleExpenseUseCase,
+    ArchiveVehicleExpenseUseCase,
+    UnarchiveVehicleExpenseUseCase,
   ],
   exports: [
     VehicleRepository,
@@ -61,6 +75,13 @@ import { CustomerModule } from '../customer/customer.module';
     UpdateVehicleUseCase,
     ArchiveVehicleUseCase,
     UnarchiveVehicleUseCase,
+    GetVehicleSaleUseCase,
+    GetVehicleByIdUseCase,
+    FetchVehicleExpensesUseCase,
+    getVehicleExpenseByIdUseCase,
+    UpdateVehicleExpenseUseCase,
+    ArchiveVehicleExpenseUseCase,
+    UnarchiveVehicleExpenseUseCase,
   ],
 })
 export class VehicleModule {}

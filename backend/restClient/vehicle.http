@@ -3,47 +3,66 @@ GET {{BACKEND_URL}}/vehicles/brands HTTP/1.1
 Content-Type: application/json
 
 ### Search Vehicles (with all filters)
-GET {{BACKEND_URL}}/vehicles?page=1&limit=10&storeId=1&brandId=1&status=IN_STOCK&category=CAR&modelYear=2023&yearOfManufacture=2022&modelName=Civic&plateNumber=ABC1234&announcedPriceMin=50000&announcedPriceMax=100000&startDate=2025-01-01&endDate=2025-12-31 HTTP/1.1
+GET {{BACKEND_URL}}/vehicles?page=1&limit=10&storeId=1&brandId=1&status=IN_STOCK&category=CAR&modelYear=2023&yearOfManufacture=2022&modelName=Civic&plateNumber=ABC1234&announcedPriceMin=50000&announcedPriceMax=100000&startDate=2025-01-01&endDate=2025-12-31&orderBy=modelName HTTP/1.1
 Content-Type: application/json
 
 ### Search Vehicles (minimal filters)
 GET {{BACKEND_URL}}/vehicles?page=1&limit=10 HTTP/1.1
 Content-Type: application/json
 
-### Create Vehicle
+### Get Vehicle by ID
+GET {{BACKEND_URL}}/vehicles/37 HTTP/1.1
+Content-Type: application/json
+
+### Create Vehicle (complete)
 POST {{BACKEND_URL}}/vehicles HTTP/1.1
 Content-Type: application/json
 
 {
-  "chassiNumber": "1HGBH41JXMN109186",
+  "chassiNumber": "1HGBH41JXMN23436",
   "modelYear": 2023,
   "yearOfManufacture": 2022,
   "modelName": "Civic EXL",
   "brandId": 1,
   "category": "CAR",
   "kilometers": 15000,
-  "plateNumber": "ABC1234",
+  "plateNumber": "ABC1233",
   "announcedPrice": 85000,
   "minimumPrice": 80000,
   "commissionValue": 5000,
-  "color": "preto",
+  "color": "000000",
   "fuelType": "FLEX",
   "status": "IN_STOCK",
-  "storeId": 1
+  "storeId": 1,
+  "characteristics": ["Ar condicionado", "Direção hidráulica"],
+  "payment": {
+    "purchaseDate": "2023-08-01T00:00:00.000Z",
+    "paidTo": "Fornecedor ABC",
+    "installments": [
+      {
+        "installmentSequence": 1,
+        "dueDate": "2023-09-01T00:00:00.000Z",
+        "value": 85000,
+        "isUpfront": true,
+        "paymentMethods": [
+          {
+            "type": "BANK_SLIP",
+            "value": 85000,
+            "paymentDate": "2023-08-01T00:00:00.000Z"
+          }
+        ]
+      }
+    ]
+  }
 }
 
-### Create Vehicle (with nullables)
+### Create Vehicle (minimal)
 POST {{BACKEND_URL}}/vehicles HTTP/1.1
 Content-Type: application/json
 
 {
   "chassiNumber": "2HGBH41JXMN109187",
-  "modelYear": null,
-  "yearOfManufacture": null,
-  "modelName": null,
   "brandId": 1,
-  "category": null,
-  "kilometers": null,
   "plateNumber": "XYZ5678",
   "announcedPrice": null,
   "minimumPrice": null,
@@ -54,8 +73,66 @@ Content-Type: application/json
   "storeId": 1
 }
 
-### Update Vehicle
-PATCH {{BACKEND_URL}}/vehicles/5 HTTP/1.1
+### Create Vehicle (with installments)
+POST {{BACKEND_URL}}/vehicles HTTP/1.1
+Content-Type: application/json
+
+{
+  "chassiNumber": "3HGBH41JXMN109188",
+  "modelYear": 2024,
+  "yearOfManufacture": 2023,
+  "modelName": "Corolla XEi",
+  "brandId": 2,
+  "category": "CAR",
+  "kilometers": 0,
+  "plateNumber": "DEF9999",
+  "announcedPrice": 120000,
+  "minimumPrice": 115000,
+  "commissionValue": 6000,
+  "color": "FFFFFF",
+  "fuelType": "FLEX",
+  "status": "IN_STOCK",
+  "storeId": 1,
+  "characteristics": ["Ar condicionado digital", "Câmera de ré"],
+  "description": "Compra do veículo Corolla XEi",
+  "paidTo": "Concessionária XYZ",
+  "payment": {
+    "purchaseDate": "2024-01-15T00:00:00.000Z",
+    "paidTo": "Concessionária XYZ",
+    "installments": [
+      {
+        "installmentSequence": 1,
+        "dueDate": "2024-02-15T00:00:00.000Z",
+        "value": 40000,
+        "isUpfront": true,
+        "paymentMethods": [
+          {
+            "type": "PIX",
+            "value": 40000,
+            "paymentDate": "2024-01-15T00:00:00.000Z"
+          }
+        ]
+      },
+      {
+        "installmentSequence": 2,
+        "dueDate": "2024-03-15T00:00:00.000Z",
+        "value": 40000,
+        "isUpfront": false,
+        "paymentMethods": null
+      },
+      {
+        "installmentSequence": 3,
+        "dueDate": "2024-04-15T00:00:00.000Z",
+        "value": 40000,
+        "isUpfront": false,
+        "paymentMethods": null
+      }
+    ]
+  }
+}
+
+### Update Vehicle (partial)
+PATCH {{BACKEND_URL}}/vehicles/1 HTTP/1.1
 Content-Type: application/json
 
 {
@@ -66,49 +143,69 @@ Content-Type: application/json
   "kilometers": 18000
 }
 
-### Update Vehicle (full update)
-PATCH {{BACKEND_URL}}/vehicles/5 HTTP/1.1
+### Update Vehicle (with characteristics)
+PATCH {{BACKEND_URL}}/vehicles/37 HTTP/1.1
 Content-Type: application/json
 
 {
-  "chassiNumber": "1HGBH41JXMN109186",
-  "modelYear": 2024,
-  "yearOfManufacture": 2023,
   "modelName": "Civic EXL Updated",
-  "brandId": 2,
-  "category": "CAR",
-  "kilometers": 20000,
-  "plateNumber": "ABC1234",
   "announcedPrice": 95000,
-  "minimumPrice": 90000,
-  "commissionValue": 6000,
-  "color": "0000FF",
-  "fuelType": "HYBRID",
-  "status": "IN_STOCK",
-  "storeId": 1
+  "characteristics": ["Ar condicionado", "Direção hidráulica", "Nova característica"]
+}
+
+### Update Vehicle Payment
+PATCH {{BACKEND_URL}}/vehicles/37 HTTP/1.1
+Content-Type: application/json
+
+{
+  "payment": {
+    "purchaseDate": "2023-08-15T00:00:00.000Z",
+    "paidTo": "Leilão"
+  }
+}
+
+### Update Vehicle Payment (only paidTo)
+PATCH {{BACKEND_URL}}/vehicles/37 HTTP/1.1
+Content-Type: application/json
+
+{
+  "payment": {
+    "paidTo": "Concessionária XYZ"
+  }
+}
+
+### Update Vehicle Payment (only purchaseDate)
+PATCH {{BACKEND_URL}}/vehicles/37 HTTP/1.1
+Content-Type: application/json
+
+{
+  "payment": {
+    "purchaseDate": "2023-09-01T00:00:00.000Z"
+  }
 }
 
 ### Archive Vehicle
-PATCH {{BACKEND_URL}}/vehicles/5/archive HTTP/1.1
+PATCH {{BACKEND_URL}}/vehicles/1/archive HTTP/1.1
 Content-Type: application/json
 
 ### Unarchive Vehicle
-PATCH {{BACKEND_URL}}/vehicles/5/unarchive HTTP/1.1
+PATCH {{BACKEND_URL}}/vehicles/1/unarchive HTTP/1.1
 Content-Type: application/json
 
-### Insert Vehicle Expense
+### Insert Vehicle Expense (maintenance)
 POST {{BACKEND_URL}}/vehicles/expense HTTP/1.1
 Content-Type: application/json
 
 {
-  "vehicleId": 5,
+  "vehicleId": 1,
   "category": "MAINTENANCE",
   "observations": "Troca de óleo e filtros",
   "description": "Manutenção preventiva completa",
   "paidTo": "Oficina do João",
-  "totalValue": 50000,
+  "competencyDate": "2025-08-15T00:00:00.000Z",
   "installments": [
     {
+      "installmentSequence": 1,
       "dueDate": "2025-08-15T00:00:00.000Z",
       "value": 25000,
       "isUpfront": true,
@@ -121,6 +218,7 @@ Content-Type: application/json
       ]
     },
     {
+      "installmentSequence": 2,
       "dueDate": "2025-09-15T00:00:00.000Z",
       "value": 25000,
       "isUpfront": false,
@@ -129,39 +227,40 @@ Content-Type: application/json
   ]
 }
 
-### Insert Vehicle Expense (IPVA)
+### Insert Vehicle Expense (Multa)
 POST {{BACKEND_URL}}/vehicles/expense HTTP/1.1
 Content-Type: application/json
 
 {
-  "vehicleId": 5,
-  "category": "IPVA",
+  "vehicleId": 1,
+  "category": "FINE",
   "observations": null,
-  "description": "IPVA 2025",
-  "paidTo": "Governo do Estado",
-  "totalValue": 180000,
+  "description": "Multa por excesso de velocidade",
+  "paidTo": "Detran",
+  "competencyDate": "2025-02-15T00:00:00.000Z",
   "installments": [
     {
-      "dueDate": "2025-03-31T00:00:00.000Z",
-      "value": 180000,
+      "installmentSequence": 1,
+      "dueDate": "2025-02-15T00:00:00.000Z",
+      "value": 50000,
       "isUpfront": false,
       "paymentMethods": [
         {
-          "type": "BANK_SLIP",
-          "value": 180000,
-          "paymentDate": "2025-03-25T00:00:00.000Z"
+          "type": "PIX",
+          "value": 50000,
+          "paymentDate": "2025-02-10T00:00:00.000Z"
         }
       ]
     }
   ]
 }
 
-### Make Vehicle Sale (new contract)
+### Make Vehicle Sale (installments)
 POST {{BACKEND_URL}}/vehicles/sale HTTP/1.1
 Content-Type: application/json
 
 {
-  "vehicleId": 5,
+  "vehicleId": 3,
   "customerId": 1,
   "date": "2025-08-12T00:00:00.000Z",
   "commissionValue": 5000,
@@ -172,31 +271,31 @@ Content-Type: application/json
   "installments": [
     {
       "dueDate": "2025-09-12T00:00:00.000Z",
-      "value": 45000,
+      "value": 47500,
       "isUpfront": true,
       "paymentMethods": [
         {
           "type": "PIX",
-          "value": 45000,
+          "value": 47500,
           "paymentDate": "2025-08-12T00:00:00.000Z"
         }
       ]
     },
     {
       "dueDate": "2025-10-12T00:00:00.000Z",
-      "value": 5000,
+      "value": 47500,
       "isUpfront": false,
       "paymentMethods": null
     }
   ]
 }
 
-### Make Vehicle Sale (one-off full payment)
+### Make Vehicle Sale (full payment)
 POST {{BACKEND_URL}}/vehicles/sale HTTP/1.1
 Content-Type: application/json
 
 {
-  "vehicleId": 6,
+  "vehicleId": 2,
   "customerId": 2,
   "date": "2025-08-16T00:00:00.000Z",
   "commissionValue": 2000,
@@ -220,66 +319,55 @@ Content-Type: application/json
   ]
 }
 
-### Update Vehicle (basic fields only)
-PATCH {{BACKEND_URL}}/vehicles/1 HTTP/1.1
+### Get Vehicle Sale by ID
+GET {{BACKEND_URL}}/vehicles/sale/2 HTTP/1.1
+Content-Type: application/json
+
+### Get Vehicle Expenses by Vehicle ID
+GET {{BACKEND_URL}}/vehicles/expense/1 HTTP/1.1
+Content-Type: application/json
+
+### Get Vehicle Expense by ID
+GET {{BACKEND_URL}}/vehicles/expense/detail/1 HTTP/1.1
+Content-Type: application/json
+
+### Update Vehicle Expense
+PATCH {{BACKEND_URL}}/vehicles/expense/1 HTTP/1.1
 Content-Type: application/json
 
 {
-  "modelName": "Civic EXL Updated",
-  "announcedPrice": 90000,
-  "kilometers": 16000
+  "observations": "Troca de óleo e filtros - Atualizado",
+  "category": "MAINTENANCE",
+  "competencyDate": "2025-08-15T00:00:00.000Z"
 }
 
-### Update Vehicle (with characteristics update)
-PATCH {{BACKEND_URL}}/vehicles/6 HTTP/1.1
+### Archive Vehicle Expense
+PATCH {{BACKEND_URL}}/vehicles/expense/1/archive HTTP/1.1
 Content-Type: application/json
 
-{
-  "modelName": "Civic EXL",
-  "announcedPrice": 88000,
-  "characteristics": [
-    {
-      "id": 1,
-      "characteristic": "Ar condicionado (atualizado)"
-    },
-    {
-      "id": 2,
-      "characteristic": "Direção hidráulica (atualizado)"
-    },
-    {
-      "characteristic": "Nova característica sem ID"
-    }
-  ]
-}
-
-### Update Vehicle (remove all characteristics)
-PATCH {{BACKEND_URL}}/vehicles/1 HTTP/1.1
+### Unarchive Vehicle Expense
+PATCH {{BACKEND_URL}}/vehicles/expense/1/unarchive HTTP/1.1
 Content-Type: application/json
 
-{
-  "characteristics": []
-}
+### ERROR CASES
 
-### Examples of invalid requests (for testing validation)
-
-### Invalid Vehicle - Missing required fields
+### Invalid Vehicle Creation - Missing required fields
 POST {{BACKEND_URL}}/vehicles HTTP/1.1
 Content-Type: application/json
 
 {
   "chassiNumber": "1HGBH41JXMN109186",
-  "brandId": 1,
-  "algo": "asdadasdsad"
+  "brandId": 1
   // Missing: plateNumber, commissionValue, status, storeId
 }
 
-### Invalid Make Sale - missing commissionValue / accountReceivable
+### Invalid Vehicle Sale - Missing required fields
 POST {{BACKEND_URL}}/vehicles/sale HTTP/1.1
 Content-Type: application/json
 
 {
-  "vehicleId": 5,
+  "vehicleId": 1,
   "customerId": 1,
   "date": "2025-08-12T00:00:00.000Z"
-  // Missing commissionValue, accountReceivable and installments
+  // Missing: commissionValue, accountReceivable, installments
 }
