@@ -10,13 +10,15 @@ import ExportButton from "@/domains/pdf/components/ExportButton";
 import { ITEMS_PER_PAGE } from "@shared/constants";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState, type ReactNode } from "react";
-import { VehicleStatusText } from "../constants";
+import { VEHICLES_TABLE, VehicleStatusText } from "../constants";
 import { DisableVehicle, VehiclesFilterFormInputs } from "../types";
 import selectVehiclesInfo from "../utils/selectVehiclesInfo";
 import selectVehiclesInfoForReport from "../utils/selectVehiclesInfoForReport";
 import DisableVehicleModal from "./DisableVehicleModal";
 import VehiclesFilterForm from "./VehiclesFilterForm";
 import VehiclesTableActions from "./VehiclesTableActions";
+
+const gridColumns = 7;
 
 export default function VehiclesTable(): ReactNode {
   const [disableVehicleInfo, setDisableVehicleInfo] = useState<DisableVehicle>({
@@ -93,12 +95,24 @@ export default function VehiclesTable(): ReactNode {
         <Table.Filter form={<VehiclesFilterForm />} />
       </div>
       <Table>
-        <Table.Header gridColumns={7}>
-          <Table.Head label="Modelo" />
-          <Table.Head label="Placa" colSpan={1} />
-          <Table.Head label="Ano do modelo" colSpan={1} />
-          <Table.Head label="Preço anunciado" colSpan={1} />
-          <Table.Head label="Status" colSpan={1} />
+        <Table.Header gridColumns={gridColumns}>
+          <Table.Head label={VEHICLES_TABLE.model.label} />
+          <Table.Head
+            label={VEHICLES_TABLE.plate.label}
+            colSpan={VEHICLES_TABLE.plate.colSpan}
+          />
+          <Table.Head
+            label={VEHICLES_TABLE.year.label}
+            colSpan={VEHICLES_TABLE.year.colSpan}
+          />
+          <Table.Head
+            label={VEHICLES_TABLE.price.label}
+            colSpan={VEHICLES_TABLE.price.colSpan}
+          />
+          <Table.Head
+            label={VEHICLES_TABLE.status.label}
+            colSpan={VEHICLES_TABLE.status.colSpan}
+          />
           <Table.Head action />
         </Table.Header>
         <Table.Body
@@ -108,25 +122,38 @@ export default function VehiclesTable(): ReactNode {
           action="READ"
         >
           {vehiclesInfo?.data.map((vehicle) => (
-            <Table.Row key={vehicle.id} gridColumns={7}>
-              <Table.Cell label={vehicle.modelName} />
-              <Table.Cell label={vehicle.plateNumber} colSpan={1} />
-              <Table.Cell label={vehicle.modelYear} colSpan={1} />
+            <Table.Row key={vehicle.id} gridColumns={gridColumns}>
+              <Table.Cell
+                label={vehicle.modelName}
+                columnLabel={VEHICLES_TABLE.model.label}
+              />
+              <Table.Cell
+                label={vehicle.plateNumber}
+                colSpan={VEHICLES_TABLE.plate.colSpan}
+                columnLabel={VEHICLES_TABLE.plate.label}
+              />
+              <Table.Cell
+                label={vehicle.modelYear}
+                colSpan={VEHICLES_TABLE.year.colSpan}
+                columnLabel={VEHICLES_TABLE.year.label}
+              />
               <Table.Cell
                 label={vehicle.announcedPrice.padStart(
                   biggestValueLength,
                   BLANK
                 )}
-                className="font-mono whitespace-pre"
-                colSpan={1}
+                columnLabel={VEHICLES_TABLE.price.label}
+                className="font-mono xl:whitespace-pre"
+                colSpan={VEHICLES_TABLE.price.colSpan}
               />
               <Table.Cell
+                columnLabel={VEHICLES_TABLE.status.label}
                 label={
                   vehicle.archivedAt
                     ? "Inativo"
                     : VehicleStatusText[vehicle.status]
                 }
-                colSpan={1}
+                colSpan={VEHICLES_TABLE.status.colSpan}
               />
               <Table.Action>
                 <VehiclesTableActions

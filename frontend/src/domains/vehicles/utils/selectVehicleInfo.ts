@@ -5,7 +5,7 @@ import { VehicleFormInputs } from "../types";
 
 export default function selectVehicleInfo(
   payload: VehicleWithPayment
-): VehicleFormInputs {
+): VehicleFormInputs & { purchaseValue: string } {
   const { payment, vehicle } = payload;
 
   const commonCharacteristics = [];
@@ -47,5 +47,6 @@ export default function selectVehicleInfo(
       storeId: String(vehicle.store.id),
       brandId: String(vehicle.brand.id),
     },
+    purchaseValue: applyMask(payment.value, "money") ?? "",
   };
 }

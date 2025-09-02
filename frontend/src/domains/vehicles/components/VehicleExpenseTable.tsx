@@ -7,7 +7,7 @@ import { FetchVehicleExpense } from "@/domains/global/types/model";
 import { ExpenseCategory } from "@shared/enums";
 import DisableVehicleExpenseModal from "./DisableVehicleExpenseModal";
 import VehicleExpenseTableActions from "./VehicleExpenseTableActions";
-import { ExpenseCategoryText } from "../constants";
+import { ExpenseCategoryText, VEHICLES_EXPENSES_TABLE } from "../constants";
 import selectVehicleExpensesInfo from "../utils/selectVehicleExpensesInfo";
 import DataField from "@/domains/global/components/DataField";
 import { applyMask } from "@/domains/global/utils/applyMask";
@@ -15,6 +15,8 @@ import { BLANK } from "@/domains/global/constants";
 // import { useParams } from "react-router-dom";
 // import { BACKEND_URL } from "@/domains/global/constants";
 // import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
+
+const gridColumns = 8;
 
 export default function VehicleExpenseTable(): ReactNode {
   const [disableVehicleExpenseInfo, setDisableVehicleExpenseInfo] =
@@ -92,11 +94,14 @@ export default function VehicleExpenseTable(): ReactNode {
         />
       </div>
       <Table>
-        <Table.Header gridColumns={8}>
-          <Table.Head label="Data de competência" />
-          <Table.Head label="Observações" />
-          <Table.Head label="Categoria" />
-          <Table.Head label="Valor" colSpan={1} />
+        <Table.Header gridColumns={gridColumns}>
+          <Table.Head label={VEHICLES_EXPENSES_TABLE.competencyDate.label} />
+          <Table.Head label={VEHICLES_EXPENSES_TABLE.observations.label} />
+          <Table.Head label={VEHICLES_EXPENSES_TABLE.category.label} />
+          <Table.Head
+            label={VEHICLES_EXPENSES_TABLE.totalValue.label}
+            colSpan={VEHICLES_EXPENSES_TABLE.totalValue.colSpan}
+          />
           <Table.Head action />
         </Table.Header>
         <Table.Body
@@ -106,14 +111,24 @@ export default function VehicleExpenseTable(): ReactNode {
           action="READ"
         >
           {vehicleExpensesInfo?.map((expense) => (
-            <Table.Row key={expense.id} gridColumns={8}>
-              <Table.Cell label={expense.competencyDate} />
-              <Table.Cell label={expense.observations} />
-              <Table.Cell label={ExpenseCategoryText[expense.category]} />
+            <Table.Row key={expense.id} gridColumns={gridColumns}>
+              <Table.Cell
+                label={expense.competencyDate}
+                columnLabel={VEHICLES_EXPENSES_TABLE.competencyDate.label}
+              />
+              <Table.Cell
+                label={expense.observations}
+                columnLabel={VEHICLES_EXPENSES_TABLE.observations.label}
+              />
+              <Table.Cell
+                label={ExpenseCategoryText[expense.category]}
+                columnLabel={VEHICLES_EXPENSES_TABLE.category.label}
+              />
               <Table.Cell
                 label={expense.totalValue.padStart(biggestValueLength, BLANK)}
                 className="font-mono whitespace-pre"
-                colSpan={1}
+                colSpan={VEHICLES_EXPENSES_TABLE.totalValue.colSpan}
+                columnLabel={VEHICLES_EXPENSES_TABLE.totalValue.label}
               />
               <Table.Action>
                 <VehicleExpenseTableActions

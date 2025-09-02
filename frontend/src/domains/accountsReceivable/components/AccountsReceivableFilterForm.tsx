@@ -26,7 +26,7 @@ function AccountsReceivableFilterForm(): ReactNode {
     <Form<AccountsReceivableFilterFormInputs>
       schema={SchemaAccountsReceivableFilterForm}
       onSubmit={handleSubmit}
-      className="flex-1 flex flex-col"
+      className="flex-1 flex flex-col min-h-0"
       defaultValues={{
         startDate: accountsReceivableFilter?.startDate || "",
         endDate: accountsReceivableFilter?.endDate || "",

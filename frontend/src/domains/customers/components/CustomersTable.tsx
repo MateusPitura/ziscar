@@ -15,6 +15,7 @@ import DisableCustomerModal from "./DisableCustomerModal";
 import CustomersFilterForm from "./CustomersFilterForm";
 import CustomersTableActions from "./CustomersTableActions";
 import selectCustomersInfoForReport from "../utils/selectCustomersInfoForReport";
+import { CUSTOMERS_TABLE } from "../constants";
 
 const enableReport = false;
 
@@ -48,10 +49,13 @@ export default function CustomersTable(): ReactNode {
   async function getCustomersInfo(
     filter?: string
   ): Promise<PageablePayload<FetchCustomer>> {
-    return await safeFetch(`${BACKEND_URL}/customer?${filter}&orderBy=fullName`, {
-      resource: "CUSTOMERS",
-      action: "READ",
-    });
+    return await safeFetch(
+      `${BACKEND_URL}/customer?${filter}&orderBy=fullName`,
+      {
+        resource: "CUSTOMERS",
+        action: "READ",
+      }
+    );
   }
 
   const { data: customersInfo, isFetching: isFetchingCustomersInfo } = useQuery(
@@ -97,11 +101,11 @@ export default function CustomersTable(): ReactNode {
       </div>
       <Table>
         <Table.Header>
-          <Table.Head label="Nome completo" />
-          <Table.Head label="CPF" />
-          <Table.Head label="Email" />
-          <Table.Head label="Celular" />
-          <Table.Head label="Status" />
+          <Table.Head label={CUSTOMERS_TABLE.name.label} />
+          <Table.Head label={CUSTOMERS_TABLE.cpf.label} />
+          <Table.Head label={CUSTOMERS_TABLE.email.label} />
+          <Table.Head label={CUSTOMERS_TABLE.phone.label} />
+          <Table.Head label={CUSTOMERS_TABLE.status.label} />
           <Table.Head action />
         </Table.Header>
         <Table.Body
@@ -112,11 +116,26 @@ export default function CustomersTable(): ReactNode {
         >
           {customersInfo?.data.map((customer) => (
             <Table.Row key={customer.id}>
-              <Table.Cell label={customer.fullName} />
-              <Table.Cell label={customer.cpf} />
-              <Table.Cell label={customer.email} />
-              <Table.Cell label={customer.phone} />
-              <Table.Cell label={customer.archivedAt ? "Inativo" : "Ativo"} />
+              <Table.Cell
+                label={customer.fullName}
+                columnLabel={CUSTOMERS_TABLE.name.label}
+              />
+              <Table.Cell
+                label={customer.cpf}
+                columnLabel={CUSTOMERS_TABLE.cpf.label}
+              />
+              <Table.Cell
+                label={customer.email}
+                columnLabel={CUSTOMERS_TABLE.email.label}
+              />
+              <Table.Cell
+                label={customer.phone}
+                columnLabel={CUSTOMERS_TABLE.phone.label}
+              />
+              <Table.Cell
+                label={customer.archivedAt ? "Inativo" : "Ativo"}
+                columnLabel={CUSTOMERS_TABLE.status.label}
+              />
               <Table.Action>
                 <CustomersTableActions
                   isActive={!customer.archivedAt}

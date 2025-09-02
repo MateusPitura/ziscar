@@ -1,15 +1,16 @@
+import FieldArray from "@/design-system/Form/FieldArray";
 import Input from "@/design-system/Form/Input";
-import { useEffect, useState, type ReactNode } from "react";
-import { useFormContext } from "react-hook-form";
-import useSafeFetch from "../hooks/useSafeFetch";
-import useSnackbar from "../hooks/useSnackbar";
-import { useQuery } from "@tanstack/react-query";
+import Select from "@/design-system/Form/Select";
 import { addressDefaultValues } from "@/domains/users/constants";
 import { UserFormInputs } from "@/domains/users/types";
-import Select from "@/design-system/Form/Select";
-import { CEP_LENGTH_WITH_MASK, STATES } from "../constants";
-import FieldArray from "@/design-system/Form/FieldArray";
+import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState, type ReactNode } from "react";
+import { useFormContext } from "react-hook-form";
+import { BACKEND_URL, CEP_LENGTH_WITH_MASK, STATES } from "../constants";
+import useSafeFetch from "../hooks/useSafeFetch";
+import useSnackbar from "../hooks/useSnackbar";
 import { BrazilianState } from "../types";
+import { City } from "../types/model";
 
 interface ViaCepAddress {
   logradouro: string;
@@ -17,11 +18,6 @@ interface ViaCepAddress {
   ibge: string;
   uf: BrazilianState;
   erro: boolean;
-}
-
-interface IbgeCity {
-  nome: string;
-  id: string;
 }
 
 export default function AddressFields(): ReactNode {
@@ -67,15 +63,12 @@ export default function AddressFields(): ReactNode {
 
   async function getCitiesFromState(
     state?: string
-  ): Promise<IbgeCity[] | undefined> {
+  ): Promise<City[] | undefined> {
     if (!state) return [];
 
-    return await safeFetch(
-      `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${state}/municipios`,
-      {
-        enableCookie: false,
-      }
-    );
+    const result = await safeFetch(`${BACKEND_URL}/city/${state}`);
+    console.log("🌠 result: ", result);
+    return result;
   }
 
   const selectedState = watch("address.0.state");
@@ -86,8 +79,8 @@ export default function AddressFields(): ReactNode {
     enabled: !!selectedState,
     select: (data) =>
       data?.map((city) => ({
-        value: String(city.id),
-        label: city.nome,
+        value: String(city.ibgeCode),
+        label: city.name,
       })),
   });
 

@@ -28,7 +28,7 @@ function Tab({
   return (
     <div
       className={classNames(
-        "flex flex-col items-center rounded-t-md border border-transparent relative top-[1px]",
+        "flex flex-col items-center rounded-t-md border border-transparent -m-[1px]",
         {
           "!border-neutral-300 !border-b-neutral-50 shadow-lg": isActive,
         }
