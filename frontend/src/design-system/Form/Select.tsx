@@ -122,10 +122,12 @@ export default function Select<T extends FieldValues>({
                           if (value === selectedValue) {
                             onChange?.(undefined);
                             field.onChange("");
+                            setIsOpen(false);
                             return;
                           }
                           onChange?.(value);
                           field.onChange(value);
+                          setIsOpen(false);
                         }}
                         className="flex !text-neutral-700 text-body-medium"
                         keywords={[option.label]}

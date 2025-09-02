@@ -79,6 +79,17 @@ export default function VehiclesTable(): ReactNode {
           formatFilters={{
             endDate: "Data final",
             startDate: "Data inicial",
+            storeId: "Loja",
+            brandId: "Marca",
+            status: "Status",
+            category: "Categoria",
+            modelYear: "Ano do modelo",
+            yearOfManufacture: "Ano de fabricação",
+            modelName: "Modelo",
+            plateNumber: "Placa",
+            announcedPriceMin: "Preço mínimo",
+            announcedPriceMax: "Preço máximo",
+            orderBy: "Ordenar por",
           }}
           formatFiltersValues={{}}
           formatColumns={{

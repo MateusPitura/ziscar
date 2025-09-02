@@ -24,6 +24,25 @@ export const SchemaVehiclesFilterForm = s
   .object({
     startDate: s.dateString().or(s.empty()),
     endDate: s.dateString().or(s.empty()),
+    storeId: s.string().or(s.empty()),
+    brandId: s.string().or(s.empty()),
+    status: s.enumeration(VEHICLESTATUS_VALUES).or(s.empty()),
+    category: s.enumeration(VEHICLECATEGORY_VALUES).or(s.empty()),
+    modelYear: s.numberString().or(s.empty()),
+    yearOfManufacture: s.numberString().or(s.empty()),
+    modelName: s.string().or(s.empty()),
+    plateNumber: s.plateNumber().or(s.empty()),
+    orderBy: s.string().or(s.empty()),
+    announcedPriceMin: s
+      .numberString({
+        formatter: (value) => applyMask(value, "money") ?? "",
+      })
+      .or(s.empty()),
+    announcedPriceMax: s
+      .numberString({
+        formatter: (value) => applyMask(value, "money") ?? "",
+      })
+      .or(s.empty()),
   })
   .refine(...s.dateRangeRule);
 
