@@ -5,7 +5,7 @@ import { CityRepository } from 'src/repositories/city-repository';
 
 @Injectable()
 export class CityService implements CityRepository {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
   async getAllByState(state: BrazilianState): Promise<City[]> {
     return this.prisma.city.findMany({

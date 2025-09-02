@@ -14,8 +14,9 @@ import { CreateInput, UpdateInput } from 'src/types';
 
 @Injectable()
 export class AccountReceivableInstallmentService
-  implements AccountReceivableInstallmentRepository {
-  constructor(private prisma: PrismaService) { }
+  implements AccountReceivableInstallmentRepository
+{
+  constructor(private prisma: PrismaService) {}
 
   async create(
     data: CreateInput<AccountReceivableInstallment>,
@@ -121,9 +122,10 @@ export class AccountReceivableInstallmentService
         },
         include: {
           paymentMethodReceivables: true,
-        }, orderBy: {
-          installmentSequence: 'asc'
-        }
+        },
+        orderBy: {
+          installmentSequence: 'asc',
+        },
       });
 
     if (!installments || installments.length === 0) {
