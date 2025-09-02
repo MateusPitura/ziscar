@@ -1,1 +1,0 @@
-import{c as n,r as a,aK as r}from"./index-DLLA1f-v.js";function o(t,u){const e=n(),s=e.getQueryCache();return a.useSyncExternalStore(a.useCallback(c=>s.subscribe(r.batchCalls(c)),[s]),()=>e.isFetching(t),()=>e.isFetching(t))}export{o as u};
