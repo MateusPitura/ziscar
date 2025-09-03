@@ -121,6 +121,14 @@ export class VehicleService implements VehicleRepository {
         lte: params.announcedPriceMax ?? undefined,
       };
 
+    if (params.activityStatus === 'INACTIVE') {
+      where.archivedAt = { not: null };
+    }
+
+    if (params.activityStatus === 'ACTIVE') {
+      where.archivedAt = null;
+    }
+
     if (params.startDate || params.endDate) {
       where.createdAt = {
         gte: params.startDate,
@@ -133,7 +141,7 @@ export class VehicleService implements VehicleRepository {
         where,
         skip,
         take,
-        orderBy: params.orderBy ? { [params.orderBy]: 'asc' } : { id: 'desc' },
+        orderBy: { modelName: 'asc' },
         select: GET_VEHICLE,
       }),
       this.prisma.vehicle.count({ where }),

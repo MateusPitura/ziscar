@@ -22,6 +22,7 @@ import {
   createAccountReceivableDTO,
   createAccountReceivableInstallmentDTO,
 } from "./account-receivable.dto";
+import { ActivityStatus } from "@shared/types";
 
 export const InsertVehicleRequestSchema = s.object({
   chassiNumber: s.string(17),
@@ -84,7 +85,7 @@ export const SearchVehiclesRequestSchema = BasePaginationSchema.merge(
     plateNumber: s.string(7).optional(),
     announcedPriceMin: s.number().optional(),
     announcedPriceMax: s.number().optional(),
-    orderBy: s.string().optional(),
+    activityStatus: s.enumeration(Object.values(ActivityStatus)).optional(),
   })
   .refine(...s.dateRangeRule);
 

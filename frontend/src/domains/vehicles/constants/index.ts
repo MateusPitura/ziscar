@@ -15,6 +15,7 @@ import {
   VehicleFormInputs,
   VehiclesFilterFormInputs,
 } from "../types";
+import { ActivityStatus } from "@shared/types";
 
 export const vehicleFilterDefaultValues: VehiclesFilterFormInputs = {
   startDate: "",
@@ -29,7 +30,13 @@ export const vehicleFilterDefaultValues: VehiclesFilterFormInputs = {
   plateNumber: "",
   announcedPriceMin: "",
   announcedPriceMax: "",
-  orderBy: "modelName",
+  activityStatus: ActivityStatus.ACTIVE,
+};
+
+export const ActivityStatusText: Record<ActivityStatus, string> = {
+  ALL: "Todos",
+  INACTIVE: "Inativos",
+  ACTIVE: "Ativos",
 };
 
 export const VehicleStatusText: Record<VehicleStatusType, string> = {
@@ -162,15 +169,4 @@ export const defaultCommonCharacteristics = [
   "Câmera de ré",
   "Air bag",
   "Rodas de liga leve",
-];
-
-// To do --- ad this to a enum on the shared schema too
-export const vehicleOrderByOptions = [
-  { value: "modelName", label: "Nome do modelo" },
-  { value: "modelName", label: "Nome do modelo" },
-  { value: "modelName", label: "Nome do modelo" },
-  { value: "modelName", label: "Nome do modelo" },
-  { value: "modelName", label: "Nome do modelo" },
-  { value: "modelName", label: "Nome do modelo" },
-  { value: "modelName", label: "Nome do modelo" },
 ];

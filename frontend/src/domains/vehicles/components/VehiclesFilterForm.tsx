@@ -3,10 +3,7 @@ import Input from "@/design-system/Form/Input";
 import Select from "@/design-system/Form/Select";
 import SideSheet from "@/design-system/SideSheet";
 import { memo, ReactElement, ReactNode } from "react";
-import {
-  vehicleFilterDefaultValues,
-  vehicleOrderByOptions,
-} from "../constants";
+import { vehicleFilterDefaultValues } from "../constants";
 import { useFormContext } from "react-hook-form";
 import { SchemaVehiclesFilterForm } from "../schemas";
 import useDialogContext from "@/domains/global/hooks/useDialogContext";
@@ -24,8 +21,10 @@ import {
   VehicleCategoryText,
   VehicleStatusText,
   YEARS_OF_MANUFACTURE_OPTIONS,
+  ActivityStatusText,
 } from "../constants";
 import { VehicleCategory, VehicleStatus } from "@shared/enums";
+import { ActivityStatus } from "@shared/types";
 
 function VehiclesFilterForm(): ReactNode {
   const { vehiclesFilter, handleVehiclesFilter } = useFilterContext();
@@ -78,6 +77,7 @@ function VehiclesFilterForm(): ReactNode {
         plateNumber: vehiclesFilter?.plateNumber || "",
         announcedPriceMin: vehiclesFilter?.announcedPriceMin || "",
         announcedPriceMax: vehiclesFilter?.announcedPriceMax || "",
+        activityStatus: vehiclesFilter?.activityStatus || ActivityStatus.ACTIVE,
       }}
       replaceEmptyStringToNull={false}
     >
@@ -117,21 +117,17 @@ function VehiclesFilterFormContent({
   return (
     <>
       <SideSheet.Body className="flex flex-col gap-4 max-h-[82vh] overflow-y-auto">
-        <Select<VehiclesFilterFormInputs>
-          name="orderBy"
-          label="Ordenar por"
-          options={vehicleOrderByOptions}
-          loading={isFetchingStoresInfo}
+        <Input<VehiclesFilterFormInputs>
+          name="modelName"
+          label="Modelo"
+          placeholder="Nome do modelo"
         />
         <Input<VehiclesFilterFormInputs>
-          name="startDate"
-          label="Data inicial de criação"
-          type="date"
-        />
-        <Input<VehiclesFilterFormInputs>
-          name="endDate"
-          label="Data final de criação"
-          type="date"
+          name="plateNumber"
+          label="Placa"
+          placeholder="ABC1234"
+          mask="plateNumber"
+          maxLength={8}
         />
         <Select<VehiclesFilterFormInputs>
           name="storeId"
@@ -146,15 +142,6 @@ function VehiclesFilterFormContent({
           loading={isFetchingStoresInfo}
         />
         <Select<VehiclesFilterFormInputs>
-          name="brandId"
-          label="Marca"
-          options={[
-            { value: "", label: "Todas as marcas" },
-            ...(brandsInfo ?? []),
-          ]}
-          loading={isFetchingBrandsInfo}
-        />
-        <Select<VehiclesFilterFormInputs>
           name="status"
           label="Status"
           options={[
@@ -166,6 +153,15 @@ function VehiclesFilterFormContent({
           ]}
         />
         <Select<VehiclesFilterFormInputs>
+          name="brandId"
+          label="Marca"
+          options={[
+            { value: "", label: "Todas as marcas" },
+            ...(brandsInfo ?? []),
+          ]}
+          loading={isFetchingBrandsInfo}
+        />
+        <Select<VehiclesFilterFormInputs>
           name="category"
           label="Categoria"
           options={[
@@ -175,6 +171,14 @@ function VehiclesFilterFormContent({
               label: VehicleCategoryText[category],
             })),
           ]}
+        />
+        <Select<VehiclesFilterFormInputs>
+          name="activityStatus"
+          label="Status de atividade"
+          options={Object.values(ActivityStatus).map((activityStatus) => ({
+            value: activityStatus,
+            label: ActivityStatusText[activityStatus],
+          }))}
         />
         <Select<VehiclesFilterFormInputs>
           name="modelYear"
@@ -193,18 +197,6 @@ function VehiclesFilterFormContent({
           ]}
         />
         <Input<VehiclesFilterFormInputs>
-          name="modelName"
-          label="Modelo"
-          placeholder="Nome do modelo"
-        />
-        <Input<VehiclesFilterFormInputs>
-          name="plateNumber"
-          label="Placa"
-          placeholder="ABC1234"
-          mask="plateNumber"
-          maxLength={8}
-        />
-        <Input<VehiclesFilterFormInputs>
           name="announcedPriceMin"
           label="Preço anunciado mínimo"
           mask="money"
@@ -215,6 +207,16 @@ function VehiclesFilterFormContent({
           label="Preço anunciado máximo"
           mask="money"
           placeholder="R$ 0,00"
+        />
+        <Input<VehiclesFilterFormInputs>
+          name="startDate"
+          label="Data inicial de criação"
+          type="date"
+        />
+        <Input<VehiclesFilterFormInputs>
+          name="endDate"
+          label="Data final de criação"
+          type="date"
         />
       </SideSheet.Body>
       <SideSheet.Footer
