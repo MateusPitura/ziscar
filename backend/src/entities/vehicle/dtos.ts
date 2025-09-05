@@ -3,8 +3,6 @@ import {
   InsertVehicleResponseSchema,
   SearchVehiclesRequestSchema,
   SearchVehiclesResponseSchema,
-  InsertVehicleExpenseRequestSchema,
-  InsertVehicleExpenseResponseSchema,
   FetchVehicleBrandsResponseSchema,
   MakeVehicleSaleRequestSchema,
   MakeVehicleSaleResponseSchema,
@@ -14,12 +12,8 @@ import {
   ArchiveVehicleResponseSchema,
   UnarchiveVehicleRequestSchema,
   UnarchiveVehicleResponseSchema,
-  ArchiveVehicleExpenseResponseSchema,
-  UnarchiveVehicleExpenseResponseSchema,
-  VehicleExpenseResponseSchema,
   VehicleSaleResponseSchema,
   VehicleWithPaymentResponseSchema,
-  UpdateVehicleExpenseRequestSchema,
 } from '@shared/dtos/vehicle.dto';
 import { createZodDto } from 'nestjs-zod';
 import { z } from 'zod';
@@ -30,9 +24,7 @@ export class InsertVehicleRequestDto extends createZodDto(
 export class SearchVehiclesRequestDto extends createZodDto(
   SearchVehiclesRequestSchema,
 ) {}
-export class InsertVehicleExpenseRequestDto extends createZodDto(
-  InsertVehicleExpenseRequestSchema,
-) {}
+
 export class MakeVehicleSaleRequestDto extends createZodDto(
   MakeVehicleSaleRequestSchema,
 ) {}
@@ -45,9 +37,6 @@ export class ArchiveVehicleRequestDto extends createZodDto(
 export class UnarchiveVehicleRequestDto extends createZodDto(
   UnarchiveVehicleRequestSchema,
 ) {}
-export class UpdateVehicleExpenseRequestDto extends createZodDto(
-  UpdateVehicleExpenseRequestSchema,
-) {}
 
 export type InsertVehicleResponseDto = z.infer<
   typeof InsertVehicleResponseSchema
@@ -55,9 +44,7 @@ export type InsertVehicleResponseDto = z.infer<
 export type SearchVehiclesResponseDto = z.infer<
   typeof SearchVehiclesResponseSchema
 >;
-export type InsertVehicleExpenseResponseDto = z.infer<
-  typeof InsertVehicleExpenseResponseSchema
->;
+
 export type MakeVehicleSaleResponseDto = z.infer<
   typeof MakeVehicleSaleResponseSchema
 >;
@@ -70,18 +57,9 @@ export type ArchiveVehicleResponseDto = z.infer<
 export type UnarchiveVehicleResponseDto = z.infer<
   typeof UnarchiveVehicleResponseSchema
 >;
-export type ArchiveVehicleExpenseResponseDto = z.infer<
-  typeof ArchiveVehicleExpenseResponseSchema
->;
-export type UnarchiveVehicleExpenseResponseDto = z.infer<
-  typeof UnarchiveVehicleExpenseResponseSchema
->;
+
 export type FetchVehicleBrandsResponseDto = z.infer<
   typeof FetchVehicleBrandsResponseSchema
->;
-
-export type VehicleExpenseResponseDto = z.infer<
-  typeof VehicleExpenseResponseSchema
 >;
 
 export type VehicleSaleResponseDto = z.infer<typeof VehicleSaleResponseSchema>;

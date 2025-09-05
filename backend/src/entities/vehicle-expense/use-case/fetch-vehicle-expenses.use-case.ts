@@ -1,18 +1,15 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { VehicleRepository } from 'src/repositories/vehicle-repository';
-import { VehicleExpenseResponseDto } from '../dtos';
+import { Injectable } from '@nestjs/common';
 import { ExpenseCategory } from '@shared/enums';
+import { VehicleExpenseResponseDto } from '../dtos';
+import { VehicleExpenseService } from '../vehicle-expense.service';
 
 @Injectable()
 export class FetchVehicleExpensesUseCase {
-  constructor(
-    @Inject(VehicleRepository)
-    private readonly vehicleRepository: VehicleRepository,
-  ) {}
+  constructor(private readonly vehicleExpenseService: VehicleExpenseService) {}
 
   async execute(vehicleId: string): Promise<VehicleExpenseResponseDto[]> {
     const expensesResult =
-      await this.vehicleRepository.fetchVehicleExpenses(vehicleId);
+      await this.vehicleExpenseService.fetchVehicleExpenses(vehicleId);
 
     if (!expensesResult.length) return [];
 

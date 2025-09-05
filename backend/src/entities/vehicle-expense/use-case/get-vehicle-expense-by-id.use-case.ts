@@ -1,18 +1,15 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { VehicleRepository } from 'src/repositories/vehicle-repository';
-import { VehicleExpenseResponseDto } from '../dtos';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { ExpenseCategory } from '@shared/enums';
+import { VehicleExpenseResponseDto } from '../dtos';
+import { VehicleExpenseService } from '../vehicle-expense.service';
 
 @Injectable()
-export class getVehicleExpenseByIdUseCase {
-  constructor(
-    @Inject(VehicleRepository)
-    private readonly vehicleRepository: VehicleRepository,
-  ) {}
+export class GetVehicleExpenseByIdUseCase {
+  constructor(private readonly vehicleExpenseService: VehicleExpenseService) {}
 
   async execute(expenseId: string): Promise<VehicleExpenseResponseDto> {
     const expenseResult =
-      await this.vehicleRepository.getVehicleExpenseById(expenseId);
+      await this.vehicleExpenseService.getVehicleExpenseById(expenseId);
 
     if (!expenseResult) throw new NotFoundException('Expense not found');
 
