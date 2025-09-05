@@ -195,3 +195,8 @@ export const SchemaAddress = object({
   cep: cep(),
   number: string(),
 });
+
+export const record = <T extends z.ZodTypeAny>(valueSchema: T) =>
+  z.record(valueSchema);
+
+export const unknown = z.unknown;

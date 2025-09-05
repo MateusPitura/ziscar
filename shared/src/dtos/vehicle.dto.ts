@@ -40,6 +40,32 @@ export const InsertVehicleRequestSchema = s.object({
   status: s.enumeration(VEHICLESTATUS_VALUES),
   storeId: s.id(),
   characteristics: s.array(s.string()).optional(),
+  payment: s
+    .object({
+      purchaseDate: s.date(),
+      paidTo: s.string().nullable(),
+      installments: s.array(
+        createAccountPayableInstallmentDTO
+          .omit({
+            accountPayableId: true,
+            status: true,
+            isRefund: true,
+            refundAccountPayableInstallmentId: true,
+          })
+          .extend({
+            paymentMethods: s
+              .array(
+                s.object({
+                  type: s.enumeration(PAYMENTMETHODPAYABLETYPE_VALUES),
+                  value: s.number(),
+                  paymentDate: s.date().nullable(),
+                })
+              )
+              .nullable(),
+          })
+      ),
+    })
+    .optional(),
 });
 
 export const InsertVehicleResponseSchema = BaseIdResponseSchema;
@@ -58,21 +84,27 @@ export const SearchVehiclesRequestSchema = BasePaginationSchema.merge(
     plateNumber: s.string(7).optional(),
     announcedPriceMin: s.number().optional(),
     announcedPriceMax: s.number().optional(),
+    orderBy: s.string().optional(),
   })
   .refine(...s.dateRangeRule);
 
-const VehicleItemSchema = s.object({
+export const VehicleItemResponseSchema = s.object({
   id: s.id(),
   chassiNumber: s.string(17),
   modelYear: s.number().nullable(),
   yearOfManufacture: s.number().nullable(),
-  modelName: s.string().nullable(),
+  modelName: s.string(127).nullable(),
   storeId: s.id(),
   status: s.enumeration(VEHICLESTATUS_VALUES),
   category: s.enumeration(VEHICLECATEGORY_VALUES).nullable(),
   announcedPrice: s.number().nullable(),
   plateNumber: s.string(7),
   archivedAt: s.date().nullable().optional(),
+  kilometers: s.number().nullable(),
+  minimumPrice: s.number().nullable(),
+  commissionValue: s.number(),
+  color: s.string(6).nullable(),
+  fuelType: s.enumeration(FUELTYPE_VALUES).nullable(),
   vehicleCharacteristicValues: s
     .array(
       s.object({
@@ -95,8 +127,9 @@ const VehicleItemSchema = s.object({
     .optional(),
 });
 
-export const SearchVehiclesResponseSchema =
-  BasePaginatedResponseSchema(VehicleItemSchema);
+export const SearchVehiclesResponseSchema = BasePaginatedResponseSchema(
+  VehicleItemResponseSchema
+);
 
 export const InsertVehicleExpenseRequestSchema = s
   .object({
@@ -172,17 +205,14 @@ export const UpdateVehicleRequestSchema = InsertVehicleRequestSchema.omit({
 })
   .partial()
   .extend({
-    characteristics: s
-      .array(
-        s.object({
-          id: s.id().optional(),
-          characteristic: s.string(127),
-        })
-      )
+    characteristics: s.array(s.string()).optional(),
+    payment: s
+      .object({
+        purchaseDate: s.date().optional(),
+        paidTo: s.string().nullable().optional(),
+      })
       .optional(),
   });
-
-export const UpdateVehicleResponseSchema = BaseIdResponseSchema;
 
 export const ArchiveVehicleRequestSchema = BaseIdSchema;
 
@@ -197,3 +227,70 @@ export const UnarchiveVehicleResponseSchema = s.object({
   id: s.id(),
   archivedAt: s.date().nullable(),
 });
+
+export const ArchiveVehicleExpenseResponseSchema = s.object({
+  id: s.id(),
+  archivedAt: s.date(),
+});
+
+export const UnarchiveVehicleExpenseResponseSchema = s.object({
+  id: s.id(),
+  archivedAt: s.date().nullable(),
+});
+
+export const VehicleExpenseResponseSchema = s.object({
+  id: s.id(),
+  vehicleId: s.id(),
+  category: s.enumeration(EXPENSECATEGORY_VALUES),
+  observations: s.string().nullable(),
+  competencyDate: s.date(),
+  archivedAt: s.date().nullable(),
+  totalValue: s.number(),
+  accountPayable: s
+    .object({
+      description: s.string().nullable(),
+      paidTo: s.string().nullable(),
+    })
+    .optional(),
+});
+
+export const VehicleSaleResponseSchema = s.object({
+  id: s.id(),
+  vehicleId: s.id(),
+  customerId: s.id(),
+  date: s.date(),
+  userId: s.id(),
+  archivedAt: s.date().nullable(),
+  vehicleSnapshot: s.record(s.unknown()).nullable(),
+  customerSnapshot: s.record(s.unknown()).nullable(),
+  accountReceivable: s
+    .object({
+      description: s.string().nullable(),
+      receivedFrom: s.string().nullable(),
+    })
+    .optional(),
+  accountPayable: s
+    .object({
+      description: s.string().nullable(),
+      paidTo: s.string().nullable(),
+    })
+    .optional(),
+});
+
+export const VehicleWithPaymentResponseSchema =
+  VehicleItemResponseSchema.extend({
+    payment: s
+      .object({
+        purchaseDate: s.date(),
+        paidTo: s.string().nullable(),
+      })
+      .optional(),
+  });
+
+export const UpdateVehicleExpenseRequestSchema = s.object({
+  observations: s.string().nullable().optional(),
+  category: s.enumeration(EXPENSECATEGORY_VALUES).optional(),
+  competencyDate: s.date().optional(),
+});
+
+export const UpdateVehicleResponseSchema = VehicleWithPaymentResponseSchema;

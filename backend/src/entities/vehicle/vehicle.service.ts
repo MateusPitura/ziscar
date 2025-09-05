@@ -4,20 +4,36 @@ import {
   Prisma,
   VehicleCategory,
   VehicleStatus,
+  VehicleSale,
+  VehicleExpense,
+  VehiclePurchase,
 } from '@prisma/client';
+import {
+  GetVehicleExpenseByIdOutDto,
+  GetVehicleExpensesOutDto,
+} from 'src/repositories/vehicle-repository';
 import {
   VehicleStatus as SharedVehicleStatus,
   VehicleCategory as SharedVehicleCategory,
+  FuelType,
 } from '@shared/enums';
 import { PrismaService } from 'src/infra/database/prisma.service';
-import { VehicleRepository } from 'src/repositories/vehicle-repository';
+import {
+  GetVehicleWithPaymentOutDto,
+  VehicleRepository,
+} from 'src/repositories/vehicle-repository';
 import { CreateInput, UpdateInput } from 'src/types';
 import type {
   SearchVehiclesRequestDto,
   SearchVehiclesResponseDto,
   FetchVehicleBrandsResponseDto,
 } from './dtos';
-import { GET_VEHICLE } from './constants';
+import {
+  GET_VEHICLE,
+  VEHICLE_WITH_PAYMENT_SELECT,
+  VEHICLE_EXPENSE_SELECT,
+  VEHICLE_EXPENSE_WITH_VEHICLE_SELECT,
+} from './constants';
 
 @Injectable()
 export class VehicleService implements VehicleRepository {
@@ -27,29 +43,21 @@ export class VehicleService implements VehicleRepository {
     return this.prisma.vehicle.create({ data });
   }
 
-  async findById(id: string): Promise<Vehicle | null> {
-    const vehicle = await this.prisma.vehicle.findUnique({
-      where: { id: Number(id) },
-    });
-
-    if (!vehicle) {
-      return null;
-    }
-
-    return vehicle;
-  }
-
-  async findUnique(id: number): Promise<Vehicle | null> {
+  async findById(id: number): Promise<GetVehicleWithPaymentOutDto | null> {
     return await this.prisma.vehicle.findUnique({
       where: { id },
-      include: { brand: true, vehicleCharacteristicValues: true },
+      select: VEHICLE_WITH_PAYMENT_SELECT,
     });
   }
 
-  async update(id: string, data: UpdateInput<Vehicle>): Promise<Vehicle> {
+  async update(
+    id: string,
+    data: UpdateInput<Vehicle>,
+  ): Promise<GetVehicleWithPaymentOutDto> {
     return await this.prisma.vehicle.update({
       where: { id: Number(id) },
       data,
+      select: VEHICLE_WITH_PAYMENT_SELECT,
     });
   }
 
@@ -125,7 +133,7 @@ export class VehicleService implements VehicleRepository {
         where,
         skip,
         take,
-        orderBy: { id: 'desc' },
+        orderBy: params.orderBy ? { [params.orderBy]: 'asc' } : { id: 'desc' },
         select: GET_VEHICLE,
       }),
       this.prisma.vehicle.count({ where }),
@@ -135,6 +143,7 @@ export class VehicleService implements VehicleRepository {
       ...row,
       status: row.status as SharedVehicleStatus,
       category: row.category as SharedVehicleCategory | null,
+      fuelType: row.fuelType as FuelType,
     }));
 
     return { data: mappedRows, total: total };
@@ -157,58 +166,123 @@ export class VehicleService implements VehicleRepository {
 
   async updateCharacteristics(
     vehicleId: number,
-    characteristics: Array<{ id?: number; characteristic: string }>,
+    characteristics: string[],
   ): Promise<void> {
     const vehicleIdNumber = Number(vehicleId);
 
-    const existingCharacteristics =
-      await this.prisma.vehicleCharacteristicValue.findMany({
-        where: { vehicleId: vehicleIdNumber },
-        select: { id: true },
-      });
-
-    const existingIds = existingCharacteristics.map((char) => char.id);
-    const providedIds = characteristics
-      .filter((char) => char.id !== undefined)
-      .map((char) => char.id!);
-
-    const idsToDelete = existingIds.filter((id) => !providedIds.includes(id));
-
-    const characteristicsToUpdate = characteristics.filter(
-      (char) => char.id !== undefined && existingIds.includes(char.id),
-    );
-
-    const characteristicsToInsert = characteristics.filter(
-      (char) => char.id === undefined,
-    );
-
-    await this.prisma.$transaction(async (prisma) => {
-      if (idsToDelete.length > 0) {
-        await prisma.vehicleCharacteristicValue.deleteMany({
-          where: {
-            id: { in: idsToDelete },
-            vehicleId: vehicleIdNumber,
-          },
-        });
-      }
-
-      for (const char of characteristicsToUpdate) {
-        await prisma.vehicleCharacteristicValue.update({
-          where: { id: char.id! },
-          data: { characteristic: char.characteristic },
-        });
-      }
-
-      if (characteristicsToInsert.length > 0) {
-        const dataToInsert = characteristicsToInsert.map((char) => ({
-          vehicleId: vehicleIdNumber,
-          characteristic: char.characteristic,
-        }));
-
-        await prisma.vehicleCharacteristicValue.createMany({
-          data: dataToInsert,
-        });
-      }
+    await this.prisma.vehicleCharacteristicValue.deleteMany({
+      where: { vehicleId: vehicleIdNumber },
     });
+
+    if (characteristics.length > 0) {
+      const data = characteristics.map((characteristic) => ({
+        vehicleId: vehicleIdNumber,
+        characteristic,
+      }));
+
+      await this.prisma.vehicleCharacteristicValue.createMany({
+        data,
+      });
+    }
+  }
+
+  async getVehicleSale(vehicleSaleId: string): Promise<VehicleSale | null> {
+    return await this.prisma.vehicleSale.findUnique({
+      where: { id: Number(vehicleSaleId) },
+      include: {
+        accountReceivable: true,
+        accountPayable: true,
+      },
+    });
+  }
+
+  async getVehicleWithPayment(
+    vehicleId: string,
+  ): Promise<GetVehicleWithPaymentOutDto | null> {
+    return await this.prisma.vehicle.findUnique({
+      where: { id: Number(vehicleId) },
+      select: VEHICLE_WITH_PAYMENT_SELECT,
+    });
+  }
+
+  async fetchVehicleExpenses(
+    vehicleId: string,
+  ): Promise<GetVehicleExpensesOutDto[]> {
+    return await this.prisma.vehicleExpense.findMany({
+      where: { vehicleId: Number(vehicleId) },
+      select: VEHICLE_EXPENSE_SELECT,
+      orderBy: { createdAt: 'desc' },
+    });
+  }
+
+  async getVehicleExpenseById(
+    expenseId: string,
+  ): Promise<GetVehicleExpenseByIdOutDto | null> {
+    return await this.prisma.vehicleExpense.findUnique({
+      where: { id: Number(expenseId) },
+      select: VEHICLE_EXPENSE_WITH_VEHICLE_SELECT,
+    });
+  }
+
+  async updateVehicleExpense(
+    expenseId: string,
+    data: UpdateInput<VehicleExpense>,
+  ): Promise<VehicleExpense> {
+    return await this.prisma.vehicleExpense.update({
+      where: { id: Number(expenseId) },
+      data,
+    });
+  }
+
+  async archiveVehicleExpense(expenseId: string): Promise<VehicleExpense> {
+    return await this.prisma.vehicleExpense.update({
+      where: { id: Number(expenseId) },
+      data: {
+        archivedAt: new Date(),
+      },
+    });
+  }
+
+  async unarchiveVehicleExpense(expenseId: string): Promise<VehicleExpense> {
+    return await this.prisma.vehicleExpense.update({
+      where: { id: Number(expenseId) },
+      data: {
+        archivedAt: null,
+      },
+    });
+  }
+
+  async createPurchase(
+    data: CreateInput<VehiclePurchase>,
+  ): Promise<VehiclePurchase> {
+    return this.prisma.vehiclePurchase.create({ data });
+  }
+
+  async updateVehiclePayment(
+    vehicleId: string,
+    payment: { purchaseDate?: Date; paidTo?: string | null },
+  ): Promise<void> {
+    const vehiclePurchase = await this.prisma.vehiclePurchase.findFirst({
+      where: { vehicleId: Number(vehicleId) },
+      include: { accountPayable: true },
+    });
+
+    if (!vehiclePurchase) {
+      throw new Error('Vehicle purchase not found');
+    }
+
+    if (payment.purchaseDate) {
+      await this.prisma.vehiclePurchase.update({
+        where: { id: vehiclePurchase.id },
+        data: { date: payment.purchaseDate },
+      });
+    }
+
+    if (payment.paidTo !== undefined) {
+      await this.prisma.accountPayable.update({
+        where: { id: vehiclePurchase.accountPayableId },
+        data: { paidTo: payment.paidTo },
+      });
+    }
   }
 }
