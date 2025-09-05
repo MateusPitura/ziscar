@@ -1,23 +1,23 @@
 import { Injectable } from '@nestjs/common';
-import { VehicleService } from '../vehicle.service';
+import { ExpenseCategory } from '@shared/enums';
 import {
   UpdateVehicleExpenseRequestDto,
   VehicleExpenseResponseDto,
 } from '../dtos';
-import { ExpenseCategory } from '@shared/enums';
+import { VehicleExpenseService } from '../vehicle-expense.service';
 
 @Injectable()
 export class UpdateVehicleExpenseUseCase {
-  constructor(private readonly vehicleService: VehicleService) {}
+  constructor(private readonly vehicleExpenseService: VehicleExpenseService) {}
 
   async execute(
     expenseId: string,
     input: UpdateVehicleExpenseRequestDto,
   ): Promise<VehicleExpenseResponseDto> {
-    await this.vehicleService.updateVehicleExpense(expenseId, input);
+    await this.vehicleExpenseService.updateVehicleExpense(expenseId, input);
 
     const updatedExpense =
-      await this.vehicleService.getVehicleExpenseById(expenseId);
+      await this.vehicleExpenseService.getVehicleExpenseById(expenseId);
 
     if (!updatedExpense) throw new Error('Expense not found after update');
 

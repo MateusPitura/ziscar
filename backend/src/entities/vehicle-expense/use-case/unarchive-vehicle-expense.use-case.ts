@@ -1,15 +1,16 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { VehicleService } from '../vehicle.service';
 import { UnarchiveVehicleExpenseResponseDto } from '../dtos';
+import { VehicleExpenseService } from '../vehicle-expense.service';
 
 @Injectable()
 export class UnarchiveVehicleExpenseUseCase {
-  constructor(private readonly vehicleService: VehicleService) {}
+  constructor(private readonly vehicleExpenseService: VehicleExpenseService) {}
 
   async execute(
     expenseId: string,
   ): Promise<UnarchiveVehicleExpenseResponseDto> {
-    const expense = await this.vehicleService.getVehicleExpenseById(expenseId);
+    const expense =
+      await this.vehicleExpenseService.getVehicleExpenseById(expenseId);
     if (!expense) {
       throw new NotFoundException('Vehicle expense not found');
     }
@@ -19,7 +20,7 @@ export class UnarchiveVehicleExpenseUseCase {
     }
 
     const unarchivedExpense =
-      await this.vehicleService.unarchiveVehicleExpense(expenseId);
+      await this.vehicleExpenseService.unarchiveVehicleExpense(expenseId);
 
     return {
       id: unarchivedExpense.id,

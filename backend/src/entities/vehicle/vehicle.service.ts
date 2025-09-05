@@ -5,13 +5,8 @@ import {
   VehicleCategory,
   VehicleStatus,
   VehicleSale,
-  VehicleExpense,
   VehiclePurchase,
 } from '@prisma/client';
-import {
-  GetVehicleExpenseByIdOutDto,
-  GetVehicleExpensesOutDto,
-} from 'src/repositories/vehicle-repository';
 import {
   VehicleStatus as SharedVehicleStatus,
   VehicleCategory as SharedVehicleCategory,
@@ -28,12 +23,7 @@ import type {
   SearchVehiclesResponseDto,
   FetchVehicleBrandsResponseDto,
 } from './dtos';
-import {
-  GET_VEHICLE,
-  VEHICLE_WITH_PAYMENT_SELECT,
-  VEHICLE_EXPENSE_SELECT,
-  VEHICLE_EXPENSE_WITH_VEHICLE_SELECT,
-} from './constants';
+import { GET_VEHICLE, VEHICLE_WITH_PAYMENT_SELECT } from './constants';
 import { ActivityStatus } from '@shared/types';
 
 @Injectable()
@@ -211,53 +201,6 @@ export class VehicleService implements VehicleRepository {
     return await this.prisma.vehicle.findUnique({
       where: { id: Number(vehicleId) },
       select: VEHICLE_WITH_PAYMENT_SELECT,
-    });
-  }
-
-  async fetchVehicleExpenses(
-    vehicleId: string,
-  ): Promise<GetVehicleExpensesOutDto[]> {
-    return await this.prisma.vehicleExpense.findMany({
-      where: { vehicleId: Number(vehicleId) },
-      select: VEHICLE_EXPENSE_SELECT,
-      orderBy: { createdAt: 'desc' },
-    });
-  }
-
-  async getVehicleExpenseById(
-    expenseId: string,
-  ): Promise<GetVehicleExpenseByIdOutDto | null> {
-    return await this.prisma.vehicleExpense.findUnique({
-      where: { id: Number(expenseId) },
-      select: VEHICLE_EXPENSE_WITH_VEHICLE_SELECT,
-    });
-  }
-
-  async updateVehicleExpense(
-    expenseId: string,
-    data: UpdateInput<VehicleExpense>,
-  ): Promise<VehicleExpense> {
-    return await this.prisma.vehicleExpense.update({
-      where: { id: Number(expenseId) },
-      data,
-    });
-  }
-
-  async archiveVehicleExpense(expenseId: string): Promise<VehicleExpense> {
-    return await this.prisma.vehicleExpense.update({
-      where: { id: Number(expenseId) },
-      data: {
-        archivedAt: new Date(),
-      },
-    });
-  }
-
-  async unarchiveVehicleExpense(expenseId: string): Promise<VehicleExpense> {
-    return await this.prisma.vehicleExpense.update({
-      where: { id: Number(expenseId) },
-      data: {
-        archivedAt: null,
-      },
     });
   }
 

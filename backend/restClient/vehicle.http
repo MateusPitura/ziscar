@@ -193,7 +193,7 @@ PATCH {{BACKEND_URL}}/vehicles/1/unarchive HTTP/1.1
 Content-Type: application/json
 
 ### Insert Vehicle Expense (maintenance)
-POST {{BACKEND_URL}}/vehicles/expense HTTP/1.1
+POST {{BACKEND_URL}}/vehicle-expense HTTP/1.1
 Content-Type: application/json
 
 {
@@ -228,7 +228,7 @@ Content-Type: application/json
 }
 
 ### Insert Vehicle Expense (Multa)
-POST {{BACKEND_URL}}/vehicles/expense HTTP/1.1
+POST {{BACKEND_URL}}/vehicle-expense HTTP/1.1
 Content-Type: application/json
 
 {
@@ -320,19 +320,19 @@ Content-Type: application/json
 }
 
 ### Get Vehicle Sale by ID
-GET {{BACKEND_URL}}/vehicles/sale/2 HTTP/1.1
+GET {{BACKEND_URL}}/vehicles/sale/1 HTTP/1.1
 Content-Type: application/json
 
 ### Get Vehicle Expenses by Vehicle ID
-GET {{BACKEND_URL}}/vehicles/expense/1 HTTP/1.1
+GET {{BACKEND_URL}}/vehicle-expense/1 HTTP/1.1
 Content-Type: application/json
 
 ### Get Vehicle Expense by ID
-GET {{BACKEND_URL}}/vehicles/expense/detail/1 HTTP/1.1
+GET {{BACKEND_URL}}/vehicle-expense/detail/1 HTTP/1.1
 Content-Type: application/json
 
 ### Update Vehicle Expense
-PATCH {{BACKEND_URL}}/vehicles/expense/1 HTTP/1.1
+PATCH {{BACKEND_URL}}/vehicle-expense/1 HTTP/1.1
 Content-Type: application/json
 
 {
@@ -342,11 +342,11 @@ Content-Type: application/json
 }
 
 ### Archive Vehicle Expense
-PATCH {{BACKEND_URL}}/vehicles/expense/1/archive HTTP/1.1
+PATCH {{BACKEND_URL}}/vehicle-expense/1/archive HTTP/1.1
 Content-Type: application/json
 
 ### Unarchive Vehicle Expense
-PATCH {{BACKEND_URL}}/vehicles/expense/1/unarchive HTTP/1.1
+PATCH {{BACKEND_URL}}/vehicle-expense/1/unarchive HTTP/1.1
 Content-Type: application/json
 
 ### ERROR CASES
