@@ -14,6 +14,9 @@ import selectAccountsReceivableInfo from "../utils/selectAccountsReceivableInfo"
 import selectAccountsReceivableInfoForReport from "../utils/selectAccountsReceivableInfoForReport";
 import AccountsReceivableFilterForm from "./AccountsReceivableFilterForm";
 import AccountsReceivableTableActions from "./AccountsReceivableTableActions";
+import { ACCOUNTS_RECEIVABLE_TABLE } from "../constants";
+
+const gridColumns = 10;
 
 export default function AccountsReceivableTable(): ReactNode {
   const { safeFetch } = useSafeFetch();
@@ -34,10 +37,13 @@ export default function AccountsReceivableTable(): ReactNode {
   async function getAccountsReceivableInfo(
     filter?: string
   ): Promise<PageablePayload<FetchAccountReceivable>> {
-    return await safeFetch(`${BACKEND_URL}/account-receivable/search?${filter}&orderBy=description`, {
-      resource: "ACCOUNTS_RECEIVABLE",
-      action: "READ",
-    });
+    return await safeFetch(
+      `${BACKEND_URL}/account-receivable/search?${filter}&orderBy=description`,
+      {
+        resource: "ACCOUNTS_RECEIVABLE",
+        action: "READ",
+      }
+    );
   }
 
   const {
@@ -89,12 +95,17 @@ export default function AccountsReceivableTable(): ReactNode {
         <Table.Filter form={<AccountsReceivableFilterForm />} />
       </div>
       <Table>
-        <Table.Header gridColumns={10}>
-          <Table.Head label="Descrição" />
-          <Table.Head label="Número de parcelas" />
-          <Table.Head label="Recebido de" />
-          <Table.Head label="Status geral do pagamento" />
-          <Table.Head label="Valor total" colSpan={1} />
+        <Table.Header gridColumns={gridColumns}>
+          <Table.Head label={ACCOUNTS_RECEIVABLE_TABLE.description.label} />
+          <Table.Head
+            label={ACCOUNTS_RECEIVABLE_TABLE.installmentsNumber.label}
+          />
+          <Table.Head label={ACCOUNTS_RECEIVABLE_TABLE.receivedFrom.label} />
+          <Table.Head label={ACCOUNTS_RECEIVABLE_TABLE.overallStatus.label} />
+          <Table.Head
+            label={ACCOUNTS_RECEIVABLE_TABLE.totalValue.label}
+            colSpan={ACCOUNTS_RECEIVABLE_TABLE.totalValue.colSpan}
+          />
           <Table.Head action />
         </Table.Header>
         <Table.Body
@@ -104,14 +115,24 @@ export default function AccountsReceivableTable(): ReactNode {
           action="READ"
         >
           {accountsReceivableInfo?.data.map((accountReceivable) => (
-            <Table.Row key={accountReceivable.id} gridColumns={10}>
-              <Table.Cell label={accountReceivable.description} />
-              <Table.Cell label={accountReceivable.installmentsNumber} />
-              <Table.Cell label={accountReceivable.receivedFrom} />
+            <Table.Row key={accountReceivable.id} gridColumns={gridColumns}>
+              <Table.Cell
+                label={accountReceivable.description}
+                columnLabel={ACCOUNTS_RECEIVABLE_TABLE.description.label}
+              />
+              <Table.Cell
+                label={accountReceivable.installmentsNumber}
+                columnLabel={ACCOUNTS_RECEIVABLE_TABLE.installmentsNumber.label}
+              />
+              <Table.Cell
+                label={accountReceivable.receivedFrom}
+                columnLabel={ACCOUNTS_RECEIVABLE_TABLE.receivedFrom.label}
+              />
               <Table.Cell
                 label={
                   <AccountStatus status={accountReceivable.overallStatus} />
                 }
+                columnLabel={ACCOUNTS_RECEIVABLE_TABLE.overallStatus.label}
               />
               <Table.Cell
                 label={accountReceivable.totalValue.padStart(
@@ -119,7 +140,8 @@ export default function AccountsReceivableTable(): ReactNode {
                   BLANK
                 )}
                 className="font-mono whitespace-pre"
-                colSpan={1}
+                colSpan={ACCOUNTS_RECEIVABLE_TABLE.totalValue.colSpan}
+                columnLabel={ACCOUNTS_RECEIVABLE_TABLE.totalValue.label}
               />
               <Table.Action>
                 <AccountsReceivableTableActions

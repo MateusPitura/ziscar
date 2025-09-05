@@ -15,11 +15,13 @@
       "Pageable",
       "PAYMENTMETHODPAYABLETYPE",
       "PAYMENTMETHODRECEIVABLETYPE",
+      "PGPORT",
       "ROLETYPE",
       "Shadcn",
       "Transactionable",
       "VEHICLECATEGORY",
       "VEHICLESTATUS",
+      "ziscar",
       "Ziscar"
     ]
   }

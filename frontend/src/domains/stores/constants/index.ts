@@ -14,3 +14,21 @@ export const storeFilterDefaultValues: StoresFilterFormInputs = {
   startDate: "",
   endDate: "",
 };
+
+export const STORES_TABLE = {
+  name: {
+    label: "Nome",
+  },
+  cnpj: {
+    label: "CNPJ",
+  },
+  email: {
+    label: "Email",
+  },
+  phone: {
+    label: "Celular",
+  },
+  status: {
+    label: "Status",
+  },
+} as const;

@@ -64,7 +64,7 @@ Content-Type: application/json
   "chassiNumber": "2HGBH41JXMN109187",
   "brandId": 1,
   "plateNumber": "XYZ5678",
-  "commissionValue": 3000,
+  "commissionValue": 2000,
   "status": "PURCHASED",
   "storeId": 1
 }
@@ -294,7 +294,7 @@ Content-Type: application/json
   "vehicleId": 2,
   "customerId": 2,
   "date": "2025-08-16T00:00:00.000Z",
-  "commissionValue": 3000,
+  "commissionValue": 2000,
   "accountReceivable": {
     "description": "Venda à vista",
     "receivedFrom": "Cliente Maria"

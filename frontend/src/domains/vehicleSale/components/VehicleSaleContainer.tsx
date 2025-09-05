@@ -41,6 +41,7 @@ export default function VehicleSaleContainer(): ReactNode {
       payment: {
         purchaseDate: "2023-01-01",
         paidTo: "Fulano de Tal",
+        value: "7000000",
       },
       vehicle: {
         id: 1,

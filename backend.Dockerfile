@@ -1,9 +1,6 @@
 # Use the Node.js image
 FROM node:22
 
-ARG APP_ENV
-ENV APP_ENV=$APP_ENV
-
 # Set the working directory for shared
 WORKDIR /app/shared
 # Copy package.json for shared
@@ -29,4 +26,8 @@ COPY scripts/generate-shared-enums.js /app/scripts/
 RUN npx prisma generate
 RUN cd /app && node scripts/generate-shared-enums.js
 
-CMD ["sh", "-c", "npm run ${APP_ENV}"]
+RUN npm run build
+
+EXPOSE 3000
+
+CMD sh -c "npm run dev:db-init && npm run start"

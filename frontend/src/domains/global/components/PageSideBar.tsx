@@ -12,7 +12,9 @@ import usePermissions from "../hooks/usePermissions";
 import checkPermission from "../utils/checkPermission";
 
 function PageSideBar(): ReactElement {
-  const [isSideMenuOpen, setIsSideMenuOpen] = useState(true);
+  const [isSideMenuOpen, setIsSideMenuOpen] = useState(
+    window.innerWidth >= 1280 ? true : false
+  );
 
   function handleToggleSideMenu() {
     setIsSideMenuOpen((prev) => !prev);
@@ -74,13 +76,14 @@ function PageSideBar(): ReactElement {
             route.action
           );
 
-          if(!hasPermission) return null;
+          if (!hasPermission) return null;
 
           return (
             <Button
               key={route.path}
               padding={isSideMenuOpen ? "default" : "none"}
               label={isSideMenuOpen ? route.displayName : undefined}
+              tooltipMessage={isSideMenuOpen ? undefined : route.displayName}
               variant="tertiary"
               iconLeft={route.icon}
               onClick={() => {

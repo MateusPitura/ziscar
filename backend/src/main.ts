@@ -4,6 +4,10 @@ import { Logger } from '@nestjs/common';
 import cookieParser from 'cookie-parser';
 import { FRONTEND_URL } from './constants';
 import { BACKEND_PORT } from '@shared/constants';
+import * as dotenv from 'dotenv';
+import { join } from 'path';
+
+dotenv.config({ path: join(__dirname, '../../../../.env') });
 
 export async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -17,3 +21,5 @@ export async function bootstrap() {
   await app.listen(BACKEND_PORT as number);
   Logger.log(`Worker ${process.pid} started`);
 }
+
+bootstrap();

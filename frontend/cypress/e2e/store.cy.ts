@@ -160,7 +160,7 @@ describe("Store", () => {
     );
     cy.intercept(
       "GET",
-      "https://servicodados.ibge.gov.br/api/v1/localidades/estados/MA/municipios"
+      "http://localhost:3000/city/MA"
     ).as("citiesAPi");
 
     cy.visit("/stores");
@@ -406,7 +406,7 @@ describe("Store", () => {
     );
     cy.intercept(
       "GET",
-      "https://servicodados.ibge.gov.br/api/v1/localidades/estados/MA/municipios"
+      "http://localhost:3000/city/MA"
     ).as("citiesAPi");
 
     cy.visit("/stores");

@@ -1,7 +1,6 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { Prisma, PrismaClient } from '@prisma/client';
 import { Transaction } from 'src/types';
-import { isProduction } from 'src/constants';
 
 const MAX_RETRIES = 3;
 
@@ -16,13 +15,13 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
 
   constructor() {
     super();
-    if (isProduction) {
-      this.prisma = new PrismaClient();
-    } else {
+    if (process.env.NODE_ENV === 'development') {
       if (!global.prisma) {
         global.prisma = new PrismaClient();
       }
       this.prisma = global.prisma as PrismaClient;
+    } else {
+      this.prisma = new PrismaClient();
     }
   }
 

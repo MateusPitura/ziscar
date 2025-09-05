@@ -9,7 +9,7 @@ import { Childrenable } from "@/domains/global/types";
 import type { ReactNode } from "react";
 
 interface TooltipProperties extends Childrenable {
-  content: string;
+  content?: string;
   disabled?: boolean;
 }
 

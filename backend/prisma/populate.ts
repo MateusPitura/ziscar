@@ -33,13 +33,14 @@ const prisma = new PrismaClient();
 const YEAR_IN_MS = 365 * 24 * 60 * 60 * 1000;
 
 async function populate() {
+  console.log('👥 Starting database population...');
   await prisma.$transaction(async (tx) => {
-    console.log('👥 Starting database population...');
-
     await tx.enterprise.createMany({
       data: [{ ...POPULATE_ENTERPRISE.DEFAULT }],
     });
+  });
 
+  await prisma.$transaction(async (tx) => {
     await tx.store.createMany({
       data: [
         {
@@ -67,7 +68,9 @@ async function populate() {
     await tx.store.createMany({
       data: otherStores,
     });
+  });
 
+  await prisma.$transaction(async (tx) => {
     await tx.customer.createMany({
       data: [
         {
@@ -95,7 +98,9 @@ async function populate() {
     await tx.customer.createMany({
       data: otherCustomers,
     });
+  });
 
+  await prisma.$transaction(async (tx) => {
     await tx.user.createMany({
       data: [
         {
@@ -142,7 +147,9 @@ async function populate() {
     await tx.user.createMany({
       data: otherUsers,
     });
+  });
 
+  await prisma.$transaction(async (tx) => {
     const otherVehiclesPromise = Array.from(
       { length: POPULATE_OTHER_ENTITIES_AMOUNT },
       (_, index) => {
@@ -198,7 +205,9 @@ async function populate() {
     await tx.vehicle.createMany({
       data: otherVehicles,
     });
+  });
 
+  await prisma.$transaction(async (tx) => {
     const otherAccountsReceivablePromise = Array.from(
       { length: POPULATE_OTHER_ENTITIES_AMOUNT },
       async () => {
@@ -218,18 +227,18 @@ async function populate() {
 
         const installments = Array.from(
           { length: installmentsCount },
-          (_, i) => {
+          (_, idx) => {
             return {
-              installmentSequence: hasUpfront ? i : i + 1,
-              dueDate: addMonths(firstDueDate, i),
+              installmentSequence: hasUpfront ? idx : idx + 1,
+              dueDate: addMonths(firstDueDate, idx),
               value: faker.number.int({ min: 500_000, max: 20_000_000 }),
               isRefund: false,
-              isUpfront: hasUpfront && i === 0,
+              isUpfront: hasUpfront && idx === 0,
               status:
-                i < paidInstallmentsCount
+                idx < paidInstallmentsCount
                   ? InstallmentStatus.PAID
                   : InstallmentStatus.PENDING,
-              ...(i < paidInstallmentsCount && {
+              ...(idx < paidInstallmentsCount && {
                 paymentMethodReceivables: {
                   create: {
                     type: PAYMENTMETHODRECEIVABLETYPE_VALUES[
@@ -238,9 +247,12 @@ async function populate() {
                         max: PAYMENTMETHODRECEIVABLETYPE_VALUES.length - 1,
                       })
                     ],
-                    value: faker.number.int({ min: 500_000, max: 20_000_000 }),
+                    value: faker.number.int({
+                      min: 500_000,
+                      max: 20_000_000,
+                    }),
                     paymentDate: subDays(
-                      addMonths(firstDueDate, i),
+                      addMonths(firstDueDate, idx),
                       faker.number.int({ min: 0, max: 7 }),
                     ),
                     userId: POPULATE_USER.ADM.id,

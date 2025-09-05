@@ -20,8 +20,8 @@ export default function () {
   };
 
   const payload = {
-    password: __ENV.PASSWORD,
-    email: __ENV.EMAIL
+    password: __ENV.K6_PASSWORD,
+    email: __ENV.K6_EMAIL
   }
 
   const response = http.post(url, JSON.stringify(payload), params);

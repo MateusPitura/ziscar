@@ -15,7 +15,7 @@ import { EmailService } from './email.service';
             secure: true,
             auth: {
               user: 'systemdigitalcar@gmail.com',
-              pass: configService.get<string>('EMAIL_APPPASSWORD'),
+              pass: configService.get<string>('EMAIL_APP_PASSWORD'),
             },
           },
         };

@@ -19,11 +19,9 @@ echo "Starting Docker"
 echo "Waiting for servers to start"
 sleep 10
 
-(cd ../backend && npm run dev:db-init)
-
 echo "Running e2e tests"
 (cd ../frontend && npm run cypress:run)
 
 echo "Stopping Docker"
-(cd .. && npm run dev:down && npm run test:down:db)
+(cd .. && npm run down && npm run test:db:down)
 
