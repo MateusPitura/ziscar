@@ -34,6 +34,7 @@ import {
   VEHICLE_EXPENSE_SELECT,
   VEHICLE_EXPENSE_WITH_VEHICLE_SELECT,
 } from './constants';
+import { ActivityStatus } from '@shared/types';
 
 @Injectable()
 export class VehicleService implements VehicleRepository {
@@ -121,11 +122,11 @@ export class VehicleService implements VehicleRepository {
         lte: params.announcedPriceMax ?? undefined,
       };
 
-    if (params.activityStatus === 'INACTIVE') {
+    if (params.activityStatus === ActivityStatus.INACTIVE) {
       where.archivedAt = { not: null };
     }
 
-    if (params.activityStatus === 'ACTIVE') {
+    if (params.activityStatus === ActivityStatus.ACTIVE) {
       where.archivedAt = null;
     }
 
