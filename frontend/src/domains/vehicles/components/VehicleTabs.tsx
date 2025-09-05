@@ -14,10 +14,12 @@ type VehicleTabs = "PURCHASE" | "INFORMATION" | "CHARACTERISTICS";
 
 interface VehicleTabsProperties {
   isEdit?: boolean;
+  purchaseValue?: string;
 }
 
 export default function VehicleTabs({
   isEdit,
+  purchaseValue,
 }: VehicleTabsProperties): ReactNode {
   const [activeTab, setActiveTab] = useState<VehicleTabs>("PURCHASE");
   const { errors } = useFormState<VehicleFormInputs>();
@@ -56,7 +58,7 @@ export default function VehicleTabs({
             <Section.Group>
               <Section.Header title="Informações da compra" />
               <Section.Body>
-                <VehiclePurchaseDetailsForm />
+                <VehiclePurchaseDetailsForm value={purchaseValue} />
               </Section.Body>
             </Section.Group>
             {!isEdit && (

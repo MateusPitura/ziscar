@@ -160,6 +160,7 @@ interface ButtonProps extends ButtonVariantProps {
   resource?: ResourcesType;
   action?: ActionsType;
   renderIfNoPermission?: boolean;
+  tooltipMessage?: string;
 }
 
 const Button = forwardRef(
@@ -170,6 +171,7 @@ const Button = forwardRef(
       onClick,
       state,
       renderIfNoPermission = false,
+      tooltipMessage,
       ...props
     }: ButtonProps,
     ref: React.Ref<HTMLButtonElement>
@@ -182,8 +184,12 @@ const Button = forwardRef(
 
     return (
       <Tooltip
-        content={formatDeniedMessage({ resource, action })}
-        disabled={hasPermission}
+        content={
+          hasPermission
+            ? tooltipMessage
+            : formatDeniedMessage({ resource, action })
+        }
+        disabled={hasPermission && !tooltipMessage}
       >
         <div className={classNames({ "cursor-not-allowed": !hasPermission })}>
           <ButtonVariant

@@ -170,3 +170,41 @@ export const defaultCommonCharacteristics = [
   "Air bag",
   "Rodas de liga leve",
 ];
+
+export const VEHICLES_TABLE = {
+  model: {
+    label: "Modelo",
+  },
+  plate: {
+    label: "Placa",
+    colSpan: 1,
+  },
+  year: {
+    label: "Ano do modelo",
+    colSpan: 1,
+  },
+  price: {
+    label: "Preço anunciado",
+    colSpan: 1,
+  },
+  status: {
+    label: "Status",
+    colSpan: 1,
+  },
+} as const;
+
+export const VEHICLES_EXPENSES_TABLE = {
+  competencyDate: {
+    label: "Data de competência",
+  },
+  observations: {
+    label: "Observações",
+  },
+  category: {
+    label: "Categoria",
+  },
+  totalValue: {
+    label: "Valor",
+    colSpan: 1,
+  },
+} as const;

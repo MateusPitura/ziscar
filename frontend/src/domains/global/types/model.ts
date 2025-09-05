@@ -72,7 +72,7 @@ export interface AccountReceivableInstallment {
   isRefund?: boolean;
   isUpfront?: boolean;
   status: InstallmentStatusType;
-  paymentMethodReceivables: PaymentMethod[]
+  paymentMethodReceivables: PaymentMethod[];
 }
 
 export interface PaymentMethod {
@@ -113,6 +113,7 @@ export interface VehicleWithPayment {
   payment: {
     purchaseDate: string;
     paidTo?: string;
+    value: string;
   };
 }
 
@@ -127,6 +128,11 @@ export interface VehicleExpense {
 
 export interface Brand {
   id: number;
+  name: string;
+}
+
+export interface City {
+  ibgeCode: number;
   name: string;
 }
 

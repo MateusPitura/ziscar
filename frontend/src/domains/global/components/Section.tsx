@@ -2,7 +2,7 @@ import classNames from "classnames";
 import { Childrenable } from "../types";
 
 function Container({ children }: Childrenable) {
-  return <div className="flex flex-col gap-x-4 gap-y-2 w-[56rem]">{children}</div>;
+  return <div className="flex flex-col gap-x-4 gap-y-2 xl:w-[56rem] w-[40rem]">{children}</div>;
 }
 
 function Group({ children }: Childrenable) {

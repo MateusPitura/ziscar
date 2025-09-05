@@ -1,21 +1,21 @@
+import Spinner from "@/design-system/Spinner";
+import useCheckPermission from "@/domains/global/hooks/useCheckPermission";
+import useDialog from "@/domains/global/hooks/useDialog";
+import { Childrenable } from "@/domains/global/types";
+import { ITEMS_PER_PAGE } from "@shared/constants";
+import { ActionsType, ResourcesType } from "@shared/enums";
+import { formatDeniedMessage } from "@shared/utils/formatDeniedMessage";
 import classNames from "classnames";
 import { Children, type ReactElement, type ReactNode } from "react";
 import Button from "./Button";
-import Spinner from "@/design-system/Spinner";
-import SideSheet from "./SideSheet";
-import { Childrenable } from "@/domains/global/types";
-import useDialog from "@/domains/global/hooks/useDialog";
 import Loading from "./Loading";
-import useCheckPermission from "@/domains/global/hooks/useCheckPermission";
-import { formatDeniedMessage } from "@shared/utils/formatDeniedMessage";
+import SideSheet from "./SideSheet";
 import { ButtonState } from "./types";
-import { ITEMS_PER_PAGE } from "@shared/constants";
-import { ActionsType, ResourcesType } from "@shared/enums";
 
 function Container({ children }: Childrenable): ReactElement {
   return (
     <div className="overflow-x-auto flex flex-1">
-      <div className="min-w-[85rem] w-full flex flex-col">{children}</div>
+      <div className="w-full flex flex-col">{children}</div>
     </div>
   );
 }
@@ -36,7 +36,8 @@ function Row({ children, className, gridColumns = "default" }: RowProps) {
   return (
     <div
       className={classNames(
-        "px-4 py-1 grid gap-2 bg-neutral-50 h-14 items-center border-b border-neutral-300 last:border-b-0",
+        "px-4 py-4 flex-col flex gap-2 bg-neutral-50 border-b border-neutral-300 border-r",
+        "xl:py-1 xl:grid xl:h-14 xl:items-center",
         className
       )}
       style={{
@@ -54,7 +55,7 @@ function Header({ children, className, gridColumns }: HeaderProps) {
   return (
     <Row
       className={classNames(
-        "bg-neutral-50 border border-neutral-300 rounded-t-md",
+        "bg-neutral-50 border border-neutral-300 rounded-t-md xl:block hidden",
         className
       )}
       gridColumns={gridColumns}
@@ -68,22 +69,21 @@ interface CellProps {
   className?: string;
   colSpan?: number;
   label?: ReactNode;
+  columnLabel?: string;
 }
 
-function Cell({ label, className, colSpan }: CellProps) {
+function Cell({ label, className, colSpan, columnLabel }: CellProps) {
   const colSpanAux = colSpan ?? 2;
 
   return (
     <span
-      className={classNames(
-        "text-neutral-700 text-body-medium overflow-x-hidden",
-        className
-      )}
+      className="text-neutral-700 text-body-medium overflow-x-hidden"
       style={{
         gridColumn: `span ${colSpanAux} / span ${colSpanAux}`,
       }}
     >
-      {label}
+      <span className="font-semibold xl:hidden">{columnLabel}: </span>
+      <span className={className}>{label}</span>
     </span>
   );
 }
@@ -97,7 +97,7 @@ function Action({ className, colSpan = 1, children }: ActionProps) {
   return (
     <div
       className={classNames(
-        "overflow-x-hidden flex justify-end gap-2",
+        "overflow-x-hidden flex gap-2 xl:justify-end",
         className
       )}
       style={{
@@ -116,11 +116,9 @@ interface HeadProps extends CellProps {
 function Head({ label, className, action = false, colSpan }: HeadProps) {
   return (
     <Cell
-      className={classNames("!text-body-large", className, {
-        "!col-span-1": action,
-      })}
+      className={classNames("!text-body-large", className)}
       label={label}
-      colSpan={colSpan}
+      colSpan={action ? 1 : colSpan}
     />
   );
 }
@@ -137,7 +135,7 @@ function Body({ children, isEmpty, isLoading, action, resource }: BodyProps) {
 
   if (isLoading || isEmpty) {
     return (
-      <div className="flex-1 bg-neutral-50 overflow-y-auto flex items-center justify-center border-x border-b rounded-b-md border-neutral-300">
+      <div className="flex-1 bg-neutral-50 overflow-y-auto flex items-center justify-center border xl:border-t-0 rounded-md xl:rounded-t-none border-neutral-300">
         {isLoading ? (
           <Spinner />
         ) : (
@@ -152,7 +150,7 @@ function Body({ children, isEmpty, isLoading, action, resource }: BodyProps) {
   }
 
   return (
-    <div className="flex-1 bg-neutral-50 border-x border-b rounded-b-md border-neutral-300 overflow-y-auto">
+    <div className="flex-1 bg-neutral-50 border xl:border-t-0 rounded-md xl:rounded-t-none border-neutral-300 overflow-y-auto grid grid-cols-2 lg:grid-cols-3 xl:block">
       {children}
     </div>
   );
@@ -194,7 +192,7 @@ function Footer({
   return (
     <Row
       className={classNames(
-        "bg-neutral-50 rounded-b-md border-none !flex items-center gap-4 justify-center",
+        "bg-neutral-50 rounded-b-md border-none !flex items-center gap-4 justify-center !flex-row",
         className
       )}
       gridColumns={1}

@@ -29,6 +29,7 @@ export default function VehicleExpenseHeader({
       payment: {
         purchaseDate: "2023-01-01",
         paidTo: "João da Silva",
+        value: "7000000",
       },
       vehicle: {
         id: 1,

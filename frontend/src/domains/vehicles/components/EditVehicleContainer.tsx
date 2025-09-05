@@ -33,6 +33,7 @@ export default function EditVehicleContainer(): ReactNode {
       payment: {
         purchaseDate: "2023-01-01",
         paidTo: "Fulano de Tal",
+        value: "7000000",
       },
       vehicle: {
         id: 1,
@@ -124,10 +125,14 @@ export default function EditVehicleContainer(): ReactNode {
           className="flex-1 flex flex-col gap-4"
           schema={SchemaVehicleForm}
           onlyDirty
-          defaultValues={vehicleData}
+          defaultValues={{
+            characteristics: vehicleData.characteristics,
+            payment: vehicleData.payment,
+            vehicle: vehicleData.vehicle,
+          }}
         >
           <PageHeader title="Alterar veículo" />
-          <VehicleTabs isEdit />
+          <VehicleTabs isEdit purchaseValue={vehicleData.purchaseValue} />
           <PageFooter dirty primaryBtnState={isPending ? "loading" : undefined}>
             <Button color="lightBlue" iconRight="Save" label="Salvar" />
             <Button

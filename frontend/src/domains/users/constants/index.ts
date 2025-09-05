@@ -25,3 +25,21 @@ export const userFilterDefaultValues: UsersFilterFormInputs = {
   startDate: "",
   endDate: "",
 };
+
+export const USERS_TABLE = {
+  name: {
+    label: "Nome completo",
+  },
+  cpf: {
+    label: "CPF",
+  },
+  email: {
+    label: "Email",
+  },
+  phone: {
+    label: "Celular",
+  },
+  status: {
+    label: "Status",
+  },
+} as const;
