@@ -34,6 +34,7 @@ import {
   VEHICLE_EXPENSE_SELECT,
   VEHICLE_EXPENSE_WITH_VEHICLE_SELECT,
 } from './constants';
+import { ActivityStatus } from '@shared/types';
 
 @Injectable()
 export class VehicleService implements VehicleRepository {
@@ -121,6 +122,14 @@ export class VehicleService implements VehicleRepository {
         lte: params.announcedPriceMax ?? undefined,
       };
 
+    if (params.activityStatus === ActivityStatus.INACTIVE) {
+      where.archivedAt = { not: null };
+    }
+
+    if (params.activityStatus === ActivityStatus.ACTIVE) {
+      where.archivedAt = null;
+    }
+
     if (params.startDate || params.endDate) {
       where.createdAt = {
         gte: params.startDate,
@@ -133,7 +142,7 @@ export class VehicleService implements VehicleRepository {
         where,
         skip,
         take,
-        orderBy: params.orderBy ? { [params.orderBy]: 'asc' } : { id: 'desc' },
+        orderBy: { modelName: 'asc' },
         select: GET_VEHICLE,
       }),
       this.prisma.vehicle.count({ where }),

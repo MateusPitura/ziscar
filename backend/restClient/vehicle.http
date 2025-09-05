@@ -64,7 +64,11 @@ Content-Type: application/json
   "chassiNumber": "2HGBH41JXMN109187",
   "brandId": 1,
   "plateNumber": "XYZ5678",
+  "announcedPrice": null,
+  "minimumPrice": null,
   "commissionValue": 2000,
+  "color": null,
+  "fuelType": null,
   "status": "PURCHASED",
   "storeId": 1
 }

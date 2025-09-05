@@ -15,10 +15,28 @@ import {
   VehicleFormInputs,
   VehiclesFilterFormInputs,
 } from "../types";
+import { ActivityStatus } from "@shared/types";
 
 export const vehicleFilterDefaultValues: VehiclesFilterFormInputs = {
   startDate: "",
   endDate: "",
+  storeId: "",
+  brandId: "",
+  status: "",
+  category: "",
+  modelYear: "",
+  yearOfManufacture: "",
+  modelName: "",
+  plateNumber: "",
+  announcedPriceMin: "",
+  announcedPriceMax: "",
+  activityStatus: ActivityStatus.ACTIVE,
+};
+
+export const ActivityStatusText: Record<ActivityStatus, string> = {
+  ALL: "Todos",
+  INACTIVE: "Inativos",
+  ACTIVE: "Ativos",
 };
 
 export const VehicleStatusText: Record<VehicleStatusType, string> = {

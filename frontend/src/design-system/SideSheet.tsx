@@ -20,7 +20,11 @@ interface ContainerProps extends DialogProps, Childrenable {}
 function Container({ children, ...dialog }: ContainerProps): ReactElement {
   return (
     <DialogProvider {...dialog}>
-      <Sheet open={dialog.isOpen} onOpenChange={dialog.handleOpen}>
+      <Sheet
+        open={dialog.isOpen}
+        onOpenChange={dialog.handleOpen}
+        modal={false}
+      >
         {children}
         {/* DialogDescription corrige warning de acessibilidade */}
         <DialogDescription className="hidden" />

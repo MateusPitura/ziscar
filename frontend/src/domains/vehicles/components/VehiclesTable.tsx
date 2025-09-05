@@ -10,7 +10,11 @@ import ExportButton from "@/domains/pdf/components/ExportButton";
 import { ITEMS_PER_PAGE } from "@shared/constants";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState, type ReactNode } from "react";
-import { VEHICLES_TABLE, VehicleStatusText } from "../constants";
+import {
+  VEHICLES_TABLE,
+  VehicleStatusText,
+  ActivityStatusText,
+} from "../constants";
 import { DisableVehicle, VehiclesFilterFormInputs } from "../types";
 import selectVehiclesInfo from "../utils/selectVehiclesInfo";
 import selectVehiclesInfoForReport from "../utils/selectVehiclesInfoForReport";
@@ -81,8 +85,21 @@ export default function VehiclesTable(): ReactNode {
           formatFilters={{
             endDate: "Data final",
             startDate: "Data inicial",
+            storeId: "Loja",
+            brandId: "Marca",
+            status: "Status",
+            category: "Categoria",
+            modelYear: "Ano do modelo",
+            yearOfManufacture: "Ano de fabricação",
+            modelName: "Modelo",
+            plateNumber: "Placa",
+            announcedPriceMin: "Preço mínimo",
+            announcedPriceMax: "Preço máximo",
+            activityStatus: "Status de atividade",
           }}
-          formatFiltersValues={{}}
+          formatFiltersValues={{
+            activityStatus: ActivityStatusText,
+          }}
           formatColumns={{
             announcedPrice: "Preço anunciado",
             modelName: "Modelo",
