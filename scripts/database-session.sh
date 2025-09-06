@@ -8,6 +8,13 @@ PRIVATE_KEY_PATH="$HOME/.ssh/oci"
 LOCAL_PORT=$DATABASE_PORT
 DATABASE_PRIVATE_IP=10.0.2.50
 
+# Check if argument is provided to return PID
+RETURN_PID=false
+if [[ "$1" == "--pid" || "$1" == "-p" ]]; then
+    RETURN_PID=true
+fi
+
+
 # List sessions and filter for ACTIVE and matching instance
 ACTIVE_SESSION=$(oci bastion session list \
     --bastion-id "$BASTION_OCID" \
@@ -23,8 +30,10 @@ if [[ -n "$ACTIVE_SESSION" ]]; then
     # Calculate session expiration time by adding TTL (in seconds) to time-updated
     SESSION_EXPIRATION=$(date -d "$EXPIRATION + $SESSION_TTL seconds" +"%Y-%m-%d %H:%M:%S %Z")
 
-    echo "Found ACTIVE session"
-    echo "Session expires at: $SESSION_EXPIRATION"
+    if [[ "$RETURN_PID" == false ]]; then
+        echo "Found ACTIVE session"
+        echo "Session expires at: $SESSION_EXPIRATION"
+    fi
 else
     echo "Creating Bastion session for port forwarding..."
     SESSION_JSON=$(oci bastion session create-port-forwarding \
@@ -56,5 +65,16 @@ else
 fi
 
 # Start port forwarding using SSH and ProxyCommand
-echo "Starting port forwarding: localhost:$LOCAL_PORT -> $DATABASE_PRIVATE_IP:$DATABASE_PORT"
-ssh -i "$PUBLIC_KEY_PATH" -N -L $LOCAL_PORT:$DATABASE_PRIVATE_IP:$DATABASE_PORT -p 22 $SESSION_ID@host.bastion.sa-saopaulo-1.oci.oraclecloud.com
+if [[ "$RETURN_PID" == false ]]; then
+    echo "Starting port forwarding: localhost:$LOCAL_PORT -> $DATABASE_PRIVATE_IP:$DATABASE_PORT"
+fi
+
+if [[ "$RETURN_PID" == true ]]; then
+    # Start SSH in background and capture PID
+    ssh -i "$PUBLIC_KEY_PATH" -N -L $LOCAL_PORT:$DATABASE_PRIVATE_IP:$DATABASE_PORT -p 22 $SESSION_ID@host.bastion.sa-saopaulo-1.oci.oraclecloud.com &
+    SSH_PID=$!
+    echo $SSH_PID
+else
+    # Start SSH in foreground (original behavior)
+    ssh -i "$PUBLIC_KEY_PATH" -N -L $LOCAL_PORT:$DATABASE_PRIVATE_IP:$DATABASE_PORT -p 22 $SESSION_ID@host.bastion.sa-saopaulo-1.oci.oraclecloud.com
+fi
