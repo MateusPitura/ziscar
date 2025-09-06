@@ -1,14 +1,15 @@
 import Tabs from "@/design-system/Tabs";
 import Section from "@/domains/global/components/Section";
 import PaymentForm from "@/domains/global/forms/PaymentForm";
+import UpfrontForm from "@/domains/global/forms/UpfrontForm";
 import { useState, type ReactElement } from "react";
 import { useFormState } from "react-hook-form";
 import CustomerSearchForm from "../forms/CustomerSearchForm";
+import VehicleSaleDetailsForm from "../forms/VehicleSaleDetailsForm";
+import useVehicleSalePageContext from "../hooks/useVehicleSalePageContext";
 import { VehicleSaleFormInputs, VehicleToString } from "../types";
 import CustomerData from "./CustomerData";
 import VehicleData from "./VehicleData";
-import VehicleSaleDetailsForm from "../forms/VehicleSaleDetailsForm";
-import UpfrontForm from "@/domains/global/forms/UpfrontForm";
 
 type VehicleSaleTabs = "CLIENT" | "VEHICLE" | "PAYMENT";
 
@@ -21,6 +22,7 @@ export default function VehicleSaleTabs({
 }: VehicleSaleTabsProperties): ReactElement {
   const [activeTab, setActiveTab] = useState<VehicleSaleTabs>("VEHICLE");
   const { errors } = useFormState<VehicleSaleFormInputs>();
+  const { customer } = useVehicleSalePageContext();
 
   return (
     <Tabs>
@@ -61,7 +63,7 @@ export default function VehicleSaleTabs({
             <Section.Group>
               <Section.Header title="Dados do cliente" />
               <Section.Body>
-                <CustomerData />
+                <CustomerData customerData={customer}/>
               </Section.Body>
             </Section.Group>
           </Section>

@@ -66,9 +66,7 @@ export default function AddressFields(): ReactNode {
   ): Promise<City[] | undefined> {
     if (!state) return [];
 
-    const result = await safeFetch(`${BACKEND_URL}/city/${state}`);
-    console.log("🌠 result: ", result);
-    return result;
+    return await safeFetch(`${BACKEND_URL}/city/${state}`);
   }
 
   const selectedState = watch("address.0.state");

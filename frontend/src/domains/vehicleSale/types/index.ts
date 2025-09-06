@@ -18,7 +18,17 @@ export type VehicleToString = ToString<
   "kilometers" | "announcedPrice" | "minimumPrice" | "commissionValue"
 >;
 
+export interface VehicleSaleToString {
+  vehicle: VehicleToString;
+  customer: FetchCustomer;
+}
+
 export type FetchVehicleToString = ToString<
   FetchVehicle,
   "announcedPrice" | "modelYear"
 >;
+
+export interface VehicleSaleDetails {
+  vehicle: Vehicle;
+  customer: FetchCustomer;
+}

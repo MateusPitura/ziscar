@@ -50,7 +50,7 @@ export default function VehicleData({
       <div className="col-span-3">
         <DataField
           label="Características"
-          value={vehicleData.characteristics.join(", ")}
+          value={vehicleData.vehicleCharacteristicValues.join(", ")}
         />
       </div>
     </>

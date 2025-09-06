@@ -9,7 +9,7 @@ export default function VehicleContainer(): ReactElement {
 
   return (
     <div className="flex flex-col gap-4 h-full w-full">
-      <PageHeader title="Veículos Disponíveis">
+      <PageHeader title="Veículos">
         <Button
           label="Adicionar veículo"
           iconLeft="Add"

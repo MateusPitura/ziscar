@@ -5,6 +5,7 @@ import PageHeader from "@/domains/global/components/PageHeader";
 import { BACKEND_URL } from "@/domains/global/constants";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
+import formatInstallment from "@/domains/global/utils/formatInstallment";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
@@ -19,11 +20,32 @@ export default function NewVehicleContainer(): ReactNode {
   const { showSuccessSnackbar } = useSnackbar();
   const queryClient = useQueryClient();
 
-  async function createVehicle(data: VehicleFormInputs) {
+  async function createVehicle({
+    vehicle,
+    characteristics,
+    payment,
+  }: VehicleFormInputs) {
+    const characteristicsFormatted = [
+      ...characteristics.commonCharacteristics,
+      ...characteristics.newCharacteristics.map((c) => c.description),
+    ];
+
+    const installments = formatInstallment({
+      installment: payment.installment!,
+      upfront: payment.upfront,
+    });
+
     await safeFetch(`${BACKEND_URL}/vehicles`, {
-      // 🌠 IMPROVE
       method: "POST",
-      body: data.vehicle,
+      body: {
+        ...vehicle,
+        characteristics: characteristicsFormatted,
+        payment: {
+          purchaseDate: payment.purchaseDate,
+          paidTo: payment.paidTo,
+          installments,
+        },
+      },
       resource: "VEHICLES",
       action: "CREATE",
     });

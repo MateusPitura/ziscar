@@ -2,11 +2,8 @@
 
 set -e
 
-echo "Linting backend"
-(cd ../backend && npm run lint)
-
-echo "Linting frontend"
-(cd ../frontend && npm run lint)
+echo "Linting frontend and backend"
+npm run lint
 
 echo "Running unit tests"
 npm run test:db

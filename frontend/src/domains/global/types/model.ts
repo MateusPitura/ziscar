@@ -104,7 +104,7 @@ export interface Vehicle {
     id: number;
     name: string;
   };
-  characteristics: string[];
+  vehicleCharacteristicValues: string[];
   archivedAt?: Date;
 }
 
@@ -114,7 +114,7 @@ export interface VehicleWithPayment {
     purchaseDate: string;
     paidTo?: string;
     value: string;
-  };
+  } | null;
 }
 
 export interface VehicleExpense {

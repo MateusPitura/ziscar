@@ -29,10 +29,10 @@ export const ACCOUNTS_RECEIVABLE_TABLE = {
   },
   overallStatus: {
     label: "Status geral",
+    colSpan: 1,
   },
   totalValue: {
     label: "Valor total",
-    colSpan: 1,
   },
 } as const;
 

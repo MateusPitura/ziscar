@@ -9,12 +9,12 @@ import formatFilters from "@/domains/global/utils/formatFilters";
 import ExportButton from "@/domains/pdf/components/ExportButton";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, type ReactNode } from "react";
+import { ACCOUNTS_RECEIVABLE_TABLE } from "../constants";
 import { AccountsReceivableFilterFormInputs } from "../types";
 import selectAccountsReceivableInfo from "../utils/selectAccountsReceivableInfo";
 import selectAccountsReceivableInfoForReport from "../utils/selectAccountsReceivableInfoForReport";
 import AccountsReceivableFilterForm from "./AccountsReceivableFilterForm";
 import AccountsReceivableTableActions from "./AccountsReceivableTableActions";
-import { ACCOUNTS_RECEIVABLE_TABLE } from "../constants";
 
 const gridColumns = 10;
 
@@ -101,11 +101,11 @@ export default function AccountsReceivableTable(): ReactNode {
             label={ACCOUNTS_RECEIVABLE_TABLE.installmentsNumber.label}
           />
           <Table.Head label={ACCOUNTS_RECEIVABLE_TABLE.receivedFrom.label} />
-          <Table.Head label={ACCOUNTS_RECEIVABLE_TABLE.overallStatus.label} />
           <Table.Head
-            label={ACCOUNTS_RECEIVABLE_TABLE.totalValue.label}
-            colSpan={ACCOUNTS_RECEIVABLE_TABLE.totalValue.colSpan}
+            label={ACCOUNTS_RECEIVABLE_TABLE.overallStatus.label}
+            colSpan={ACCOUNTS_RECEIVABLE_TABLE.overallStatus.colSpan}
           />
+          <Table.Head label={ACCOUNTS_RECEIVABLE_TABLE.totalValue.label} />
           <Table.Head action />
         </Table.Header>
         <Table.Body
@@ -133,6 +133,7 @@ export default function AccountsReceivableTable(): ReactNode {
                   <AccountStatus status={accountReceivable.overallStatus} />
                 }
                 columnLabel={ACCOUNTS_RECEIVABLE_TABLE.overallStatus.label}
+                colSpan={ACCOUNTS_RECEIVABLE_TABLE.overallStatus.colSpan}
               />
               <Table.Cell
                 label={accountReceivable.totalValue.padStart(
@@ -140,7 +141,6 @@ export default function AccountsReceivableTable(): ReactNode {
                   BLANK
                 )}
                 className="font-mono whitespace-pre"
-                colSpan={ACCOUNTS_RECEIVABLE_TABLE.totalValue.colSpan}
                 columnLabel={ACCOUNTS_RECEIVABLE_TABLE.totalValue.label}
               />
               <Table.Action>

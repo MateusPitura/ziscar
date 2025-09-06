@@ -1,11 +1,11 @@
-import type { ReactNode } from "react";
-import { DisableVehicleExpense } from "../types";
+import Dialog from "@/design-system/Dialog";
+import { BACKEND_URL, BLANK } from "@/domains/global/constants";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { BACKEND_URL, BLANK } from "@/domains/global/constants";
 import { DialogProps } from "@/domains/global/types";
-import Dialog from "@/design-system/Dialog";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import type { ReactNode } from "react";
+import { DisableVehicleExpense } from "../types";
 
 interface DisableVehicleExpenseModalProperties
   extends DisableVehicleExpense,
@@ -21,12 +21,14 @@ export default function DisableVehicleExpenseModal({
   const queryClient = useQueryClient();
 
   async function disableVehicleExpense() {
-    await safeFetch(`${BACKEND_URL}/vehicle-expense/${vehicleExpenseId}`, { // 🌠 MOCK
-      method: "DELETE",
-      body: { archivedAt: new Date().toISOString() },
-      resource: "VEHICLE_EXPENSE",
-      action: "DELETE",
-    });
+    await safeFetch(
+      `${BACKEND_URL}/vehicle-expense/${vehicleExpenseId}/archive`,
+      {
+        method: "PATCH",
+        resource: "VEHICLE_EXPENSE",
+        action: "DELETE",
+      }
+    );
   }
 
   const { mutate, isPending } = useMutation({
@@ -34,7 +36,7 @@ export default function DisableVehicleExpenseModal({
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["vehicle-expenses"] });
       showSuccessSnackbar({
-        title: `Gasto removido com sucesso`,
+        title: `Gasto desativado com sucesso`,
       });
       dialog.closeDialog();
     },
@@ -42,19 +44,19 @@ export default function DisableVehicleExpenseModal({
 
   return (
     <Dialog {...dialog}>
-      <Dialog.Header title="Remover gasto" />
+      <Dialog.Header title="Desativar gasto" />
       <Dialog.Body>
         <span className="text-body-medium text-neutral-700">
-          Tem certeza que deseja remover o gasto de
+          Tem certeza que deseja desativar o gasto de
           <span className="font-bold">
             {BLANK}
             {vehicleCategory}
           </span>
-          ? Ao remover ele não será mais acessível
+          ? Ao desativar ele não será mais acessível
         </span>
       </Dialog.Body>
       <Dialog.Footer
-        labelPrimaryBtn="Remover"
+        labelPrimaryBtn="Desativar"
         onClickPrimaryBtn={mutate}
         primaryBtnState={isPending ? "loading" : undefined}
         primaryBtnColor="red"

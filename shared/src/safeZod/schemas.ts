@@ -103,6 +103,11 @@ export const paymentDate = () =>
     .max(new Date(), { message: "Data de pagamento inválida" })
     .transform((date) => date.toISOString().split("T")[0]);
 
+export const dueDate = () =>
+  date()
+    .min(new Date("1900-01-01"), { message: "Data de vencimento inválida" })
+    .transform((date) => date.toISOString().split("T")[0]);
+
 export const dateRangeRule: [
   (data: Record<string, unknown>) => boolean,
   object

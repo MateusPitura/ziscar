@@ -12,7 +12,7 @@ export default function selectVehicleExpensesInfo(
       ...expense,
       totalValue: applyMask(expense.totalValue, "money") ?? "",
       competencyDate: safeFormat({
-        date: expense.competencyDate,
+        date: expense.competencyDate?.split('T')?.[0],
         format: "dd/MM/yyyy",
       }),
     });

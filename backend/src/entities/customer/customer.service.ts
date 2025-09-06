@@ -211,7 +211,7 @@ export class CustomerService {
     if (address?.remove) {
       if (!customerBeforeUpdate.addressId) {
         throw new BadRequestException(
-          'Não é possível excluir, endereço não encontrado',
+          'Não é possível remover, endereço não encontrado',
         );
       }
       updatePayload['address'] = {

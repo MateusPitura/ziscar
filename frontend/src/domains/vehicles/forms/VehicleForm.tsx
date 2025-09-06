@@ -20,6 +20,10 @@ import {
 import { VehicleFormInputs } from "../types";
 import selectBrandsInfo from "../utils/selectBrandsInfo";
 
+const VehicleStatusSanitized = Object.values(VehicleStatus).filter((status) =>
+  ![VehicleStatus.SOLD].includes(status)
+);
+
 export default function VehicleForm(): ReactNode {
   const { setValue } = useFormContext<VehicleFormInputs>();
   const { safeFetch } = useSafeFetch();
@@ -96,7 +100,7 @@ export default function VehicleForm(): ReactNode {
       <Select<VehicleFormInputs>
         name="vehicle.status"
         label="Status"
-        options={Object.values(VehicleStatus).map((vehicleStatus) => ({
+        options={Object.values(VehicleStatusSanitized).map((vehicleStatus) => ({
           value: vehicleStatus,
           label: VehicleStatusText[vehicleStatus],
         }))}

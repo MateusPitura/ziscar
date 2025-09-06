@@ -37,7 +37,7 @@ export class InsertVehicleUseCase {
       }
 
       if (payment) {
-        const description = `Compra do veículo de placa ${vehicle.plateNumber}`;
+        const description = `Compra Veículo ${vehicle.plateNumber}`;
 
         const createdAccountPayable = await this.accountPayableService.create({
           description,

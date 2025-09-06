@@ -4,7 +4,7 @@ const actionFormatted: Record<Actions, string> = {
   CREATE: "criar",
   READ: "visualizar",
   UPDATE: "editar",
-  DELETE: "excluir",
+  DELETE: "desativar",
 };
 
 const resourceFormatted: Record<Resources, string> = {

@@ -1,15 +1,15 @@
 import { BACKEND_URL } from "@/domains/global/constants";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
-import { InstallmentStatus } from "@shared/enums";
+import { VehicleWithPayment } from "@/domains/global/types/model";
+import { applyMask } from "@/domains/global/utils/applyMask";
+import formatInstallment from "@/domains/global/utils/formatInstallment";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ReactNode, useMemo } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ExpenseCategoryText, vehicleExpenseDefaultValues } from "../constants";
 import ExpenseForm from "../forms/ExpenseForm";
 import { VehicleExpenseFormInputs } from "../types";
-import { VehicleWithPayment } from "@/domains/global/types/model";
-import { applyMask } from "@/domains/global/utils/applyMask";
 
 export default function NewVehicleExpenseContainer(): ReactNode {
   const { safeFetch } = useSafeFetch();
@@ -24,35 +24,24 @@ export default function NewVehicleExpenseContainer(): ReactNode {
   }, [queryClient, vehicleId]);
 
   async function createExpense({ payment }: VehicleExpenseFormInputs) {
+    const installments = formatInstallment({
+      installment: payment.installment!,
+      upfront: payment.upfront,
+    });
+
     await safeFetch(`${BACKEND_URL}/vehicle-expense`, {
-      // 🌠 IMPROVE
       method: "POST",
       body: {
         vehicleId,
         category: payment.category,
         observations: payment.observations,
+        competencyDate: payment.competencyDate,
         description: `Gasto Veículo ${applyMask(
           vehicleData?.vehicle.plateNumber,
           "plateNumber"
         )}`,
         paidTo: ExpenseCategoryText[payment.category],
-        installments: [
-          {
-            dueDate: payment.installment?.dueDate,
-            value: payment.installment?.value,
-            isUpfront: false,
-            paymentMethods:
-              payment.installment?.status === InstallmentStatus.PAID
-                ? [
-                    {
-                      type: payment.installment?.paymentMethod,
-                      value: payment.installment?.value,
-                      paymentDate: payment.installment?.paymentDate,
-                    },
-                  ]
-                : null,
-          },
-        ],
+        installments,
       },
       resource: "VEHICLE_EXPENSE",
       action: "CREATE",

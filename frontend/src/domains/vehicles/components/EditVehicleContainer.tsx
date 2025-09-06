@@ -7,7 +7,6 @@ import { BACKEND_URL } from "@/domains/global/constants";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import { VehicleWithPayment } from "@/domains/global/types/model";
-import { FuelType, VehicleCategory, VehicleStatus } from "@shared/enums";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ReactNode, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -24,49 +23,23 @@ export default function EditVehicleContainer(): ReactNode {
   const { vehicleId } = useParams();
 
   async function getVehicle(): Promise<VehicleWithPayment> {
-    // return await safeFetch(`${BACKEND_URL}/vehicle/${vehicleId}`, { // 🌠 MOCK
-    //   resource: "VEHICLES",
-    //   action: "READ",
-    // });
+    const response = await safeFetch(`${BACKEND_URL}/vehicles/${vehicleId}`, {
+      resource: "VEHICLES",
+      action: "READ",
+    });
+
+    const { payment, vehicleCharacteristicValues, ...vehicle } = response;
 
     return {
       payment: {
-        purchaseDate: "2023-01-01",
-        paidTo: "Fulano de Tal",
+        ...payment,
         value: "7000000",
       },
       vehicle: {
-        id: 1,
-        modelName: "Fusca",
-        announcedPrice: 8000000,
-        plateNumber: "ABC1234",
-        modelYear: 1970,
-        status: VehicleStatus.DELIVERED,
-        archivedAt: undefined,
-        brand: {
-          id: 10,
-          name: "Volkswagen",
-        },
-        store: {
-          id: 1,
-          name: "Loja 1",
-        },
-        category: VehicleCategory.CAR,
-        color: "#FFFFFF",
-        chassiNumber: "AAAAAAAAAAAAAAAAA",
-        commissionValue: 1000,
-        fuelType: FuelType.FLEX,
-        kilometers: 1000,
-        minimumPrice: 8000000,
-        yearOfManufacture: 1970,
-        characteristics: [
-          "Direção hidráulica",
-          "Janelas elétricas",
-          "Ar condicionado",
-          "Piloto automático",
-          "Vidros elétricos",
-          "Freios ABS",
-        ],
+        ...vehicle,
+        vehicleCharacteristicValues: vehicleCharacteristicValues.map(
+          (c: Record<string, string>) => c?.characteristic
+        ),
       },
     };
   }
@@ -77,11 +50,26 @@ export default function EditVehicleContainer(): ReactNode {
     select: selectVehicleInfo,
   });
 
-  async function editVehicle(data: VehicleFormInputs) {
+  async function editVehicle({
+    characteristics,
+    payment,
+    vehicle,
+  }: VehicleFormInputs) {
+    const characteristicsFormatted = [
+      ...characteristics.commonCharacteristics,
+      ...characteristics.newCharacteristics.map((c) => c.description),
+    ];
+
     await safeFetch(`${BACKEND_URL}/vehicles/${vehicleId}`, {
-      // 🌠 IMPROVE
       method: "PATCH",
-      body: data.vehicle,
+      body: {
+        ...vehicle,
+        characteristics: characteristicsFormatted,
+        payment: {
+          purchaseDate: payment?.purchaseDate ?? "",
+          paidTo: payment?.paidTo ?? "",
+        },
+      },
       resource: "VEHICLES",
       action: "UPDATE",
     });
@@ -124,7 +112,6 @@ export default function EditVehicleContainer(): ReactNode {
           onSubmit={mutate}
           className="flex-1 flex flex-col gap-4"
           schema={SchemaVehicleForm}
-          onlyDirty
           defaultValues={{
             characteristics: vehicleData.characteristics,
             payment: vehicleData.payment,

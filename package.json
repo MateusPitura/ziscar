@@ -5,6 +5,7 @@
     "start": "npm run dev:db & npm --prefix frontend run dev & npm --prefix backend run dev",
     "dev": "docker-compose up --build -d",
     "down": "docker-compose down",
+    "lint": "npm --prefix frontend run lint && npm --prefix backend run lint",
     "dev:db": "docker-compose up --build -d database",
     "dev:db:down": "docker-compose down database",
     "test:db": "docker-compose -f docker-compose.test.yml up --build -d test_database",

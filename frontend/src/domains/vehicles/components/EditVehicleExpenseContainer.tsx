@@ -3,7 +3,6 @@ import { BACKEND_URL } from "@/domains/global/constants";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import { VehicleExpense } from "@/domains/global/types/model";
-import { ExpenseCategory } from "@shared/enums";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ReactNode, useEffect } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -17,23 +16,17 @@ export default function EditVehicleExpenseContainer(): ReactNode {
   const { showSuccessSnackbar } = useSnackbar();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { expenseId } = useParams();
+  const { expenseId, vehicleId } = useParams();
   const { pathname } = useLocation();
 
   async function getVehicleExpense(): Promise<VehicleExpense> {
-    // return await safeFetch(`${BACKEND_URL}/vehicle-expense/${expenseId}`, { // 🌠 MOCK
-    //   resource: "VEHICLE_EXPENSE",
-    //   action: "READ",
-    // });
-
-    return {
-      category: ExpenseCategory.IPVA,
-      competencyDate: "2025-01-01",
-      id: 1,
-      observations: "Seu Jorge",
-      totalValue: "100000",
-      archivedAt: undefined,
-    };
+    return await safeFetch(
+      `${BACKEND_URL}/vehicle-expense/detail/${expenseId}`,
+      {
+        resource: "VEHICLE_EXPENSE",
+        action: "READ",
+      }
+    );
   }
 
   const { data: vehicleExpenseData, isFetching } = useQuery({
@@ -43,9 +36,9 @@ export default function EditVehicleExpenseContainer(): ReactNode {
   });
 
   async function editVehicleExpense(data: VehicleExpenseFormInputs) {
-    await safeFetch(`${BACKEND_URL}/vehicle-expense/${expenseId}`, { // 🌠 MOCK
+    await safeFetch(`${BACKEND_URL}/vehicle-expense/${expenseId}`, {
       method: "PATCH",
-      body: data,
+      body: data.payment,
       resource: "VEHICLE_EXPENSE",
       action: "UPDATE",
     });
@@ -62,7 +55,7 @@ export default function EditVehicleExpenseContainer(): ReactNode {
         });
       }
       queryClient.invalidateQueries({
-        queryKey: ["vehicle-expenses"],
+        queryKey: ["vehicle-expenses", vehicleId],
       });
       queryClient.invalidateQueries({
         queryKey: ["accounts-payable"],

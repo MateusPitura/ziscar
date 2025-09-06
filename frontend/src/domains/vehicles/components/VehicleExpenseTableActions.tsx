@@ -28,9 +28,8 @@ export default function VehicleExpenseTableActions({
   const { showSuccessSnackbar } = useSnackbar();
   
   async function enableVehicleExpense() {
-    await safeFetch(`${BACKEND_URL}/vehicle-expense/${vehicleExpenseId}`, { // 🌠 MOCK
-      method: "DELETE",
-      body: { archivedAt: null },
+    await safeFetch(`${BACKEND_URL}/vehicle-expense/${vehicleExpenseId}/unarchive`, {
+      method: "PATCH",
       resource: "VEHICLE_EXPENSE",
       action: "DELETE",
     });

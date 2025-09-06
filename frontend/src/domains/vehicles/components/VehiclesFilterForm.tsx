@@ -125,7 +125,7 @@ function VehiclesFilterFormContent({
         <Input<VehiclesFilterFormInputs>
           name="plateNumber"
           label="Placa"
-          placeholder="ABC1234"
+          placeholder="ABC-1234"
           mask="plateNumber"
           maxLength={8}
         />

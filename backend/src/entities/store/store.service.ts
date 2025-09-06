@@ -193,7 +193,7 @@ export class StoreService {
     if (address?.remove) {
       if (!storeBeforeUpdate.addressId) {
         throw new BadRequestException(
-          'Não é possível excluir, endereço não encontrado',
+          'Não é possível remover, endereço não encontrado',
         );
       }
       updatePayload['address'] = {
