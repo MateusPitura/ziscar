@@ -214,7 +214,89 @@ async function populate() {
   });
 
   await prisma.$transaction(async (tx) => {
-    const otherAccountsPayableForVehicleExpensesPromise = Array.from(
+    const accountsPayableForVehiclePurchasePromise = Array.from(
+      { length: POPULATE_OTHER_ENTITIES_AMOUNT },
+      async (_, accountId) => {
+        const installmentsCount = faker.number.int({
+          min: MIN_INSTALLMENTS_PER_ACCOUNT,
+          max: MAX_INSTALLMENTS_PER_ACCOUNT,
+        });
+
+        const paidInstallmentsCount = faker.number.int({
+          min: 0,
+          max: installmentsCount,
+        });
+
+        const hasUpfront = faker.datatype.boolean();
+
+        const firstDueDate = faker.date.between({
+          from: new Date(Date.now() - 5 * YEAR_IN_MS),
+          to: new Date(Date.now() - 2 * YEAR_IN_MS),
+        });
+
+        const value = faker.number.int({ min: 500_000, max: 1_500_000 });
+
+        const installments = Array.from(
+          { length: installmentsCount },
+          (_, installmentId) => {
+            return {
+              installmentSequence: hasUpfront
+                ? installmentId
+                : installmentId + 1,
+              dueDate: addMonths(firstDueDate, installmentId),
+              value,
+              isRefund: false,
+              isUpfront: hasUpfront && installmentId === 0,
+              status:
+                installmentId < paidInstallmentsCount
+                  ? InstallmentStatus.PAID
+                  : InstallmentStatus.PENDING,
+              ...(installmentId < paidInstallmentsCount && {
+                paymentMethodPayables: {
+                  create: {
+                    type: PAYMENTMETHODPAYABLETYPE_VALUES[
+                      faker.number.int({
+                        min: 0,
+                        max: PAYMENTMETHODPAYABLETYPE_VALUES.length - 1,
+                      })
+                    ],
+                    value,
+                    paymentDate: subDays(
+                      addMonths(firstDueDate, installmentId),
+                      faker.number.int({ min: 0, max: 7 }),
+                    ),
+                    userId: POPULATE_USER.ADM.id,
+                  },
+                },
+              }),
+            };
+          },
+        );
+
+        await tx.accountPayable.create({
+          data: {
+            description: `Compra Veículo ${generatePlateNumber(true)}`,
+            paidTo: faker.company.name(),
+            accountPayableInstallments: {
+              create: installments,
+            },
+            vehiclePurchases: {
+              create: {
+                date: faker.date.past({ years: 1 }),
+                userId: POPULATE_USER.ADM.id,
+                vehicleId: accountId + 1,
+              },
+            },
+          },
+        });
+      },
+    );
+
+    await Promise.all(accountsPayableForVehiclePurchasePromise);
+  });
+
+  await prisma.$transaction(async (tx) => {
+    const accountsPayableForVehicleExpensesPromise = Array.from(
       { length: POPULATE_OTHER_ENTITIES_AMOUNT },
       async (_, accountId) => {
         const installmentsCount = faker.number.int({
@@ -308,7 +390,7 @@ async function populate() {
       },
     );
 
-    await Promise.all(otherAccountsPayableForVehicleExpensesPromise);
+    await Promise.all(accountsPayableForVehicleExpensesPromise);
   });
 
   await prisma.$transaction(async (tx) => {
