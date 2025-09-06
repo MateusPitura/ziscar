@@ -15,7 +15,7 @@ export default function formatInstallment({
 }: FormatInstallmentProperties) {
   const installments = [
     {
-      installmentSequence: 2, // 🌠 FIX INSTALLMENT SEQUENCE
+      installmentSequence: 2, // 🌠 FIX INSTALLMENT SEQUENCE, = 1
       dueDate: installment.dueDate,
       value: installment.value,
       isUpfront: false,
@@ -34,7 +34,7 @@ export default function formatInstallment({
 
   if (upfront.length) {
     installments.push({
-      installmentSequence: 1, // 🌠 FIX INSTALLMENT SEQUENCE
+      installmentSequence: 1, // 🌠 FIX INSTALLMENT SEQUENCE, = 0
       dueDate: upfront[0].dueDate,
       value: upfront[0].value,
       isUpfront: true,

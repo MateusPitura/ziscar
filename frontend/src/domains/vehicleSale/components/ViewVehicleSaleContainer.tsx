@@ -1,29 +1,48 @@
 import Button from "@/design-system/Button";
 import Spinner from "@/design-system/Spinner";
+import Tabs from "@/design-system/Tabs";
 import PageHeader from "@/domains/global/components/PageHeader";
 import Section from "@/domains/global/components/Section";
 import { BACKEND_URL } from "@/domains/global/constants";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
-import { Vehicle } from "@/domains/global/types/model";
 import { useQuery } from "@tanstack/react-query";
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { VehicleSaleDetails } from "../types";
 import selectVehicleSaleInfo from "../utils/selectVehicleSaleInfo";
+import CustomerData from "./CustomerData";
 import VehicleData from "./VehicleData";
+
+type SaleTabs = "VEHICLE" | "CUSTOMER" | "PROFIT";
+
+const enableProfitTab = false;
 
 export default function ViewVehicleSaleContainer(): ReactNode {
   const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState<SaleTabs>("VEHICLE");
 
   const { safeFetch } = useSafeFetch();
   const { vehicleSaleId } = useParams();
 
-  async function getVehicle(): Promise<Vehicle> {
-    const response = await safeFetch(`${BACKEND_URL}/vehicles/sale/${vehicleSaleId}`, {
-      resource: "VEHICLES",
-      action: "READ",
-    });
+  async function getVehicle(): Promise<VehicleSaleDetails> {
+    const response = await safeFetch(
+      `${BACKEND_URL}/vehicles/sale/${vehicleSaleId}`,
+      {
+        resource: "VEHICLES",
+        action: "READ",
+      }
+    );
 
-    return response.vehicleSnapshot
+    return {
+      customer: response.customerSnapshot,
+      vehicle: {
+        ...response.vehicleSnapshot,
+        vehicleCharacteristicValues:
+          response.vehicleSnapshot?.vehicleCharacteristicValues.map(
+            (c: Record<string, string>) => c?.characteristic
+          ),
+      },
+    };
   }
 
   const { data: vehicleData, isFetching } = useQuery({
@@ -43,7 +62,9 @@ export default function ViewVehicleSaleContainer(): ReactNode {
   return (
     vehicleData && (
       <div className="flex flex-col gap-4 w-full">
-        <PageHeader title="Detalhes do Veículo Vendido">
+        <PageHeader
+          title={`Detalhes "Venda Veículo ${vehicleData.vehicle.plateNumber}"`}
+        >
           <Button
             label="Voltar"
             iconLeft="ArrowBack"
@@ -54,16 +75,56 @@ export default function ViewVehicleSaleContainer(): ReactNode {
             data-cy="back-vehicle-sale-button"
           />
         </PageHeader>
-        <div className="flex justify-center flex-1">
-          <Section>
-            <Section.Group>
-              <Section.Header title="Dados do veículo" />
-              <Section.Body className="grid-cols-3">
-                <VehicleData vehicleData={vehicleData} />
-              </Section.Body>
-            </Section.Group>
-          </Section>
-        </div>
+        <Tabs>
+          <Tabs.Header>
+            <Tabs.Tab
+              isActive={activeTab === "VEHICLE"}
+              title="Veículo"
+              onClick={() => setActiveTab("VEHICLE")}
+              resource="VEHICLE_SALE"
+              action="READ"
+            />
+            <Tabs.Tab
+              isActive={activeTab === "CUSTOMER"}
+              title="Cliente"
+              onClick={() => setActiveTab("CUSTOMER")}
+              resource="VEHICLE_SALE"
+              action="READ"
+            />
+            {enableProfitTab && (
+              <Tabs.Tab
+                isActive={activeTab === "PROFIT"}
+                title="Rentabilidade"
+                onClick={() => setActiveTab("PROFIT")}
+                resource="VEHICLE_SALE"
+                action="READ"
+              />
+            )}
+          </Tabs.Header>
+          <Tabs.Body>
+            <Tabs.Section isActive={activeTab === "VEHICLE"}>
+              <Section>
+                <Section.Group>
+                  <Section.Header title="Dados do veículo" />
+                  <Section.Body className="grid-cols-3">
+                    <VehicleData vehicleData={vehicleData.vehicle} />
+                  </Section.Body>
+                </Section.Group>
+              </Section>
+            </Tabs.Section>
+            <Tabs.Section isActive={activeTab === "CUSTOMER"}>
+              <Section>
+                <Section.Group>
+                  <Section.Header title="Dados do cliente" />
+                  <Section.Body className="grid-cols-2">
+                    <CustomerData customerData={vehicleData.customer} />
+                  </Section.Body>
+                </Section.Group>
+              </Section>
+            </Tabs.Section>
+            <Tabs.Section isActive={activeTab === "PROFIT"}></Tabs.Section>
+          </Tabs.Body>
+        </Tabs>
       </div>
     )
   );

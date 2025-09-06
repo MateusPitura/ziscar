@@ -16,10 +16,10 @@ export default function AccountsReceivableTableActions({
 
   return (
     <>
-      <Tooltip content="Veículo">
+      <Tooltip content="Detalhes da venda">
         <Button
           variant="quaternary"
-          iconLeft="DirectionsCar"
+          iconLeft="CurrencyExchange"
           onClick={() => navigate(`/vehicle-sale/view/${vehicleSaleId}`)}
           resource="VEHICLE_SALE"
           action="READ"
@@ -27,10 +27,10 @@ export default function AccountsReceivableTableActions({
           data-cy={`button-view-vehicleSale-${vehicleSaleId}`}
         />
       </Tooltip>
-      <Tooltip content="Pagamento">
+      <Tooltip content="Detalhes do pagamento">
         <Button
           variant="quaternary"
-          iconLeft="Visibility"
+          iconLeft="ReceiptLong"
           onClick={() =>
             navigate(`/accounts-receivable/${accountReceivableId}/installments`)
           }
