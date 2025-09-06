@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 import { addMonths, subDays } from 'date-fns';
 import { SEED_ROLE_SALES_ID } from '../../shared/src/constants';
 import {
@@ -155,58 +155,70 @@ async function populate() {
     });
   });
 
+  const vehiclePurchases = Array.from(
+    { length: POPULATE_OTHER_ENTITIES_AMOUNT },
+    () => ({
+      installmentValue: faker.number.int({ min: 500_000, max: 1_500_000 }),
+      installmentCount: faker.number.int({
+        min: MIN_INSTALLMENTS_PER_ACCOUNT,
+        max: MAX_INSTALLMENTS_PER_ACCOUNT,
+      }),
+    }),
+  );
+
   await prisma.$transaction(async (tx) => {
-    const otherVehiclesPromise = Array.from(
-      { length: POPULATE_OTHER_ENTITIES_AMOUNT },
-      (_, index) => {
-        const minimumPrice = faker.number.int({
-          min: 500_000,
-          max: 20_000_000,
-        });
-        const yearOfManufacture = faker.number.int({
-          min: 1990,
-          max: new Date().getFullYear(),
-        });
+    const otherVehicles: Prisma.VehicleCreateManyInput[] = [];
 
-        return {
-          chassiNumber: generateChassi(),
-          plateNumber: generatePlateNumber(),
-          status:
-            VEHICLESTATUS_VALUES[
-              faker.number.int({ min: 0, max: VEHICLESTATUS_VALUES.length - 1 })
-            ],
-          commissionValue: faker.number.int({ min: 0, max: 100_000 }), // 🌠 precisa conferir o valor de compra
-          announcedPrice:
-            minimumPrice + faker.number.int({ min: 0, max: 1_000_000 }),
-          minimumPrice,
-          brandId: faker.number.int({
-            min: 1,
-            max: vehicleBrands.length,
-          }),
-          storeId: POPULATE_STORE.DEFAULT.id,
-          category:
-            VEHICLECATEGORY_VALUES[
-              faker.number.int({
-                min: 0,
-                max: VEHICLECATEGORY_VALUES.length - 1,
-              })
-            ],
-          fuelType:
-            FUELTYPE_VALUES[
-              faker.number.int({ min: 0, max: FUELTYPE_VALUES.length - 1 })
-            ],
-          color: faker.color.rgb().replace('#', ''),
-          kilometers: faker.number.int({ min: 0, max: 300_000 }),
-          modelName: faker.vehicle.model(),
-          modelYear: yearOfManufacture + 1,
-          yearOfManufacture,
-          archivedAt:
-            index < POPULATE_INACTIVE_ENTITIES_AMOUNT ? new Date() : null,
-        };
-      },
-    );
+    for (const [purchaseId, vehiclePurchase] of vehiclePurchases.entries()) {
+      const totalValue =
+        vehiclePurchase.installmentValue * vehiclePurchase.installmentCount;
 
-    const otherVehicles = await Promise.all(otherVehiclesPromise);
+      const minimumPrice = faker.number.int({
+        min: totalValue + 100_000,
+        max: totalValue + 1_000_000,
+      });
+
+      const yearOfManufacture = faker.number.int({
+        min: 1990,
+        max: new Date().getFullYear(),
+      });
+
+      otherVehicles.push({
+        chassiNumber: generateChassi(),
+        plateNumber: generatePlateNumber(),
+        status:
+          VEHICLESTATUS_VALUES[
+            faker.number.int({ min: 0, max: VEHICLESTATUS_VALUES.length - 1 })
+          ],
+        commissionValue: faker.number.int({ min: 0, max: 50_000 }),
+        announcedPrice:
+          minimumPrice + faker.number.int({ min: 0, max: 1_000_000 }),
+        minimumPrice,
+        brandId: faker.number.int({
+          min: 1,
+          max: vehicleBrands.length,
+        }),
+        storeId: POPULATE_STORE.DEFAULT.id,
+        category:
+          VEHICLECATEGORY_VALUES[
+            faker.number.int({
+              min: 0,
+              max: VEHICLECATEGORY_VALUES.length - 1,
+            })
+          ],
+        fuelType:
+          FUELTYPE_VALUES[
+            faker.number.int({ min: 0, max: FUELTYPE_VALUES.length - 1 })
+          ],
+        color: faker.color.rgb().replace('#', ''),
+        kilometers: faker.number.int({ min: 0, max: 300_000 }),
+        modelName: faker.vehicle.model(),
+        modelYear: yearOfManufacture + 1,
+        yearOfManufacture,
+        archivedAt:
+          purchaseId < POPULATE_INACTIVE_ENTITIES_AMOUNT ? new Date() : null,
+      });
+    }
 
     await tx.vehicle.createMany({
       data: otherVehicles,
@@ -214,66 +226,58 @@ async function populate() {
   });
 
   await prisma.$transaction(async (tx) => {
-    const accountsPayableForVehiclePurchasePromise = Array.from(
-      { length: POPULATE_OTHER_ENTITIES_AMOUNT },
-      async (_, accountId) => {
-        const installmentsCount = faker.number.int({
-          min: MIN_INSTALLMENTS_PER_ACCOUNT,
-          max: MAX_INSTALLMENTS_PER_ACCOUNT,
-        });
+    const accountsPayableForVehiclePurchasePromise: unknown[] = [];
 
-        const paidInstallmentsCount = faker.number.int({
-          min: 0,
-          max: installmentsCount,
-        });
+    for (const [purchaseId, vehiclePurchase] of vehiclePurchases.entries()) {
+      const paidInstallmentsCount = faker.number.int({
+        min: 0,
+        max: vehiclePurchase.installmentCount,
+      });
 
-        const hasUpfront = faker.datatype.boolean();
+      const hasUpfront = faker.datatype.boolean();
 
-        const firstDueDate = faker.date.between({
-          from: new Date(Date.now() - 5 * YEAR_IN_MS),
-          to: new Date(Date.now() - 2 * YEAR_IN_MS),
-        });
+      const firstDueDate = faker.date.between({
+        from: new Date(Date.now() - 5 * YEAR_IN_MS),
+        to: new Date(Date.now() - 2 * YEAR_IN_MS),
+      });
 
-        const value = faker.number.int({ min: 500_000, max: 1_500_000 });
-
-        const installments = Array.from(
-          { length: installmentsCount },
-          (_, installmentId) => {
-            return {
-              installmentSequence: hasUpfront
-                ? installmentId
-                : installmentId + 1,
-              dueDate: addMonths(firstDueDate, installmentId),
-              value,
-              isRefund: false,
-              isUpfront: hasUpfront && installmentId === 0,
-              status:
-                installmentId < paidInstallmentsCount
-                  ? InstallmentStatus.PAID
-                  : InstallmentStatus.PENDING,
-              ...(installmentId < paidInstallmentsCount && {
-                paymentMethodPayables: {
-                  create: {
-                    type: PAYMENTMETHODPAYABLETYPE_VALUES[
-                      faker.number.int({
-                        min: 0,
-                        max: PAYMENTMETHODPAYABLETYPE_VALUES.length - 1,
-                      })
-                    ],
-                    value,
-                    paymentDate: subDays(
-                      addMonths(firstDueDate, installmentId),
-                      faker.number.int({ min: 0, max: 7 }),
-                    ),
-                    userId: POPULATE_USER.ADM.id,
-                  },
+      const installments = Array.from(
+        { length: vehiclePurchase.installmentCount },
+        (_, installmentId) => {
+          return {
+            installmentSequence: hasUpfront ? installmentId : installmentId + 1,
+            dueDate: addMonths(firstDueDate, installmentId),
+            value: vehiclePurchase.installmentValue,
+            isRefund: false,
+            isUpfront: hasUpfront && installmentId === 0,
+            status:
+              installmentId < paidInstallmentsCount
+                ? InstallmentStatus.PAID
+                : InstallmentStatus.PENDING,
+            ...(installmentId < paidInstallmentsCount && {
+              paymentMethodPayables: {
+                create: {
+                  type: PAYMENTMETHODPAYABLETYPE_VALUES[
+                    faker.number.int({
+                      min: 0,
+                      max: PAYMENTMETHODPAYABLETYPE_VALUES.length - 1,
+                    })
+                  ],
+                  value: vehiclePurchase.installmentValue,
+                  paymentDate: subDays(
+                    addMonths(firstDueDate, installmentId),
+                    faker.number.int({ min: 0, max: 7 }),
+                  ),
+                  userId: POPULATE_USER.ADM.id,
                 },
-              }),
-            };
-          },
-        );
+              },
+            }),
+          };
+        },
+      );
 
-        await tx.accountPayable.create({
+      accountsPayableForVehiclePurchasePromise.push(
+        tx.accountPayable.create({
           data: {
             description: `Compra Veículo ${generatePlateNumber(true)}`,
             paidTo: faker.company.name(),
@@ -284,13 +288,13 @@ async function populate() {
               create: {
                 date: faker.date.past({ years: 1 }),
                 userId: POPULATE_USER.ADM.id,
-                vehicleId: accountId + 1,
+                vehicleId: purchaseId + 1,
               },
             },
           },
-        });
-      },
-    );
+        }),
+      );
+    }
 
     await Promise.all(accountsPayableForVehiclePurchasePromise);
   });
