@@ -36,7 +36,7 @@ export default function DisableVehicleExpenseModal({
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["vehicle-expenses"] });
       showSuccessSnackbar({
-        title: `Gasto removido com sucesso`,
+        title: `Gasto desativado com sucesso`,
       });
       dialog.closeDialog();
     },
@@ -44,19 +44,19 @@ export default function DisableVehicleExpenseModal({
 
   return (
     <Dialog {...dialog}>
-      <Dialog.Header title="Remover gasto" />
+      <Dialog.Header title="Desativar gasto" />
       <Dialog.Body>
         <span className="text-body-medium text-neutral-700">
-          Tem certeza que deseja remover o gasto de
+          Tem certeza que deseja desativar o gasto de
           <span className="font-bold">
             {BLANK}
             {vehicleCategory}
           </span>
-          ? Ao remover ele não será mais acessível
+          ? Ao desativar ele não será mais acessível
         </span>
       </Dialog.Body>
       <Dialog.Footer
-        labelPrimaryBtn="Remover"
+        labelPrimaryBtn="Desativar"
         onClickPrimaryBtn={mutate}
         primaryBtnState={isPending ? "loading" : undefined}
         primaryBtnColor="red"

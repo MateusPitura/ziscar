@@ -244,7 +244,7 @@ export class UserService {
     if (address?.remove) {
       if (!userBeforeUpdate.addressId) {
         throw new BadRequestException(
-          'Não é possível excluir, endereço não encontrado',
+          'Não é possível remover, endereço não encontrado',
         );
       }
       updatePayload['address'] = {
