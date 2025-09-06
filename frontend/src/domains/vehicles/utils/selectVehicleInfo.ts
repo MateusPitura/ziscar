@@ -11,7 +11,7 @@ export default function selectVehicleInfo(
   const commonCharacteristics = [];
   const newCharacteristics = [];
 
-  for (const characteristic of vehicle.characteristics) {
+  for (const characteristic of vehicle.vehicleCharacteristicValues) {
     if (defaultCommonCharacteristics.includes(characteristic)) {
       commonCharacteristics.push(characteristic);
     } else {

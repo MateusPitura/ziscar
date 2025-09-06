@@ -7,12 +7,7 @@ import { BACKEND_URL } from "@/domains/global/constants";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import { VehicleWithPayment } from "@/domains/global/types/model";
-import {
-  FuelType,
-  InstallmentStatus,
-  VehicleCategory,
-  VehicleStatus,
-} from "@shared/enums";
+import { InstallmentStatus } from "@shared/enums";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ReactNode } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -32,50 +27,19 @@ export default function VehicleSaleContainer(): ReactNode {
   const { customer: customerData } = useVehicleSalePageContext();
 
   async function getVehicle(): Promise<VehicleWithPayment> {
-    // return await safeFetch(`${BACKEND_URL}/vehicle/${vehicleId}`, { // 🌠 MOCK
-    //   resource: "VEHICLES",
-    //   action: "READ",
-    // });
+    const response = await safeFetch(`${BACKEND_URL}/vehicles/${vehicleId}`, {
+      resource: "VEHICLES",
+      action: "READ",
+    });
 
     return {
       payment: {
+        // 🌠 IMPROVE
         purchaseDate: "2023-01-01",
         paidTo: "Fulano de Tal",
         value: "7000000",
       },
-      vehicle: {
-        id: 1,
-        modelName: "Fusca",
-        announcedPrice: 8000000,
-        plateNumber: "ABC1234",
-        modelYear: 1970,
-        status: VehicleStatus.DELIVERED,
-        archivedAt: undefined,
-        brand: {
-          id: 10,
-          name: "Volkswagen",
-        },
-        store: {
-          id: 1,
-          name: "Loja 1",
-        },
-        category: VehicleCategory.CAR,
-        color: "#FFFFFF",
-        chassiNumber: "AAAAAAAAAAAAAAAAA",
-        commissionValue: 1000,
-        fuelType: FuelType.FLEX,
-        kilometers: 1000,
-        minimumPrice: 8000000,
-        yearOfManufacture: 1970,
-        characteristics: [
-          "Direção hidráulica",
-          "Janelas elétricas",
-          "Ar condicionado",
-          "Piloto automático",
-          "Vidros elétricos",
-          "Freios ABS",
-        ],
-      },
+      vehicle: response,
     };
   }
 

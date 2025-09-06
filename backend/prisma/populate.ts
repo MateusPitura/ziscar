@@ -190,7 +190,7 @@ async function populate() {
               faker.number.int({ min: 0, max: FUELTYPE_VALUES.length - 1 })
             ],
           color: faker.color.rgb().replace('#', ''),
-          kilometers: faker.number.int({ min: 0, max: 30_000_000 }),
+          kilometers: faker.number.int({ min: 0, max: 300_000 }),
           modelName: faker.vehicle.model(),
           modelYear: yearOfManufacture + 1,
           yearOfManufacture,

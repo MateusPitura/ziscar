@@ -1,20 +1,18 @@
 import Table from "@/design-system/Table";
+import DataField from "@/domains/global/components/DataField";
+import { BACKEND_URL, BLANK } from "@/domains/global/constants";
 import useDialog from "@/domains/global/hooks/useDialog";
+import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
+import { FetchVehicleExpense } from "@/domains/global/types/model";
+import { applyMask } from "@/domains/global/utils/applyMask";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState, type ReactNode } from "react";
+import { useParams } from "react-router-dom";
+import { ExpenseCategoryText, VEHICLES_EXPENSES_TABLE } from "../constants";
 import { DisableVehicleExpense } from "../types";
-import { FetchVehicleExpense } from "@/domains/global/types/model";
-import { ExpenseCategory } from "@shared/enums";
+import selectVehicleExpensesInfo from "../utils/selectVehicleExpensesInfo";
 import DisableVehicleExpenseModal from "./DisableVehicleExpenseModal";
 import VehicleExpenseTableActions from "./VehicleExpenseTableActions";
-import { ExpenseCategoryText, VEHICLES_EXPENSES_TABLE } from "../constants";
-import selectVehicleExpensesInfo from "../utils/selectVehicleExpensesInfo";
-import DataField from "@/domains/global/components/DataField";
-import { applyMask } from "@/domains/global/utils/applyMask";
-import { BLANK } from "@/domains/global/constants";
-// import { useParams } from "react-router-dom";
-// import { BACKEND_URL } from "@/domains/global/constants";
-// import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 
 const gridColumns = 8;
 
@@ -26,8 +24,8 @@ export default function VehicleExpenseTable(): ReactNode {
     });
 
   const dialog = useDialog();
-  //   const { safeFetch } = useSafeFetch();
-  // const { vehicleId } = useParams();
+  const { safeFetch } = useSafeFetch();
+  const { vehicleId } = useParams();
 
   function handleDisableVehicleExpenseInfo(
     vehicleExpense: DisableVehicleExpense
@@ -37,37 +35,11 @@ export default function VehicleExpenseTable(): ReactNode {
   }
 
   async function getVehicleExpenseInfo(): Promise<FetchVehicleExpense[]> {
-    // return await safeFetch(`${BACKEND_URL}/vehicle-expense/${vehicleId}`, { // 🌠 MOCK
-    //   resource: "VEHICLE_EXPENSE",
-    //   action: "READ",
-    // });
+    return await safeFetch(`${BACKEND_URL}/vehicle-expense/${vehicleId}`, {
+      resource: "VEHICLE_EXPENSE",
+      action: "READ",
+    });
 
-    return [
-      {
-        id: 1,
-        category: ExpenseCategory.MAINTENANCE,
-        observations: "Troca de óleo",
-        archivedAt: undefined,
-        totalValue: "1500",
-        competencyDate: "2023-10-01",
-      },
-      {
-        id: 2,
-        category: ExpenseCategory.FUEL,
-        observations: "Abastecimento",
-        archivedAt: undefined,
-        totalValue: "300",
-        competencyDate: "2023-10-05",
-      },
-      {
-        id: 3,
-        category: ExpenseCategory.INSURANCE,
-        observations: "Seguro anual",
-        archivedAt: undefined,
-        totalValue: "1200",
-        competencyDate: "2023-10-10",
-      },
-    ];
   }
 
   const {
@@ -90,7 +62,7 @@ export default function VehicleExpenseTable(): ReactNode {
       <div className="w-fit">
         <DataField
           label="Total de gastos"
-          value={applyMask("1000000", "money")}
+          value={applyMask("1000000", "money")} // 🌠 Calcular valor real
         />
       </div>
       <Table>

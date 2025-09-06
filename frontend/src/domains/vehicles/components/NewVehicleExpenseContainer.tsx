@@ -31,6 +31,7 @@ export default function NewVehicleExpenseContainer(): ReactNode {
         vehicleId,
         category: payment.category,
         observations: payment.observations,
+        competencyDate: payment.competencyDate,
         description: `Gasto Veículo ${applyMask(
           vehicleData?.vehicle.plateNumber,
           "plateNumber"
@@ -38,6 +39,7 @@ export default function NewVehicleExpenseContainer(): ReactNode {
         paidTo: ExpenseCategoryText[payment.category],
         installments: [
           {
+            installmentSequence: 1,
             dueDate: payment.installment?.dueDate,
             value: payment.installment?.value,
             isUpfront: false,

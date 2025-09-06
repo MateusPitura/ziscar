@@ -2,60 +2,28 @@ import Button from "@/design-system/Button";
 import Spinner from "@/design-system/Spinner";
 import PageHeader from "@/domains/global/components/PageHeader";
 import Section from "@/domains/global/components/Section";
+import { BACKEND_URL } from "@/domains/global/constants";
+import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import { Vehicle } from "@/domains/global/types/model";
-import { FuelType, VehicleCategory, VehicleStatus } from "@shared/enums";
 import { useQuery } from "@tanstack/react-query";
 import type { ReactNode } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import selectVehicleSaleInfo from "../utils/selectVehicleSaleInfo";
 import VehicleData from "./VehicleData";
-// import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 
 export default function ViewVehicleSaleContainer(): ReactNode {
   const navigate = useNavigate();
 
-  // const { safeFetch } = useSafeFetch();
+  const { safeFetch } = useSafeFetch();
   const { vehicleSaleId } = useParams();
 
   async function getVehicle(): Promise<Vehicle> {
-    // return await safeFetch(`${BACKEND_URL}/vehicle/${vehicleId}`, { // 🌠 MOCK
-    //   resource: "VEHICLES",
-    //   action: "READ",
-    // });
+    const response = await safeFetch(`${BACKEND_URL}/vehicles/sale/${vehicleSaleId}`, {
+      resource: "VEHICLES",
+      action: "READ",
+    });
 
-    return {
-      id: 1,
-      modelName: "Fusca",
-      announcedPrice: 8000000,
-      plateNumber: "ABC1234",
-      modelYear: 1970,
-      status: VehicleStatus.DELIVERED,
-      archivedAt: undefined,
-      brand: {
-        id: 10,
-        name: "Volkswagen",
-      },
-      store: {
-        id: 1,
-        name: "Loja 1",
-      },
-      category: VehicleCategory.CAR,
-      color: "#FFFFFF",
-      chassiNumber: "AAAAAAAAAAAAAAAAA",
-      commissionValue: 1000,
-      fuelType: FuelType.FLEX,
-      kilometers: 1000,
-      minimumPrice: 8000000,
-      yearOfManufacture: 1970,
-      characteristics: [
-        "Direção hidráulica",
-        "Janelas elétricas",
-        "Ar condicionado",
-        "Piloto automático",
-        "Vidros elétricos",
-        "Freios ABS",
-      ],
-    };
+    return response.vehicleSnapshot
   }
 
   const { data: vehicleData, isFetching } = useQuery({
