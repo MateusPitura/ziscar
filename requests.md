@@ -308,3 +308,4 @@ payload:
 # Venda do veículo
 
 Não está aceitando valor da comissão como 0
+Nos installments aceitar installmentSequence igual da compra e nos gastos

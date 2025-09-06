@@ -1,15 +1,15 @@
 import { BACKEND_URL } from "@/domains/global/constants";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
-import { InstallmentStatus } from "@shared/enums";
+import { VehicleWithPayment } from "@/domains/global/types/model";
+import { applyMask } from "@/domains/global/utils/applyMask";
+import formatInstallment from "@/domains/global/utils/formatInstallment";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ReactNode, useMemo } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ExpenseCategoryText, vehicleExpenseDefaultValues } from "../constants";
 import ExpenseForm from "../forms/ExpenseForm";
 import { VehicleExpenseFormInputs } from "../types";
-import { VehicleWithPayment } from "@/domains/global/types/model";
-import { applyMask } from "@/domains/global/utils/applyMask";
 
 export default function NewVehicleExpenseContainer(): ReactNode {
   const { safeFetch } = useSafeFetch();
@@ -24,43 +24,10 @@ export default function NewVehicleExpenseContainer(): ReactNode {
   }, [queryClient, vehicleId]);
 
   async function createExpense({ payment }: VehicleExpenseFormInputs) {
-    const installments = [
-      {
-        installmentSequence: 2, // 🌠 FIX INSTALLMENT SEQUENCE
-        dueDate: payment.installment?.dueDate,
-        value: payment.installment?.value,
-        isUpfront: false,
-        paymentMethods:
-          payment.installment?.status === InstallmentStatus.PAID
-            ? [
-                {
-                  type: payment.installment?.paymentMethod,
-                  value: payment.installment?.value,
-                  paymentDate: payment.installment?.paymentDate,
-                },
-              ]
-            : null,
-      },
-    ];
-
-    if (payment.upfront.length) {
-      installments.push({
-        installmentSequence: 1, // 🌠 FIX INSTALLMENT SEQUENCE
-        dueDate: payment.upfront[0]?.dueDate,
-        value: payment.upfront[0]?.value,
-        isUpfront: true,
-        paymentMethods:
-          payment.upfront[0]?.status === InstallmentStatus.PAID
-            ? [
-                {
-                  type: payment.upfront[0]?.paymentMethod,
-                  value: payment.upfront[0]?.value,
-                  paymentDate: payment.upfront[0]?.paymentDate,
-                },
-              ]
-            : null,
-      });
-    }
+    const installments = formatInstallment({
+      installment: payment.installment!,
+      upfront: payment.upfront,
+    });
 
     await safeFetch(`${BACKEND_URL}/vehicle-expense`, {
       method: "POST",

@@ -92,8 +92,8 @@ export type AddressFormInputs = s.infer<typeof SchemaAddress>;
 
 export type BrazilianState = (typeof BRAZILIANSTATE_VALUES)[number];
 
-type PayableInstallmentFormInputs = s.infer<typeof SchemaPayableInstallment>;
-type ReceivableInstallmentFormInputs = s.infer<
+export type PayableInstallmentFormInputs = s.infer<typeof SchemaPayableInstallment>;
+export type ReceivableInstallmentFormInputs = s.infer<
   typeof SchemaReceivableInstallment
 >;
 
