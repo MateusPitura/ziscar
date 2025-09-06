@@ -60,7 +60,17 @@ else
     echo "Session ACTIVE"
 fi
 
-echo SSH using the ProxyCommand
-ssh -i "$PRIVATE_KEY_PATH" \
-    -o "ProxyCommand=ssh -i $PRIVATE_KEY_PATH -W %h:%p -p 22 $SESSION_ID@host.bastion.sa-saopaulo-1.oci.oraclecloud.com" \
-    -p 22 "$USERNAME@$BACKEND_PRIVATE_IP"
+SSH_CMD=(
+  ssh -i "$PRIVATE_KEY_PATH"
+  -t
+  -o "ProxyCommand=ssh -i $PRIVATE_KEY_PATH -W %h:%p -p 22 $SESSION_ID@host.bastion.sa-saopaulo-1.oci.oraclecloud.com"
+  -p 22 "$USERNAME@$BACKEND_PRIVATE_IP"
+)
+
+if [[ $# -gt 0 ]]; then
+    echo Running remote command...
+    "${SSH_CMD[@]}" "$@"
+else
+    echo Starting interactive session...
+    "${SSH_CMD[@]}"
+fi
