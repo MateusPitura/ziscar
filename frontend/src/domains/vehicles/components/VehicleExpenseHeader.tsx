@@ -29,7 +29,7 @@ export default function VehicleExpenseHeader({
     });
 
     return {
-      // 🌠 IMPROVE
+      // 🌠 IMPROVE GET (UNNECESSARY)
       payment: {
         purchaseDate: "2023-01-01",
         paidTo: "Fulano de Tal",

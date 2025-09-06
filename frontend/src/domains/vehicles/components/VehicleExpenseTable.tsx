@@ -13,6 +13,7 @@ import { DisableVehicleExpense } from "../types";
 import selectVehicleExpensesInfo from "../utils/selectVehicleExpensesInfo";
 import DisableVehicleExpenseModal from "./DisableVehicleExpenseModal";
 import VehicleExpenseTableActions from "./VehicleExpenseTableActions";
+import { removeMask } from "@shared/utils/removeMask";
 
 const gridColumns = 8;
 
@@ -39,21 +40,32 @@ export default function VehicleExpenseTable(): ReactNode {
       resource: "VEHICLE_EXPENSE",
       action: "READ",
     });
-
   }
 
   const {
     data: vehicleExpensesInfo,
     isFetching: isFetchingVehicleExpensesInfo,
   } = useQuery({
-    queryKey: ["vehicle-expenses"],
+    queryKey: ["vehicle-expenses", vehicleId],
     queryFn: getVehicleExpenseInfo,
     select: selectVehicleExpensesInfo,
   });
 
   const biggestValueLength = useMemo(() => {
     if (!vehicleExpensesInfo?.length) return 0;
-    return Math.max(...vehicleExpensesInfo.map((v) => v.totalValue.length));
+    return Math.max(
+      ...vehicleExpensesInfo.map((v) => String(v.totalValue).length)
+    );
+  }, [vehicleExpensesInfo]);
+
+  const totalValueExpenses = useMemo(() => {
+    if (!vehicleExpensesInfo?.length) return "0";
+    let totalValue = 0;
+    for (const expense of vehicleExpensesInfo) {
+      if (expense.archivedAt) continue;
+      totalValue += Number(removeMask(expense.totalValue));
+    }
+    return String(totalValue);
   }, [vehicleExpensesInfo]);
 
   return (
@@ -62,7 +74,7 @@ export default function VehicleExpenseTable(): ReactNode {
       <div className="w-fit">
         <DataField
           label="Total de gastos"
-          value={applyMask("1000000", "money")} // 🌠 Calcular valor real
+          value={applyMask(totalValueExpenses, "money")}
         />
       </div>
       <Table>

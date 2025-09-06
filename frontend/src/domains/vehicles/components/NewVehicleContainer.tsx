@@ -21,7 +21,7 @@ export default function NewVehicleContainer(): ReactNode {
 
   async function createVehicle(data: VehicleFormInputs) {
     await safeFetch(`${BACKEND_URL}/vehicles`, {
-      // 🌠 IMPROVE
+      // 🌠 IMPROVE CREATE VEHICLE
       method: "POST",
       body: data.vehicle,
       resource: "VEHICLES",

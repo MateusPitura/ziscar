@@ -7,8 +7,8 @@ export default function selectVehicleExpenseInfo(
   return {
     payment: {
       category: payload.category,
-      competencyDate: payload.competencyDate,
-      observations: payload.observations,
+      competencyDate: payload.competencyDate?.split("T")?.[0],
+      observations: payload.observations ?? "",
       upfront: [],
       installment: null,
     },

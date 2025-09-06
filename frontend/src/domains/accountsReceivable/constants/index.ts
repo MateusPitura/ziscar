@@ -52,9 +52,9 @@ export const ACCOUNTS_RECEIVABLE_INSTALLMENTS_TABLE = {
   },
   status: {
     label: "Status do pagamento",
-    colSpan: 1,
   },
   value: {
     label: "Valor",
+    colSpan: 1,
   },
 } as const;

@@ -16,14 +16,13 @@ export default function EditVehicleExpenseContainer(): ReactNode {
   const { showSuccessSnackbar } = useSnackbar();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { expenseId } = useParams();
+  const { expenseId, vehicleId } = useParams();
   const { pathname } = useLocation();
 
   async function getVehicleExpense(): Promise<VehicleExpense> {
     return await safeFetch(
       `${BACKEND_URL}/vehicle-expense/detail/${expenseId}`,
       {
-        // 🌠 IMPROVE
         resource: "VEHICLE_EXPENSE",
         action: "READ",
       }
@@ -56,7 +55,7 @@ export default function EditVehicleExpenseContainer(): ReactNode {
         });
       }
       queryClient.invalidateQueries({
-        queryKey: ["vehicle-expenses"],
+        queryKey: ["vehicle-expenses", vehicleId],
       });
       queryClient.invalidateQueries({
         queryKey: ["accounts-payable"],

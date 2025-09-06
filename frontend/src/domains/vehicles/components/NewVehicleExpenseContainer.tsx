@@ -25,7 +25,7 @@ export default function NewVehicleExpenseContainer(): ReactNode {
 
   async function createExpense({ payment }: VehicleExpenseFormInputs) {
     await safeFetch(`${BACKEND_URL}/vehicle-expense`, {
-      // 🌠 IMPROVE
+      // 🌠 IMPROVE CREATE EXPENSE
       method: "POST",
       body: {
         vehicleId,

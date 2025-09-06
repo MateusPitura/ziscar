@@ -54,7 +54,7 @@ export default function VehiclesTable(): ReactNode {
     filter?: string
   ): Promise<PageablePayload<FetchVehicle>> {
     return await safeFetch(
-      `${BACKEND_URL}/vehicles?${filter}&limit=${ITEMS_PER_PAGE}`, // 🌠 Order by model name
+      `${BACKEND_URL}/vehicles?${filter}&limit=${ITEMS_PER_PAGE}`,
       {
         resource: "VEHICLES",
         action: "READ",

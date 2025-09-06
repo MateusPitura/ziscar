@@ -34,7 +34,7 @@ export default function VehicleSaleContainer(): ReactNode {
 
     return {
       payment: {
-        // 🌠 IMPROVE
+        // 🌠 IMPROVE GET (UNNECESSARY)
         purchaseDate: "2023-01-01",
         paidTo: "Fulano de Tal",
         value: "7000000",

@@ -29,7 +29,7 @@ export default function EditVehicleContainer(): ReactNode {
     });
 
     return {
-      // 🌠 IMPROVE
+      // 🌠 IMPROVE GET
       payment: {
         purchaseDate: "2023-01-01",
         paidTo: "Fulano de Tal",
@@ -47,7 +47,7 @@ export default function EditVehicleContainer(): ReactNode {
 
   async function editVehicle(data: VehicleFormInputs) {
     await safeFetch(`${BACKEND_URL}/vehicles/${vehicleId}`, {
-      // 🌠 IMPROVE
+      // 🌠 IMPROVE EDIT VEHICLE
       method: "PATCH",
       body: data.vehicle,
       resource: "VEHICLES",
