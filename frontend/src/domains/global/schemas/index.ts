@@ -22,7 +22,7 @@ const SchemaInstallment = s.object({
     formatter: (value) => applyMask(value, "money") ?? "",
   }),
   status: s.enumeration(INSTALLMENTSTATUS_VALUES),
-  dueDate: s.paymentDate().or(s.empty()),
+  dueDate: s.dueDate().or(s.empty()),
   paymentDate: s.paymentDate().or(s.empty()),
 });
 
