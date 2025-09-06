@@ -93,7 +93,7 @@ export default function PaymentForm({
       )}
       <div className="col-span-full w-fit">
         <DataField
-          label="Valor total de venda"
+          label="Valor total"
           value={formatTotalValue(installmentValueWatch, upfrontValueWatch)}
         />
       </div>
