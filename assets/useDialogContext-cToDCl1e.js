@@ -1,1 +1,0 @@
-import{r as o}from"./index-CDuUmDit.js";import{D as r}from"./DialogContext-28MRl5PT.js";function n(){const t=o.useContext(r);if(!t)throw new Error("useDialogContext must be used within a DialogProvider");return t}export{n as u};
