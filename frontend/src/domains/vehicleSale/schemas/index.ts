@@ -38,17 +38,16 @@ export function SchemaVehicleSaleForm({
     .superRefine(installmentFieldsRule)
     .superRefine(upfrontFieldsRule)
     .superRefine((data, ctx) => {
-      const commission = Number(data.payment.commissionValue) || 0;
       const upfront = Number(data.payment.upfront[0]?.value) || 0;
       const value = Number(data.payment.installment?.value) || 0;
 
       const minimum = Number(removeMask(minimumPrice ?? "0")) || 0;
-      
-      if (upfront + value <= minimum + commission) {
+
+      if (upfront + value < minimum) {
         addIssue<VehicleSaleFormInputs>(
           ctx,
           "payment.installment.value",
-          "Valor menor que o preço mínimo mais a comissão"
+          "Valor menor que o preço mínimo"
         );
       }
     });

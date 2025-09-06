@@ -5,6 +5,7 @@ import PageHeader from "@/domains/global/components/PageHeader";
 import { BACKEND_URL } from "@/domains/global/constants";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
+import { InstallmentStatus } from "@shared/enums";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
@@ -19,11 +20,65 @@ export default function NewVehicleContainer(): ReactNode {
   const { showSuccessSnackbar } = useSnackbar();
   const queryClient = useQueryClient();
 
-  async function createVehicle(data: VehicleFormInputs) {
+  async function createVehicle({
+    vehicle,
+    characteristics,
+    payment,
+  }: VehicleFormInputs) {
+    const characteristicsFormatted = [
+      ...characteristics.commonCharacteristics,
+      ...characteristics.newCharacteristics.map((c) => c.description),
+    ];
+
+    const installments = [
+      {
+        installmentSequence: 2, // 🌠 FIX INSTALLMENT SEQUENCE
+        dueDate: payment.installment?.dueDate,
+        value: payment.installment?.value,
+        isUpfront: false,
+        paymentMethods:
+          payment.installment?.status === InstallmentStatus.PAID
+            ? [
+                {
+                  type: payment.installment?.paymentMethod,
+                  value: payment.installment?.value,
+                  paymentDate: payment.installment?.paymentDate,
+                },
+              ]
+            : null,
+      },
+    ];
+
+    if (payment.upfront.length) {
+      installments.push({
+        installmentSequence: 1, // 🌠 FIX INSTALLMENT SEQUENCE
+        dueDate: payment.upfront[0]?.dueDate,
+        value: payment.upfront[0]?.value,
+        isUpfront: true,
+        paymentMethods:
+          payment.upfront[0]?.status === InstallmentStatus.PAID
+            ? [
+                {
+                  type: payment.upfront[0]?.paymentMethod,
+                  value: payment.upfront[0]?.value,
+                  paymentDate: payment.upfront[0]?.paymentDate,
+                },
+              ]
+            : null,
+      });
+    }
+
     await safeFetch(`${BACKEND_URL}/vehicles`, {
-      // 🌠 IMPROVE CREATE VEHICLE
       method: "POST",
-      body: data.vehicle,
+      body: {
+        ...vehicle,
+        characteristics: characteristicsFormatted,
+        payment: {
+          purchaseDate: payment.purchaseDate,
+          paidTo: payment.paidTo,
+          installments,
+        },
+      },
       resource: "VEHICLES",
       action: "CREATE",
     });

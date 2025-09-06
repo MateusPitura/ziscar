@@ -23,18 +23,13 @@ export default function VehicleExpenseHeader({
   const { safeFetch } = useSafeFetch();
 
   async function getVehicleInfo(): Promise<VehicleWithPayment> {
-   const response = await safeFetch(`${BACKEND_URL}/vehicles/${vehicleId}`, {
+    const response = await safeFetch(`${BACKEND_URL}/vehicles/${vehicleId}`, {
       resource: "VEHICLES",
       action: "READ",
     });
 
     return {
-      // 🌠 IMPROVE GET (UNNECESSARY)
-      payment: {
-        purchaseDate: "2023-01-01",
-        paidTo: "Fulano de Tal",
-        value: "7000000",
-      },
+      payment: null,
       vehicle: response,
     };
   }

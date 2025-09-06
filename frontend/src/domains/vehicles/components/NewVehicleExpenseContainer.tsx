@@ -24,8 +24,45 @@ export default function NewVehicleExpenseContainer(): ReactNode {
   }, [queryClient, vehicleId]);
 
   async function createExpense({ payment }: VehicleExpenseFormInputs) {
+    const installments = [
+      {
+        installmentSequence: 2, // 🌠 FIX INSTALLMENT SEQUENCE
+        dueDate: payment.installment?.dueDate,
+        value: payment.installment?.value,
+        isUpfront: false,
+        paymentMethods:
+          payment.installment?.status === InstallmentStatus.PAID
+            ? [
+                {
+                  type: payment.installment?.paymentMethod,
+                  value: payment.installment?.value,
+                  paymentDate: payment.installment?.paymentDate,
+                },
+              ]
+            : null,
+      },
+    ];
+
+    if (payment.upfront.length) {
+      installments.push({
+        installmentSequence: 1, // 🌠 FIX INSTALLMENT SEQUENCE
+        dueDate: payment.upfront[0]?.dueDate,
+        value: payment.upfront[0]?.value,
+        isUpfront: true,
+        paymentMethods:
+          payment.upfront[0]?.status === InstallmentStatus.PAID
+            ? [
+                {
+                  type: payment.upfront[0]?.paymentMethod,
+                  value: payment.upfront[0]?.value,
+                  paymentDate: payment.upfront[0]?.paymentDate,
+                },
+              ]
+            : null,
+      });
+    }
+
     await safeFetch(`${BACKEND_URL}/vehicle-expense`, {
-      // 🌠 IMPROVE CREATE EXPENSE
       method: "POST",
       body: {
         vehicleId,
@@ -37,24 +74,7 @@ export default function NewVehicleExpenseContainer(): ReactNode {
           "plateNumber"
         )}`,
         paidTo: ExpenseCategoryText[payment.category],
-        installments: [
-          {
-            installmentSequence: 1,
-            dueDate: payment.installment?.dueDate,
-            value: payment.installment?.value,
-            isUpfront: false,
-            paymentMethods:
-              payment.installment?.status === InstallmentStatus.PAID
-                ? [
-                    {
-                      type: payment.installment?.paymentMethod,
-                      value: payment.installment?.value,
-                      paymentDate: payment.installment?.paymentDate,
-                    },
-                  ]
-                : null,
-          },
-        ],
+        installments,
       },
       resource: "VEHICLE_EXPENSE",
       action: "CREATE",

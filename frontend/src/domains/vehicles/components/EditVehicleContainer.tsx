@@ -28,14 +28,19 @@ export default function EditVehicleContainer(): ReactNode {
       action: "READ",
     });
 
+    const { payment, vehicleCharacteristicValues, ...vehicle } = response;
+
     return {
-      // 🌠 IMPROVE GET
       payment: {
-        purchaseDate: "2023-01-01",
-        paidTo: "Fulano de Tal",
+        ...payment,
         value: "7000000",
       },
-      vehicle: response,
+      vehicle: {
+        ...vehicle,
+        vehicleCharacteristicValues: vehicleCharacteristicValues.map(
+          (c: Record<string, string>) => c?.characteristic
+        ),
+      },
     };
   }
 
@@ -45,11 +50,26 @@ export default function EditVehicleContainer(): ReactNode {
     select: selectVehicleInfo,
   });
 
-  async function editVehicle(data: VehicleFormInputs) {
+  async function editVehicle({
+    characteristics,
+    payment,
+    vehicle,
+  }: VehicleFormInputs) {
+    const characteristicsFormatted = [
+      ...characteristics.commonCharacteristics,
+      ...characteristics.newCharacteristics.map((c) => c.description),
+    ];
+
     await safeFetch(`${BACKEND_URL}/vehicles/${vehicleId}`, {
-      // 🌠 IMPROVE EDIT VEHICLE
       method: "PATCH",
-      body: data.vehicle,
+      body: {
+        ...vehicle,
+        characteristics: characteristicsFormatted,
+        payment: {
+          purchaseDate: payment?.purchaseDate ?? "",
+          paidTo: payment?.paidTo ?? "",
+        },
+      },
       resource: "VEHICLES",
       action: "UPDATE",
     });
@@ -92,7 +112,6 @@ export default function EditVehicleContainer(): ReactNode {
           onSubmit={mutate}
           className="flex-1 flex flex-col gap-4"
           schema={SchemaVehicleForm}
-          onlyDirty
           defaultValues={{
             characteristics: vehicleData.characteristics,
             payment: vehicleData.payment,

@@ -1,6 +1,8 @@
 import { VehicleWithPayment } from "@/domains/global/types/model";
 import { applyMask } from "@/domains/global/utils/applyMask";
-import { defaultCommonCharacteristics } from "../constants";
+import {
+  defaultCommonCharacteristics
+} from "../constants";
 import { VehicleFormInputs } from "../types";
 
 export default function selectVehicleInfo(
@@ -25,8 +27,8 @@ export default function selectVehicleInfo(
       newCharacteristics,
     },
     payment: {
-      paidTo: payment.paidTo ?? "",
-      purchaseDate: payment.purchaseDate,
+      paidTo: payment?.paidTo ?? "",
+      purchaseDate: payment?.purchaseDate?.split("T")[0] ?? "",
       upfront: [],
       installment: null,
     },
@@ -37,16 +39,16 @@ export default function selectVehicleInfo(
       minimumPrice: applyMask(vehicle.minimumPrice, "money") ?? "",
       commissionValue: applyMask(vehicle.commissionValue, "money") ?? "",
       chassiNumber: applyMask(vehicle.chassiNumber, "chassi") ?? "",
-      color: vehicle.color,
-      fuelType: vehicle.fuelType,
-      status: vehicle.status,
-      modelYear: String(vehicle.modelYear),
-      yearOfManufacture: String(vehicle.yearOfManufacture),
-      modelName: vehicle.modelName,
-      category: vehicle.category,
-      storeId: String(vehicle.store.id),
-      brandId: String(vehicle.brand.id),
+      color: vehicle.color ?? "",
+      fuelType: vehicle.fuelType ?? "",
+      status: vehicle.status ?? "",
+      modelYear: String(vehicle.modelYear ?? ""),
+      yearOfManufacture: String(vehicle.yearOfManufacture ?? ""),
+      modelName: vehicle.modelName ?? "",
+      category: vehicle.category ?? "",
+      storeId: String(vehicle.store.id ?? ""),
+      brandId: String(vehicle.brand.id ?? ""),
     },
-    purchaseValue: applyMask(payment.value, "money") ?? "",
+    purchaseValue: applyMask(payment?.value, "money") ?? "",
   };
 }
