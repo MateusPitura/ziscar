@@ -20,7 +20,7 @@ import { ITEMS_PER_PAGE } from '@shared/constants';
 export class AccountReceivableController {
   constructor(
     private readonly AccountReceivableService: AccountReceivableService,
-  ) {}
+  ) { }
 
   @Post('/')
   async createAccountReceivable(@Body() body: CreateAccountReceivableDTO) {
@@ -28,46 +28,15 @@ export class AccountReceivableController {
   }
 
   @Get('search')
-  async searchAccountsReceivable(
-    @Query() queryParams: QueryAccountReceivableDTO,
-  ): Promise<SearchResponse> {
-    try {
-      // Os parâmetros já vêm validados pelo ZodValidationPipe
-      const searchRequest = {
-        page: queryParams.page,
-        limit: queryParams.limit ?? ITEMS_PER_PAGE,
-        startDate: queryParams.startDate
-          ? new Date(queryParams.startDate)
-          : undefined,
-        endDate: queryParams.endDate
-          ? new Date(queryParams.endDate)
-          : undefined,
-        overallStatus: queryParams.overallStatus,
-        orderBy: queryParams.orderBy,
-      };
-
-      // Validações adicionais
-      if (
-        searchRequest.startDate &&
-        searchRequest.endDate &&
-        searchRequest.startDate > searchRequest.endDate
-      ) {
-        throw new BadRequestException(
-          'startDate deve ser anterior ou igual à endDate',
-        );
-      }
-
-      // Chamar o service
-      const result = await this.AccountReceivableService.search(searchRequest);
-
-      return result;
-    } catch (error) {
-      if (error instanceof BadRequestException) {
-        throw error;
-      }
-
-      throw new BadRequestException('Erro ao buscar contas a receber');
-    }
+  async searchAccountsReceivable(@Query() query: QueryAccountReceivableDTO) {
+    return this.AccountReceivableService.search(
+      query.page,
+      query.limit,
+      query.startDate ? new Date(query.startDate) : new Date('1970-01-01'),
+      query.endDate ? new Date(query.endDate) : new Date(),
+      query.overallStatus,
+      query.orderBy ?? 'description',
+    );
   }
 
   @Get('/:id')

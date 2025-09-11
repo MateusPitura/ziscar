@@ -20,7 +20,7 @@ export interface SearchResponseItem {
 
 export interface SearchResponse {
   total: number;
-  data: SearchResponseItem[];
+  data: AccountReceivable[];
 }
 
 export abstract class AccountReceivableRepository {
@@ -31,7 +31,15 @@ export abstract class AccountReceivableRepository {
   abstract findByInstallmentId(
     installmentId: string,
   ): Promise<AccountReceivable | null>;
-  abstract search(request: SearchRequest): Promise<SearchResponse>;
+
+  abstract search(
+    page: number,
+    limit: number,
+    startDate: Date,
+    endDate: Date,
+    overallStatus: 'PENDING' | 'PAID',
+    totalValue: string): Promise<SearchResponse>;
+
   abstract update(
     id: string,
     data: UpdateInput<AccountReceivable>,
