@@ -108,8 +108,8 @@ payload:
             id: 1,
             description: "Conta a receber 1",
             receivedFrom: "Cliente A",
-            totalValue: "10000",
-            overallStatus: "PENDING",
+            totalValue: "10000", // Soma do valor de todas as parcelas
+            overallStatus: "PENDING", // PAID quando todas as parcelas foram PAID e PENDING quando houver pelo menos 1 PENDING
             vehicleSaleId: 1 // ID da tabela VehicleSale,
             date: 2000-01-01 // Data de venda
         },
