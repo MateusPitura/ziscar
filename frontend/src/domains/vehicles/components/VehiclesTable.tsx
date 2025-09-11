@@ -98,15 +98,18 @@ export default function VehiclesTable(): ReactNode {
             activityStatus: "Status de atividade",
           }}
           formatFiltersValues={{
+            status: {
+              "": "Todos",
+              ...VehicleStatusText,
+            },
             activityStatus: ActivityStatusText,
           }}
           formatColumns={{
-            announcedPrice: "Preço anunciado",
             modelName: "Modelo",
             plateNumber: "Placa",
             modelYear: "Ano do modelo",
             status: "Status",
-            archivedAt: "Ativo",
+            announcedPrice: "Preço anunciado",
           }}
         />
         <Table.Filter form={<VehiclesFilterForm />} />
