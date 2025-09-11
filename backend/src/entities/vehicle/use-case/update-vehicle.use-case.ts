@@ -2,12 +2,14 @@ import { Inject, Injectable } from '@nestjs/common';
 import { VehicleRepository } from 'src/repositories/vehicle-repository';
 import { UpdateVehicleRequestDto, UpdateVehicleResponseDto } from '../dtos';
 import { FuelType, VehicleCategory, VehicleStatus } from '@shared/enums';
+import { ValidateVehicleUniqueFieldsUseCase } from './validate-vehicle-unique-fields.use-case';
 
 @Injectable()
 export class UpdateVehicleUseCase {
   constructor(
     @Inject(VehicleRepository)
     private readonly vehicleRepository: VehicleRepository,
+    private readonly validateVehicleUniqueFieldsUseCase: ValidateVehicleUniqueFieldsUseCase,
   ) {}
 
   async execute(
@@ -15,6 +17,12 @@ export class UpdateVehicleUseCase {
     data: UpdateVehicleRequestDto,
   ): Promise<UpdateVehicleResponseDto> {
     const { characteristics, payment, ...vehicleData } = data;
+
+    await this.validateVehicleUniqueFieldsUseCase.execute({
+      chassiNumber: vehicleData.chassiNumber,
+      plateNumber: vehicleData.plateNumber,
+      vehicleId: Number(id),
+    });
 
     if (vehicleData) await this.vehicleRepository.update(id, vehicleData);
 

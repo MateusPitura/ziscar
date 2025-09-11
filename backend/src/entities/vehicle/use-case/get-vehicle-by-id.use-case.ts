@@ -22,6 +22,11 @@ export class GetVehicleByIdUseCase {
       ? {
           purchaseDate: vehiclePurchases[0].date,
           paidTo: vehiclePurchases[0].accountPayable?.paidTo || null,
+          value:
+            vehiclePurchases[0].accountPayable?.accountPayableInstallments.reduce(
+              (total, installment) => total + installment.value,
+              0,
+            ) || 0,
         }
       : undefined;
 

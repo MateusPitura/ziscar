@@ -41,6 +41,18 @@ export class VehicleService implements VehicleRepository {
     });
   }
 
+  async findByChassiNumber(chassiNumber: string): Promise<Vehicle | null> {
+    return await this.prisma.vehicle.findUnique({
+      where: { chassiNumber },
+    });
+  }
+
+  async findByPlateNumber(plateNumber: string): Promise<Vehicle | null> {
+    return await this.prisma.vehicle.findUnique({
+      where: { plateNumber },
+    });
+  }
+
   async update(
     id: string,
     data: UpdateInput<Vehicle>,

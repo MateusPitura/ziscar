@@ -44,7 +44,7 @@ export const InsertVehicleRequestSchema = s.object({
   payment: s
     .object({
       purchaseDate: s.date(),
-      paidTo: s.string().nullable(),
+      paidTo: s.string(127).nullable(),
       installments: s.array(
         createAccountPayableInstallmentDTO
           .omit({
@@ -179,7 +179,6 @@ export const MakeVehicleSaleRequestSchema = s.object({
   installments: s.array(
     createAccountReceivableInstallmentDTO
       .omit({
-        installmentSequence: true,
         accountReceivableId: true,
         status: true,
         isRefund: true,
@@ -284,6 +283,7 @@ export const VehicleWithPaymentResponseSchema =
       .object({
         purchaseDate: s.date(),
         paidTo: s.string().nullable(),
+        value: s.numberPositive(),
       })
       .optional(),
   });

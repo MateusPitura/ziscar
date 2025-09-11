@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/infra/database/prisma.service';
 import {
   InstallmentStatus,
@@ -15,6 +19,7 @@ import { MakeVehicleSaleRequestDto, MakeVehicleSaleResponseDto } from '../dtos';
 import { deepClone } from 'src/utils/deepClone';
 import { UserService } from 'src/entities/user/user.service';
 import { AccountPayableInstallmentService } from 'src/entities/account-payable-installment/account-payable-installment.service';
+import { AccountPayable } from '@prisma/client';
 
 @Injectable()
 export class MakeSaleUseCase {
@@ -77,22 +82,31 @@ export class MakeSaleUseCase {
         userId,
       );
 
-      const createdCommissionAccountPayable =
-        await this.accountPayableService.create({
-          description: `Comissão da venda do ${updatedVehicle.modelName} ${updatedVehicle.modelYear}`,
-          paidTo: user?.fullName,
-        });
+      let createdCommissionAccountPayable: AccountPayable | null = null;
 
-      await this.accountPayableInstallmentService.create({
-        accountPayableId: createdCommissionAccountPayable.id,
-        installmentSequence: 1,
-        dueDate: date,
-        value: commissionValue,
-        status: InstallmentStatus.PENDING,
-        isUpfront: true,
-        isRefund: false,
-        refundAccountPayableInstallmentId: null,
-      });
+      if (commissionValue > 0) {
+        createdCommissionAccountPayable =
+          await this.accountPayableService.create({
+            description: `Comissão da venda do ${updatedVehicle.modelName} ${updatedVehicle.modelYear}`,
+            paidTo: user?.fullName,
+          });
+
+        if (!createdCommissionAccountPayable)
+          throw new InternalServerErrorException(
+            'Erro ao criar conta a receber da comissão',
+          );
+
+        await this.accountPayableInstallmentService.create({
+          accountPayableId: createdCommissionAccountPayable.id,
+          installmentSequence: 1,
+          dueDate: date,
+          value: 1,
+          status: InstallmentStatus.PENDING,
+          isUpfront: true,
+          isRefund: false,
+          refundAccountPayableInstallmentId: null,
+        });
+      }
 
       await this.vehicleService.update(String(vehicleId), {
         status: VehicleStatus.SOLD,
@@ -105,7 +119,7 @@ export class MakeSaleUseCase {
           userId,
           vehicleId: Number(vehicleId),
           accountReceivableId: createdAccountReceivable.id,
-          accountPayableId: createdCommissionAccountPayable.id,
+          accountPayableId: createdCommissionAccountPayable?.id,
           vehicleSnapshot: deepClone(updatedVehicle),
           customerSnapshot: deepClone(customer),
         },
@@ -124,11 +138,11 @@ export class MakeSaleUseCase {
     userId: number,
   ): Promise<void> {
     await Promise.all(
-      installments.map(async (installment, index) => {
+      installments.map(async (installment) => {
         const accountReceivableInstallment =
           await this.accountReceivableInstallmentService.create({
             accountReceivableId,
-            installmentSequence: index + 1,
+            installmentSequence: installment.installmentSequence,
             dueDate: installment.dueDate,
             value: installment.value,
             status: InstallmentStatus.PENDING,

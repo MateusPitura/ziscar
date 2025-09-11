@@ -42,11 +42,11 @@ export class InsertExpenseUseCase {
       });
 
       await Promise.all(
-        installments.map(async (installment, index) => {
+        installments.map(async (installment) => {
           const accountPayableInstallment =
             await this.accountPayableInstallmentService.create({
               accountPayableId: accountPayable.id,
-              installmentSequence: index + 1,
+              installmentSequence: installment.installmentSequence,
               dueDate: installment.dueDate,
               value: installment.value,
               status: InstallmentStatus.PENDING,
