@@ -20,7 +20,15 @@ export interface SearchResponseItem {
 
 export interface SearchResponse {
   total: number;
-  data: AccountReceivable[];
+  data: {
+    id: number;
+    description: string;
+    receivedFrom: string;
+    totalValue: number;
+    overallStatus: 'PAID' | 'PENDING';
+    vehicleSaleId: number | null;
+    date: Date | null;
+  }[];
 }
 
 export abstract class AccountReceivableRepository {

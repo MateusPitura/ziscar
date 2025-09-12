@@ -79,16 +79,25 @@ export class AccountReceivableService implements AccountReceivableRepository {
     const accounts = await this.prisma.accountReceivable.findMany({
       where: {
         accountReceivableInstallments: overallStatus
-          ? {
-            every: {
-              status: overallStatus
+          ? overallStatus === 'PAID'
+            ? {
+              every: { status: 'PAID' }, // todas pagas
             }
-          } // só filtra se veio status
+            : overallStatus === 'PENDING'
+              ? {
+                some: { status: 'PENDING' }, // pelo menos uma pendente
+              }
+              : undefined
           : undefined,
         createdAt: {
           gte: startDate,
           lte: endDate ?? new Date(),
         }
+      },
+      include: {
+        accountReceivableInstallments: true,
+        vehicleSales: true,
+
       },
       skip: (page - 1) * limit,
       take: limit,
@@ -96,10 +105,15 @@ export class AccountReceivableService implements AccountReceivableRepository {
         description: 'asc'
       }
     })
+
     const total = await this.prisma.accountReceivable.count({
       where: {
         accountReceivableInstallments: overallStatus
-          ? { every: { status: overallStatus } }
+          ? overallStatus === 'PAID'
+            ? { every: { status: 'PAID' } }
+            : overallStatus === 'PENDING'
+              ? { some: { status: 'PENDING' } }
+              : undefined
           : undefined,
         createdAt: {
           gte: startDate,
@@ -108,8 +122,34 @@ export class AccountReceivableService implements AccountReceivableRepository {
       },
     });
 
+    const data = accounts.map(acc => {
+      const installments = acc.accountReceivableInstallments;
 
-    return { total, data: accounts }
+      // soma do valor de todas as parcelas
+      const totalValue = installments.reduce(
+        (sum, inst) => sum + Number(inst.value),
+        0
+      );
+
+      // regra para definir overallStatus
+      const allPaid = installments.every(inst => inst.status === 'PAID');
+      const overallStatus: 'PAID' | 'PENDING' = allPaid ? 'PAID' : 'PENDING';
+
+      return {
+        id: acc.id,
+        description: acc.description ?? '',
+        receivedFrom: acc.receivedFrom ?? '',
+        totalValue,
+        overallStatus,
+        vehicleSaleId: acc.vehicleSales?.[0]?.vehicleId || null,
+        date: acc.vehicleSales?.[0]?.date ?? null,
+      };
+    });
+
+    return {
+      total,
+      data,
+    };
   }
 
   async update(
