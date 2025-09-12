@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -60,7 +61,9 @@ export class MakeSaleUseCase {
       if (!vehicle) throw new NotFoundException('Vehicle not found');
       if (!customer) throw new NotFoundException('Customer not found');
 
-      // Verificar outras regras de negocio, como status inválido para venda,etc
+      if (vehicle.status === VehicleStatus.SOLD) {
+        throw new BadRequestException('Vehicle is already sold');
+      }
 
       let updatedVehicle = vehicle;
       if (vehicle.commissionValue !== commissionValue) {
