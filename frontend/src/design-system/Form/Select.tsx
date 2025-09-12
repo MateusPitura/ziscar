@@ -89,6 +89,7 @@ export default function Select<T extends FieldValues>({
             fullWidth
             state={disabled ? "disabled" : undefined}
             className="!h-10"
+            data-cy={`select-${name}`}
           />
         </Popover.Trigger>
         <Popover.Content align="start" className="!p-2">
@@ -118,6 +119,7 @@ export default function Select<T extends FieldValues>({
                       <CommandItem
                         key={option.value}
                         value={option.value}
+                        data-cy={`select-option-${option.value}`}
                         onSelect={(value) => {
                           if (value === selectedValue) {
                             onChange?.(undefined);

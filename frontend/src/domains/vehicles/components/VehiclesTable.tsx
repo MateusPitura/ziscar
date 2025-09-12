@@ -94,7 +94,6 @@ export default function VehiclesTable(): ReactNode {
           }}
           formatFiltersValues={{}}
           formatColumns={{
-            announcedPrice: "Preço anunciado",
             modelName: "Modelo",
             plateNumber: "Placa",
             modelYear: "Ano do modelo",

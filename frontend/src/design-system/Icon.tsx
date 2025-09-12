@@ -17,7 +17,7 @@ export default function Icon({
   if (!BareIcon) return null;
 
   return (
-    <div className={className}>
+    <div className={className} data-cy={`icon-${iconName}`}>
       <BareIcon color="inherit" fontSize={fontSize} />
     </div>
   );
