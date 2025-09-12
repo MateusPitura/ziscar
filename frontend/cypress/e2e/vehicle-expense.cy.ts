@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
 
-describe("Vehicle", () => {
+describe("Vehicle Expense", () => {
   beforeEach(() => {
     cy.login();
   });
