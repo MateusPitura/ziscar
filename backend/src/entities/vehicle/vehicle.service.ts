@@ -24,7 +24,7 @@ import type {
   FetchVehicleBrandsResponseDto,
 } from './dtos';
 import { GET_VEHICLE, VEHICLE_WITH_PAYMENT_SELECT } from './constants';
-import { ActivityStatus } from '@shared/types';
+import { VEHICLE_INACTIVE_STATUS } from '@shared/types';
 
 @Injectable()
 export class VehicleService implements VehicleRepository {
@@ -101,9 +101,18 @@ export class VehicleService implements VehicleRepository {
 
     const where: Prisma.VehicleWhereInput = {};
 
+    where.status = { not: VehicleStatus.SOLD };
+
     if (params.storeId) where.storeId = Number(params.storeId);
     if (params.brandId) where.brandId = Number(params.brandId);
-    if (params.status) where.status = params.status as VehicleStatus;
+    if (params.status) {
+      if (params.status === VEHICLE_INACTIVE_STATUS) {
+        where.archivedAt = { not: null };
+      } else {
+        where.status = params.status as VehicleStatus;
+      }
+    }
+
     if (params.category) where.category = params.category as VehicleCategory;
     if (params.modelYear) where.modelYear = Number(params.modelYear);
     if (params.yearOfManufacture)
@@ -116,21 +125,16 @@ export class VehicleService implements VehicleRepository {
       };
 
     if (params.plateNumber && params.plateNumber !== '')
-      where.plateNumber = { equals: params.plateNumber };
+      where.plateNumber = {
+        contains: params.plateNumber,
+        mode: 'insensitive',
+      };
 
     if (params.announcedPriceMin || params.announcedPriceMax)
       where.announcedPrice = {
         gte: params.announcedPriceMin ?? undefined,
         lte: params.announcedPriceMax ?? undefined,
       };
-
-    if (params.activityStatus === ActivityStatus.INACTIVE) {
-      where.archivedAt = { not: null };
-    }
-
-    if (params.activityStatus === ActivityStatus.ACTIVE) {
-      where.archivedAt = null;
-    }
 
     if (params.startDate || params.endDate) {
       where.createdAt = {

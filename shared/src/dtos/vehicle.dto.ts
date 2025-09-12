@@ -22,7 +22,7 @@ import {
   createAccountReceivableDTO,
   createAccountReceivableInstallmentDTO,
 } from "./account-receivable.dto";
-import { ActivityStatus } from "@shared/types";
+import { VehicleStatusForFilter } from "../types";
 
 export const InsertVehicleRequestSchema = s.object({
   chassiNumber: s.string(17),
@@ -77,7 +77,7 @@ export const SearchVehiclesRequestSchema = BasePaginationSchema.merge(
   .extend({
     storeId: s.id().optional(),
     brandId: s.id().optional(),
-    status: s.enumeration(VEHICLESTATUS_VALUES).optional(),
+    status: s.enumeration(VehicleStatusForFilter).optional(),
     category: s.enumeration(VEHICLECATEGORY_VALUES).optional(),
     modelYear: s.number().optional(),
     yearOfManufacture: s.number().optional(),
@@ -85,7 +85,6 @@ export const SearchVehiclesRequestSchema = BasePaginationSchema.merge(
     plateNumber: s.string(7).optional(),
     announcedPriceMin: s.number().optional(),
     announcedPriceMax: s.number().optional(),
-    activityStatus: s.enumeration(Object.values(ActivityStatus)).optional(),
   })
   .refine(...s.dateRangeRule);
 
