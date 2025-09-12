@@ -66,13 +66,14 @@ function Header({ children, className, gridColumns }: HeaderProps) {
 }
 
 interface CellProps {
+  id?: string;
   className?: string;
   colSpan?: number;
   label?: ReactNode;
   columnLabel?: string;
 }
 
-function Cell({ label, className, colSpan, columnLabel }: CellProps) {
+function Cell({ id, label, className, colSpan, columnLabel }: CellProps) {
   const colSpanAux = colSpan ?? 2;
 
   return (
@@ -83,7 +84,9 @@ function Cell({ label, className, colSpan, columnLabel }: CellProps) {
       }}
     >
       <span className="font-semibold xl:hidden">{columnLabel}: </span>
-      <span className={className}>{label}</span>
+      <span className={className} data-cy={`${columnLabel}-${id}`}>
+        {label}
+      </span>
     </span>
   );
 }
