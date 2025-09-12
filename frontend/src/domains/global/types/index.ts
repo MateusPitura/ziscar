@@ -80,7 +80,12 @@ export interface PageablePayload<T> {
   total: number;
 }
 
-export type DateFormats = "yyyy-MM-dd" | "dd/MM/yyyy" | "HH-mm" | "dd-MM-yyyy";
+export type DateFormats =
+  | "yyyy-MM-dd"
+  | "dd/MM/yyyy"
+  | "HH-mm"
+  | "dd-MM-yyyy"
+  | "dd/MM/yyyy HH:mm";
 
 export interface Options {
   value: string;
@@ -92,7 +97,9 @@ export type AddressFormInputs = s.infer<typeof SchemaAddress>;
 
 export type BrazilianState = (typeof BRAZILIANSTATE_VALUES)[number];
 
-export type PayableInstallmentFormInputs = s.infer<typeof SchemaPayableInstallment>;
+export type PayableInstallmentFormInputs = s.infer<
+  typeof SchemaPayableInstallment
+>;
 export type ReceivableInstallmentFormInputs = s.infer<
   typeof SchemaReceivableInstallment
 >;

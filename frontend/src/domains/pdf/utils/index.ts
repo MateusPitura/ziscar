@@ -25,3 +25,16 @@ export function formatAppliedFilters({
   }
   return appliedFilters;
 }
+
+export function isNumericColumn(columnKey: string): boolean {
+  const monetaryPatterns = [
+    /price/i,
+    /value/i,
+    /amount/i,
+    /cost/i,
+    /total/i,
+    /^r\$/i,
+  ];
+
+  return monetaryPatterns.some((pattern) => pattern.test(columnKey));
+}

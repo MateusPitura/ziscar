@@ -89,8 +89,8 @@ export default function CustomersTable(): ReactNode {
               },
             }}
             formatColumns={{
-              cpf: "CPF",
               fullName: "Nome completo",
+              cpf: "CPF",
               email: "Email",
               phone: "Celular",
               archivedAt: "Ativo",

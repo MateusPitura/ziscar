@@ -4,27 +4,26 @@ import type { ReactNode } from "react";
 
 const styles = StyleSheet.create({
   header: {
+    height: 60,
     flexDirection: "row",
-    marginBottom: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: "#CCCCCC",
-    paddingBottom: 15,
+    marginBottom: 10,
+    paddingBottom: 10,
     backgroundColor: "#FFFFFF",
   },
   gridColumn: {
     flex: 1,
-    minHeight: 50,
+    minHeight: 40,
   },
   logoContainer: {
-    height: 40,
-    backgroundColor: "#F3F4F6",
-    borderRadius: 4,
+    height: 50,
+    backgroundColor: "#F8F9FA",
+    borderRadius: 3,
     justifyContent: "center",
     alignItems: "center",
-    marginRight: 10,
+    marginRight: 8,
   },
   logoText: {
-    fontSize: 8,
+    fontSize: 7,
     color: "#9CA3AF",
   },
   centerContainer: {
@@ -32,13 +31,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   title: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "bold",
-    marginBottom: 3,
+    marginBottom: 2,
     textAlign: "center",
   },
   subtitle: {
-    fontSize: 10,
+    fontSize: 9,
     color: "#666666",
     textAlign: "center",
   },
@@ -47,20 +46,20 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     justifyContent: "flex-end",
     alignContent: "flex-start",
-    marginLeft: 10,
+    marginLeft: 8,
   },
   filterChip: {
-    backgroundColor: "#F3F4F6",
-    borderRadius: 12,
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    marginBottom: 3,
-    marginLeft: 3,
-    borderWidth: 1,
+    backgroundColor: "#F8F9FA",
+    borderRadius: 10,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    marginBottom: 2,
+    marginLeft: 2,
+    borderWidth: 0.5,
     borderColor: "#E5E7EB",
   },
   filterText: {
-    fontSize: 8,
+    fontSize: 7,
     color: "#374151",
   },
 });
@@ -86,7 +85,8 @@ export default function ReportHeader({
         <View style={styles.centerContainer}>
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.subtitle}>
-            Gerado em {safeFormat({ date: new Date(), format: "dd/MM/yyyy" })}
+            Gerado em{" "}
+            {safeFormat({ date: new Date(), format: "dd/MM/yyyy HH:mm" })}
           </Text>
         </View>
       </View>

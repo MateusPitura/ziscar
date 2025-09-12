@@ -3,20 +3,21 @@ import { ReactElement } from "react";
 import ReportHeader from "./ReportHeader";
 import TableHeader from "./TableHeader";
 import PageFooter from "./PageFooter";
+import { isNumericColumn } from "../utils";
 
 const styles = StyleSheet.create({
   page: {
     flexDirection: "column",
     backgroundColor: "#FFFFFF",
-    padding: 20,
-    paddingBottom: 30,
+    padding: 15,
+    paddingBottom: 25,
   },
   content: {
     flex: 1,
   },
   emptyState: {
     textAlign: "center",
-    marginTop: 50,
+    marginTop: 30,
   },
   emptyText: {
     fontSize: 16,
@@ -27,26 +28,23 @@ const styles = StyleSheet.create({
   },
   tableRow: {
     flexDirection: "row",
-    minHeight: 25,
-    borderStyle: "solid",
-    borderLeftWidth: 1,
-    borderTopWidth: 1,
-    borderColor: "#CCCCCC",
+    minHeight: 20,
   },
   tableRowAlternate: {
-    backgroundColor: "#F9FAFB",
+    backgroundColor: "#F0F0F0",
   },
   tableCol: {
     borderStyle: "solid",
-    borderWidth: 1,
-    borderLeftWidth: 0,
-    borderTopWidth: 0,
-    borderColor: "#CCCCCC",
-    padding: 6,
+    borderLeftWidth: 0.25,
+    borderColor: "#DDDDDD",
+    padding: 4,
     justifyContent: "center",
   },
+  tableColNumeric: {
+    alignItems: "flex-end",
+  },
   tableCell: {
-    fontSize: 8,
+    fontSize: 10,
     color: "#000000",
   },
 });
@@ -80,9 +78,13 @@ function Report<T>({
     );
   }
 
-  const keys = Object.keys(data[0] || {}).filter((key) => formatColumns[key]);
+  const keys = Object.keys(formatColumns).filter(
+    (key) =>
+      formatColumns[key] &&
+      (data[0] as Record<string, unknown>)?.[key] !== undefined
+  );
   const columnWidth = `${100 / keys.length}%`;
-  const itemsPerPage = 16;
+  const itemsPerPage = 22;
 
   const formatValue = (value: unknown, key: string): string => {
     if (key === "archivedAt") return value ? "Não" : "Sim";
@@ -113,18 +115,28 @@ function Report<T>({
                 ]}
                 key={`row-${index}`}
                 wrap={false}
-                minPresenceAhead={10}
+                minPresenceAhead={8}
               >
-                {keys.map((key) => (
-                  <View
-                    key={key}
-                    style={[styles.tableCol, { width: columnWidth }]}
-                  >
-                    <Text style={styles.tableCell}>
-                      {formatValue((item as Record<string, unknown>)[key], key)}
-                    </Text>
-                  </View>
-                ))}
+                {keys.map((key) => {
+                  const isMonetary = isNumericColumn(key);
+                  return (
+                    <View
+                      key={key}
+                      style={[
+                        styles.tableCol,
+                        { width: columnWidth },
+                        ...(isMonetary ? [styles.tableColNumeric] : []),
+                      ]}
+                    >
+                      <Text style={styles.tableCell}>
+                        {formatValue(
+                          (item as Record<string, unknown>)[key],
+                          key
+                        )}
+                      </Text>
+                    </View>
+                  );
+                })}
               </View>
             ))}
           </View>
