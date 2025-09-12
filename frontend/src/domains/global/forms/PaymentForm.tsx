@@ -95,6 +95,7 @@ export default function PaymentForm({
         <DataField
           label="Valor total"
           value={formatTotalValue(installmentValueWatch, upfrontValueWatch)}
+          dataCy="payment-total-value"
         />
       </div>
     </>

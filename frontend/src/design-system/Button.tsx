@@ -67,6 +67,7 @@ const BaseButton = forwardRef(
               "justify-start": textAlign === "start",
               "justify-end": textAlign === "end",
             })}
+            data-cy={`button-label-${label}`}
           >
             {label}
           </span>
