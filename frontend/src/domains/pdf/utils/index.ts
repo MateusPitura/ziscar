@@ -20,10 +20,34 @@ export function formatAppliedFilters({
     if (formattedValue) {
       appliedFilters[formattedKey] = formattedValue[value];
     } else {
-      appliedFilters[formattedKey] = value;
+      appliedFilters[formattedKey] = formatFilterValue(value, key);
     }
   }
   return appliedFilters;
+}
+
+function formatFilterValue(value: string, key: string): string {
+  if (
+    key.toLowerCase().includes("price") ||
+    key.toLowerCase().includes("value")
+  ) {
+    const numValue = parseInt(value);
+    if (!isNaN(numValue)) {
+      return `R$ ${(numValue / 100).toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      })}`;
+    }
+  }
+
+  if (key.toLowerCase().includes("date")) {
+    const date = new Date(value);
+    if (!isNaN(date.getTime())) {
+      return date.toLocaleDateString("pt-BR");
+    }
+  }
+
+  return value;
 }
 
 export function isNumericColumn(columnKey: string): boolean {

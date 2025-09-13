@@ -143,7 +143,7 @@ function VehiclesFilterFormContent({
           name="status"
           label="Status"
           options={[
-            { value: "", label: "Todos os status" },
+            { value: "", label: "Todos os ativos" },
             ...Object.values(VehicleStatusForFilter).map((vehicleStatus) => ({
               value: vehicleStatus,
               label: VehicleStatusText[vehicleStatus],
