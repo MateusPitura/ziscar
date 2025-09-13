@@ -138,7 +138,7 @@ export class AccountReceivableService implements AccountReceivableRepository {
         receivedFrom: acc.receivedFrom ?? '',
         totalValue,
         overallStatus,
-        vehicleSaleId: acc.vehicleSales?.[0]?.vehicleId || null,
+        vehicleSaleId: acc.vehicleSales?.[0]?.id || null,
         date: acc.vehicleSales?.[0]?.date ?? null,
       };
     });

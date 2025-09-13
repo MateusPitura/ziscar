@@ -142,7 +142,6 @@ export class AccountReceivableInstallmentService
       value: i.value,
       isRefund: false,
       isUpfront: i.isUpfront,
-      vehicleSaleId: i.accountReceivableId,
       paymentMethodReceivables: i.paymentMethodReceivables,
     }));
   }

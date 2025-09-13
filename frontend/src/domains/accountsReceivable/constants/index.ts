@@ -21,8 +21,8 @@ export const ACCOUNTS_RECEIVABLE_TABLE = {
   description: {
     label: "Descrição",
   },
-  installmentsNumber: {
-    label: "Número de parcelas",
+  date: {
+    label: "Data de venda",
   },
   receivedFrom: {
     label: "Recebido de",

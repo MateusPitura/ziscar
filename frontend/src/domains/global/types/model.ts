@@ -62,6 +62,7 @@ export interface AccountReceivable {
   overallStatus: InstallmentStatusType;
   installmentsNumber: number;
   vehicleSaleId: number;
+  date: string;
 }
 
 export interface AccountReceivableInstallment {
@@ -154,7 +155,7 @@ export type FetchCustomer = Pick<
 export type FetchAccountReceivable = Pick<
   AccountReceivable,
   | "id"
-  | "installmentsNumber"
+  | "date"
   | "description"
   | "receivedFrom"
   | "totalValue"

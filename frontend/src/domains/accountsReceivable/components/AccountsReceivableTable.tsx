@@ -86,7 +86,7 @@ export default function AccountsReceivableTable(): ReactNode {
           }}
           formatColumns={{
             description: "Descrição",
-            installmentsNumber: "Número de parcelas",
+            date: "Data de venda",
             receivedFrom: "Recebido de",
             overallStatus: "Status geral",
             totalValue: "Valor total",
@@ -97,9 +97,7 @@ export default function AccountsReceivableTable(): ReactNode {
       <Table>
         <Table.Header gridColumns={gridColumns}>
           <Table.Head label={ACCOUNTS_RECEIVABLE_TABLE.description.label} />
-          <Table.Head
-            label={ACCOUNTS_RECEIVABLE_TABLE.installmentsNumber.label}
-          />
+          <Table.Head label={ACCOUNTS_RECEIVABLE_TABLE.date.label} />
           <Table.Head label={ACCOUNTS_RECEIVABLE_TABLE.receivedFrom.label} />
           <Table.Head
             label={ACCOUNTS_RECEIVABLE_TABLE.overallStatus.label}
@@ -121,8 +119,8 @@ export default function AccountsReceivableTable(): ReactNode {
                 columnLabel={ACCOUNTS_RECEIVABLE_TABLE.description.label}
               />
               <Table.Cell
-                label={accountReceivable.installmentsNumber}
-                columnLabel={ACCOUNTS_RECEIVABLE_TABLE.installmentsNumber.label}
+                label={accountReceivable.date}
+                columnLabel={ACCOUNTS_RECEIVABLE_TABLE.date.label}
               />
               <Table.Cell
                 label={accountReceivable.receivedFrom}
