@@ -1,31 +1,28 @@
 import safeFormat from "@/domains/global/utils/safeFormat";
-import { InstallmentStatus, PaymentMethodReceivableType } from "@shared/enums";
+import { InstallmentStatus, PaymentMethodPayableType } from "@shared/enums";
 import {
-  AccountsReceivableFilterFormInputs,
+  AccountsPayableFilterFormInputs,
   PaymentMethodFormInputs,
 } from "../types";
 
 export const paymentMethodDefaultValues: PaymentMethodFormInputs = {
   paymentDate: safeFormat({ date: new Date(), format: "yyyy-MM-dd" }),
-  type: PaymentMethodReceivableType.CREDIT_CARD,
+  type: PaymentMethodPayableType.CREDIT_CARD,
 };
 
-export const accountReceivableFilterDefaultValues: AccountsReceivableFilterFormInputs =
+export const accountPayableFilterDefaultValues: AccountsPayableFilterFormInputs =
   {
     startDate: "",
     endDate: "",
     overallStatus: InstallmentStatus.PENDING,
   };
 
-export const ACCOUNTS_RECEIVABLE_TABLE = {
+export const ACCOUNTS_PAYABLE_TABLE = {
   description: {
     label: "Descrição",
   },
-  date: {
-    label: "Data de venda",
-  },
-  receivedFrom: {
-    label: "Recebido de",
+  paidTo: {
+    label: "Pago a",
   },
   overallStatus: {
     label: "Status geral",
@@ -36,7 +33,7 @@ export const ACCOUNTS_RECEIVABLE_TABLE = {
   },
 } as const;
 
-export const ACCOUNTS_RECEIVABLE_INSTALLMENTS_TABLE = {
+export const ACCOUNTS_PAYABLE_INSTALLMENTS_TABLE = {
   installmentSequence: {
     label: "Sequência",
     colSpan: 1,

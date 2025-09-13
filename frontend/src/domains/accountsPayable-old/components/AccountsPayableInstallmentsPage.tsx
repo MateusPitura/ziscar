@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import AccountsPayableInstallmentsContainer from "./AccountsPayableInstallmentsContainer";
+import AccountsPayableInstallmentsContainer from "./AccountsPayableInstallmentsPageContainer";
 
 export default function AccountsPayableInstallmentsPage(): ReactNode {
   return <AccountsPayableInstallmentsContainer />;
