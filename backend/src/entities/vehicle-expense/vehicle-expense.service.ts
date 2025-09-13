@@ -39,7 +39,7 @@ export class VehicleExpenseService implements VehicleExpenseRepository {
     return await this.prisma.vehicleExpense.findMany({
       where: { vehicleId: Number(vehicleId) },
       select: VEHICLE_EXPENSE_SELECT,
-      orderBy: { createdAt: 'desc' },
+      orderBy: { competencyDate: 'desc' },
     });
   }
 

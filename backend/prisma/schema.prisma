@@ -55,7 +55,7 @@ model Vehicle {
   brand             VehicleBrand     @relation(fields: [brandId], references: [id])
   category          VehicleCategory?
   kilometers        Int?
-  plateNumber       String           @db.VarChar(7)
+  plateNumber       String           @unique @db.VarChar(7)
   announcedPrice    Int?
   minimumPrice      Int?
   commissionValue   Int
@@ -119,8 +119,8 @@ model VehicleSale {
   vehicle             Vehicle           @relation(fields: [vehicleId], references: [id])
   accountReceivableId Int
   accountReceivable   AccountReceivable @relation(fields: [accountReceivableId], references: [id])
-  accountPayableId    Int
-  accountPayable      AccountPayable    @relation(fields: [accountPayableId], references: [id])
+  accountPayableId    Int?
+  accountPayable      AccountPayable?    @relation(fields: [accountPayableId], references: [id])
 
   vehicleSnapshot  Json
   customerSnapshot Json

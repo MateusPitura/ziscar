@@ -30,7 +30,7 @@ export const queryAccountReceivableDTO = s.object({
 });
 
 export const createAccountReceivableInstallmentDTO = s.object({
-  installmentSequence: s.number().min(1),
+  installmentSequence: s.number().min(0),
   dueDate: s.date(),
   value: s.number().min(0),
   status: s.nativeEnum(InstallmentStatus),
@@ -41,7 +41,7 @@ export const createAccountReceivableInstallmentDTO = s.object({
 });
 
 export const updateAccountReceivableInstallmentDTO = s.object({
-  installmentSequence: s.number().min(1),
+  installmentSequence: s.number().min(0),
   dueDate: s.date(),
   value: s.number().min(0),
   status: s.nativeEnum(InstallmentStatus),

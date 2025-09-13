@@ -8,14 +8,13 @@ import {
   VehicleCategory,
   VehicleCategoryType,
   VehicleStatus,
-  VehicleStatusType,
 } from "@shared/enums";
 import {
   VehicleExpenseFormInputs,
   VehicleFormInputs,
   VehiclesFilterFormInputs,
 } from "../types";
-import { ActivityStatus } from "@shared/types";
+import { VehicleStatusForFilterType } from "@shared/types";
 
 export const vehicleFilterDefaultValues: VehiclesFilterFormInputs = {
   startDate: "",
@@ -30,21 +29,14 @@ export const vehicleFilterDefaultValues: VehiclesFilterFormInputs = {
   plateNumber: "",
   announcedPriceMin: "",
   announcedPriceMax: "",
-  activityStatus: ActivityStatus.ACTIVE,
 };
 
-export const ActivityStatusText: Record<ActivityStatus, string> = {
-  ALL: "Todos",
-  INACTIVE: "Inativos",
-  ACTIVE: "Ativos",
-};
-
-export const VehicleStatusText: Record<VehicleStatusType, string> = {
+export const VehicleStatusText: Record<VehicleStatusForFilterType, string> = {
   DELIVERED: "Entregue",
   IN_STOCK: "Em Estoque",
   MAINTENANCE: "Em Manutenção",
   PURCHASED: "Comprado",
-  SOLD: "Vendido",
+  INACTIVE: "Inativo",
 };
 
 export const FuelTypeText: Record<FuelTypeType, string> = {

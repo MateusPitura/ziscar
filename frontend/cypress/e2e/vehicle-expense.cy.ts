@@ -26,7 +26,7 @@ describe("Vehicle Expense", () => {
           paidTo: "Manutenção",
           installments: [
             {
-              installmentSequence: 2,
+              installmentSequence: 1,
               dueDate: "2025-01-01",
               value: "10000",
               isUpfront: false,
@@ -100,7 +100,7 @@ describe("Vehicle Expense", () => {
           paidTo: "IPVA",
           installments: [
             {
-              installmentSequence: 2,
+              installmentSequence: 1,
               dueDate: null,
               value: "10000",
               isUpfront: false,
@@ -113,7 +113,7 @@ describe("Vehicle Expense", () => {
               ],
             },
             {
-              installmentSequence: 1,
+              installmentSequence: 0,
               dueDate: "2025-01-01",
               value: "10000",
               isUpfront: true,

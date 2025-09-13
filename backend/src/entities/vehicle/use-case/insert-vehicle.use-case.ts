@@ -6,6 +6,7 @@ import { AccountPayableInstallmentService } from 'src/entities/account-payable-i
 import { PaymentMethodPayableService } from 'src/entities/payment-method-payable/payment-method-payable.service';
 import { PrismaService } from 'src/infra/database/prisma.service';
 import { InstallmentStatus, PaymentMethodPayableType } from '@prisma/client';
+import { ValidateVehicleUniqueFieldsUseCase } from './validate-vehicle-unique-fields.use-case';
 
 @Injectable()
 export class InsertVehicleUseCase {
@@ -14,6 +15,7 @@ export class InsertVehicleUseCase {
     private readonly accountPayableService: AccountPayableService,
     private readonly accountPayableInstallmentService: AccountPayableInstallmentService,
     private readonly paymentMethodPayableService: PaymentMethodPayableService,
+    private readonly validateVehicleUniqueFieldsUseCase: ValidateVehicleUniqueFieldsUseCase,
     private readonly prisma: PrismaService,
   ) {}
 
@@ -22,6 +24,11 @@ export class InsertVehicleUseCase {
     userId: number,
   ): Promise<InsertVehicleResponseDto> {
     const { characteristics, payment, ...vehicleInputData } = input;
+
+    await this.validateVehicleUniqueFieldsUseCase.execute({
+      chassiNumber: vehicleInputData.chassiNumber,
+      plateNumber: vehicleInputData.plateNumber,
+    });
 
     let vehicleId: number;
 

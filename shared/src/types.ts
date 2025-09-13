@@ -1,9 +1,18 @@
-import { Resources, Actions } from "./enums";
+import {
+  Resources,
+  Actions,
+  VEHICLESTATUS_VALUES,
+  VehicleStatus,
+} from "./enums";
 
 export type Permissions = Record<Resources, Record<Actions, boolean>>;
 
-export enum ActivityStatus {
-  ALL = "ALL",
-  INACTIVE = "INACTIVE",
-  ACTIVE = "ACTIVE",
-}
+export const VEHICLE_INACTIVE_STATUS = "INACTIVE";
+
+export const VehicleStatusForFilter = [
+  ...VEHICLESTATUS_VALUES.filter((status) => status !== VehicleStatus.SOLD),
+  VEHICLE_INACTIVE_STATUS,
+];
+
+export type VehicleStatusForFilterType =
+  (typeof VehicleStatusForFilter)[number];
