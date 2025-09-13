@@ -85,11 +85,11 @@ export default function AccountsReceivableTable(): ReactNode {
             },
           }}
           formatColumns={{
-            installmentsNumber: "Número de parcelas",
             description: "Descrição",
+            installmentsNumber: "Número de parcelas",
             receivedFrom: "Recebido de",
-            totalValue: "Valor total",
             overallStatus: "Status geral",
+            totalValue: "Valor total",
           }}
         />
         <Table.Filter form={<AccountsReceivableFilterForm />} />

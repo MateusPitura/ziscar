@@ -4,27 +4,22 @@ import type { ReactNode } from "react";
 const styles = StyleSheet.create({
   tableRow: {
     flexDirection: "row",
-    minHeight: 25,
-    borderStyle: "solid",
-    borderLeftWidth: 1,
-    borderTopWidth: 1,
-    borderColor: "#CCCCCC",
-    marginTop: 5,
-    backgroundColor: "#F3F4F6",
+    minHeight: 20,
+    marginTop: 3,
+    backgroundColor: "#F8F9FA",
   },
   tableColHeader: {
     borderStyle: "solid",
-    borderWidth: 1,
-    borderLeftWidth: 0,
-    borderTopWidth: 0,
-    borderColor: "#CCCCCC",
-    padding: 6,
+    borderLeftWidth: 0.5,
+    borderBottomWidth: 0.5,
+    borderColor: "#DDDDDD",
+    padding: 4,
     justifyContent: "center",
+    alignItems: "center",
   },
   tableCellHeader: {
-    fontSize: 9,
+    fontSize: 11,
     fontWeight: "bold",
-    color: "#374151",
   },
 });
 

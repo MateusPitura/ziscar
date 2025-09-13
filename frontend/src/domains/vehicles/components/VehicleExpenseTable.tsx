@@ -75,6 +75,7 @@ export default function VehicleExpenseTable(): ReactNode {
         <DataField
           label="Total de gastos"
           value={applyMask(totalValueExpenses, "money")}
+          dataCy="total-expenses"
         />
       </div>
       <Table>
@@ -109,6 +110,7 @@ export default function VehicleExpenseTable(): ReactNode {
                 columnLabel={VEHICLES_EXPENSES_TABLE.category.label}
               />
               <Table.Cell
+                id={String(expense.id)}
                 label={expense.totalValue.padStart(biggestValueLength, BLANK)}
                 className="font-mono whitespace-pre"
                 colSpan={VEHICLES_EXPENSES_TABLE.totalValue.colSpan}

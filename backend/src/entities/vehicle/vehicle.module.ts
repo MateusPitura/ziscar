@@ -20,6 +20,7 @@ import { AccountReceivableModule } from '../account-receivable/account-receivabl
 import { AccountReceivableInstallmentModule } from '../account-receivable-installment/account-receivable-installment.module';
 import { PaymentMethodReceivableModule } from '../payment-method-receivable/payment-method-receivable.module';
 import { CustomerModule } from '../customer/customer.module';
+import { ValidateVehicleUniqueFieldsUseCase } from './use-case/validate-vehicle-unique-fields.use-case';
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import { CustomerModule } from '../customer/customer.module';
     UnarchiveVehicleUseCase,
     GetVehicleSaleUseCase,
     GetVehicleByIdUseCase,
+    ValidateVehicleUniqueFieldsUseCase,
   ],
   exports: [
     VehicleRepository,

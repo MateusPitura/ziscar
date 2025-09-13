@@ -19,7 +19,7 @@ import {
   YEARS_OF_MANUFACTURE,
 } from "../constants";
 import { VehicleFormInputs } from "../types";
-import { ActivityStatus } from "@shared/types";
+import { VehicleStatusForFilter } from "@shared/types";
 
 export const SchemaVehiclesFilterForm = s
   .object({
@@ -27,12 +27,15 @@ export const SchemaVehiclesFilterForm = s
     endDate: s.dateString().or(s.empty()),
     storeId: s.string().or(s.empty()),
     brandId: s.string().or(s.empty()),
-    status: s.enumeration(VEHICLESTATUS_VALUES).or(s.empty()),
+    status: s.enumeration(VehicleStatusForFilter).or(s.empty()),
     category: s.enumeration(VEHICLECATEGORY_VALUES).or(s.empty()),
     modelYear: s.numberString().or(s.empty()),
     yearOfManufacture: s.numberString().or(s.empty()),
     modelName: s.string().or(s.empty()),
-    plateNumber: s.plateNumber().or(s.empty()),
+    plateNumber: s
+      .string(8)
+      .transform((plateNumber) => plateNumber.replace(/[^A-Z0-9]/gi, ""))
+      .or(s.empty()),
     announcedPriceMin: s
       .numberString({
         formatter: (value) => applyMask(value, "money") ?? "",
@@ -43,7 +46,6 @@ export const SchemaVehiclesFilterForm = s
         formatter: (value) => applyMask(value, "money") ?? "",
       })
       .or(s.empty()),
-    activityStatus: s.enumeration(Object.values(ActivityStatus)),
   })
   .refine(...s.dateRangeRule);
 

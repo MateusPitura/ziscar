@@ -16,6 +16,8 @@ export type GetVehicleWithPaymentOutDto = Prisma.VehicleGetPayload<{
 export abstract class VehicleRepository {
   abstract create(data: CreateInput<Vehicle>): Promise<Vehicle>;
   abstract findById(id: number): Promise<GetVehicleWithPaymentOutDto | null>;
+  abstract findByChassiNumber(chassiNumber: string): Promise<Vehicle | null>;
+  abstract findByPlateNumber(plateNumber: string): Promise<Vehicle | null>;
   abstract update(
     id: string,
     data: UpdateInput<Vehicle>,

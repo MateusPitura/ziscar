@@ -83,8 +83,8 @@ export default function StoresTable(): ReactNode {
               },
             }}
             formatColumns={{
-              cnpj: "CNPJ",
               name: "Nome",
+              cnpj: "CNPJ",
               email: "Email",
               phone: "Celular",
               archivedAt: "Ativo",

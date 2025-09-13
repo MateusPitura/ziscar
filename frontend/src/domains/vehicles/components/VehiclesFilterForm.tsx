@@ -21,10 +21,9 @@ import {
   VehicleCategoryText,
   VehicleStatusText,
   YEARS_OF_MANUFACTURE_OPTIONS,
-  ActivityStatusText,
 } from "../constants";
-import { VehicleCategory, VehicleStatus } from "@shared/enums";
-import { ActivityStatus } from "@shared/types";
+import { VehicleCategory } from "@shared/enums";
+import { VehicleStatusForFilter } from "@shared/types";
 
 function VehiclesFilterForm(): ReactNode {
   const { vehiclesFilter, handleVehiclesFilter } = useFilterContext();
@@ -77,7 +76,6 @@ function VehiclesFilterForm(): ReactNode {
         plateNumber: vehiclesFilter?.plateNumber || "",
         announcedPriceMin: vehiclesFilter?.announcedPriceMin || "",
         announcedPriceMax: vehiclesFilter?.announcedPriceMax || "",
-        activityStatus: vehiclesFilter?.activityStatus || ActivityStatus.ACTIVE,
       }}
       replaceEmptyStringToNull={false}
     >
@@ -146,7 +144,7 @@ function VehiclesFilterFormContent({
           label="Status"
           options={[
             { value: "", label: "Todos os status" },
-            ...Object.values(VehicleStatus).map((vehicleStatus) => ({
+            ...Object.values(VehicleStatusForFilter).map((vehicleStatus) => ({
               value: vehicleStatus,
               label: VehicleStatusText[vehicleStatus],
             })),
@@ -171,14 +169,6 @@ function VehiclesFilterFormContent({
               label: VehicleCategoryText[category],
             })),
           ]}
-        />
-        <Select<VehiclesFilterFormInputs>
-          name="activityStatus"
-          label="Status de atividade"
-          options={Object.values(ActivityStatus).map((activityStatus) => ({
-            value: activityStatus,
-            label: ActivityStatusText[activityStatus],
-          }))}
         />
         <Select<VehiclesFilterFormInputs>
           name="modelYear"

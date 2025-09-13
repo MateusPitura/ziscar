@@ -2,17 +2,17 @@ import { InstallmentStatus } from "@shared/enums";
 import { s } from "@shared/safeZod";
 
 export const createAccountPayableDTO = s.object({
-  description: s.string(),
+  description: s.string(127),
   paidTo: s.string(),
 });
 
 export const updateAccountPayableDTO = s.object({
-  description: s.string().optional(),
+  description: s.string(127).optional(),
   paidTo: s.string().optional(),
 });
 
 export const createAccountPayableInstallmentDTO = s.object({
-  installmentSequence: s.number().min(1),
+  installmentSequence: s.number().min(0),
   dueDate: s.date(),
   value: s.number().min(0),
   status: s.nativeEnum(InstallmentStatus),
@@ -23,7 +23,7 @@ export const createAccountPayableInstallmentDTO = s.object({
 });
 
 export const updateAccountPayableInstallmentDTO = s.object({
-  installmentSequence: s.number().min(1),
+  installmentSequence: s.number().min(0),
   dueDate: s.date(),
   value: s.number().min(0),
   status: s.nativeEnum(InstallmentStatus),

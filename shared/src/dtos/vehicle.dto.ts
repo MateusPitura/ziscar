@@ -22,7 +22,7 @@ import {
   createAccountReceivableDTO,
   createAccountReceivableInstallmentDTO,
 } from "./account-receivable.dto";
-import { ActivityStatus } from "@shared/types";
+import { VehicleStatusForFilter } from "../types";
 
 export const InsertVehicleRequestSchema = s.object({
   chassiNumber: s.string(17),
@@ -44,7 +44,7 @@ export const InsertVehicleRequestSchema = s.object({
   payment: s
     .object({
       purchaseDate: s.date(),
-      paidTo: s.string().nullable(),
+      paidTo: s.string(127).nullable(),
       installments: s.array(
         createAccountPayableInstallmentDTO
           .omit({
@@ -77,7 +77,7 @@ export const SearchVehiclesRequestSchema = BasePaginationSchema.merge(
   .extend({
     storeId: s.id().optional(),
     brandId: s.id().optional(),
-    status: s.enumeration(VEHICLESTATUS_VALUES).optional(),
+    status: s.enumeration(VehicleStatusForFilter).optional(),
     category: s.enumeration(VEHICLECATEGORY_VALUES).optional(),
     modelYear: s.number().optional(),
     yearOfManufacture: s.number().optional(),
@@ -85,7 +85,6 @@ export const SearchVehiclesRequestSchema = BasePaginationSchema.merge(
     plateNumber: s.string(7).optional(),
     announcedPriceMin: s.number().optional(),
     announcedPriceMax: s.number().optional(),
-    activityStatus: s.enumeration(Object.values(ActivityStatus)).optional(),
   })
   .refine(...s.dateRangeRule);
 
@@ -179,7 +178,6 @@ export const MakeVehicleSaleRequestSchema = s.object({
   installments: s.array(
     createAccountReceivableInstallmentDTO
       .omit({
-        installmentSequence: true,
         accountReceivableId: true,
         status: true,
         isRefund: true,
@@ -284,6 +282,7 @@ export const VehicleWithPaymentResponseSchema =
       .object({
         purchaseDate: s.date(),
         paidTo: s.string().nullable(),
+        value: s.numberPositive(),
       })
       .optional(),
   });
