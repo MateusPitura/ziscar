@@ -69,7 +69,7 @@ export default function AccountsPayableTable(): ReactNode {
           FetchAccountPayable,
           AccountsPayableFilterFormInputs
         >
-          fileName="Relatório Contas a Pagar"
+          fileName="Relatório Pagamentos"
           queryKey={["accounts-payable", filterFormatted]}
           queryFn={getAccountsPayableInfo}
           selectQueryFn={selectAccountsPayableInfoForReport}

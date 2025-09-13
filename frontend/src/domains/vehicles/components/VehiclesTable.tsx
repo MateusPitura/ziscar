@@ -152,6 +152,7 @@ export default function VehiclesTable(): ReactNode {
             plateNumber: "Placa",
             modelYear: "Ano do modelo",
             status: "Status",
+            announcedPrice: "Preço anunciado",
           }}
         />
         <Table.Filter form={<VehiclesFilterForm />} />

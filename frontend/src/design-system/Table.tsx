@@ -218,12 +218,14 @@ function Footer({
         isLoading={!!isLoading}
         className="text-neutral-700 text-body-large"
       >
-        {totalItems && (
+        {totalItems ? (
           <>
             {`${pageOffset + 1}`}
             {`-${lastPage ? totalItems : pageOffset + itemsPerPage}`}
             {` de ${totalItems}`}
           </>
+        ) : (
+          "-"
         )}
       </Loading>
       <Button

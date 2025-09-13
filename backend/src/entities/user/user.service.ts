@@ -86,6 +86,8 @@ export class UserService {
 
     const token = this.jwtService.sign({ email: userCreateInDto.email });
 
+    console.log('EMAIL: ', `${FRONTEND_URL}/?token=${token}`);
+
     void this.emailService.sendEmail({
       to: userCreateInDto.email,
       title: 'Confirme a criação da sua conta',
