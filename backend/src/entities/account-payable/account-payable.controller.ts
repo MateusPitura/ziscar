@@ -15,7 +15,7 @@ import { QueryAccountReceivableDTO } from 'src/infra/dtos/account-receivable/que
 
 @Controller('account-payable')
 export class AccountPayableController {
-  constructor(private readonly accountPayableService: AccountPayableService) {}
+  constructor(private readonly accountPayableService: AccountPayableService) { }
 
   @Post('/')
   async create(@Body() body: CreateAccountPayableDTO) {
@@ -25,6 +25,7 @@ export class AccountPayableController {
   @Get('search')
   async searchAccountsPayable(@Query() query: QueryAccountReceivableDTO) {
     return this.accountPayableService.search(
+      query.description ?? '',
       query.page,
       query.limit,
       query.startDate ? new Date(query.startDate) : new Date('1970-01-01'),

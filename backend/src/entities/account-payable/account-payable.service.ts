@@ -10,7 +10,7 @@ import { CreateInput, UpdateInput } from 'src/types';
 
 @Injectable()
 export class AccountPayableService implements AccountPayableRepository {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async create(data: CreateInput<AccountPayable>): Promise<AccountPayable> {
     return this.prisma.accountPayable.create({ data });
@@ -54,6 +54,7 @@ export class AccountPayableService implements AccountPayableRepository {
   }
 
   async search(
+    query: string,
     page: number,
     limit: number,
     startDate: Date,
@@ -62,15 +63,19 @@ export class AccountPayableService implements AccountPayableRepository {
   ): Promise<SearchResponse> {
     const accounts = await this.prisma.accountPayable.findMany({
       where: {
+        description: {
+          contains: query,
+          mode: 'insensitive',
+        },
         accountPayableInstallments: overallStatus
           ? overallStatus === 'PAID'
             ? {
-                every: { status: 'PAID' }, // todas pagas
-              }
+              every: { status: 'PAID' }, // todas pagas
+            }
             : overallStatus === 'PENDING'
               ? {
-                  some: { status: 'PENDING' }, // pelo menos uma pendente
-                }
+                some: { status: 'PENDING' }, // pelo menos uma pendente
+              }
               : undefined
           : undefined,
         createdAt: {
