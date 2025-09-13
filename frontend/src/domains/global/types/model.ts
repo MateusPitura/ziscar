@@ -76,6 +76,28 @@ export interface AccountReceivableInstallment {
   paymentMethodReceivables: PaymentMethod[];
 }
 
+export interface AccountPayable {
+  id: number;
+  description?: string;
+  paidTo?: string;
+  totalValue: string;
+  overallStatus: InstallmentStatusType;
+  installmentsNumber: number;
+  vehicleSaleId: number;
+  date: string;
+}
+
+export interface AccountPayableInstallment {
+  id: number;
+  installmentSequence: number;
+  dueDate?: string;
+  value: string;
+  isRefund?: boolean;
+  isUpfront?: boolean;
+  status: InstallmentStatusType;
+  paymentMethodPayables: PaymentMethod[];
+}
+
 export interface PaymentMethod {
   id: number;
   type: PaymentMethodPayableTypeType;
@@ -150,6 +172,28 @@ export type FetchStore = Pick<
 export type FetchCustomer = Pick<
   Customer,
   "id" | "fullName" | "cpf" | "email" | "phone" | "archivedAt" | "cpf"
+>;
+
+export type FetchAccountPayable = Pick<
+  AccountPayable,
+  | "id"
+  | "date"
+  | "description"
+  | "paidTo"
+  | "totalValue"
+  | "overallStatus"
+>;
+
+export type FetchAccountPayableInstallment = Pick<
+  AccountPayableInstallment,
+  | "id"
+  | "installmentSequence"
+  | "dueDate"
+  | "value"
+  | "status"
+  | "isRefund"
+  | "isUpfront"
+  | "paymentMethodPayables"
 >;
 
 export type FetchAccountReceivable = Pick<

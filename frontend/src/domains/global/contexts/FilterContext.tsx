@@ -12,6 +12,7 @@ import { storeFilterDefaultValues } from "@/domains/stores/constants";
 import { customerFilterDefaultValues } from "@/domains/customers/constants";
 import { accountReceivableFilterDefaultValues } from "@/domains/accountsReceivable/constants";
 import { vehicleFilterDefaultValues } from "@/domains/vehicles/constants";
+import { accountPayableFilterDefaultValues } from "@/domains/accountsPayable/constants";
 
 interface FilterContextValues {
   usersFilter?: UsersFilter;
@@ -22,6 +23,10 @@ interface FilterContextValues {
   handleCustomersFilter: (value: Partial<CustomersFilter>) => void;
   accountsReceivableFilter?: AccountsReceivableFilter;
   handleAccountsReceivableFilter: (
+    value: Partial<AccountsReceivableFilter>
+  ) => void;
+  accountsPayableFilter?: AccountsReceivableFilter;
+  handleAccountsPayableFilter: (
     value: Partial<AccountsReceivableFilter>
   ) => void;
   vehiclesFilter?: VehiclesFilter;
@@ -86,6 +91,22 @@ function FilterProvider({ children }: Childrenable) {
     []
   );
 
+  const [accountsPayableFilter, setAccountsPayableFilter] =
+    useState<AccountsReceivableFilter>({
+      page: 1,
+      ...accountPayableFilterDefaultValues,
+    });
+
+  const handleAccountsPayableFilter = useCallback(
+    (value: Partial<AccountsReceivableFilter>) => {
+      setAccountsPayableFilter((prev) => ({
+        ...prev,
+        ...value,
+      }));
+    },
+    []
+  );
+
   const [vehiclesFilter, setVehiclesFilter] = useState<VehiclesFilter>({
     page: 1,
     ...vehicleFilterDefaultValues,
@@ -110,6 +131,8 @@ function FilterProvider({ children }: Childrenable) {
       handleAccountsReceivableFilter,
       vehiclesFilter,
       handleVehiclesFilter,
+      accountsPayableFilter,
+      handleAccountsPayableFilter,
     }),
     [
       usersFilter,
@@ -122,6 +145,8 @@ function FilterProvider({ children }: Childrenable) {
       handleAccountsReceivableFilter,
       vehiclesFilter,
       handleVehiclesFilter,
+      accountsPayableFilter,
+      handleAccountsPayableFilter,
     ]
   );
 

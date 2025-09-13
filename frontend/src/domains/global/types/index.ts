@@ -1,3 +1,4 @@
+import { AccountsPayableFilterFormInputs } from "@/domains/accountsPayable/types";
 import { AccountsReceivableFilterFormInputs } from "@/domains/accountsReceivable/types";
 import { CustomersFilterFormInputs } from "@/domains/customers/types";
 import { StoresFilterFormInputs } from "@/domains/stores/types";
@@ -72,6 +73,9 @@ export interface StoresFilter extends StoresFilterFormInputs, Pageable {}
 export interface CustomersFilter extends CustomersFilterFormInputs, Pageable {}
 export interface AccountsReceivableFilter
   extends AccountsReceivableFilterFormInputs,
+    Pageable {}
+export interface AccountsPayableFilter
+  extends AccountsPayableFilterFormInputs,
     Pageable {}
 export interface VehiclesFilter extends VehiclesFilterFormInputs, Pageable {}
 
