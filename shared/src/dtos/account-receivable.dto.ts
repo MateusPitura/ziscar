@@ -1,5 +1,5 @@
 import { ITEMS_PER_PAGE } from "../constants";
-import { InstallmentStatus, PaymentMethodReceivableType } from "../enums";
+import { InstallmentStatus, PaymentMethodPayableType, PaymentMethodReceivableType } from "../enums";
 import { s } from "../safeZod";
 
 export const createAccountReceivableDTO = s.object({
@@ -52,6 +52,11 @@ export const updateAccountReceivableInstallmentDTO = s.object({
 export const createPaymentMethodToInstallmentDTO = s.object({
   paymentDate: s.string(),
   type: s.nativeEnum(PaymentMethodReceivableType),
+});
+
+export const createPaymentMethodAccountPayableToInstallmentDTO = s.object({
+  paymentDate: s.string(),
+  type: s.nativeEnum(PaymentMethodPayableType),
 });
 
 export const queryAccountReceivableInstallmentsDTO = s.object({
