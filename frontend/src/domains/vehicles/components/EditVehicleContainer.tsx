@@ -31,10 +31,7 @@ export default function EditVehicleContainer(): ReactNode {
     const { payment, vehicleCharacteristicValues, ...vehicle } = response;
 
     return {
-      payment: {
-        ...payment,
-        value: "7000000",
-      },
+      payment,
       vehicle: {
         ...vehicle,
         vehicleCharacteristicValues: vehicleCharacteristicValues.map(
@@ -66,8 +63,8 @@ export default function EditVehicleContainer(): ReactNode {
         ...vehicle,
         characteristics: characteristicsFormatted,
         payment: {
-          purchaseDate: payment?.purchaseDate ?? "",
-          paidTo: payment?.paidTo ?? "",
+          purchaseDate: payment?.purchaseDate,
+          paidTo: payment?.paidTo,
         },
       },
       resource: "VEHICLES",
@@ -112,6 +109,7 @@ export default function EditVehicleContainer(): ReactNode {
           onSubmit={mutate}
           className="flex-1 flex flex-col gap-4"
           schema={SchemaVehicleForm}
+          replaceEmptyStringToNull
           defaultValues={{
             characteristics: vehicleData.characteristics,
             payment: vehicleData.payment,
