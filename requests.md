@@ -1,5 +1,5 @@
-## Contas a Pagar
-
+<!-- ## Contas a Pagar -->
+<!-- 
 # Buscar contas a pagar com filtro
 
 endpoint: 
@@ -24,11 +24,11 @@ payload:
             overallStatus: "PENDING",
         },
     ],
-}
+} -->
 
-# Buscar parcelas de uma conta a pagar
+<!-- # Buscar parcelas de uma conta a pagar -->
 
-endpoint: 
+<!-- endpoint: 
 GET /account-payable-installments/${accountPayableId} // Ordenar por installmentSequence
 
 payload:
@@ -65,11 +65,11 @@ payload:
             }
         ]
     },
-]
+] -->
 
-# Buscar informações de uma conta
+<!-- # Buscar informações de uma conta -->
 
-endpoint:
+<!-- endpoint:
 GET /account-payable/${accountPayableId}
 
 payload:
@@ -80,7 +80,7 @@ payload:
     totalValue: 1000000;
     overallStatus: "PAID";
     installmentsNumber: 10;
-}
+} -->
 
 # Adicionar método de pagamento em uma parcela
 
@@ -95,7 +95,7 @@ payload:
 
 ## Contas a Receber
 
-# Buscar contas a receber com filtro
+<!-- # Buscar contas a receber com filtro
 
 endpoint: 
 GET /account-receivable?page=1&startDate=2025-08-01&endDate=2025-08-08&overallStatus=PAID&orderBy=description
@@ -123,7 +123,7 @@ payload:
             date: 2000-01-01
         },
     ],
-}
+} -->
 
 # Buscar parcelas de uma conta a receber
 
