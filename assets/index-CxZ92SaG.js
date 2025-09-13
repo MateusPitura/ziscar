@@ -1,0 +1,1 @@
+import{aA as r,az as s}from"./index-UdT0GBA4.js";import{w as t,G as m,A as o,H as a,E as e,J as n}from"./schemas-BggDEbt9.js";const E=t({overallStatus:o(r),startDate:a().or(e()),endDate:a().or(e())}).refine(...n),c=t({type:o(s),paymentDate:m()});export{E as S,c as a};
