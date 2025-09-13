@@ -6,10 +6,12 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { AccountPayableService } from './account-payable.service';
 import { CreateAccountPayableDTO } from 'src/infra/dtos/account-payable/create-account-payable.dto';
 import { UpdateAccountPayableDTO } from 'src/infra/dtos/account-payable/update-account-payable.dto';
+import { QueryAccountReceivableDTO } from 'src/infra/dtos/account-receivable/query-account-receivable-dto';
 
 @Controller('account-payable')
 export class AccountPayableController {
@@ -18,6 +20,17 @@ export class AccountPayableController {
   @Post('/')
   async create(@Body() body: CreateAccountPayableDTO) {
     return this.accountPayableService.create(body);
+  }
+
+  @Get('search')
+  async searchAccountsPayable(@Query() query: QueryAccountReceivableDTO) {
+    return this.accountPayableService.search(
+      query.page,
+      query.limit,
+      query.startDate ? new Date(query.startDate) : new Date('1970-01-01'),
+      query.endDate ? new Date(query.endDate) : new Date(),
+      query.overallStatus,
+    );
   }
 
   @Get('/:id')

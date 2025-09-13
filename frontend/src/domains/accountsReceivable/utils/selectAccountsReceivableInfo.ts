@@ -1,6 +1,7 @@
 import { PageablePayload } from "@/domains/global/types";
 import { FetchAccountReceivable } from "@/domains/global/types/model";
 import { applyMask } from "@/domains/global/utils/applyMask";
+import safeFormat from "@/domains/global/utils/safeFormat";
 
 export default function selectAccountsReceivableInfo(
   payload: PageablePayload<FetchAccountReceivable>
@@ -11,6 +12,12 @@ export default function selectAccountsReceivableInfo(
     itemsFiltered.push({
       ...accountReceivable,
       totalValue: applyMask(accountReceivable.totalValue, "money") ?? "",
+      date: accountReceivable.date
+        ? safeFormat({
+            date: accountReceivable.date.split("T")[0],
+            format: "dd/MM/yyyy",
+          })
+        : "",
     });
   }
 

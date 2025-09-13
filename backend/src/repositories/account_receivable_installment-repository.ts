@@ -19,7 +19,6 @@ export interface AccountReceivableInstallmentPayload {
   value: number; // em centavos
   isRefund: boolean;
   isUpfront: boolean;
-  vehicleSaleId: number; // id da venda
 }
 
 export abstract class AccountReceivableInstallmentRepository {
