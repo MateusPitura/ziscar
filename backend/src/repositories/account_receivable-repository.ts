@@ -46,7 +46,8 @@ export abstract class AccountReceivableRepository {
     startDate: Date,
     endDate: Date,
     overallStatus: 'PENDING' | 'PAID',
-    totalValue: string): Promise<SearchResponse>;
+    totalValue: string,
+  ): Promise<SearchResponse>;
 
   abstract update(
     id: string,

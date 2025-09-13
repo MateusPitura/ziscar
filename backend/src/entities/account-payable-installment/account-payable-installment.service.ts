@@ -1,20 +1,26 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { AccountPayableInstallment } from '@prisma/client';
 import { PrismaService } from 'src/infra/database/prisma.service';
-import { AccountPayableInstallmentRepository, createPaymentMethodToInstallment } from 'src/repositories/account_payable_installment-repository';
+import {
+  AccountPayableInstallmentRepository,
+  createPaymentMethodToInstallment,
+} from 'src/repositories/account_payable_installment-repository';
 import { CreateInput, UpdateInput } from 'src/types';
 
 @Injectable()
 export class AccountPayableInstallmentService
-  implements AccountPayableInstallmentRepository {
-  constructor(private prisma: PrismaService) { }
-
+  implements AccountPayableInstallmentRepository
+{
+  constructor(private prisma: PrismaService) {}
 
   async addPaymentMethodToInstallment(
     id: string,
     data: createPaymentMethodToInstallment, // { type, paymentDate, value, userId }
   ): Promise<AccountPayableInstallment> {
-
     // 1️⃣ Verifica se a parcela existe
     const installment = await this.prisma.accountPayableInstallment.findUnique({
       where: { id: Number(id) },
@@ -29,35 +35,35 @@ export class AccountPayableInstallmentService
       throw new ConflictException('userId é obrigatório e deve ser um número');
     }
 
-    const updatedInstallment = await this.prisma.accountPayableInstallment.update({
-      where: { id: Number(id) },
-      data: {
-        paymentMethodPayables: {
-          create: {
-            type: data.type,
-            paymentDate: data.paymentDate ? new Date(data.paymentDate) : undefined,
-            value: data.value ?? installment.value,
-            userId: data.userId, // agora garantido como number
+    const updatedInstallment =
+      await this.prisma.accountPayableInstallment.update({
+        where: { id: Number(id) },
+        data: {
+          paymentMethodPayables: {
+            create: {
+              type: data.type,
+              paymentDate: data.paymentDate
+                ? new Date(data.paymentDate)
+                : undefined,
+              value: data.value ?? installment.value,
+              userId: data.userId, // agora garantido como number
+            },
           },
         },
-      },
-      include: {
-        paymentMethodPayables: true, // retorna todos os métodos de pagamento
-      },
-    });
+        include: {
+          paymentMethodPayables: true, // retorna todos os métodos de pagamento
+        },
+      });
 
     return updatedInstallment;
   }
 
-
-
-
-
-  async findAllByAccountPayableId(accountPayableId: string): Promise<AccountPayableInstallment[]> {
+  async findAllByAccountPayableId(
+    accountPayableId: string,
+  ): Promise<AccountPayableInstallment[]> {
     return this.prisma.accountPayableInstallment.findMany({
-      where:
-      {
-        accountPayableId: Number(accountPayableId)
+      where: {
+        accountPayableId: Number(accountPayableId),
       },
       include: {
         paymentMethodPayables: {
@@ -65,12 +71,12 @@ export class AccountPayableInstallmentService
             id: true,
             paymentDate: true,
             type: true,
-          }
-        }
+          },
+        },
       },
       orderBy: {
-        installmentSequence: 'asc'
-      }
+        installmentSequence: 'asc',
+      },
     });
   }
 
@@ -92,7 +98,6 @@ export class AccountPayableInstallmentService
     return installment;
   }
 
-
   // async addPaymentMethodToInstallment(
   //   id: string,
   //   data: createPaymentMethodToInstallment,
@@ -110,8 +115,6 @@ export class AccountPayableInstallmentService
   //   if (!installment) {
   //     throw new NotFoundException('Parcela a receber não encontrada');
   //   }
-
-
 
   //   if (installment.paymentMethodPayables.length > 0) {
   //     throw new ConflictException(
@@ -139,7 +142,6 @@ export class AccountPayableInstallmentService
   //       },
   //     });
   // }
-
 
   async update(
     id: string,

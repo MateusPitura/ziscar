@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -12,15 +11,13 @@ import {
 import { CreateAccountReceivableDTO } from 'src/infra/dtos/account-receivable/create-account-receivable.dto';
 import { QueryAccountReceivableDTO } from 'src/infra/dtos/account-receivable/query-account-receivable-dto';
 import { UpdateAccountReceivableDTO } from 'src/infra/dtos/account-receivable/update-account-receivable.dto';
-import { SearchResponse } from 'src/repositories/account_receivable-repository';
 import { AccountReceivableService } from './account-receivable.service';
-import { ITEMS_PER_PAGE } from '@shared/constants';
 
 @Controller('account-receivable')
 export class AccountReceivableController {
   constructor(
     private readonly AccountReceivableService: AccountReceivableService,
-  ) { }
+  ) {}
 
   @Post('/')
   async createAccountReceivable(@Body() body: CreateAccountReceivableDTO) {
@@ -35,7 +32,6 @@ export class AccountReceivableController {
       query.startDate ? new Date(query.startDate) : new Date('1970-01-01'),
       query.endDate ? new Date(query.endDate) : new Date(),
       query.overallStatus,
-      query.orderBy ?? 'description',
     );
   }
 

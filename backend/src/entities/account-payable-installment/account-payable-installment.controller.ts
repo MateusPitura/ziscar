@@ -21,7 +21,7 @@ import { AuthGuard } from '../auth/auth.guard';
 export class AccountPayableInstallmentController {
   constructor(
     private readonly accountPayableInstallmentService: AccountPayableInstallmentService,
-  ) { }
+  ) {}
 
   @Post('/')
   async createAccountPayableInstallment(
@@ -36,10 +36,13 @@ export class AccountPayableInstallmentController {
   }
 
   @Get('/by-account-payable/:accountPayableId')
-  async findAllByAccountPayableId(@Param('accountPayableId') accountPayableId: string) {
-    return this.accountPayableInstallmentService.findAllByAccountPayableId(accountPayableId);
+  async findAllByAccountPayableId(
+    @Param('accountPayableId') accountPayableId: string,
+  ) {
+    return this.accountPayableInstallmentService.findAllByAccountPayableId(
+      accountPayableId,
+    );
   }
-
 
   @Post('payment-method/:installmentId')
   async addPaymentMethodToInstallment(

@@ -15,7 +15,7 @@ import { QueryAccountReceivableDTO } from 'src/infra/dtos/account-receivable/que
 
 @Controller('account-payable')
 export class AccountPayableController {
-  constructor(private readonly accountPayableService: AccountPayableService) { }
+  constructor(private readonly accountPayableService: AccountPayableService) {}
 
   @Post('/')
   async create(@Body() body: CreateAccountPayableDTO) {
@@ -30,7 +30,6 @@ export class AccountPayableController {
       query.startDate ? new Date(query.startDate) : new Date('1970-01-01'),
       query.endDate ? new Date(query.endDate) : new Date(),
       query.overallStatus,
-      query.orderBy ?? 'description',
     );
   }
 

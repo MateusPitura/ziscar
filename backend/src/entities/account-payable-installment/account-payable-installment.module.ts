@@ -27,4 +27,4 @@ import { JwtModule } from '@nestjs/jwt';
     AccountPayableInstallmentService,
   ],
 })
-export class AccountPayableInstallmentModule { }
+export class AccountPayableInstallmentModule {}

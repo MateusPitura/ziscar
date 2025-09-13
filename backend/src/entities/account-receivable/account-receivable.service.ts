@@ -3,18 +3,13 @@ import { AccountReceivable } from '@prisma/client';
 import { PrismaService } from 'src/infra/database/prisma.service';
 import {
   AccountReceivableRepository,
-  SearchRequest,
   SearchResponse,
-  SearchResponseItem,
 } from 'src/repositories/account_receivable-repository';
 import { CreateInput, UpdateInput } from 'src/types';
 
 @Injectable()
 export class AccountReceivableService implements AccountReceivableRepository {
-  constructor(private prisma: PrismaService) { }
-
-
-
+  constructor(private prisma: PrismaService) {}
 
   async create(
     data: CreateInput<AccountReceivable>,
@@ -33,8 +28,6 @@ export class AccountReceivableService implements AccountReceivableRepository {
 
     return accountReceivable;
   }
-
-
 
   async findByInstallmentId(
     installmentId: string,
@@ -74,37 +67,41 @@ export class AccountReceivableService implements AccountReceivableRepository {
     return accountReceivable;
   }
 
-
-  async search(page: number, limit: number, startDate: Date, endDate: Date, overallStatus?: 'PENDING' | 'PAID', totalValue?: string): Promise<SearchResponse> {
+  async search(
+    page: number,
+    limit: number,
+    startDate: Date,
+    endDate: Date,
+    overallStatus?: 'PENDING' | 'PAID',
+  ): Promise<SearchResponse> {
     const accounts = await this.prisma.accountReceivable.findMany({
       where: {
         accountReceivableInstallments: overallStatus
           ? overallStatus === 'PAID'
             ? {
-              every: { status: 'PAID' }, // todas pagas
-            }
+                every: { status: 'PAID' }, // todas pagas
+              }
             : overallStatus === 'PENDING'
               ? {
-                some: { status: 'PENDING' }, // pelo menos uma pendente
-              }
+                  some: { status: 'PENDING' }, // pelo menos uma pendente
+                }
               : undefined
           : undefined,
         createdAt: {
           gte: startDate,
           lte: endDate ?? new Date(),
-        }
+        },
       },
       include: {
         accountReceivableInstallments: true,
         vehicleSales: true,
-
       },
       skip: (page - 1) * limit,
       take: limit,
       orderBy: {
-        description: 'asc'
-      }
-    })
+        description: 'asc',
+      },
+    });
 
     const total = await this.prisma.accountReceivable.count({
       where: {
@@ -122,17 +119,17 @@ export class AccountReceivableService implements AccountReceivableRepository {
       },
     });
 
-    const data = accounts.map(acc => {
+    const data = accounts.map((acc) => {
       const installments = acc.accountReceivableInstallments;
 
       // soma do valor de todas as parcelas
       const totalValue = installments.reduce(
         (sum, inst) => sum + Number(inst.value),
-        0
+        0,
       );
 
       // regra para definir overallStatus
-      const allPaid = installments.every(inst => inst.status === 'PAID');
+      const allPaid = installments.every((inst) => inst.status === 'PAID');
       const overallStatus: 'PAID' | 'PENDING' = allPaid ? 'PAID' : 'PENDING';
 
       return {
