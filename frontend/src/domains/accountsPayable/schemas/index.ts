@@ -6,6 +6,7 @@ import { s } from "@shared/safeZod";
 
 export const SchemaAccountsPayableFilterForm = s
   .object({
+    description: s.string().or(s.empty()),
     overallStatus: s.enumeration(INSTALLMENTSTATUS_VALUES),
     startDate: s.dateString().or(s.empty()),
     endDate: s.dateString().or(s.empty()),

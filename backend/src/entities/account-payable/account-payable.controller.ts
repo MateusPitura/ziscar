@@ -25,6 +25,7 @@ export class AccountPayableController {
   @Get('search')
   async searchAccountsPayable(@Query() query: QueryAccountReceivableDTO) {
     return this.accountPayableService.search(
+      query.description ?? '',
       query.page,
       query.limit,
       query.startDate ? new Date(query.startDate) : new Date('1970-01-01'),

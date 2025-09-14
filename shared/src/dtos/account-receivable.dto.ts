@@ -27,6 +27,7 @@ export const queryAccountReceivableDTO = s.object({
   endDate: s.string().optional(),
   overallStatus: s.enumeration(["PAID", "PENDING"]).optional(),
   orderBy: s.string().optional(),
+  description: s.string().optional(),
 });
 
 export const createAccountReceivableInstallmentDTO = s.object({

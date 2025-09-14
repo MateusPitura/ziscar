@@ -23,6 +23,7 @@ export abstract class AccountPayableRepository {
   abstract create(data: CreateInput<AccountPayable>): Promise<AccountPayable>;
   abstract findById(id: string): Promise<FindByIdResponse | null>;
   abstract search(
+    query: string,
     page: number,
     limit: number,
     startDate: Date,
