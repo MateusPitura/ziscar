@@ -106,6 +106,10 @@ export class AccountPayableService implements AccountPayableRepository {
           gte: startDate,
           lte: endDate,
         },
+        description: {
+          contains: query,
+          mode: 'insensitive',
+        },
       },
     });
 

@@ -30,7 +30,9 @@ function AccountsReceivableFilterForm(): ReactNode {
       defaultValues={{
         startDate: accountsReceivableFilter?.startDate || "",
         endDate: accountsReceivableFilter?.endDate || "",
-        overallStatus: accountsReceivableFilter?.overallStatus || InstallmentStatus.PAID,
+        description: accountsReceivableFilter?.description || "",
+        overallStatus:
+          accountsReceivableFilter?.overallStatus || InstallmentStatus.PAID,
       }}
       replaceEmptyStringToNull={false}
     >
@@ -53,6 +55,10 @@ function AccountsReceivableFilterFormContent(): ReactElement {
   return (
     <>
       <SideSheet.Body className="flex flex-col gap-4">
+        <Input<AccountsReceivableFilterFormInputs>
+          label="Descrição"
+          name="description"
+        />
         <Input<AccountsReceivableFilterFormInputs>
           name="startDate"
           label="Data inicial de criação"

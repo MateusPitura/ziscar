@@ -122,6 +122,10 @@ export class AccountReceivableService implements AccountReceivableRepository {
           gte: startDate,
           lte: endDate,
         },
+        description: {
+          contains: query,
+          mode: 'insensitive',
+        },
       },
     });
 

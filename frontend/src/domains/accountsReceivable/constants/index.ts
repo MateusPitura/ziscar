@@ -12,6 +12,7 @@ export const paymentMethodDefaultValues: PaymentMethodFormInputs = {
 
 export const accountReceivableFilterDefaultValues: AccountsReceivableFilterFormInputs =
   {
+    description: "",
     startDate: "",
     endDate: "",
     overallStatus: InstallmentStatus.PENDING,
