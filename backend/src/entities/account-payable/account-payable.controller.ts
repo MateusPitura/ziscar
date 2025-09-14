@@ -15,7 +15,7 @@ import { QueryAccountReceivableDTO } from 'src/infra/dtos/account-receivable/que
 
 @Controller('account-payable')
 export class AccountPayableController {
-  constructor(private readonly accountPayableService: AccountPayableService) { }
+  constructor(private readonly accountPayableService: AccountPayableService) {}
 
   @Post('/')
   async create(@Body() body: CreateAccountPayableDTO) {

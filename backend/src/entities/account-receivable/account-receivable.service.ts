@@ -9,7 +9,7 @@ import { CreateInput, UpdateInput } from 'src/types';
 
 @Injectable()
 export class AccountReceivableService implements AccountReceivableRepository {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
   async create(
     data: CreateInput<AccountReceivable>,
@@ -77,7 +77,6 @@ export class AccountReceivableService implements AccountReceivableRepository {
   ): Promise<SearchResponse> {
     const accounts = await this.prisma.accountReceivable.findMany({
       where: {
-
         description: {
           contains: query,
           mode: 'insensitive',
@@ -86,12 +85,12 @@ export class AccountReceivableService implements AccountReceivableRepository {
         accountReceivableInstallments: overallStatus
           ? overallStatus === 'PAID'
             ? {
-              every: { status: 'PAID' }, // todas pagas
-            }
+                every: { status: 'PAID' }, // todas pagas
+              }
             : overallStatus === 'PENDING'
               ? {
-                some: { status: 'PENDING' }, // pelo menos uma pendente
-              }
+                  some: { status: 'PENDING' }, // pelo menos uma pendente
+                }
               : undefined
           : undefined,
         createdAt: {

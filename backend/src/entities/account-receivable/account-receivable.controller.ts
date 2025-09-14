@@ -17,7 +17,7 @@ import { AccountReceivableService } from './account-receivable.service';
 export class AccountReceivableController {
   constructor(
     private readonly AccountReceivableService: AccountReceivableService,
-  ) { }
+  ) {}
 
   @Post('/')
   async createAccountReceivable(@Body() body: CreateAccountReceivableDTO) {

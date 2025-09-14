@@ -13,8 +13,9 @@ import { CreateInput, UpdateInput } from 'src/types';
 
 @Injectable()
 export class AccountPayableInstallmentService
-  implements AccountPayableInstallmentRepository {
-  constructor(private prisma: PrismaService) { }
+  implements AccountPayableInstallmentRepository
+{
+  constructor(private prisma: PrismaService) {}
 
   async addPaymentMethodToInstallment(
     id: string,
