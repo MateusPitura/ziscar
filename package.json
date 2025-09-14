@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "start": "npm run dev:db & npm --prefix frontend run dev & npm --prefix backend run dev",
-    "dev": "docker-compose up --build -d",
+    "dev": "docker-compose up --build -d && docker image prune -f",
     "down": "docker-compose down",
     "lint": "npm --prefix frontend run lint && npm --prefix backend run lint",
     "dev:db": "docker-compose up --build -d database",
@@ -14,7 +14,7 @@
     "test:load:down": "docker-compose -f docker-compose.test.yml down k6",
     "prod:db": "docker-compose pull database && RESTART_POLICY=always npm run dev:db",
     "prod:db:down": "npm run dev:db:down",
-    "prod:backend": "docker-compose pull backend && NODE_ENV=production RESTART_POLICY=always docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d backend",
+    "prod:backend": "docker-compose pull backend && docker image prune -f && NODE_ENV=production RESTART_POLICY=always docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d backend",
     "prod:backend:down": "docker-compose down backend",
     "prod:build": "docker-compose build && docker-compose push",
     "generate:enums": "node scripts/generate-shared-enums.js",
