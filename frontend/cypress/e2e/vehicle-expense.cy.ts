@@ -344,7 +344,7 @@ describe("Vehicle Expense", () => {
     });
   });
 
-  it("should enable user", () => {
+  it("should enable vehicle expense", () => {
     cy.visit("/vehicles");
 
     cy.get('[data-cy^="button-vehicle-expense-"]')
