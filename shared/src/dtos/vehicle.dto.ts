@@ -59,7 +59,7 @@ export const InsertVehicleRequestSchema = s.object({
                 s.object({
                   type: s.enumeration(PAYMENTMETHODPAYABLETYPE_VALUES),
                   value: s.number(),
-                  paymentDate: s.date().nullable(),
+                  paymentDate: s.date(),
                 })
               )
               .nullable(),
@@ -151,7 +151,7 @@ export const InsertVehicleExpenseRequestSchema = s
               s.object({
                 type: s.enumeration(PAYMENTMETHODPAYABLETYPE_VALUES),
                 value: s.number(),
-                paymentDate: s.date().nullable(),
+                paymentDate: s.date(),
               })
             )
             .nullable(),
@@ -189,7 +189,7 @@ export const MakeVehicleSaleRequestSchema = s.object({
             s.object({
               type: s.enumeration(PAYMENTMETHODRECEIVABLETYPE_VALUES),
               value: s.number(),
-              paymentDate: s.date().nullable(),
+              paymentDate: s.date(),
             })
           )
           .nullable(),
