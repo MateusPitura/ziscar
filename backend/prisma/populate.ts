@@ -549,7 +549,7 @@ async function populate() {
               accountPayableInstallments: {
                 create: [
                   {
-                    dueDate: saleDate, // 🌠 trocar para null
+                    dueDate: addMonths(saleDate, 1),
                     value: faker.number.int({
                       min: 0,
                       max: maxCommissionValue,

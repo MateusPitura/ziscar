@@ -1,3 +1,5 @@
+O código fonte também está disponível no GitHub: https://github.com/MateusPitura/ziscar
+
 A aplicação pode ser executada localmente ou acessada na internet. Ambas utilizam as credenciais a seguir:
 
 Administrador:
@@ -26,9 +28,9 @@ Em um terminal CMD verifique a versão do docker com "docker -v" (ex.: 28.3.3) e
 
 ### Execução
 
-Baixe o zip do projeto, descompacte e abra o projeto. Use as opções padrões do arquivo ".env" ou o configure conforme a sua preferência
+Baixe o zip do projeto, descompacte e navegue até a pasta "ziscar-main". Use as opções padrões do arquivo ".env" ou o configure conforme a sua preferência
 
-Abra um terminal CMD, navegue até a pasta raiz do projeto e execute "docker-compose pull" (irá demorar aproximadamente 2 minutos a depender da internet) e depois "docker-compose up". Caso o Docker solicite permissão para acessar o serviço de rede, aceite
+Abra um terminal CMD, navegue até a pasta "ziscar-main" e execute "docker-compose pull" (irá demorar aproximadamente 2 minutos a depender da internet) e depois "docker-compose up". Caso o Docker solicite permissão para acessar o serviço de rede, aceite
 
 No navegador abra "http://localhost:5173". As portas 3000, 5173, 5432 precisam estar livres
 
