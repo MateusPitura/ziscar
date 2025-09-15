@@ -1,1 +1,0 @@
-import{c as r}from"./index-Bc_KExWn.js";import{w as s,x as t,N as m,L as o,M as n,O as c,E as a,H as e,A as i,P as l,J as f}from"./schemas-BggDEbt9.js";const d=s({fullName:l().or(a()),status:i(["active","inactive"]),startDate:e().or(a()),endDate:e().or(a())}).refine(...f),h=s({fullName:c(),email:n().or(a()),phone:o().or(a()),cpf:m(),address:t(r).max(1)});export{d as S,h as a};
