@@ -17,6 +17,7 @@ export const updateAccountReceivableDTO = s.object({
 });
 
 export const queryAccountReceivableDTO = s.object({
+  description: s.string().optional(),
   page: s
     .string()
     .transform((val) => parseInt(val, 10))
@@ -31,7 +32,6 @@ export const queryAccountReceivableDTO = s.object({
   endDate: s.string().optional(),
   overallStatus: s.enumeration(["PAID", "PENDING"]).optional(),
   orderBy: s.string().optional(),
-  description: s.string().optional(),
 });
 
 export const createAccountReceivableInstallmentDTO = s.object({

@@ -37,7 +37,7 @@ export default function VehicleCommonCharacteristicForm(): ReactNode {
       />
       <Choice.Checkbox<VehicleFormInputs>
         name="characteristics.commonCharacteristics"
-        label="Vidros elétricos"
+        label="Janelas elétricas"
         value="Janelas elétricas"
       />
     </Choice>

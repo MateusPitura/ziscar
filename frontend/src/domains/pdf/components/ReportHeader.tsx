@@ -1,5 +1,5 @@
 import safeFormat from "@/domains/global/utils/safeFormat";
-import { StyleSheet, Text, View } from "@react-pdf/renderer";
+import { Image, StyleSheet, Text, View } from "@react-pdf/renderer";
 import type { ReactNode } from "react";
 
 const styles = StyleSheet.create({
@@ -14,14 +14,14 @@ const styles = StyleSheet.create({
     flex: 1,
     minHeight: 40,
   },
-  logoContainer: {
-    height: 50,
-    backgroundColor: "#F8F9FA",
-    borderRadius: 3,
-    justifyContent: "center",
-    alignItems: "center",
-    marginRight: 8,
-  },
+  // logoContainer: {
+  //   height: 50,
+  //   backgroundColor: "#F8F9FA",
+  //   borderRadius: 3,
+  //   justifyContent: "center",
+  //   alignItems: "center",
+  //   marginRight: 8,
+  // },
   logoText: {
     fontSize: 7,
     color: "#9CA3AF",
@@ -76,8 +76,11 @@ export default function ReportHeader({
   return (
     <View style={styles.header} fixed>
       <View style={styles.gridColumn}>
-        <View style={styles.logoContainer}>
-          <Text style={styles.logoText}>LOGO</Text>
+        <View>
+          <Image
+            src="/somente-logo.png"
+            style={{ width: 40, height: 40 }}
+          />
         </View>
       </View>
 

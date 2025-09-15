@@ -6,15 +6,16 @@ import { SendEmail } from './email.type';
 export class EmailService {
   constructor(private readonly mailerService: MailerService) {}
 
-  async sendEmail({ body, title, to }: SendEmail) {
+  async sendEmail({ body, title, to, html }: SendEmail) {
     try {
       await this.mailerService.sendMail({
         to,
         subject: title,
         text: body,
+        html,
       });
-    } catch {
-      console.error('❌ Cannot send the email');
+    } catch (error) {
+      console.error('❌ Cannot send the email', error);
     }
   }
 }
