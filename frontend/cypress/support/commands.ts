@@ -21,5 +21,5 @@ Cypress.Commands.add(
 );
 
 Cypress.Commands.add("fillInputByName", (name, value) => {
-  cy.get(`input[name="${name}"]`).type(value);
+  cy.get(`input[name="${name}"]`).clear().type(value);
 });

@@ -613,4 +613,251 @@ describe("vehicle", () => {
       "Veículo criado com sucesso"
     );
   });
+
+  it("should edit one field in vehicle", () => {
+    cy.visit("/vehicles");
+
+    cy.intercept("GET", "http://localhost:3000/vehicles?page=1&limit=20").as(
+      "getVehiclesPage"
+    );
+
+    cy.get('[data-cy^="button-edit-vehicle-"]')
+      .first()
+      .invoke("attr", "data-cy")
+      .then((dataCy) => {
+        const userId = dataCy.split("-").pop();
+        cy.wrap(userId).as("vehicleId");
+      });
+
+    const companyName = faker.company.name();
+
+    cy.get("@vehicleId").then((vehicleId) => {
+      cy.intercept("GET", `http://localhost:3000/vehicles/${vehicleId}`).as(
+        "getVehicle"
+      );
+
+      cy.intercept(
+        "PATCH",
+        `http://localhost:3000/vehicles/${vehicleId}`,
+        (req) => {
+          expect(req.body.payment.paidTo).to.equal(companyName);
+        }
+      ).as("editVehicle");
+
+      cy.getDataCy(`button-edit-vehicle-${vehicleId}`).click();
+
+      cy.wait("@getVehicle");
+
+      cy.url().should("include", `/vehicles/edit/${vehicleId}`);
+
+      cy.get('button[type="submit"]').should("be.disabled");
+
+      cy.fillInputByName("payment.paidTo", companyName);
+
+      cy.get('button[type="submit"]').should("be.enabled");
+
+      cy.get('button[type="submit"]').click();
+
+      cy.getDataCy("snackbar-title").should("contain", "Veículo");
+      cy.getDataCy("snackbar-title").should(
+        "contain",
+        "atualizado com sucesso"
+      );
+
+      cy.wait("@editVehicle");
+      cy.wait("@getVehiclesPage");
+    });
+  });
+
+  it("should edit all fields in vehicle", () => {
+    cy.visit("/vehicles");
+
+    cy.intercept("GET", "http://localhost:3000/vehicles?page=1&limit=20").as(
+      "getVehiclesPage"
+    );
+
+    cy.get('[data-cy^="button-edit-vehicle-"]')
+      .first()
+      .invoke("attr", "data-cy")
+      .then((dataCy) => {
+        const userId = dataCy.split("-").pop();
+        cy.wrap(userId).as("vehicleId");
+      });
+
+    const companyName = faker.company.name();
+
+    cy.get("@vehicleId").then((vehicleId) => {
+      const plateNumber = generatePlateNumber();
+      const chassiNumber = generateChassi();
+
+      cy.intercept("GET", `http://localhost:3000/vehicles/${vehicleId}`).as(
+        "getVehicle"
+      );
+
+      cy.intercept(
+        "PATCH",
+        `http://localhost:3000/vehicles/${vehicleId}`,
+        (req) => {
+          expect(req.body.payment.paidTo).to.equal(companyName);
+          expect(req.body.payment.purchaseDate).to.equal("2025-01-01");
+          expect(req.body.plateNumber).to.equal(plateNumber);
+          expect(req.body.chassiNumber).to.equal(chassiNumber);
+          expect(req.body.commissionValue).to.equal("000");
+          expect(req.body.modelName).to.equal("Corsa");
+          expect(req.body.kilometers).to.equal("10000");
+          expect(req.body.characteristics[0]).to.equal("Janelas elétricas");
+        }
+      ).as("editVehicle");
+
+      cy.getDataCy(`button-edit-vehicle-${vehicleId}`).click();
+
+      cy.wait("@getVehicle");
+
+      cy.url().should("include", `/vehicles/edit/${vehicleId}`);
+
+      cy.get('button[type="submit"]').should("be.disabled");
+
+      cy.fillInputByName("payment.paidTo", companyName);
+
+      cy.get('button[type="submit"]').should("be.enabled");
+
+      cy.fillInputByName("payment.purchaseDate", "2025-01-01");
+
+      cy.getDataCy("data-field-Valor de compra")
+        .invoke("text")
+        .then((text) => {
+          expect(text).to.include("R$");
+
+          const numericValue = Number(text.replace(/\D/g, ""));
+
+          expect(numericValue).to.be.greaterThan(0);
+        });
+
+      cy.getDataCy("tab-Veículo").click();
+
+      cy.fillInputByName("vehicle.plateNumber", plateNumber);
+      cy.fillInputByName("vehicle.chassiNumber", chassiNumber);
+
+      cy.fillInputByName("vehicle.commissionValue", "0");
+
+      cy.fillInputByName("vehicle.modelName", "Corsa");
+
+      cy.fillInputByName("vehicle.kilometers", "10000");
+
+      cy.getDataCy("tab-Características").click();
+
+      cy.get('input[name="characteristics.commonCharacteristics"]')
+        .last()
+        .click();
+
+      cy.get('button[type="submit"]').click();
+
+      cy.getDataCy("snackbar-title").should("contain", "Veículo");
+      cy.getDataCy("snackbar-title").should(
+        "contain",
+        "atualizado com sucesso"
+      );
+
+      cy.wait("@editVehicle");
+      cy.wait("@getVehiclesPage");
+    });
+  });
+
+  it.only("should validate fields on edit vehicle", () => {
+    cy.visit("/vehicles");
+
+    cy.intercept("GET", "http://localhost:3000/vehicles?page=1&limit=20").as(
+      "getVehiclesPage"
+    );
+
+    cy.get('[data-cy^="button-edit-vehicle-"]')
+      .first()
+      .invoke("attr", "data-cy")
+      .then((dataCy) => {
+        const userId = dataCy.split("-").pop();
+        cy.wrap(userId).as("vehicleId");
+      });
+
+    cy.get("@vehicleId").then((vehicleId) => {
+      cy.intercept("GET", `http://localhost:3000/vehicles/${vehicleId}`).as(
+        "getVehicle"
+      );
+
+      cy.getDataCy(`button-edit-vehicle-${vehicleId}`).click();
+
+      cy.wait("@getVehicle");
+
+      cy.url().should("include", `/vehicles/edit/${vehicleId}`);
+
+      cy.get('button[type="submit"]').should("be.disabled");
+
+      cy.get('input[name="payment.purchaseDate"]').clear();
+
+      cy.get('button[type="submit"]').should("be.enabled");
+
+      cy.getDataCy("tab-Veículo").click();
+
+      cy.get('input[name="vehicle.plateNumber"]').clear();
+      cy.get('input[name="vehicle.chassiNumber"]').clear();
+      cy.get('input[name="vehicle.minimumPrice"]').clear();
+      cy.get('input[name="vehicle.announcedPrice"]').clear();
+      cy.get('input[name="vehicle.commissionValue"]').clear();
+      cy.get('input[name="vehicle.kilometers"]').clear();
+
+      cy.getDataCy("select-vehicle.storeId").click();
+      cy.getDataCy("icon-Check").click();
+
+      cy.getDataCy("select-vehicle.status").click();
+      cy.getDataCy("icon-Check").click();
+
+      cy.getDataCy("select-vehicle.brandId").click();
+      cy.getDataCy("icon-Check").click();
+
+      cy.get('button[type="submit"]').click();
+
+      cy.getDataCy("input-error-vehicle.plateNumber").should(
+        "have.text",
+        "Campo obrigatório"
+      );
+      cy.getDataCy("input-error-vehicle.chassiNumber").should(
+        "have.text",
+        "Campo obrigatório"
+      );
+      cy.getDataCy("input-error-vehicle.storeId").should(
+        "have.text",
+        "Campo obrigatório"
+      );
+      cy.getDataCy("input-error-vehicle.storeId").should(
+        "have.text",
+        "Campo obrigatório"
+      );
+      cy.getDataCy("input-error-vehicle.minimumPrice").should(
+        "have.text",
+        "Deve ser maior ou igual a R$ 0,01"
+      );
+      cy.getDataCy("input-error-vehicle.announcedPrice").should(
+        "have.text",
+        "Deve ser maior ou igual a R$ 0,01"
+      );
+      cy.getDataCy("input-error-vehicle.status").should(
+        "have.text",
+        "Opção inválida"
+      );
+      cy.getDataCy("input-error-vehicle.brandId").should(
+        "have.text",
+        "Campo obrigatório"
+      );
+      cy.getDataCy("input-error-vehicle.kilometers").should(
+        "have.text",
+        "Deve ser maior ou igual a 0"
+      );
+
+      cy.getDataCy("tab-Compra").click();
+
+      cy.getDataCy("input-error-payment.purchaseDate").should(
+        "have.text",
+        "Data inválida"
+      );
+    });
+  });
 });
