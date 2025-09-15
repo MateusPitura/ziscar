@@ -292,7 +292,7 @@ describe('AuthService', () => {
     expect(spy).toHaveBeenCalledWith({
       to: POPULATE_USER.ADM.email,
       title: 'Redefina sua senha',
-      body: `${FRONTEND_URL}/?token=`,
+      html: expect.stringContaining(`${FRONTEND_URL}/?token=`) as string,
     });
   });
 
@@ -329,7 +329,7 @@ describe('AuthService', () => {
     expect(spy).toHaveBeenCalledWith({
       to: POPULATE_USER.ADM.email,
       title: 'Redefina sua senha',
-      body: `${FRONTEND_URL}/?token=`,
+      html: expect.stringContaining(`${FRONTEND_URL}/?token=`) as string,
     });
   });
 

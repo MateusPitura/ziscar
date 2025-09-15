@@ -763,7 +763,7 @@ describe("vehicle", () => {
     });
   });
 
-  it.only("should validate fields on edit vehicle", () => {
+  it("should validate fields on edit vehicle", () => {
     cy.visit("/vehicles");
 
     cy.intercept("GET", "http://localhost:3000/vehicles?page=1&limit=20").as(

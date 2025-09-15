@@ -41,7 +41,7 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly emailService: EmailService,
     private readonly prismaService: PrismaService,
-  ) { }
+  ) {}
 
   async signIn({ authSignInInDto, res }: SignInInput) {
     const user = await this.userService.findOne({
@@ -190,7 +190,6 @@ export class AuthService {
   `,
     });
 
-
     return true;
   }
 
@@ -249,5 +248,4 @@ export class AuthService {
 
     return true;
   }
-
 }

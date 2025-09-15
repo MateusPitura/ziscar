@@ -30,7 +30,7 @@ export class UserService {
     private readonly prismaService: PrismaService,
     private readonly emailService: EmailService,
     private readonly jwtService: JwtService,
-  ) { }
+  ) {}
 
   async create({ userCreateInDto, transaction }: CreateInput) {
     const database = transaction || this.prismaService;
@@ -126,7 +126,6 @@ export class UserService {
 
     return user;
   }
-
 
   async findMany({
     userFindManyInDto,

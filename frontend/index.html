@@ -1,59 +1,64 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ziscar</title>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ziscar</title>
+    <link rel="icon" type="image/png" href="/somente-logo.png" />
 
-  <link rel="icon" type="image/png" href="/somente-logo.png" />
-
-  <meta http-equiv="Content-Security-Policy" content="
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="
 		    default-src 'self'; 
         connect-src 'self' data: https://viacep.com.br https://servicodados.ibge.gov.br <%= BACKEND_URL %>;
 	      img-src 'self' data:;
         script-src 'self' 'unsafe-inline' 'unsafe-eval';
         style-src 'self' 'unsafe-inline';
         font-src 'self' data:;
-      " />
-  <style>
-    /* HTML Loading */
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
+      "
+    />
+    <style>
+      /* HTML Loading */
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
       }
-    }
-  </style>
-  <!-- Git Hub Pages -->
-  <script type="text/javascript">
-    (function (l) {
-      if (l.search[1] === "/") {
-        var decoded = l.search
-          .slice(1)
-          .split("&")
-          .map(function (s) {
-            return s.replace(/~and~/g, "&");
-          })
-          .join("?");
-        window.history.replaceState(
-          null,
-          null,
-          l.pathname.slice(0, -1) + decoded + l.hash
-        );
-      }
-    })(window.location);
-  </script>
-</head>
+    </style>
+    <!-- Git Hub Pages -->
+    <script type="text/javascript">
+      (function (l) {
+        if (l.search[1] === "/") {
+          var decoded = l.search
+            .slice(1)
+            .split("&")
+            .map(function (s) {
+              return s.replace(/~and~/g, "&");
+            })
+            .join("?");
+          window.history.replaceState(
+            null,
+            null,
+            l.pathname.slice(0, -1) + decoded + l.hash
+          );
+        }
+      })(window.location);
+    </script>
+  </head>
 
-<body style="margin: 0;">
-  <div id="root">
-    <div style="
+  <body style="margin: 0">
+    <div id="root">
+      <div
+        style="
           display: flex;
           justify-content: center;
           align-items: center;
           height: 100vh;
-        ">
-      <div style="
+        "
+      >
+        <div
+          style="
             width: 2.5rem;
             height: 2.5rem;
             border-width: 4px;
@@ -63,10 +68,10 @@
             animation: spin 1s linear infinite;
             border-top-color: transparent;
             box-sizing: border-box;
-          "></div>
+          "
+        ></div>
+      </div>
     </div>
-  </div>
-  <script type="module" src="/src/main.tsx"></script>
-</body>
-
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>
