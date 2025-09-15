@@ -14,8 +14,8 @@ describe("vehicle", () => {
       .first()
       .invoke("attr", "data-cy")
       .then((dataCy) => {
-        const userId = dataCy.split("-").pop();
-        cy.wrap(userId).as("vehicleId");
+        const vehicleId = dataCy.split("-").pop();
+        cy.wrap(vehicleId).as("vehicleId");
       });
 
     cy.get("@vehicleId").then((vehicleId) => {
@@ -139,7 +139,7 @@ describe("vehicle", () => {
     );
   });
 
-  it("Should create vehicle with minimal fields", () => {
+  it("should create vehicle with minimal fields", () => {
     const plateNumber = generatePlateNumber();
     const chassiNumber = generateChassi();
 
@@ -222,7 +222,7 @@ describe("vehicle", () => {
     );
   });
 
-  it("Should create vehicle with all fields", () => {
+  it("should create vehicle with all fields", () => {
     const plateNumber = generatePlateNumber();
     const chassiNumber = generateChassi();
     const characteristic = faker.lorem.word();
@@ -355,8 +355,8 @@ describe("vehicle", () => {
       .first()
       .invoke("attr", "data-cy")
       .then((dataCy) => {
-        const userId = dataCy.split("-").pop();
-        cy.wrap(userId).as("vehicleId");
+        const vehicleId = dataCy.split("-").pop();
+        cy.wrap(vehicleId).as("vehicleId");
       });
 
     cy.get("@vehicleId").then(() => {
@@ -471,7 +471,7 @@ describe("vehicle", () => {
     });
   });
 
-  it("Should create vehicle with paid installment and upfront", () => {
+  it("should create vehicle with paid installment and upfront", () => {
     const plateNumber = generatePlateNumber();
     const chassiNumber = generateChassi();
     const characteristic = faker.lorem.word();
@@ -625,8 +625,8 @@ describe("vehicle", () => {
       .first()
       .invoke("attr", "data-cy")
       .then((dataCy) => {
-        const userId = dataCy.split("-").pop();
-        cy.wrap(userId).as("vehicleId");
+        const vehicleId = dataCy.split("-").pop();
+        cy.wrap(vehicleId).as("vehicleId");
       });
 
     const companyName = faker.company.name();
@@ -680,8 +680,8 @@ describe("vehicle", () => {
       .first()
       .invoke("attr", "data-cy")
       .then((dataCy) => {
-        const userId = dataCy.split("-").pop();
-        cy.wrap(userId).as("vehicleId");
+        const vehicleId = dataCy.split("-").pop();
+        cy.wrap(vehicleId).as("vehicleId");
       });
 
     const companyName = faker.company.name();
@@ -774,8 +774,8 @@ describe("vehicle", () => {
       .first()
       .invoke("attr", "data-cy")
       .then((dataCy) => {
-        const userId = dataCy.split("-").pop();
-        cy.wrap(userId).as("vehicleId");
+        const vehicleId = dataCy.split("-").pop();
+        cy.wrap(vehicleId).as("vehicleId");
       });
 
     cy.get("@vehicleId").then((vehicleId) => {
