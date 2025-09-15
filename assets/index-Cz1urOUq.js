@@ -1,0 +1,1 @@
+import{aB as r,aA as s}from"./index-CrVTpVTI.js";import{w as e,G as n,A as o,H as t,z as m,E as a,J as A}from"./schemas-B7gcU9vp.js";const c=e({description:m().or(a()),overallStatus:o(r),startDate:t().or(a()),endDate:t().or(a())}).refine(...A),p=e({type:o(s),paymentDate:n()});export{c as S,p as a};
