@@ -33,6 +33,7 @@ function Tab({
           "!border-neutral-300 !border-b-neutral-50 shadow-lg": isActive,
         }
       )}
+      data-cy={`tab-${title}`}
     >
       <Button
         label={title}

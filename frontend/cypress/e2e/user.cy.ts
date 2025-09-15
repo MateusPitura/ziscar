@@ -131,47 +131,6 @@ describe("User", () => {
     cy.get('[data-cy="table-navigate-before"]').should("be.disabled");
   });
 
-  // it("should generate user report", () => {
-  //   cy.visit("/users");
-
-  //   cy.intercept(
-  //     "GET",
-  //     "http://localhost:3000/user?page=1&status=active&orderBy=fullName"
-  //   ).as("getUsersPage1");
-
-  //   cy.intercept(
-  //     "GET",
-  //     "http://localhost:3000/user?page=1&status=active&orderBy=fullName"
-  //   ).as("getUsersPage2");
-
-  //   cy.wait("@getUsersPage1");
-
-  //   cy.get('[data-cy="export-button"]').click();
-
-  //   cy.get('[data-cy="snackbar-title"]').should(
-  //     "contain",
-  //     "O PDF está sendo gerado"
-  //   );
-
-  //   cy.wait("@getUsersPage2");
-
-  //   cy.task("downloads:folder").then((downloadsFolder) => {
-  //     cy.task("list:files", downloadsFolder).then((files: string[]) => {
-  //       const pdfFile = files.find(
-  //         (file) =>
-  //           file.startsWith("Relatório Usuários") && file.endsWith(".pdf")
-  //       );
-  //       if (!pdfFile) {
-  //         throw new Error("PDF file not found");
-  //       }
-  //     });
-  //   });
-
-  //   cy.contains('[data-cy="snackbar-title"]', "O PDF está sendo gerado").should(
-  //     "not.exist"
-  //   );
-  // });
-
   it("should edit user, add address, edit address and remove address", () => {
     const fullName = faker.person.fullName();
     const cep = "65043420";
