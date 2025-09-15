@@ -1,6 +1,8 @@
 node_modules/
-.env
+# 🌠 Remover comentário depois da banca do projeto
+# .env  
 .env.prod
+scripts/.env
 test/load/result/
 copilot-instructions.md
 
