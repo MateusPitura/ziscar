@@ -41,7 +41,7 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly emailService: EmailService,
     private readonly prismaService: PrismaService,
-  ) {}
+  ) { }
 
   async signIn({ authSignInInDto, res }: SignInInput) {
     const user = await this.userService.findOne({
@@ -164,8 +164,32 @@ export class AuthService {
     void this.emailService.sendEmail({
       to: authForgetPasswordInDto.email,
       title: 'Redefina sua senha',
-      body: `${FRONTEND_URL}/?token=${token}`,
+      html: `
+    <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.5;">
+      <h2 style="color: #007bff;">Redefina sua senha</h2>
+      <p>Olá,</p>
+      <p>Recebemos uma solicitação para redefinir sua senha. Clique no botão abaixo para criar uma nova senha:</p>
+      <a
+        href="${FRONTEND_URL}/?token=${token}"
+        style="
+          display: inline-block;
+          padding: 12px 24px;
+          margin: 16px 0;
+          background-color: #007bff;
+          color: #fff;
+          text-decoration: none;
+          border-radius: 6px;
+          font-weight: bold;
+        "
+      >
+        Redefinir senha
+      </a>
+      <p>Se você não solicitou a redefinição, ignore este e-mail.</p>
+      <p>Atenciosamente,<br/>Equipe Ziscar</p>
+    </div>
+  `,
     });
+
 
     return true;
   }
@@ -190,9 +214,40 @@ export class AuthService {
     void this.emailService.sendEmail({
       to: user?.email ?? '',
       title: 'Redefina sua senha',
-      body: `${FRONTEND_URL}/?token=${token}`,
+      html: `
+      <table width="100%" cellpadding="0" cellspacing="0" style="font-family: Arial, sans-serif; color: #333; line-height: 1.5; max-width: 600px; margin: auto; border-collapse: collapse;">
+        <tr>
+          <td style="padding: 20px; text-align: center; background-color: #f5f5f5;">
+            <h2 style="color: #007bff; margin: 0;">Redefina sua senha</h2>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 20px; background-color: #ffffff;">
+            <p>Olá,</p>
+            <p>Recebemos uma solicitação para redefinir sua senha. Clique no botão abaixo para criar uma nova senha:</p>
+            <table cellpadding="0" cellspacing="0" style="margin: 20px 0;">
+              <tr>
+                <td align="center" bgcolor="#007bff" style="border-radius: 6px;">
+                  <a href="${FRONTEND_URL}/?token=${token}" target="_blank" style="display: inline-block; padding: 12px 24px; font-size: 16px; color: #fff; text-decoration: none; font-weight: bold;">
+                    Redefinir senha
+                  </a>
+                </td>
+              </tr>
+            </table>
+            <p>Se você não solicitou a redefinição, ignore este e-mail.</p>
+            <p>Atenciosamente,<br/>Equipe Ziscar</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 10px; text-align: center; font-size: 12px; color: #888;">
+            &copy; 2025 Ziscar. Todos os direitos reservados.
+          </td>
+        </tr>
+      </table>
+    `,
     });
 
     return true;
   }
+
 }
