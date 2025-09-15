@@ -13,6 +13,7 @@ export const updateAccountReceivableDTO = s.object({
 });
 
 export const queryAccountReceivableDTO = s.object({
+  description: s.string().optional(),
   page: s
     .string()
     .transform((val) => parseInt(val, 10))

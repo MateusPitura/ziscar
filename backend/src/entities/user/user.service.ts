@@ -30,7 +30,7 @@ export class UserService {
     private readonly prismaService: PrismaService,
     private readonly emailService: EmailService,
     private readonly jwtService: JwtService,
-  ) {}
+  ) { }
 
   async create({ userCreateInDto, transaction }: CreateInput) {
     const database = transaction || this.prismaService;
@@ -89,11 +89,42 @@ export class UserService {
     void this.emailService.sendEmail({
       to: userCreateInDto.email,
       title: 'Confirme a criação da sua conta',
-      body: `${FRONTEND_URL}/?token=${token}`,
+      html: `
+      <table width="100%" cellpadding="0" cellspacing="0" style="font-family: Arial, sans-serif; color: #333; line-height: 1.5; max-width: 600px; margin: auto; border-collapse: collapse;">
+        <tr>
+          <td style="padding: 20px; text-align: center; background-color: #f5f5f5;">
+            <h2 style="color: #007bff; margin: 0;">Confirme sua conta</h2>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 20px; background-color: #ffffff;">
+            <p>Olá,</p>
+            <p>Sua conta foi criada com sucesso! Clique no botão abaixo para confirmar sua conta e definir sua senha:</p>
+            <table cellpadding="0" cellspacing="0" style="margin: 20px 0;">
+              <tr>
+                <td align="center" bgcolor="#007bff" style="border-radius: 6px;">
+                  <a href="${FRONTEND_URL}/?token=${token}" target="_blank" style="display: inline-block; padding: 12px 24px; font-size: 16px; color: #fff; text-decoration: none; font-weight: bold;">
+                    Confirmar conta
+                  </a>
+                </td>
+              </tr>
+            </table>
+            <p>Se você não solicitou a criação desta conta, ignore este e-mail.</p>
+            <p>Atenciosamente,<br/>Equipe Ziscar</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 10px; text-align: center; font-size: 12px; color: #888;">
+            &copy; 2025 Ziscar. Todos os direitos reservados.
+          </td>
+        </tr>
+      </table>
+    `,
     });
 
     return user;
   }
+
 
   async findMany({
     userFindManyInDto,
