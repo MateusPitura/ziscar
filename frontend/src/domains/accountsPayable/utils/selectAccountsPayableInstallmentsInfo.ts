@@ -14,7 +14,7 @@ export default function selectAccountsPayableInstallmentsInfo(
         ...paymentMethod,
         paymentDate: paymentMethod.paymentDate
           ? safeFormat({
-              date: paymentMethod.paymentDate,
+              date: paymentMethod.paymentDate?.split("T")[0],
               format: "dd/MM/yyyy",
             })
           : "",
@@ -24,7 +24,10 @@ export default function selectAccountsPayableInstallmentsInfo(
     itemsFiltered.push({
       ...accountPayable,
       dueDate: accountPayable.dueDate
-        ? safeFormat({ date: accountPayable.dueDate, format: "dd/MM/yyyy" })
+        ? safeFormat({
+            date: accountPayable.dueDate?.split("T")[0],
+            format: "dd/MM/yyyy",
+          })
         : "",
       value: applyMask(accountPayable.value, "money") ?? "",
       paymentMethodPayables: paymentMethods,
