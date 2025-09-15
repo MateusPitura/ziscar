@@ -48,5 +48,6 @@ export const rolePermissions: Record<
     { resource: Resources.CUSTOMERS, action: Actions.CREATE },
     { resource: Resources.CUSTOMERS, action: Actions.READ },
     { resource: Resources.CUSTOMERS, action: Actions.UPDATE },
+    { resource: Resources.STORES, action: Actions.READ },
   ],
 };

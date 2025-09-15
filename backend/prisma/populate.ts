@@ -9,6 +9,7 @@ import {
   PAYMENTMETHODPAYABLETYPE_VALUES,
   PAYMENTMETHODRECEIVABLETYPE_VALUES,
   VEHICLECATEGORY_VALUES,
+  VehicleStatus,
   VEHICLESTATUS_VALUES,
 } from '../../shared/src/enums';
 import {
@@ -188,7 +189,7 @@ async function populate() {
         plateNumber: generatePlateNumber(),
         status:
           VEHICLESTATUS_VALUES[
-            faker.number.int({ min: 0, max: VEHICLESTATUS_VALUES.length - 1 })
+            faker.number.int({ min: 0, max: VEHICLESTATUS_VALUES.length - 2 }) // Exclude 'SOLD' status
           ],
         commissionValue: faker.number.int({ min: 0, max: 50_000 }),
         announcedPrice:
@@ -457,15 +458,112 @@ async function populate() {
           },
         );
 
+        const plateNumber = generatePlateNumber(true);
+
+        const personName = faker.person.fullName();
+
+        const maxCommissionValue = faker.number.int({ min: 0, max: 50_000 });
+
+        const customerSnapshot = {
+          cpf: generateCpf(),
+          email: faker.internet.email(),
+          phone: faker.string.numeric(11),
+          fullName: personName,
+        };
+
+        const yearOfManufacture = faker.number.int({
+          min: 1990,
+          max: new Date().getFullYear(),
+        });
+
+        const minimumPrice = faker.number.int({
+          min: 500_000,
+          max: 18_000_000,
+        });
+
+        const saleDate = faker.date.past({ years: 1 });
+
+        const vehicleSnapshot = {
+          brand: {
+            name: faker.vehicle.manufacturer(),
+          },
+          color: faker.color.rgb().replace('#', ''),
+          store: {
+            name: faker.company.name(),
+          },
+          status: VehicleStatus.SOLD,
+          category:
+            VEHICLECATEGORY_VALUES[
+              faker.number.int({
+                min: 0,
+                max: VEHICLECATEGORY_VALUES.length - 1,
+              })
+            ],
+          fuelType:
+            FUELTYPE_VALUES[
+              faker.number.int({ min: 0, max: FUELTYPE_VALUES.length - 1 })
+            ],
+          modelName: faker.vehicle.model(),
+          modelYear: yearOfManufacture + 1,
+          yearOfManufacture,
+          kilometers: faker.number.int({ min: 0, max: 300000 }),
+          chassiNumber: generateChassi(),
+          plateNumber: plateNumber.replace(/[^a-zA-Z0-9]/g, ''),
+          minimumPrice,
+          announcedPrice:
+            minimumPrice + faker.number.int({ min: 0, max: 1_000_000 }),
+          commissionValue: maxCommissionValue,
+          vehicleCharacteristicValues: [],
+        };
+
         await tx.accountReceivable.create({
           data: {
-            description: `Venda Veículo ${generatePlateNumber(true)}`,
-            receivedFrom: faker.person.fullName(),
+            description: `Venda Veículo ${plateNumber}`,
+            receivedFrom: personName,
             accountReceivableInstallments: {
               create: installments,
             },
+            vehicleSales: {
+              create: {
+                customerSnapshot: customerSnapshot,
+                date: saleDate,
+                userId: POPULATE_USER.ADM.id,
+                customerId: POPULATE_CUSTOMER.DEFAULT.id,
+                vehicleId: POPULATE_INACTIVE_ENTITIES_AMOUNT + 1, // First active vehicle
+                vehicleSnapshot: vehicleSnapshot,
+              },
+            },
           },
         });
+
+        const commissionValue = faker.number.int({
+          min: 0,
+          max: maxCommissionValue,
+        });
+
+        if (commissionValue) {
+          await tx.accountPayable.create({
+            data: {
+              description: `Comissão Venda Veículo ${plateNumber}`,
+              paidTo: POPULATE_USER.ADM.fullName,
+              accountPayableInstallments: {
+                create: [
+                  {
+                    dueDate: saleDate, // 🌠 trocar para null
+                    value: faker.number.int({
+                      min: 0,
+                      max: maxCommissionValue,
+                    }),
+                    installmentSequence: 1,
+                    isRefund: false,
+                    isUpfront: false,
+                    status: InstallmentStatus.PENDING,
+                  },
+                ],
+              },
+            },
+          });
+        }
       },
     );
 

@@ -51,7 +51,7 @@ echo -e "${BLUE}🗃️  Running migration on database${NC}"
 echo ""
 
 echo -e "${PURPLE}🖥️  Running backend container${NC}"
-./backend-session.sh "cd ziscar && docker-compose down backend && docker-compose pull backend && NODE_ENV=production RESTART_POLICY=always docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d backend && exit"
+./backend-session.sh "cd ziscar && docker-compose down backend && docker-compose pull backend && docker image prune -f && NODE_ENV=production RESTART_POLICY=always docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d backend && exit"
 echo ""
 
 echo -e "${BLUE}🌐 Running frontend container${NC}"
