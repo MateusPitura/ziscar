@@ -54,6 +54,7 @@ export class AccountPayableService implements AccountPayableRepository {
   }
 
   async search(
+    query: string,
     page: number,
     limit: number,
     startDate: Date,
@@ -62,6 +63,10 @@ export class AccountPayableService implements AccountPayableRepository {
   ): Promise<SearchResponse> {
     const accounts = await this.prisma.accountPayable.findMany({
       where: {
+        description: {
+          contains: query,
+          mode: 'insensitive',
+        },
         accountPayableInstallments: overallStatus
           ? overallStatus === 'PAID'
             ? {
@@ -100,6 +105,10 @@ export class AccountPayableService implements AccountPayableRepository {
         createdAt: {
           gte: startDate,
           lte: endDate,
+        },
+        description: {
+          contains: query,
+          mode: 'insensitive',
         },
       },
     });

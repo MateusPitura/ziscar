@@ -68,6 +68,7 @@ export class AccountReceivableService implements AccountReceivableRepository {
   }
 
   async search(
+    query: string,
     page: number,
     limit: number,
     startDate: Date,
@@ -76,6 +77,11 @@ export class AccountReceivableService implements AccountReceivableRepository {
   ): Promise<SearchResponse> {
     const accounts = await this.prisma.accountReceivable.findMany({
       where: {
+        description: {
+          contains: query,
+          mode: 'insensitive',
+        },
+
         accountReceivableInstallments: overallStatus
           ? overallStatus === 'PAID'
             ? {
@@ -115,6 +121,10 @@ export class AccountReceivableService implements AccountReceivableRepository {
         createdAt: {
           gte: startDate,
           lte: endDate,
+        },
+        description: {
+          contains: query,
+          mode: 'insensitive',
         },
       },
     });

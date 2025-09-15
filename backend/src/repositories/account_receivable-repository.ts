@@ -41,6 +41,7 @@ export abstract class AccountReceivableRepository {
   ): Promise<AccountReceivable | null>;
 
   abstract search(
+    query: string,
     page: number,
     limit: number,
     startDate: Date,
