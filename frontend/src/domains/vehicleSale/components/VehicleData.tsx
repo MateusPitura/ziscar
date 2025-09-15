@@ -2,8 +2,7 @@ import ColorPreview from "@/design-system/ColorPreview";
 import DataField from "@/domains/global/components/DataField";
 import {
   FuelTypeText,
-  VehicleCategoryText,
-  VehicleStatusText,
+  VehicleCategoryText, VehicleStatusTextForSale
 } from "@/domains/vehicles/constants";
 import type { ReactNode } from "react";
 import { VehicleToString } from "../types";
@@ -22,11 +21,11 @@ export default function VehicleData({
       <DataField label="Loja" value={vehicleData.store.name} />
       <DataField label="Preço mínimo" value={vehicleData.minimumPrice} />
       <DataField label="Preço anunciado" value={vehicleData.announcedPrice} />
+      <DataField label="Comissão máxima" value={vehicleData.commissionValue} />
       <DataField
-        label="Comissão máxima"
-        value={vehicleData.commissionValue}
+        label="Status"
+        value={VehicleStatusTextForSale[vehicleData.status]}
       />
-      <DataField label="Status" value={VehicleStatusText[vehicleData.status]} />
       <DataField label="Quilometragem" value={vehicleData.kilometers} />
       <DataField
         label="Categoria"
