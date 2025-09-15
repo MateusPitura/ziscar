@@ -7,6 +7,7 @@ import { PaymentMethodPayableService } from 'src/entities/payment-method-payable
 import { PrismaService } from 'src/infra/database/prisma.service';
 import { InstallmentStatus, PaymentMethodPayableType } from '@prisma/client';
 import { ValidateVehicleUniqueFieldsUseCase } from './validate-vehicle-unique-fields.use-case';
+import { max } from 'date-fns';
 
 @Injectable()
 export class InsertVehicleUseCase {
@@ -84,9 +85,13 @@ export class InsertVehicleUseCase {
           await this.accountPayableInstallmentService.create({
             accountPayableId,
             installmentSequence: index + 1,
-            dueDate: installment.dueDate,
+            dueDate: installment.paymentMethods
+              ? max(installment.paymentMethods.map((pm) => pm.paymentDate))
+              : installment.dueDate,
             value: installment.value,
-            status: InstallmentStatus.PENDING,
+            status: installment.paymentMethods
+              ? InstallmentStatus.PAID
+              : InstallmentStatus.PENDING,
             isUpfront: installment.isUpfront ?? false,
             isRefund: false,
             refundAccountPayableInstallmentId: null,
