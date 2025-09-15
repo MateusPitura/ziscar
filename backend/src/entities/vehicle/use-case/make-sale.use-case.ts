@@ -21,7 +21,7 @@ import { deepClone } from 'src/utils/deepClone';
 import { UserService } from 'src/entities/user/user.service';
 import { AccountPayableInstallmentService } from 'src/entities/account-payable-installment/account-payable-installment.service';
 import { AccountPayable } from '@prisma/client';
-import { max } from 'date-fns';
+import { addMonths, max } from 'date-fns';
 
 @Injectable()
 export class MakeSaleUseCase {
@@ -103,7 +103,7 @@ export class MakeSaleUseCase {
         await this.accountPayableInstallmentService.create({
           accountPayableId: createdCommissionAccountPayable.id,
           installmentSequence: 1,
-          dueDate: date,
+          dueDate: addMonths(date, 1),
           value: commissionValue,
           status: InstallmentStatus.PENDING,
           isUpfront: false,

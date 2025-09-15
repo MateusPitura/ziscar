@@ -102,6 +102,7 @@ export class VehicleService implements VehicleRepository {
     const where: Prisma.VehicleWhereInput = {};
 
     where.status = { not: VehicleStatus.SOLD };
+    where.store = { archivedAt: null };
 
     if (params.storeId) where.storeId = Number(params.storeId);
     if (params.brandId) where.brandId = Number(params.brandId);
