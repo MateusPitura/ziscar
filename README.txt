@@ -10,9 +10,9 @@ Vendedor:
 - Usuário: john.sales@email.com
 - Senha: Senha12345@
 
-# Execução local
+1. Execução local
 
-### Instalação do Docker
+1.1 Instalação do Docker
 
 Caso já possua o Docker instalado pule para a próxima etapa
 
@@ -26,14 +26,14 @@ Execute em um terminal CMD "wsl --update". Após concluir, verifique a versão c
 
 Em um terminal CMD verifique a versão do docker com "docker -v" (ex.: 28.3.3) e "docker-compose -v" (ex.: 2.39.2)
 
-### Execução
+1.2 Execução
 
-Baixe o zip do projeto, descompacte e navegue até a pasta "ziscar-main". Use as opções padrões do arquivo ".env" ou o configure conforme a sua preferência
+Baixe o zip do projeto e descompacte. Use as opções padrão do arquivo ".env" ou o configure conforme a sua preferência navegando até a pasta raiz "ziscar-main", abrindo o arquivo e o editando
 
-Abra um terminal CMD, navegue até a pasta "ziscar-main" e execute "docker-compose pull" (irá demorar aproximadamente 2 minutos a depender da internet) e depois "docker-compose up". Caso o Docker solicite permissão para acessar o serviço de rede, aceite
+Abra um terminal CMD, navegue até a pasta raiz "ziscar-main". Garante que o programa "Docker Desktop" esteja aberto e execute no terminal "docker-compose pull" (irá demorar aproximadamente 2 minutos a depender da internet) e depois "docker-compose up". Caso o Docker solicite permissão para acessar o serviço de rede, aceite
 
 No navegador abra "http://localhost:5173". As portas 3000, 5173, 5432 precisam estar livres
 
-# Acesso via internet
+2. Acesso via internet
 
-Acesse o site https://ziscar.me (obs.: o método de autenticação permite um usuário acessar em 1 computador por vez)
+Alternativamente acesse o site https://ziscar.me (obs.: o método de autenticação permite um usuário acessar em 1 computador por vez)
