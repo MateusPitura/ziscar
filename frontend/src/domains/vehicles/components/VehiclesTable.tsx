@@ -4,16 +4,26 @@ import useDialog from "@/domains/global/hooks/useDialog";
 import useFilterContext from "@/domains/global/hooks/useFilterContext";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import { PageablePayload } from "@/domains/global/types";
-import { FetchVehicle } from "@/domains/global/types/model";
+import {
+  FetchVehicle,
+  FetchBrand,
+  FetchStore,
+} from "@/domains/global/types/model";
 import formatFilters from "@/domains/global/utils/formatFilters";
 import ExportButton from "@/domains/pdf/components/ExportButton";
 import { ITEMS_PER_PAGE } from "@shared/constants";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState, type ReactNode } from "react";
-import { VEHICLES_TABLE, VehicleStatusText } from "../constants";
+import {
+  VEHICLES_TABLE,
+  VehicleStatusText,
+  VehicleCategoryText,
+} from "../constants";
 import { DisableVehicle, VehiclesFilterFormInputs } from "../types";
 import selectVehiclesInfo from "../utils/selectVehiclesInfo";
 import selectVehiclesInfoForReport from "../utils/selectVehiclesInfoForReport";
+import selectBrandsInfo from "../utils/selectBrandsInfo";
+import selectStoresInfo from "@/domains/stores/utils/selectStoresInfo";
 import DisableVehicleModal from "./DisableVehicleModal";
 import VehiclesFilterForm from "./VehiclesFilterForm";
 import VehiclesTableActions from "./VehiclesTableActions";
@@ -58,11 +68,50 @@ export default function VehiclesTable(): ReactNode {
     );
   }
 
+  async function getBrandsInfo(): Promise<FetchBrand[]> {
+    return await safeFetch(`${BACKEND_URL}/vehicles/brands`);
+  }
+
+  async function getStoresInfo(): Promise<PageablePayload<FetchStore>> {
+    return await safeFetch(`${BACKEND_URL}/store?orderBy=name`, {
+      resource: "STORES",
+      action: "READ",
+    });
+  }
+
   const { data: vehiclesInfo, isFetching: isFetchingVehiclesInfo } = useQuery({
     queryKey: ["vehicles", filterFormatted],
     queryFn: ({ queryKey }) => getVehiclesInfo(queryKey[1]),
     select: selectVehiclesInfo,
   });
+
+  const { data: brandsInfo } = useQuery({
+    queryKey: ["brands"],
+    queryFn: getBrandsInfo,
+    select: selectBrandsInfo,
+  });
+
+  const { data: storesInfo } = useQuery({
+    queryKey: ["stores"],
+    queryFn: getStoresInfo,
+    select: selectStoresInfo,
+  });
+
+  const brandNamesMap = useMemo(() => {
+    if (!brandsInfo) return {};
+    return brandsInfo.reduce((acc, brand) => {
+      acc[brand.value] = brand.label;
+      return acc;
+    }, {} as Record<string, string>);
+  }, [brandsInfo]);
+
+  const storeNamesMap = useMemo(() => {
+    if (!storesInfo?.data) return {};
+    return storesInfo.data.reduce((acc, store) => {
+      acc[String(store.id)] = store.name;
+      return acc;
+    }, {} as Record<string, string>);
+  }, [storesInfo]);
 
   const biggestValueLength = useMemo(() => {
     if (!vehiclesInfo?.data.length) return 0;
@@ -92,12 +141,18 @@ export default function VehiclesTable(): ReactNode {
             announcedPriceMin: "Preço mínimo",
             announcedPriceMax: "Preço máximo",
           }}
-          formatFiltersValues={{}}
+          formatFiltersValues={{
+            status: VehicleStatusText,
+            category: { ...VehicleCategoryText, "": "Todas" },
+            brandId: brandNamesMap,
+            storeId: storeNamesMap,
+          }}
           formatColumns={{
             modelName: "Modelo",
             plateNumber: "Placa",
             modelYear: "Ano do modelo",
             status: "Status",
+            announcedPrice: "Preço anunciado",
           }}
         />
         <Table.Filter form={<VehiclesFilterForm />} />

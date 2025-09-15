@@ -89,12 +89,12 @@ describe("Account Receivable", () => {
       });
 
     cy.get("@vehicleSaleId").then((vehicleSaleId) => {
-      cy.getDataCy(`button-view-vehicleSale-${vehicleSaleId}`).click();
-
       cy.intercept(
         "GET",
         `http://localhost:3000/vehicles/sale/${vehicleSaleId}`
       ).as("getVehicleSale");
+
+      cy.getDataCy(`button-view-vehicleSale-${vehicleSaleId}`).click();
 
       cy.wait("@getVehicleSale");
 
@@ -133,8 +133,6 @@ describe("Account Receivable", () => {
       });
 
     cy.get("@accountId").then((accountId) => {
-      cy.getDataCy(`button-edit-accountReceivable-${accountId}`).click();
-
       cy.intercept(
         "GET",
         `http://localhost:3000/account-receivable/${accountId}`
@@ -144,6 +142,8 @@ describe("Account Receivable", () => {
         "GET",
         `http://localhost:3000/account-receivable-installments/by-account/${accountId}`
       ).as("getAccountInstallments");
+
+      cy.getDataCy(`button-edit-accountReceivable-${accountId}`).click();
 
       cy.wait("@getAccountDetails");
       cy.wait("@getAccountInstallments");
@@ -190,8 +190,6 @@ describe("Account Receivable", () => {
       });
 
     cy.get("@accountId").then((accountId) => {
-      cy.getDataCy(`button-edit-accountReceivable-${accountId}`).click();
-
       cy.intercept(
         "GET",
         `http://localhost:3000/account-receivable/${accountId}`
@@ -201,6 +199,8 @@ describe("Account Receivable", () => {
         "GET",
         `http://localhost:3000/account-receivable-installments/by-account/${accountId}`
       ).as("getAccountInstallments");
+
+      cy.getDataCy(`button-edit-accountReceivable-${accountId}`).click();
 
       cy.wait("@getAccountDetails");
       cy.wait("@getAccountInstallments");

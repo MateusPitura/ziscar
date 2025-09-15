@@ -39,6 +39,7 @@ export default function StoresTableActions({
     mutationFn: enableStore,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["stores"] });
+      queryClient.invalidateQueries({ queryKey: ["vehicles"] });
       showSuccessSnackbar({
         title: `Loja ${name} ativada com sucesso`,
       });

@@ -97,8 +97,6 @@ describe("Account Payable", () => {
       });
 
     cy.get("@accountId").then((accountId) => {
-      cy.getDataCy(`button-edit-accountPayable-${accountId}`).click();
-
       cy.intercept(
         "GET",
         `http://localhost:3000/account-payable/${accountId}`
@@ -108,6 +106,8 @@ describe("Account Payable", () => {
         "GET",
         `http://localhost:3000/account-payable-installments/by-account-payable/${accountId}`
       ).as("getAccountInstallments");
+
+      cy.getDataCy(`button-edit-accountPayable-${accountId}`).click();
 
       cy.wait("@getAccountDetails");
       cy.wait("@getAccountInstallments");
@@ -154,8 +154,6 @@ describe("Account Payable", () => {
       });
 
     cy.get("@accountId").then((accountId) => {
-      cy.getDataCy(`button-edit-accountPayable-${accountId}`).click();
-
       cy.intercept(
         "GET",
         `http://localhost:3000/account-payable/${accountId}`
@@ -165,6 +163,8 @@ describe("Account Payable", () => {
         "GET",
         `http://localhost:3000/account-payable-installments/by-account-payable/${accountId}`
       ).as("getAccountInstallments");
+
+      cy.getDataCy(`button-edit-accountPayable-${accountId}`).click();
 
       cy.wait("@getAccountDetails");
       cy.wait("@getAccountInstallments");

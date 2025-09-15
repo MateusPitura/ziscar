@@ -159,6 +159,8 @@ export class AuthService {
     };
     const token = this.jwtService.sign(payload);
 
+    console.log('EMAIL: ', `${FRONTEND_URL}/?token=${token}`);
+
     void this.emailService.sendEmail({
       to: authForgetPasswordInDto.email,
       title: 'Redefina sua senha',
@@ -182,6 +184,8 @@ export class AuthService {
       enterpriseId: user!.enterpriseId,
     };
     const token = this.jwtService.sign(payload);
+
+    console.log('EMAIL: ', `${FRONTEND_URL}/?token=${token}`);
 
     void this.emailService.sendEmail({
       to: user?.email ?? '',

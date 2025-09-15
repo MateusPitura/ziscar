@@ -34,6 +34,7 @@ export default function DisableStoreModal({
     onSuccess: () => {
       handleStoresFilter({ page: 1 });
       queryClient.invalidateQueries({ queryKey: ["stores"] });
+      queryClient.invalidateQueries({ queryKey: ["vehicles"] });
       showSuccessSnackbar({
         title: `Loja ${storeName} desativada com sucesso`,
       });
@@ -51,8 +52,7 @@ export default function DisableStoreModal({
             {BLANK}
             {storeName}
           </span>
-          ? Ao desativar os registros relacionados a ela não serão mais
-          acessíveis
+          ? Ao desativar os veículos dessa loja não serão mais acessíveis
         </span>
       </Dialog.Body>
       <Dialog.Footer
