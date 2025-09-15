@@ -5,6 +5,7 @@ import { s } from "@shared/safeZod";
 
 export const SchemaAccountsReceivableFilterForm = s
   .object({
+    description: s.string().or(s.empty()),
     overallStatus: s.enumeration(INSTALLMENTSTATUS_VALUES),
     startDate: s.dateString().or(s.empty()),
     endDate: s.dateString().or(s.empty()),

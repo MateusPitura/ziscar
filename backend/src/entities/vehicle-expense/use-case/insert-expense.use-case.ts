@@ -9,6 +9,7 @@ import {
   InsertVehicleExpenseRequestDto,
   InsertVehicleExpenseResponseDto,
 } from '../dtos';
+import { max } from 'date-fns';
 
 @Injectable()
 export class InsertExpenseUseCase {
@@ -47,9 +48,13 @@ export class InsertExpenseUseCase {
             await this.accountPayableInstallmentService.create({
               accountPayableId: accountPayable.id,
               installmentSequence: installment.installmentSequence,
-              dueDate: installment.dueDate,
+              dueDate: installment.paymentMethods
+                ? max(installment.paymentMethods.map((pm) => pm.paymentDate))
+                : installment.dueDate,
               value: installment.value,
-              status: InstallmentStatus.PENDING,
+              status: installment.paymentMethods
+                ? InstallmentStatus.PAID
+                : InstallmentStatus.PENDING,
               isUpfront: installment.isUpfront ?? false,
               isRefund: false,
               refundAccountPayableInstallmentId: null,

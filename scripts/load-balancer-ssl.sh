@@ -2,6 +2,8 @@
 
 source .env
 
+set -e
+
 # Inputs
 CERT_NAME="cert-$(date +%Y%m%d)"
 PUBLIC_FILE_PATH="$HOME/Downloads/cert.pem"
@@ -9,6 +11,24 @@ PRIVATE_FILE_PATH="$HOME/Downloads/privkey.pem"
 CA_FILE_PATH="$HOME/Downloads/fullchain.pem"
 LOAD_BALANCER_LISTNER_NAME="https-listener"
 BACKEND_SET_NAME="bs_lb_2023-0831-1920"
+
+echo "Generating new SSL certificate for load balancer..."
+sudo certbot certonly --manual --preferred-challenges dns -d api.ziscar.me --email $SSL_EMAIL --agree-tos --no-eff-email
+
+echo "Moving certificate files to Downloads..."
+sudo cp /etc/letsencrypt/live/api.ziscar.me/cert.pem $HOME/Downloads/
+sudo cp /etc/letsencrypt/live/api.ziscar.me/fullchain.pem $HOME/Downloads/
+sudo cp /etc/letsencrypt/live/api.ziscar.me/privkey.pem $HOME/Downloads/
+
+echo "Changing ownership of certificate files..."
+sudo chown $USER:$USER $HOME/Downloads/cert.pem
+sudo chown $USER:$USER $HOME/Downloads/privkey.pem
+sudo chown $USER:$USER $HOME/Downloads/fullchain.pem
+
+echo "Setting permissions on certificate files..."
+sudo chmod 600 $HOME/Downloads/cert.pem
+sudo chmod 600 $HOME/Downloads/privkey.pem
+sudo chmod 600 $HOME/Downloads/fullchain.pem
 
 echo "Creating certificate $CERT_NAME..."
 oci lb certificate create \

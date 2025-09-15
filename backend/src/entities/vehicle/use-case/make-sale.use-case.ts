@@ -21,6 +21,7 @@ import { deepClone } from 'src/utils/deepClone';
 import { UserService } from 'src/entities/user/user.service';
 import { AccountPayableInstallmentService } from 'src/entities/account-payable-installment/account-payable-installment.service';
 import { AccountPayable } from '@prisma/client';
+import { max } from 'date-fns';
 
 @Injectable()
 export class MakeSaleUseCase {
@@ -90,7 +91,7 @@ export class MakeSaleUseCase {
       if (commissionValue > 0) {
         createdCommissionAccountPayable =
           await this.accountPayableService.create({
-            description: `Comissão da venda do ${updatedVehicle.modelName} ${updatedVehicle.modelYear}`,
+            description: `Comissão Venda Veículo ${updatedVehicle.plateNumber}`,
             paidTo: user?.fullName,
           });
 
@@ -103,9 +104,9 @@ export class MakeSaleUseCase {
           accountPayableId: createdCommissionAccountPayable.id,
           installmentSequence: 1,
           dueDate: date,
-          value: 1,
+          value: commissionValue,
           status: InstallmentStatus.PENDING,
-          isUpfront: true,
+          isUpfront: false,
           isRefund: false,
           refundAccountPayableInstallmentId: null,
         });
@@ -146,9 +147,13 @@ export class MakeSaleUseCase {
           await this.accountReceivableInstallmentService.create({
             accountReceivableId,
             installmentSequence: installment.installmentSequence,
-            dueDate: installment.dueDate,
+            dueDate: installment.paymentMethods
+              ? max(installment.paymentMethods.map((pm) => pm.paymentDate))
+              : installment.dueDate,
             value: installment.value,
-            status: InstallmentStatus.PENDING,
+            status: installment.paymentMethods
+              ? InstallmentStatus.PAID
+              : InstallmentStatus.PENDING,
             isUpfront: installment.isUpfront ?? false,
             isRefund: false,
             refundAccountReceivableInstallmentId: null,

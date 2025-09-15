@@ -38,7 +38,9 @@ export class AccountPayableInstallmentService
     const updatedInstallment =
       await this.prisma.accountPayableInstallment.update({
         where: { id: Number(id) },
+
         data: {
+          status: 'PAID',
           paymentMethodPayables: {
             create: {
               type: data.type,

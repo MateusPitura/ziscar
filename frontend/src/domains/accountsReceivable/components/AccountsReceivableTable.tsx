@@ -74,6 +74,7 @@ export default function AccountsReceivableTable(): ReactNode {
           queryFn={getAccountsReceivableInfo}
           selectQueryFn={selectAccountsReceivableInfoForReport}
           formatFilters={{
+            description: "Descrição",
             endDate: "Data final",
             startDate: "Data inicial",
             overallStatus: "Status geral",

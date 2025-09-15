@@ -1,5 +1,9 @@
 import { ITEMS_PER_PAGE } from "../constants";
-import { InstallmentStatus, PaymentMethodPayableType, PaymentMethodReceivableType } from "../enums";
+import {
+  InstallmentStatus,
+  PaymentMethodPayableType,
+  PaymentMethodReceivableType,
+} from "../enums";
 import { s } from "../safeZod";
 
 export const createAccountReceivableDTO = s.object({
@@ -27,6 +31,7 @@ export const queryAccountReceivableDTO = s.object({
   endDate: s.string().optional(),
   overallStatus: s.enumeration(["PAID", "PENDING"]).optional(),
   orderBy: s.string().optional(),
+  description: s.string().optional(),
 });
 
 export const createAccountReceivableInstallmentDTO = s.object({

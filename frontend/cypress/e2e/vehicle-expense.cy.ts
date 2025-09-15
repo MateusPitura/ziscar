@@ -65,7 +65,7 @@ describe("Vehicle Expense", () => {
 
       cy.fillInputByName("payment.installment.dueDate", "2025-01-01");
 
-      cy.getDataCy("payment-total-value").should("have.text", "R$ 100,00");
+      cy.getDataCy("data-field-Valor total").should("have.text", "R$ 100,00");
 
       cy.get('button[type="submit"]').click();
 
@@ -156,7 +156,7 @@ describe("Vehicle Expense", () => {
       cy.getDataCy("select-option-PAID").click();
       cy.fillInputByName("payment.installment.paymentDate", "2025-01-01");
 
-      cy.getDataCy("payment-total-value").should("have.text", "R$ 200,00");
+      cy.getDataCy("data-field-Valor total").should("have.text", "R$ 200,00");
 
       cy.get('button[type="submit"]').click();
 
@@ -206,7 +206,7 @@ describe("Vehicle Expense", () => {
       cy.getDataCy("select-payment.installment.paymentMethod").click();
       cy.getDataCy("select-option-CREDIT_CARD").click();
 
-      cy.getDataCy("payment-total-value").should("have.text", "R$ 0,00");
+      cy.getDataCy("data-field-Valor total").should("have.text", "R$ 0,00");
 
       cy.get('button[type="submit"]').click();
 
@@ -333,7 +333,7 @@ describe("Vehicle Expense", () => {
           });
         });
 
-        cy.getDataCy("total-expenses").then(($element) => {
+        cy.getDataCy("data-field-Total de gastos").then(($element) => {
           const displayedText = $element.text();
 
           const displayedValue = displayedText.replace(/\D/g, "");

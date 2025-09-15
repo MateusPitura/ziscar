@@ -77,6 +77,7 @@ export default function AccountsPayableTable(): ReactNode {
             endDate: "Data final",
             startDate: "Data inicial",
             overallStatus: "Status geral",
+            description: "Descrição",
           }}
           formatFiltersValues={{
             overallStatus: {

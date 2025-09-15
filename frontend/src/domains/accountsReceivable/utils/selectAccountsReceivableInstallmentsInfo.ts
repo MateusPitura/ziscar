@@ -14,7 +14,7 @@ export default function selectAccountsReceivableInstallmentsInfo(
         ...paymentMethod,
         paymentDate: paymentMethod.paymentDate
           ? safeFormat({
-              date: paymentMethod.paymentDate,
+              date: paymentMethod.paymentDate?.split("T")[0],
               format: "dd/MM/yyyy",
             })
           : "",
@@ -24,7 +24,10 @@ export default function selectAccountsReceivableInstallmentsInfo(
     itemsFiltered.push({
       ...accountReceivable,
       dueDate: accountReceivable.dueDate
-        ? safeFormat({ date: accountReceivable.dueDate, format: "dd/MM/yyyy" })
+        ? safeFormat({
+            date: accountReceivable.dueDate?.split("T")[0],
+            format: "dd/MM/yyyy",
+          })
         : "",
       value: applyMask(accountReceivable.value, "money") ?? "",
       paymentMethodReceivables: paymentMethods,

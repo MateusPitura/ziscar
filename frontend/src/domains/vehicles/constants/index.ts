@@ -39,6 +39,14 @@ export const VehicleStatusText: Record<VehicleStatusForFilterType, string> = {
   INACTIVE: "Inativo",
 };
 
+export const VehicleStatusTextForSale: Record<VehicleStatus, string> = {
+  DELIVERED: "Entregue",
+  IN_STOCK: "Em Estoque",
+  MAINTENANCE: "Em Manutenção",
+  PURCHASED: "Comprado",
+  SOLD: "Vendido",
+};
+
 export const FuelTypeText: Record<FuelTypeType, string> = {
   FLEX: "Flex",
   GASOLINE: "Gasolina",

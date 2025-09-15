@@ -30,6 +30,7 @@ function AccountsPayableFilterForm(): ReactNode {
       defaultValues={{
         startDate: accountsPayableFilter?.startDate || "",
         endDate: accountsPayableFilter?.endDate || "",
+        description: accountsPayableFilter?.description || "",
         overallStatus:
           accountsPayableFilter?.overallStatus || InstallmentStatus.PAID,
       }}
@@ -54,6 +55,10 @@ function AccountsPayableFilterFormContent(): ReactElement {
   return (
     <>
       <SideSheet.Body className="flex flex-col gap-4">
+        <Input<AccountsPayableFilterFormInputs>
+          label="Descrição"
+          name="description"
+        />
         <Input<AccountsPayableFilterFormInputs>
           name="startDate"
           label="Data inicial de criação"

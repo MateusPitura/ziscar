@@ -75,7 +75,6 @@ export default function VehicleExpenseTable(): ReactNode {
         <DataField
           label="Total de gastos"
           value={applyMask(totalValueExpenses, "money")}
-          dataCy="total-expenses"
         />
       </div>
       <Table>

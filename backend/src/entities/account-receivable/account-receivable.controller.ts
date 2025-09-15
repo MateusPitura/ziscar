@@ -27,6 +27,7 @@ export class AccountReceivableController {
   @Get('search')
   async searchAccountsReceivable(@Query() query: QueryAccountReceivableDTO) {
     return this.AccountReceivableService.search(
+      query.description ?? '',
       query.page,
       query.limit,
       query.startDate ? new Date(query.startDate) : new Date('1970-01-01'),
