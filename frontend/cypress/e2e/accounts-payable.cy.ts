@@ -1,5 +1,11 @@
 describe("Account Payable", () => {
   beforeEach(() => {
+    cy.intercept("**", (req) => {
+      req.headers["cache-control"] = "no-cache";
+      req.headers["if-none-match"] = undefined;
+      req.headers["if-modified-since"] = undefined;
+    });
+
     cy.login();
   });
 
