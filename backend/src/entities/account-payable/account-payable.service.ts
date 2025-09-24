@@ -16,11 +16,10 @@ export class AccountPayableService implements AccountPayableRepository {
     return this.prisma.accountPayable.create({ data });
   }
   async findById(id: string): Promise<FindByIdResponse> {
-    // 1️⃣ Buscar a conta a pagar com os installments
     const accountPayable = await this.prisma.accountPayable.findUnique({
       where: { id: Number(id) },
       include: {
-        accountPayableInstallments: true, // garante que pegamos todas as parcelas
+        accountPayableInstallments: true,
       },
     });
 
