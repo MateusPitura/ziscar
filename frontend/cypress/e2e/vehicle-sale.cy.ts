@@ -57,7 +57,7 @@ describe("vehicle", () => {
 
       cy.url().should("include", `/vehicle-sale/new/${vehicleId}`);
 
-      cy.getDataCy("data-field-Número da placa")
+      cy.getDataCy("data-field-Placa")
         .invoke("text")
         .should((text) => {
           expect(text.length).to.be.oneOf([7, 8]);
@@ -158,7 +158,7 @@ describe("vehicle", () => {
 
       cy.url().should("include", `/vehicle-sale/new/${vehicleId}`);
 
-      cy.getDataCy("data-field-Número da placa")
+      cy.getDataCy("data-field-Placa")
         .invoke("text")
         .should((text) => {
           expect(text.length).to.be.oneOf([7, 8]);
@@ -284,7 +284,7 @@ describe("vehicle", () => {
 
       cy.url().should("include", `/vehicle-sale/new/${vehicleId}`);
 
-      cy.getDataCy("data-field-Número da placa")
+      cy.getDataCy("data-field-Placa")
         .invoke("text")
         .should((text) => {
           expect(text.length).to.be.oneOf([7, 8]);
@@ -371,7 +371,7 @@ describe("vehicle", () => {
 
       cy.url().should("include", `/vehicle-sale/new/${vehicleId}`);
 
-      cy.getDataCy("data-field-Número da placa")
+      cy.getDataCy("data-field-Placa")
         .invoke("text")
         .should((text) => {
           expect(text.length).to.be.oneOf([7, 8]);
