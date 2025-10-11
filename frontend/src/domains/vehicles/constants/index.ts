@@ -9,12 +9,12 @@ import {
   VehicleCategoryType,
   VehicleStatus,
 } from "@shared/enums";
+import { VehicleStatusForFilterType } from "@shared/types";
 import {
   VehicleExpenseFormInputs,
   VehicleFormInputs,
   VehiclesFilterFormInputs,
 } from "../types";
-import { VehicleStatusForFilterType } from "@shared/types";
 
 export const vehicleFilterDefaultValues: VehiclesFilterFormInputs = {
   startDate: "",
