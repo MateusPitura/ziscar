@@ -1,6 +1,6 @@
+import { ButtonState } from "@/design-system/types";
 import { Children, cloneElement, type ReactElement } from "react";
 import useButtonState from "../hooks/useButtonState";
-import { ButtonState } from "@/design-system/types";
 import { Childrenable } from "../types";
 
 interface PageHeaderProperties extends Childrenable {
@@ -23,8 +23,8 @@ export default function PageHeader({
   const [first, ...others] = Children.toArray(children);
 
   return (
-    <div className="w-full py-4 flex flex-col gap-4">
-      <div className="flex-1 flex flex-col items-center gap-2">
+    <div className="w-full flex flex-col gap-4">
+      <div className="flex-1 flex flex-col items-center gap-1">
         <span className="text-headline-large text-neutral-700 flex-1 text-center">
           {title}
         </span>

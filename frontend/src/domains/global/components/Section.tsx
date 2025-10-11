@@ -1,8 +1,9 @@
 import classNames from "classnames";
+import { ReactNode } from "react";
 import { Childrenable } from "../types";
 
 function Container({ children }: Childrenable) {
-  return <div className="flex flex-col gap-x-4 gap-y-2 xl:w-[56rem] w-[40rem]">{children}</div>;
+  return <div className="flex flex-col gap-x-4 gap-y-1 xl:w-[56rem] w-[40rem]">{children}</div>;
 }
 
 function Group({ children }: Childrenable) {
@@ -10,12 +11,12 @@ function Group({ children }: Childrenable) {
 }
 
 interface HeaderProps {
-  title: string;
+  title: ReactNode;
 }
 
 function Header({ title }: HeaderProps) {
   return (
-    <div className="px-4 py-2">
+    <div className="px-4 py-1">
       <span className="text-body-large text-neutral-700 font-bold">{title}</span>
     </div>
   );
@@ -27,7 +28,7 @@ interface SectionBodyProps extends Childrenable {
 
 function Body({ children, className }: SectionBodyProps) {
   return (
-    <div className={classNames("px-4 py-2 grid grid-cols-2 gap-x-4 gap-y-2", className)}>
+    <div className={classNames("px-4 py-1 grid grid-cols-2 gap-x-4 gap-y-1", className)}>
       {children}
     </div>
   );

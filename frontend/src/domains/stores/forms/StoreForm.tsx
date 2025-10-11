@@ -74,12 +74,7 @@ export default function StoreForm({
                 />
               </Section.Body>
             </Section.Group>
-            <Section.Group>
-              <Section.Header title="Endereço" />
-              <Section.Body>
-                <AddressFields />
-              </Section.Body>
-            </Section.Group>
+            <AddressFields />
           </Section>
         </div>
         <PageFooter primaryBtnState={isPending ? "loading" : undefined} dirty>
@@ -94,7 +89,7 @@ export default function StoreForm({
             color="red"
             iconRight="Close"
             label="Cancelar"
-            onClick={() => navigate('/stores')}
+            onClick={() => navigate("/stores")}
           />
         </PageFooter>
       </Form>

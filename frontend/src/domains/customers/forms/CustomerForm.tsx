@@ -50,12 +50,7 @@ export default function CustomerForm({
                 <CustomerFormInputs/>
               </Section.Body>
             </Section.Group>
-            <Section.Group>
-              <Section.Header title="Endereço" />
-              <Section.Body>
-                <AddressFields />
-              </Section.Body>
-            </Section.Group>
+            <AddressFields />
           </Section>
         </div>
         <PageFooter primaryBtnState={isPending ? "loading" : undefined} dirty>

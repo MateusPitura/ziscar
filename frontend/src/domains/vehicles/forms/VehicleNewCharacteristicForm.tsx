@@ -9,6 +9,7 @@ export default function VehicleNewCharacteristicForm(): ReactElement {
       name="characteristics.newCharacteristics"
       appendText="Adicionar característica"
       removeText="Remover característica"
+      title="Adicione características"
       appendDefaultValues={{ description: "" }}
       maxLength={10}
       render={(index) => (

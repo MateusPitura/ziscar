@@ -52,12 +52,7 @@ export default function ExpenseForm({
             </Section.Group>
             {!isEdit && (
               <>
-                <Section.Group>
-                  <Section.Header title="Informações da entrada" />
-                  <Section.Body>
-                    <UpfrontForm />
-                  </Section.Body>
-                </Section.Group>
+                <UpfrontForm />
                 <Section.Group>
                   <Section.Header title="Informações do pagamento" />
                   <Section.Body>

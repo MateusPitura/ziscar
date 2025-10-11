@@ -86,12 +86,7 @@ export default function UserForm({
                   />
                 </Section.Body>
               </Section.Group>
-              <Section.Group>
-                <Section.Header title="Endereço" />
-                <Section.Body>
-                  <AddressFields />
-                </Section.Body>
-              </Section.Group>
+              <AddressFields />
               {allowEditRole && (
                 <Section.Group>
                   <Section.Header title="Categoria" />
@@ -137,7 +132,7 @@ export default function UserForm({
               color="red"
               iconRight="Close"
               label="Cancelar"
-              onClick={() => navigate('/users')}
+              onClick={() => navigate("/users")}
             />
           </PageFooter>
         </Form>

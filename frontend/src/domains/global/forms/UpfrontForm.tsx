@@ -1,3 +1,4 @@
+import FieldArray from "@/design-system/Form/FieldArray";
 import Input from "@/design-system/Form/Input";
 import Select from "@/design-system/Form/Select";
 import {
@@ -12,7 +13,6 @@ import {
   vehicleDefaultValues,
 } from "../../vehicles/constants";
 import { VehicleFormInputs } from "../../vehicles/types";
-import FieldArray from "@/design-system/Form/FieldArray";
 
 interface UpfrontFormProperties {
   isAccountReceivable?: boolean;
@@ -43,6 +43,8 @@ export default function UpfrontForm({
       appendText="Adicionar entrada"
       removeText="Remover entrada"
       maxLength={1}
+      title="Informação da entrada"
+      className="grid-cols-3"
       appendDefaultValues={vehicleDefaultValues.payment.installment!}
       render={() => (
         <>
