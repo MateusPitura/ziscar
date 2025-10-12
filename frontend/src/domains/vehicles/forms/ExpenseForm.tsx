@@ -1,5 +1,6 @@
 import Button from "@/design-system/Button";
 import Form from "@/design-system/Form";
+import { ContextHelperable } from "@/domains/contextHelpers/types";
 import PageFooter from "@/domains/global/components/PageFooter";
 import Section from "@/domains/global/components/Section";
 import PaymentForm from "@/domains/global/forms/PaymentForm";
@@ -11,7 +12,7 @@ import { SchemaVehicleExpenseForm } from "../schemas";
 import { VehicleExpenseFormInputs } from "../types";
 import VehicleExpenseDetailsForm from "./VehicleExpenseDetailsForm";
 
-interface ExpenseFormProperties {
+interface ExpenseFormProperties extends ContextHelperable {
   defaultValues: Partial<VehicleExpenseFormInputs>;
   onSubmit: (data: VehicleExpenseFormInputs) => void;
   isPending: boolean;
@@ -31,6 +32,7 @@ export default function ExpenseForm({
   resource,
   action,
   onClose,
+  contextHelper
 }: ExpenseFormProperties): ReactNode {
   return (
     <div className="flex flex-col gap-4 w-full">
@@ -41,7 +43,7 @@ export default function ExpenseForm({
         className="gap-4 flex flex-col flex-1"
         onlyDirty={isEdit}
       >
-        <VehicleExpenseHeader title={headerTitle} />
+        <VehicleExpenseHeader title={headerTitle} contextHelper={contextHelper}/>
         <div className="flex justify-center flex-1">
           <Section>
             <Section.Group>

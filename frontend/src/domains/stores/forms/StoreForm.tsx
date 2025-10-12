@@ -1,6 +1,7 @@
 import Button from "@/design-system/Button";
 import Form from "@/design-system/Form";
 import Input from "@/design-system/Form/Input";
+import { ContextHelperable } from "@/domains/contextHelpers/types";
 import AddressFields from "@/domains/global/components/AddressFields";
 import PageFooter from "@/domains/global/components/PageFooter";
 import PageHeader from "@/domains/global/components/PageHeader";
@@ -11,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { SchemaStoreForm } from "../schemas";
 import { StoreFormInputs } from "../types";
 
-interface StoreFormProperties {
+interface StoreFormProperties extends ContextHelperable {
   defaultValues: Partial<StoreFormInputs>;
   onSubmit: (data: StoreFormInputs) => void;
   isPending: boolean;
@@ -29,6 +30,7 @@ export default function StoreForm({
   isEdit = false,
   resource,
   action,
+  contextHelper
 }: StoreFormProperties): ReactNode {
   const navigate = useNavigate();
 
@@ -41,7 +43,7 @@ export default function StoreForm({
         className="gap-4 flex flex-col flex-1"
         onlyDirty={isEdit}
       >
-        <PageHeader title={headerTitle} />
+        <PageHeader title={headerTitle} contextHelper={contextHelper}/>
         <div className="flex justify-center flex-1">
           <Section>
             <Section.Group>

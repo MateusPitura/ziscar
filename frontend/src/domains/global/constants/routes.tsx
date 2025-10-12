@@ -1,4 +1,5 @@
 import { IconsName } from "@/design-system/types";
+import VehiclesContextHelper from "@/domains/contextHelpers/components/VehiclesContextHelper";
 import { ActionsType, ResourcesType } from "@shared/enums";
 import { lazy, ReactNode } from "react";
 import { DEFAULT_ROUTE } from ".";
@@ -166,7 +167,7 @@ export const privateRoutes: Route[] = [
     path: "/accounts-payable",
     displayName: "Pagamentos",
     icon: "CreditCardOff",
-    entryPage: <AccountsPayable />,
+    entryPage: <AccountsPayable contextHelper={<VehiclesContextHelper />} />,
     shouldDisplay: true,
     action: "READ",
     resource: "ACCOUNTS_PAYABLE",

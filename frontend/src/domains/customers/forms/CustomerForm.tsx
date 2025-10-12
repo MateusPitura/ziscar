@@ -1,5 +1,6 @@
 import Button from "@/design-system/Button";
 import Form from "@/design-system/Form";
+import { ContextHelperable } from "@/domains/contextHelpers/types";
 import AddressFields from "@/domains/global/components/AddressFields";
 import PageFooter from "@/domains/global/components/PageFooter";
 import PageHeader from "@/domains/global/components/PageHeader";
@@ -11,7 +12,7 @@ import { SchemaCustomerForm } from "../schemas";
 import { CustomerFormInputs as CustomerFormInputsType } from "../types";
 import CustomerFormInputs from "./CustomerFormInputs";
 
-interface CustomerFormProperties {
+interface CustomerFormProperties extends ContextHelperable {
   defaultValues: Partial<CustomerFormInputsType>;
   onSubmit: (data: CustomerFormInputsType) => void;
   isPending: boolean;
@@ -29,6 +30,7 @@ export default function CustomerForm({
   isEdit = false,
   resource,
   action,
+  contextHelper
 }: CustomerFormProperties): ReactNode {
   const navigate = useNavigate();
 
@@ -41,7 +43,7 @@ export default function CustomerForm({
         className="gap-4 flex flex-col flex-1"
         onlyDirty={isEdit}
       >
-        <PageHeader title={headerTitle} />
+        <PageHeader title={headerTitle} contextHelper={contextHelper}/>
         <div className="flex justify-center flex-1">
           <Section>
             <Section.Group>

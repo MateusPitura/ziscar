@@ -1,11 +1,91 @@
+import Spinner from "@/design-system/Spinner";
+import { ContextHelperable } from "@/domains/contextHelpers/types";
+import { BACKEND_URL } from "@/domains/global/constants";
+import UserForm from "@/domains/global/forms/UserForm";
+import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
+import useSnackbar from "@/domains/global/hooks/useSnackbar";
+import { User } from "@/domains/global/types/model";
+import parseAddressToUpdate from "@/domains/global/utils/parseAddressToUpdate";
+import { UserFormInputs } from "@/domains/users/types";
+import {
+  useIsFetching,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import type { ReactNode } from "react";
 import { EditProfilePageProvider } from "../contexts/EditProfilePageContext";
-import EditProfilePageContainer from "./EditProfilePageContainer";
+import selectProfileInfo from "../utils/selectProfileInfo";
 
-export default function EditProfilePage(): ReactNode {
+export default function EditProfilePage({
+  contextHelper,
+}: ContextHelperable): ReactNode {
+  const { safeFetch } = useSafeFetch();
+  const { showSuccessSnackbar } = useSnackbar();
+  const queryClient = useQueryClient();
+
+  const isFetchingCep = useIsFetching({ queryKey: ["cepApi"] });
+
+  async function getProfileInfo(): Promise<User> {
+    return await safeFetch(`${BACKEND_URL}/profile`);
+  }
+
+  const { data: profileData, isFetching } = useQuery({
+    queryKey: ["profile"],
+    queryFn: getProfileInfo,
+    select: selectProfileInfo,
+  });
+
+  async function editUser(data: UserFormInputs) {
+    const { address, ...rest } = data;
+
+    const addressPayload = parseAddressToUpdate({
+      newAddress: address,
+      oldAddress: profileData?.address,
+    });
+
+    await safeFetch(`${BACKEND_URL}/profile`, {
+      method: "PATCH",
+      body: {
+        ...rest,
+        ...(addressPayload && { address: addressPayload }),
+      },
+    });
+  }
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: editUser,
+    onSuccess: async () => {
+      showSuccessSnackbar({
+        title: "Perfil atualizado com sucesso",
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["profile"],
+      });
+    },
+  });
+
+  if (isFetching) {
+    return (
+      <div className="flex justify-center items-center h-full w-full">
+        <Spinner />
+      </div>
+    );
+  }
+
   return (
     <EditProfilePageProvider>
-      <EditProfilePageContainer />
+      {profileData && (
+        <UserForm
+          headerTitle="Editar minha conta"
+          defaultValues={profileData}
+          onSubmit={mutate}
+          isPending={isPending || !!isFetchingCep}
+          isEdit
+          allowChangePassword
+          contextHelper={contextHelper}
+        />
+      )}
     </EditProfilePageProvider>
   );
 }

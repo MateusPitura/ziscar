@@ -1,4 +1,5 @@
 import Button from "@/design-system/Button";
+import { ContextHelperable } from "@/domains/contextHelpers/types";
 import PageHeader from "@/domains/global/components/PageHeader";
 import { BACKEND_URL } from "@/domains/global/constants";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
@@ -9,7 +10,7 @@ import type { ReactNode } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import selectVehicleInfo from "../utils/selectVehicleInfo";
 
-interface VehicleExpenseHeaderProps {
+interface VehicleExpenseHeaderProps extends ContextHelperable {
   title: string;
   showActions?: boolean;
 }
@@ -17,6 +18,7 @@ interface VehicleExpenseHeaderProps {
 export default function VehicleExpenseHeader({
   title,
   showActions,
+  contextHelper
 }: VehicleExpenseHeaderProps): ReactNode {
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -53,6 +55,7 @@ export default function VehicleExpenseHeader({
       title={
         data?.vehicle.plateNumber ? `${title} "${data.vehicle.plateNumber}"` : title
       }
+      contextHelper={contextHelper}
     >
       {showActions && (
         <>

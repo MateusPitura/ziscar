@@ -1,10 +1,17 @@
+import { ContextHelperable } from "@/domains/contextHelpers/types";
+import PageHeader from "@/domains/global/components/PageHeader";
 import { AccountsReceivablePageProvider } from "../contexts/AccountsReceivablePageContext";
-import AccountsReceivableContainer from "./AccountsReceivableContainer";
+import AccountsReceivableTable from "./AccountsReceivableTable";
 
-export default function AccountsReceivablePage() {
+export default function AccountsReceivablePage({
+  contextHelper,
+}: ContextHelperable) {
   return (
     <AccountsReceivablePageProvider>
-      <AccountsReceivableContainer />
+      <div className="flex flex-col gap-4 h-full w-full">
+        <PageHeader title="Vendas" contextHelper={contextHelper} />
+        <AccountsReceivableTable />
+      </div>
     </AccountsReceivablePageProvider>
   );
 }

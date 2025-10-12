@@ -2,6 +2,7 @@ import Button from "@/design-system/Button";
 import Form from "@/design-system/Form";
 import Choice from "@/design-system/Form/Choice";
 import Input from "@/design-system/Form/Input";
+import { ContextHelperable } from "@/domains/contextHelpers/types";
 import AddressFields from "@/domains/global/components/AddressFields";
 import PageHeader from "@/domains/global/components/PageHeader";
 import Section from "@/domains/global/components/Section";
@@ -15,7 +16,7 @@ import { UserFormInputs } from "../../users/types";
 import PageFooter from "../components/PageFooter";
 import useDialog from "../hooks/useDialog";
 
-interface UserFormProperties {
+interface UserFormProperties extends ContextHelperable {
   defaultValues: Partial<UserFormInputs>;
   onSubmit: (data: UserFormInputs) => void;
   isPending: boolean;
@@ -37,6 +38,7 @@ export default function UserForm({
   action,
   allowEditRole = false,
   allowChangePassword = false,
+  contextHelper
 }: UserFormProperties): ReactNode {
   const navigate = useNavigate();
   const dialog = useDialog();
@@ -52,7 +54,7 @@ export default function UserForm({
           className="gap-4 flex flex-col flex-1"
           onlyDirty={isEdit}
         >
-          <PageHeader title={headerTitle} />
+          <PageHeader title={headerTitle} contextHelper={contextHelper}/>
           <div className="flex justify-center flex-1">
             <Section>
               <Section.Group>

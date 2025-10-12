@@ -7,8 +7,9 @@ import { useQuery } from "@tanstack/react-query";
 import type { ReactNode } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import selectAccountPayableInfo from "../utils/selectAccountPayableInfo";
+import { ContextHelperable } from "@/domains/contextHelpers/types";
 
-export default function AccountsPayableInstallmentsHeader(): ReactNode {
+export default function AccountsPayableInstallmentsHeader({ contextHelper}: ContextHelperable): ReactNode {
   const navigate = useNavigate();
   const { accountPayableId } = useParams();
   const { safeFetch } = useSafeFetch();
@@ -36,6 +37,7 @@ export default function AccountsPayableInstallmentsHeader(): ReactNode {
           ? `Detalhes do Pagamento "${data.description}"`
           : "Detalhes do Pagamento"
       }
+      contextHelper={contextHelper}
     >
       <Button
         variant="quaternary"
