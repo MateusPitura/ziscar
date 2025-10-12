@@ -51,7 +51,7 @@ export default function VehicleExpenseHeader({
   return (
     <PageHeader
       title={
-        data?.vehicle.modelName ? `${title} "${data.vehicle.modelName}"` : title
+        data?.vehicle.plateNumber ? `${title} "${data.vehicle.plateNumber}"` : title
       }
     >
       {showActions && (

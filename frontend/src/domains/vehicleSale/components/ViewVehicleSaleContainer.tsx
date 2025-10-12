@@ -65,9 +65,7 @@ export default function ViewVehicleSaleContainer(): ReactNode {
   return (
     vehicleData && (
       <div className="flex flex-col gap-4 w-full">
-        <PageHeader
-          title={`Detalhes "Venda Veículo ${vehicleData.vehicle.plateNumber}"`}
-        >
+        <PageHeader title="Detalhes da Venda">
           <Button
             label="Voltar"
             iconLeft="ArrowBack"
