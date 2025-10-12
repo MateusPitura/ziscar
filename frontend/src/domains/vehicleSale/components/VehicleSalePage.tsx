@@ -20,7 +20,7 @@ import { VehicleSaleFormInputs } from "../types";
 import selectVehicleInfo from "../utils/selectVehicleInfo";
 import VehicleSaleTabs from "./VehicleSaleTabs";
 
-export default function VehicleSalePage({ contextHelper}: ContextHelperable) {
+export default function VehicleSalePage({ contextHelper }: ContextHelperable) {
   const navigate = useNavigate();
   const { safeFetch } = useSafeFetch();
   const { vehicleId } = useParams();
@@ -100,36 +100,37 @@ export default function VehicleSalePage({ contextHelper}: ContextHelperable) {
 
   return (
     <VehicleSalePageProvider>
-      {
-        vehicleData && (
-      <div className="flex flex-col gap-4 w-full">
-        <Form<VehicleSaleFormInputs>
-          onSubmit={mutate}
-          className="flex-1 flex flex-col gap-4"
-          schema={SchemaVehicleSaleForm({
-            commissionValue: vehicleData.commissionValue,
-            minimumPrice: vehicleData.minimumPrice,
-          })}
-          defaultValues={vehicleSaleDefaultValues({
-            value: vehicleData.announcedPrice,
-            commissionValue: vehicleData.commissionValue,
-          })}
-        >
-          <PageHeader title="Realizar venda" contextHelper={contextHelper}/>
-          <VehicleSaleTabs vehicleData={vehicleData} />
-          <PageFooter dirty primaryBtnState={isPending ? "loading" : undefined}>
-            <Button color="lightBlue" iconRight="Save" label="Salvar" />
-            <Button
-              color="red"
-              iconRight="Close"
-              label="Cancelar"
-              onClick={() => navigate("/vehicles")}
-            />
-          </PageFooter>
-        </Form>
-      </div>
-    )
-      }
+      {vehicleData && (
+        <div className="flex flex-col gap-4 w-full">
+          <Form<VehicleSaleFormInputs>
+            onSubmit={mutate}
+            className="flex-1 flex flex-col gap-4"
+            schema={SchemaVehicleSaleForm({
+              commissionValue: vehicleData.commissionValue,
+              minimumPrice: vehicleData.minimumPrice,
+            })}
+            defaultValues={vehicleSaleDefaultValues({
+              value: vehicleData.announcedPrice,
+              commissionValue: vehicleData.commissionValue,
+            })}
+          >
+            <PageHeader title="Realizar venda" contextHelper={contextHelper} />
+            <VehicleSaleTabs vehicleData={vehicleData} />
+            <PageFooter
+              dirty
+              primaryBtnState={isPending ? "loading" : undefined}
+            >
+              <Button color="lightBlue" iconRight="Save" label="Salvar" />
+              <Button
+                color="red"
+                iconRight="Close"
+                label="Cancelar"
+                onClick={() => navigate("/vehicles")}
+              />
+            </PageFooter>
+          </Form>
+        </div>
+      )}
     </VehicleSalePageProvider>
   );
 }
