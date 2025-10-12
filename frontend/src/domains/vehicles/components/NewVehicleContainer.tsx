@@ -7,7 +7,7 @@ import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import formatInstallment from "@/domains/global/utils/formatInstallment";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import { vehicleDefaultValues } from "../constants";
 import { SchemaVehicleForm } from "../schemas";
@@ -62,6 +62,17 @@ export default function NewVehicleContainer(): ReactNode {
       queryClient.invalidateQueries({ queryKey: ["accounts-receivable"] });
     },
   });
+
+  function handleBeforeUnload(event: BeforeUnloadEvent) {
+    event.preventDefault();
+  }
+
+  useEffect(() => {
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
 
   return (
     <div className="flex flex-col gap-4 w-full">
