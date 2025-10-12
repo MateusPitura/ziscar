@@ -1,12 +1,11 @@
 import Button from "@/design-system/Button";
+import { BACKEND_URL } from "@/domains/global/constants";
+import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
+import useSnackbar from "@/domains/global/hooks/useSnackbar";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { type ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import { DisableUser } from "../types";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
-import useSnackbar from "@/domains/global/hooks/useSnackbar";
-import { BACKEND_URL } from "@/domains/global/constants";
-import Tooltip from "@/design-system/Tooltip";
 
 interface UsersTableActionsProperties {
   isActive?: boolean;
@@ -47,47 +46,44 @@ export default function UsersTableActions({
 
   return isActive ? (
     <>
-      <Tooltip content="Editar">
-        <Button
-          variant="quaternary"
-          iconLeft="Edit"
-          onClick={() => navigate(`/users/edit/${userId}`)}
-          resource="USERS"
-          action="UPDATE"
-          padding="none"
-          data-cy={`button-edit-user-${userId}`}
-        />
-      </Tooltip>
-      <Tooltip content="Desativar">
-        <Button
-          variant="primary"
-          iconLeft="Delete"
-          color="red"
-          padding="none"
-          onClick={() =>
-            handleDisableUserInfo({
-              userName: fullName,
-              userId: userId,
-            })
-          }
-          resource="USERS"
-          action="DELETE"
-          data-cy={`button-disable-user-${userId}`}
-        />
-      </Tooltip>
-    </>
-  ) : (
-    <Tooltip content="Ativar">
       <Button
+        tooltipMessage="Editar"
         variant="quaternary"
-        onClick={mutate}
-        state={isPending ? "loading" : undefined}
+        iconLeft="Edit"
+        onClick={() => navigate(`/users/edit/${userId}`)}
+        resource="USERS"
+        action="UPDATE"
+        padding="none"
+        data-cy={`button-edit-user-${userId}`}
+      />
+      <Button
+        tooltipMessage="Desativar"
+        variant="primary"
+        iconLeft="Delete"
+        color="red"
+        padding="none"
+        onClick={() =>
+          handleDisableUserInfo({
+            userName: fullName,
+            userId: userId,
+          })
+        }
         resource="USERS"
         action="DELETE"
-        padding="none"
-        iconLeft="ToggleOn"
-        data-cy={`button-enable-user-${userId}`}
+        data-cy={`button-disable-user-${userId}`}
       />
-    </Tooltip>
+    </>
+  ) : (
+    <Button
+      tooltipMessage="Ativar"
+      variant="quaternary"
+      onClick={mutate}
+      state={isPending ? "loading" : undefined}
+      resource="USERS"
+      action="DELETE"
+      padding="none"
+      iconLeft="ToggleOn"
+      data-cy={`button-enable-user-${userId}`}
+    />
   );
 }

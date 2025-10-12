@@ -15,7 +15,9 @@ import { SchemaVehicleForm } from "../schemas";
 import { VehicleFormInputs } from "../types";
 import VehicleTabs from "./VehicleTabs";
 
-export default function NewVehiclePage({ contextHelper }: ContextHelperable): ReactNode {
+export default function NewVehiclePage({
+  contextHelper,
+}: ContextHelperable): ReactNode {
   const navigate = useNavigate();
   const { safeFetch } = useSafeFetch();
   const { showSuccessSnackbar } = useSnackbar();
@@ -83,14 +85,20 @@ export default function NewVehiclePage({ contextHelper }: ContextHelperable): Re
         schema={SchemaVehicleForm}
         defaultValues={vehicleDefaultValues}
       >
-        <PageHeader title="Cadastrar veículo" contextHelper={contextHelper}/>
+        <PageHeader title="Cadastrar veículo" contextHelper={contextHelper} />
         <VehicleTabs />
         <PageFooter dirty primaryBtnState={isPending ? "loading" : undefined}>
-          <Button color="lightBlue" iconRight="Save" label="Salvar" />
+          <Button
+            color="lightBlue"
+            iconRight="Save"
+            label="Salvar"
+            tooltipMessage="Salvar cadastro"
+          />
           <Button
             color="red"
             iconRight="Close"
             label="Cancelar"
+            tooltipMessage="Cancelar cadastro"
             onClick={() => navigate("/vehicles")}
           />
         </PageFooter>

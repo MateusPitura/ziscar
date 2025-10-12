@@ -1,4 +1,5 @@
 import Button from "@/design-system/Button";
+import { ContextHelperable } from "@/domains/contextHelpers/types";
 import PageHeader from "@/domains/global/components/PageHeader";
 import { BACKEND_URL } from "@/domains/global/constants";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
@@ -7,7 +8,6 @@ import { useQuery } from "@tanstack/react-query";
 import type { ReactNode } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import selectAccountPayableInfo from "../utils/selectAccountPayableInfo";
-import { ContextHelperable } from "@/domains/contextHelpers/types";
 
 export default function AccountsPayableInstallmentsHeader({ contextHelper}: ContextHelperable): ReactNode {
   const navigate = useNavigate();
@@ -42,6 +42,7 @@ export default function AccountsPayableInstallmentsHeader({ contextHelper}: Cont
       <Button
         variant="quaternary"
         label="Voltar"
+        tooltipMessage="Página anterior"
         iconLeft="ArrowBack"
         onClick={() => navigate("/accounts-payable")}
         action="READ"

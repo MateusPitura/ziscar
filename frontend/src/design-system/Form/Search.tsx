@@ -1,10 +1,10 @@
+import { useDebounce } from "@/domains/global/hooks/useDebounce";
+import { QueryKeys, UnwrapArray } from "@/domains/global/types";
+import { useQuery } from "@tanstack/react-query";
 import { useMemo, type ReactElement } from "react";
 import { FieldValues, Path, PathValue } from "react-hook-form";
-import Select from "./Select";
-import { useQuery } from "@tanstack/react-query";
-import { QueryKeys, UnwrapArray } from "@/domains/global/types";
-import { useDebounce } from "@/domains/global/hooks/useDebounce";
 import Button from "../Button";
+import Select from "./Select";
 
 interface SearchProperties<T, K extends Record<string, unknown>[]> {
   fetchCallback: (search?: string) => Promise<K>;
@@ -90,6 +90,7 @@ export default function Search<
         formattedNotFound &&
         onClickNotFound && (
           <Button
+            tooltipMessage={undefined}
             label={`Cadastrar "${formattedNotFound}"`}
             variant="quaternary"
             onClick={() => onClickNotFound(formattedNotFound)}

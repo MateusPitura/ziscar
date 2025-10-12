@@ -21,6 +21,7 @@ export default function UsersPage({ contextHelper}: ContextHelperable) {
           action="CREATE"
           color="green"
           data-cy="new-user-button"
+          tooltipMessage="Adicionar novo usuário"
         />
       </PageHeader>
       <UsersTable />

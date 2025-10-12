@@ -20,6 +20,7 @@ export default function StoresPage({ contextHelper}: ContextHelperable) {
           action="CREATE"
           color="green"
           data-cy="new-store-button"
+          tooltipMessage="Adicionar nova loja"
         />
       </PageHeader>
       <StoresTable />

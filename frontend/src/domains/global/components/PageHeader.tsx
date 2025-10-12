@@ -64,6 +64,7 @@ export default function PageHeader({
               variant="quaternary"
               className="text-neutral-700"
               onClick={contextHelperModal.openDialog}
+              tooltipMessage="Ajuda"
             />
             <span className="text-headline-large flex-1 text-center text-neutral-700">
               {title}

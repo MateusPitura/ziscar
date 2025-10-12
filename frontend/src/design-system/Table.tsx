@@ -206,6 +206,7 @@ function Footer({
         onClick={handleBefore}
         label="Anterior"
         data-cy="table-navigate-before"
+        tooltipMessage="Página anterior"
         state={
           isLoading
             ? "loading"
@@ -233,6 +234,7 @@ function Footer({
         iconRight="NavigateNext"
         onClick={handleNext}
         label="Próxima"
+        tooltipMessage="Página seguinte"
         data-cy="table-navigate-next"
         state={
           isLoading
@@ -266,6 +268,7 @@ function Filter({ onFilterCallback, filterBtnState, form }: FilterProps) {
             onClick={onFilterCallback}
             state={filterBtnState}
             data-cy="button-table-filter"
+            tooltipMessage="Abrir filtros"
           />
         </div>
       </SideSheet.Trigger>

@@ -118,12 +118,18 @@ export default function VehicleSaleContainer({
           <PageHeader title="Realizar venda" contextHelper={contextHelper} />
           <VehicleSaleTabs vehicleData={vehicleData} />
           <PageFooter dirty primaryBtnState={isPending ? "loading" : undefined}>
-            <Button color="lightBlue" iconRight="Save" label="Salvar" />
+            <Button
+              color="lightBlue"
+              iconRight="Save"
+              label="Salvar"
+              tooltipMessage="Salvar cadastro"
+            />
             <Button
               color="red"
               iconRight="Close"
               label="Cancelar"
               onClick={() => navigate("/vehicles")}
+              tooltipMessage="Cancelar cadastro"
             />
           </PageFooter>
         </Form>

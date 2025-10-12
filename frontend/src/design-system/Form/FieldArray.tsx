@@ -7,7 +7,6 @@ import {
   useFieldArray,
 } from "react-hook-form";
 import Button from "../Button";
-import Tooltip from "../Tooltip";
 import InputError from "./InputError";
 
 interface FieldArrayProperties<T extends FieldValues> {
@@ -42,14 +41,13 @@ export default function FieldArray<T extends FieldValues>({
           <div className="flex items-center justify-between">
             {title}
             {maxLength === 1 && !!fields.length && (
-              <Tooltip content={removeText}>
-                <Button
-                  variant="quaternary"
-                  iconLeft="Delete"
-                  onClick={() => remove(0)}
-                  data-cy={`button-remove-${name}`}
-                />
-              </Tooltip>
+              <Button
+                tooltipMessage={removeText}
+                variant="quaternary"
+                iconLeft="Delete"
+                onClick={() => remove(0)}
+                data-cy={`button-remove-${name}`}
+              />
             )}
           </div>
         }
@@ -60,16 +58,15 @@ export default function FieldArray<T extends FieldValues>({
             <Fragment key={field.id}>
               {maxLength != 1 && (
                 <div className="flex items-center justify-end col-span-full">
-                  <Tooltip content={removeText}>
-                    <Button
-                      variant="quaternary"
-                      iconLeft="Delete"
-                      onClick={() => {
-                        remove(index);
-                      }}
-                      data-cy={`button-remove-${name}`}
-                    />
-                  </Tooltip>
+                  <Button
+                    tooltipMessage={removeText}
+                    variant="quaternary"
+                    iconLeft="Delete"
+                    onClick={() => {
+                      remove(index);
+                    }}
+                    data-cy={`button-remove-${name}`}
+                  />
                 </div>
               )}
               {render(index)}
@@ -79,6 +76,7 @@ export default function FieldArray<T extends FieldValues>({
         {(maxLength && fields.length >= maxLength) || (
           <div className="col-span-full">
             <Button
+              tooltipMessage={undefined}
               variant="secondary"
               label={appendText}
               onClick={() => {

@@ -101,6 +101,7 @@ function Footer({
           onClick={onClickSecondaryBtn}
           label={labelSecondaryBtn}
           state={secondaryBtnState}
+          tooltipMessage={undefined}
         />
       ) : (
         <DialogClose asChild>
@@ -108,6 +109,7 @@ function Footer({
             variant="quaternary"
             label={labelSecondaryBtn}
             state={secondaryBtnState}
+            tooltipMessage={undefined}
           />
         </DialogClose>
       )}
@@ -121,6 +123,7 @@ function Footer({
         action={primaryBtnAction}
         color={primaryBtnColor}
         data-cy={"dialog-footer-button-primary"}
+        tooltipMessage={undefined}
       />
     </DialogFooter>
   );

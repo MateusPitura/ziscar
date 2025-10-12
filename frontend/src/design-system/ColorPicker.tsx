@@ -7,11 +7,11 @@ import {
   useFormContext,
   useWatch,
 } from "react-hook-form";
-import { Popover } from "./Popover";
 import Button from "./Button";
-import InputLabel from "./Form/InputLabel";
-import InputError from "./Form/InputError";
 import ColorPreview from "./ColorPreview";
+import InputError from "./Form/InputError";
+import InputLabel from "./Form/InputLabel";
+import { Popover } from "./Popover";
 
 interface ColorPickerProperties<T extends FieldValues> {
   name: Path<T>;
@@ -60,6 +60,7 @@ export default function ColorPicker<T extends FieldValues>({
             fullWidth
             state={disabled ? "disabled" : undefined}
             className="!h-10"
+            tooltipMessage={undefined}
           />
         </Popover.Trigger>
         <Popover.Content className="!p-0 w-fit" align="start">

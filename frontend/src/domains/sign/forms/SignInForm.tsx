@@ -2,20 +2,20 @@ import Button from "@/design-system/Button";
 import Form from "@/design-system/Form";
 import Input from "@/design-system/Form/Input";
 import InputPassword from "@/design-system/Form/InputPassword";
-import { s } from "@shared/safeZod";
-import { type ReactNode } from "react";
-import SignCard from "../components/SignCard";
-import useDialog from "@/domains/global/hooks/useDialog";
-import ForgetPasswordModal from "../components/ForgetPasswordModal";
-import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
-import { useMutation } from "@tanstack/react-query";
 import {
   AUTH_CHANNEL,
   BACKEND_URL,
   DEFAULT_ROUTE,
 } from "@/domains/global/constants";
+import useDialog from "@/domains/global/hooks/useDialog";
 import useGlobalContext from "@/domains/global/hooks/useGlobalContext";
+import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import safeNavigate from "@/domains/global/utils/safeNavigate";
+import { s } from "@shared/safeZod";
+import { useMutation } from "@tanstack/react-query";
+import { type ReactNode } from "react";
+import ForgetPasswordModal from "../components/ForgetPasswordModal";
+import SignCard from "../components/SignCard";
 
 const SchemaSignInForm = s.object({
   email: s.email(),
@@ -65,6 +65,7 @@ export default function SignInForm(): ReactNode {
               variant="quaternary"
               onClick={dialog.openDialog}
               data-cy="forget-password-button"
+              tooltipMessage="Recuperar senha"
             />
           </div>
         </div>

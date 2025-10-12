@@ -116,6 +116,7 @@ export default function UserForm({
                       data-cy="request-change-password-button"
                       label="Alterar senha"
                       onClick={() => dialog.openDialog()}
+                      tooltipMessage="Alterar senha"
                     />
                   </Section.Body>
                 </Section.Group>
@@ -129,12 +130,14 @@ export default function UserForm({
               label="Salvar"
               resource={resource}
               action={action}
+              tooltipMessage="Salvar cadastro"
             />
             <Button
               color="red"
               iconRight="Close"
               label="Cancelar"
               onClick={() => navigate("/users")}
+              tooltipMessage="Cancelar cadastro"
             />
           </PageFooter>
         </Form>

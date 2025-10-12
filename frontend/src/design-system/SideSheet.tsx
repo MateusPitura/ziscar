@@ -1,4 +1,4 @@
-import { type ReactElement } from "react";
+import { DialogDescription } from "@/components/ui/dialog";
 import {
   Sheet,
   SheetClose,
@@ -7,12 +7,12 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import Button from "./Button";
-import classNames from "classnames";
-import { DialogDescription } from "@/components/ui/dialog";
 import { DialogProvider } from "@/domains/global/contexts/DialogContext";
 import useButtonState from "@/domains/global/hooks/useButtonState";
 import { Childrenable, DialogProps } from "@/domains/global/types";
+import classNames from "classnames";
+import { type ReactElement } from "react";
+import Button from "./Button";
 import { ButtonState } from "./types";
 
 interface ContainerProps extends DialogProps, Childrenable {}
@@ -110,6 +110,7 @@ function Footer({
         type="submit"
         state={primaryBtnStateParsed}
         data-cy="side-sheet-primary-button"
+        tooltipMessage={undefined}
       />
       {onSecondaryCallback ? (
         <Button
@@ -117,6 +118,7 @@ function Footer({
           variant="quaternary"
           onClick={onSecondaryCallback}
           state={secondaryBtnState}
+          tooltipMessage={undefined}
         />
       ) : (
         <SheetClose asChild>
@@ -124,6 +126,7 @@ function Footer({
             label={secondaryLabel}
             variant="quaternary"
             state={secondaryBtnState}
+            tooltipMessage={undefined}
           />
         </SheetClose>
       )}

@@ -1,6 +1,3 @@
-import { useEffect, useState, type ReactNode } from "react";
-import { Popover } from "../Popover";
-import Button from "../Button";
 import {
   Command,
   CommandEmpty,
@@ -8,6 +5,8 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
+import { UnwrapArray } from "@/domains/global/types";
+import { useEffect, useState, type ReactNode } from "react";
 import {
   FieldValues,
   Path,
@@ -16,8 +15,9 @@ import {
   useFormContext,
   useWatch,
 } from "react-hook-form";
-import { UnwrapArray } from "@/domains/global/types";
+import Button from "../Button";
 import Icon from "../Icon";
+import { Popover } from "../Popover";
 import Spinner from "../Spinner";
 import InputError from "./InputError";
 import InputLabel from "./InputLabel";
@@ -85,6 +85,7 @@ export default function Select<T extends FieldValues>({
                 options.find((item) => item.value === selectedValue)?.label) ||
               "Selecione um item"
             }
+            tooltipMessage={undefined}
             iconRight="UnfoldMore"
             fullWidth
             state={disabled ? "disabled" : undefined}

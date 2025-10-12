@@ -1,15 +1,15 @@
-import { memo, useState, type ReactElement } from "react";
 import Button from "@/design-system/Button";
 import { privateRoutes } from "@/domains/global/constants/routes";
-import { useNavigate } from "react-router-dom";
-import classNames from "classnames";
-import useSafeFetch from "../hooks/useSafeFetch";
-import useGlobalContext from "../hooks/useGlobalContext";
-import { AUTH_CHANNEL, BACKEND_URL } from "../constants";
 import { useMutation } from "@tanstack/react-query";
-import safeNavigate from "../utils/safeNavigate";
+import classNames from "classnames";
+import { memo, useState, type ReactElement } from "react";
+import { useNavigate } from "react-router-dom";
+import { AUTH_CHANNEL, BACKEND_URL } from "../constants";
+import useGlobalContext from "../hooks/useGlobalContext";
 import usePermissions from "../hooks/usePermissions";
+import useSafeFetch from "../hooks/useSafeFetch";
 import checkPermission from "../utils/checkPermission";
+import safeNavigate from "../utils/safeNavigate";
 
 function PageSideBar(): ReactElement {
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(
@@ -59,6 +59,7 @@ function PageSideBar(): ReactElement {
           onClick={handleToggleSideMenu}
           variant="tertiary"
           iconLeft="Menu"
+          tooltipMessage={isSideMenuOpen ? "Fechar" : "Abrir"}
         />
         {isSideMenuOpen && (
           <span className="text-headline-small text-neutral-100 flex items-center">
@@ -83,7 +84,7 @@ function PageSideBar(): ReactElement {
               key={route.path}
               padding={isSideMenuOpen ? "default" : "none"}
               label={isSideMenuOpen ? route.displayName : undefined}
-              tooltipMessage={isSideMenuOpen ? undefined : route.displayName}
+              tooltipMessage={route.displayName}
               variant="tertiary"
               iconLeft={route.icon}
               onClick={() => {
@@ -103,6 +104,7 @@ function PageSideBar(): ReactElement {
         state={isPending ? "loading" : undefined}
         fullWidth
         data-cy="button-sign-out"
+        tooltipMessage="Sair"
       />
     </div>
   );

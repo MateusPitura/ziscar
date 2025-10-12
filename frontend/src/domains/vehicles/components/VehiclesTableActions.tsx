@@ -1,5 +1,4 @@
 import Button from "@/design-system/Button";
-import Tooltip from "@/design-system/Tooltip";
 import { BACKEND_URL } from "@/domains/global/constants";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
@@ -46,69 +45,64 @@ export default function VehiclesTableActions({
 
   return isActive ? (
     <>
-      <Tooltip content="Vender">
-        <Button
-          variant="quaternary"
-          iconLeft="CurrencyExchange"
-          onClick={() => navigate(`/vehicle-sale/new/${vehicleId}`)}
-          resource="VEHICLE_SALE"
-          action="CREATE"
-          padding="none"
-          data-cy={`button-vehicleSale-${vehicleId}`}
-        />
-      </Tooltip>
-      <Tooltip content="Editar">
-        <Button
-          variant="quaternary"
-          iconLeft="Edit"
-          onClick={() => navigate(`/vehicles/edit/${vehicleId}`)}
-          resource="VEHICLES"
-          action="UPDATE"
-          padding="none"
-          data-cy={`button-edit-vehicle-${vehicleId}`}
-        />
-      </Tooltip>
-      <Tooltip content="Gastos">
-        <Button
-          variant="quaternary"
-          iconLeft="History"
-          onClick={() => navigate(`/vehicles/expense/${vehicleId}`)}
-          resource="VEHICLE_EXPENSE"
-          action="READ"
-          padding="none"
-          data-cy={`button-vehicle-expense-${vehicleId}`}
-        />
-      </Tooltip>
-      <Tooltip content="Desativar">
-        <Button
-          variant="primary"
-          iconLeft="Delete"
-          color="red"
-          padding="none"
-          onClick={() =>
-            handleDisableVehicleInfo({
-              plateNumber,
-              vehicleId,
-            })
-          }
-          resource="VEHICLES"
-          action="DELETE"
-          data-cy={`button-disable-vehicle-${vehicleId}`}
-        />
-      </Tooltip>
-    </>
-  ) : (
-    <Tooltip content="Ativar">
       <Button
+        tooltipMessage="Vender"
         variant="quaternary"
-        onClick={mutate}
-        state={isPending ? "loading" : undefined}
+        iconLeft="CurrencyExchange"
+        onClick={() => navigate(`/vehicle-sale/new/${vehicleId}`)}
+        resource="VEHICLE_SALE"
+        action="CREATE"
+        padding="none"
+        data-cy={`button-vehicleSale-${vehicleId}`}
+      />
+      <Button
+        tooltipMessage="Editar"
+        variant="quaternary"
+        iconLeft="Edit"
+        onClick={() => navigate(`/vehicles/edit/${vehicleId}`)}
+        resource="VEHICLES"
+        action="UPDATE"
+        padding="none"
+        data-cy={`button-edit-vehicle-${vehicleId}`}
+      />
+      <Button
+        tooltipMessage="Gastos"
+        variant="quaternary"
+        iconLeft="History"
+        onClick={() => navigate(`/vehicles/expense/${vehicleId}`)}
+        resource="VEHICLE_EXPENSE"
+        action="READ"
+        padding="none"
+        data-cy={`button-vehicle-expense-${vehicleId}`}
+      />
+      <Button
+        tooltipMessage="Desativar"
+        variant="primary"
+        iconLeft="Delete"
+        color="red"
+        padding="none"
+        onClick={() =>
+          handleDisableVehicleInfo({
+            plateNumber,
+            vehicleId,
+          })
+        }
         resource="VEHICLES"
         action="DELETE"
-        padding="none"
-        iconLeft="ToggleOn"
-        data-cy={`button-enable-vehicle-${vehicleId}`}
+        data-cy={`button-disable-vehicle-${vehicleId}`}
       />
-    </Tooltip>
+    </>
+  ) : (
+    <Button
+      tooltipMessage="Ativar"
+      variant="quaternary"
+      onClick={mutate}
+      state={isPending ? "loading" : undefined}
+      resource="VEHICLES"
+      action="DELETE"
+      padding="none"
+      iconLeft="ToggleOn"
+      data-cy={`button-enable-vehicle-${vehicleId}`}
+    />
   );
 }

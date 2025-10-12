@@ -22,6 +22,7 @@ export default function CustomersPage({ contextHelper }: ContextHelperable) {
           action="CREATE"
           color="green"
           data-cy="new-customer-button"
+          tooltipMessage="Adicionar cliente"
         />
       </PageHeader>
       <CustomersTable />

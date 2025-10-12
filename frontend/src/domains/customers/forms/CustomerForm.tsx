@@ -62,11 +62,13 @@ export default function CustomerForm({
             label="Salvar"
             resource={resource}
             action={action}
+            tooltipMessage="Salvar cadastro"
           />
           <Button
             color="red"
             iconRight="Close"
             label="Cancelar"
+            tooltipMessage="Cancelar cadastro"
             onClick={() => navigate('/customers')}
           />
         </PageFooter>

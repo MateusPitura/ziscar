@@ -1,11 +1,11 @@
+import { Mask } from "@/domains/global/types";
 import { applyMask } from "@/domains/global/utils/applyMask";
+import classNames from "classnames";
 import { useEffect, type ReactElement } from "react";
 import { FieldValues, Path, useFormContext, useWatch } from "react-hook-form";
 import Button from "../Button";
-import InputError from "./InputError";
-import { Mask } from "@/domains/global/types";
 import { IconsName } from "../types";
-import classNames from "classnames";
+import InputError from "./InputError";
 import InputLabel from "./InputLabel";
 
 interface InputProperties<T extends FieldValues> {
@@ -89,6 +89,7 @@ export default function Input<T extends FieldValues>({
               iconRight={iconRight}
               padding="none"
               onClick={onClickIconRight}
+              tooltipMessage={undefined}
             />
           </div>
         )}

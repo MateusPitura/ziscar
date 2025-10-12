@@ -20,6 +20,7 @@ export default function VehiclesPage({ contextHelper }: ContextHelperable) {
             action="CREATE"
             color="green"
             data-cy="new-vehicle-button"
+            tooltipMessage="Adicionar novo veículo"
           />
         </PageHeader>
         <VehiclesTable />

@@ -72,12 +72,14 @@ export default function ExpenseForm({
             label="Salvar"
             resource={resource}
             action={action}
+            tooltipMessage="Salvar cadastro"
           />
           <Button
             color="red"
             iconRight="Close"
             label="Cancelar"
             onClick={onClose}
+            tooltipMessage="Cancelar cadastro"
           />
         </PageFooter>
       </Form>

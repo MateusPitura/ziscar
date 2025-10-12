@@ -86,12 +86,14 @@ export default function StoreForm({
             label="Salvar"
             resource={resource}
             action={action}
+            tooltipMessage="Salvar cadastro"
           />
           <Button
             color="red"
             iconRight="Close"
             label="Cancelar"
             onClick={() => navigate("/stores")}
+            tooltipMessage="Cancelar cadastro"
           />
         </PageFooter>
       </Form>

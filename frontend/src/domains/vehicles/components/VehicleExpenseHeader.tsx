@@ -67,6 +67,7 @@ export default function VehicleExpenseHeader({
             action="READ"
             variant="quaternary"
             data-cy="back-vehicle-expense-button"
+            tooltipMessage="Página anterior"
           />
           <Button
             label="Adicionar gasto"
@@ -76,6 +77,7 @@ export default function VehicleExpenseHeader({
             action="CREATE"
             color="green"
             data-cy="new-vehicle-expense-button"
+            tooltipMessage="Adicionar novo gasto"
           />
         </>
       )}

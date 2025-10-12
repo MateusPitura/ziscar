@@ -1,11 +1,10 @@
+import useCheckPermission from "@/domains/global/hooks/useCheckPermission";
+import { ActionsType, ResourcesType } from "@shared/enums";
 import classNames from "classnames";
 import { forwardRef, ReactNode } from "react";
-import Tooltip from "./Tooltip";
-import useCheckPermission from "@/domains/global/hooks/useCheckPermission";
-import { ButtonColor, ButtonState, IconsName } from "./types";
-import { formatDeniedMessage } from "@shared/utils/formatDeniedMessage";
 import Icon from "./Icon";
-import { ActionsType, ResourcesType } from "@shared/enums";
+import Tooltip from "./Tooltip";
+import { ButtonColor, ButtonState, IconsName } from "./types";
 
 interface BaseButtonProps {
   state?: ButtonState;
@@ -160,45 +159,24 @@ const ButtonVariant = forwardRef(
 interface ButtonProps extends ButtonVariantProps {
   resource?: ResourcesType;
   action?: ActionsType;
-  renderIfNoPermission?: boolean;
-  tooltipMessage?: string;
+  tooltipMessage: string | undefined;
 }
 
 const Button = forwardRef(
   (
-    {
-      resource,
-      action,
-      onClick,
-      state,
-      renderIfNoPermission = false,
-      tooltipMessage,
-      ...props
-    }: ButtonProps,
+    { resource, action, onClick, state, tooltipMessage, ...props }: ButtonProps,
     ref: React.Ref<HTMLButtonElement>
   ) => {
     const hasPermission = useCheckPermission(resource, action);
 
-    if (!renderIfNoPermission && !hasPermission) {
+    if (!hasPermission) {
       return null;
     }
 
     return (
-      <Tooltip
-        content={
-          hasPermission
-            ? tooltipMessage
-            : formatDeniedMessage({ resource, action })
-        }
-        disabled={hasPermission && !tooltipMessage}
-      >
-        <div className={classNames({ "cursor-not-allowed": !hasPermission })}>
-          <ButtonVariant
-            {...props}
-            ref={ref}
-            onClick={hasPermission ? onClick : () => {}}
-            state={hasPermission ? state : "disabled"}
-          />
+      <Tooltip content={tooltipMessage} disabled={!tooltipMessage}>
+        <div>
+          <ButtonVariant {...props} ref={ref} onClick={onClick} state={state} />
         </div>
       </Tooltip>
     );

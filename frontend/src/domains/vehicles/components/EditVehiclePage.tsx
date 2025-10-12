@@ -17,7 +17,9 @@ import { VehicleFormInputs } from "../types";
 import selectVehicleInfo from "../utils/selectVehicleInfo";
 import VehicleTabs from "./VehicleTabs";
 
-export default function EditVehiclePage({ contextHelper}: ContextHelperable): ReactNode {
+export default function EditVehiclePage({
+  contextHelper,
+}: ContextHelperable): ReactNode {
   const navigate = useNavigate();
   const { safeFetch } = useSafeFetch();
   const { showSuccessSnackbar } = useSnackbar();
@@ -121,11 +123,17 @@ export default function EditVehiclePage({ contextHelper}: ContextHelperable): Re
           <PageHeader title="Alterar veículo" contextHelper={contextHelper} />
           <VehicleTabs isEdit purchaseValue={vehicleData.purchaseValue} />
           <PageFooter dirty primaryBtnState={isPending ? "loading" : undefined}>
-            <Button color="lightBlue" iconRight="Save" label="Salvar" />
+            <Button
+              color="lightBlue"
+              iconRight="Save"
+              label="Salvar"
+              tooltipMessage="Salvar cadastro"
+            />
             <Button
               color="red"
               iconRight="Close"
               label="Cancelar"
+              tooltipMessage="Cancelar cadastro"
               onClick={() => navigate("/vehicles")}
             />
           </PageFooter>

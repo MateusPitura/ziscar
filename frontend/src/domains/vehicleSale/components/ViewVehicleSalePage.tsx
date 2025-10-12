@@ -77,6 +77,7 @@ export default function ViewVehicleSalePage({ contextHelper}: ContextHelperable)
             action="READ"
             variant="quaternary"
             data-cy="back-vehicle-sale-button"
+            tooltipMessage="Página anterior"
           />
         </PageHeader>
         <Tabs>
