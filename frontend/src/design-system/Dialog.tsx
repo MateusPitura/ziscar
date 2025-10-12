@@ -1,28 +1,39 @@
-import { type ReactElement } from "react";
 import {
-  Dialog as DialogShadcn,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
+  Dialog as DialogShadcn,
   DialogTitle,
-  DialogDescription,
 } from "@/components/ui/dialog";
-import Button from "./Button";
-import { DialogClose } from "@radix-ui/react-dialog";
 import { DialogProvider } from "@/domains/global/contexts/DialogContext";
 import useButtonState from "@/domains/global/hooks/useButtonState";
 import { Childrenable, DialogProps } from "@/domains/global/types";
-import { ButtonColor, ButtonState } from "./types";
-import classNames from "classnames";
+import { DialogClose } from "@radix-ui/react-dialog";
 import { ActionsType, ResourcesType } from "@shared/enums";
+import classNames from "classnames";
+import { type ReactElement } from "react";
+import Button from "./Button";
+import { ButtonColor, ButtonState } from "./types";
 
-interface ContainerProps extends DialogProps, Childrenable {}
+interface ContainerProps extends DialogProps, Childrenable {
+  maxWidth?: string;
+}
 
-function Container({ children, ...dialog }: ContainerProps): ReactElement {
+function Container({
+  children,
+  maxWidth,
+  ...dialog
+}: ContainerProps): ReactElement {
   return (
     <DialogProvider {...dialog}>
       <DialogShadcn open={dialog.isOpen} onOpenChange={dialog.handleOpen}>
-        <DialogContent className="bg-neutral-100 p-0 gap-0 [&>button]:!ring-0 [&>button]!outline-none [&>button]:!ring-offset-0">
+        <DialogContent
+          className={classNames(
+            "bg-neutral-100 p-0 gap-0 [&>button]:!ring-0 [&>button]!outline-none [&>button]:!ring-offset-0",
+            maxWidth
+          )}
+        >
           {children}
         </DialogContent>
       </DialogShadcn>
