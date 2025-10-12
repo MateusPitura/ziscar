@@ -5,28 +5,29 @@ import useFilterContext from "@/domains/global/hooks/useFilterContext";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import { PageablePayload } from "@/domains/global/types";
 import {
-  FetchVehicle,
   FetchBrand,
   FetchStore,
+  FetchVehicle,
 } from "@/domains/global/types/model";
 import formatFilters from "@/domains/global/utils/formatFilters";
 import ExportButton from "@/domains/pdf/components/ExportButton";
+import selectStoresInfo from "@/domains/stores/utils/selectStoresInfo";
 import { ITEMS_PER_PAGE } from "@shared/constants";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState, type ReactNode } from "react";
 import {
+  VehicleCategoryText,
   VEHICLES_TABLE,
   VehicleStatusText,
-  VehicleCategoryText,
 } from "../constants";
 import { DisableVehicle, VehiclesFilterFormInputs } from "../types";
+import selectBrandsInfo from "../utils/selectBrandsInfo";
 import selectVehiclesInfo from "../utils/selectVehiclesInfo";
 import selectVehiclesInfoForReport from "../utils/selectVehiclesInfoForReport";
-import selectBrandsInfo from "../utils/selectBrandsInfo";
-import selectStoresInfo from "@/domains/stores/utils/selectStoresInfo";
 import DisableVehicleModal from "./DisableVehicleModal";
 import VehiclesFilterForm from "./VehiclesFilterForm";
 import VehiclesTableActions from "./VehiclesTableActions";
+import VehicleStatusTag from "./VehicleStatusTag";
 
 const gridColumns = 7;
 
@@ -79,7 +80,7 @@ export default function VehiclesTable(): ReactNode {
     });
   }
 
-  const { data: vehiclesInfo, isFetching: isFetchingVehiclesInfo } = useQuery({
+  const { data: vehiclesInfo, isLoading: isFetchingVehiclesInfo } = useQuery({
     queryKey: ["vehicles", filterFormatted],
     queryFn: ({ queryKey }) => getVehiclesInfo(queryKey[1]),
     select: selectVehiclesInfo,
@@ -212,14 +213,16 @@ export default function VehiclesTable(): ReactNode {
               <Table.Cell
                 columnLabel={VEHICLES_TABLE.status.label}
                 label={
-                  vehicle.archivedAt
-                    ? "Inativo"
-                    : VehicleStatusText[vehicle.status]
+                  <VehicleStatusTag
+                    isActive={!vehicle.archivedAt}
+                    status={vehicle.status}
+                  />
                 }
                 colSpan={VEHICLES_TABLE.status.colSpan}
               />
               <Table.Action>
                 <VehiclesTableActions
+                  status={vehicle.status}
                   isActive={!vehicle.archivedAt}
                   vehicleId={String(vehicle.id)}
                   plateNumber={vehicle.plateNumber}

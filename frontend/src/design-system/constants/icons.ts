@@ -20,6 +20,7 @@ import Menu from "@mui/icons-material/Menu";
 import MoreHoriz from "@mui/icons-material/MoreHoriz";
 import NavigateBefore from "@mui/icons-material/NavigateBeforeOutlined";
 import NavigateNext from "@mui/icons-material/NavigateNextOutlined";
+import NoCrash from '@mui/icons-material/NoCrashOutlined';
 import People from "@mui/icons-material/People";
 import PersonAdd from "@mui/icons-material/PersonAddOutlined";
 import Person from "@mui/icons-material/PersonOutlined";
@@ -69,5 +70,6 @@ export const icons = {
   ReceiptLong,
   History,
   Emergency,
-  Help
+  Help,
+  NoCrash,
 };

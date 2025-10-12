@@ -80,7 +80,7 @@ export default function EditVehiclePage({
     mutationFn: editVehicle,
     onSuccess: () => {
       showSuccessSnackbar({
-        title: `Veículo ${vehicleData?.vehicle.modelName} atualizado com sucesso`,
+        title: `Veículo ${vehicleData?.vehicle.plateNumber} atualizado com sucesso`,
       });
       navigate("/vehicles");
       queryClient.invalidateQueries({ queryKey: ["vehicles"] });
