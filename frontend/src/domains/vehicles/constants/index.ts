@@ -1,4 +1,5 @@
 import { applyMask } from "@/domains/global/utils/applyMask";
+import safeFormat from "@/domains/global/utils/safeFormat";
 import {
   ExpenseCategory,
   ExpenseCategoryType,
@@ -122,10 +123,10 @@ export const vehicleDefaultValues: VehicleFormInputs = {
   },
   payment: {
     paidTo: "",
-    purchaseDate: "",
+    purchaseDate: safeFormat({ date: new Date(), format: "yyyy-MM-dd" }),
     upfront: [],
     installment: {
-      dueDate: "",
+      dueDate: safeFormat({ date: new Date(), format: "yyyy-MM-dd" }),
       value: applyMask("0", "money") ?? "",
       status: InstallmentStatus.PENDING,
       paymentDate: "",
@@ -155,7 +156,7 @@ export const vehicleExpenseDefaultValues: VehicleExpenseFormInputs = {
   payment: {
     category: ExpenseCategory.MAINTENANCE,
     observations: "",
-    competencyDate: "",
+    competencyDate: safeFormat({ date: new Date(), format: "yyyy-MM-dd" }),
     upfront: [],
     installment: vehicleDefaultValues.payment.installment,
   },

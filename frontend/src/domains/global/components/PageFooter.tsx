@@ -21,7 +21,7 @@ export default function PageFooter({
   const [first, ...others] = Children.toArray(children);
 
   return (
-    <div className="w-full pt-4 flex justify-end gap-4">
+    <div className="w-full p-4 pb-0 flex justify-end gap-4">
       {cloneElement(first as ReactElement, {
         state: primaryBtnStateParsed,
         type: "submit",
