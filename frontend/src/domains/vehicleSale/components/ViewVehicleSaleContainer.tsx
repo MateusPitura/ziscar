@@ -5,6 +5,7 @@ import PageHeader from "@/domains/global/components/PageHeader";
 import Section from "@/domains/global/components/Section";
 import { BACKEND_URL } from "@/domains/global/constants";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
+import formatVehicleCharacteristics from "@/domains/global/utils/formatVehicleCharacteristics";
 import { useQuery } from "@tanstack/react-query";
 import { useState, type ReactNode } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -33,14 +34,16 @@ export default function ViewVehicleSaleContainer(): ReactNode {
       }
     );
 
+    const { customerSnapshot, vehicleSnapshot } = response;
+
     return {
-      customer: response.customerSnapshot,
+      customer: customerSnapshot,
       vehicle: {
-        ...response.vehicleSnapshot,
-        vehicleCharacteristicValues:
-          response.vehicleSnapshot?.vehicleCharacteristicValues.map(
-            (c: Record<string, string>) => c?.characteristic
-          ),
+        ...vehicleSnapshot,
+        vehicleCharacteristicValues: formatVehicleCharacteristics({
+          vehicleCharacteristicValues:
+            vehicleSnapshot.vehicleCharacteristicValues,
+        }),
       },
     };
   }

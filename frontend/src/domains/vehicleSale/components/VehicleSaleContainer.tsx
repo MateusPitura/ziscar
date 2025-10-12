@@ -8,6 +8,7 @@ import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import { VehicleWithPayment } from "@/domains/global/types/model";
 import formatInstallment from "@/domains/global/utils/formatInstallment";
+import formatVehicleCharacteristics from "@/domains/global/utils/formatVehicleCharacteristics";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ReactNode } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -32,9 +33,16 @@ export default function VehicleSaleContainer(): ReactNode {
       action: "READ",
     });
 
+    const { vehicleCharacteristicValues, ...vehicle } = response;
+
     return {
       payment: null,
-      vehicle: response,
+      vehicle: {
+        ...vehicle,
+        vehicleCharacteristicValues: formatVehicleCharacteristics({
+          vehicleCharacteristicValues,
+        }),
+      },
     };
   }
 
@@ -48,7 +56,7 @@ export default function VehicleSaleContainer(): ReactNode {
     const installments = formatInstallment({
       installment: payment.installment,
       upfront: payment.upfront,
-    })
+    });
 
     await safeFetch(`${BACKEND_URL}/vehicles/sale`, {
       method: "POST",

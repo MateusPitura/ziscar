@@ -14,6 +14,7 @@ import { SchemaVehicleForm } from "../schemas";
 import { VehicleFormInputs } from "../types";
 import selectVehicleInfo from "../utils/selectVehicleInfo";
 import VehicleTabs from "./VehicleTabs";
+import formatVehicleCharacteristics from "@/domains/global/utils/formatVehicleCharacteristics";
 
 export default function EditVehicleContainer(): ReactNode {
   const navigate = useNavigate();
@@ -34,9 +35,9 @@ export default function EditVehicleContainer(): ReactNode {
       payment,
       vehicle: {
         ...vehicle,
-        vehicleCharacteristicValues: vehicleCharacteristicValues.map(
-          (c: Record<string, string>) => c?.characteristic
-        ),
+        vehicleCharacteristicValues: formatVehicleCharacteristics({
+          vehicleCharacteristicValues,
+        }),
       },
     };
   }

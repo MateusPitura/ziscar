@@ -3,6 +3,7 @@ import PageHeader from "@/domains/global/components/PageHeader";
 import { BACKEND_URL } from "@/domains/global/constants";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import { VehicleWithPayment } from "@/domains/global/types/model";
+import formatVehicleCharacteristics from "@/domains/global/utils/formatVehicleCharacteristics";
 import { useQuery } from "@tanstack/react-query";
 import type { ReactNode } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -28,9 +29,16 @@ export default function VehicleExpenseHeader({
       action: "READ",
     });
 
+    const { vehicleCharacteristicValues, ...vehicle } = response;
+
     return {
       payment: null,
-      vehicle: response,
+      vehicle: {
+        ...vehicle,
+        vehicleCharacteristicValues: formatVehicleCharacteristics({
+          vehicleCharacteristicValues,
+        }),
+      },
     };
   }
 
