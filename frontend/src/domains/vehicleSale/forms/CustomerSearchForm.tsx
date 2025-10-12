@@ -1,26 +1,25 @@
 import Search from "@/design-system/Form/Search";
-import { useState, type ReactElement } from "react";
-import { FetchCustomer } from "@/domains/global/types/model";
 import { BACKEND_URL } from "@/domains/global/constants";
-import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
-import { VehicleSaleFormInputs } from "../types";
-import NewCustomerModal from "../components/NewCustomerModal";
 import useDialog from "@/domains/global/hooks/useDialog";
+import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
+import { FetchCustomer } from "@/domains/global/types/model";
+import { s } from "@shared/safeZod";
+import { useState, type ReactElement } from "react";
+import NewCustomerModal from "../components/NewCustomerModal";
 import useVehicleSalePageContext from "../hooks/useVehicleSalePageContext";
+import { VehicleSaleFormInputs } from "../types";
 import selectCustomersInfo from "../utils/selectCustomersInfo";
-import { applyMask } from "@/domains/global/utils/applyMask";
-import { cpfSearchSchema } from "../schemas";
 
 export default function CustomerSearchForm(): ReactElement {
   const { safeFetch } = useSafeFetch();
   const dialog = useDialog();
-  const [customerCpf, setCustomerCpf] = useState("");
+  const [customerName, setCustomerName] = useState("");
   const { handleCustomer } = useVehicleSalePageContext();
 
   async function getCustomersInfo(filter?: string): Promise<FetchCustomer[]> {
     if (!filter) return [];
 
-    const result = await safeFetch(`${BACKEND_URL}/customer?cpf=${filter}&orderBy=fullName`, {
+    const result = await safeFetch(`${BACKEND_URL}/customer?fullName=${filter}&orderBy=fullName`, {
       resource: "CUSTOMERS",
       action: "READ",
     });
@@ -30,9 +29,9 @@ export default function CustomerSearchForm(): ReactElement {
 
   return (
     <>
-      <NewCustomerModal {...dialog} customerCpf={customerCpf} />
+      <NewCustomerModal {...dialog} customerName={customerName} />
       <Search<VehicleSaleFormInputs, FetchCustomer[]>
-        label="CPF"
+        label="Nome"
         name="customer.id"
         fetchCallback={getCustomersInfo}
         queryKey="customers"
@@ -49,12 +48,12 @@ export default function CustomerSearchForm(): ReactElement {
         required
         select={selectCustomersInfo}
         onClickNotFound={(value) => {
-          setCustomerCpf(value);
+          setCustomerName(value);
           dialog.openDialog();
         }}
-        formatNotFound={(value) => applyMask(value, "cpf") ?? ""}
+        formatNotFound={(value) => value?.trim()}
         formatSearch={(search) => {
-          const result = cpfSearchSchema.safeParse(search);
+          const result = s.name().safeParse(search);
           if (result.success) {
             return result.data;
           }

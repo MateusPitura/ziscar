@@ -11,17 +11,17 @@ import { DialogProps } from "@/domains/global/types";
 import { FetchCustomer } from "@/domains/global/types/model";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { ReactNode } from "react";
-import useVehicleSalePageContext from "../hooks/useVehicleSalePageContext";
-import selectCustomerInfo from "../utils/selectCustomerInfo";
 import { useFormContext } from "react-hook-form";
+import useVehicleSalePageContext from "../hooks/useVehicleSalePageContext";
 import { VehicleSaleFormInputs } from "../types";
+import selectCustomerInfo from "../utils/selectCustomerInfo";
 
 interface NewCustomerModalProperties extends DialogProps {
-  customerCpf: string;
+  customerName: string;
 }
 
 export default function NewCustomerModal({
-  customerCpf,
+  customerName,
   ...dialog
 }: NewCustomerModalProperties): ReactNode {
   const { safeFetch } = useSafeFetch();
@@ -66,7 +66,7 @@ export default function NewCustomerModal({
         <Form<CustomerFormInputsType>
           defaultValues={{
             ...customerDefaultValues,
-            cpf: customerCpf,
+            fullName: customerName,
           }}
           schema={SchemaCustomerForm}
           onSubmit={mutate}
