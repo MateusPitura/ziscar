@@ -374,7 +374,6 @@ enum FuelType {
 enum VehicleStatus {
   PURCHASED
   IN_STOCK
-  DELIVERED
   MAINTENANCE
   SOLD
 }

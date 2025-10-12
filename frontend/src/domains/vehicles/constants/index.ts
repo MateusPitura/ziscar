@@ -33,7 +33,6 @@ export const vehicleFilterDefaultValues: VehiclesFilterFormInputs = {
 };
 
 export const VehicleStatusText: Record<VehicleStatusForFilterType, string> = {
-  DELIVERED: "Entregue",
   IN_STOCK: "Em Estoque",
   MAINTENANCE: "Em Manutenção",
   PURCHASED: "Comprado",
@@ -41,7 +40,6 @@ export const VehicleStatusText: Record<VehicleStatusForFilterType, string> = {
 };
 
 export const VehicleStatusTextForSale: Record<VehicleStatus, string> = {
-  DELIVERED: "Entregue",
   IN_STOCK: "Em Estoque",
   MAINTENANCE: "Em Manutenção",
   PURCHASED: "Comprado",
