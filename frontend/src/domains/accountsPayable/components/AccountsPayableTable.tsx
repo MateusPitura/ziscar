@@ -1,3 +1,4 @@
+import Switch from "@/design-system/Switch";
 import Table from "@/design-system/Table";
 import AccountStatus from "@/domains/global/components/AccountStatus";
 import { BACKEND_URL, BLANK } from "@/domains/global/constants";
@@ -6,6 +7,7 @@ import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import { PageablePayload } from "@/domains/global/types";
 import { FetchAccountPayable } from "@/domains/global/types/model";
 import formatFilters from "@/domains/global/utils/formatFilters";
+import safeFormat from "@/domains/global/utils/safeFormat";
 import ExportButton from "@/domains/pdf/components/ExportButton";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, type ReactNode } from "react";
@@ -62,13 +64,24 @@ export default function AccountsPayableTable(): ReactNode {
     );
   }, [accountsPayableInfo?.data]);
 
+  const isStartAndEndFilterToday = useMemo(() => {
+    if (!accountsPayableFilter?.startDate || !accountsPayableFilter?.endDate)
+      return false;
+
+    const today = safeFormat({ date: new Date(), format: "yyyy-MM-dd" });
+    if (
+      accountsPayableFilter.startDate === today &&
+      accountsPayableFilter.endDate === today
+    )
+      return true;
+
+    return false;
+  }, [accountsPayableFilter?.startDate, accountsPayableFilter?.endDate]);
+
   return (
     <>
-      <div className="flex gap-4 justify-end">
-        <ExportButton<
-          FetchAccountPayable,
-          AccountsPayableFilterFormInputs
-        >
+      <div className="flex gap-4 justify-between">
+        <ExportButton<FetchAccountPayable, AccountsPayableFilterFormInputs>
           fileName="Relatório Pagamentos"
           queryKey={["accounts-payable", filterFormatted]}
           queryFn={getAccountsPayableInfo}
@@ -92,7 +105,31 @@ export default function AccountsPayableTable(): ReactNode {
             totalValue: "Valor total",
           }}
         />
-        <Table.Filter form={<AccountsPayableFilterForm />} />
+        <div className="flex gap-4">
+          <Switch
+            checked={isStartAndEndFilterToday}
+            label="Contas de hoje"
+            onCheck={() =>
+              handleAccountsPayableFilter({
+                startDate: safeFormat({
+                  date: new Date(),
+                  format: "yyyy-MM-dd",
+                }),
+                endDate: safeFormat({
+                  date: new Date(),
+                  format: "yyyy-MM-dd",
+                }),
+              })
+            }
+            onUncheck={() =>
+              handleAccountsPayableFilter({
+                startDate: "",
+                endDate: "",
+              })
+            }
+          />
+          <Table.Filter form={<AccountsPayableFilterForm />} />
+        </div>
       </div>
       <Table>
         <Table.Header gridColumns={gridColumns}>
@@ -122,9 +159,7 @@ export default function AccountsPayableTable(): ReactNode {
                 columnLabel={ACCOUNTS_PAYABLE_TABLE.paidTo.label}
               />
               <Table.Cell
-                label={
-                  <AccountStatus status={accountPayable.overallStatus} />
-                }
+                label={<AccountStatus status={accountPayable.overallStatus} />}
                 columnLabel={ACCOUNTS_PAYABLE_TABLE.overallStatus.label}
                 colSpan={ACCOUNTS_PAYABLE_TABLE.overallStatus.colSpan}
               />

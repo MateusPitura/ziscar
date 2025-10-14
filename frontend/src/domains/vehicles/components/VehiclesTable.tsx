@@ -122,7 +122,7 @@ export default function VehiclesTable(): ReactNode {
   return (
     <>
       <DisableVehicleModal {...disableVehicleInfo} {...dialog} />
-      <div className="flex gap-4 justify-end">
+      <div className="flex gap-4 justify-between">
         <ExportButton<FetchVehicle, VehiclesFilterFormInputs>
           fileName="Relatório Veículos"
           queryKey={["vehicles", filterFormatted]}

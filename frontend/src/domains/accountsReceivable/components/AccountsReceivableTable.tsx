@@ -1,3 +1,4 @@
+import Switch from "@/design-system/Switch";
 import Table from "@/design-system/Table";
 import AccountStatus from "@/domains/global/components/AccountStatus";
 import { BACKEND_URL, BLANK } from "@/domains/global/constants";
@@ -6,6 +7,7 @@ import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import { PageablePayload } from "@/domains/global/types";
 import { FetchAccountReceivable } from "@/domains/global/types/model";
 import formatFilters from "@/domains/global/utils/formatFilters";
+import safeFormat from "@/domains/global/utils/safeFormat";
 import ExportButton from "@/domains/pdf/components/ExportButton";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, type ReactNode } from "react";
@@ -62,9 +64,26 @@ export default function AccountsReceivableTable(): ReactNode {
     );
   }, [accountsReceivableInfo?.data]);
 
+  const isStartAndEndFilterToday = useMemo(() => {
+    if (
+      !accountsReceivableFilter?.startDate ||
+      !accountsReceivableFilter?.endDate
+    )
+      return false;
+
+    const today = safeFormat({ date: new Date(), format: "yyyy-MM-dd" });
+    if (
+      accountsReceivableFilter.startDate === today &&
+      accountsReceivableFilter.endDate === today
+    )
+      return true;
+
+    return false;
+  }, [accountsReceivableFilter?.startDate, accountsReceivableFilter?.endDate]);
+
   return (
     <>
-      <div className="flex gap-4 justify-end">
+      <div className="flex gap-4 justify-between">
         <ExportButton<
           FetchAccountReceivable,
           AccountsReceivableFilterFormInputs
@@ -93,7 +112,31 @@ export default function AccountsReceivableTable(): ReactNode {
             totalValue: "Valor total",
           }}
         />
-        <Table.Filter form={<AccountsReceivableFilterForm />} />
+        <div className="flex gap-4">
+          <Switch
+            checked={isStartAndEndFilterToday}
+            label="Contas de hoje"
+            onCheck={() =>
+              handleAccountsReceivableFilter({
+                startDate: safeFormat({
+                  date: new Date(),
+                  format: "yyyy-MM-dd",
+                }),
+                endDate: safeFormat({
+                  date: new Date(),
+                  format: "yyyy-MM-dd",
+                }),
+              })
+            }
+            onUncheck={() =>
+              handleAccountsReceivableFilter({
+                startDate: "",
+                endDate: "",
+              })
+            }
+          />
+          <Table.Filter form={<AccountsReceivableFilterForm />} />
+        </div>
       </div>
       <Table>
         <Table.Header gridColumns={gridColumns}>
