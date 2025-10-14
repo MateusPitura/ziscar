@@ -37,6 +37,7 @@ const YEAR_IN_MS = 365 * 24 * 60 * 60 * 1000;
 const MAX_INSTALLMENTS_PER_ACCOUNT = 12;
 const MIN_INSTALLMENTS_PER_ACCOUNT = 1;
 const EXPENSES_PER_VEHICLE = 3;
+const DEFAULT_TIMEOUT = { timeout: 100000 }; // 10 seconds
 
 async function populate() {
   console.log('👥 Starting database population...');
@@ -45,7 +46,7 @@ async function populate() {
     await tx.enterprise.createMany({
       data: [{ ...POPULATE_ENTERPRISE.DEFAULT }],
     });
-  });
+  }, DEFAULT_TIMEOUT);
 
   await prisma.$transaction(async (tx) => {
     await tx.store.createMany({
@@ -75,7 +76,7 @@ async function populate() {
     await tx.store.createMany({
       data: otherStores,
     });
-  });
+  }, DEFAULT_TIMEOUT);
 
   await prisma.$transaction(async (tx) => {
     await tx.customer.createMany({
@@ -105,7 +106,7 @@ async function populate() {
     await tx.customer.createMany({
       data: otherCustomers,
     });
-  });
+  }, DEFAULT_TIMEOUT);
 
   await prisma.$transaction(async (tx) => {
     await tx.user.createMany({
@@ -154,7 +155,7 @@ async function populate() {
     await tx.user.createMany({
       data: otherUsers,
     });
-  });
+  }, DEFAULT_TIMEOUT);
 
   const vehiclePurchases = Array.from(
     { length: POPULATE_OTHER_ENTITIES_AMOUNT },
@@ -224,7 +225,7 @@ async function populate() {
     await tx.vehicle.createMany({
       data: otherVehicles,
     });
-  });
+  }, DEFAULT_TIMEOUT);
 
   await prisma.$transaction(async (tx) => {
     const accountsPayableForVehiclePurchasePromise: unknown[] = [];
@@ -298,7 +299,7 @@ async function populate() {
     }
 
     await Promise.all(accountsPayableForVehiclePurchasePromise);
-  });
+  }, DEFAULT_TIMEOUT);
 
   await prisma.$transaction(async (tx) => {
     const accountsPayableForVehicleExpensesPromise = Array.from(
@@ -396,7 +397,7 @@ async function populate() {
     );
 
     await Promise.all(accountsPayableForVehicleExpensesPromise);
-  });
+  }, DEFAULT_TIMEOUT);
 
   await prisma.$transaction(async (tx) => {
     const otherAccountsReceivablePromise = Array.from(
@@ -568,7 +569,7 @@ async function populate() {
     );
 
     await Promise.all(otherAccountsReceivablePromise);
-  });
+  }, DEFAULT_TIMEOUT);
 }
 
 populate()
