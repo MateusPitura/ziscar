@@ -62,7 +62,7 @@ export default function NewVehiclePage({
       });
       navigate("/vehicles");
       queryClient.invalidateQueries({ queryKey: ["vehicles"] });
-      queryClient.invalidateQueries({ queryKey: ["accounts-receivable"] });
+      queryClient.invalidateQueries({ queryKey: ["accounts-payable"] });
     },
   });
 
