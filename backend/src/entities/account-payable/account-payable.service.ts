@@ -132,12 +132,17 @@ export class AccountPayableService implements AccountPayableRepository {
       const allPaid = installments.every((inst) => inst.status === 'PAID');
       const overallStatus: 'PAID' | 'PENDING' = allPaid ? 'PAID' : 'PENDING';
 
+      const closeDueDate = acc.accountPayableInstallments
+        .filter((i) => i.status === 'PENDING')
+        .sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime())[0]?.dueDate;
+
       return {
         id: acc.id,
         description: acc.description ?? '',
         paidTo: acc.paidTo ?? '',
         totalValue,
         overallStatus,
+        date: closeDueDate,
       };
     });
 

@@ -14,6 +14,7 @@ export interface SearchResponse {
     paidTo: string;
     totalValue: number;
     overallStatus: 'PAID' | 'PENDING';
+    date: Date | null;
   }[];
 }
 

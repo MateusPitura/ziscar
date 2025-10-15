@@ -20,7 +20,7 @@ import selectAccountsPayableInfoForReport from "../utils/selectAccountsPayableIn
 import AccountsPayableFilterForm from "./AccountsPayableFilterForm";
 import AccountsPayableTableActions from "./AccountsPayableTableActions";
 
-const gridColumns = 8;
+const gridColumns = 10;
 
 export default function AccountsPayableTable(): ReactNode {
   const { safeFetch } = useSafeFetch();
@@ -150,6 +150,7 @@ export default function AccountsPayableTable(): ReactNode {
       <Table>
         <Table.Header gridColumns={gridColumns}>
           <Table.Head label={ACCOUNTS_PAYABLE_TABLE.description.label} />
+          <Table.Head label={ACCOUNTS_PAYABLE_TABLE.date.label} />
           <Table.Head label={ACCOUNTS_PAYABLE_TABLE.paidTo.label} />
           <Table.Head
             label={ACCOUNTS_PAYABLE_TABLE.overallStatus.label}
@@ -169,6 +170,10 @@ export default function AccountsPayableTable(): ReactNode {
               <Table.Cell
                 label={accountPayable.description}
                 columnLabel={ACCOUNTS_PAYABLE_TABLE.description.label}
+              />
+              <Table.Cell
+                label={accountPayable.date}
+                columnLabel={ACCOUNTS_PAYABLE_TABLE.date.label}
               />
               <Table.Cell
                 label={accountPayable.paidTo}

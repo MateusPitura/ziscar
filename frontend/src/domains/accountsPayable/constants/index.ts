@@ -22,6 +22,9 @@ export const ACCOUNTS_PAYABLE_TABLE = {
   description: {
     label: "Descrição",
   },
+  date: {
+    label: "Data de vencimento",
+  },
   paidTo: {
     label: "Pago a",
   },
