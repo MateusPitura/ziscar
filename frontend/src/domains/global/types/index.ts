@@ -79,8 +79,15 @@ export interface AccountsPayableFilter
     Pageable {}
 export interface VehiclesFilter extends VehiclesFilterFormInputs, Pageable {}
 
+interface Summary {
+  totalOverall: number;
+  totalPaid: number;
+  totalPending: number;
+}
+
 export interface PageablePayload<T> {
   data: T[];
+  summary?: Summary;
   total: number;
 }
 

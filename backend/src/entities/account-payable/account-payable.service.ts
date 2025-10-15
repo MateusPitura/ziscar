@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { AccountPayable } from '@prisma/client';
+import { AccountPayable, Prisma } from '@prisma/client';
 import { PrismaService } from 'src/infra/database/prisma.service';
 import {
   AccountPayableRepository,
@@ -61,28 +61,30 @@ export class AccountPayableService implements AccountPayableRepository {
     endDate: Date,
     overallStatus?: 'PENDING' | 'PAID',
   ): Promise<SearchResponse> {
-    const accounts = await this.prisma.accountPayable.findMany({
-      where: {
-        description: {
-          contains: query,
-          mode: 'insensitive',
-        },
-        accountPayableInstallments: overallStatus
-          ? overallStatus === 'PAID'
-            ? {
-                every: { status: 'PAID' }, // todas pagas
-              }
-            : overallStatus === 'PENDING'
-              ? {
-                  some: { status: 'PENDING' }, // pelo menos uma pendente
-                }
-              : undefined
-          : undefined,
-        createdAt: {
-          gte: startDate,
-          lte: endDate ?? new Date(),
-        },
+    const filter: Prisma.AccountPayableWhereInput = {
+      description: {
+        contains: query,
+        mode: 'insensitive',
       },
+      accountPayableInstallments: overallStatus
+        ? overallStatus === 'PAID'
+          ? {
+              every: { status: 'PAID' },
+            }
+          : overallStatus === 'PENDING'
+            ? {
+                some: { status: 'PENDING' },
+              }
+            : undefined
+        : undefined,
+      createdAt: {
+        gte: startDate,
+        lte: endDate ?? new Date(),
+      },
+    };
+
+    const accounts = await this.prisma.accountPayable.findMany({
+      where: filter,
       include: {
         accountPayableInstallments: true,
       },
@@ -93,24 +95,28 @@ export class AccountPayableService implements AccountPayableRepository {
       },
     });
 
-    const total = await this.prisma.accountPayable.count({
-      where: {
-        accountPayableInstallments: overallStatus
-          ? overallStatus === 'PAID'
-            ? { every: { status: 'PAID' } }
-            : overallStatus === 'PENDING'
-              ? { some: { status: 'PENDING' } }
-              : undefined
-          : undefined,
-        createdAt: {
-          gte: startDate,
-          lte: endDate,
+    const summaryByStatus = await this.prisma.accountPayableInstallment.groupBy(
+      {
+        by: ['status'],
+        _sum: {
+          value: true,
         },
-        description: {
-          contains: query,
-          mode: 'insensitive',
+        where: {
+          accountPayable: {
+            createdAt: filter.createdAt,
+            description: filter.description,
+          },
         },
       },
+    );
+
+    const totalPaid =
+      summaryByStatus.find((s) => s.status === 'PAID')?._sum.value ?? 0;
+    const totalPending =
+      summaryByStatus.find((s) => s.status === 'PENDING')?._sum.value ?? 0;
+
+    const total = await this.prisma.accountPayable.count({
+      where: filter,
     });
 
     const data = accounts.map((acc) => {
@@ -138,6 +144,11 @@ export class AccountPayableService implements AccountPayableRepository {
     return {
       total,
       data,
+      summary: {
+        totalOverall: totalPaid + totalPending,
+        totalPaid,
+        totalPending,
+      },
     };
   }
 

@@ -1,11 +1,13 @@
 import Switch from "@/design-system/Switch";
 import Table from "@/design-system/Table";
 import AccountStatus from "@/domains/global/components/AccountStatus";
+import DataField from "@/domains/global/components/DataField";
 import { BACKEND_URL, BLANK } from "@/domains/global/constants";
 import useFilterContext from "@/domains/global/hooks/useFilterContext";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import { PageablePayload } from "@/domains/global/types";
 import { FetchAccountPayable } from "@/domains/global/types/model";
+import { applyMask } from "@/domains/global/utils/applyMask";
 import formatFilters from "@/domains/global/utils/formatFilters";
 import safeFormat from "@/domains/global/utils/safeFormat";
 import ExportButton from "@/domains/pdf/components/ExportButton";
@@ -130,6 +132,20 @@ export default function AccountsPayableTable(): ReactNode {
           />
           <Table.Filter form={<AccountsPayableFilterForm />} />
         </div>
+      </div>
+      <div className="w-fit flex gap-4">
+        <DataField
+          label="Total"
+          value={applyMask(accountsPayableInfo?.summary?.totalOverall, "money")}
+        />
+        <DataField
+          label="Total Pago"
+          value={applyMask(accountsPayableInfo?.summary?.totalPaid, "money")}
+        />
+        <DataField
+          label="Total Pendente"
+          value={applyMask(accountsPayableInfo?.summary?.totalPending, "money")}
+        />
       </div>
       <Table>
         <Table.Header gridColumns={gridColumns}>
