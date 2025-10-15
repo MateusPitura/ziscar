@@ -34,8 +34,6 @@ export interface SignInInput {
 }
 
 export interface SignOutInput {
-  enterpriseId: number;
-  userId: number;
   res?: Response;
 }
 

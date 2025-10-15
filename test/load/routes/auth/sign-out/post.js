@@ -1,14 +1,13 @@
-import http from "k6/http";
 import { sleep } from "k6";
+import http from "k6/http";
+import { API_URL } from "/shared/src/constants.ts";
+import { checkResponse } from "/test/load/utils/checkResponse.js";
 import {
-    defaultDuration,
-    defaultHeaders,
-    defaultRequestsPerVU,
+  defaultDuration,
+  defaultHeaders,
+  defaultRequestsPerVU,
 } from "/test/load/utils/constants.js";
 import { signIn } from "/test/load/utils/signIn.js";
-import { getToken } from "/test/load/utils/getToken.js";
-import { checkResponse } from "/test/load/utils/checkResponse.js";
-import { JWT_COOKIE_NAME, API_URL } from "/shared/src/constants.ts";
 
 const VUS = 150;
 
@@ -25,12 +24,7 @@ export function setup() {
 export default function (data) {
   const url = `${API_URL}/auth/sign-out`;
 
-  const params = {
-    ...defaultHeaders,
-    cookies: {
-      [JWT_COOKIE_NAME]: getToken(data),
-    },
-  };
+  const params = defaultHeaders;
 
   const response = http.post(url, null, params);
 
