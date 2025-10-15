@@ -1,5 +1,6 @@
 import Table from "@/design-system/Table";
 import AccountStatus from "@/domains/global/components/AccountStatus";
+import DataField from "@/domains/global/components/DataField";
 import {
   BACKEND_URL,
   BLANK,
@@ -11,13 +12,15 @@ import {
   AccountReceivableInstallment,
   FetchAccountReceivableInstallment,
 } from "@/domains/global/types/model";
+import { applyMask } from "@/domains/global/utils/applyMask";
+import { removeMask } from "@shared/utils/removeMask";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState, type ReactNode } from "react";
 import { useParams } from "react-router-dom";
+import { ACCOUNTS_RECEIVABLE_INSTALLMENTS_TABLE } from "../constants";
 import selectAccountsReceivableInstallmentsInfo from "../utils/selectAccountsReceivableInstallmentsInfo";
 import AccountsReceivableInstallmentsTableActions from "./AccountsReceivableTableInstallmentsActions";
 import PaymentMethodModal from "./PaymentMethodModal";
-import { ACCOUNTS_RECEIVABLE_INSTALLMENTS_TABLE } from "../constants";
 
 const gridColumns = 11;
 
@@ -64,12 +67,51 @@ export default function AccountsReceivableInstallmentsTable(): ReactNode {
     );
   }, [accountsReceivableInstallmentsInfo]);
 
+  const summary = useMemo(() => {
+    if (!accountsReceivableInstallmentsInfo?.length)
+      return {
+        totalOverall: 0,
+        totalPaid: 0,
+        totalPending: 0,
+      };
+
+    const totalPaid =
+      accountsReceivableInstallmentsInfo
+        .filter((s) => s.status === "PAID")
+        ?.reduce((acc, curr) => acc + Number(removeMask(curr.value)), 0) ?? 0;
+
+    const totalPending =
+      accountsReceivableInstallmentsInfo
+        .filter((s) => s.status === "PENDING")
+        ?.reduce((acc, curr) => acc + Number(removeMask(curr.value)), 0) ?? 0;
+
+    return {
+      totalOverall: totalPaid + totalPending,
+      totalPaid,
+      totalPending,
+    };
+  }, [accountsReceivableInstallmentsInfo]);
+
   return (
     <>
       <PaymentMethodModal
         installment={installmentToPaymentMethod}
         {...dialog}
       />
+      <div className="w-fit flex gap-4">
+        <DataField
+          label="Total"
+          value={applyMask(summary?.totalOverall, "money")}
+        />
+        <DataField
+          label="Total Pago"
+          value={applyMask(summary?.totalPaid, "money")}
+        />
+        <DataField
+          label="Total Pendente"
+          value={applyMask(summary?.totalPending, "money")}
+        />
+      </div>
       <Table>
         <Table.Header gridColumns={gridColumns}>
           <Table.Head

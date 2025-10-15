@@ -1,16 +1,19 @@
 import Table from "@/design-system/Table";
 import AccountStatus from "@/domains/global/components/AccountStatus";
+import DataField from "@/domains/global/components/DataField";
 import {
-    BACKEND_URL,
-    BLANK,
-    PaymentMethodPayableText,
+  BACKEND_URL,
+  BLANK,
+  PaymentMethodPayableText,
 } from "@/domains/global/constants";
 import useDialog from "@/domains/global/hooks/useDialog";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import {
-    AccountPayableInstallment,
-    FetchAccountPayableInstallment,
+  AccountPayableInstallment,
+  FetchAccountPayableInstallment,
 } from "@/domains/global/types/model";
+import { applyMask } from "@/domains/global/utils/applyMask";
+import { removeMask } from "@shared/utils/removeMask";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState, type ReactNode } from "react";
 import { useParams } from "react-router-dom";
@@ -64,12 +67,51 @@ export default function AccountsPayableInstallmentsTable(): ReactNode {
     );
   }, [accountsPayableInstallmentsInfo]);
 
+  const summary = useMemo(() => {
+    if (!accountsPayableInstallmentsInfo?.length)
+      return {
+        totalOverall: 0,
+        totalPaid: 0,
+        totalPending: 0,
+      };
+
+    const totalPaid =
+      accountsPayableInstallmentsInfo
+        .filter((s) => s.status === "PAID")
+        ?.reduce((acc, curr) => acc + Number(removeMask(curr.value)), 0) ?? 0;
+
+    const totalPending =
+      accountsPayableInstallmentsInfo
+        .filter((s) => s.status === "PENDING")
+        ?.reduce((acc, curr) => acc + Number(removeMask(curr.value)), 0) ?? 0;
+
+    return {
+      totalOverall: totalPaid + totalPending,
+      totalPaid,
+      totalPending,
+    };
+  }, [accountsPayableInstallmentsInfo]);
+
   return (
     <>
       <PaymentMethodModal
         installment={installmentToPaymentMethod}
         {...dialog}
       />
+      <div className="w-fit flex gap-4">
+        <DataField
+          label="Total"
+          value={applyMask(summary?.totalOverall, "money")}
+        />
+        <DataField
+          label="Total Pago"
+          value={applyMask(summary?.totalPaid, "money")}
+        />
+        <DataField
+          label="Total Pendente"
+          value={applyMask(summary?.totalPending, "money")}
+        />
+      </div>
       <Table>
         <Table.Header gridColumns={gridColumns}>
           <Table.Head
@@ -110,8 +152,7 @@ export default function AccountsPayableInstallmentsTable(): ReactNode {
             <Table.Row key={installment.id} gridColumns={gridColumns}>
               <Table.Cell
                 columnLabel={
-                  ACCOUNTS_PAYABLE_INSTALLMENTS_TABLE.installmentSequence
-                    .label
+                  ACCOUNTS_PAYABLE_INSTALLMENTS_TABLE.installmentSequence.label
                 }
                 colSpan={
                   ACCOUNTS_PAYABLE_INSTALLMENTS_TABLE.installmentSequence
@@ -128,9 +169,7 @@ export default function AccountsPayableInstallmentsTable(): ReactNode {
                 }
               />
               <Table.Cell
-                columnLabel={
-                  ACCOUNTS_PAYABLE_INSTALLMENTS_TABLE.dueDate.label
-                }
+                columnLabel={ACCOUNTS_PAYABLE_INSTALLMENTS_TABLE.dueDate.label}
                 label={installment.dueDate}
               />
               <Table.Cell
@@ -156,9 +195,7 @@ export default function AccountsPayableInstallmentsTable(): ReactNode {
                 }
               />
               <Table.Cell
-                columnLabel={
-                  ACCOUNTS_PAYABLE_INSTALLMENTS_TABLE.status.label
-                }
+                columnLabel={ACCOUNTS_PAYABLE_INSTALLMENTS_TABLE.status.label}
                 label={<AccountStatus status={installment.status} />}
               />
               <Table.Cell
