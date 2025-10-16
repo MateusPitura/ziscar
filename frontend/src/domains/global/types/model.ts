@@ -181,6 +181,8 @@ export type FetchCustomer = Pick<
 
 export type FetchPaidTo = Pick<PaidTo, "paidTo" | "id">;
 
+export type FetchModel = Pick<Vehicle, "id" | "modelName">;
+
 export type FetchAccountPayable = Pick<
   AccountPayable,
   "id" | "date" | "description" | "paidTo" | "totalValue" | "overallStatus"

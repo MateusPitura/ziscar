@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { Prisma, Vehicle, VehiclePurchase, VehicleSale } from '@prisma/client';
 import type {
   FetchVehicleBrandsResponseDto,
+  SearchModelRequestDto,
+  SearchModelResponseDto,
   SearchPaidToRequestDto,
   SearchPaidToResponseDto,
   SearchVehiclesRequestDto,
@@ -31,6 +33,9 @@ export abstract class VehicleRepository {
   abstract searchPaidTo(
     params: SearchPaidToRequestDto,
   ): Promise<SearchPaidToResponseDto>;
+  abstract searchModel(
+    params: SearchModelRequestDto,
+  ): Promise<SearchModelResponseDto>;
   abstract insertCharacteristics(
     vehicleId: number,
     characteristics: string[],

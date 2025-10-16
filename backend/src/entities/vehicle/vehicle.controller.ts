@@ -20,6 +20,8 @@ import {
   InsertVehicleResponseDto,
   MakeVehicleSaleRequestDto,
   MakeVehicleSaleResponseDto,
+  SearchModelRequestDto,
+  SearchModelResponseDto,
   SearchPaidToRequestDto,
   SearchPaidToResponseDto,
   SearchVehiclesRequestDto,
@@ -36,6 +38,7 @@ import { GetVehicleByIdUseCase } from './use-case/get-vehicle-by-id.use-case';
 import { GetVehicleSaleUseCase } from './use-case/get-vehicle-sale.use-case';
 import { InsertVehicleUseCase } from './use-case/insert-vehicle.use-case';
 import { MakeSaleUseCase } from './use-case/make-sale.use-case';
+import { SearchModelUseCase } from './use-case/search-model.use-case';
 import { SearchPaidToUseCase } from './use-case/search-paid-to.use-case';
 import { SearchVehiclesUseCase } from './use-case/search-vehicles.use-case';
 import { UnarchiveVehicleUseCase } from './use-case/unarchive-vehicle.use-case';
@@ -48,6 +51,7 @@ export class VehicleController {
     private readonly insertVehicle: InsertVehicleUseCase,
     private readonly searchVehicles: SearchVehiclesUseCase,
     private readonly searchPaidToVehicle: SearchPaidToUseCase,
+    private readonly searchModelVehicle: SearchModelUseCase,
     private readonly fetchBrands: FetchBrandsUseCase,
     private readonly makeSale: MakeSaleUseCase,
     private readonly updateVehicle: UpdateVehicleUseCase,
@@ -81,6 +85,14 @@ export class VehicleController {
     @Query() query: SearchPaidToRequestDto,
   ): Promise<SearchPaidToResponseDto> {
     return this.searchPaidToVehicle.execute(query);
+  }
+
+  @Get('/model')
+  @RoleGuard(Resources.VEHICLES, Actions.READ)
+  async searchModel(
+    @Query() query: SearchModelRequestDto,
+  ): Promise<SearchModelResponseDto> {
+    return this.searchModelVehicle.execute(query);
   }
 
   @Get('brands')

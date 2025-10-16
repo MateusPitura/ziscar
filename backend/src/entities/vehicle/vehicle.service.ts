@@ -22,6 +22,8 @@ import { CreateInput, UpdateInput } from 'src/types';
 import { GET_VEHICLE, VEHICLE_WITH_PAYMENT_SELECT } from './constants';
 import type {
   FetchVehicleBrandsResponseDto,
+  SearchModelRequestDto,
+  SearchModelResponseDto,
   SearchPaidToRequestDto,
   SearchPaidToResponseDto,
   SearchVehiclesRequestDto,
@@ -182,6 +184,25 @@ export class VehicleService implements VehicleRepository {
         paidTo: true,
         id: true,
       },
+      distinct: ['paidTo'],
+    });
+
+    return { data: result };
+  }
+
+  async searchModel(
+    params: SearchModelRequestDto,
+  ): Promise<SearchModelResponseDto> {
+    const result = await this.prisma.vehicle.findMany({
+      where: {
+        modelName: { contains: params.modelName, mode: 'insensitive' },
+      },
+      orderBy: { modelName: 'asc' },
+      select: {
+        modelName: true,
+        id: true,
+      },
+      distinct: ['modelName'],
     });
 
     return { data: result };

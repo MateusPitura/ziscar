@@ -67,7 +67,8 @@ export type QueryKeys =
   | "accounts-receivable"
   | "accounts-receivable-installments"
   | "accounts-receivable-payment-method"
-  | "paid-to";
+  | "paid-to"
+  | "vehicle-model";
 
 export interface UsersFilter extends UsersFilterFormInputs, Pageable {}
 export interface StoresFilter extends StoresFilterFormInputs, Pageable {}

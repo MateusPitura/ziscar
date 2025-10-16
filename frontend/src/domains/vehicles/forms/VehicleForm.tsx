@@ -10,6 +10,7 @@ import { FuelType, VehicleCategory, VehicleStatus } from "@shared/enums";
 import { useQuery } from "@tanstack/react-query";
 import type { ReactNode } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
+import VehicleModelSearch from "../components/VehicleModelSearch";
 import {
   FuelTypeText,
   VehicleCategoryText,
@@ -117,7 +118,7 @@ export default function VehicleForm(): ReactNode {
         loading={isFetchingBrandsInfo}
         required
       />
-      <Input<VehicleFormInputs> name="vehicle.modelName" label="Modelo" />
+      <VehicleModelSearch />
       <Input<VehicleFormInputs>
         name="vehicle.kilometers"
         label="Quilometragem"

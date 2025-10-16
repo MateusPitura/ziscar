@@ -45,8 +45,8 @@ export default function VehiclePurchaseDetailsForm({
         name="payment.paidTo"
         fetchCallback={getPaidToInfo}
         queryKey="paid-to"
-        labelKey="paidTo"
         variant="autocomplete"
+        labelKey="paidTo"
         valueKey="id"
         select={selectPaidToInfo}
         formatSearch={(search) => {

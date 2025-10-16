@@ -57,7 +57,7 @@ export default function ExpenseForm({
                 <UpfrontForm />
                 <Section.Group>
                   <Section.Header title="Informações do pagamento" />
-                  <Section.Body>
+                  <Section.Body className="grid-cols-3">
                     <PaymentForm />
                   </Section.Body>
                 </Section.Group>

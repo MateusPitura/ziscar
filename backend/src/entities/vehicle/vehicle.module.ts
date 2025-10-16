@@ -15,6 +15,7 @@ import { GetVehicleByIdUseCase } from './use-case/get-vehicle-by-id.use-case';
 import { GetVehicleSaleUseCase } from './use-case/get-vehicle-sale.use-case';
 import { InsertVehicleUseCase } from './use-case/insert-vehicle.use-case';
 import { MakeSaleUseCase } from './use-case/make-sale.use-case';
+import { SearchModelUseCase } from './use-case/search-model.use-case';
 import { SearchPaidToUseCase } from './use-case/search-paid-to.use-case';
 import { SearchVehiclesUseCase } from './use-case/search-vehicles.use-case';
 import { UnarchiveVehicleUseCase } from './use-case/unarchive-vehicle.use-case';
@@ -45,6 +46,7 @@ import { VehicleService } from './vehicle.service';
     InsertVehicleUseCase,
     SearchVehiclesUseCase,
     SearchPaidToUseCase,
+    SearchModelUseCase,
     FetchBrandsUseCase,
     MakeSaleUseCase,
     UpdateVehicleUseCase,
@@ -60,6 +62,7 @@ import { VehicleService } from './vehicle.service';
     InsertVehicleUseCase,
     SearchVehiclesUseCase,
     SearchPaidToUseCase,
+    SearchModelUseCase,
     FetchBrandsUseCase,
     MakeSaleUseCase,
     UpdateVehicleUseCase,

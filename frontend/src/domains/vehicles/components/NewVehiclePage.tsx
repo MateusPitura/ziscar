@@ -63,6 +63,8 @@ export default function NewVehiclePage({
       navigate("/vehicles");
       queryClient.invalidateQueries({ queryKey: ["vehicles"] });
       queryClient.invalidateQueries({ queryKey: ["accounts-payable"] });
+      queryClient.invalidateQueries({ queryKey: ["paid-to"] });
+      queryClient.invalidateQueries({ queryKey: ["vehicle-model"] });
     },
   });
 

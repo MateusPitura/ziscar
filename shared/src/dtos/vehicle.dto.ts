@@ -92,6 +92,10 @@ export const SearchPaidToRequestSchema = s.object({
   paidTo: s.string().optional(),
 });
 
+export const SearchModelRequestSchema = s.object({
+  modelName: s.string().optional(),
+});
+
 export const VehicleItemResponseSchema = s.object({
   id: s.id(),
   chassiNumber: s.string(17),
@@ -143,6 +147,16 @@ export const SearchPaidToResponseSchema = s.object({
     })
   ),
 });
+
+export const SearchModelResponseSchema = s.object({
+  data: s.array(
+    s.object({
+      modelName: s.string().nullable(),
+      id: s.id(),
+    })
+  ),
+});
+
 
 export const InsertVehicleExpenseRequestSchema = s
   .object({

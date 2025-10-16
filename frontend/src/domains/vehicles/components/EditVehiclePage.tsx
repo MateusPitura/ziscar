@@ -84,6 +84,8 @@ export default function EditVehiclePage({
       });
       navigate("/vehicles");
       queryClient.invalidateQueries({ queryKey: ["vehicles"] });
+      queryClient.invalidateQueries({ queryKey: ["paid-to"] });
+      queryClient.invalidateQueries({ queryKey: ["vehicle-model"] });
     },
   });
 
