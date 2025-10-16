@@ -59,7 +59,7 @@ export default function Search<
       value: String(item[valueKey as string]) as UnwrapArray<
         PathValue<T, Path<T>>
       >,
-      description: String(item[descriptionKey as string]),
+      description: descriptionKey ? String(item[descriptionKey as string]) : "",
     }));
   }, [data, labelKey, valueKey, descriptionKey]);
 

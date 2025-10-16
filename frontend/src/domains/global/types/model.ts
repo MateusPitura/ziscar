@@ -159,6 +159,11 @@ export interface City {
   name: string;
 }
 
+export interface PaidTo {
+  paidTo: string | null;
+  id: number;
+}
+
 export type FetchUser = Pick<
   User,
   "id" | "cpf" | "fullName" | "email" | "phone" | "archivedAt" | "roleId"
@@ -174,14 +179,11 @@ export type FetchCustomer = Pick<
   "id" | "fullName" | "cpf" | "email" | "phone" | "archivedAt" | "cpf"
 >;
 
+export type FetchPaidTo = Pick<PaidTo, "paidTo" | "id">;
+
 export type FetchAccountPayable = Pick<
   AccountPayable,
-  | "id"
-  | "date"
-  | "description"
-  | "paidTo"
-  | "totalValue"
-  | "overallStatus"
+  "id" | "date" | "description" | "paidTo" | "totalValue" | "overallStatus"
 >;
 
 export type FetchAccountPayableInstallment = Pick<

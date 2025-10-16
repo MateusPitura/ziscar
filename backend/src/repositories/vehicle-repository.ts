@@ -1,9 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { Vehicle, VehicleSale, VehiclePurchase, Prisma } from '@prisma/client';
+import { Prisma, Vehicle, VehiclePurchase, VehicleSale } from '@prisma/client';
 import type {
+  FetchVehicleBrandsResponseDto,
+  SearchPaidToRequestDto,
+  SearchPaidToResponseDto,
   SearchVehiclesRequestDto,
   SearchVehiclesResponseDto,
-  FetchVehicleBrandsResponseDto,
 } from 'src/entities/vehicle/dtos';
 import { CreateInput, UpdateInput } from 'src/types';
 import type { VEHICLE_WITH_PAYMENT_SELECT } from '../entities/vehicle/constants';
@@ -26,6 +28,9 @@ export abstract class VehicleRepository {
   abstract search(
     params: SearchVehiclesRequestDto,
   ): Promise<SearchVehiclesResponseDto>;
+  abstract searchPaidTo(
+    params: SearchPaidToRequestDto,
+  ): Promise<SearchPaidToResponseDto>;
   abstract insertCharacteristics(
     vehicleId: number,
     characteristics: string[],

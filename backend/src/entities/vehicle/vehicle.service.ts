@@ -1,30 +1,32 @@
 import { Injectable } from '@nestjs/common';
 import {
-  Vehicle,
   Prisma,
+  Vehicle,
   VehicleCategory,
-  VehicleStatus,
-  VehicleSale,
   VehiclePurchase,
+  VehicleSale,
+  VehicleStatus,
 } from '@prisma/client';
 import {
-  VehicleStatus as SharedVehicleStatus,
-  VehicleCategory as SharedVehicleCategory,
   FuelType,
+  VehicleCategory as SharedVehicleCategory,
+  VehicleStatus as SharedVehicleStatus,
 } from '@shared/enums';
+import { VEHICLE_INACTIVE_STATUS } from '@shared/types';
 import { PrismaService } from 'src/infra/database/prisma.service';
 import {
   GetVehicleWithPaymentOutDto,
   VehicleRepository,
 } from 'src/repositories/vehicle-repository';
 import { CreateInput, UpdateInput } from 'src/types';
+import { GET_VEHICLE, VEHICLE_WITH_PAYMENT_SELECT } from './constants';
 import type {
+  FetchVehicleBrandsResponseDto,
+  SearchPaidToRequestDto,
+  SearchPaidToResponseDto,
   SearchVehiclesRequestDto,
   SearchVehiclesResponseDto,
-  FetchVehicleBrandsResponseDto,
 } from './dtos';
-import { GET_VEHICLE, VEHICLE_WITH_PAYMENT_SELECT } from './constants';
-import { VEHICLE_INACTIVE_STATUS } from '@shared/types';
 
 @Injectable()
 export class VehicleService implements VehicleRepository {
@@ -166,6 +168,23 @@ export class VehicleService implements VehicleRepository {
     }));
 
     return { data: mappedRows, total: total };
+  }
+
+  async searchPaidTo(
+    params: SearchPaidToRequestDto,
+  ): Promise<SearchPaidToResponseDto> {
+    const result = await this.prisma.accountPayable.findMany({
+      where: {
+        paidTo: { contains: params.paidTo, mode: 'insensitive' },
+      },
+      orderBy: { paidTo: 'asc' },
+      select: {
+        paidTo: true,
+        id: true,
+      },
+    });
+
+    return { data: result };
   }
 
   async insertCharacteristics(
