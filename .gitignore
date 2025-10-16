@@ -5,6 +5,4 @@ node_modules/
 scripts/.env
 test/load/result/
 copilot-instructions.md
-
-# Enum generation cache
 scripts/.enum-cache.json

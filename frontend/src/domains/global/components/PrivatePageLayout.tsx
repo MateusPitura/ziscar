@@ -1,14 +1,14 @@
-import { useEffect, type ReactElement } from "react";
-import PageSideBar from "./PageSideBar";
-import { Outlet, useMatches, useNavigate } from "react-router-dom";
 import Spinner from "@/design-system/Spinner";
-import useSafeFetch from "../hooks/useSafeFetch";
-import { BACKEND_URL, DEFAULT_ROUTE } from "../constants";
-import { useQuery } from "@tanstack/react-query";
-import { Permissions } from "@shared/types";
-import useSnackbar from "../hooks/useSnackbar";
-import { formatDeniedMessage } from "@shared/utils/formatDeniedMessage";
 import { ActionsType, ResourcesType } from "@shared/enums";
+import { Permissions } from "@shared/types";
+import { formatDeniedMessage } from "@shared/utils/formatDeniedMessage";
+import { useQuery } from "@tanstack/react-query";
+import { useEffect, type ReactElement } from "react";
+import { Outlet, useMatches, useNavigate } from "react-router-dom";
+import { BACKEND_URL, DEFAULT_ROUTE } from "../constants";
+import useSafeFetch from "../hooks/useSafeFetch";
+import useSnackbar from "../hooks/useSnackbar";
+import PageSideBar from "./PageSideBar";
 
 export default function PrivatePageLayout(): ReactElement {
   const matches = useMatches();
@@ -61,10 +61,8 @@ export default function PrivatePageLayout(): ReactElement {
     <div className="bg-neutral-50 w-full h-screen flex flex-col">
       <div className="flex flex-1 overflow-hidden">
         <PageSideBar />
-        <div className="bg-neutral-50 p-4 w-full overflow-y-auto">
-          <div className="w-full p-4 rounded-md shadow-md h-full overflow-y-auto flex">
-            <Outlet />
-          </div>
+        <div className="w-full p-4 h-full overflow-y-auto flex">
+          <Outlet />
         </div>
       </div>
     </div>

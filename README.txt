@@ -36,4 +36,4 @@ No navegador abra "http://localhost:5173". As portas 3000, 5173, 5432 precisam e
 
 2. Acesso via internet
 
-Alternativamente acesse o site https://ziscar.me (obs.: o método de autenticação permite um usuário acessar em 1 computador por vez)
+Alternativamente acesse o site https://ziscar.me

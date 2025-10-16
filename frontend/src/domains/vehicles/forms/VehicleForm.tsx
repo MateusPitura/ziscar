@@ -9,10 +9,10 @@ import selectStoresInfo from "@/domains/stores/utils/selectStoresInfo";
 import { FuelType, VehicleCategory, VehicleStatus } from "@shared/enums";
 import { useQuery } from "@tanstack/react-query";
 import type { ReactNode } from "react";
-import { useFormContext } from "react-hook-form";
+import { useFormContext, useWatch } from "react-hook-form";
+import VehicleModelSearch from "../components/VehicleModelSearch";
 import {
   FuelTypeText,
-  MODEL_YEARS_OPTIONS,
   VehicleCategoryText,
   VehicleStatusText,
   YEARS_OF_MANUFACTURE_OPTIONS,
@@ -20,12 +20,12 @@ import {
 import { VehicleFormInputs } from "../types";
 import selectBrandsInfo from "../utils/selectBrandsInfo";
 
-const VehicleStatusSanitized = Object.values(VehicleStatus).filter((status) =>
-  ![VehicleStatus.SOLD].includes(status)
+const VehicleStatusSanitized = Object.values(VehicleStatus).filter(
+  (status) => ![VehicleStatus.SOLD].includes(status)
 );
 
 export default function VehicleForm(): ReactNode {
-  const { setValue } = useFormContext<VehicleFormInputs>();
+  const { setValue, control } = useFormContext<VehicleFormInputs>();
   const { safeFetch } = useSafeFetch();
 
   async function getStoresInfo(): Promise<PageablePayload<FetchStore>> {
@@ -51,18 +51,23 @@ export default function VehicleForm(): ReactNode {
     select: selectBrandsInfo,
   });
 
+  const yearOfManufactureWatch = useWatch({
+    control,
+    name: "vehicle.yearOfManufacture",
+  });
+
   return (
     <>
       <Input<VehicleFormInputs>
         name="vehicle.plateNumber"
-        label="Número da placa"
+        label="Placa"
         required
         mask="plateNumber"
         maxLength={8}
       />
       <Input<VehicleFormInputs>
         name="vehicle.chassiNumber"
-        label="Número do chassi"
+        label="Chassi"
         required
         mask="chassi"
         maxLength={17}
@@ -113,7 +118,7 @@ export default function VehicleForm(): ReactNode {
         loading={isFetchingBrandsInfo}
         required
       />
-      <Input<VehicleFormInputs> name="vehicle.modelName" label="Modelo" />
+      <VehicleModelSearch />
       <Input<VehicleFormInputs>
         name="vehicle.kilometers"
         label="Quilometragem"
@@ -144,7 +149,17 @@ export default function VehicleForm(): ReactNode {
       <Select<VehicleFormInputs>
         name="vehicle.modelYear"
         label="Ano do modelo"
-        options={MODEL_YEARS_OPTIONS}
+        disabled={!yearOfManufactureWatch}
+        options={[
+          {
+            label: yearOfManufactureWatch,
+            value: yearOfManufactureWatch,
+          },
+          {
+            label: String(Number(yearOfManufactureWatch) + 1),
+            value: String(Number(yearOfManufactureWatch) + 1),
+          },
+        ]}
       />
       <Select<VehicleFormInputs>
         name="vehicle.fuelType"

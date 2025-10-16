@@ -1,17 +1,21 @@
 import {
-  InsertVehicleRequestSchema,
-  InsertVehicleResponseSchema,
-  SearchVehiclesRequestSchema,
-  SearchVehiclesResponseSchema,
-  FetchVehicleBrandsResponseSchema,
-  MakeVehicleSaleRequestSchema,
-  MakeVehicleSaleResponseSchema,
-  UpdateVehicleRequestSchema,
-  UpdateVehicleResponseSchema,
   ArchiveVehicleRequestSchema,
   ArchiveVehicleResponseSchema,
+  FetchVehicleBrandsResponseSchema,
+  InsertVehicleRequestSchema,
+  InsertVehicleResponseSchema,
+  MakeVehicleSaleRequestSchema,
+  MakeVehicleSaleResponseSchema,
+  SearchModelRequestSchema,
+  SearchModelResponseSchema,
+  SearchPaidToRequestSchema,
+  SearchPaidToResponseSchema,
+  SearchVehiclesRequestSchema,
+  SearchVehiclesResponseSchema,
   UnarchiveVehicleRequestSchema,
   UnarchiveVehicleResponseSchema,
+  UpdateVehicleRequestSchema,
+  UpdateVehicleResponseSchema,
   VehicleSaleResponseSchema,
   VehicleWithPaymentResponseSchema,
 } from '@shared/dtos/vehicle.dto';
@@ -23,6 +27,14 @@ export class InsertVehicleRequestDto extends createZodDto(
 ) {}
 export class SearchVehiclesRequestDto extends createZodDto(
   SearchVehiclesRequestSchema,
+) {}
+
+export class SearchPaidToRequestDto extends createZodDto(
+  SearchPaidToRequestSchema,
+) {}
+
+export class SearchModelRequestDto extends createZodDto(
+  SearchModelRequestSchema,
 ) {}
 
 export class MakeVehicleSaleRequestDto extends createZodDto(
@@ -44,6 +56,12 @@ export type InsertVehicleResponseDto = z.infer<
 export type SearchVehiclesResponseDto = z.infer<
   typeof SearchVehiclesResponseSchema
 >;
+
+export type SearchPaidToResponseDto = z.infer<
+  typeof SearchPaidToResponseSchema
+>;
+
+export type SearchModelResponseDto = z.infer<typeof SearchModelResponseSchema>;
 
 export type MakeVehicleSaleResponseDto = z.infer<
   typeof MakeVehicleSaleResponseSchema

@@ -1,5 +1,17 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { Actions, Resources } from '@prisma/client';
+import { JWT_COOKIE_NAME, SEED_ROLE_ADMIN_ID } from '@shared/constants';
+import { compare } from 'bcrypt';
+import { randomUUID } from 'crypto';
+import { FRONTEND_URL, isProduction } from 'src/constants';
+import { EnterpriseService } from 'src/entities/enterprise/enterprise.service';
+import { StoreService } from 'src/entities/store/store.service';
+import { GET_PERMISSIONS } from 'src/entities/user/user.constant';
+import { UserService } from 'src/entities/user/user.service';
+import handlePermissions from 'src/utils/handlePermissions';
+import { PrismaService } from '../../infra/database/prisma.service';
+import { EmailService } from '../email/email.service';
 import {
   AuthResetPassword,
   AuthSignin,
@@ -10,19 +22,6 @@ import {
   SignOutInput,
   SignUpInput,
 } from './auth.type';
-import { compare } from 'bcrypt';
-import { EmailService } from '../email/email.service';
-import { PrismaService } from '../../infra/database/prisma.service';
-import { SEED_ROLE_ADMIN_ID, JWT_COOKIE_NAME } from '@shared/constants';
-import { FRONTEND_URL } from 'src/constants';
-import { randomUUID } from 'crypto';
-import handlePermissions from 'src/utils/handlePermissions';
-import { isProduction } from 'src/constants';
-import { UserService } from 'src/entities/user/user.service';
-import { GET_PERMISSIONS } from 'src/entities/user/user.constant';
-import { StoreService } from 'src/entities/store/store.service';
-import { Actions, Resources } from '@prisma/client';
-import { EnterpriseService } from 'src/entities/enterprise/enterprise.service';
 
 export type RoleWithPermissions = {
   id: number;
@@ -51,6 +50,7 @@ export class AuthService {
         id: true,
         enterpriseId: true,
         password: true,
+        jit: true,
       },
       showNotFoundError: false,
     });
@@ -59,12 +59,14 @@ export class AuthService {
       throw new UnauthorizedException('Email ou senha inválidos');
     }
 
-    const jit = randomUUID();
-
-    await this.userService.update({
-      where: { id: user.id },
-      userUpdateInDto: { jit },
-    });
+    let jit = user.jit;
+    if (!jit) {
+      jit = randomUUID();
+      await this.userService.update({
+        where: { id: user.id },
+        userUpdateInDto: { jit },
+      });
+    }
 
     const permissions = handlePermissions({
       permissions:
@@ -91,14 +93,7 @@ export class AuthService {
     return res?.json(true);
   }
 
-  async signOut({ userId, enterpriseId, res }: SignOutInput) {
-    await this.userService.update({
-      where: { id: userId },
-      userUpdateInDto: { jit: null },
-      showNotFoundError: false,
-      enterpriseId,
-    });
-
+  signOut({ res }: SignOutInput) {
     res?.clearCookie(JWT_COOKIE_NAME);
 
     return res?.json(true);

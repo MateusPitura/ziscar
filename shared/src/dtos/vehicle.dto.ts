@@ -1,19 +1,13 @@
-import { s } from "../safeZod";
 import {
-  BasePaginationSchema,
-  BaseDateRangeSchema,
-  BaseIdResponseSchema,
-  BasePaginatedResponseSchema,
-  BaseIdSchema,
-} from "./base.dto";
-import {
-  VEHICLECATEGORY_VALUES,
-  FUELTYPE_VALUES,
-  VEHICLESTATUS_VALUES,
   EXPENSECATEGORY_VALUES,
+  FUELTYPE_VALUES,
   PAYMENTMETHODPAYABLETYPE_VALUES,
   PAYMENTMETHODRECEIVABLETYPE_VALUES,
+  VEHICLECATEGORY_VALUES,
+  VEHICLESTATUS_VALUES,
 } from "../enums";
+import { s } from "../safeZod";
+import { VehicleStatusForFilter } from "../types";
 import {
   createAccountPayableDTO,
   createAccountPayableInstallmentDTO,
@@ -22,7 +16,13 @@ import {
   createAccountReceivableDTO,
   createAccountReceivableInstallmentDTO,
 } from "./account-receivable.dto";
-import { VehicleStatusForFilter } from "../types";
+import {
+  BaseDateRangeSchema,
+  BaseIdResponseSchema,
+  BaseIdSchema,
+  BasePaginatedResponseSchema,
+  BasePaginationSchema,
+} from "./base.dto";
 
 export const InsertVehicleRequestSchema = s.object({
   chassiNumber: s.string(17),
@@ -88,6 +88,14 @@ export const SearchVehiclesRequestSchema = BasePaginationSchema.merge(
   })
   .refine(...s.dateRangeRule);
 
+export const SearchPaidToRequestSchema = s.object({
+  paidTo: s.string().optional(),
+});
+
+export const SearchModelRequestSchema = s.object({
+  modelName: s.string().optional(),
+});
+
 export const VehicleItemResponseSchema = s.object({
   id: s.id(),
   chassiNumber: s.string(17),
@@ -130,6 +138,25 @@ export const VehicleItemResponseSchema = s.object({
 export const SearchVehiclesResponseSchema = BasePaginatedResponseSchema(
   VehicleItemResponseSchema
 );
+
+export const SearchPaidToResponseSchema = s.object({
+  data: s.array(
+    s.object({
+      paidTo: s.string().nullable(),
+      id: s.id(),
+    })
+  ),
+});
+
+export const SearchModelResponseSchema = s.object({
+  data: s.array(
+    s.object({
+      modelName: s.string().nullable(),
+      id: s.id(),
+    })
+  ),
+});
+
 
 export const InsertVehicleExpenseRequestSchema = s
   .object({

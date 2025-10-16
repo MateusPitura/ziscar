@@ -87,61 +87,152 @@ const AccountsReceivableInstallments = lazy(
     )
 );
 
+const VehiclesContextHelper = lazy(
+  () => import("@/domains/contextHelpers/components/VehiclesContextHelper")
+);
+const NewVehicleContextHelper = lazy(
+  () => import("@/domains/contextHelpers/components/NewVehicleContextHelper")
+);
+const EditVehicleContextHelper = lazy(
+  () => import("@/domains/contextHelpers/components/EditVehicleContextHelper")
+);
+const VehicleExpenseContextHelper = lazy(
+  () =>
+    import("@/domains/contextHelpers/components/VehicleExpenseContextHelper")
+);
+const NewVehicleExpenseContextHelper = lazy(
+  () =>
+    import("@/domains/contextHelpers/components/NewVehicleExpenseContextHelper")
+);
+const EditVehicleExpenseContextHelper = lazy(
+  () =>
+    import(
+      "@/domains/contextHelpers/components/EditVehicleExpenseContextHelper"
+    )
+);
+const UsersContextHelper = lazy(
+  () => import("@/domains/contextHelpers/components/UsersContextHelper")
+);
+const NewUserContextHelper = lazy(
+  () => import("@/domains/contextHelpers/components/NewUserContextHelper")
+);
+const EditUserContextHelper = lazy(
+  () => import("@/domains/contextHelpers/components/EditUserContextHelper")
+);
+const EditProfileContextHelper = lazy(
+  () => import("@/domains/contextHelpers/components/EditProfileContextHelper")
+);
+const StoresContextHelper = lazy(
+  () => import("@/domains/contextHelpers/components/StoresContextHelper")
+);
+const NewStoreContextHelper = lazy(
+  () => import("@/domains/contextHelpers/components/NewStoreContextHelper")
+);
+const EditStoreContextHelper = lazy(
+  () => import("@/domains/contextHelpers/components/EditStoreContextHelper")
+);
+const CustomersContextHelper = lazy(
+  () => import("@/domains/contextHelpers/components/CustomersContextHelper")
+);
+const NewCustomerContextHelper = lazy(
+  () => import("@/domains/contextHelpers/components/NewCustomerContextHelper")
+);
+const EditCustomerContextHelper = lazy(
+  () => import("@/domains/contextHelpers/components/EditCustomerContextHelper")
+);
+const VehicleSaleContextHelper = lazy(
+  () => import("@/domains/contextHelpers/components/VehicleSaleContextHelper")
+);
+const ViewVehicleSaleContextHelper = lazy(
+  () =>
+    import("@/domains/contextHelpers/components/ViewVehicleSaleContextHelper")
+);
+const AccountsPayableContextHelper = lazy(
+  () =>
+    import("@/domains/contextHelpers/components/AccountsPayableContextHelper")
+);
+const AccountsPayableInstallmentsContextHelper = lazy(
+  () =>
+    import(
+      "@/domains/contextHelpers/components/AccountsPayableInstallmentsContextHelper"
+    )
+);
+const AccountsReceivableContextHelper = lazy(
+  () =>
+    import(
+      "@/domains/contextHelpers/components/AccountsReceivableContextHelper"
+    )
+);
+const AccountsReceivableInstallmentsContextHelper = lazy(
+  () =>
+    import(
+      "@/domains/contextHelpers/components/AccountsReceivableInstallmentsContextHelper"
+    )
+);
+
 export const privateRoutes: Route[] = [
   {
     path: DEFAULT_ROUTE,
     displayName: "Veículos",
     icon: "DirectionsCar",
-    entryPage: <Vehicles />,
+    entryPage: <Vehicles contextHelper={<VehiclesContextHelper />} />,
     shouldDisplay: true,
     action: "READ",
     resource: "VEHICLES",
   },
   {
     path: "/vehicles/new",
-    entryPage: <NewVehicle />,
+    entryPage: <NewVehicle contextHelper={<NewVehicleContextHelper />} />,
     shouldDisplay: false,
     action: "CREATE",
     resource: "VEHICLES",
   },
   {
     path: "/vehicles/edit/:vehicleId",
-    entryPage: <EditVehicle />,
+    entryPage: <EditVehicle contextHelper={<EditVehicleContextHelper />} />,
     shouldDisplay: false,
     action: "UPDATE",
     resource: "VEHICLES",
   },
   {
     path: "/vehicles/expense/:vehicleId",
-    entryPage: <VehicleExpense />,
+    entryPage: (
+      <VehicleExpense contextHelper={<VehicleExpenseContextHelper />} />
+    ),
     shouldDisplay: false,
     action: "READ",
     resource: "VEHICLES",
   },
   {
     path: "/vehicles/expense/:vehicleId/new",
-    entryPage: <NewVehicleExpense />,
+    entryPage: (
+      <NewVehicleExpense contextHelper={<NewVehicleExpenseContextHelper />} />
+    ),
     shouldDisplay: false,
     action: "READ",
     resource: "VEHICLES",
   },
   {
     path: "/vehicles/expense/:vehicleId/edit/:expenseId",
-    entryPage: <EditVehicleExpense />,
+    entryPage: (
+      <EditVehicleExpense contextHelper={<EditVehicleExpenseContextHelper />} />
+    ),
     shouldDisplay: false,
     action: "READ",
     resource: "VEHICLES",
   },
   {
     path: "/vehicle-sale/new/:vehicleId",
-    entryPage: <VehicleSale />,
+    entryPage: <VehicleSale contextHelper={<VehicleSaleContextHelper />} />,
     shouldDisplay: false,
     action: "CREATE",
     resource: "VEHICLE_SALE",
   },
   {
     path: "/vehicle-sale/view/:vehicleSaleId",
-    entryPage: <ViewVehicleSale />,
+    entryPage: (
+      <ViewVehicleSale contextHelper={<ViewVehicleSaleContextHelper />} />
+    ),
     shouldDisplay: false,
     action: "READ",
     resource: "VEHICLE_SALE",
@@ -150,14 +241,20 @@ export const privateRoutes: Route[] = [
     path: "/accounts-receivable",
     displayName: "Vendas",
     icon: "CreditCard",
-    entryPage: <AccountsReceivable />,
+    entryPage: (
+      <AccountsReceivable contextHelper={<AccountsReceivableContextHelper />} />
+    ),
     shouldDisplay: true,
     action: "READ",
     resource: "ACCOUNTS_RECEIVABLE",
   },
   {
     path: "/accounts-receivable/:accountReceivableId/installments",
-    entryPage: <AccountsReceivableInstallments />,
+    entryPage: (
+      <AccountsReceivableInstallments
+        contextHelper={<AccountsReceivableInstallmentsContextHelper />}
+      />
+    ),
     shouldDisplay: false,
     action: "READ",
     resource: "ACCOUNTS_RECEIVABLE",
@@ -166,14 +263,20 @@ export const privateRoutes: Route[] = [
     path: "/accounts-payable",
     displayName: "Pagamentos",
     icon: "CreditCardOff",
-    entryPage: <AccountsPayable />,
+    entryPage: (
+      <AccountsPayable contextHelper={<AccountsPayableContextHelper />} />
+    ),
     shouldDisplay: true,
     action: "READ",
     resource: "ACCOUNTS_PAYABLE",
   },
   {
     path: "/accounts-payable/:accountPayableId/installments",
-    entryPage: <AccountsPayableInstallments />,
+    entryPage: (
+      <AccountsPayableInstallments
+        contextHelper={<AccountsPayableInstallmentsContextHelper />}
+      />
+    ),
     shouldDisplay: false,
     action: "READ",
     resource: "ACCOUNTS_PAYABLE",
@@ -182,21 +285,21 @@ export const privateRoutes: Route[] = [
     path: "/stores",
     displayName: "Lojas",
     icon: "Store",
-    entryPage: <Stores />,
+    entryPage: <Stores contextHelper={<StoresContextHelper />} />,
     shouldDisplay: true,
     action: "READ",
     resource: "STORES",
   },
   {
     path: "/stores/new",
-    entryPage: <NewStore />,
+    entryPage: <NewStore contextHelper={<NewStoreContextHelper />} />,
     shouldDisplay: false,
     action: "CREATE",
     resource: "STORES",
   },
   {
     path: "/stores/edit/:storeId",
-    entryPage: <EditStore />,
+    entryPage: <EditStore contextHelper={<EditStoreContextHelper />} />,
     shouldDisplay: false,
     action: "UPDATE",
     resource: "STORES",
@@ -205,21 +308,21 @@ export const privateRoutes: Route[] = [
     path: "/users",
     displayName: "Usuários",
     icon: "Person",
-    entryPage: <Users />,
+    entryPage: <Users contextHelper={<UsersContextHelper />} />,
     shouldDisplay: true,
     action: "READ",
     resource: "USERS",
   },
   {
     path: "/users/new",
-    entryPage: <NewUser />,
+    entryPage: <NewUser contextHelper={<NewUserContextHelper />} />,
     shouldDisplay: false,
     action: "CREATE",
     resource: "USERS",
   },
   {
     path: "/users/edit/:userId",
-    entryPage: <EditUser />,
+    entryPage: <EditUser contextHelper={<EditUserContextHelper />} />,
     shouldDisplay: false,
     action: "UPDATE",
     resource: "USERS",
@@ -228,28 +331,28 @@ export const privateRoutes: Route[] = [
     path: "/customers",
     displayName: "Clientes",
     icon: "People",
-    entryPage: <Customers />,
+    entryPage: <Customers contextHelper={<CustomersContextHelper />} />,
     shouldDisplay: true,
     action: "READ",
     resource: "CUSTOMERS",
   },
   {
     path: "/customers/new",
-    entryPage: <NewCustomer />,
+    entryPage: <NewCustomer contextHelper={<NewCustomerContextHelper />} />,
     shouldDisplay: false,
     action: "CREATE",
     resource: "CUSTOMERS",
   },
   {
     path: "/customers/edit/:customerId",
-    entryPage: <EditCustomer />,
+    entryPage: <EditCustomer contextHelper={<EditCustomerContextHelper />} />,
     shouldDisplay: false,
     action: "UPDATE",
     resource: "CUSTOMERS",
   },
   {
     path: "/profile",
-    entryPage: <EditProfile />,
+    entryPage: <EditProfile contextHelper={<EditProfileContextHelper />} />,
     shouldDisplay: true,
     icon: "Settings",
     displayName: "Conta",

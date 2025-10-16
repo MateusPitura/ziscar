@@ -1,3 +1,4 @@
+import FieldArray from "@/design-system/Form/FieldArray";
 import Input from "@/design-system/Form/Input";
 import Select from "@/design-system/Form/Select";
 import {
@@ -12,7 +13,7 @@ import {
   vehicleDefaultValues,
 } from "../../vehicles/constants";
 import { VehicleFormInputs } from "../../vehicles/types";
-import FieldArray from "@/design-system/Form/FieldArray";
+import safeFormat from "../utils/safeFormat";
 
 interface UpfrontFormProperties {
   isAccountReceivable?: boolean;
@@ -28,8 +29,16 @@ export default function UpfrontForm({
     if (statusWatch === InstallmentStatus.PENDING) {
       setValue("payment.upfront.0.paymentDate", "");
       setValue("payment.upfront.0.paymentMethod", "");
+      setValue(
+        "payment.upfront.0.dueDate",
+        safeFormat({ date: new Date(), format: "yyyy-MM-dd" })
+      );
     } else if (statusWatch === InstallmentStatus.PAID) {
       setValue("payment.upfront.0.dueDate", "");
+      setValue(
+        "payment.upfront.0.paymentDate",
+        safeFormat({ date: new Date(), format: "yyyy-MM-dd" })
+      );
       setValue(
         "payment.upfront.0.paymentMethod",
         PaymentMethodPayableType.CREDIT_CARD
@@ -43,6 +52,8 @@ export default function UpfrontForm({
       appendText="Adicionar entrada"
       removeText="Remover entrada"
       maxLength={1}
+      title="Informação da entrada"
+      className="grid-cols-3"
       appendDefaultValues={vehicleDefaultValues.payment.installment!}
       render={() => (
         <>

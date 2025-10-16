@@ -3,11 +3,17 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { GET_PERMISSIONS, GET_USER } from './user.constant';
-import { EmailService } from '../email/email.service';
 import { JwtService } from '@nestjs/jwt';
 import { ITEMS_PER_PAGE } from '@shared/constants';
 import { addressNullableFields, FRONTEND_URL } from 'src/constants';
+import { RoleWithPermissions } from 'src/entities/auth/auth.service';
+import { PrismaService } from 'src/infra/database/prisma.service';
+import { EncryptPasswordInput, GetCallback } from 'src/types';
+import { generateRandomPassword } from 'src/utils/generateRandomPassword';
+import handlePermissions from 'src/utils/handlePermissions';
+import { verifyDuplicated } from 'src/utils/verifyDuplicated';
+import { EmailService } from '../email/email.service';
+import { GET_PERMISSIONS, GET_USER } from './user.constant';
 import {
   CreateInput,
   FindManyInput,
@@ -16,12 +22,6 @@ import {
   UpdateInput,
   VerifyDuplicatedInput,
 } from './user.type';
-import handlePermissions from 'src/utils/handlePermissions';
-import { PrismaService } from 'src/infra/database/prisma.service';
-import { verifyDuplicated } from 'src/utils/verifyDuplicated';
-import { EncryptPasswordInput, GetCallback } from 'src/types';
-import { generateRandomPassword } from 'src/utils/generateRandomPassword';
-import { RoleWithPermissions } from 'src/entities/auth/auth.service';
 import { encryptPassword } from './user.utils';
 
 @Injectable()
@@ -170,9 +170,21 @@ export class UserService {
     const startDate = userFindManyInDto?.startDate;
     const endDate = userFindManyInDto?.endDate;
     if (startDate || endDate) {
+      let startDateFormatted: Date | undefined = undefined;
+      if (startDate) {
+        startDateFormatted = new Date(startDate);
+        startDateFormatted.setHours(0, 0, 0, 0);
+      }
+
+      let endDateFormatted: Date | undefined = undefined;
+      if (endDate) {
+        endDateFormatted = new Date(endDate);
+        endDateFormatted.setHours(23, 59, 59, 999);
+      }
+
       findManyWhere.where['createdAt'] = {
-        ...(startDate && { gte: new Date(startDate) }),
-        ...(endDate && { lte: new Date(endDate) }),
+        ...(startDate && { gte: startDateFormatted }),
+        ...(endDate && { lte: endDateFormatted }),
       };
     }
 

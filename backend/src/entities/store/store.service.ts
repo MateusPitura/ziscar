@@ -132,9 +132,21 @@ export class StoreService {
     const startDate = storeFindManyInDto?.startDate;
     const endDate = storeFindManyInDto?.endDate;
     if (startDate || endDate) {
+      let startDateFormatted: Date | undefined = undefined;
+      if (startDate) {
+        startDateFormatted = new Date(startDate);
+        startDateFormatted.setHours(0, 0, 0, 0);
+      }
+
+      let endDateFormatted: Date | undefined = undefined;
+      if (endDate) {
+        endDateFormatted = new Date(endDate);
+        endDateFormatted.setHours(23, 59, 59, 999);
+      }
+
       findManyWhere.where['createdAt'] = {
-        ...(startDate && { gte: new Date(startDate) }),
-        ...(endDate && { lte: new Date(endDate) }),
+        ...(startDate && { gte: startDateFormatted }),
+        ...(endDate && { lte: endDateFormatted }),
       };
     }
 

@@ -1,7 +1,7 @@
 import classNames from "classnames";
+import get from "lodash/get";
 import type { ReactNode } from "react";
 import { useFormState } from "react-hook-form";
-import get from "lodash/get";
 
 interface InputErrorProperties {
   name: string;
@@ -21,7 +21,7 @@ export default function InputError({
 
   return (
     <span
-      className={classNames("text-body-small text-red-500 p-1 !h-6", {
+      className={classNames("text-label-small text-red-500 px-1 py-px !h-6", {
         invisible: !errorsFormatted,
       })}
       data-cy={errorsFormatted && `input-error-${name}`}

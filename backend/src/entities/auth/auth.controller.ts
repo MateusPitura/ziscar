@@ -42,9 +42,8 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuardSignOut)
   @Post('sign-out')
-  signOut(@Req() req: AuthRequest, @Res() res?: Response) {
-    const { userId, enterpriseId } = req.authToken;
-    return this.authService.signOut({ userId, enterpriseId, res });
+  signOut(@Res() res?: Response) {
+    return this.authService.signOut({ res });
   }
 
   @Post('sign-up')

@@ -1,4 +1,5 @@
 import { applyMask } from "@/domains/global/utils/applyMask";
+import safeFormat from "@/domains/global/utils/safeFormat";
 import {
   ExpenseCategory,
   ExpenseCategoryType,
@@ -9,12 +10,12 @@ import {
   VehicleCategoryType,
   VehicleStatus,
 } from "@shared/enums";
+import { VehicleStatusForFilterType } from "@shared/types";
 import {
   VehicleExpenseFormInputs,
   VehicleFormInputs,
   VehiclesFilterFormInputs,
 } from "../types";
-import { VehicleStatusForFilterType } from "@shared/types";
 
 export const vehicleFilterDefaultValues: VehiclesFilterFormInputs = {
   startDate: "",
@@ -32,7 +33,6 @@ export const vehicleFilterDefaultValues: VehiclesFilterFormInputs = {
 };
 
 export const VehicleStatusText: Record<VehicleStatusForFilterType, string> = {
-  DELIVERED: "Entregue",
   IN_STOCK: "Em Estoque",
   MAINTENANCE: "Em Manutenção",
   PURCHASED: "Comprado",
@@ -40,7 +40,6 @@ export const VehicleStatusText: Record<VehicleStatusForFilterType, string> = {
 };
 
 export const VehicleStatusTextForSale: Record<VehicleStatus, string> = {
-  DELIVERED: "Entregue",
   IN_STOCK: "Em Estoque",
   MAINTENANCE: "Em Manutenção",
   PURCHASED: "Comprado",
@@ -122,10 +121,10 @@ export const vehicleDefaultValues: VehicleFormInputs = {
   },
   payment: {
     paidTo: "",
-    purchaseDate: "",
+    purchaseDate: safeFormat({ date: new Date(), format: "yyyy-MM-dd" }),
     upfront: [],
     installment: {
-      dueDate: "",
+      dueDate: safeFormat({ date: new Date(), format: "yyyy-MM-dd" }),
       value: applyMask("0", "money") ?? "",
       status: InstallmentStatus.PENDING,
       paymentDate: "",
@@ -155,7 +154,7 @@ export const vehicleExpenseDefaultValues: VehicleExpenseFormInputs = {
   payment: {
     category: ExpenseCategory.MAINTENANCE,
     observations: "",
-    competencyDate: "",
+    competencyDate: safeFormat({ date: new Date(), format: "yyyy-MM-dd" }),
     upfront: [],
     installment: vehicleDefaultValues.payment.installment,
   },

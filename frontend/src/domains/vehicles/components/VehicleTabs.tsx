@@ -63,15 +63,10 @@ export default function VehicleTabs({
             </Section.Group>
             {!isEdit && (
               <>
-                <Section.Group>
-                  <Section.Header title="Informações da entrada" />
-                  <Section.Body>
-                    <UpfrontForm />
-                  </Section.Body>
-                </Section.Group>
+                <UpfrontForm />
                 <Section.Group>
                   <Section.Header title="Informações do pagamento" />
-                  <Section.Body>
+                  <Section.Body className="grid-cols-3">
                     <PaymentForm />
                   </Section.Body>
                 </Section.Group>
@@ -97,12 +92,7 @@ export default function VehicleTabs({
                 <VehicleCommonCharacteristicForm />
               </Section.Body>
             </Section.Group>
-            <Section.Group>
-              <Section.Header title="Adicione características" />
-              <Section.Body>
-                <VehicleNewCharacteristicForm />
-              </Section.Body>
-            </Section.Group>
+            <VehicleNewCharacteristicForm />
           </Section>
         </Tabs.Section>
       </Tabs.Body>

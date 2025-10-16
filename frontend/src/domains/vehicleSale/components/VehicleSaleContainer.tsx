@@ -1,6 +1,7 @@
 import Button from "@/design-system/Button";
 import Form from "@/design-system/Form";
 import Spinner from "@/design-system/Spinner";
+import { ContextHelperable } from "@/domains/contextHelpers/types";
 import PageFooter from "@/domains/global/components/PageFooter";
 import PageHeader from "@/domains/global/components/PageHeader";
 import { BACKEND_URL } from "@/domains/global/constants";
@@ -8,6 +9,7 @@ import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import { VehicleWithPayment } from "@/domains/global/types/model";
 import formatInstallment from "@/domains/global/utils/formatInstallment";
+import formatVehicleCharacteristics from "@/domains/global/utils/formatVehicleCharacteristics";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ReactNode } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -18,7 +20,9 @@ import { VehicleSaleFormInputs } from "../types";
 import selectVehicleInfo from "../utils/selectVehicleInfo";
 import VehicleSaleTabs from "./VehicleSaleTabs";
 
-export default function VehicleSaleContainer(): ReactNode {
+export default function VehicleSaleContainer({
+  contextHelper,
+}: ContextHelperable): ReactNode {
   const navigate = useNavigate();
   const { safeFetch } = useSafeFetch();
   const { vehicleId } = useParams();
@@ -32,9 +36,16 @@ export default function VehicleSaleContainer(): ReactNode {
       action: "READ",
     });
 
+    const { vehicleCharacteristicValues, ...vehicle } = response;
+
     return {
       payment: null,
-      vehicle: response,
+      vehicle: {
+        ...vehicle,
+        vehicleCharacteristicValues: formatVehicleCharacteristics({
+          vehicleCharacteristicValues,
+        }),
+      },
     };
   }
 
@@ -48,7 +59,7 @@ export default function VehicleSaleContainer(): ReactNode {
     const installments = formatInstallment({
       installment: payment.installment,
       upfront: payment.upfront,
-    })
+    });
 
     await safeFetch(`${BACKEND_URL}/vehicles/sale`, {
       method: "POST",
@@ -104,15 +115,21 @@ export default function VehicleSaleContainer(): ReactNode {
             commissionValue: vehicleData.commissionValue,
           })}
         >
-          <PageHeader title="Realizar venda" />
+          <PageHeader title="Realizar venda" contextHelper={contextHelper} />
           <VehicleSaleTabs vehicleData={vehicleData} />
           <PageFooter dirty primaryBtnState={isPending ? "loading" : undefined}>
-            <Button color="lightBlue" iconRight="Save" label="Salvar" />
+            <Button
+              color="lightBlue"
+              iconRight="Save"
+              label="Salvar"
+              tooltipMessage="Salvar cadastro"
+            />
             <Button
               color="red"
               iconRight="Close"
               label="Cancelar"
               onClick={() => navigate("/vehicles")}
+              tooltipMessage="Cancelar cadastro"
             />
           </PageFooter>
         </Form>

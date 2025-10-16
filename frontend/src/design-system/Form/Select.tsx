@@ -1,6 +1,3 @@
-import { useEffect, useState, type ReactNode } from "react";
-import { Popover } from "../Popover";
-import Button from "../Button";
 import {
   Command,
   CommandEmpty,
@@ -8,6 +5,8 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
+import { UnwrapArray } from "@/domains/global/types";
+import { useEffect, useState, type ReactNode } from "react";
 import {
   FieldValues,
   Path,
@@ -16,13 +15,14 @@ import {
   useFormContext,
   useWatch,
 } from "react-hook-form";
-import { UnwrapArray } from "@/domains/global/types";
+import Button from "../Button";
 import Icon from "../Icon";
+import { Popover } from "../Popover";
 import Spinner from "../Spinner";
 import InputError from "./InputError";
 import InputLabel from "./InputLabel";
 
-type SelectProperties<T extends FieldValues | undefined = undefined> = {
+export type SelectProperties<T extends FieldValues | undefined = undefined> = {
   [K in Path<T>]: {
     options: {
       value: UnwrapArray<PathValue<T, K>>;
@@ -77,7 +77,7 @@ export default function Select<T extends FieldValues>({
     <label className="flex flex-col">
       <InputLabel label={label} required={required} />
       <Popover open={isOpen} onOpenChange={setIsOpen}>
-        <Popover.Trigger>
+        <Popover.Trigger asChild>
           <Button
             variant="secondary"
             label={
@@ -85,6 +85,7 @@ export default function Select<T extends FieldValues>({
                 options.find((item) => item.value === selectedValue)?.label) ||
               "Selecione um item"
             }
+            tooltipMessage={undefined}
             iconRight="UnfoldMore"
             fullWidth
             state={disabled ? "disabled" : undefined}

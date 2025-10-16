@@ -1,4 +1,5 @@
 import Button from "@/design-system/Button";
+import { ContextHelperable } from "@/domains/contextHelpers/types";
 import PageHeader from "@/domains/global/components/PageHeader";
 import { BACKEND_URL } from "@/domains/global/constants";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
@@ -8,7 +9,7 @@ import type { ReactNode } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import selectAccountReceivableInfo from "../utils/selectAccountReceivableInfo";
 
-export default function AccountsReceivableInstallmentsHeader(): ReactNode {
+export default function AccountsReceivableInstallmentsHeader({ contextHelper}: ContextHelperable): ReactNode {
   const navigate = useNavigate();
   const { accountReceivableId } = useParams();
   const { safeFetch } = useSafeFetch();
@@ -36,6 +37,7 @@ export default function AccountsReceivableInstallmentsHeader(): ReactNode {
           ? `Detalhes do Pagamento "${data.description}"`
           : "Detalhes do Pagamento"
       }
+      contextHelper={contextHelper}
     >
       <Button
         variant="quaternary"
@@ -45,6 +47,7 @@ export default function AccountsReceivableInstallmentsHeader(): ReactNode {
         action="READ"
         resource="ACCOUNTS_RECEIVABLE"
         data-cy="back-accounts-receivable-button"
+        tooltipMessage="Página anterior"
       />
     </PageHeader>
   );

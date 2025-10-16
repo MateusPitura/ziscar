@@ -1,30 +1,34 @@
 import { Injectable } from '@nestjs/common';
 import {
-  Vehicle,
   Prisma,
+  Vehicle,
   VehicleCategory,
-  VehicleStatus,
-  VehicleSale,
   VehiclePurchase,
+  VehicleSale,
+  VehicleStatus,
 } from '@prisma/client';
 import {
-  VehicleStatus as SharedVehicleStatus,
-  VehicleCategory as SharedVehicleCategory,
   FuelType,
+  VehicleCategory as SharedVehicleCategory,
+  VehicleStatus as SharedVehicleStatus,
 } from '@shared/enums';
+import { VEHICLE_INACTIVE_STATUS } from '@shared/types';
 import { PrismaService } from 'src/infra/database/prisma.service';
 import {
   GetVehicleWithPaymentOutDto,
   VehicleRepository,
 } from 'src/repositories/vehicle-repository';
 import { CreateInput, UpdateInput } from 'src/types';
+import { GET_VEHICLE, VEHICLE_WITH_PAYMENT_SELECT } from './constants';
 import type {
+  FetchVehicleBrandsResponseDto,
+  SearchModelRequestDto,
+  SearchModelResponseDto,
+  SearchPaidToRequestDto,
+  SearchPaidToResponseDto,
   SearchVehiclesRequestDto,
   SearchVehiclesResponseDto,
-  FetchVehicleBrandsResponseDto,
 } from './dtos';
-import { GET_VEHICLE, VEHICLE_WITH_PAYMENT_SELECT } from './constants';
-import { VEHICLE_INACTIVE_STATUS } from '@shared/types';
 
 @Injectable()
 export class VehicleService implements VehicleRepository {
@@ -141,9 +145,21 @@ export class VehicleService implements VehicleRepository {
       };
 
     if (params.startDate || params.endDate) {
+      let startDateFormatted: Date | undefined = undefined;
+      if (params.startDate) {
+        startDateFormatted = new Date(params.startDate);
+        startDateFormatted.setHours(0, 0, 0, 0);
+      }
+
+      let endDateFormatted: Date | undefined = undefined;
+      if (params.endDate) {
+        endDateFormatted = new Date(params.endDate);
+        endDateFormatted.setHours(23, 59, 59, 999);
+      }
+
       where.createdAt = {
-        gte: params.startDate,
-        lte: params.endDate,
+        gte: startDateFormatted,
+        lte: endDateFormatted,
       };
     }
 
@@ -166,6 +182,42 @@ export class VehicleService implements VehicleRepository {
     }));
 
     return { data: mappedRows, total: total };
+  }
+
+  async searchPaidTo(
+    params: SearchPaidToRequestDto,
+  ): Promise<SearchPaidToResponseDto> {
+    const result = await this.prisma.accountPayable.findMany({
+      where: {
+        paidTo: { contains: params.paidTo, mode: 'insensitive' },
+      },
+      orderBy: { paidTo: 'asc' },
+      select: {
+        paidTo: true,
+        id: true,
+      },
+      distinct: ['paidTo'],
+    });
+
+    return { data: result };
+  }
+
+  async searchModel(
+    params: SearchModelRequestDto,
+  ): Promise<SearchModelResponseDto> {
+    const result = await this.prisma.vehicle.findMany({
+      where: {
+        modelName: { contains: params.modelName, mode: 'insensitive' },
+      },
+      orderBy: { modelName: 'asc' },
+      select: {
+        modelName: true,
+        id: true,
+      },
+      distinct: ['modelName'],
+    });
+
+    return { data: result };
   }
 
   async insertCharacteristics(

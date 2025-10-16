@@ -63,7 +63,7 @@ export default function VehicleSaleTabs({
             <Section.Group>
               <Section.Header title="Dados do cliente" />
               <Section.Body>
-                <CustomerData customerData={customer}/>
+                <CustomerData customerData={customer} />
               </Section.Body>
             </Section.Group>
           </Section>
@@ -86,15 +86,10 @@ export default function VehicleSaleTabs({
                 <VehicleSaleDetailsForm />
               </Section.Body>
             </Section.Group>
-            <Section.Group>
-              <Section.Header title="Informações da entrada" />
-              <Section.Body>
-                <UpfrontForm />
-              </Section.Body>
-            </Section.Group>
+            <UpfrontForm />
             <Section.Group>
               <Section.Header title="Informações do pagamento" />
-              <Section.Body>
+              <Section.Body className="grid-cols-3">
                 <PaymentForm isAccountReceivable />
               </Section.Body>
             </Section.Group>

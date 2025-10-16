@@ -16,8 +16,8 @@ export default function VehicleData({
 }: VehicleDataProperties): ReactNode {
   return (
     <>
-      <DataField label="Número da placa" value={vehicleData.plateNumber} />
-      <DataField label="Número do chassi" value={vehicleData.chassiNumber} />
+      <DataField label="Placa" value={vehicleData.plateNumber} />
+      <DataField label="Chassi" value={vehicleData.chassiNumber} />
       <DataField label="Loja" value={vehicleData.store.name} />
       <DataField label="Preço mínimo" value={vehicleData.minimumPrice} />
       <DataField label="Preço anunciado" value={vehicleData.announcedPrice} />

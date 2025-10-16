@@ -20,6 +20,11 @@ export interface SearchResponseItem {
 
 export interface SearchResponse {
   total: number;
+  summary: {
+    totalPaid: number;
+    totalPending: number;
+    totalOverall: number;
+  };
   data: {
     id: number;
     description: string;

@@ -1,8 +1,8 @@
 import { Childrenable } from "@/domains/global/types";
+import { ActionsType, ResourcesType } from "@shared/enums";
 import classNames from "classnames";
 import { type ReactNode } from "react";
 import Button from "./Button";
-import { ActionsType, ResourcesType } from "@shared/enums";
 
 function Container({ children }: Childrenable): ReactNode {
   return <div className="flex-1 flex flex-col">{children}</div>;
@@ -42,6 +42,7 @@ function Tab({
         color={hasError ? "red" : undefined}
         resource={resource}
         action={action}
+        tooltipMessage={undefined}
       />
     </div>
   );

@@ -1,4 +1,4 @@
-import { Injectable, ConflictException } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { VehicleService } from '../vehicle.service';
 
 interface ValidateVehicleUniqueFieldsUseCaseInput {
@@ -20,9 +20,7 @@ export class ValidateVehicleUniqueFieldsUseCase {
       const existingChassi =
         await this.vehicleService.findByChassiNumber(chassiNumber);
       if (existingChassi && existingChassi.id !== vehicleId) {
-        throw new ConflictException(
-          'Já existe um veículo com este número de chassi',
-        );
+        throw new ConflictException('Já existe um veículo com este chassi');
       }
     }
 

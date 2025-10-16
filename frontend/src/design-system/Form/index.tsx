@@ -1,3 +1,5 @@
+import { Childrenable } from "@/domains/global/types";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { lazy, useCallback, type ReactElement } from "react";
 import {
   DefaultValues,
@@ -7,9 +9,7 @@ import {
   useForm,
   UseFormReturn,
 } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { ZodType } from "zod";
-import { Childrenable } from "@/domains/global/types";
 
 const DevTool = import.meta.env.DEV
   ? lazy(() => import("@/domains/global/components/HookFormDevTool"))

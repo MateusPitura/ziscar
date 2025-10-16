@@ -113,6 +113,7 @@ export default function AddressFields(): ReactNode {
       appendText="Adicionar endereço"
       removeText="Remover endereço"
       maxLength={1}
+      title="Endereço"
       appendDefaultValues={addressDefaultValues}
       render={() => (
         <>

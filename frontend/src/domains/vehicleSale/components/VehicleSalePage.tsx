@@ -1,10 +1,11 @@
+import { ContextHelperable } from "@/domains/contextHelpers/types";
 import { VehicleSalePageProvider } from "../contexts/VehicleSalePageContext";
 import VehicleSaleContainer from "./VehicleSaleContainer";
 
-export default function VehicleSalePage() {
+export default function VehicleSalePage({ contextHelper }: ContextHelperable) {
   return (
     <VehicleSalePageProvider>
-      <VehicleSaleContainer />
+      <VehicleSaleContainer contextHelper={contextHelper} />
     </VehicleSalePageProvider>
   );
 }

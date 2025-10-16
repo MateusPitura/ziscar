@@ -45,6 +45,7 @@ export default function useSnackbar() {
               onClick={onActionClick}
               resource={actionBtnResource}
               action={actionBtnAction}
+              tooltipMessage={undefined}
             />
           </ToastAction>
         ),
@@ -75,6 +76,7 @@ export default function useSnackbar() {
               onClick={onActionClick}
               resource={actionBtnResource}
               action={actionBtnAction}
+              tooltipMessage={undefined}
             />
           </ToastAction>
         ),

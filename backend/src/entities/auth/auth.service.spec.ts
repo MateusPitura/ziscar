@@ -114,13 +114,10 @@ describe('AuthService', () => {
     expect(spy).toHaveBeenCalledTimes(0);
   });
 
-  it('should sign out and set jit to null', async () => {
+  it('should sign out and set jit to null', () => {
     const spy = jest.spyOn(userService, 'update');
 
-    const response = await authService.signOut({
-      enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
-      userId: POPULATE_USER.ADM.id,
-    });
+    const response = authService.signOut({});
     expect(response).toBeUndefined();
 
     expect(spy).toHaveBeenCalledTimes(1);
@@ -133,19 +130,13 @@ describe('AuthService', () => {
     );
   });
 
-  it('should not throw error when sign out with outer enterprise id', async () => {
-    const response = await authService.signOut({
-      enterpriseId: POPULATE_ENTERPRISE.OUTER.id,
-      userId: POPULATE_USER.ADM.id,
-    });
+  it('should not throw error when sign out with outer enterprise id', () => {
+    const response = authService.signOut({});
     expect(response).toBeUndefined();
   });
 
-  it('should not throw error when sign out with a inactive user', async () => {
-    const response = await authService.signOut({
-      enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
-      userId: POPULATE_USER.INACTIVE.id,
-    });
+  it('should not throw error when sign out with a inactive user', () => {
+    const response = authService.signOut({});
     expect(response).toBeUndefined();
   });
 

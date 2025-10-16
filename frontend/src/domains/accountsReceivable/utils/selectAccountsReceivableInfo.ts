@@ -24,5 +24,6 @@ export default function selectAccountsReceivableInfo(
   return {
     total: payload.total,
     data: itemsFiltered,
+    summary: payload.summary,
   };
 }

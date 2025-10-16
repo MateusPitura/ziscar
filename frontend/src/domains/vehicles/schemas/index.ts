@@ -13,13 +13,13 @@ import {
   VEHICLESTATUS_VALUES,
 } from "@shared/enums";
 import { s } from "@shared/safeZod";
+import { VehicleStatusForFilter } from "@shared/types";
 import {
   defaultCommonCharacteristics,
   MODEL_YEARS,
   YEARS_OF_MANUFACTURE,
 } from "../constants";
 import { VehicleFormInputs } from "../types";
-import { VehicleStatusForFilter } from "@shared/types";
 
 export const SchemaVehiclesFilterForm = s
   .object({
@@ -29,8 +29,8 @@ export const SchemaVehiclesFilterForm = s
     brandId: s.string().or(s.empty()),
     status: s.enumeration(VehicleStatusForFilter).or(s.empty()),
     category: s.enumeration(VEHICLECATEGORY_VALUES).or(s.empty()),
-    modelYear: s.numberString().or(s.empty()),
-    yearOfManufacture: s.numberString().or(s.empty()),
+    modelYear: s.enumeration(MODEL_YEARS).or(s.empty()),
+    yearOfManufacture: s.enumeration(YEARS_OF_MANUFACTURE).or(s.empty()),
     modelName: s.string().or(s.empty()),
     plateNumber: s
       .string(8)
@@ -101,11 +101,14 @@ export const SchemaVehicleForm = s
     const { modelYear, yearOfManufacture } = data.vehicle;
 
     if (modelYear !== "" && yearOfManufacture !== "") {
-      if (Number(modelYear) < Number(yearOfManufacture)) {
+      if (
+        Number(modelYear) < Number(yearOfManufacture) ||
+        Number(modelYear) > Number(yearOfManufacture) + 1
+      ) {
         addIssue<VehicleFormInputs>(
           ctx,
           "vehicle.modelYear",
-          "O ano do modelo deve ser maior ou igual ao ano de fabricação"
+          "O ano do modelo deve ser igual ou 1 ano a mais ao ano de fabricação"
         );
       }
     }

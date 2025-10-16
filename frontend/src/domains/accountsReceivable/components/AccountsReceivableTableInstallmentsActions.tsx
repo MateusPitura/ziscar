@@ -1,7 +1,6 @@
 import Button from "@/design-system/Button";
-import Tooltip from "@/design-system/Tooltip";
-import type { ReactNode } from "react";
 import { AccountReceivableInstallment } from "@/domains/global/types/model";
+import type { ReactNode } from "react";
 
 interface AccountsReceivableInstallmentsTableActionsProperties {
   installment: AccountReceivableInstallment;
@@ -17,16 +16,15 @@ export default function AccountsReceivableInstallmentsTableActions({
   if (installment.paymentMethodReceivables.length) return;
 
   return (
-    <Tooltip content="Adicionar método de pagamento">
-      <Button
-        variant="quaternary"
-        iconLeft="AddCard"
-        onClick={() => handleInstallmentToPaymentMethodInfo(installment)}
-        resource="ACCOUNTS_RECEIVABLE"
-        action="READ"
-        padding="none"
-        data-cy={`button-edit-addPaymentMethod-${installment.id}`}
-      />
-    </Tooltip>
+    <Button
+      tooltipMessage="Adicionar método de pagamento"
+      variant="quaternary"
+      iconLeft="AddCard"
+      onClick={() => handleInstallmentToPaymentMethodInfo(installment)}
+      resource="ACCOUNTS_RECEIVABLE"
+      action="READ"
+      padding="none"
+      data-cy={`button-edit-addPaymentMethod-${installment.id}`}
+    />
   );
 }

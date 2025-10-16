@@ -1,11 +1,15 @@
+import Switch from "@/design-system/Switch";
 import Table from "@/design-system/Table";
 import AccountStatus from "@/domains/global/components/AccountStatus";
+import DataField from "@/domains/global/components/DataField";
 import { BACKEND_URL, BLANK } from "@/domains/global/constants";
 import useFilterContext from "@/domains/global/hooks/useFilterContext";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import { PageablePayload } from "@/domains/global/types";
 import { FetchAccountPayable } from "@/domains/global/types/model";
+import { applyMask } from "@/domains/global/utils/applyMask";
 import formatFilters from "@/domains/global/utils/formatFilters";
+import safeFormat from "@/domains/global/utils/safeFormat";
 import ExportButton from "@/domains/pdf/components/ExportButton";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, type ReactNode } from "react";
@@ -16,7 +20,7 @@ import selectAccountsPayableInfoForReport from "../utils/selectAccountsPayableIn
 import AccountsPayableFilterForm from "./AccountsPayableFilterForm";
 import AccountsPayableTableActions from "./AccountsPayableTableActions";
 
-const gridColumns = 8;
+const gridColumns = 10;
 
 export default function AccountsPayableTable(): ReactNode {
   const { safeFetch } = useSafeFetch();
@@ -62,13 +66,24 @@ export default function AccountsPayableTable(): ReactNode {
     );
   }, [accountsPayableInfo?.data]);
 
+  const isStartAndEndFilterToday = useMemo(() => {
+    if (!accountsPayableFilter?.startDate || !accountsPayableFilter?.endDate)
+      return false;
+
+    const today = safeFormat({ date: new Date(), format: "yyyy-MM-dd" });
+    if (
+      accountsPayableFilter.startDate === today &&
+      accountsPayableFilter.endDate === today
+    )
+      return true;
+
+    return false;
+  }, [accountsPayableFilter?.startDate, accountsPayableFilter?.endDate]);
+
   return (
     <>
-      <div className="flex gap-4 justify-end">
-        <ExportButton<
-          FetchAccountPayable,
-          AccountsPayableFilterFormInputs
-        >
+      <div className="flex gap-4 justify-between">
+        <ExportButton<FetchAccountPayable, AccountsPayableFilterFormInputs>
           fileName="Relatório Pagamentos"
           queryKey={["accounts-payable", filterFormatted]}
           queryFn={getAccountsPayableInfo}
@@ -92,11 +107,50 @@ export default function AccountsPayableTable(): ReactNode {
             totalValue: "Valor total",
           }}
         />
-        <Table.Filter form={<AccountsPayableFilterForm />} />
+        <div className="flex gap-4">
+          <Switch
+            checked={isStartAndEndFilterToday}
+            label="Contas de hoje"
+            onCheck={() =>
+              handleAccountsPayableFilter({
+                startDate: safeFormat({
+                  date: new Date(),
+                  format: "yyyy-MM-dd",
+                }),
+                endDate: safeFormat({
+                  date: new Date(),
+                  format: "yyyy-MM-dd",
+                }),
+              })
+            }
+            onUncheck={() =>
+              handleAccountsPayableFilter({
+                startDate: "",
+                endDate: "",
+              })
+            }
+          />
+          <Table.Filter form={<AccountsPayableFilterForm />} />
+        </div>
+      </div>
+      <div className="w-fit flex gap-4">
+        <DataField
+          label="Total"
+          value={applyMask(accountsPayableInfo?.summary?.totalOverall, "money")}
+        />
+        <DataField
+          label="Total Pago"
+          value={applyMask(accountsPayableInfo?.summary?.totalPaid, "money")}
+        />
+        <DataField
+          label="Total Pendente"
+          value={applyMask(accountsPayableInfo?.summary?.totalPending, "money")}
+        />
       </div>
       <Table>
         <Table.Header gridColumns={gridColumns}>
           <Table.Head label={ACCOUNTS_PAYABLE_TABLE.description.label} />
+          <Table.Head label={ACCOUNTS_PAYABLE_TABLE.date.label} />
           <Table.Head label={ACCOUNTS_PAYABLE_TABLE.paidTo.label} />
           <Table.Head
             label={ACCOUNTS_PAYABLE_TABLE.overallStatus.label}
@@ -118,13 +172,15 @@ export default function AccountsPayableTable(): ReactNode {
                 columnLabel={ACCOUNTS_PAYABLE_TABLE.description.label}
               />
               <Table.Cell
+                label={accountPayable.date}
+                columnLabel={ACCOUNTS_PAYABLE_TABLE.date.label}
+              />
+              <Table.Cell
                 label={accountPayable.paidTo}
                 columnLabel={ACCOUNTS_PAYABLE_TABLE.paidTo.label}
               />
               <Table.Cell
-                label={
-                  <AccountStatus status={accountPayable.overallStatus} />
-                }
+                label={<AccountStatus status={accountPayable.overallStatus} />}
                 columnLabel={ACCOUNTS_PAYABLE_TABLE.overallStatus.label}
                 colSpan={ACCOUNTS_PAYABLE_TABLE.overallStatus.colSpan}
               />

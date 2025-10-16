@@ -60,8 +60,8 @@ describe('AuthController', () => {
     expect(response).toBeUndefined();
   });
 
-  it('should signout', async () => {
-    const response = await authController.signOut(AUTH_REQUEST_DEFAULT);
+  it('should signout', () => {
+    const response = authController.signOut();
 
     expect(response).toBeUndefined();
   });

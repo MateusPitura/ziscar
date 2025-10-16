@@ -1,6 +1,6 @@
+import safeFormat from "@/domains/global/utils/safeFormat";
 import { InstallmentStatus } from "@shared/enums";
 import { VehicleSaleFormInputs } from "../types";
-import safeFormat from "@/domains/global/utils/safeFormat";
 
 interface VehicleSaleDefaultValuesProperties {
   value: string;
@@ -18,7 +18,7 @@ export function vehicleSaleDefaultValues({
       saleDate: safeFormat({ date: new Date(), format: "yyyy-MM-dd" }),
       upfront: [],
       installment: {
-        dueDate: "",
+        dueDate: safeFormat({ date: new Date(), format: "yyyy-MM-dd" }),
         value,
         status: InstallmentStatus.PENDING,
         paymentDate: "",

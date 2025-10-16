@@ -66,6 +66,7 @@ export default function ExportButton<T, U extends FieldValues>({
     <Button
       variant="primary"
       color="darkBlue"
+      tooltipMessage="Gerar relatório PDF"
       label="Gerar relatório PDF"
       iconRight="FileDownload"
       state={isFetching ? "loading" : undefined}

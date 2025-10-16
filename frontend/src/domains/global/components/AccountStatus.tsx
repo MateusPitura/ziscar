@@ -1,5 +1,6 @@
-import type { ReactNode } from "react";
 import { InstallmentStatusType } from "@shared/enums";
+import type { ReactNode } from "react";
+import Tag from "./Tag";
 
 interface AccountStatusProperties {
   status: InstallmentStatusType;
@@ -8,13 +9,13 @@ interface AccountStatusProperties {
 export default function AccountStatus({
   status,
 }: AccountStatusProperties): ReactNode {
-  return status === "PAID" ? (
-    <div className="p-1 px-2 text-body-medium rounded-md w-fit h-fit bg-green-600 text-white border border-green-700">
-      Pago
-    </div>
-  ) : (
-    <div className="p-1 px-2 text-body-medium rounded-md w-fit h-fit bg-amber-500 text-white border border-amber-600">
-      Pendente
-    </div>
+  return (
+    <Tag
+      className={{
+        "bg-green-100 text-green-800 border-green-800": status === "PAID",
+        "bg-orange-100 text-orange-800 border-orange-800": status === "PENDING",
+      }}
+      content={status === "PAID" ? "Pago" : "Pendente"}
+    />
   );
 }

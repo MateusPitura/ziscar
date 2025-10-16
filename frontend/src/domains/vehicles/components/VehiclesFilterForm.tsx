@@ -2,28 +2,28 @@ import Form from "@/design-system/Form";
 import Input from "@/design-system/Form/Input";
 import Select from "@/design-system/Form/Select";
 import SideSheet from "@/design-system/SideSheet";
-import { memo, ReactElement, ReactNode } from "react";
-import { vehicleFilterDefaultValues } from "../constants";
-import { useFormContext } from "react-hook-form";
-import { SchemaVehiclesFilterForm } from "../schemas";
-import useDialogContext from "@/domains/global/hooks/useDialogContext";
-import { VehiclesFilterFormInputs } from "../types";
-import useFilterContext from "@/domains/global/hooks/useFilterContext";
-import { useQuery } from "@tanstack/react-query";
 import { BACKEND_URL } from "@/domains/global/constants";
+import useDialogContext from "@/domains/global/hooks/useDialogContext";
+import useFilterContext from "@/domains/global/hooks/useFilterContext";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import { PageablePayload } from "@/domains/global/types";
 import { FetchBrand, FetchStore } from "@/domains/global/types/model";
 import selectStoresInfo from "@/domains/stores/utils/selectStoresInfo";
-import selectBrandsInfo from "../utils/selectBrandsInfo";
+import { VehicleCategory } from "@shared/enums";
+import { VehicleStatusForFilter } from "@shared/types";
+import { useQuery } from "@tanstack/react-query";
+import { memo, ReactElement, ReactNode } from "react";
+import { useFormContext, useWatch } from "react-hook-form";
 import {
   MODEL_YEARS_OPTIONS,
   VehicleCategoryText,
+  vehicleFilterDefaultValues,
   VehicleStatusText,
   YEARS_OF_MANUFACTURE_OPTIONS,
 } from "../constants";
-import { VehicleCategory } from "@shared/enums";
-import { VehicleStatusForFilter } from "@shared/types";
+import { SchemaVehiclesFilterForm } from "../schemas";
+import { VehiclesFilterFormInputs } from "../types";
+import selectBrandsInfo from "../utils/selectBrandsInfo";
 
 function VehiclesFilterForm(): ReactNode {
   const { vehiclesFilter, handleVehiclesFilter } = useFilterContext();
@@ -102,7 +102,7 @@ function VehiclesFilterFormContent({
   brandsInfo,
   isFetchingBrandsInfo,
 }: VehiclesFilterFormContentProps): ReactElement {
-  const { reset } = useFormContext();
+  const { reset, control, setValue } = useFormContext<VehiclesFilterFormInputs>();
   const { handleVehiclesFilter } = useFilterContext();
   const { closeDialog } = useDialogContext();
 
@@ -111,6 +111,11 @@ function VehiclesFilterFormContent({
     reset(vehicleFilterDefaultValues);
     closeDialog();
   }
+
+  const yearOfManufactureWatch = useWatch({
+    control,
+    name: "yearOfManufacture",
+  });
 
   return (
     <>
@@ -171,19 +176,31 @@ function VehiclesFilterFormContent({
           ]}
         />
         <Select<VehiclesFilterFormInputs>
-          name="modelYear"
-          label="Ano do modelo"
-          options={[
-            { value: "", label: "Todos os anos" },
-            ...MODEL_YEARS_OPTIONS,
-          ]}
-        />
-        <Select<VehiclesFilterFormInputs>
           name="yearOfManufacture"
           label="Ano de fabricação"
           options={[
             { value: "", label: "Todos os anos" },
             ...YEARS_OF_MANUFACTURE_OPTIONS,
+          ]}
+          onChange={() => setValue("modelYear", "")}
+        />
+        <Select<VehiclesFilterFormInputs>
+          name="modelYear"
+          label="Ano do modelo"
+          options={[
+            { value: "", label: "Todos os anos" },
+            ...(yearOfManufactureWatch
+              ? [
+                  {
+                    value: yearOfManufactureWatch,
+                    label: yearOfManufactureWatch,
+                  },
+                  {
+                    value: String(Number(yearOfManufactureWatch) + 1),
+                    label: String(Number(yearOfManufactureWatch) + 1),
+                  },
+                ]
+              : MODEL_YEARS_OPTIONS),
           ]}
         />
         <Input<VehiclesFilterFormInputs>

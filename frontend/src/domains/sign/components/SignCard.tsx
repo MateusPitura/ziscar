@@ -47,6 +47,7 @@ function Footer({
         state={primaryBtnStateParsed}
         fullWidth
         type="submit"
+        tooltipMessage={undefined}
       />
       {secondaryBtnLabel && (
         <div className="flex-1 flex justify-center">
@@ -54,6 +55,7 @@ function Footer({
             label={secondaryBtnLabel}
             textAlign="center"
             variant="quaternary"
+            tooltipMessage={undefined}
             onClick={onClickSecondaryBtn}
           />
         </div>

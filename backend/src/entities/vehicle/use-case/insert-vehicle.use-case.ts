@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { VehicleService } from '../vehicle.service';
-import { InsertVehicleRequestDto, InsertVehicleResponseDto } from '../dtos';
-import { AccountPayableService } from 'src/entities/account-payable/account-payable.service';
+import { InstallmentStatus, PaymentMethodPayableType } from '@prisma/client';
+import { max } from 'date-fns';
 import { AccountPayableInstallmentService } from 'src/entities/account-payable-installment/account-payable-installment.service';
+import { AccountPayableService } from 'src/entities/account-payable/account-payable.service';
 import { PaymentMethodPayableService } from 'src/entities/payment-method-payable/payment-method-payable.service';
 import { PrismaService } from 'src/infra/database/prisma.service';
-import { InstallmentStatus, PaymentMethodPayableType } from '@prisma/client';
+import { InsertVehicleRequestDto, InsertVehicleResponseDto } from '../dtos';
+import { VehicleService } from '../vehicle.service';
 import { ValidateVehicleUniqueFieldsUseCase } from './validate-vehicle-unique-fields.use-case';
-import { max } from 'date-fns';
 
 @Injectable()
 export class InsertVehicleUseCase {
@@ -80,11 +80,11 @@ export class InsertVehicleUseCase {
     if (!installments) return;
 
     await Promise.all(
-      installments.map(async (installment, index) => {
+      installments.map(async (installment) => {
         const accountPayableInstallment =
           await this.accountPayableInstallmentService.create({
             accountPayableId,
-            installmentSequence: index + 1,
+            installmentSequence: installment.installmentSequence,
             dueDate: installment.paymentMethods
               ? max(installment.paymentMethods.map((pm) => pm.paymentDate))
               : installment.dueDate,

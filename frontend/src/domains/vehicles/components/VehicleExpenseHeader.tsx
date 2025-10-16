@@ -1,14 +1,16 @@
 import Button from "@/design-system/Button";
+import { ContextHelperable } from "@/domains/contextHelpers/types";
 import PageHeader from "@/domains/global/components/PageHeader";
 import { BACKEND_URL } from "@/domains/global/constants";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import { VehicleWithPayment } from "@/domains/global/types/model";
+import formatVehicleCharacteristics from "@/domains/global/utils/formatVehicleCharacteristics";
 import { useQuery } from "@tanstack/react-query";
 import type { ReactNode } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import selectVehicleInfo from "../utils/selectVehicleInfo";
 
-interface VehicleExpenseHeaderProps {
+interface VehicleExpenseHeaderProps extends ContextHelperable {
   title: string;
   showActions?: boolean;
 }
@@ -16,6 +18,7 @@ interface VehicleExpenseHeaderProps {
 export default function VehicleExpenseHeader({
   title,
   showActions,
+  contextHelper
 }: VehicleExpenseHeaderProps): ReactNode {
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -28,9 +31,16 @@ export default function VehicleExpenseHeader({
       action: "READ",
     });
 
+    const { vehicleCharacteristicValues, ...vehicle } = response;
+
     return {
       payment: null,
-      vehicle: response,
+      vehicle: {
+        ...vehicle,
+        vehicleCharacteristicValues: formatVehicleCharacteristics({
+          vehicleCharacteristicValues,
+        }),
+      },
     };
   }
 
@@ -43,8 +53,9 @@ export default function VehicleExpenseHeader({
   return (
     <PageHeader
       title={
-        data?.vehicle.modelName ? `${title} "${data.vehicle.modelName}"` : title
+        data?.vehicle.plateNumber ? `${title} "${data.vehicle.plateNumber}"` : title
       }
+      contextHelper={contextHelper}
     >
       {showActions && (
         <>
@@ -56,6 +67,7 @@ export default function VehicleExpenseHeader({
             action="READ"
             variant="quaternary"
             data-cy="back-vehicle-expense-button"
+            tooltipMessage="Página anterior"
           />
           <Button
             label="Adicionar gasto"
@@ -65,6 +77,7 @@ export default function VehicleExpenseHeader({
             action="CREATE"
             color="green"
             data-cy="new-vehicle-expense-button"
+            tooltipMessage="Adicionar novo gasto"
           />
         </>
       )}

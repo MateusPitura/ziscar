@@ -98,7 +98,7 @@ describe("Account Receivable", () => {
 
       cy.wait("@getVehicleSale");
 
-      cy.getDataCy("data-field-Número da placa")
+      cy.getDataCy("data-field-Placa")
         .invoke("text")
         .should((text) => {
           expect(text.length).to.be.oneOf([7, 8]);

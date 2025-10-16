@@ -66,7 +66,9 @@ export type QueryKeys =
   | "account-receivable"
   | "accounts-receivable"
   | "accounts-receivable-installments"
-  | "accounts-receivable-payment-method";
+  | "accounts-receivable-payment-method"
+  | "paid-to"
+  | "vehicle-model";
 
 export interface UsersFilter extends UsersFilterFormInputs, Pageable {}
 export interface StoresFilter extends StoresFilterFormInputs, Pageable {}
@@ -79,8 +81,15 @@ export interface AccountsPayableFilter
     Pageable {}
 export interface VehiclesFilter extends VehiclesFilterFormInputs, Pageable {}
 
+interface Summary {
+  totalOverall: number;
+  totalPaid: number;
+  totalPending: number;
+}
+
 export interface PageablePayload<T> {
   data: T[];
+  summary?: Summary;
   total: number;
 }
 

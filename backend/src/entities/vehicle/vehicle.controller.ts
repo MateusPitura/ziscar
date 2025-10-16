@@ -9,34 +9,40 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { InsertVehicleUseCase } from './use-case/insert-vehicle.use-case';
-import { SearchVehiclesUseCase } from './use-case/search-vehicles.use-case';
-import { FetchBrandsUseCase } from './use-case/fetch-brands.use-case';
-import { MakeSaleUseCase } from './use-case/make-sale.use-case';
-import { UpdateVehicleUseCase } from './use-case/update-vehicle.use-case';
-import { ArchiveVehicleUseCase } from './use-case/archive-vehicle.use-case';
-import { UnarchiveVehicleUseCase } from './use-case/unarchive-vehicle.use-case';
-import { GetVehicleByIdUseCase } from './use-case/get-vehicle-by-id.use-case';
-import { GetVehicleSaleUseCase } from './use-case/get-vehicle-sale.use-case';
+import { Actions, Resources } from '@prisma/client';
 import { AuthGuard } from 'src/entities/auth/auth.guard';
 import { RoleGuard } from 'src/entities/auth/role.guard';
-import { Actions, Resources } from '@prisma/client';
-import {
-  InsertVehicleRequestDto,
-  SearchVehiclesRequestDto,
-  MakeVehicleSaleRequestDto,
-  UpdateVehicleRequestDto,
-  UnarchiveVehicleResponseDto,
-  UpdateVehicleResponseDto,
-  SearchVehiclesResponseDto,
-  MakeVehicleSaleResponseDto,
-  InsertVehicleResponseDto,
-  FetchVehicleBrandsResponseDto,
-  ArchiveVehicleResponseDto,
-  VehicleWithPaymentResponseDto,
-  VehicleSaleResponseDto,
-} from './dtos';
 import { AuthRequest } from '../auth/auth.type';
+import {
+  ArchiveVehicleResponseDto,
+  FetchVehicleBrandsResponseDto,
+  InsertVehicleRequestDto,
+  InsertVehicleResponseDto,
+  MakeVehicleSaleRequestDto,
+  MakeVehicleSaleResponseDto,
+  SearchModelRequestDto,
+  SearchModelResponseDto,
+  SearchPaidToRequestDto,
+  SearchPaidToResponseDto,
+  SearchVehiclesRequestDto,
+  SearchVehiclesResponseDto,
+  UnarchiveVehicleResponseDto,
+  UpdateVehicleRequestDto,
+  UpdateVehicleResponseDto,
+  VehicleSaleResponseDto,
+  VehicleWithPaymentResponseDto,
+} from './dtos';
+import { ArchiveVehicleUseCase } from './use-case/archive-vehicle.use-case';
+import { FetchBrandsUseCase } from './use-case/fetch-brands.use-case';
+import { GetVehicleByIdUseCase } from './use-case/get-vehicle-by-id.use-case';
+import { GetVehicleSaleUseCase } from './use-case/get-vehicle-sale.use-case';
+import { InsertVehicleUseCase } from './use-case/insert-vehicle.use-case';
+import { MakeSaleUseCase } from './use-case/make-sale.use-case';
+import { SearchModelUseCase } from './use-case/search-model.use-case';
+import { SearchPaidToUseCase } from './use-case/search-paid-to.use-case';
+import { SearchVehiclesUseCase } from './use-case/search-vehicles.use-case';
+import { UnarchiveVehicleUseCase } from './use-case/unarchive-vehicle.use-case';
+import { UpdateVehicleUseCase } from './use-case/update-vehicle.use-case';
 
 @Controller('vehicles')
 @UseGuards(AuthGuard)
@@ -44,6 +50,8 @@ export class VehicleController {
   constructor(
     private readonly insertVehicle: InsertVehicleUseCase,
     private readonly searchVehicles: SearchVehiclesUseCase,
+    private readonly searchPaidToVehicle: SearchPaidToUseCase,
+    private readonly searchModelVehicle: SearchModelUseCase,
     private readonly fetchBrands: FetchBrandsUseCase,
     private readonly makeSale: MakeSaleUseCase,
     private readonly updateVehicle: UpdateVehicleUseCase,
@@ -69,6 +77,22 @@ export class VehicleController {
     @Query() query: SearchVehiclesRequestDto,
   ): Promise<SearchVehiclesResponseDto> {
     return this.searchVehicles.execute(query);
+  }
+
+  @Get('/paid-to')
+  @RoleGuard(Resources.VEHICLES, Actions.READ)
+  async searchPaidTo(
+    @Query() query: SearchPaidToRequestDto,
+  ): Promise<SearchPaidToResponseDto> {
+    return this.searchPaidToVehicle.execute(query);
+  }
+
+  @Get('/model')
+  @RoleGuard(Resources.VEHICLES, Actions.READ)
+  async searchModel(
+    @Query() query: SearchModelRequestDto,
+  ): Promise<SearchModelResponseDto> {
+    return this.searchModelVehicle.execute(query);
   }
 
   @Get('brands')

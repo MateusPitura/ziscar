@@ -1,6 +1,8 @@
-import { Children, cloneElement, type ReactElement } from "react";
-import useButtonState from "../hooks/useButtonState";
+import Icon from "@/design-system/Icon";
 import { ButtonState } from "@/design-system/types";
+import { Children, cloneElement, type ReactElement } from "react";
+import { BLANK } from "../constants";
+import useButtonState from "../hooks/useButtonState";
 import { Childrenable } from "../types";
 
 interface PageFooterProperties extends Childrenable {
@@ -21,7 +23,16 @@ export default function PageFooter({
   const [first, ...others] = Children.toArray(children);
 
   return (
-    <div className="w-full py-4 flex justify-end gap-4">
+    <div className="w-full p-4 pb-0 flex justify-end gap-4">
+      <span className="text-body-small text-red-500 flex items-center gap-1 flex-1">
+        <Icon
+          iconName="Emergency"
+          fontSize="inherit"
+          className="text-red-500 text-label-small"
+        />
+        {BLANK}
+        Campos obrigatórios
+      </span>
       {cloneElement(first as ReactElement, {
         state: primaryBtnStateParsed,
         type: "submit",

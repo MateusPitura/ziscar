@@ -3,12 +3,18 @@ import { CreateInput, UpdateInput } from 'src/types';
 
 export interface SearchResponse {
   total: number;
+  summary: {
+    totalPaid: number;
+    totalPending: number;
+    totalOverall: number;
+  };
   data: {
     id: number;
     description: string;
     paidTo: string;
     totalValue: number;
     overallStatus: 'PAID' | 'PENDING';
+    date: Date | null;
   }[];
 }
 

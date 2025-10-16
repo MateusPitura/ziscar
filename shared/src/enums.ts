@@ -49,7 +49,6 @@ export enum FuelType {
 export enum VehicleStatus {
   PURCHASED = "PURCHASED",
   IN_STOCK = "IN_STOCK",
-  DELIVERED = "DELIVERED",
   MAINTENANCE = "MAINTENANCE",
   SOLD = "SOLD",
 }
@@ -128,7 +127,7 @@ export const RESOURCES_VALUES = [Resources.USERS, Resources.VEHICLES, Resources.
 export const ACTIONS_VALUES = [Actions.CREATE, Actions.READ, Actions.UPDATE, Actions.DELETE] as const;
 export const VEHICLECATEGORY_VALUES = [VehicleCategory.TRUCK, VehicleCategory.CAR, VehicleCategory.MOTORCYCLE, VehicleCategory.BUS, VehicleCategory.VAN] as const;
 export const FUELTYPE_VALUES = [FuelType.DIESEL, FuelType.ELECTRIC, FuelType.ETHANOL, FuelType.FLEX, FuelType.GASOLINE, FuelType.GNV, FuelType.HYBRID] as const;
-export const VEHICLESTATUS_VALUES = [VehicleStatus.PURCHASED, VehicleStatus.IN_STOCK, VehicleStatus.DELIVERED, VehicleStatus.MAINTENANCE, VehicleStatus.SOLD] as const;
+export const VEHICLESTATUS_VALUES = [VehicleStatus.PURCHASED, VehicleStatus.IN_STOCK, VehicleStatus.MAINTENANCE, VehicleStatus.SOLD] as const;
 export const EXPENSECATEGORY_VALUES = [ExpenseCategory.AGENCY_FEES, ExpenseCategory.FUEL, ExpenseCategory.FINE, ExpenseCategory.IPVA, ExpenseCategory.LICENSING, ExpenseCategory.LOGISTICS, ExpenseCategory.MAINTENANCE, ExpenseCategory.OTHER, ExpenseCategory.INSURANCE] as const;
 export const INSTALLMENTSTATUS_VALUES = [InstallmentStatus.PAID, InstallmentStatus.PENDING] as const;
 export const PAYMENTMETHODRECEIVABLETYPE_VALUES = [PaymentMethodReceivableType.BANK_SLIP, PaymentMethodReceivableType.CREDIT_CARD, PaymentMethodReceivableType.DEBIT_CARD, PaymentMethodReceivableType.CASH, PaymentMethodReceivableType.DOC, PaymentMethodReceivableType.PIX, PaymentMethodReceivableType.TED, PaymentMethodReceivableType.TRANSFER] as const;
