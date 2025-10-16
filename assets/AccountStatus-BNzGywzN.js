@@ -1,1 +1,0 @@
-import{j as e}from"./index-CrVTpVTI.js";function d({status:t}){return t==="PAID"?e.jsx("div",{className:"p-1 px-2 text-body-medium rounded-md w-fit h-fit bg-green-600 text-white border border-green-700",children:"Pago"}):e.jsx("div",{className:"p-1 px-2 text-body-medium rounded-md w-fit h-fit bg-amber-500 text-white border border-amber-600",children:"Pendente"})}export{d as A};
