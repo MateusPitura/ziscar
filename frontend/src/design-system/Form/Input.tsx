@@ -10,7 +10,7 @@ import InputLabel from "./InputLabel";
 
 interface InputProperties<T extends FieldValues> {
   name: Path<T>;
-  label: string;
+  label?: string;
   placeholder?: string;
   mask?: Mask;
   iconRight?: IconsName;
@@ -22,6 +22,8 @@ interface InputProperties<T extends FieldValues> {
   autoFocus?: boolean;
   forceUnselect?: boolean;
   disabled?: boolean;
+  onChange?: (value: string) => void;
+  autoComplete?: boolean;
 }
 
 export default function Input<T extends FieldValues>({
@@ -38,6 +40,8 @@ export default function Input<T extends FieldValues>({
   autoFocus = false,
   forceUnselect,
   disabled = false,
+  onChange,
+  autoComplete = true,
 }: InputProperties<T>): ReactElement {
   const { register, setValue } = useFormContext();
   const value = useWatch({ name });
@@ -51,7 +55,7 @@ export default function Input<T extends FieldValues>({
 
   return (
     <label className="flex flex-col">
-      <InputLabel label={label} required={required} />
+      {label && <InputLabel label={label} required={required} />}
       <div
         className={classNames(
           "border-neutral-500 border-2 rounded-md flex items-center gap-1 overflow-hidden h-10",
@@ -68,7 +72,7 @@ export default function Input<T extends FieldValues>({
               "!text-neutral-300": disabled,
             }
           )}
-          autoComplete="on"
+          autoComplete={autoComplete ? "on" : "off"}
           placeholder={placeholder}
           type={type}
           maxLength={maxLength}
@@ -81,6 +85,7 @@ export default function Input<T extends FieldValues>({
               shouldDirty: true,
             })
           }
+          onChange={(event) => onChange?.(event.target.value)}
         />
         {iconRight && (
           <div className="px-2">

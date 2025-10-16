@@ -19,10 +19,13 @@ export default function CustomerSearchForm(): ReactElement {
   async function getCustomersInfo(filter?: string): Promise<FetchCustomer[]> {
     if (!filter) return [];
 
-    const result = await safeFetch(`${BACKEND_URL}/customer?fullName=${filter}&orderBy=fullName`, {
-      resource: "CUSTOMERS",
-      action: "READ",
-    });
+    const result = await safeFetch(
+      `${BACKEND_URL}/customer?fullName=${filter}&orderBy=fullName`,
+      {
+        resource: "CUSTOMERS",
+        action: "READ",
+      }
+    );
 
     return result.data;
   }
@@ -55,7 +58,7 @@ export default function CustomerSearchForm(): ReactElement {
         formatSearch={(search) => {
           const result = s.name().safeParse(search);
           if (result.success) {
-            return result.data;
+            return result.data.trim();
           }
           return undefined;
         }}

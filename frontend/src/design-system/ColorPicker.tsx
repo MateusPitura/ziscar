@@ -45,7 +45,7 @@ export default function ColorPicker<T extends FieldValues>({
     <label className="flex flex-col">
       <InputLabel label={label} required={required} />
       <Popover open={isOpen} onOpenChange={setIsOpen}>
-        <Popover.Trigger>
+        <Popover.Trigger asChild>
           <Button
             label={
               watch ? (

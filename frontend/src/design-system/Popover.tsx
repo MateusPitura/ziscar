@@ -48,8 +48,12 @@ function Content({
   );
 }
 
-function Trigger({ children }: Childrenable): ReactElement {
-  return <PopoverTrigger asChild>{children}</PopoverTrigger>;
+interface TriggerProps extends Childrenable {
+  asChild?: boolean;
+}
+
+function Trigger({ children, asChild }: TriggerProps): ReactElement {
+  return <PopoverTrigger asChild={asChild}>{children}</PopoverTrigger>;
 }
 
 const Popover = Object.assign(Container, { Content, Trigger });

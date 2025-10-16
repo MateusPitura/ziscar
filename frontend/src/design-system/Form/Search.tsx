@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useMemo, type ReactElement } from "react";
 import { FieldValues, Path, PathValue } from "react-hook-form";
 import Button from "../Button";
+import AutoComplete from "./AutoComplete";
 import Select from "./Select";
 
 interface SearchProperties<T, K extends Record<string, unknown>[]> {
@@ -20,6 +21,7 @@ interface SearchProperties<T, K extends Record<string, unknown>[]> {
   select?: (item: K) => K;
   formatSearch: (search: string) => string | undefined;
   formatNotFound?: (search: string) => string;
+  variant?: "select" | "autocomplete";
 }
 
 export default function Search<
@@ -39,6 +41,7 @@ export default function Search<
   onClickNotFound,
   formatSearch,
   formatNotFound,
+  variant,
 }: SearchProperties<T, K>): ReactElement {
   const { value, setValue } = useDebounce();
 
@@ -65,6 +68,31 @@ export default function Search<
       return formatNotFound(value);
     }
   }, [value]);
+
+  if (variant === "autocomplete") {
+    return (
+      <AutoComplete
+        name={name}
+        onSearchChange={(value) => {
+          const formattedValue = formatSearch(value);
+          if (!formattedValue) return;
+          setValue(formattedValue);
+        }}
+        label={label}
+        options={dataFormatted}
+        shouldFilter={false}
+        loading={isLoading}
+        required={required}
+        onChange={(selectedValue) => {
+          const selectedItem = data?.find(
+            (item) => String(item[valueKey as string]) === selectedValue
+          ) as UnwrapArray<K> | undefined;
+
+          onChange?.(selectedItem);
+        }}
+      />
+    );
+  }
 
   return (
     <Select
