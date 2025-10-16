@@ -145,9 +145,21 @@ export class VehicleService implements VehicleRepository {
       };
 
     if (params.startDate || params.endDate) {
+      let startDateFormatted: Date | undefined = undefined;
+      if (params.startDate) {
+        startDateFormatted = new Date(params.startDate);
+        startDateFormatted.setHours(0, 0, 0, 0);
+      }
+
+      let endDateFormatted: Date | undefined = undefined;
+      if (params.endDate) {
+        endDateFormatted = new Date(params.endDate);
+        endDateFormatted.setHours(23, 59, 59, 999);
+      }
+
       where.createdAt = {
-        gte: params.startDate,
-        lte: params.endDate,
+        gte: startDateFormatted,
+        lte: endDateFormatted,
       };
     }
 

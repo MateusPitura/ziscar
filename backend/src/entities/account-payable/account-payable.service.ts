@@ -61,6 +61,18 @@ export class AccountPayableService implements AccountPayableRepository {
     endDate: Date,
     overallStatus?: 'PENDING' | 'PAID',
   ): Promise<SearchResponse> {
+    let startDateFormatted: Date | undefined = undefined;
+    if (startDate) {
+      startDateFormatted = new Date(startDate);
+      startDateFormatted.setHours(0, 0, 0, 0);
+    }
+
+    let endDateFormatted: Date | undefined = undefined;
+    if (endDate) {
+      endDateFormatted = new Date(endDate);
+      endDateFormatted.setHours(23, 59, 59, 999);
+    }
+
     const filter: Prisma.AccountPayableWhereInput = {
       description: {
         contains: query,
@@ -78,8 +90,8 @@ export class AccountPayableService implements AccountPayableRepository {
             : undefined
         : undefined,
       createdAt: {
-        gte: startDate,
-        lte: endDate ?? new Date(),
+        gte: startDateFormatted,
+        lte: endDateFormatted,
       },
     };
 

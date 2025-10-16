@@ -4,7 +4,12 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Customer } from '@prisma/client';
+import { ITEMS_PER_PAGE } from '@shared/constants';
+import { addressNullableFields } from 'src/constants';
 import { PrismaService } from 'src/infra/database/prisma.service';
+import { GetCallback } from 'src/types';
+import { verifyDuplicated } from 'src/utils/verifyDuplicated';
+import { GET_CUSTOMER } from './customer.constant';
 import {
   CreateInput,
   FindManyInput,
@@ -12,11 +17,6 @@ import {
   UpdateInput,
   VerifyDuplicatedInput,
 } from './customer.type';
-import { GetCallback } from 'src/types';
-import { ITEMS_PER_PAGE } from '@shared/constants';
-import { GET_CUSTOMER } from './customer.constant';
-import { addressNullableFields } from 'src/constants';
-import { verifyDuplicated } from 'src/utils/verifyDuplicated';
 
 @Injectable()
 export class CustomerService {
@@ -149,9 +149,21 @@ export class CustomerService {
     const startDate = customerFindManyInDto?.startDate;
     const endDate = customerFindManyInDto?.endDate;
     if (startDate || endDate) {
+      let startDateFormatted: Date | undefined = undefined;
+      if (startDate) {
+        startDateFormatted = new Date(startDate);
+        startDateFormatted.setHours(0, 0, 0, 0);
+      }
+
+      let endDateFormatted: Date | undefined = undefined;
+      if (endDate) {
+        endDateFormatted = new Date(endDate);
+        endDateFormatted.setHours(23, 59, 59, 999);
+      }
+
       findManyWhere.where['createdAt'] = {
-        ...(startDate && { gte: new Date(startDate) }),
-        ...(endDate && { lte: new Date(endDate) }),
+        ...(startDate && { gte: startDateFormatted }),
+        ...(endDate && { lte: endDateFormatted }),
       };
     }
 
