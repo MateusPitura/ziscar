@@ -22,7 +22,6 @@ interface InputProperties<T extends FieldValues> {
   autoFocus?: boolean;
   forceUnselect?: boolean;
   disabled?: boolean;
-  onChange?: (value: string) => void;
   autoComplete?: boolean;
 }
 
@@ -40,7 +39,6 @@ export default function Input<T extends FieldValues>({
   autoFocus = false,
   forceUnselect,
   disabled = false,
-  onChange,
   autoComplete = true,
 }: InputProperties<T>): ReactElement {
   const { register, setValue } = useFormContext();
@@ -85,7 +83,6 @@ export default function Input<T extends FieldValues>({
               shouldDirty: true,
             })
           }
-          onChange={(event) => onChange?.(event.target.value)}
         />
         {iconRight && (
           <div className="px-2">
