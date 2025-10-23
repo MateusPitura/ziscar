@@ -1,6 +1,10 @@
-O código fonte também está disponível no GitHub: https://github.com/MateusPitura/ziscar
+O código fonte também está disponível no GitHub em https://github.com/MateusPitura/ziscar
 
-A aplicação pode ser executada localmente ou acessada na internet. Ambas utilizam as credenciais a seguir:
+A aplicação hospedada pode ser acessada em https://ziscar.me
+
+1. Execução local
+
+A aplicação pode ser executada localmente e utilizando as credenciais a seguir:
 
 Administrador:
 - Usuário: john.doe@email.com
@@ -9,8 +13,6 @@ Administrador:
 Vendedor:
 - Usuário: john.sales@email.com
 - Senha: Senha12345@
-
-1. Execução local
 
 1.1 Instalação do Docker
 
@@ -33,7 +35,3 @@ Baixe o zip do projeto e descompacte. Use as opções padrão do arquivo ".env" 
 Abra um terminal CMD, navegue até a pasta raiz "ziscar-main". Garante que o programa "Docker Desktop" esteja aberto e execute no terminal "docker-compose pull" (irá demorar aproximadamente 2 minutos a depender da internet) e depois "docker-compose up". Caso o Docker solicite permissão para acessar o serviço de rede, aceite
 
 No navegador abra "http://localhost:5173". As portas 3000, 5173, 5432 precisam estar livres
-
-2. Acesso via internet
-
-Alternativamente acesse o site https://ziscar.me
