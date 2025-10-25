@@ -1,8 +1,10 @@
 import { Controller, Get, Param, Query, Req, UseGuards } from '@nestjs/common';
+import { Actions, Resources } from '@prisma/client';
 import { QueryAccountReceivableDTO } from 'src/infra/dtos/account-receivable/query-account-receivable-dto';
-import { AuthRequest } from '../auth/auth.type';
-import { AccountReceivableService } from './account-receivable.service';
 import { AuthGuard } from '../auth/auth.guard';
+import { AuthRequest } from '../auth/auth.type';
+import { RoleGuard } from '../auth/role.guard';
+import { AccountReceivableService } from './account-receivable.service';
 
 @Controller('account-receivable')
 @UseGuards(AuthGuard)
@@ -12,6 +14,7 @@ export class AccountReceivableController {
   ) {}
 
   @Get('search')
+  @RoleGuard(Resources.ACCOUNTS_RECEIVABLE, Actions.READ)
   async searchAccountsReceivable(
     @Query() query: QueryAccountReceivableDTO,
     @Req() req: AuthRequest,
@@ -29,23 +32,12 @@ export class AccountReceivableController {
   }
 
   @Get('/:id')
+  @RoleGuard(Resources.ACCOUNTS_RECEIVABLE, Actions.READ)
   async findByIdAccountReceivable(
     @Param('id') id: string,
     @Req() req: AuthRequest,
   ) {
     const { enterpriseId } = req.authToken;
     return this.AccountReceivableService.findById(id, enterpriseId);
-  }
-
-  @Get('/by-installment/:installmentId')
-  async findByInstallmentId(
-    @Param('installmentId') installmentId: string,
-    @Req() req: AuthRequest,
-  ) {
-    const { enterpriseId } = req.authToken;
-    return this.AccountReceivableService.findByInstallmentId(
-      installmentId,
-      enterpriseId,
-    );
   }
 }

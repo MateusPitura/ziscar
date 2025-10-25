@@ -29,11 +29,6 @@ export abstract class AccountReceivableRepository {
     enterpriseId: number,
   ): Promise<AccountReceivable | null>;
 
-  abstract findByInstallmentId(
-    installmentId: string,
-    enterpriseId: number,
-  ): Promise<AccountReceivable | null>;
-
   abstract search(
     query: string,
     page: number,

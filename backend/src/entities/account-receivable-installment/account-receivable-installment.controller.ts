@@ -12,6 +12,8 @@ import { AccountReceivableInstallmentPayload } from 'src/repositories/account_re
 import { AuthGuard } from '../auth/auth.guard';
 import { AuthRequest } from '../auth/auth.type';
 import { AccountReceivableInstallmentService } from './account-receivable-installment.service';
+import { RoleGuard } from '../auth/role.guard';
+import { Actions, Resources } from '@prisma/client';
 
 @Controller('account-receivable-installments')
 @UseGuards(AuthGuard)
@@ -21,6 +23,7 @@ export class AccountReceivableInstallmentController {
   ) {}
 
   @Post('payment-method/:installmentId')
+  @RoleGuard(Resources.ACCOUNTS_RECEIVABLE, Actions.CREATE)
   async addPaymentMethodToInstallment(
     @Param('installmentId') installmentId: string,
     @Body() body: CreatePaymentMethodDTO,
@@ -39,6 +42,7 @@ export class AccountReceivableInstallmentController {
   }
 
   @Get('/by-account/:accountReceivableId')
+  @RoleGuard(Resources.ACCOUNTS_RECEIVABLE, Actions.READ)
   async findAllByAccountReceivableId(
     @Param('accountReceivableId') accountReceivableId: string,
     @Req() req: AuthRequest,

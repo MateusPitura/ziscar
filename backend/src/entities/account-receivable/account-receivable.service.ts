@@ -32,46 +32,6 @@ export class AccountReceivableService implements AccountReceivableRepository {
     return accountReceivable;
   }
 
-  async findByInstallmentId(
-    installmentId: string,
-    enterpriseId: number,
-  ): Promise<AccountReceivable | null> {
-    const accountReceivable = await this.prisma.accountReceivable.findFirst({
-      where: {
-        enterpriseId,
-        accountReceivableInstallments: {
-          some: {
-            id: Number(installmentId),
-          },
-        },
-      },
-      include: {
-        accountReceivableInstallments: {
-          select: {
-            id: true,
-            dueDate: true,
-            installmentSequence: true,
-            status: true,
-            value: true,
-            isRefund: true,
-            isUpfront: true,
-          },
-        },
-        vehicleSales: {
-          select: {
-            id: true,
-          },
-        },
-      },
-    });
-
-    if (!accountReceivable) {
-      throw new NotFoundException('Parcela da conta a receber não encontrada');
-    }
-
-    return accountReceivable;
-  }
-
   async search(
     query: string,
     page: number,

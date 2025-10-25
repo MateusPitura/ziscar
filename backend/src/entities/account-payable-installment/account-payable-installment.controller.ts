@@ -11,6 +11,8 @@ import { CreatePaymentMethodToAccountPayableDTO } from 'src/infra/dtos/account-p
 import { AuthGuard } from '../auth/auth.guard';
 import { AuthRequest } from '../auth/auth.type';
 import { AccountPayableInstallmentService } from './account-payable-installment.service';
+import { RoleGuard } from '../auth/role.guard';
+import { Actions, Resources } from '@prisma/client';
 
 @Controller('account-payable-installments')
 @UseGuards(AuthGuard)
@@ -19,6 +21,7 @@ export class AccountPayableInstallmentController {
     private readonly accountPayableInstallmentService: AccountPayableInstallmentService,
   ) {}
 
+  @RoleGuard(Resources.ACCOUNTS_PAYABLE, Actions.READ)
   @Get('/by-account-payable/:accountPayableId')
   async findAllByAccountPayableId(
     @Param('accountPayableId') accountPayableId: string,
@@ -32,6 +35,7 @@ export class AccountPayableInstallmentController {
   }
 
   @Post('payment-method/:installmentId')
+  @RoleGuard(Resources.ACCOUNTS_PAYABLE, Actions.CREATE)
   async addPaymentMethodToInstallment(
     @Param('installmentId') installmentId: string,
     @Body() body: CreatePaymentMethodToAccountPayableDTO,

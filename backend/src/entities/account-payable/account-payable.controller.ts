@@ -3,6 +3,8 @@ import { QueryAccountReceivableDTO } from 'src/infra/dtos/account-receivable/que
 import { AuthRequest } from '../auth/auth.type';
 import { AccountPayableService } from './account-payable.service';
 import { AuthGuard } from '../auth/auth.guard';
+import { RoleGuard } from '../auth/role.guard';
+import { Actions, Resources } from '@prisma/client';
 
 @Controller('account-payable')
 @UseGuards(AuthGuard)
@@ -10,6 +12,7 @@ export class AccountPayableController {
   constructor(private readonly accountPayableService: AccountPayableService) {}
 
   @Get('search')
+  @RoleGuard(Resources.ACCOUNTS_PAYABLE, Actions.READ)
   async searchAccountsPayable(
     @Query() query: QueryAccountReceivableDTO,
     @Req() req: AuthRequest,
@@ -27,6 +30,7 @@ export class AccountPayableController {
   }
 
   @Get('/:id')
+  @RoleGuard(Resources.ACCOUNTS_PAYABLE, Actions.READ)
   async findById(@Param('id') id: string, @Req() req: AuthRequest) {
     const { enterpriseId } = req.authToken;
     return this.accountPayableService.findById(id, enterpriseId);
