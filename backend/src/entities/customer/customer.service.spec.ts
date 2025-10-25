@@ -1,19 +1,19 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import {
   BadRequestException,
   ConflictException,
   NotFoundException,
 } from '@nestjs/common';
-import { CustomerService } from './customer.service';
-import { PrismaService } from 'src/infra/database/prisma.service';
+import { Test, TestingModule } from '@nestjs/testing';
+import { ITEMS_PER_PAGE } from '@shared/constants';
 import {
   addressNullableFields,
   POPULATE_INACTIVE_ENTITIES_AMOUNT,
   POPULATE_OTHER_ENTITIES_AMOUNT,
 } from 'src/constants';
-import { POPULATE_ENTERPRISE, POPULATE_CUSTOMER } from 'src/constants/populate';
-import { ITEMS_PER_PAGE } from '@shared/constants';
+import { POPULATE_CUSTOMER, POPULATE_ENTERPRISE } from 'src/constants/populate';
+import { PrismaService } from 'src/infra/database/prisma.service';
 import { GET_CUSTOMER } from './customer.constant';
+import { CustomerService } from './customer.service';
 
 describe('CustomerService', () => {
   let customerService: CustomerService;
@@ -673,6 +673,9 @@ describe('CustomerService', () => {
       enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
     });
 
+    const dateFormatted = new Date('2000-01-01');
+    dateFormatted.setHours(0, 0, 0, 0);
+
     expect(spy).toHaveBeenCalledWith({
       skip: 0,
       take: ITEMS_PER_PAGE,
@@ -684,7 +687,7 @@ describe('CustomerService', () => {
         },
         archivedAt: null,
         createdAt: {
-          gte: new Date('2000-01-01'),
+          gte: dateFormatted,
         },
         enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
         cpf: {

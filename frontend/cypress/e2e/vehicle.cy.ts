@@ -1,6 +1,6 @@
-import { generatePlateNumber } from "../../../shared/src/test/generatePlateNumber";
-import { generateChassi } from "../../../shared/src/test/generateChassi";
 import { faker } from "@faker-js/faker";
+import { generateChassi } from "../../../shared/src/test/generateChassi";
+import { generatePlateNumber } from "../../../shared/src/test/generatePlateNumber";
 
 describe("vehicle", () => {
   beforeEach(() => {

@@ -10,6 +10,7 @@ import {
   Path,
   PathValue,
   useFormContext,
+  useWatch,
 } from "react-hook-form";
 import { Popover } from "../Popover";
 import Spinner from "../Spinner";
@@ -33,6 +34,17 @@ export default function AutoComplete<T extends FieldValues>({
   const [isOpen, setIsOpen] = useState(false);
   const { setValue } = useFormContext<T>();
 
+  const selectedValue = useWatch({
+    name,
+  });
+
+  useEffect(() => {
+    if (selectedValue) {
+      setIsOpen(true);
+      onSearchChange?.(selectedValue);
+    }
+  }, [selectedValue]);
+
   useEffect(() => {
     if (disabled) {
       setIsOpen(false);
@@ -48,10 +60,6 @@ export default function AutoComplete<T extends FieldValues>({
           hideErrorLabel
           disabled={disabled}
           data-cy={`select-${name}`}
-          onChange={(value) => {
-            setIsOpen(true);
-            onSearchChange?.(value);
-          }}
           autoComplete={false}
         />
         <Popover.Trigger />

@@ -1,19 +1,19 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import {
   BadRequestException,
   ConflictException,
   NotFoundException,
 } from '@nestjs/common';
-import { StoreService } from './store.service';
-import { PrismaService } from 'src/infra/database/prisma.service';
+import { Test, TestingModule } from '@nestjs/testing';
+import { ITEMS_PER_PAGE } from '@shared/constants';
 import {
   addressNullableFields,
   POPULATE_INACTIVE_ENTITIES_AMOUNT,
   POPULATE_OTHER_ENTITIES_AMOUNT,
 } from 'src/constants';
 import { POPULATE_ENTERPRISE, POPULATE_STORE } from 'src/constants/populate';
-import { ITEMS_PER_PAGE } from '@shared/constants';
+import { PrismaService } from 'src/infra/database/prisma.service';
 import { GET_STORE } from './store.constant';
+import { StoreService } from './store.service';
 
 describe('StoreService', () => {
   let storeService: StoreService;
@@ -659,6 +659,9 @@ describe('StoreService', () => {
       enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
     });
 
+    const dateFormatted = new Date('2000-01-01');
+    dateFormatted.setHours(0, 0, 0, 0);
+
     expect(spy).toHaveBeenCalledWith({
       skip: 0,
       take: ITEMS_PER_PAGE,
@@ -670,7 +673,7 @@ describe('StoreService', () => {
         },
         archivedAt: null,
         createdAt: {
-          gte: new Date('2000-01-01'),
+          gte: dateFormatted,
         },
         enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
       },

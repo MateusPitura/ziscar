@@ -68,7 +68,7 @@ describe("vehicle", () => {
       cy.get('button[type="submit"]').should("be.disabled");
 
       cy.getDataCy("select-customer.id").click();
-      cy.get("[cmdk-input]").type("1");
+      cy.get("[cmdk-input]").type("a");
       cy.get('[data-cy^="select-option-"]').first().click();
 
       cy.get('button[type="submit"]').should("be.enabled");
@@ -169,7 +169,7 @@ describe("vehicle", () => {
       cy.get('button[type="submit"]').should("be.disabled");
 
       cy.getDataCy("select-customer.id").click();
-      cy.get("[cmdk-input]").type("1");
+      cy.get("[cmdk-input]").type("a");
       cy.get('[data-cy^="select-option-"]').first().click();
 
       cy.get('button[type="submit"]').should("be.enabled");
@@ -295,10 +295,10 @@ describe("vehicle", () => {
       cy.get('button[type="submit"]').should("be.disabled");
 
       cy.getDataCy("select-customer.id").click();
-      cy.get("[cmdk-input]").type(customerCpf);
+      cy.get("[cmdk-input]").type(customerFullName);
       cy.get("[data-cy^='button-label-Cadastrar']").first().click();
 
-      cy.fillInputByName("fullName", customerFullName);
+      cy.fillInputByName("cpf", customerCpf);
 
       cy.get('[data-cy="dialog-footer-button-primary"]').click();
 
