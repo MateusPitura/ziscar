@@ -8,6 +8,7 @@ export default function VehicleCommonCharacteristicForm(): ReactNode {
     <Choice>
       {defaultCommonCharacteristics.map((c) => (
         <Choice.Checkbox<VehicleFormInputs>
+          key={c}
           name="characteristics.commonCharacteristics"
           label={c}
           value={c}

@@ -23,6 +23,7 @@ interface InputProperties<T extends FieldValues> {
   forceUnselect?: boolean;
   disabled?: boolean;
   autoComplete?: boolean;
+  onChange?: (value: string) => void;
 }
 
 export default function Input<T extends FieldValues>({
@@ -40,6 +41,7 @@ export default function Input<T extends FieldValues>({
   forceUnselect,
   disabled = false,
   autoComplete = true,
+  onChange: customOnChange
 }: InputProperties<T>): ReactElement {
   const { register, setValue } = useFormContext();
   const value = useWatch({ name });
@@ -50,6 +52,8 @@ export default function Input<T extends FieldValues>({
       setValue<string>(name, valueFormatted);
     }
   }, [value, mask, name, setValue]);
+
+  const { onChange, ...rest } = register(name);
 
   return (
     <label className="flex flex-col">
@@ -63,7 +67,11 @@ export default function Input<T extends FieldValues>({
         )}
       >
         <input
-          {...register(name)}
+          {...rest}
+          onChange={(event) => {
+            onChange(event);
+            customOnChange?.(event.target.value);
+          }}
           className={classNames(
             "text-body-large text-neutral-700 bg-transparent p-1 px-2 caret-neutral-700 flex-1",
             {

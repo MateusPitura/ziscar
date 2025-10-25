@@ -1,10 +1,3 @@
-import {
-  Command,
-  CommandEmpty,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
 import { UnwrapArray } from "@/domains/global/types";
 import { useEffect, useState, type ReactNode } from "react";
 import {
@@ -13,12 +6,10 @@ import {
   PathValue,
   useController,
   useFormContext,
-  useWatch,
 } from "react-hook-form";
 import Button from "../Button";
-import Icon from "../Icon";
 import { Popover } from "../Popover";
-import Spinner from "../Spinner";
+import Command from "./Command";
 import InputError from "./InputError";
 import InputLabel from "./InputLabel";
 
@@ -63,9 +54,7 @@ export default function Select<T extends FieldValues>({
     control,
   });
 
-  const selectedValue = useWatch({
-    name,
-  });
+  const selectedValue = field.value;
 
   useEffect(() => {
     if (disabled) {
@@ -94,65 +83,31 @@ export default function Select<T extends FieldValues>({
           />
         </Popover.Trigger>
         <Popover.Content align="start" className="!p-2">
-          <Command shouldFilter={shouldFilter}>
-            <CommandInput
-              placeholder="Pesquise"
-              autoFocus
-              className="text-body-medium text-neutral-700"
-              onValueChange={(search) => {
+          <Command<T>
+            shouldFilter={shouldFilter}
+            loading={loading}
+            options={options}
+            onChange={(value) => {
+              if (value === selectedValue) {
                 onChange?.(undefined);
                 field.onChange("");
-                onSearchChange?.(search);
-              }}
-            />
-            <CommandList {...register(name)}>
-              {loading ? (
-                <div className="flex items-center justify-center p-2">
-                  <Spinner />
-                </div>
-              ) : (
-                <>
-                  <CommandEmpty className="text-neutral-700 flex items-center justify-center p-2 text-body-medium min-h-14">
-                    {notFound || "Nenhum item encontrado"}
-                  </CommandEmpty>
-                  {options.map((option) => {
-                    return (
-                      <CommandItem
-                        key={option.value}
-                        value={option.value}
-                        data-cy={`select-option-${option.value}`}
-                        onSelect={(value) => {
-                          if (value === selectedValue) {
-                            onChange?.(undefined);
-                            field.onChange("");
-                            setIsOpen(false);
-                            return;
-                          }
-                          onChange?.(value);
-                          field.onChange(value);
-                          setIsOpen(false);
-                        }}
-                        className="flex !text-neutral-700 text-body-medium"
-                        keywords={[option.label]}
-                      >
-                        <div className="flex-1">
-                          <p>{option.label}</p>
-                          {option.description && (
-                            <p className="text-label-medium text-neutral-500">
-                              {option.description}
-                            </p>
-                          )}
-                        </div>
-                        {selectedValue === option.value && (
-                          <Icon iconName="Check" />
-                        )}
-                      </CommandItem>
-                    );
-                  })}
-                </>
-              )}
-            </CommandList>
-          </Command>
+              } else {
+                onChange?.(value);
+                field.onChange(value);
+              }
+              setIsOpen(false);
+            }}
+            register={register}
+            name={name}
+            notFound={notFound}
+            showSearch
+            selectedValue={selectedValue}
+            onSearchChange={(search) => {
+              onChange?.(undefined);
+              field.onChange("");
+              onSearchChange?.(search);
+            }}
+          />
         </Popover.Content>
       </Popover>
       {hideErrorLabel || <InputError name={name} required={required} />}

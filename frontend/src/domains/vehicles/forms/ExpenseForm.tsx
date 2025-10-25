@@ -11,6 +11,7 @@ import VehicleExpenseHeader from "../components/VehicleExpenseHeader";
 import useGetVehicleInfo from "../hooks/useGetVehicleInfo";
 import { SchemaVehicleExpenseForm } from "../schemas";
 import { VehicleExpenseFormInputs } from "../types";
+import selectVehicleInfo from "../utils/selectVehicleInfo";
 import VehicleExpenseDetailsForm from "./VehicleExpenseDetailsForm";
 
 interface ExpenseFormProperties extends ContextHelperable {
@@ -35,7 +36,9 @@ export default function ExpenseForm({
   onClose,
   contextHelper,
 }: ExpenseFormProperties): ReactNode {
-  const { data } = useGetVehicleInfo();
+  const { data } = useGetVehicleInfo({
+    select: selectVehicleInfo
+  });
 
   return (
     <div className="flex flex-col gap-4 w-full">
