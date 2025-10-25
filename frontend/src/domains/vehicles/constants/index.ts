@@ -163,7 +163,7 @@ export const vehicleExpenseDefaultValues: VehicleExpenseFormInputs = {
 
 export const defaultCommonCharacteristics = [
   "Direção hidráulica",
-  "Janelas elétricas",
+  "Vidros elétricos",
   "Ar condicionado",
   "Travas elétricas",
   "Câmera de ré",
