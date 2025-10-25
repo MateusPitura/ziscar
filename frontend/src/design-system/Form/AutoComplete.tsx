@@ -10,6 +10,7 @@ import {
   Path,
   PathValue,
   useFormContext,
+  useFormState,
   useWatch,
 } from "react-hook-form";
 import { Popover } from "../Popover";
@@ -38,12 +39,16 @@ export default function AutoComplete<T extends FieldValues>({
     name,
   });
 
+  const { isDirty } = useFormState({
+    name
+  })
+
   useEffect(() => {
-    if (selectedValue) {
+    if (selectedValue && isDirty) {
       setIsOpen(true);
       onSearchChange?.(selectedValue);
     }
-  }, [selectedValue]);
+  }, [selectedValue, isDirty]);
 
   useEffect(() => {
     if (disabled) {

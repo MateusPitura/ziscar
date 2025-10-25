@@ -7,10 +7,9 @@ import PageHeader from "@/domains/global/components/PageHeader";
 import { BACKEND_URL } from "@/domains/global/constants";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
-import { VehicleWithPayment } from "@/domains/global/types/model";
 import formatInstallment from "@/domains/global/utils/formatInstallment";
-import formatVehicleCharacteristics from "@/domains/global/utils/formatVehicleCharacteristics";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import useGetVehicleInfo from "@/domains/vehicles/hooks/useGetVehicleInfo";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ReactNode } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { vehicleSaleDefaultValues } from "../constants";
@@ -30,30 +29,9 @@ export default function VehicleSaleContainer({
   const queryClient = useQueryClient();
   const { customer: customerData } = useVehicleSalePageContext();
 
-  async function getVehicle(): Promise<VehicleWithPayment> {
-    const response = await safeFetch(`${BACKEND_URL}/vehicles/${vehicleId}`, {
-      resource: "VEHICLES",
-      action: "READ",
-    });
-
-    const { vehicleCharacteristicValues, ...vehicle } = response;
-
-    return {
-      payment: null,
-      vehicle: {
-        ...vehicle,
-        vehicleCharacteristicValues: formatVehicleCharacteristics({
-          vehicleCharacteristicValues,
-        }),
-      },
-    };
-  }
-
-  const { data: vehicleData, isFetching } = useQuery({
-    queryKey: ["vehicle", vehicleId],
-    queryFn: getVehicle,
+   const { data: vehicleData, isFetching } = useGetVehicleInfo({
     select: selectVehicleInfo,
-  });
+  })
 
   async function createSale({ payment, customer }: VehicleSaleFormInputs) {
     const installments = formatInstallment({

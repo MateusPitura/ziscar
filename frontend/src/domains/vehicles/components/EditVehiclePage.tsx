@@ -7,11 +7,10 @@ import PageHeader from "@/domains/global/components/PageHeader";
 import { BACKEND_URL } from "@/domains/global/constants";
 import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
-import { VehicleWithPayment } from "@/domains/global/types/model";
-import formatVehicleCharacteristics from "@/domains/global/utils/formatVehicleCharacteristics";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ReactNode, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import useGetVehicleInfo from "../hooks/useGetVehicleInfo";
 import { SchemaVehicleForm } from "../schemas";
 import { VehicleFormInputs } from "../types";
 import selectVehicleInfo from "../utils/selectVehicleInfo";
@@ -26,30 +25,9 @@ export default function EditVehiclePage({
   const queryClient = useQueryClient();
   const { vehicleId } = useParams();
 
-  async function getVehicle(): Promise<VehicleWithPayment> {
-    const response = await safeFetch(`${BACKEND_URL}/vehicles/${vehicleId}`, {
-      resource: "VEHICLES",
-      action: "READ",
-    });
-
-    const { payment, vehicleCharacteristicValues, ...vehicle } = response;
-
-    return {
-      payment,
-      vehicle: {
-        ...vehicle,
-        vehicleCharacteristicValues: formatVehicleCharacteristics({
-          vehicleCharacteristicValues,
-        }),
-      },
-    };
-  }
-
-  const { data: vehicleData, isFetching } = useQuery({
-    queryKey: ["vehicle", vehicleId],
-    queryFn: getVehicle,
+  const { data: vehicleData, isFetching } = useGetVehicleInfo({
     select: selectVehicleInfo,
-  });
+  })
 
   async function editVehicle({
     characteristics,

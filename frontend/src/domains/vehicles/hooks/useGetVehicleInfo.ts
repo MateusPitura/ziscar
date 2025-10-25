@@ -4,12 +4,14 @@ import { VehicleWithPayment } from "@/domains/global/types/model";
 import formatVehicleCharacteristics from "@/domains/global/utils/formatVehicleCharacteristics";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-import { VehicleFormInputs } from "../types";
-import selectVehicleInfo from "../utils/selectVehicleInfo";
 
-export default function useGetVehicleInfo(): UseQueryResult<
-  VehicleFormInputs & { purchaseValue: string }
-> {
+interface UseGetVehicleInfoProps<T> {
+  select: (data: VehicleWithPayment) => T;
+}
+
+export default function useGetVehicleInfo<T>({
+  select,
+}: UseGetVehicleInfoProps<T>): UseQueryResult<T> {
   const { vehicleId } = useParams();
   const { safeFetch } = useSafeFetch();
 
@@ -19,10 +21,10 @@ export default function useGetVehicleInfo(): UseQueryResult<
       action: "READ",
     });
 
-    const { vehicleCharacteristicValues, ...vehicle } = response;
+    const { payment, vehicleCharacteristicValues, ...vehicle } = response;
 
     return {
-      payment: null,
+      payment,
       vehicle: {
         ...vehicle,
         vehicleCharacteristicValues: formatVehicleCharacteristics({
@@ -35,6 +37,6 @@ export default function useGetVehicleInfo(): UseQueryResult<
   return useQuery({
     queryKey: ["vehicle", vehicleId],
     queryFn: getVehicleInfo,
-    select: selectVehicleInfo,
+    select,
   });
 }
