@@ -21,12 +21,3 @@ export const createAccountPayableInstallmentDTO = s.object({
   accountPayableId: s.id(),
   refundAccountPayableInstallmentId: s.id().nullable(),
 });
-
-export const updateAccountPayableInstallmentDTO = s.object({
-  installmentSequence: s.number().min(0),
-  dueDate: s.date(),
-  value: s.number().min(0),
-  status: s.nativeEnum(InstallmentStatus),
-  isRefund: s.boolean().default(false),
-  isUpfront: s.boolean().default(false),
-});

@@ -193,10 +193,12 @@ export class VehicleService implements VehicleRepository {
 
   async searchPaidTo(
     params: SearchPaidToRequestDto,
+    enterpriseId: number,
   ): Promise<SearchPaidToResponseDto> {
     const result = await this.prisma.accountPayable.findMany({
       where: {
         paidTo: { contains: params.paidTo, mode: 'insensitive' },
+        enterpriseId,
       },
       orderBy: { paidTo: 'asc' },
       select: {

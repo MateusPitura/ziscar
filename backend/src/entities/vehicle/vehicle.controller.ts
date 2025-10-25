@@ -85,8 +85,10 @@ export class VehicleController {
   @RoleGuard(Resources.VEHICLES, Actions.READ)
   async searchPaidTo(
     @Query() query: SearchPaidToRequestDto,
+    @Req() req: AuthRequest,
   ): Promise<SearchPaidToResponseDto> {
-    return this.searchPaidToVehicle.execute(query);
+    const { enterpriseId } = req.authToken;
+    return this.searchPaidToVehicle.execute(query, enterpriseId);
   }
 
   @Get('/model')

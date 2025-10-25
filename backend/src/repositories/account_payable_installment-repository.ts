@@ -2,7 +2,7 @@ import {
   AccountPayableInstallment,
   PaymentMethodPayableType,
 } from '@prisma/client';
-import { CreateInput, UpdateInput } from 'src/types';
+import { CreateInput } from 'src/types';
 
 export interface createPaymentMethodToInstallment {
   type: PaymentMethodPayableType;
@@ -15,19 +15,13 @@ export abstract class AccountPayableInstallmentRepository {
   abstract create(
     data: CreateInput<AccountPayableInstallment>,
   ): Promise<AccountPayableInstallment>;
-  abstract findById(id: string): Promise<AccountPayableInstallment | null>;
   abstract addPaymentMethodToInstallment(
     id: string,
     data: createPaymentMethodToInstallment,
+    enterpriseId: number,
   ): Promise<AccountPayableInstallment>;
-
   abstract findAllByAccountPayableId(
     accountPayableId: string,
+    enterpriseId: number,
   ): Promise<AccountPayableInstallment[]>;
-
-  abstract update(
-    id: string,
-    data: UpdateInput<AccountPayableInstallment>,
-  ): Promise<void>;
-  abstract delete(id: string): Promise<void>;
 }

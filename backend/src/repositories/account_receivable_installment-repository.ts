@@ -2,7 +2,7 @@ import {
   AccountReceivableInstallment,
   PaymentMethodReceivableType,
 } from '@prisma/client';
-import { CreateInput, UpdateInput } from 'src/types';
+import { CreateInput } from 'src/types';
 
 export interface createPaymentMethodToInstallment {
   type: PaymentMethodReceivableType;
@@ -28,17 +28,10 @@ export abstract class AccountReceivableInstallmentRepository {
   abstract addPaymentMethodToInstallment(
     installmentId: string,
     data: createPaymentMethodToInstallment,
+    enterpriseId: number,
   ): Promise<AccountReceivableInstallment>;
-  abstract findById(id: string): Promise<AccountReceivableInstallment | null>;
   abstract findAllByAccountReceivableId(
     accountReceivableId: string,
+    enterpriseId: number,
   ): Promise<AccountReceivableInstallmentPayload[]>;
-  abstract findPaymentMethodByInstallmentId(
-    installmentId: string,
-  ): Promise<AccountReceivableInstallment | null>;
-  abstract update(
-    id: string,
-    data: UpdateInput<AccountReceivableInstallment>,
-  ): Promise<void>;
-  abstract delete(id: string): Promise<void>;
 }

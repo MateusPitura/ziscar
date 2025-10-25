@@ -36,6 +36,7 @@ export abstract class VehicleRepository {
   ): Promise<SearchVehiclesResponseDto>;
   abstract searchPaidTo(
     params: SearchPaidToRequestDto,
+    enterpriseId: number,
   ): Promise<SearchPaidToResponseDto>;
   abstract searchModel(
     params: SearchModelRequestDto,

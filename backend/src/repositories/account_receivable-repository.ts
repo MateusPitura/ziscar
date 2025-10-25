@@ -1,22 +1,5 @@
 import { AccountReceivable } from '@prisma/client';
-import { CreateInput, UpdateInput } from 'src/types';
-
-export interface SearchRequest {
-  page: number;
-  limit: number;
-  startDate?: Date;
-  endDate?: Date;
-  overallStatus?: 'PAID' | 'PENDING';
-  orderBy?: string;
-}
-
-export interface SearchResponseItem {
-  id: number;
-  description: string;
-  receivedFrom: string;
-  totalValue: string;
-  overallStatus: 'PAID' | 'PENDING';
-}
+import { CreateInput } from 'src/types';
 
 export interface SearchResponse {
   total: number;
@@ -40,9 +23,15 @@ export abstract class AccountReceivableRepository {
   abstract create(
     data: CreateInput<AccountReceivable>,
   ): Promise<AccountReceivable>;
-  abstract findById(id: string): Promise<AccountReceivable | null>;
+
+  abstract findById(
+    id: string,
+    enterpriseId: number,
+  ): Promise<AccountReceivable | null>;
+
   abstract findByInstallmentId(
     installmentId: string,
+    enterpriseId: number,
   ): Promise<AccountReceivable | null>;
 
   abstract search(
@@ -51,13 +40,7 @@ export abstract class AccountReceivableRepository {
     limit: number,
     startDate: Date,
     endDate: Date,
+    enterpriseId: number,
     overallStatus: 'PENDING' | 'PAID',
-    totalValue: string,
   ): Promise<SearchResponse>;
-
-  abstract update(
-    id: string,
-    data: UpdateInput<AccountReceivable>,
-  ): Promise<void>;
-  abstract delete(id: string): Promise<void>;
 }
