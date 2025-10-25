@@ -62,6 +62,7 @@ export const VehicleCategoryText: Record<VehicleCategoryType, string> = {
   TRUCK: "Caminhão",
   BUS: "Ônibus",
   VAN: "Van",
+  PICKUP: "Caminhonete",
 };
 
 export const ExpenseCategoryText: Record<ExpenseCategoryType, string> = {

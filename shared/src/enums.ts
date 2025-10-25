@@ -34,6 +34,7 @@ export enum VehicleCategory {
   MOTORCYCLE = "MOTORCYCLE",
   BUS = "BUS",
   VAN = "VAN",
+  PICKUP = "PICKUP",
 }
 
 export enum FuelType {
@@ -125,7 +126,7 @@ export enum BrazilianState {
 export const ROLETYPE_VALUES = [RoleType.ADMIN, RoleType.SELLER] as const;
 export const RESOURCES_VALUES = [Resources.USERS, Resources.VEHICLES, Resources.STORES, Resources.VEHICLE_PURCHASE, Resources.VEHICLE_EXPENSE, Resources.VEHICLE_SALE, Resources.ACCOUNTS_PAYABLE, Resources.ACCOUNTS_RECEIVABLE, Resources.CUSTOMERS, Resources.REPORTS] as const;
 export const ACTIONS_VALUES = [Actions.CREATE, Actions.READ, Actions.UPDATE, Actions.DELETE] as const;
-export const VEHICLECATEGORY_VALUES = [VehicleCategory.TRUCK, VehicleCategory.CAR, VehicleCategory.MOTORCYCLE, VehicleCategory.BUS, VehicleCategory.VAN] as const;
+export const VEHICLECATEGORY_VALUES = [VehicleCategory.TRUCK, VehicleCategory.CAR, VehicleCategory.MOTORCYCLE, VehicleCategory.BUS, VehicleCategory.VAN, VehicleCategory.PICKUP] as const;
 export const FUELTYPE_VALUES = [FuelType.DIESEL, FuelType.ELECTRIC, FuelType.ETHANOL, FuelType.FLEX, FuelType.GASOLINE, FuelType.GNV, FuelType.HYBRID] as const;
 export const VEHICLESTATUS_VALUES = [VehicleStatus.PURCHASED, VehicleStatus.IN_STOCK, VehicleStatus.MAINTENANCE, VehicleStatus.SOLD] as const;
 export const EXPENSECATEGORY_VALUES = [ExpenseCategory.AGENCY_FEES, ExpenseCategory.FUEL, ExpenseCategory.FINE, ExpenseCategory.IPVA, ExpenseCategory.LICENSING, ExpenseCategory.LOGISTICS, ExpenseCategory.MAINTENANCE, ExpenseCategory.OTHER, ExpenseCategory.INSURANCE] as const;

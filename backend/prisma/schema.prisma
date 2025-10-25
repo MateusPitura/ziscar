@@ -138,7 +138,7 @@ model AccountPayable {
   vehicleExpenses            VehicleExpense[]
   vehicleSales               VehicleSale[]
   accountPayableInstallments AccountPayableInstallment[]
-  enterpriseId               Int?
+  enterpriseId               Int
 
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
@@ -227,7 +227,7 @@ model AccountReceivable {
   receivedFrom                  String?                        @db.VarChar(127)
   vehicleSales                  VehicleSale[]
   accountReceivableInstallments AccountReceivableInstallment[]
-  enterpriseId                  Int?
+  enterpriseId                  Int
 
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
@@ -361,6 +361,7 @@ enum VehicleCategory {
   MOTORCYCLE
   BUS
   VAN
+  PICKUP
 }
 
 enum FuelType {
