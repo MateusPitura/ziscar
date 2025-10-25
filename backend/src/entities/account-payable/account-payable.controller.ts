@@ -1,9 +1,11 @@
-import { Controller, Get, Param, Query, Req } from '@nestjs/common';
+import { Controller, Get, Param, Query, Req, UseGuards } from '@nestjs/common';
 import { QueryAccountReceivableDTO } from 'src/infra/dtos/account-receivable/query-account-receivable-dto';
 import { AuthRequest } from '../auth/auth.type';
 import { AccountPayableService } from './account-payable.service';
+import { AuthGuard } from '../auth/auth.guard';
 
 @Controller('account-payable')
+@UseGuards(AuthGuard)
 export class AccountPayableController {
   constructor(private readonly accountPayableService: AccountPayableService) {}
 

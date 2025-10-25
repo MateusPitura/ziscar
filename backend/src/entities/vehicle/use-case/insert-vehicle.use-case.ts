@@ -59,6 +59,7 @@ export class InsertVehicleUseCase {
         const createdAccountPayable = await this.accountPayableService.create({
           description,
           paidTo: payment.paidTo,
+          enterpriseId,
         });
 
         await this.createInstallments(

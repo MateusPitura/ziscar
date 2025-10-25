@@ -139,6 +139,7 @@ export class AccountReceivableService implements AccountReceivableRepository {
           accountReceivable: {
             createdAt: filter.createdAt,
             description: filter.description,
+            enterpriseId,
           },
         },
       });

@@ -119,6 +119,7 @@ export class AccountPayableService implements AccountPayableRepository {
           accountPayable: {
             createdAt: filter.createdAt,
             description: filter.description,
+            enterpriseId,
           },
         },
       },

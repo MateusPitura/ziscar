@@ -53,6 +53,7 @@ export class InsertExpenseUseCase {
       const accountPayable = await this.accountPayableService.create({
         description,
         paidTo,
+        enterpriseId,
       });
 
       await Promise.all(
