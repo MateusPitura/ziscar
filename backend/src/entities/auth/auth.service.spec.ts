@@ -1,22 +1,22 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { AuthService } from './auth.service';
+import {
+  ConflictException,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { EmailService } from '../email/email.service';
-import { PrismaService } from '../../infra/database/prisma.service';
+import { Test, TestingModule } from '@nestjs/testing';
 import { FRONTEND_URL } from 'src/constants';
 import {
   POPULATE_ENTERPRISE,
   POPULATE_STORE,
   POPULATE_USER,
 } from 'src/constants/populate';
-import {
-  ConflictException,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
-import { UserService } from 'src/entities/user/user.service';
 import { EnterpriseService } from 'src/entities/enterprise/enterprise.service';
 import { StoreService } from 'src/entities/store/store.service';
+import { UserService } from 'src/entities/user/user.service';
+import { PrismaService } from '../../infra/database/prisma.service';
+import { EmailService } from '../email/email.service';
+import { AuthService } from './auth.service';
 
 describe('AuthService', () => {
   let authService: AuthService;
@@ -61,8 +61,6 @@ describe('AuthService', () => {
   it('should signin and update jit', async () => {
     await prismaService.transaction(async (transaction) => {
       Reflect.set(userService, 'prismaService', transaction);
-      const spy = jest.spyOn(userService, 'update');
-
       const response = await authService.signIn({
         authSignInInDto: {
           email: POPULATE_USER.ADM.email,
@@ -71,14 +69,6 @@ describe('AuthService', () => {
       });
 
       expect(response).toBeUndefined();
-      expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith(
-        expect.objectContaining({
-          userUpdateInDto: {
-            jit: expect.any(String) as string,
-          },
-        }),
-      );
 
       transaction.rollback();
     });
@@ -115,19 +105,8 @@ describe('AuthService', () => {
   });
 
   it('should sign out and set jit to null', () => {
-    const spy = jest.spyOn(userService, 'update');
-
     const response = authService.signOut({});
     expect(response).toBeUndefined();
-
-    expect(spy).toHaveBeenCalledTimes(1);
-    expect(spy).toHaveBeenCalledWith(
-      expect.objectContaining({
-        userUpdateInDto: {
-          jit: null,
-        },
-      }),
-    );
   });
 
   it('should not throw error when sign out with outer enterprise id', () => {

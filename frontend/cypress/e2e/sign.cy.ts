@@ -19,8 +19,8 @@ describe("Sign", () => {
     cy.get('[data-cy="button-/vehicles"]').should("exist");
     cy.get('[data-cy="button-/profile"]').should("exist");
     cy.get('[data-cy="button-/customers"]').should("exist");
+    cy.get('[data-cy="button-/stores"]').should("exist");
   
-    cy.get('[data-cy="button-/stores"]').should("not.exist");
     cy.get('[data-cy="button-/accounts-payable"]').should("not.exist");
     cy.get('[data-cy="button-/accounts-receivable"]').should("not.exist");
     cy.get('[data-cy="button-/users"]').should("not.exist");
@@ -35,12 +35,12 @@ describe("Sign", () => {
 
     cy.url().should("include", "/vehicles");
 
-    cy.visit("/stores");
+    cy.visit("/users");
 
     cy.get('[data-cy="snackbar-title"]').should("contain", "Ocorreu um erro");
     cy.get('[data-cy="snackbar-description"]').should(
       "contain",
-      "Você não pode visualizar lojas"
+      "Você não pode visualizar usuários"
     );
 
     cy.url().should("include", "/");
@@ -61,7 +61,7 @@ describe("Sign", () => {
     cy.url().should("include", "/");
   });
 
-  it.only("should warn if not fill one field on sign in", () => {
+  it("should warn if not fill one field on sign in", () => {
     cy.visit("/");
 
     cy.get('input[name="email"]').type("john.doe@email.com");

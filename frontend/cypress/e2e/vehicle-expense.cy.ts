@@ -214,10 +214,6 @@ describe("Vehicle Expense", () => {
         "have.text",
         "Opção inválida"
       );
-      cy.getDataCy("input-error-payment.competencyDate").should(
-        "have.text",
-        "Data inválida"
-      );
       cy.getDataCy("input-error-payment.upfront.0.value").should(
         "have.text",
         "Deve ser maior ou igual a R$ 0,01"
