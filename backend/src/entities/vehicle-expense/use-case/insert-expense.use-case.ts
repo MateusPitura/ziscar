@@ -10,6 +10,7 @@ import {
   InsertVehicleExpenseResponseDto,
 } from '../dtos';
 import { max } from 'date-fns';
+import { VehicleService } from 'src/entities/vehicle/vehicle.service';
 
 @Injectable()
 export class InsertExpenseUseCase {
@@ -19,11 +20,13 @@ export class InsertExpenseUseCase {
     private accountPayableInstallmentService: AccountPayableInstallmentService,
     private paymentMethodPayableService: PaymentMethodPayableService,
     private vehicleExpenseService: VehicleExpenseService,
+    private vehicleService: VehicleService,
   ) {}
 
   async execute(
     input: InsertVehicleExpenseRequestDto,
     userId: number,
+    enterpriseId: number,
   ): Promise<InsertVehicleExpenseResponseDto> {
     const {
       category,
@@ -34,6 +37,16 @@ export class InsertExpenseUseCase {
       competencyDate,
       installments,
     } = input;
+
+    const vehicleBeforeUpdate = await this.vehicleService.findById(
+      Number(vehicleId),
+      enterpriseId,
+    );
+
+    if (!vehicleBeforeUpdate) {
+      throw new Error('Vehicle not found');
+    }
+
     let vehicleExpenseId: number;
 
     await this.prisma.transaction(async () => {

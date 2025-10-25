@@ -8,6 +8,7 @@ import UpfrontForm from "@/domains/global/forms/UpfrontForm";
 import { ActionsType, ResourcesType } from "@shared/enums";
 import type { ReactNode } from "react";
 import VehicleExpenseHeader from "../components/VehicleExpenseHeader";
+import useGetVehicleInfo from "../hooks/useGetVehicleInfo";
 import { SchemaVehicleExpenseForm } from "../schemas";
 import { VehicleExpenseFormInputs } from "../types";
 import VehicleExpenseDetailsForm from "./VehicleExpenseDetailsForm";
@@ -32,8 +33,10 @@ export default function ExpenseForm({
   resource,
   action,
   onClose,
-  contextHelper
+  contextHelper,
 }: ExpenseFormProperties): ReactNode {
+  const { data } = useGetVehicleInfo();
+
   return (
     <div className="flex flex-col gap-4 w-full">
       <Form<VehicleExpenseFormInputs>
@@ -43,7 +46,11 @@ export default function ExpenseForm({
         className="gap-4 flex flex-col flex-1"
         onlyDirty={isEdit}
       >
-        <VehicleExpenseHeader title={headerTitle} contextHelper={contextHelper}/>
+        <VehicleExpenseHeader
+          title={headerTitle}
+          contextHelper={contextHelper}
+          plateNumber={data?.vehicle.plateNumber}
+        />
         <div className="flex justify-center flex-1">
           <Section>
             <Section.Group>

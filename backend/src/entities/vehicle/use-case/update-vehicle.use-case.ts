@@ -15,8 +15,18 @@ export class UpdateVehicleUseCase {
   async execute(
     id: string,
     data: UpdateVehicleRequestDto,
+    enterpriseId: number,
   ): Promise<UpdateVehicleResponseDto> {
     const { characteristics, payment, ...vehicleData } = data;
+
+    const vehicleBeforeUpdate = await this.vehicleRepository.findById(
+      Number(id),
+      enterpriseId,
+    );
+
+    if (!vehicleBeforeUpdate) {
+      throw new Error('Vehicle not found');
+    }
 
     await this.validateVehicleUniqueFieldsUseCase.execute({
       chassiNumber: vehicleData.chassiNumber,
@@ -37,13 +47,16 @@ export class UpdateVehicleUseCase {
       await this.vehicleRepository.updateVehiclePayment(id, payment);
     }
 
-    const updatedVehicle = await this.vehicleRepository.findById(Number(id));
+    const vehicleAfterUpdate = await this.vehicleRepository.findById(
+      Number(id),
+      enterpriseId,
+    );
 
     return {
-      ...updatedVehicle!,
-      category: updatedVehicle!.category as VehicleCategory,
-      status: updatedVehicle!.status as VehicleStatus,
-      fuelType: updatedVehicle!.fuelType as FuelType | null,
+      ...vehicleAfterUpdate!,
+      category: vehicleAfterUpdate!.category as VehicleCategory,
+      status: vehicleAfterUpdate!.status as VehicleStatus,
+      fuelType: vehicleAfterUpdate!.fuelType as FuelType | null,
     };
   }
 }

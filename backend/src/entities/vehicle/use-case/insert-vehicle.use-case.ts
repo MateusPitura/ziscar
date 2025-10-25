@@ -8,6 +8,7 @@ import { PrismaService } from 'src/infra/database/prisma.service';
 import { InsertVehicleRequestDto, InsertVehicleResponseDto } from '../dtos';
 import { VehicleService } from '../vehicle.service';
 import { ValidateVehicleUniqueFieldsUseCase } from './validate-vehicle-unique-fields.use-case';
+import { StoreService } from 'src/entities/store/store.service';
 
 @Injectable()
 export class InsertVehicleUseCase {
@@ -18,13 +19,21 @@ export class InsertVehicleUseCase {
     private readonly paymentMethodPayableService: PaymentMethodPayableService,
     private readonly validateVehicleUniqueFieldsUseCase: ValidateVehicleUniqueFieldsUseCase,
     private readonly prisma: PrismaService,
+    private readonly storeService: StoreService,
   ) {}
 
   async execute(
     input: InsertVehicleRequestDto,
     userId: number,
+    enterpriseId: number,
   ): Promise<InsertVehicleResponseDto> {
     const { characteristics, payment, ...vehicleInputData } = input;
+
+    await this.storeService.findOne({
+      select: { id: true },
+      enterpriseId,
+      where: { id: vehicleInputData.storeId },
+    });
 
     await this.validateVehicleUniqueFieldsUseCase.execute({
       chassiNumber: vehicleInputData.chassiNumber,

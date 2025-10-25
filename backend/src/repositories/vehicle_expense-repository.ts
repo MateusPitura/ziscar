@@ -19,9 +19,11 @@ export abstract class VehicleExpenseRepository {
   abstract delete(id: string): Promise<void>;
   abstract fetchVehicleExpenses(
     vehicleId: string,
+    enterpriseId: number,
   ): Promise<GetVehicleExpensesOutDto[]>;
   abstract getVehicleExpenseById(
     expenseId: string,
+    enterpriseId: number,
   ): Promise<GetVehicleExpenseByIdOutDto | null>;
   abstract updateVehicleExpense(
     expenseId: string,

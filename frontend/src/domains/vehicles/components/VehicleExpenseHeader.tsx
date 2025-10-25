@@ -1,60 +1,27 @@
 import Button from "@/design-system/Button";
 import { ContextHelperable } from "@/domains/contextHelpers/types";
 import PageHeader from "@/domains/global/components/PageHeader";
-import { BACKEND_URL } from "@/domains/global/constants";
-import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
-import { VehicleWithPayment } from "@/domains/global/types/model";
-import formatVehicleCharacteristics from "@/domains/global/utils/formatVehicleCharacteristics";
-import { useQuery } from "@tanstack/react-query";
 import type { ReactNode } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import selectVehicleInfo from "../utils/selectVehicleInfo";
+import { useLocation, useNavigate } from "react-router-dom";
 
 interface VehicleExpenseHeaderProps extends ContextHelperable {
   title: string;
   showActions?: boolean;
+  plateNumber?: string;
 }
 
 export default function VehicleExpenseHeader({
   title,
   showActions,
-  contextHelper
+  contextHelper,
+  plateNumber,
 }: VehicleExpenseHeaderProps): ReactNode {
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const { vehicleId } = useParams();
-  const { safeFetch } = useSafeFetch();
-
-  async function getVehicleInfo(): Promise<VehicleWithPayment> {
-    const response = await safeFetch(`${BACKEND_URL}/vehicles/${vehicleId}`, {
-      resource: "VEHICLES",
-      action: "READ",
-    });
-
-    const { vehicleCharacteristicValues, ...vehicle } = response;
-
-    return {
-      payment: null,
-      vehicle: {
-        ...vehicle,
-        vehicleCharacteristicValues: formatVehicleCharacteristics({
-          vehicleCharacteristicValues,
-        }),
-      },
-    };
-  }
-
-  const { data } = useQuery({
-    queryKey: ["vehicle", vehicleId],
-    queryFn: getVehicleInfo,
-    select: selectVehicleInfo,
-  });
 
   return (
     <PageHeader
-      title={
-        data?.vehicle.plateNumber ? `${title} "${data.vehicle.plateNumber}"` : title
-      }
+      title={plateNumber ? `${title} "${plateNumber}"` : title}
       contextHelper={contextHelper}
     >
       {showActions && (

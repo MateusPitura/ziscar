@@ -6,9 +6,14 @@ import { VehicleExpenseService } from '../vehicle-expense.service';
 export class ArchiveVehicleExpenseUseCase {
   constructor(private readonly vehicleExpenseService: VehicleExpenseService) {}
 
-  async execute(expenseId: string): Promise<ArchiveVehicleExpenseResponseDto> {
-    const expense =
-      await this.vehicleExpenseService.getVehicleExpenseById(expenseId);
+  async execute(
+    expenseId: string,
+    enterpriseId: number,
+  ): Promise<ArchiveVehicleExpenseResponseDto> {
+    const expense = await this.vehicleExpenseService.getVehicleExpenseById(
+      expenseId,
+      enterpriseId,
+    );
     if (!expense) {
       throw new NotFoundException('Vehicle expense not found');
     }

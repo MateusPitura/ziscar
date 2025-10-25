@@ -7,9 +7,15 @@ import { VehicleExpenseService } from '../vehicle-expense.service';
 export class FetchVehicleExpensesUseCase {
   constructor(private readonly vehicleExpenseService: VehicleExpenseService) {}
 
-  async execute(vehicleId: string): Promise<VehicleExpenseResponseDto[]> {
+  async execute(
+    vehicleId: string,
+    enterpriseId: number,
+  ): Promise<VehicleExpenseResponseDto[]> {
     const expensesResult =
-      await this.vehicleExpenseService.fetchVehicleExpenses(vehicleId);
+      await this.vehicleExpenseService.fetchVehicleExpenses(
+        vehicleId,
+        enterpriseId,
+      );
 
     if (!expensesResult.length) return [];
 

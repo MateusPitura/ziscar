@@ -35,9 +35,17 @@ export class VehicleExpenseService implements VehicleExpenseRepository {
 
   async fetchVehicleExpenses(
     vehicleId: string,
+    enterpriseId: number,
   ): Promise<GetVehicleExpensesOutDto[]> {
     return await this.prisma.vehicleExpense.findMany({
-      where: { vehicleId: Number(vehicleId) },
+      where: {
+        vehicle: {
+          id: Number(vehicleId),
+          store: {
+            enterpriseId,
+          },
+        },
+      },
       select: VEHICLE_EXPENSE_SELECT,
       orderBy: { competencyDate: 'desc' },
     });
@@ -45,9 +53,10 @@ export class VehicleExpenseService implements VehicleExpenseRepository {
 
   async getVehicleExpenseById(
     expenseId: string,
+    enterpriseId: number,
   ): Promise<GetVehicleExpenseByIdOutDto | null> {
     return await this.prisma.vehicleExpense.findUnique({
-      where: { id: Number(expenseId) },
+      where: { id: Number(expenseId), vehicle: { store: { enterpriseId } } },
       select: VEHICLE_EXPENSE_WITH_VEHICLE_SELECT,
     });
   }

@@ -7,9 +7,15 @@ import { VehicleExpenseService } from '../vehicle-expense.service';
 export class GetVehicleExpenseByIdUseCase {
   constructor(private readonly vehicleExpenseService: VehicleExpenseService) {}
 
-  async execute(expenseId: string): Promise<VehicleExpenseResponseDto> {
+  async execute(
+    expenseId: string,
+    enterpriseId: number,
+  ): Promise<VehicleExpenseResponseDto> {
     const expenseResult =
-      await this.vehicleExpenseService.getVehicleExpenseById(expenseId);
+      await this.vehicleExpenseService.getVehicleExpenseById(
+        expenseId,
+        enterpriseId,
+      );
 
     if (!expenseResult) throw new NotFoundException('Expense not found');
 

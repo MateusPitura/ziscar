@@ -19,7 +19,10 @@ export type GetVehicleWithPaymentOutDto = Prisma.VehicleGetPayload<{
 @Injectable()
 export abstract class VehicleRepository {
   abstract create(data: CreateInput<Vehicle>): Promise<Vehicle>;
-  abstract findById(id: number): Promise<GetVehicleWithPaymentOutDto | null>;
+  abstract findById(
+    id: number,
+    enterpriseId: number,
+  ): Promise<GetVehicleWithPaymentOutDto | null>;
   abstract findByChassiNumber(chassiNumber: string): Promise<Vehicle | null>;
   abstract findByPlateNumber(plateNumber: string): Promise<Vehicle | null>;
   abstract update(
@@ -29,12 +32,14 @@ export abstract class VehicleRepository {
   abstract fetchBrands(): Promise<FetchVehicleBrandsResponseDto>;
   abstract search(
     params: SearchVehiclesRequestDto,
+    enterpriseId: number,
   ): Promise<SearchVehiclesResponseDto>;
   abstract searchPaidTo(
     params: SearchPaidToRequestDto,
   ): Promise<SearchPaidToResponseDto>;
   abstract searchModel(
     params: SearchModelRequestDto,
+    enterpriseId: number,
   ): Promise<SearchModelResponseDto>;
   abstract insertCharacteristics(
     vehicleId: number,
@@ -44,9 +49,13 @@ export abstract class VehicleRepository {
     vehicleId: number,
     characteristics: string[],
   ): Promise<void>;
-  abstract getVehicleSale(vehicleSaleId: string): Promise<VehicleSale | null>;
+  abstract getVehicleSale(
+    vehicleSaleId: string,
+    enterpriseId: number,
+  ): Promise<VehicleSale | null>;
   abstract getVehicleWithPayment(
     vehicleId: string,
+    enterpriseId: number,
   ): Promise<GetVehicleWithPaymentOutDto | null>;
   abstract createPurchase(
     data: CreateInput<VehiclePurchase>,

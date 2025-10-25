@@ -13,11 +13,15 @@ export class UpdateVehicleExpenseUseCase {
   async execute(
     expenseId: string,
     input: UpdateVehicleExpenseRequestDto,
+    enterpriseId: number,
   ): Promise<VehicleExpenseResponseDto> {
     await this.vehicleExpenseService.updateVehicleExpense(expenseId, input);
 
     const updatedExpense =
-      await this.vehicleExpenseService.getVehicleExpenseById(expenseId);
+      await this.vehicleExpenseService.getVehicleExpenseById(
+        expenseId,
+        enterpriseId,
+      );
 
     if (!updatedExpense) throw new Error('Expense not found after update');
 

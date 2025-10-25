@@ -11,10 +11,11 @@ export class UnarchiveVehicleUseCase {
 
   async execute(
     input: UnarchiveVehicleRequestDto,
+    enterpriseId: number,
   ): Promise<UnarchiveVehicleResponseDto> {
     const { id } = input;
 
-    const vehicle = await this.vehicleService.findById(id);
+    const vehicle = await this.vehicleService.findById(id, enterpriseId);
     if (!vehicle) {
       throw new NotFoundException('Vehicle not found');
     }
