@@ -20,7 +20,14 @@ ACTIVE_SESSION=$(oci bastion session list \
     --bastion-id "$BASTION_OCID" \
     --session-lifecycle-state ACTIVE \
     --all \
-    --output json | jq -r --arg DATABASE_OCID "$DATABASE_OCID" '.data[] | select(.["target-resource-details"].["target-resource-id"] == $DATABASE_OCID) | @json' | head -n 1)
+    --output json |
+    jq -r --arg DATABASE_OCID "$DATABASE_OCID" '
+        .data[] 
+        | select(.["target-resource-details"].["session-type"] == "PORT_FORWARDING") 
+        | select(.["target-resource-details"].["target-resource-id"] == $DATABASE_OCID) 
+        | @json
+    ' | head -n 1
+)
 
 if [[ -n "$ACTIVE_SESSION" ]]; then
     SESSION_ID=$(echo "$ACTIVE_SESSION" | jq -r '.id')
