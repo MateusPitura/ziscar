@@ -1,0 +1,1 @@
+import{c as r}from"./index-8LNUc8ZP.js";import{x as s,y as t,O as m,L as o,M as n,P as c,E as a,H as e,A as i,N as l,J as f}from"./schemas-CZyi_FYc.js";const d=s({fullName:l().or(a()),status:i(["active","inactive"]),startDate:e().or(a()),endDate:e().or(a())}).refine(...f),h=s({fullName:c(),email:n().or(a()),phone:o().or(a()),cpf:m(),address:t(r).max(1)});export{d as S,h as a};
