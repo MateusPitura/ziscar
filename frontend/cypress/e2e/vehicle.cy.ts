@@ -705,7 +705,7 @@ describe("vehicle", () => {
           expect(req.body.commissionValue).to.equal("000");
           expect(req.body.modelName).to.equal("Corsa");
           expect(req.body.kilometers).to.equal("10000");
-          expect(req.body.characteristics[0]).to.equal("Janelas elétricas");
+          expect(req.body.characteristics[0]).to.equal("Vidros elétricos");
         }
       ).as("editVehicle");
 

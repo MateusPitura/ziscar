@@ -162,13 +162,13 @@ export const vehicleExpenseDefaultValues: VehicleExpenseFormInputs = {
 };
 
 export const defaultCommonCharacteristics = [
-  "Direção hidráulica",
-  "Vidros elétricos",
-  "Ar condicionado",
-  "Travas elétricas",
-  "Câmera de ré",
   "Air bag",
+  "Ar condicionado",
+  "Câmera de ré",
+  "Direção hidráulica",
   "Rodas de liga leve",
+  "Travas elétricas",
+  "Vidros elétricos",
 ];
 
 export const VEHICLES_TABLE = {
