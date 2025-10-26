@@ -6,7 +6,10 @@ import { SearchVehiclesRequestDto, SearchVehiclesResponseDto } from '../dtos';
 export class SearchVehiclesUseCase {
   constructor(private readonly vehicleService: VehicleService) {}
 
-  execute(input: SearchVehiclesRequestDto): Promise<SearchVehiclesResponseDto> {
-    return this.vehicleService.search(input);
+  execute(
+    input: SearchVehiclesRequestDto,
+    enterpriseId: number,
+  ): Promise<SearchVehiclesResponseDto> {
+    return this.vehicleService.search(input, enterpriseId);
   }
 }

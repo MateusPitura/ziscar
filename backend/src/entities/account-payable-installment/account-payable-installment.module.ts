@@ -4,15 +4,8 @@ import { AccountPayableInstallmentService } from './account-payable-installment.
 import { Module } from '@nestjs/common';
 import { AccountPayableInstallmentController } from './account-payable-installment.controller';
 import { UserModule } from '../user/user.module';
-import { JwtModule } from '@nestjs/jwt';
 @Module({
-  imports: [
-    UserModule, // <-- Adicionar UserModule
-    JwtModule.register({
-      secret: process.env.JWT_SECRET || 'your-secret',
-      signOptions: { expiresIn: '1h' },
-    }),
-  ],
+  imports: [UserModule],
   providers: [
     PrismaService,
     {

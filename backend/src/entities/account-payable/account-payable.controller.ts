@@ -1,51 +1,38 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  Put,
-  Query,
-} from '@nestjs/common';
-import { AccountPayableService } from './account-payable.service';
-import { CreateAccountPayableDTO } from 'src/infra/dtos/account-payable/create-account-payable.dto';
-import { UpdateAccountPayableDTO } from 'src/infra/dtos/account-payable/update-account-payable.dto';
+import { Controller, Get, Param, Query, Req, UseGuards } from '@nestjs/common';
 import { QueryAccountReceivableDTO } from 'src/infra/dtos/account-receivable/query-account-receivable-dto';
+import { AuthRequest } from '../auth/auth.type';
+import { AccountPayableService } from './account-payable.service';
+import { AuthGuard } from '../auth/auth.guard';
+import { RoleGuard } from '../auth/role.guard';
+import { Actions, Resources } from '@prisma/client';
 
 @Controller('account-payable')
+@UseGuards(AuthGuard)
 export class AccountPayableController {
   constructor(private readonly accountPayableService: AccountPayableService) {}
 
-  @Post('/')
-  async create(@Body() body: CreateAccountPayableDTO) {
-    return this.accountPayableService.create(body);
-  }
-
   @Get('search')
-  async searchAccountsPayable(@Query() query: QueryAccountReceivableDTO) {
+  @RoleGuard(Resources.ACCOUNTS_PAYABLE, Actions.READ)
+  async searchAccountsPayable(
+    @Query() query: QueryAccountReceivableDTO,
+    @Req() req: AuthRequest,
+  ) {
+    const { enterpriseId } = req.authToken;
     return this.accountPayableService.search(
       query.description ?? '',
       query.page,
       query.limit,
       query.startDate ? new Date(query.startDate) : new Date('1970-01-01'),
       query.endDate ? new Date(query.endDate) : new Date(),
+      enterpriseId,
       query.overallStatus,
     );
   }
 
   @Get('/:id')
-  async findById(@Param('id') id: string) {
-    return this.accountPayableService.findById(id);
-  }
-
-  @Put('/:id')
-  async update(@Param('id') id: string, @Body() body: UpdateAccountPayableDTO) {
-    return this.accountPayableService.update(id, body);
-  }
-
-  @Delete('/:id')
-  async delete(@Param('id') id: string) {
-    return this.accountPayableService.delete(id);
+  @RoleGuard(Resources.ACCOUNTS_PAYABLE, Actions.READ)
+  async findById(@Param('id') id: string, @Req() req: AuthRequest) {
+    const { enterpriseId } = req.authToken;
+    return this.accountPayableService.findById(id, enterpriseId);
   }
 }

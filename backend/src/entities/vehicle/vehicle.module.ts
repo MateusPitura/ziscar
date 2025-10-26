@@ -23,6 +23,7 @@ import { UpdateVehicleUseCase } from './use-case/update-vehicle.use-case';
 import { ValidateVehicleUniqueFieldsUseCase } from './use-case/validate-vehicle-unique-fields.use-case';
 import { VehicleController } from './vehicle.controller';
 import { VehicleService } from './vehicle.service';
+import { StoreModule } from '../store/store.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { VehicleService } from './vehicle.service';
     AccountReceivableInstallmentModule,
     PaymentMethodReceivableModule,
     CustomerModule,
+    StoreModule,
   ],
   controllers: [VehicleController],
   providers: [

@@ -1,17 +1,18 @@
 import { useEffect, useState, type ReactElement } from "react";
 import { SketchPicker } from "react-color";
 import {
-  Controller,
   FieldValues,
   Path,
+  useController,
   useFormContext,
-  useWatch,
 } from "react-hook-form";
 import Button from "./Button";
 import ColorPreview from "./ColorPreview";
+import Command from "./Form/Command";
 import InputError from "./Form/InputError";
 import InputLabel from "./Form/InputLabel";
 import { Popover } from "./Popover";
+import { colors } from "./constants/colors";
 
 interface ColorPickerProperties<T extends FieldValues> {
   name: Path<T>;
@@ -28,12 +29,16 @@ export default function ColorPicker<T extends FieldValues>({
   required,
   hideErrorLabel,
 }: ColorPickerProperties<T>): ReactElement {
-  const { control } = useFormContext<T>();
+  const { control, register } = useFormContext<T>();
   const [isOpen, setIsOpen] = useState(false);
+  const [addColor, setAddColor] = useState(false);
 
-  const watch = useWatch({
+  const { field } = useController({
     name,
+    control,
   });
+
+  const selectedValue = field.value;
 
   useEffect(() => {
     if (disabled) {
@@ -44,13 +49,19 @@ export default function ColorPicker<T extends FieldValues>({
   return (
     <label className="flex flex-col">
       <InputLabel label={label} required={required} />
-      <Popover open={isOpen} onOpenChange={setIsOpen}>
+      <Popover
+        open={isOpen}
+        onOpenChange={(state) => {
+          setIsOpen(state);
+          if (!state) setAddColor(false);
+        }}
+      >
         <Popover.Trigger asChild>
           <Button
             label={
-              watch ? (
+              selectedValue ? (
                 <div className="flex items-center">
-                  <ColorPreview color={watch} />
+                  <ColorPreview color={selectedValue} />
                 </div>
               ) : (
                 "Selecione uma cor"
@@ -64,28 +75,46 @@ export default function ColorPicker<T extends FieldValues>({
           />
         </Popover.Trigger>
         <Popover.Content className="!p-0 w-fit" align="start">
-          <Controller
-            name={name}
-            control={control}
-            render={({ field }) => (
-              <SketchPicker
-                color={field.value}
-                onChange={(color) => field.onChange(color.hex.replace("#", ""))}
-                disableAlpha
-                presetColors={[
-                  "#FFFFFF",
-                  "#C0C0C0",
-                  "#808080",
-                  "#000000",
-                  "#C00000",
-                  "#0033A0",
-                  "#D8CAB8",
-                  "#4B3621",
-                  "#800020",
-                ]}
-              />
-            )}
-          />
+          {addColor ? (
+            <SketchPicker
+              color={field.value}
+              onChange={(color) => field.onChange(color.hex.replace("#", ""))}
+              disableAlpha
+              presetColors={[]}
+            />
+          ) : (
+            <Command
+              options={colors}
+              onChange={(value) => {
+                if (value === selectedValue) {
+                  field.onChange("");
+                } else {
+                  field.onChange(value);
+                }
+                setIsOpen(false);
+              }}
+              customLabel={(option) => (
+                <div className="flex items-center gap-1">
+                  <ColorPreview color={option.value} className="!h-3 w-6"/>
+                  {option.label}
+                </div>
+              )}
+              register={register}
+              name={name}
+              showSearch
+              selectedValue={selectedValue}
+              onSearchChange={() => field.onChange("")}
+              notFound={
+                <Button
+                  className="justify-self-center"
+                  variant="quaternary"
+                  tooltipMessage="Adicionar cor"
+                  label="Adicionar cor"
+                  onClick={() => setAddColor(true)}
+                />
+              }
+            />
+          )}
         </Popover.Content>
       </Popover>
       {hideErrorLabel || <InputError name={name} required={required} />}

@@ -11,11 +11,6 @@ export const createAccountReceivableDTO = s.object({
   receivedFrom: s.string(),
 });
 
-export const updateAccountReceivableDTO = s.object({
-  description: s.string(),
-  receivedFrom: s.string(),
-});
-
 export const queryAccountReceivableDTO = s.object({
   description: s.string().optional(),
   page: s
@@ -43,15 +38,6 @@ export const createAccountReceivableInstallmentDTO = s.object({
   isUpfront: s.boolean().default(false),
   accountReceivableId: s.id(),
   refundAccountReceivableInstallmentId: s.id().nullable(),
-});
-
-export const updateAccountReceivableInstallmentDTO = s.object({
-  installmentSequence: s.number().min(0),
-  dueDate: s.date(),
-  value: s.number().min(0),
-  status: s.nativeEnum(InstallmentStatus),
-  isRefund: s.boolean().default(false),
-  isUpfront: s.boolean().default(false),
 });
 
 export const createPaymentMethodToInstallmentDTO = s.object({

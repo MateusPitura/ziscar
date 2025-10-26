@@ -9,9 +9,14 @@ export class GetVehicleSaleUseCase {
     private readonly vehicleRepository: VehicleRepository,
   ) {}
 
-  async execute(vehicleSaleId: string): Promise<VehicleSaleResponseDto> {
-    const saleResult =
-      await this.vehicleRepository.getVehicleSale(vehicleSaleId);
+  async execute(
+    vehicleSaleId: string,
+    enterpriseId: number,
+  ): Promise<VehicleSaleResponseDto> {
+    const saleResult = await this.vehicleRepository.getVehicleSale(
+      vehicleSaleId,
+      enterpriseId,
+    );
 
     if (!saleResult) throw new NotFoundException('Vehicle sale not found');
 

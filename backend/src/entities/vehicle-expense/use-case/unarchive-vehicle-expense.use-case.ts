@@ -8,9 +8,13 @@ export class UnarchiveVehicleExpenseUseCase {
 
   async execute(
     expenseId: string,
+    enterpriseId: number,
   ): Promise<UnarchiveVehicleExpenseResponseDto> {
-    const expense =
-      await this.vehicleExpenseService.getVehicleExpenseById(expenseId);
+    const expense = await this.vehicleExpenseService.getVehicleExpenseById(
+      expenseId,
+      enterpriseId,
+    );
+
     if (!expense) {
       throw new NotFoundException('Vehicle expense not found');
     }

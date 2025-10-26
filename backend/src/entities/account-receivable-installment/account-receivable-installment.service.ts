@@ -10,7 +10,7 @@ import {
   AccountReceivableInstallmentRepository,
   createPaymentMethodToInstallment,
 } from 'src/repositories/account_receivable_installment-repository';
-import { CreateInput, UpdateInput } from 'src/types';
+import { CreateInput } from 'src/types';
 
 @Injectable()
 export class AccountReceivableInstallmentService
@@ -27,10 +27,14 @@ export class AccountReceivableInstallmentService
   async addPaymentMethodToInstallment(
     installmentId: string,
     data: createPaymentMethodToInstallment,
+    enterpriseId: number,
   ): Promise<AccountReceivableInstallment> {
     const installment =
       await this.prisma.accountReceivableInstallment.findUnique({
         where: {
+          accountReceivable: {
+            enterpriseId,
+          },
           id: Number(installmentId),
         },
         include: {
@@ -57,6 +61,9 @@ export class AccountReceivableInstallmentService
       await this.prisma.accountReceivableInstallment.update({
         where: {
           id: Number(installmentId),
+          accountReceivable: {
+            enterpriseId,
+          },
         },
         data: {
           status: 'PAID',
@@ -77,48 +84,17 @@ export class AccountReceivableInstallmentService
     return updatedInstallment;
   }
 
-  async findById(id: string): Promise<AccountReceivableInstallment | null> {
-    const installment =
-      await this.prisma.accountReceivableInstallment.findUnique({
-        where: { id: Number(id) },
-      });
-
-    if (!installment) {
-      throw new NotFoundException('Parcela a receber não encontrada');
-    }
-
-    return installment;
-  }
-
-  async findPaymentMethodByInstallmentId(
-    installmentId: string,
-  ): Promise<AccountReceivableInstallment | null> {
-    const installment =
-      await this.prisma.accountReceivableInstallment.findUnique({
-        where: { id: Number(installmentId) },
-        include: {
-          paymentMethodReceivables: {
-            select: {
-              id: true,
-              paymentDate: true,
-              type: true,
-            },
-          },
-        },
-      });
-
-    if (!installment) {
-      throw new NotFoundException('Parcela a receber não encontrada');
-    }
-
-    return installment;
-  }
-
-  async findAllByAccountReceivableId(accountReceivableId: string) {
+  async findAllByAccountReceivableId(
+    accountReceivableId: string,
+    enterpriseId: number,
+  ) {
     const installments =
       await this.prisma.accountReceivableInstallment.findMany({
         where: {
-          accountReceivableId: Number(accountReceivableId),
+          accountReceivable: {
+            enterpriseId,
+            id: Number(accountReceivableId),
+          },
         },
         include: {
           paymentMethodReceivables: true,
@@ -144,21 +120,5 @@ export class AccountReceivableInstallmentService
       isUpfront: i.isUpfront,
       paymentMethodReceivables: i.paymentMethodReceivables,
     }));
-  }
-
-  async update(
-    id: string,
-    data: UpdateInput<AccountReceivableInstallment>,
-  ): Promise<void> {
-    await this.prisma.accountReceivableInstallment.update({
-      where: { id: Number(id) },
-      data,
-    });
-  }
-
-  async delete(id: string): Promise<void> {
-    await this.prisma.accountReceivableInstallment.delete({
-      where: { id: Number(id) },
-    });
   }
 }

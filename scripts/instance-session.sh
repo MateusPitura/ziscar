@@ -6,14 +6,40 @@ source .env
 USERNAME="ubuntu"
 PUBLIC_KEY_PATH="$HOME/.ssh/oci.pub"
 PRIVATE_KEY_PATH="$HOME/.ssh/oci"
-BACKEND_PRIVATE_IP=10.0.3.197
+
+INSTANCE_OCID=""
+PRIVATE_IP=""
+
+# Check first argument for target type
+if [[ "$1" == "-b" ]]; then
+    INSTANCE_OCID=$BACKEND_OCID
+    PRIVATE_IP="10.0.3.197"
+    shift  # Remove -b from arguments
+elif [[ "$1" == "-d" ]]; then
+    INSTANCE_OCID=$DATABASE_OCID
+    PRIVATE_IP="10.0.2.50"
+    shift  # Remove -d from arguments
+else
+    echo "Error: Please specify target type:"
+    echo "Usage: $0 [-b|-d] [command]"
+    echo "  -b: Connect to backend server"
+    echo "  -d: Connect to database server"
+    exit 1
+fi
 
 # List sessions and filter for ACTIVE and matching instance
 ACTIVE_SESSION=$(oci bastion session list \
     --bastion-id "$BASTION_OCID" \
     --session-lifecycle-state ACTIVE \
     --all \
-    --output json | jq -r --arg BACKEND_OCID "$BACKEND_OCID" '.data[] | select(.["target-resource-details"].["target-resource-id"] == $BACKEND_OCID) | @json' | head -n 1)
+    --output json | 
+    jq -r --arg INSTANCE_OCID "$INSTANCE_OCID" '
+        .data[] 
+        | select(.["target-resource-details"].["session-type"] == "MANAGED_SSH") 
+        | select(.["target-resource-details"].["target-resource-id"] == $INSTANCE_OCID) 
+        | @json
+    ' | head -n 1
+)
 
 if [[ -n "$ACTIVE_SESSION" ]]; then
     SESSION_ID=$(echo "$ACTIVE_SESSION" | jq -r '.id')
@@ -30,8 +56,8 @@ else
     echo "Creating Bastion session..."
     SESSION_JSON=$(oci bastion session create-managed-ssh \
         --bastion-id "$BASTION_OCID" \
-        --target-resource-id "$BACKEND_OCID" \
-        --target-private-ip "$BACKEND_PRIVATE_IP" \
+        --target-resource-id "$INSTANCE_OCID" \
+        --target-private-ip "$PRIVATE_IP" \
         --ssh-public-key-file "$PUBLIC_KEY_PATH" \
         --key-type PUB \
         --target-os-username "$USERNAME" \
@@ -64,7 +90,7 @@ SSH_CMD=(
   ssh -i "$PRIVATE_KEY_PATH"
   -t
   -o "ProxyCommand=ssh -i $PRIVATE_KEY_PATH -W %h:%p -p 22 $SESSION_ID@host.bastion.sa-saopaulo-1.oci.oraclecloud.com"
-  -p 22 "$USERNAME@$BACKEND_PRIVATE_IP"
+  -p 22 "$USERNAME@$PRIVATE_IP"
 )
 
 if [[ $# -gt 0 ]]; then

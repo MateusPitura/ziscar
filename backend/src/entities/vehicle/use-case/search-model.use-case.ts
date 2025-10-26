@@ -6,7 +6,10 @@ import { VehicleService } from '../vehicle.service';
 export class SearchModelUseCase {
   constructor(private readonly vehicleService: VehicleService) {}
 
-  execute(input: SearchModelRequestDto): Promise<SearchModelResponseDto> {
-    return this.vehicleService.searchModel(input);
+  execute(
+    input: SearchModelRequestDto,
+    enterpriseId: number,
+  ): Promise<SearchModelResponseDto> {
+    return this.vehicleService.searchModel(input, enterpriseId);
   }
 }

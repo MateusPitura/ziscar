@@ -3,8 +3,10 @@ import { AccountPayableRepository } from 'src/repositories/account_payable-repos
 import { AccountPayableService } from './account-payable.service';
 import { Module } from '@nestjs/common';
 import { AccountPayableController } from './account-payable.controller';
+import { UserModule } from '../user/user.module';
 
 @Module({
+  imports: [UserModule],
   controllers: [AccountPayableController],
   providers: [
     PrismaService,

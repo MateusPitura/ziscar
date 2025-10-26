@@ -1,5 +1,5 @@
 import { AccountPayable } from '@prisma/client';
-import { CreateInput, UpdateInput } from 'src/types';
+import { CreateInput } from 'src/types';
 
 export interface SearchResponse {
   total: number;
@@ -19,7 +19,10 @@ export interface SearchResponse {
 }
 
 export interface FindByIdResponse
-  extends Omit<AccountPayable, 'createdAt' | 'updatedAt' | 'archivedAt'> {
+  extends Omit<
+    AccountPayable,
+    'createdAt' | 'updatedAt' | 'archivedAt' | 'enterpriseId'
+  > {
   totalValue: number;
   overallStatus: 'PAID' | 'PENDING';
   installmentsNumber: number;
@@ -27,16 +30,17 @@ export interface FindByIdResponse
 
 export abstract class AccountPayableRepository {
   abstract create(data: CreateInput<AccountPayable>): Promise<AccountPayable>;
-  abstract findById(id: string): Promise<FindByIdResponse | null>;
+  abstract findById(
+    id: string,
+    enterpriseId: number,
+  ): Promise<FindByIdResponse | null>;
   abstract search(
     query: string,
     page: number,
     limit: number,
     startDate: Date,
     endDate: Date,
+    enterpriseId: number,
     overallStatus: 'PENDING' | 'PAID',
-    totalValue: string,
   ): Promise<SearchResponse>;
-  abstract update(id: string, data: UpdateInput<AccountPayable>): Promise<void>;
-  abstract delete(id: string): Promise<void>;
 }

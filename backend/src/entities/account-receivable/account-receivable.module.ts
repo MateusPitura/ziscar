@@ -3,8 +3,10 @@ import { AccountReceivableRepository } from 'src/repositories/account_receivable
 import { AccountReceivableService } from './account-receivable.service';
 import { Module } from '@nestjs/common';
 import { AccountReceivableController } from './account-receivable.controller';
+import { UserModule } from '../user/user.module';
 
 @Module({
+  imports: [UserModule],
   controllers: [AccountReceivableController],
   providers: [
     PrismaService,

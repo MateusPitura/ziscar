@@ -4,24 +4,24 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { PrismaService } from 'src/infra/database/prisma.service';
 import {
+  AccountPayable,
   InstallmentStatus,
   PaymentMethodReceivableType,
   VehicleStatus,
 } from '@prisma/client';
-import { AccountReceivableService } from 'src/entities/account-receivable/account-receivable.service';
-import { AccountReceivableInstallmentService } from 'src/entities/account-receivable-installment/account-receivable-installment.service';
-import { PaymentMethodReceivableService } from 'src/entities/payment-method-receivable/payment-method-receivable.service';
-import { AccountPayableService } from 'src/entities/account-payable/account-payable.service';
-import { VehicleService } from '../vehicle.service';
-import { CustomerService } from 'src/entities/customer/customer.service';
-import { MakeVehicleSaleRequestDto, MakeVehicleSaleResponseDto } from '../dtos';
-import { deepClone } from 'src/utils/deepClone';
-import { UserService } from 'src/entities/user/user.service';
-import { AccountPayableInstallmentService } from 'src/entities/account-payable-installment/account-payable-installment.service';
-import { AccountPayable } from '@prisma/client';
 import { addMonths, max } from 'date-fns';
+import { AccountPayableInstallmentService } from 'src/entities/account-payable-installment/account-payable-installment.service';
+import { AccountPayableService } from 'src/entities/account-payable/account-payable.service';
+import { AccountReceivableInstallmentService } from 'src/entities/account-receivable-installment/account-receivable-installment.service';
+import { AccountReceivableService } from 'src/entities/account-receivable/account-receivable.service';
+import { CustomerService } from 'src/entities/customer/customer.service';
+import { PaymentMethodReceivableService } from 'src/entities/payment-method-receivable/payment-method-receivable.service';
+import { UserService } from 'src/entities/user/user.service';
+import { PrismaService } from 'src/infra/database/prisma.service';
+import { deepClone } from 'src/utils/deepClone';
+import { MakeVehicleSaleRequestDto, MakeVehicleSaleResponseDto } from '../dtos';
+import { VehicleService } from '../vehicle.service';
 
 @Injectable()
 export class MakeSaleUseCase {
@@ -40,6 +40,7 @@ export class MakeSaleUseCase {
   async execute(
     input: MakeVehicleSaleRequestDto,
     userId: number,
+    enterpriseId: number,
   ): Promise<MakeVehicleSaleResponseDto> {
     const {
       vehicleId,
@@ -53,8 +54,8 @@ export class MakeSaleUseCase {
 
     await this.prisma.$transaction(async (prisma) => {
       const [vehicle, customer, user] = await Promise.all([
-        this.vehicleService.findById(vehicleId),
-        this.customerService.findUnique(Number(customerId)),
+        this.vehicleService.findById(vehicleId, enterpriseId),
+        this.customerService.findUnique(Number(customerId), enterpriseId),
         this.userService.findUnique(userId),
       ]);
 
@@ -77,6 +78,7 @@ export class MakeSaleUseCase {
         await this.accountReceivableService.create({
           description: accountReceivable.description,
           receivedFrom: accountReceivable.receivedFrom,
+          enterpriseId,
         });
 
       await this.createInstallments(
@@ -93,6 +95,7 @@ export class MakeSaleUseCase {
           await this.accountPayableService.create({
             description: `Comissão Venda Veículo ${updatedVehicle.plateNumber}`,
             paidTo: user?.fullName,
+            enterpriseId,
           });
 
         if (!createdCommissionAccountPayable)

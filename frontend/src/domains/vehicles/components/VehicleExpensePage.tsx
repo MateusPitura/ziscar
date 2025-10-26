@@ -1,13 +1,16 @@
 import Spinner from "@/design-system/Spinner";
 import { ContextHelperable } from "@/domains/contextHelpers/types";
-import { useIsFetching } from "@tanstack/react-query";
 import type { ReactNode } from "react";
+import useGetVehicleInfo from "../hooks/useGetVehicleInfo";
+import selectVehicleInfo from "../utils/selectVehicleInfo";
 import VehicleExpenseHeader from "./VehicleExpenseHeader";
 import VehicleExpenseTable from "./VehicleExpenseTable";
 
-export default function VehicleExpensePage({ contextHelper }: ContextHelperable): ReactNode {
-  const isFetching = useIsFetching({
-    queryKey: ["vehicle"],
+export default function VehicleExpensePage({
+  contextHelper,
+}: ContextHelperable): ReactNode {
+  const { data, isFetching } = useGetVehicleInfo({
+    select: selectVehicleInfo,
   });
 
   if (isFetching) {
@@ -20,7 +23,12 @@ export default function VehicleExpensePage({ contextHelper }: ContextHelperable)
 
   return (
     <div className="flex flex-col gap-4 h-full w-full">
-      <VehicleExpenseHeader title="Gastos do Veículo" showActions contextHelper={contextHelper}/>
+      <VehicleExpenseHeader
+        title="Gastos do Veículo"
+        showActions
+        contextHelper={contextHelper}
+        plateNumber={data?.vehicle.plateNumber}
+      />
       <VehicleExpenseTable />
     </div>
   );

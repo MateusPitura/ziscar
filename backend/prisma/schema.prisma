@@ -120,7 +120,7 @@ model VehicleSale {
   accountReceivableId Int
   accountReceivable   AccountReceivable @relation(fields: [accountReceivableId], references: [id])
   accountPayableId    Int?
-  accountPayable      AccountPayable?    @relation(fields: [accountPayableId], references: [id])
+  accountPayable      AccountPayable?   @relation(fields: [accountPayableId], references: [id])
 
   vehicleSnapshot  Json
   customerSnapshot Json
@@ -138,6 +138,7 @@ model AccountPayable {
   vehicleExpenses            VehicleExpense[]
   vehicleSales               VehicleSale[]
   accountPayableInstallments AccountPayableInstallment[]
+  enterpriseId               Int
 
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
@@ -226,6 +227,7 @@ model AccountReceivable {
   receivedFrom                  String?                        @db.VarChar(127)
   vehicleSales                  VehicleSale[]
   accountReceivableInstallments AccountReceivableInstallment[]
+  enterpriseId                  Int
 
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
@@ -359,6 +361,7 @@ enum VehicleCategory {
   MOTORCYCLE
   BUS
   VAN
+  PICKUP
 }
 
 enum FuelType {

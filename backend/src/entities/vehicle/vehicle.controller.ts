@@ -67,32 +67,38 @@ export class VehicleController {
     @Body() input: InsertVehicleRequestDto,
     @Req() req: AuthRequest,
   ): Promise<InsertVehicleResponseDto> {
-    const { userId } = req.authToken;
-    return this.insertVehicle.execute(input, userId);
+    const { userId, enterpriseId } = req.authToken;
+    return this.insertVehicle.execute(input, userId, enterpriseId);
   }
 
   @Get()
   @RoleGuard(Resources.VEHICLES, Actions.READ)
   async search(
     @Query() query: SearchVehiclesRequestDto,
+    @Req() req: AuthRequest,
   ): Promise<SearchVehiclesResponseDto> {
-    return this.searchVehicles.execute(query);
+    const { enterpriseId } = req.authToken;
+    return this.searchVehicles.execute(query, enterpriseId);
   }
 
   @Get('/paid-to')
   @RoleGuard(Resources.VEHICLES, Actions.READ)
   async searchPaidTo(
     @Query() query: SearchPaidToRequestDto,
+    @Req() req: AuthRequest,
   ): Promise<SearchPaidToResponseDto> {
-    return this.searchPaidToVehicle.execute(query);
+    const { enterpriseId } = req.authToken;
+    return this.searchPaidToVehicle.execute(query, enterpriseId);
   }
 
   @Get('/model')
   @RoleGuard(Resources.VEHICLES, Actions.READ)
   async searchModel(
     @Query() query: SearchModelRequestDto,
+    @Req() req: AuthRequest,
   ): Promise<SearchModelResponseDto> {
-    return this.searchModelVehicle.execute(query);
+    const { enterpriseId } = req.authToken;
+    return this.searchModelVehicle.execute(query, enterpriseId);
   }
 
   @Get('brands')
@@ -107,8 +113,8 @@ export class VehicleController {
     @Body() input: MakeVehicleSaleRequestDto,
     @Req() req: AuthRequest,
   ): Promise<MakeVehicleSaleResponseDto> {
-    const { userId } = req.authToken;
-    return this.makeSale.execute(input, userId);
+    const { userId, enterpriseId } = req.authToken;
+    return this.makeSale.execute(input, userId, enterpriseId);
   }
 
   @Patch(':id')
@@ -116,39 +122,51 @@ export class VehicleController {
   async update(
     @Param('id') id: string,
     @Body() input: UpdateVehicleRequestDto,
+    @Req() req: AuthRequest,
   ): Promise<UpdateVehicleResponseDto> {
-    return this.updateVehicle.execute(id, input);
+    const { enterpriseId } = req.authToken;
+    return this.updateVehicle.execute(id, input, enterpriseId);
   }
 
   @Patch(':id/archive')
   @RoleGuard(Resources.VEHICLES, Actions.UPDATE)
-  async archive(@Param('id') id: string): Promise<ArchiveVehicleResponseDto> {
+  async archive(
+    @Param('id') id: string,
+    @Req() req: AuthRequest,
+  ): Promise<ArchiveVehicleResponseDto> {
     const payload = { id: Number(id) };
-    return this.archiveVehicle.execute(payload);
+    const { enterpriseId } = req.authToken;
+    return this.archiveVehicle.execute(payload, enterpriseId);
   }
 
   @Patch(':id/unarchive')
   @RoleGuard(Resources.VEHICLES, Actions.UPDATE)
   async unarchive(
     @Param('id') id: string,
+    @Req() req: AuthRequest,
   ): Promise<UnarchiveVehicleResponseDto> {
+    const { enterpriseId } = req.authToken;
     const payload = { id: Number(id) };
-    return this.unarchiveVehicle.execute(payload);
+    return this.unarchiveVehicle.execute(payload, enterpriseId);
   }
 
   @Get(':id')
   @RoleGuard(Resources.VEHICLES, Actions.READ)
   async findById(
     @Param('id') id: string,
+    @Req() req: AuthRequest,
   ): Promise<VehicleWithPaymentResponseDto> {
-    return this.fetchVehicleById.execute(id);
+    const { enterpriseId } = req.authToken;
+    return this.fetchVehicleById.execute(id, enterpriseId);
   }
 
   @Get('sale/:saleId')
   @RoleGuard(Resources.VEHICLE_SALE, Actions.READ)
   async fetchSale(
     @Param('saleId') saleId: string,
+    @Req() req: AuthRequest,
   ): Promise<VehicleSaleResponseDto> {
-    return this.getVehicleSale.execute(saleId);
+    const { enterpriseId } = req.authToken;
+    return this.getVehicleSale.execute(saleId, enterpriseId);
   }
 }

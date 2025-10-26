@@ -6,7 +6,7 @@ import {
   FindByIdResponse,
   SearchResponse,
 } from 'src/repositories/account_payable-repository';
-import { CreateInput, UpdateInput } from 'src/types';
+import { CreateInput } from 'src/types';
 
 @Injectable()
 export class AccountPayableService implements AccountPayableRepository {
@@ -15,10 +15,10 @@ export class AccountPayableService implements AccountPayableRepository {
   async create(data: CreateInput<AccountPayable>): Promise<AccountPayable> {
     return this.prisma.accountPayable.create({ data });
   }
-  async findById(id: string): Promise<FindByIdResponse> {
+  async findById(id: string, enterpriseId: number): Promise<FindByIdResponse> {
     // 1️⃣ Buscar a conta a pagar com os installments
     const accountPayable = await this.prisma.accountPayable.findUnique({
-      where: { id: Number(id) },
+      where: { id: Number(id), enterpriseId },
       include: {
         accountPayableInstallments: true, // garante que pegamos todas as parcelas
       },
@@ -59,6 +59,7 @@ export class AccountPayableService implements AccountPayableRepository {
     limit: number,
     startDate: Date,
     endDate: Date,
+    enterpriseId: number,
     overallStatus?: 'PENDING' | 'PAID',
   ): Promise<SearchResponse> {
     let startDateFormatted: Date | undefined = undefined;
@@ -74,6 +75,7 @@ export class AccountPayableService implements AccountPayableRepository {
     }
 
     const filter: Prisma.AccountPayableWhereInput = {
+      enterpriseId,
       description: {
         contains: query,
         mode: 'insensitive',
@@ -117,6 +119,7 @@ export class AccountPayableService implements AccountPayableRepository {
           accountPayable: {
             createdAt: filter.createdAt,
             description: filter.description,
+            enterpriseId,
           },
         },
       },
@@ -167,17 +170,5 @@ export class AccountPayableService implements AccountPayableRepository {
         totalPending,
       },
     };
-  }
-
-  async update(id: string, data: UpdateInput<AccountPayable>): Promise<void> {
-    await this.prisma.accountPayable.update({
-      where: { id: Number(id) },
-      data,
-    });
-  }
-  async delete(id: string): Promise<void> {
-    await this.prisma.accountPayable.delete({
-      where: { id: Number(id) },
-    });
   }
 }

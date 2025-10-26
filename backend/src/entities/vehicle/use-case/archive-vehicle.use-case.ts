@@ -8,10 +8,11 @@ export class ArchiveVehicleUseCase {
 
   async execute(
     input: ArchiveVehicleRequestDto,
+    enterpriseId: number,
   ): Promise<ArchiveVehicleResponseDto> {
     const { id } = input;
 
-    const vehicle = await this.vehicleService.findById(id);
+    const vehicle = await this.vehicleService.findById(id, enterpriseId);
     if (!vehicle) {
       throw new NotFoundException('Vehicle not found');
     }

@@ -9,7 +9,7 @@ import {
   AccountPayableInstallmentRepository,
   createPaymentMethodToInstallment,
 } from 'src/repositories/account_payable_installment-repository';
-import { CreateInput, UpdateInput } from 'src/types';
+import { CreateInput } from 'src/types';
 
 @Injectable()
 export class AccountPayableInstallmentService
@@ -20,10 +20,11 @@ export class AccountPayableInstallmentService
   async addPaymentMethodToInstallment(
     id: string,
     data: createPaymentMethodToInstallment, // { type, paymentDate, value, userId }
+    enterpriseId: number,
   ): Promise<AccountPayableInstallment> {
     // 1️⃣ Verifica se a parcela existe
     const installment = await this.prisma.accountPayableInstallment.findUnique({
-      where: { id: Number(id) },
+      where: { id: Number(id), accountPayable: { enterpriseId } },
     });
 
     if (!installment) {
@@ -37,7 +38,7 @@ export class AccountPayableInstallmentService
 
     const updatedInstallment =
       await this.prisma.accountPayableInstallment.update({
-        where: { id: Number(id) },
+        where: { id: Number(id), accountPayable: { enterpriseId } },
 
         data: {
           status: 'PAID',
@@ -62,10 +63,14 @@ export class AccountPayableInstallmentService
 
   async findAllByAccountPayableId(
     accountPayableId: string,
+    enterpriseId: number,
   ): Promise<AccountPayableInstallment[]> {
     return this.prisma.accountPayableInstallment.findMany({
       where: {
-        accountPayableId: Number(accountPayableId),
+        accountPayable: {
+          id: Number(accountPayableId),
+          enterpriseId,
+        },
       },
       include: {
         paymentMethodPayables: {
@@ -86,78 +91,5 @@ export class AccountPayableInstallmentService
     data: CreateInput<AccountPayableInstallment>,
   ): Promise<AccountPayableInstallment> {
     return this.prisma.accountPayableInstallment.create({ data });
-  }
-
-  async findById(id: string): Promise<AccountPayableInstallment | null> {
-    const installment = await this.prisma.accountPayableInstallment.findUnique({
-      where: { id: Number(id) },
-    });
-
-    if (!installment) {
-      throw new NotFoundException('Parcela não encontrada.');
-    }
-
-    return installment;
-  }
-
-  // async addPaymentMethodToInstallment(
-  //   id: string,
-  //   data: createPaymentMethodToInstallment,
-  // ): Promise<void> {
-  //   const installment =
-  //     await this.prisma.accountPayableInstallment.findUnique({
-  //       where: {
-  //         id: Number(id),
-  //       },
-  //       include: {
-  //         paymentMethodPayables: true,
-  //       },
-  //     });
-
-  //   if (!installment) {
-  //     throw new NotFoundException('Parcela a receber não encontrada');
-  //   }
-
-  //   if (installment.paymentMethodPayables.length > 0) {
-  //     throw new ConflictException(
-  //       'Esta parcela já possui um método de pagamento',
-  //     );
-  //   }
-
-  //   const updatedInstallment =
-  //     await this.prisma.accountPayableInstallment.update({
-  //       where: {
-  //         id: Number(id),
-  //       },
-  //       data: {
-  //         status: 'PAID',
-  //         paymentMethodPayables: {
-  //           create: {
-  //             type: data.type,
-  //             paymentDate: new Date(data.paymentDate),
-  //             value: installment.value,
-  //           }
-  //         },
-  //       },
-  //       include: {
-  //         paymentMethodPayables: true,
-  //       },
-  //     });
-  // }
-
-  async update(
-    id: string,
-    data: UpdateInput<AccountPayableInstallment>,
-  ): Promise<void> {
-    await this.prisma.accountPayableInstallment.update({
-      where: { id: Number(id) },
-      data,
-    });
-  }
-
-  async delete(id: string): Promise<void> {
-    await this.prisma.accountPayableInstallment.delete({
-      where: { id: Number(id) },
-    });
   }
 }

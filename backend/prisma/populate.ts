@@ -281,6 +281,7 @@ async function populate() {
       accountsPayableForVehiclePurchasePromise.push(
         tx.accountPayable.create({
           data: {
+            enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
             description: `Compra Veículo ${generatePlateNumber(true)}`,
             paidTo: faker.company.name(),
             accountPayableInstallments: {
@@ -383,6 +384,7 @@ async function populate() {
 
         await tx.accountPayable.create({
           data: {
+            enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
             description: `Gasto Veículo ${generatePlateNumber(true)}`,
             paidTo: faker.person.fullName(),
             accountPayableInstallments: {
@@ -519,6 +521,7 @@ async function populate() {
 
         await tx.accountReceivable.create({
           data: {
+            enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
             description: `Venda Veículo ${plateNumber}`,
             receivedFrom: personName,
             accountReceivableInstallments: {
@@ -545,6 +548,7 @@ async function populate() {
         if (commissionValue) {
           await tx.accountPayable.create({
             data: {
+              enterpriseId: POPULATE_ENTERPRISE.DEFAULT.id,
               description: `Comissão Venda Veículo ${plateNumber}`,
               paidTo: POPULATE_USER.ADM.fullName,
               accountPayableInstallments: {

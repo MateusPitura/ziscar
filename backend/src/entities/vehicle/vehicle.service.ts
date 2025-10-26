@@ -38,9 +38,12 @@ export class VehicleService implements VehicleRepository {
     return this.prisma.vehicle.create({ data });
   }
 
-  async findById(id: number): Promise<GetVehicleWithPaymentOutDto | null> {
+  async findById(
+    id: number,
+    enterpriseId: number,
+  ): Promise<GetVehicleWithPaymentOutDto | null> {
     return await this.prisma.vehicle.findUnique({
-      where: { id },
+      where: { id, store: { enterpriseId } },
       select: VEHICLE_WITH_PAYMENT_SELECT,
     });
   }
@@ -98,6 +101,7 @@ export class VehicleService implements VehicleRepository {
 
   async search(
     params: SearchVehiclesRequestDto,
+    enterpriseId: number,
   ): Promise<SearchVehiclesResponseDto> {
     const page = params.page;
     const take = params.limit;
@@ -106,7 +110,10 @@ export class VehicleService implements VehicleRepository {
     const where: Prisma.VehicleWhereInput = {};
 
     where.status = { not: VehicleStatus.SOLD };
-    where.store = { archivedAt: null };
+    where.store = {
+      archivedAt: null,
+      enterpriseId,
+    };
 
     if (params.storeId) where.storeId = Number(params.storeId);
     if (params.brandId) where.brandId = Number(params.brandId);
@@ -186,10 +193,12 @@ export class VehicleService implements VehicleRepository {
 
   async searchPaidTo(
     params: SearchPaidToRequestDto,
+    enterpriseId: number,
   ): Promise<SearchPaidToResponseDto> {
     const result = await this.prisma.accountPayable.findMany({
       where: {
         paidTo: { contains: params.paidTo, mode: 'insensitive' },
+        enterpriseId,
       },
       orderBy: { paidTo: 'asc' },
       select: {
@@ -204,10 +213,14 @@ export class VehicleService implements VehicleRepository {
 
   async searchModel(
     params: SearchModelRequestDto,
+    enterpriseId: number,
   ): Promise<SearchModelResponseDto> {
     const result = await this.prisma.vehicle.findMany({
       where: {
         modelName: { contains: params.modelName, mode: 'insensitive' },
+        store: {
+          enterpriseId,
+        },
       },
       orderBy: { modelName: 'asc' },
       select: {
@@ -257,9 +270,15 @@ export class VehicleService implements VehicleRepository {
     }
   }
 
-  async getVehicleSale(vehicleSaleId: string): Promise<VehicleSale | null> {
+  async getVehicleSale(
+    vehicleSaleId: string,
+    enterpriseId: number,
+  ): Promise<VehicleSale | null> {
     return await this.prisma.vehicleSale.findUnique({
-      where: { id: Number(vehicleSaleId) },
+      where: {
+        id: Number(vehicleSaleId),
+        vehicle: { store: { enterpriseId } },
+      },
       include: {
         accountReceivable: true,
         accountPayable: true,
@@ -269,9 +288,10 @@ export class VehicleService implements VehicleRepository {
 
   async getVehicleWithPayment(
     vehicleId: string,
+    enterpriseId: number,
   ): Promise<GetVehicleWithPaymentOutDto | null> {
     return await this.prisma.vehicle.findUnique({
-      where: { id: Number(vehicleId) },
+      where: { id: Number(vehicleId), store: { enterpriseId } },
       select: VEHICLE_WITH_PAYMENT_SELECT,
     });
   }
