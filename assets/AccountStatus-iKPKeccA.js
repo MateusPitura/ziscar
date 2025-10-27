@@ -1,0 +1,1 @@
+import{j as r}from"./index-BaodxefT.js";import{T as n}from"./Tag-cP9426l-.js";function g({status:e}){return r.jsx(n,{className:{"bg-green-100 text-green-800 border-green-800":e==="PAID","bg-orange-100 text-orange-800 border-orange-800":e==="PENDING"},content:e==="PAID"?"Pago":"Pendente"})}export{g as A};

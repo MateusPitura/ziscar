@@ -1,1 +1,0 @@
-import{a as p}from"./index-CnY9f91V.js";function e(n){const o=[];for(const t of n.data)o.push({...t,phone:p(t==null?void 0:t.phone,"phone")??"",cnpj:p(t==null?void 0:t.cnpj,"cnpj")??""});return{total:n.total,data:o}}export{e as s};
