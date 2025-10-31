@@ -71,7 +71,7 @@ export default function Command<T extends FieldValues>({
                   keywords={[option.label]}
                 >
                   <div className="flex-1">
-                    {customLabel ? customLabel(option) : <p>option.label</p>}
+                    {customLabel ? customLabel(option) : <p>{option.label}</p>}
                     {option.description && (
                       <p className="text-label-medium text-neutral-500">
                         {option.description}

@@ -51,7 +51,7 @@ export default function PageHeader({
   return (
     <>
       <Dialog {...contextHelperModal} maxWidth="max-w-[60rem] pb-4">
-        <Dialog.Header title="Dúvidas" />
+        <Dialog.Header title="Ajuda" />
         <Dialog.Body>
           {contextHelper}
         </Dialog.Body>
