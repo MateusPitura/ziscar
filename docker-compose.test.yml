@@ -18,7 +18,7 @@ services:
       - ./test/load:/test/load
     env_file:
       - path: .env
-      - required: false
+        required: false
     environment:
       - K6_EMAIL=${K6_EMAIL}
       - K6_PASSWORD=${K6_PASSWORD}
