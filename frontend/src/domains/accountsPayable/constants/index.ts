@@ -21,6 +21,7 @@ export const accountPayableFilterDefaultValues: AccountsPayableFilterFormInputs 
 export const ACCOUNTS_PAYABLE_TABLE = {
   description: {
     label: "Descrição",
+    colSpan: 3,
   },
   date: {
     label: "Data de vencimento",
@@ -34,6 +35,7 @@ export const ACCOUNTS_PAYABLE_TABLE = {
   },
   totalValue: {
     label: "Valor total",
+    colSpan: 1,
   },
 } as const;
 

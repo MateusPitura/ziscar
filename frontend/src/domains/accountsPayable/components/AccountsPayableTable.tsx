@@ -151,14 +151,20 @@ export default function AccountsPayableTable(): ReactNode {
       </div>
       <Table>
         <Table.Header gridColumns={gridColumns}>
-          <Table.Head label={ACCOUNTS_PAYABLE_TABLE.description.label} />
+          <Table.Head
+            label={ACCOUNTS_PAYABLE_TABLE.description.label}
+            colSpan={ACCOUNTS_PAYABLE_TABLE.description.colSpan}
+          />
           <Table.Head label={ACCOUNTS_PAYABLE_TABLE.date.label} />
           <Table.Head label={ACCOUNTS_PAYABLE_TABLE.paidTo.label} />
           <Table.Head
             label={ACCOUNTS_PAYABLE_TABLE.overallStatus.label}
             colSpan={ACCOUNTS_PAYABLE_TABLE.overallStatus.colSpan}
           />
-          <Table.Head label={ACCOUNTS_PAYABLE_TABLE.totalValue.label} />
+          <Table.Head
+            label={ACCOUNTS_PAYABLE_TABLE.totalValue.label}
+            colSpan={ACCOUNTS_PAYABLE_TABLE.totalValue.colSpan}
+          />
           <Table.Head action />
         </Table.Header>
         <Table.Body
@@ -171,6 +177,7 @@ export default function AccountsPayableTable(): ReactNode {
             <Table.Row key={accountPayable.id} gridColumns={gridColumns}>
               <Table.Cell
                 label={accountPayable.description}
+                colSpan={ACCOUNTS_PAYABLE_TABLE.description.colSpan}
                 columnLabel={ACCOUNTS_PAYABLE_TABLE.description.label}
               />
               <Table.Cell
@@ -197,6 +204,7 @@ export default function AccountsPayableTable(): ReactNode {
                   BLANK
                 )}
                 className="font-mono whitespace-pre"
+                colSpan={ACCOUNTS_PAYABLE_TABLE.totalValue.colSpan}
                 columnLabel={ACCOUNTS_PAYABLE_TABLE.totalValue.label}
               />
               <Table.Action>

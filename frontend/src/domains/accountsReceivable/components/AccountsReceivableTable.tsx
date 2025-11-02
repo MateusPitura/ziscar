@@ -162,14 +162,20 @@ export default function AccountsReceivableTable(): ReactNode {
       </div>
       <Table>
         <Table.Header gridColumns={gridColumns}>
-          <Table.Head label={ACCOUNTS_RECEIVABLE_TABLE.description.label} />
+          <Table.Head
+            label={ACCOUNTS_RECEIVABLE_TABLE.description.label}
+            colSpan={ACCOUNTS_RECEIVABLE_TABLE.description.colSpan}
+          />
           <Table.Head label={ACCOUNTS_RECEIVABLE_TABLE.date.label} />
           <Table.Head label={ACCOUNTS_RECEIVABLE_TABLE.receivedFrom.label} />
           <Table.Head
             label={ACCOUNTS_RECEIVABLE_TABLE.overallStatus.label}
             colSpan={ACCOUNTS_RECEIVABLE_TABLE.overallStatus.colSpan}
           />
-          <Table.Head label={ACCOUNTS_RECEIVABLE_TABLE.totalValue.label} />
+          <Table.Head
+            label={ACCOUNTS_RECEIVABLE_TABLE.totalValue.label}
+            colSpan={ACCOUNTS_RECEIVABLE_TABLE.totalValue.colSpan}
+          />
           <Table.Head action />
         </Table.Header>
         <Table.Body
@@ -183,6 +189,7 @@ export default function AccountsReceivableTable(): ReactNode {
               <Table.Cell
                 label={accountReceivable.description}
                 columnLabel={ACCOUNTS_RECEIVABLE_TABLE.description.label}
+                colSpan={ACCOUNTS_RECEIVABLE_TABLE.description.colSpan}
               />
               <Table.Cell
                 label={accountReceivable.date}
@@ -206,6 +213,7 @@ export default function AccountsReceivableTable(): ReactNode {
                 )}
                 className="font-mono whitespace-pre"
                 columnLabel={ACCOUNTS_RECEIVABLE_TABLE.totalValue.label}
+                colSpan={ACCOUNTS_RECEIVABLE_TABLE.totalValue.colSpan}
               />
               <Table.Action>
                 <AccountsReceivableTableActions

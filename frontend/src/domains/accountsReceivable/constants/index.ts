@@ -21,6 +21,7 @@ export const accountReceivableFilterDefaultValues: AccountsReceivableFilterFormI
 export const ACCOUNTS_RECEIVABLE_TABLE = {
   description: {
     label: "Descrição",
+    colSpan: 3,
   },
   date: {
     label: "Data de venda",
@@ -34,6 +35,7 @@ export const ACCOUNTS_RECEIVABLE_TABLE = {
   },
   totalValue: {
     label: "Valor total",
+    colSpan: 1,
   },
 } as const;
 
