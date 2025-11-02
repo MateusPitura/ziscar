@@ -174,6 +174,11 @@ export const defaultCommonCharacteristics = [
 export const VEHICLES_TABLE = {
   model: {
     label: "Modelo",
+    colSpan: 1,
+  },
+  brand: {
+    label: "Marca",
+    colSpan: 1,
   },
   plate: {
     label: "Placa",

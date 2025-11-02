@@ -37,7 +37,7 @@ function Row({ children, className, gridColumns = "default" }: RowProps) {
     <div
       className={classNames(
         "px-4 py-4 flex-col flex gap-2 bg-neutral-50 border-b border-neutral-300 border-r",
-        "xl:py-1 xl:grid xl:h-14 xl:items-center",
+        "xl:py-0 xl:grid xl:h-14 xl:items-center",
         className
       )}
       style={{
