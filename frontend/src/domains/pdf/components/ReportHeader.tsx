@@ -1,4 +1,4 @@
-import safeFormat from "@/domains/global/utils/safeFormat";
+import { safeFormat } from "@/domains/global/utils/date";
 import { Image, StyleSheet, Text, View } from "@react-pdf/renderer";
 import type { ReactNode } from "react";
 

@@ -1,4 +1,4 @@
-import safeFormat from "@/domains/global/utils/safeFormat";
+import { todayFormatted } from "@/domains/global/utils/date";
 import { InstallmentStatus, PaymentMethodReceivableType } from "@shared/enums";
 import {
   AccountsReceivableFilterFormInputs,
@@ -6,15 +6,15 @@ import {
 } from "../types";
 
 export const paymentMethodDefaultValues: PaymentMethodFormInputs = {
-  paymentDate: safeFormat({ date: new Date(), format: "yyyy-MM-dd" }),
+  paymentDate: todayFormatted(),
   type: PaymentMethodReceivableType.CREDIT_CARD,
 };
 
 export const accountReceivableFilterDefaultValues: AccountsReceivableFilterFormInputs =
   {
     description: "",
-    startDate: "",
-    endDate: "",
+    startDate: todayFormatted(),
+    endDate: todayFormatted(),
     overallStatus: InstallmentStatus.PENDING,
   };
 

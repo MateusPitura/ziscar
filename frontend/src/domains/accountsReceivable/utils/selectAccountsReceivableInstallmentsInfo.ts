@@ -1,10 +1,11 @@
 import { FetchAccountReceivableInstallment } from "@/domains/global/types/model";
 import { applyMask } from "@/domains/global/utils/applyMask";
-import safeFormat from "@/domains/global/utils/safeFormat";
+import { safeFormat } from "@/domains/global/utils/date";
+import { isPast } from "date-fns";
 
 export default function selectAccountsReceivableInstallmentsInfo(
   payload: FetchAccountReceivableInstallment[]
-): FetchAccountReceivableInstallment[] {
+): (FetchAccountReceivableInstallment & { isExpired: boolean })[] {
   const itemsFiltered = [];
 
   for (const accountReceivable of payload) {
@@ -31,6 +32,10 @@ export default function selectAccountsReceivableInstallmentsInfo(
         : "",
       value: applyMask(accountReceivable.value, "money") ?? "",
       paymentMethodReceivables: paymentMethods,
+      isExpired:
+        accountReceivable.status === "PENDING" &&
+        !!accountReceivable.dueDate &&
+        isPast(new Date(accountReceivable.dueDate)),
     });
   }
 

@@ -8,8 +8,8 @@ import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import { PageablePayload } from "@/domains/global/types";
 import { FetchAccountReceivable } from "@/domains/global/types/model";
 import { applyMask } from "@/domains/global/utils/applyMask";
+import { safeFormat, todayFormatted } from "@/domains/global/utils/date";
 import formatFilters from "@/domains/global/utils/formatFilters";
-import safeFormat from "@/domains/global/utils/safeFormat";
 import ExportButton from "@/domains/pdf/components/ExportButton";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, type ReactNode } from "react";
@@ -73,7 +73,7 @@ export default function AccountsReceivableTable(): ReactNode {
     )
       return false;
 
-    const today = safeFormat({ date: new Date(), format: "yyyy-MM-dd" });
+    const today = todayFormatted();
     if (
       accountsReceivableFilter.startDate === today &&
       accountsReceivableFilter.endDate === today
@@ -117,7 +117,7 @@ export default function AccountsReceivableTable(): ReactNode {
         <div className="flex gap-4">
           <Switch
             checked={isStartAndEndFilterToday}
-            label="Contas de hoje"
+            label="Vendas de hoje"
             onCheck={() =>
               handleAccountsReceivableFilter({
                 startDate: safeFormat({

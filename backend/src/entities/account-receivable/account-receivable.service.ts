@@ -72,25 +72,23 @@ export class AccountReceivableService implements AccountReceivableRepository {
         : undefined,
     };
 
-    const accounts = await this.prisma.accountReceivable.findMany({
-      where: filter,
-      include: {
-        accountReceivableInstallments: true,
-        vehicleSales: true,
-      },
-      skip: (page - 1) * limit,
-      take: limit,
-      orderBy: {
-        description: 'asc',
-      },
-    });
-
-    const total = await this.prisma.accountReceivable.count({
-      where: filter,
-    });
-
-    const summaryByStatus =
-      await this.prisma.accountReceivableInstallment.groupBy({
+    const [accounts, total, summaryByStatus] = await Promise.all([
+      this.prisma.accountReceivable.findMany({
+        where: filter,
+        include: {
+          accountReceivableInstallments: true,
+          vehicleSales: true,
+        },
+        skip: (page - 1) * limit,
+        take: limit,
+        orderBy: {
+          description: 'asc',
+        },
+      }),
+      await this.prisma.accountReceivable.count({
+        where: filter,
+      }),
+      this.prisma.accountReceivableInstallment.groupBy({
         by: ['status'],
         _sum: {
           value: true,
@@ -102,7 +100,8 @@ export class AccountReceivableService implements AccountReceivableRepository {
             enterpriseId,
           },
         },
-      });
+      }),
+    ]);
 
     const totalPaid =
       summaryByStatus.find((s) => s.status === 'PAID')?._sum.value ?? 0;

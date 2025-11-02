@@ -13,7 +13,7 @@ import {
   vehicleDefaultValues,
 } from "../../vehicles/constants";
 import { VehicleFormInputs } from "../../vehicles/types";
-import safeFormat from "../utils/safeFormat";
+import { todayFormatted } from "../utils/date";
 
 interface UpfrontFormProperties {
   isAccountReceivable?: boolean;
@@ -31,13 +31,13 @@ export default function UpfrontForm({
       setValue("payment.upfront.0.paymentMethod", "");
       setValue(
         "payment.upfront.0.dueDate",
-        safeFormat({ date: new Date(), format: "yyyy-MM-dd" })
+        todayFormatted()
       );
     } else if (statusWatch === InstallmentStatus.PAID) {
       setValue("payment.upfront.0.dueDate", "");
       setValue(
         "payment.upfront.0.paymentDate",
-        safeFormat({ date: new Date(), format: "yyyy-MM-dd" })
+        todayFormatted()
       );
       setValue(
         "payment.upfront.0.paymentMethod",
