@@ -47,6 +47,14 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: "#000000",
   },
+  filtersSection: {
+    paddingBottom: 8,
+  },
+  filtersText: {
+    fontSize: 9,
+    color: "#374151",
+    lineHeight: 1.4,
+  },
 });
 
 interface ReportProperties<T> {
@@ -62,11 +70,25 @@ function Report<T>({
   title,
   appliedFilters,
 }: ReportProperties<T>): ReactElement {
+  const hasFilters = appliedFilters && Object.keys(appliedFilters).length > 0;
+
   if (!data || data.length === 0) {
     return (
       <Document>
         <Page size="A4" orientation="landscape" style={styles.page}>
-          <ReportHeader appliedFilters={appliedFilters} title={title} />
+          <ReportHeader title={title} />
+
+          {hasFilters && (
+            <View style={styles.filtersSection}>
+              <Text style={styles.filtersText}>
+                Filtros aplicados:{" "}
+                {Object.entries(appliedFilters)
+                  .map(([key, value]) => `${key}: ${value}`)
+                  .join("; ")}
+              </Text>
+            </View>
+          )}
+
           <View style={styles.content}>
             <View style={styles.emptyState}>
               <Text style={styles.emptyText}>Nenhum dado encontrado</Text>
@@ -84,7 +106,7 @@ function Report<T>({
       (data[0] as Record<string, unknown>)?.[key] !== undefined
   );
   const columnWidth = `${100 / keys.length}%`;
-  const itemsPerPage = 22;
+  const itemsPerPage = hasFilters ? 20 : 22;
 
   const formatValue = (value: unknown, key: string): string => {
     if (key === "archivedAt") return value ? "Não" : "Sim";
@@ -97,7 +119,18 @@ function Report<T>({
   return (
     <Document>
       <Page size="A4" orientation="landscape" style={styles.page}>
-        <ReportHeader appliedFilters={appliedFilters} title={title} />
+        <ReportHeader title={title} />
+
+        {hasFilters && (
+          <View style={styles.filtersSection}>
+            <Text style={styles.filtersText}>
+              Filtros aplicados:{" "}
+              {Object.entries(appliedFilters)
+                .map(([key, value]) => `${key}: ${value}`)
+                .join("; ")}
+            </Text>
+          </View>
+        )}
 
         <TableHeader
           keys={keys}
