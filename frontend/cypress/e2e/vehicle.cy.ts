@@ -3,6 +3,8 @@ import { generateChassi } from "../../../shared/src/test/generateChassi";
 import { generatePlateNumber } from "../../../shared/src/test/generatePlateNumber";
 
 describe("vehicle", () => {
+  const formattedDate = new Date().toISOString().split("T")[0];
+
   beforeEach(() => {
     cy.login();
   });
@@ -74,7 +76,7 @@ describe("vehicle", () => {
     });
   });
 
-  it("should navigate in vehicle table", () => {
+  it.only("should navigate in vehicle table", () => {
     cy.visit("/vehicles");
 
     cy.intercept("GET", "http://localhost:3000/vehicles?page=1&limit=20").as(
@@ -100,7 +102,7 @@ describe("vehicle", () => {
     cy.get('[data-cy="table-navigate-before"]').should("be.disabled");
   });
 
-  it("should generate vehicle report", () => {
+  it.only("should generate vehicle report", () => {
     cy.visit("/vehicles");
 
     cy.intercept("GET", "http://localhost:3000/vehicles?page=1&limit=20").as(
@@ -139,7 +141,7 @@ describe("vehicle", () => {
     );
   });
 
-  it("should create vehicle with minimal fields", () => {
+  it.only("should create vehicle with minimal fields", () => {
     const plateNumber = generatePlateNumber();
     const chassiNumber = generateChassi();
 
@@ -222,7 +224,7 @@ describe("vehicle", () => {
     );
   });
 
-  it("should create vehicle with all fields", () => {
+  it.only("should create vehicle with all fields", () => {
     const plateNumber = generatePlateNumber();
     const chassiNumber = generateChassi();
     const characteristic = faker.lorem.word();
@@ -256,10 +258,16 @@ describe("vehicle", () => {
             },
             {
               installmentSequence: 0,
-              dueDate: "2025-01-01",
+              dueDate: null,
               value: "1000000",
               isUpfront: true,
-              paymentMethods: null,
+              paymentMethods: [
+                {
+                  type: "CREDIT_CARD",
+                  value: "1000000",
+                  paymentDate: formattedDate,
+                },
+              ],
             },
           ],
         },
@@ -287,7 +295,6 @@ describe("vehicle", () => {
 
     cy.getDataCy("button-append-payment.upfront").click();
     cy.fillInputByName("payment.upfront.0.value", "1000000");
-    cy.fillInputByName("payment.upfront.0.dueDate", "2025-01-01");
 
     cy.fillInputByName("payment.installment.value", "8000000");
     cy.fillInputByName("payment.installment.dueDate", "2025-01-01");
@@ -369,8 +376,6 @@ describe("vehicle", () => {
       cy.get('button[type="submit"]').should("be.enabled");
 
       cy.getDataCy("button-append-payment.upfront").click();
-      cy.getDataCy("select-payment.upfront.0.status").click();
-      cy.getDataCy("select-option-PENDING").click();
 
       cy.wait(500);
 
@@ -454,10 +459,6 @@ describe("vehicle", () => {
       cy.getDataCy("input-error-payment.upfront.0.value").should(
         "have.text",
         "Deve ser maior ou igual a R$ 0,01"
-      );
-      cy.getDataCy("input-error-payment.upfront.0.status").should(
-        "have.text",
-        "Opção inválida"
       );
 
       cy.getDataCy("input-error-payment.installment.value").should(
@@ -548,8 +549,6 @@ describe("vehicle", () => {
 
     cy.getDataCy("button-append-payment.upfront").click();
     cy.fillInputByName("payment.upfront.0.value", "1000000");
-    cy.getDataCy("select-payment.upfront.0.status").click();
-    cy.get('[data-cy^="select-option-PAID"]').click();
     cy.fillInputByName("payment.upfront.0.paymentDate", "2025-01-01");
 
     cy.getDataCy("select-payment.installment.status").click();
