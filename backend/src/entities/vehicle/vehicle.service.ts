@@ -155,13 +155,13 @@ export class VehicleService implements VehicleRepository {
       let startDateFormatted: Date | undefined = undefined;
       if (params.startDate) {
         startDateFormatted = new Date(params.startDate);
-        startDateFormatted.setHours(0, 0, 0, 0);
+        startDateFormatted.setUTCHours(0, 0, 0, 0);
       }
 
       let endDateFormatted: Date | undefined = undefined;
       if (params.endDate) {
         endDateFormatted = new Date(params.endDate);
-        endDateFormatted.setHours(23, 59, 59, 999);
+        endDateFormatted.setUTCHours(23, 59, 59, 999);
       }
 
       where.createdAt = {
@@ -195,7 +195,7 @@ export class VehicleService implements VehicleRepository {
     params: SearchPaidToRequestDto,
     enterpriseId: number,
   ): Promise<SearchPaidToResponseDto> {
-    const result = await this.prisma.accountPayable.findMany({
+    const resultRaw = await this.prisma.accountPayable.findMany({
       where: {
         paidTo: { contains: params.paidTo, mode: 'insensitive' },
         enterpriseId,
@@ -208,14 +208,28 @@ export class VehicleService implements VehicleRepository {
       distinct: ['paidTo'],
     });
 
-    return { data: result };
+    const uniqueResults = new Set();
+    const results: {
+      paidTo: string | null;
+      id: number;
+    }[] = [];
+
+    for (const result of resultRaw) {
+      const key = result.paidTo?.toUpperCase() ?? null;
+      if (!uniqueResults.has(key)) {
+        uniqueResults.add(key);
+        results.push({ ...result, paidTo: key });
+      }
+    }
+
+    return { data: results };
   }
 
   async searchModel(
     params: SearchModelRequestDto,
     enterpriseId: number,
   ): Promise<SearchModelResponseDto> {
-    const result = await this.prisma.vehicle.findMany({
+    const resultWat = await this.prisma.vehicle.findMany({
       where: {
         modelName: { contains: params.modelName, mode: 'insensitive' },
         store: {
@@ -230,7 +244,21 @@ export class VehicleService implements VehicleRepository {
       distinct: ['modelName'],
     });
 
-    return { data: result };
+    const uniqueResults = new Set();
+    const results: {
+      modelName: string | null;
+      id: number;
+    }[] = [];
+
+    for (const result of resultWat) {
+      const key = result.modelName?.toUpperCase() ?? null;
+      if (!uniqueResults.has(key)) {
+        uniqueResults.add(key);
+        results.push({ ...result, modelName: key });
+      }
+    }
+
+    return { data: results };
   }
 
   async insertCharacteristics(

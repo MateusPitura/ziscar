@@ -1,6 +1,6 @@
 import { FetchVehicleExpense } from "@/domains/global/types/model";
 import { applyMask } from "@/domains/global/utils/applyMask";
-import safeFormat from "@/domains/global/utils/safeFormat";
+import { safeFormat } from "@/domains/global/utils/date";
 
 export default function selectVehicleExpensesInfo(
   payload: FetchVehicleExpense[]

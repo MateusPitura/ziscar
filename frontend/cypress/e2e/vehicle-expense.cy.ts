@@ -1,6 +1,8 @@
 import { faker } from "@faker-js/faker";
 
 describe("Vehicle Expense", () => {
+  const formattedDate = new Date().toISOString().split("T")[0];
+
   beforeEach(() => {
     cy.login();
   });
@@ -114,10 +116,16 @@ describe("Vehicle Expense", () => {
             },
             {
               installmentSequence: 0,
-              dueDate: "2025-01-01",
+              dueDate: null,
               value: "10000",
               isUpfront: true,
-              paymentMethods: null,
+              paymentMethods: [
+                {
+                  type: "CREDIT_CARD",
+                  value: "10000",
+                  paymentDate: formattedDate,
+                },
+              ],
             },
           ],
         });
@@ -149,7 +157,6 @@ describe("Vehicle Expense", () => {
 
       cy.getDataCy("button-append-payment.upfront").click();
       cy.fillInputByName("payment.upfront.0.value", "10000");
-      cy.fillInputByName("payment.upfront.0.dueDate", "2025-01-01");
 
       cy.fillInputByName("payment.installment.value", "10000");
       cy.getDataCy("select-payment.installment.status").click();
@@ -196,9 +203,6 @@ describe("Vehicle Expense", () => {
       cy.get('button[type="submit"]').should("be.enabled");
 
       cy.getDataCy("button-append-payment.upfront").click();
-      cy.getDataCy("select-payment.upfront.0.status").click();
-      cy.getDataCy("select-option-PENDING").click();
-      cy.fillInputByName("payment.upfront.0.dueDate", "1800-01-01");
 
       cy.getDataCy("select-payment.installment.status").click();
       cy.getDataCy("select-option-PAID").click();
@@ -218,17 +222,9 @@ describe("Vehicle Expense", () => {
         "have.text",
         "Deve ser maior ou igual a R$ 0,01"
       );
-      cy.getDataCy("input-error-payment.upfront.0.status").should(
-        "have.text",
-        "Opção inválida"
-      );
       cy.getDataCy("input-error-payment.installment.value").should(
         "have.text",
         "Deve ser maior ou igual a R$ 0,01"
-      );
-      cy.getDataCy("input-error-payment.upfront.0.dueDate").should(
-        "have.text",
-        "Data de vencimento inválida"
       );
       cy.getDataCy("input-error-payment.installment.paymentDate").should(
         "have.text",

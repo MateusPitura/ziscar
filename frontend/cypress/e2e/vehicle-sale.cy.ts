@@ -2,6 +2,8 @@ import { faker } from "@faker-js/faker";
 import { generateCpf } from "../../../shared/src/test/generateCpf";
 
 describe("vehicle", () => {
+  const formattedDate = new Date().toISOString().split("T")[0];
+
   beforeEach(() => {
     cy.login();
   });
@@ -134,10 +136,16 @@ describe("vehicle", () => {
             },
             {
               installmentSequence: 0,
-              dueDate: "2025-01-01",
+              dueDate: null,
               value: "1000000",
               isUpfront: true,
-              paymentMethods: null,
+              paymentMethods: [
+                {
+                  type: "CREDIT_CARD",
+                  value: "1000000",
+                  paymentDate: formattedDate,
+                },
+              ],
             },
           ],
         });
@@ -186,7 +194,6 @@ describe("vehicle", () => {
 
       cy.getDataCy("button-append-payment.upfront").click();
       cy.fillInputByName("payment.upfront.0.value", "1000000");
-      cy.fillInputByName("payment.upfront.0.dueDate", "2025-01-01");
 
       cy.fillInputByName("payment.installment.value", "80000000");
       cy.fillInputByName("payment.installment.dueDate", "2025-01-01");
@@ -319,8 +326,6 @@ describe("vehicle", () => {
 
       cy.getDataCy("button-append-payment.upfront").click();
       cy.fillInputByName("payment.upfront.0.value", "1000000");
-      cy.getDataCy("select-payment.upfront.0.status").click();
-      cy.get('[data-cy^="select-option-PAID"]').click();
       cy.fillInputByName("payment.upfront.0.paymentDate", "2025-01-01");
 
       cy.getDataCy("select-payment.installment.status").click();
@@ -386,8 +391,6 @@ describe("vehicle", () => {
       cy.get('button[type="submit"]').should("be.enabled");
 
       cy.getDataCy("button-append-payment.upfront").click();
-      cy.getDataCy("select-payment.upfront.0.status").click();
-      cy.get('[data-cy^="select-option-PENDING"]').click();
 
       cy.wait(500)
 
@@ -406,10 +409,6 @@ describe("vehicle", () => {
       cy.getDataCy("input-error-payment.upfront.0.value").should(
         "have.text",
         "Deve ser maior ou igual a R$ 0,01"
-      );
-      cy.getDataCy("input-error-payment.upfront.0.status").should(
-        "have.text",
-        "Opção inválida"
       );
       cy.getDataCy("input-error-payment.installment.value").should(
         "have.text",

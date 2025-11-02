@@ -1,7 +1,7 @@
 import { PageablePayload } from "@/domains/global/types";
 import { FetchAccountReceivable } from "@/domains/global/types/model";
 import { applyMask } from "@/domains/global/utils/applyMask";
-import safeFormat from "@/domains/global/utils/safeFormat";
+import { safeFormat } from "@/domains/global/utils/date";
 
 export default function selectAccountsReceivableInfoForReport(
   payload: PageablePayload<FetchAccountReceivable>

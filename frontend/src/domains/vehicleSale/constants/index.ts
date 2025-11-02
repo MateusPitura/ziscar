@@ -1,4 +1,4 @@
-import safeFormat from "@/domains/global/utils/safeFormat";
+import { todayFormatted } from "@/domains/global/utils/date";
 import { InstallmentStatus } from "@shared/enums";
 import { VehicleSaleFormInputs } from "../types";
 
@@ -15,10 +15,10 @@ export function vehicleSaleDefaultValues({
     customer: { id: "" },
     payment: {
       commissionValue,
-      saleDate: safeFormat({ date: new Date(), format: "yyyy-MM-dd" }),
+      saleDate: todayFormatted(),
       upfront: [],
       installment: {
-        dueDate: safeFormat({ date: new Date(), format: "yyyy-MM-dd" }),
+        dueDate: todayFormatted(),
         value,
         status: InstallmentStatus.PENDING,
         paymentDate: "",

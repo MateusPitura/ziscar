@@ -8,8 +8,8 @@ import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import { PageablePayload } from "@/domains/global/types";
 import { FetchAccountReceivable } from "@/domains/global/types/model";
 import { applyMask } from "@/domains/global/utils/applyMask";
+import { safeFormat, todayFormatted } from "@/domains/global/utils/date";
 import formatFilters from "@/domains/global/utils/formatFilters";
-import safeFormat from "@/domains/global/utils/safeFormat";
 import ExportButton from "@/domains/pdf/components/ExportButton";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, type ReactNode } from "react";
@@ -73,7 +73,7 @@ export default function AccountsReceivableTable(): ReactNode {
     )
       return false;
 
-    const today = safeFormat({ date: new Date(), format: "yyyy-MM-dd" });
+    const today = todayFormatted();
     if (
       accountsReceivableFilter.startDate === today &&
       accountsReceivableFilter.endDate === today
@@ -117,7 +117,7 @@ export default function AccountsReceivableTable(): ReactNode {
         <div className="flex gap-4">
           <Switch
             checked={isStartAndEndFilterToday}
-            label="Contas de hoje"
+            label="Vendas de hoje"
             onCheck={() =>
               handleAccountsReceivableFilter({
                 startDate: safeFormat({
@@ -162,14 +162,20 @@ export default function AccountsReceivableTable(): ReactNode {
       </div>
       <Table>
         <Table.Header gridColumns={gridColumns}>
-          <Table.Head label={ACCOUNTS_RECEIVABLE_TABLE.description.label} />
+          <Table.Head
+            label={ACCOUNTS_RECEIVABLE_TABLE.description.label}
+            colSpan={ACCOUNTS_RECEIVABLE_TABLE.description.colSpan}
+          />
           <Table.Head label={ACCOUNTS_RECEIVABLE_TABLE.date.label} />
           <Table.Head label={ACCOUNTS_RECEIVABLE_TABLE.receivedFrom.label} />
           <Table.Head
             label={ACCOUNTS_RECEIVABLE_TABLE.overallStatus.label}
             colSpan={ACCOUNTS_RECEIVABLE_TABLE.overallStatus.colSpan}
           />
-          <Table.Head label={ACCOUNTS_RECEIVABLE_TABLE.totalValue.label} />
+          <Table.Head
+            label={ACCOUNTS_RECEIVABLE_TABLE.totalValue.label}
+            colSpan={ACCOUNTS_RECEIVABLE_TABLE.totalValue.colSpan}
+          />
           <Table.Head action />
         </Table.Header>
         <Table.Body
@@ -183,6 +189,7 @@ export default function AccountsReceivableTable(): ReactNode {
               <Table.Cell
                 label={accountReceivable.description}
                 columnLabel={ACCOUNTS_RECEIVABLE_TABLE.description.label}
+                colSpan={ACCOUNTS_RECEIVABLE_TABLE.description.colSpan}
               />
               <Table.Cell
                 label={accountReceivable.date}
@@ -206,6 +213,7 @@ export default function AccountsReceivableTable(): ReactNode {
                 )}
                 className="font-mono whitespace-pre"
                 columnLabel={ACCOUNTS_RECEIVABLE_TABLE.totalValue.label}
+                colSpan={ACCOUNTS_RECEIVABLE_TABLE.totalValue.colSpan}
               />
               <Table.Action>
                 <AccountsReceivableTableActions

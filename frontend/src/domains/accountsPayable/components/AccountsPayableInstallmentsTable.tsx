@@ -1,4 +1,5 @@
 import Table from "@/design-system/Table";
+import AccountExpired from "@/domains/global/components/AccountExpired";
 import AccountStatus from "@/domains/global/components/AccountStatus";
 import DataField from "@/domains/global/components/DataField";
 import {
@@ -170,7 +171,12 @@ export default function AccountsPayableInstallmentsTable(): ReactNode {
               />
               <Table.Cell
                 columnLabel={ACCOUNTS_PAYABLE_INSTALLMENTS_TABLE.dueDate.label}
-                label={installment.dueDate}
+                label={
+                  <div className="flex gap-1 text-center">
+                    {installment.dueDate}{" "}
+                    {installment.isExpired && <AccountExpired />}
+                  </div>
+                }
               />
               <Table.Cell
                 columnLabel={

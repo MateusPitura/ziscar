@@ -1,8 +1,8 @@
 import { PageablePayload } from "@/domains/global/types";
 import { FetchVehicle } from "@/domains/global/types/model";
 import { applyMask } from "@/domains/global/utils/applyMask";
-import { VehicleStatusText } from "../constants";
 import { VEHICLE_INACTIVE_STATUS } from "@shared/types";
+import { VehicleStatusText } from "../constants";
 
 export default function selectVehiclesInfoForReport(
   payload: PageablePayload<FetchVehicle>
@@ -17,6 +17,7 @@ export default function selectVehiclesInfoForReport(
       status: vehicle.archivedAt
         ? VehicleStatusText[VEHICLE_INACTIVE_STATUS]
         : VehicleStatusText[vehicle.status],
+      brand: vehicle.brand.name
     });
   }
 
