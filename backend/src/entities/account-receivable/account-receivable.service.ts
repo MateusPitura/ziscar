@@ -44,13 +44,13 @@ export class AccountReceivableService implements AccountReceivableRepository {
     let startDateFormatted: Date | undefined = undefined;
     if (startDate) {
       startDateFormatted = new Date(startDate);
-      startDateFormatted.setHours(0, 0, 0, 0);
+      startDateFormatted.setUTCHours(0, 0, 0, 0);
     }
 
     let endDateFormatted: Date | undefined = undefined;
     if (endDate) {
       endDateFormatted = new Date(endDate);
-      endDateFormatted.setHours(23, 59, 59, 999);
+      endDateFormatted.setUTCHours(23, 59, 59, 999);
     }
 
     const filter: Prisma.AccountReceivableWhereInput = {

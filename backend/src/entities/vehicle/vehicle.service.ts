@@ -155,13 +155,13 @@ export class VehicleService implements VehicleRepository {
       let startDateFormatted: Date | undefined = undefined;
       if (params.startDate) {
         startDateFormatted = new Date(params.startDate);
-        startDateFormatted.setHours(0, 0, 0, 0);
+        startDateFormatted.setUTCHours(0, 0, 0, 0);
       }
 
       let endDateFormatted: Date | undefined = undefined;
       if (params.endDate) {
         endDateFormatted = new Date(params.endDate);
-        endDateFormatted.setHours(23, 59, 59, 999);
+        endDateFormatted.setUTCHours(23, 59, 59, 999);
       }
 
       where.createdAt = {

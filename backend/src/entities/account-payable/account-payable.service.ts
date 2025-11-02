@@ -65,13 +65,13 @@ export class AccountPayableService implements AccountPayableRepository {
     let startDateFormatted: Date | undefined = undefined;
     if (startDate) {
       startDateFormatted = new Date(startDate);
-      startDateFormatted.setHours(0, 0, 0, 0);
+      startDateFormatted.setUTCHours(0, 0, 0, 0);
     }
 
     let endDateFormatted: Date | undefined = undefined;
     if (endDate) {
       endDateFormatted = new Date(endDate);
-      endDateFormatted.setHours(23, 59, 59, 999);
+      endDateFormatted.setUTCHours(23, 59, 59, 999);
     }
 
     const filter: Prisma.AccountPayableWhereInput = {
@@ -126,6 +126,7 @@ export class AccountPayableService implements AccountPayableRepository {
         },
       }),
     ]);
+    console.log('🌠 accounts: ', accounts);
 
     const totalPaid =
       summaryByStatus.find((s) => s.status === 'PAID')?._sum.value ?? 0;
