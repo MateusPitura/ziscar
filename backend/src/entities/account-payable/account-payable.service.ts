@@ -126,7 +126,6 @@ export class AccountPayableService implements AccountPayableRepository {
         },
       }),
     ]);
-    console.log('🌠 accounts: ', accounts);
 
     const totalPaid =
       summaryByStatus.find((s) => s.status === 'PAID')?._sum.value ?? 0;
