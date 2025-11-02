@@ -1,4 +1,6 @@
 describe("Account Receivable", () => {
+  const formattedDate = new Date().toISOString().split("T")[0];
+
   beforeEach(() => {
     cy.intercept("**", (req) => {
       req.headers["cache-control"] = "no-cache";
@@ -14,7 +16,7 @@ describe("Account Receivable", () => {
 
     cy.intercept(
       "GET",
-      "http://localhost:3000/account-receivable/search?page=1&overallStatus=PENDING&orderBy=description"
+      `http://localhost:3000/account-receivable/search?page=1&startDate=${formattedDate}&endDate=${formattedDate}&overallStatus=PENDING&orderBy=description`
     ).as("getAccountsReceivable1");
 
     cy.wait("@getAccountsReceivable1");
@@ -23,7 +25,7 @@ describe("Account Receivable", () => {
 
     cy.intercept(
       "GET",
-      "http://localhost:3000/account-receivable/search?page=2&overallStatus=PENDING&orderBy=description"
+      `http://localhost:3000/account-receivable/search?page=2&startDate=${formattedDate}&endDate=${formattedDate}&overallStatus=PENDING&orderBy=description`
     ).as("getAccountsReceivable2");
 
     cy.get('[data-cy="table-navigate-next"]').click();
@@ -42,12 +44,12 @@ describe("Account Receivable", () => {
 
     cy.intercept(
       "GET",
-      "http://localhost:3000/account-receivable/search?page=1&overallStatus=PENDING&orderBy=description"
+      `http://localhost:3000/account-receivable/search?page=1&startDate=${formattedDate}&endDate=${formattedDate}&overallStatus=PENDING&orderBy=description`
     ).as("getAccountsReceivable1");
 
     cy.intercept(
       "GET",
-      "http://localhost:3000/account-receivable/search?page=2&overallStatus=PENDING&orderBy=description"
+      `http://localhost:3000/account-receivable/search?page=2&startDate=${formattedDate}&endDate=${formattedDate}&overallStatus=PENDING&orderBy=description`
     ).as("getAccountsReceivable2");
 
     cy.wait("@getAccountsReceivable1");
@@ -60,6 +62,8 @@ describe("Account Receivable", () => {
     );
 
     cy.wait("@getAccountsReceivable2");
+
+    cy.wait(1000)
 
     cy.task("downloads:folder").then((downloadsFolder) => {
       cy.task("list:files", downloadsFolder).then((files: string[]) => {
@@ -119,7 +123,7 @@ describe("Account Receivable", () => {
 
     cy.intercept(
       "GET",
-      "http://localhost:3000/account-receivable/search?page=1&overallStatus=PENDING&orderBy=description"
+      `http://localhost:3000/account-receivable/search?page=1&startDate=${formattedDate}&endDate=${formattedDate}&overallStatus=PENDING&orderBy=description`
     ).as("getAccountsReceivable");
 
     cy.wait("@getAccountsReceivable");
@@ -176,7 +180,7 @@ describe("Account Receivable", () => {
 
     cy.intercept(
       "GET",
-      "http://localhost:3000/account-receivable/search?page=1&overallStatus=PENDING&orderBy=description"
+      `http://localhost:3000/account-receivable/search?page=1&startDate=${formattedDate}&endDate=${formattedDate}&overallStatus=PENDING&orderBy=description`
     ).as("getAccountsReceivable");
 
     cy.wait("@getAccountsReceivable");

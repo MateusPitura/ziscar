@@ -1,10 +1,11 @@
 import { FetchAccountPayableInstallment } from "@/domains/global/types/model";
 import { applyMask } from "@/domains/global/utils/applyMask";
-import safeFormat from "@/domains/global/utils/safeFormat";
+import { safeFormat } from "@/domains/global/utils/date";
+import { isPast } from "date-fns";
 
 export default function selectAccountsPayableInstallmentsInfo(
   payload: FetchAccountPayableInstallment[]
-): FetchAccountPayableInstallment[] {
+): (FetchAccountPayableInstallment & { isExpired: boolean })[] {
   const itemsFiltered = [];
 
   for (const accountPayable of payload) {
@@ -31,6 +32,10 @@ export default function selectAccountsPayableInstallmentsInfo(
         : "",
       value: applyMask(accountPayable.value, "money") ?? "",
       paymentMethodPayables: paymentMethods,
+      isExpired:
+        accountPayable.status === "PENDING" &&
+        !!accountPayable.dueDate &&
+        isPast(new Date(accountPayable.dueDate)),
     });
   }
 

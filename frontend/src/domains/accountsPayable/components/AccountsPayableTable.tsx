@@ -1,5 +1,6 @@
 import Switch from "@/design-system/Switch";
 import Table from "@/design-system/Table";
+import AccountExpired from "@/domains/global/components/AccountExpired";
 import AccountStatus from "@/domains/global/components/AccountStatus";
 import DataField from "@/domains/global/components/DataField";
 import { BACKEND_URL, BLANK } from "@/domains/global/constants";
@@ -8,8 +9,8 @@ import useSafeFetch from "@/domains/global/hooks/useSafeFetch";
 import { PageablePayload } from "@/domains/global/types";
 import { FetchAccountPayable } from "@/domains/global/types/model";
 import { applyMask } from "@/domains/global/utils/applyMask";
+import { safeFormat, todayFormatted } from "@/domains/global/utils/date";
 import formatFilters from "@/domains/global/utils/formatFilters";
-import safeFormat from "@/domains/global/utils/safeFormat";
 import ExportButton from "@/domains/pdf/components/ExportButton";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, type ReactNode } from "react";
@@ -70,7 +71,7 @@ export default function AccountsPayableTable(): ReactNode {
     if (!accountsPayableFilter?.startDate || !accountsPayableFilter?.endDate)
       return false;
 
-    const today = safeFormat({ date: new Date(), format: "yyyy-MM-dd" });
+    const today = todayFormatted();
     if (
       accountsPayableFilter.startDate === today &&
       accountsPayableFilter.endDate === today
@@ -102,6 +103,7 @@ export default function AccountsPayableTable(): ReactNode {
           }}
           formatColumns={{
             description: "Descrição",
+            date: "Data de vencimento",
             paidTo: "Pago a",
             overallStatus: "Status geral",
             totalValue: "Valor total",
@@ -149,14 +151,20 @@ export default function AccountsPayableTable(): ReactNode {
       </div>
       <Table>
         <Table.Header gridColumns={gridColumns}>
-          <Table.Head label={ACCOUNTS_PAYABLE_TABLE.description.label} />
+          <Table.Head
+            label={ACCOUNTS_PAYABLE_TABLE.description.label}
+            colSpan={ACCOUNTS_PAYABLE_TABLE.description.colSpan}
+          />
           <Table.Head label={ACCOUNTS_PAYABLE_TABLE.date.label} />
           <Table.Head label={ACCOUNTS_PAYABLE_TABLE.paidTo.label} />
           <Table.Head
             label={ACCOUNTS_PAYABLE_TABLE.overallStatus.label}
             colSpan={ACCOUNTS_PAYABLE_TABLE.overallStatus.colSpan}
           />
-          <Table.Head label={ACCOUNTS_PAYABLE_TABLE.totalValue.label} />
+          <Table.Head
+            label={ACCOUNTS_PAYABLE_TABLE.totalValue.label}
+            colSpan={ACCOUNTS_PAYABLE_TABLE.totalValue.colSpan}
+          />
           <Table.Head action />
         </Table.Header>
         <Table.Body
@@ -169,10 +177,16 @@ export default function AccountsPayableTable(): ReactNode {
             <Table.Row key={accountPayable.id} gridColumns={gridColumns}>
               <Table.Cell
                 label={accountPayable.description}
+                colSpan={ACCOUNTS_PAYABLE_TABLE.description.colSpan}
                 columnLabel={ACCOUNTS_PAYABLE_TABLE.description.label}
               />
               <Table.Cell
-                label={accountPayable.date}
+                label={
+                  <div className="flex gap-1 text-center">
+                    {accountPayable.date}{" "}
+                    {accountPayable.isExpired && <AccountExpired />}
+                  </div>
+                }
                 columnLabel={ACCOUNTS_PAYABLE_TABLE.date.label}
               />
               <Table.Cell
@@ -190,6 +204,7 @@ export default function AccountsPayableTable(): ReactNode {
                   BLANK
                 )}
                 className="font-mono whitespace-pre"
+                colSpan={ACCOUNTS_PAYABLE_TABLE.totalValue.colSpan}
                 columnLabel={ACCOUNTS_PAYABLE_TABLE.totalValue.label}
               />
               <Table.Action>

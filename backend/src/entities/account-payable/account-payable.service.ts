@@ -65,13 +65,13 @@ export class AccountPayableService implements AccountPayableRepository {
     let startDateFormatted: Date | undefined = undefined;
     if (startDate) {
       startDateFormatted = new Date(startDate);
-      startDateFormatted.setHours(0, 0, 0, 0);
+      startDateFormatted.setUTCHours(0, 0, 0, 0);
     }
 
     let endDateFormatted: Date | undefined = undefined;
     if (endDate) {
       endDateFormatted = new Date(endDate);
-      endDateFormatted.setHours(23, 59, 59, 999);
+      endDateFormatted.setUTCHours(23, 59, 59, 999);
     }
 
     const filter: Prisma.AccountPayableWhereInput = {
@@ -97,20 +97,22 @@ export class AccountPayableService implements AccountPayableRepository {
       },
     };
 
-    const accounts = await this.prisma.accountPayable.findMany({
-      where: filter,
-      include: {
-        accountPayableInstallments: true,
-      },
-      skip: (page - 1) * limit,
-      take: limit,
-      orderBy: {
-        description: 'asc',
-      },
-    });
-
-    const summaryByStatus = await this.prisma.accountPayableInstallment.groupBy(
-      {
+    const [accounts, total, summaryByStatus] = await Promise.all([
+      this.prisma.accountPayable.findMany({
+        where: filter,
+        include: {
+          accountPayableInstallments: true,
+        },
+        skip: (page - 1) * limit,
+        take: limit,
+        orderBy: {
+          description: 'asc',
+        },
+      }),
+      this.prisma.accountPayable.count({
+        where: filter,
+      }),
+      this.prisma.accountPayableInstallment.groupBy({
         by: ['status'],
         _sum: {
           value: true,
@@ -122,17 +124,13 @@ export class AccountPayableService implements AccountPayableRepository {
             enterpriseId,
           },
         },
-      },
-    );
+      }),
+    ]);
 
     const totalPaid =
       summaryByStatus.find((s) => s.status === 'PAID')?._sum.value ?? 0;
     const totalPending =
       summaryByStatus.find((s) => s.status === 'PENDING')?._sum.value ?? 0;
-
-    const total = await this.prisma.accountPayable.count({
-      where: filter,
-    });
 
     const data = accounts.map((acc) => {
       const installments = acc.accountPayableInstallments;

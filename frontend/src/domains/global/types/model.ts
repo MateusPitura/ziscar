@@ -231,6 +231,7 @@ export type FetchVehicle = Pick<
   | "plateNumber"
   | "modelYear"
   | "status"
+  | 'brand'
   | "archivedAt"
 >;
 

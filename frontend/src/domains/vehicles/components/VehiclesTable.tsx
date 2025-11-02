@@ -150,6 +150,7 @@ export default function VehiclesTable(): ReactNode {
           }}
           formatColumns={{
             modelName: "Modelo",
+            brand: 'Marca',
             plateNumber: "Placa",
             modelYear: "Ano do modelo",
             status: "Status",
@@ -160,7 +161,14 @@ export default function VehiclesTable(): ReactNode {
       </div>
       <Table>
         <Table.Header gridColumns={gridColumns}>
-          <Table.Head label={VEHICLES_TABLE.model.label} />
+          <Table.Head
+            label={VEHICLES_TABLE.model.label}
+            colSpan={VEHICLES_TABLE.model.colSpan}
+          />
+          <Table.Head
+            label={VEHICLES_TABLE.brand.label}
+            colSpan={VEHICLES_TABLE.brand.colSpan}
+          />
           <Table.Head
             label={VEHICLES_TABLE.plate.label}
             colSpan={VEHICLES_TABLE.plate.colSpan}
@@ -190,6 +198,12 @@ export default function VehiclesTable(): ReactNode {
               <Table.Cell
                 label={vehicle.modelName}
                 columnLabel={VEHICLES_TABLE.model.label}
+                colSpan={VEHICLES_TABLE.model.colSpan}
+              />
+              <Table.Cell
+                label={vehicle.brandName}
+                columnLabel={VEHICLES_TABLE.brand.label}
+                colSpan={VEHICLES_TABLE.brand.colSpan}
               />
               <Table.Cell
                 label={vehicle.plateNumber}

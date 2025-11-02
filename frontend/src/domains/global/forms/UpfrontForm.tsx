@@ -9,11 +9,10 @@ import { InstallmentStatus, PaymentMethodPayableType } from "@shared/enums";
 import { useEffect, type ReactNode } from "react";
 import { useFormContext } from "react-hook-form";
 import {
-  INSTALMENT_STATUS,
-  vehicleDefaultValues,
+  vehicleDefaultValues
 } from "../../vehicles/constants";
 import { VehicleFormInputs } from "../../vehicles/types";
-import safeFormat from "../utils/safeFormat";
+import { todayFormatted } from "../utils/date";
 
 interface UpfrontFormProperties {
   isAccountReceivable?: boolean;
@@ -29,16 +28,10 @@ export default function UpfrontForm({
     if (statusWatch === InstallmentStatus.PENDING) {
       setValue("payment.upfront.0.paymentDate", "");
       setValue("payment.upfront.0.paymentMethod", "");
-      setValue(
-        "payment.upfront.0.dueDate",
-        safeFormat({ date: new Date(), format: "yyyy-MM-dd" })
-      );
+      setValue("payment.upfront.0.dueDate", todayFormatted());
     } else if (statusWatch === InstallmentStatus.PAID) {
       setValue("payment.upfront.0.dueDate", "");
-      setValue(
-        "payment.upfront.0.paymentDate",
-        safeFormat({ date: new Date(), format: "yyyy-MM-dd" })
-      );
+      setValue("payment.upfront.0.paymentDate", todayFormatted());
       setValue(
         "payment.upfront.0.paymentMethod",
         PaymentMethodPayableType.CREDIT_CARD
@@ -54,19 +47,16 @@ export default function UpfrontForm({
       maxLength={1}
       title="Informação da entrada"
       className="grid-cols-3"
-      appendDefaultValues={vehicleDefaultValues.payment.installment!}
+      appendDefaultValues={{
+        ...vehicleDefaultValues.payment.installment!,
+        status: InstallmentStatus.PAID,
+      }}
       render={() => (
         <>
           <Input<VehicleFormInputs>
             label="Valor"
             name="payment.upfront.0.value"
             mask="money"
-            required
-          />
-          <Select<VehicleFormInputs>
-            label="Status do pagamento"
-            name="payment.upfront.0.status"
-            options={INSTALMENT_STATUS}
             required
           />
           {statusWatch === InstallmentStatus.PAID ? (
