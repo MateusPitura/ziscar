@@ -4,7 +4,7 @@ A aplicação hospedada pode ser acessada em https://ziscar.me
 
 1. Execução local
 
-A aplicação pode ser executada localmente e utilizando as credenciais a seguir:
+A aplicação pode ser acessada localmente utilizando as credenciais a seguir:
 
 Administrador:
 - Usuário: john.doe@email.com

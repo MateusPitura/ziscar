@@ -95,7 +95,7 @@ export default function EditStorePage({ contextHelper}: ContextHelperable) {
         defaultValues={storeData}
         onSubmit={mutate}
         isPending={isPending || !!isFetchingCep}
-        headerTitle="Alterar usuário"
+        headerTitle="Alterar loja"
         isEdit
         resource="STORES"
         action="UPDATE"
