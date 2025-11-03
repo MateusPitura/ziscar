@@ -34,6 +34,7 @@ import UnfoldMore from "@mui/icons-material/UnfoldMore";
 import VerifiedUser from "@mui/icons-material/VerifiedUserOutlined";
 import VisibilityOff from "@mui/icons-material/VisibilityOffOutlined";
 import Visibility from "@mui/icons-material/VisibilityOutlined";
+import Warning from '@mui/icons-material/Warning';
 
 export const icons = {
   FileDownload,
@@ -72,4 +73,5 @@ export const icons = {
   Emergency,
   Help,
   NoCrash,
+  Warning
 };

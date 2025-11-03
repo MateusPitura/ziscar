@@ -12,7 +12,7 @@ import { INSTALMENT_STATUS } from "../../vehicles/constants";
 import { VehicleFormInputs } from "../../vehicles/types";
 import DataField from "../components/DataField";
 import { applyMask } from "../utils/applyMask";
-import safeFormat from "../utils/safeFormat";
+import { todayFormatted } from "../utils/date";
 
 interface PaymentFormProperties {
   isAccountReceivable?: boolean;
@@ -43,14 +43,14 @@ export default function PaymentForm({
       setValue("payment.installment.paymentDate", "");
       setValue(
         "payment.installment.dueDate",
-        safeFormat({ date: new Date(), format: "yyyy-MM-dd" })
+        todayFormatted()
       );
       setValue("payment.installment.paymentMethod", "");
     } else if (statusWatch === InstallmentStatus.PAID) {
       setValue("payment.installment.dueDate", "");
       setValue(
         "payment.installment.paymentDate",
-        safeFormat({ date: new Date(), format: "yyyy-MM-dd" })
+        todayFormatted()
       );
       setValue(
         "payment.installment.paymentMethod",

@@ -14,6 +14,7 @@ export default function selectVehiclesInfo(
       announcedPrice: applyMask(vehicle.announcedPrice, "money") ?? "",
       plateNumber: applyMask(vehicle.plateNumber, "plateNumber") ?? "",
       modelYear: vehicle.modelYear ? String(vehicle.modelYear) : "",
+      brandName: vehicle.brand.name
     });
   }
 

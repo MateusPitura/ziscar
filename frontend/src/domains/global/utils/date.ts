@@ -6,9 +6,13 @@ interface FormatDateProps {
   format: DateFormats;
 }
 
-export default function safeFormat({ date, format }: FormatDateProps) {
+export function safeFormat({ date, format }: FormatDateProps) {
   if (date instanceof Date) {
     return fnsFormat(parseISO(date.toISOString()), format);
   }
   return fnsFormat(parseISO(date), format);
+}
+
+export function todayFormatted(){
+  return safeFormat({ date: new Date(), format: "yyyy-MM-dd" })
 }

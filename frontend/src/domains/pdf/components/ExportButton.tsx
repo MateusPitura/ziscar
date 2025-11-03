@@ -1,7 +1,7 @@
 import Button from "@/design-system/Button";
 import useSnackbar from "@/domains/global/hooks/useSnackbar";
 import { PageablePayload } from "@/domains/global/types";
-import safeFormat from "@/domains/global/utils/safeFormat";
+import { safeFormat } from "@/domains/global/utils/date";
 import { pdf } from "@react-pdf/renderer";
 import { ITEMS_PER_PAGE } from "@shared/constants";
 import { QueryKey, useIsFetching, useQueryClient } from "@tanstack/react-query";

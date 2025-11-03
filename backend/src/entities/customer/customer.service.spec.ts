@@ -674,7 +674,7 @@ describe('CustomerService', () => {
     });
 
     const dateFormatted = new Date('2000-01-01');
-    dateFormatted.setHours(0, 0, 0, 0);
+    dateFormatted.setUTCHours(0, 0, 0, 0);
 
     expect(spy).toHaveBeenCalledWith({
       skip: 0,

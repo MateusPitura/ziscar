@@ -1,10 +1,10 @@
-import safeFormat from "@/domains/global/utils/safeFormat";
+import { safeFormat } from "@/domains/global/utils/date";
 import { Image, StyleSheet, Text, View } from "@react-pdf/renderer";
 import type { ReactNode } from "react";
 
 const styles = StyleSheet.create({
   header: {
-    height: 60,
+    height: 40,
     flexDirection: "row",
     marginBottom: 10,
     paddingBottom: 10,
@@ -13,18 +13,6 @@ const styles = StyleSheet.create({
   gridColumn: {
     flex: 1,
     minHeight: 40,
-  },
-  // logoContainer: {
-  //   height: 50,
-  //   backgroundColor: "#F8F9FA",
-  //   borderRadius: 3,
-  //   justifyContent: "center",
-  //   alignItems: "center",
-  //   marginRight: 8,
-  // },
-  logoText: {
-    fontSize: 7,
-    color: "#9CA3AF",
   },
   centerContainer: {
     alignItems: "center",
@@ -41,46 +29,25 @@ const styles = StyleSheet.create({
     color: "#666666",
     textAlign: "center",
   },
-  filtersContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "flex-end",
-    alignContent: "flex-start",
-    marginLeft: 8,
-  },
-  filterChip: {
-    backgroundColor: "#F8F9FA",
-    borderRadius: 10,
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    marginBottom: 2,
-    marginLeft: 2,
-    borderWidth: 0.5,
-    borderColor: "#E5E7EB",
-  },
-  filterText: {
-    fontSize: 7,
-    color: "#374151",
+  logoContainer: {
+    marginBottom: "-20px",
+    marginTop: "-20px",
+    marginLeft: "-10px",
   },
 });
 
 interface ReportHeaderProperties {
-  appliedFilters: Record<string, string>;
   title: string;
 }
 
 export default function ReportHeader({
-  appliedFilters,
   title,
 }: ReportHeaderProperties): ReactNode {
   return (
     <View style={styles.header} fixed>
       <View style={styles.gridColumn}>
-        <View>
-          <Image
-            src="/somente-logo.png"
-            style={{ width: 40, height: 40 }}
-          />
+        <View style={styles.logoContainer}>
+          <Image src="/FullLogo.png" style={{ width: 160, height: 90 }} />
         </View>
       </View>
 
@@ -94,19 +61,7 @@ export default function ReportHeader({
         </View>
       </View>
 
-      <View style={styles.gridColumn}>
-        {appliedFilters && Object.keys(appliedFilters).length > 0 && (
-          <View style={styles.filtersContainer}>
-            {Object.entries(appliedFilters).map(([key, value]) => (
-              <View key={key} style={styles.filterChip}>
-                <Text style={styles.filterText}>
-                  {key}: {value}
-                </Text>
-              </View>
-            ))}
-          </View>
-        )}
-      </View>
+      <View style={styles.gridColumn} />
     </View>
   );
 }

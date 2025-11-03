@@ -26,7 +26,9 @@ export interface VehicleSaleToString {
 export type FetchVehicleToString = ToString<
   FetchVehicle,
   "announcedPrice" | "modelYear"
->;
+> & {
+  brandName: string;
+};
 
 export interface VehicleSaleDetails {
   vehicle: Vehicle;
