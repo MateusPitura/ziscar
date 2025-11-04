@@ -1,6 +1,8 @@
-O código fonte também está disponível no GitHub em https://github.com/MateusPitura/ziscar
+O vídeo do projeto pode ser acessado em https://youtu.be/Jkrk-iUCsal
 
 A aplicação hospedada pode ser acessada em https://ziscar.me
+
+O código fonte também está disponível no GitHub em https://github.com/MateusPitura/ziscar
 
 1. Execução local
 
