@@ -1,6 +1,5 @@
 node_modules/
-# 🌠 Remover comentário depois da banca do projeto
-# .env  
+.env  
 .env.prod
 scripts/.env
 test/load/result/
