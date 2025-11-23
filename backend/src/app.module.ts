@@ -3,7 +3,7 @@ import { AuthModule } from './entities/auth/auth.module';
 import { DatabaseModule } from './infra/database/database.module';
 import { ConfigModule } from '@nestjs/config';
 import { EmailModule } from './entities/email/email.module';
-import { APP_PIPE } from '@nestjs/core';
+import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { ZodValidationPipe } from 'nestjs-zod';
 import { AppController } from './app.controller';
 import { AccountPayableModule } from './entities/account-payable/account-payable.module';
@@ -24,6 +24,7 @@ import { VehiclePurchaseModule } from './entities/vehicle-purchase/vehicle-purch
 import { VehicleSaleModule } from './entities/vehicle-sale/vehicle-sale.module';
 import { UserModule } from './entities/user/user.module';
 import { join } from 'path';
+import { AuditInterceptor } from './entities/audit/audit.interceptor';
 
 @Module({
   imports: [
@@ -56,6 +57,10 @@ import { join } from 'path';
     {
       provide: APP_PIPE,
       useClass: ZodValidationPipe,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: AuditInterceptor,
     },
   ],
   controllers: [AppController],
