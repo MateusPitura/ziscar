@@ -11,12 +11,11 @@
       http-equiv="Content-Security-Policy"
       content="
 		    default-src 'self'; 
-        connect-src 'self' data: https://viacep.com.br https://servicodados.ibge.gov.br <%= BACKEND_URL %> https://www.google-analytics.com;
-	      img-src 'self' data: https://www.googletagmanager.com https://www.google-analytics.com;
-        script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com;
+        connect-src 'self' data: https://viacep.com.br https://servicodados.ibge.gov.br <%= BACKEND_URL %> https://firestore.googleapis.com https://firebasestorage.googleapis.com;
+	      img-src 'self' data:;
+        script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.gstatic.com https://www.googleapis.com;
         style-src 'self' 'unsafe-inline';
         font-src 'self' data:;
-        frame-src https://www.googletagmanager.com;
       "
     />
     <style>
@@ -46,31 +45,9 @@
         }
       })(window.location);
     </script>
-    <!-- Google Tag Manager -->
-    <script>
-      (function (w, d, s, l, i) {
-        w[l] = w[l] || [];
-        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
-        var f = d.getElementsByTagName(s)[0],
-          j = d.createElement(s),
-          dl = l != "dataLayer" ? "&l=" + l : "";
-        j.async = true;
-        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
-        f.parentNode.insertBefore(j, f);
-      })(window, document, "script", "dataLayer", "GTM-53FPM5NX");
-    </script>
   </head>
 
   <body style="margin: 0">
-    <!-- Google Tag Manager (noscript) -->
-    <noscript
-      ><iframe
-        src="https://www.googletagmanager.com/ns.html?id=GTM-53FPM5NX"
-        height="0"
-        width="0"
-        style="display: none; visibility: hidden"
-      ></iframe
-    ></noscript>
     <div id="root">
       <div
         style="

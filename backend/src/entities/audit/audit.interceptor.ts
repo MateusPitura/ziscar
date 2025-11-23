@@ -21,15 +21,15 @@ export class AuditInterceptor implements NestInterceptor {
 
         const req = context.switchToHttp().getRequest<AuthRequest>();
         const { userId, enterpriseId } = req.authToken || {};
-        const ipAddress = req.ip;
+        const ipAddress = req?.ip;
 
         const audit = {
-          method: req.method ?? null,
-          url: req.url ?? null,
+          method: req?.method ?? null,
+          url: req?.url ?? null,
           ipAddress: ipAddress ?? null,
           userId: userId ?? null,
           enterpriseId: enterpriseId ?? null,
-          timestamp: new Date().toISOString(),
+          timestamp: new Date()?.toISOString() ?? null,
           stage: process.env.NODE_ENV ?? null,
         };
 

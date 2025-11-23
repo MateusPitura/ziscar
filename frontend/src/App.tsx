@@ -1,12 +1,14 @@
-import { RouterProvider } from "react-router-dom";
-import { GlobalProvider } from "./domains/global/contexts/GlobalContext";
-import Snackbar from "./design-system/Snackbar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+
+import { RouterProvider } from "react-router-dom";
 import ErrorBoundary from "./ErrorBoundary";
-import { QueryKeys } from "./domains/global/types";
-import { router } from "./router";
+import Snackbar from "./design-system/Snackbar";
 import { FilterProvider } from "./domains/global/contexts/FilterContext";
+import { GlobalProvider } from "./domains/global/contexts/GlobalContext";
+import { QueryKeys } from "./domains/global/types";
+import { auditInterceptor } from "./domains/global/utils/auditInterceptor";
+import { router } from "./router";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -25,6 +27,8 @@ declare module "@tanstack/react-query" {
 }
 
 export default function App() {
+  auditInterceptor();
+
   return (
     <ErrorBoundary>
       <GlobalProvider>
