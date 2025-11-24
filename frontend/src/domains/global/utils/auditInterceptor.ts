@@ -1,5 +1,7 @@
+import { DOMAIN } from "@shared/constants";
 import { initializeApp } from "firebase/app";
 import { addDoc, collection, getFirestore } from "firebase/firestore";
+import { isProduction } from "../constants";
 
 interface Navigator {
   deviceMemory?: number;
@@ -18,9 +20,13 @@ export function auditInterceptor(): void {
   const db = getFirestore(app);
 
   if (localStorage.getItem("DISABLE_AUDIT") === "true") {
-    document.cookie = "DISABLE_AUDIT=true; path=/;";
-    return
-  };
+    let cookie = "DISABLE_AUDIT=true; path=/;";
+    if (isProduction) {
+      cookie += ` domain=.${DOMAIN};`;
+    }
+    document.cookie = cookie;
+    return;
+  }
 
   const connection = (navigator as Navigator)?.connection;
 
@@ -29,7 +35,7 @@ export function auditInterceptor(): void {
     referrer: document?.referrer ?? null,
     url: location?.href ?? null,
     timestamp: new Date()?.toISOString() ?? null,
-    stage: process.env.NODE_ENV ?? null,
+    stage: import.meta.env.MODE ?? null,
     timezone: Intl?.DateTimeFormat()?.resolvedOptions()?.timeZone,
     viewport: {
       width: window?.innerWidth ?? null,

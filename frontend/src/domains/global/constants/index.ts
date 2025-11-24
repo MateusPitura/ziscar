@@ -9,10 +9,11 @@ import {
 
 export const BLANK = " ";
 
-export const BACKEND_URL =
-  import.meta.env.MODE === "production"
-    ? API_URL
-    : `http://localhost:${BACKEND_PORT}`;
+export const isProduction = import.meta.env.MODE === "production";
+
+export const BACKEND_URL = isProduction
+  ? API_URL
+  : `http://localhost:${BACKEND_PORT}`;
 
 export const AUTH_CHANNEL = {
   SIGNIN: "SIGN_IN",
