@@ -1,1 +1,0 @@
-import{c as t}from"./index-C6klyKLI.js";import{x as r,y as o,K as m,L as n,M as i,w as s,E as a,H as e,A as c,J as p}from"./schemas-CrZ-JHZI.js";const h=r({name:s().or(a()),status:c(["active","inactive"]),startDate:e().or(a()),endDate:e().or(a())}).refine(...p),l=r({name:s(),email:i().or(a()),phone:n().or(a()),cnpj:m(),address:o(t).max(1)});export{h as S,l as a};
