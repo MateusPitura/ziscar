@@ -14,4 +14,8 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
-import './commands'
+import "./commands";
+
+beforeEach(() => {
+  localStorage.setItem("DISABLE_AUDIT", "true");
+});

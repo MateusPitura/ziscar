@@ -17,7 +17,10 @@ export function auditInterceptor(): void {
   const app = initializeApp({ projectId: "project-ziscar" });
   const db = getFirestore(app);
 
-  if (localStorage.getItem("DISABLE_AUDIT") === "true") return;
+  if (localStorage.getItem("DISABLE_AUDIT") === "true") {
+    document.cookie = "DISABLE_AUDIT=true; path=/;";
+    return
+  };
 
   const connection = (navigator as Navigator)?.connection;
 
