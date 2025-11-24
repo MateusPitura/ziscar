@@ -1,0 +1,1 @@
+import{aU as n,j as a,aV as o,a9 as s}from"./index-PgcJxcI8.js";function r(t){return+n(t)<Date.now()}function i(){return a.jsx(o,{content:"Atrasado",children:a.jsx("div",{children:a.jsx(s,{iconName:"Warning",className:"text-orange-500"})})})}export{i as A,r as i};
