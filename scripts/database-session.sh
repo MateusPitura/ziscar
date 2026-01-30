@@ -42,12 +42,14 @@ if [[ -n "$ACTIVE_SESSION" ]]; then
         echo "Session expires at: $SESSION_EXPIRATION"
     fi
 else
-    echo "Creating Bastion session for port forwarding..."
+    if [[ "$RETURN_PID" == false ]]; then
+        echo "Creating Bastion session for port forwarding..."
+    fi
     SESSION_JSON=$(oci bastion session create-port-forwarding \
         --bastion-id "$BASTION_OCID" \
         --target-resource-id "$DATABASE_OCID" \
         --target-private-ip "$DATABASE_PRIVATE_IP" \
-        --target-port $DATABASE_PORT \
+        --target-port "$DATABASE_PORT" \
         --ssh-public-key-file "$PUBLIC_KEY_PATH" \
         --key-type PUB \
         --session-ttl 10800 \
@@ -59,16 +61,22 @@ else
         exit 1
     fi
 
-    echo "Waiting for session to become ACTIVE..."
+    if [[ "$RETURN_PID" == false ]]; then
+        echo "Waiting for session to become ACTIVE..."
+    fi
     while true; do
         STATUS=$(oci bastion session get --session-id "$SESSION_ID" --output json | jq -r '.data."lifecycle-state"')
-        echo "Current status: $STATUS"
+        if [[ "$RETURN_PID" == false ]]; then
+            echo "Current status: $STATUS"
+        fi
         if [[ "$STATUS" == "ACTIVE" ]]; then
             break
         fi
         sleep 15
     done
-    echo "Session ACTIVE"
+    if [[ "$RETURN_PID" == false ]]; then
+        echo "Session ACTIVE"
+    fi
 fi
 
 # Start port forwarding using SSH and ProxyCommand
@@ -78,10 +86,10 @@ fi
 
 if [[ "$RETURN_PID" == true ]]; then
     # Start SSH in background and capture PID
-    ssh -i "$PUBLIC_KEY_PATH" -N -L $LOCAL_PORT:$DATABASE_PRIVATE_IP:$DATABASE_PORT -p 22 $SESSION_ID@host.bastion.sa-saopaulo-1.oci.oraclecloud.com &
+    ssh -i "$PUBLIC_KEY_PATH" -N -L "$LOCAL_PORT":$DATABASE_PRIVATE_IP:"$DATABASE_PORT" -p 22 "$SESSION_ID"@host.bastion.sa-saopaulo-1.oci.oraclecloud.com &
     SSH_PID=$!
     echo $SSH_PID
 else
     # Start SSH in foreground (original behavior)
-    ssh -i "$PUBLIC_KEY_PATH" -N -L $LOCAL_PORT:$DATABASE_PRIVATE_IP:$DATABASE_PORT -p 22 $SESSION_ID@host.bastion.sa-saopaulo-1.oci.oraclecloud.com
+    ssh -i "$PUBLIC_KEY_PATH" -N -L "$LOCAL_PORT":$DATABASE_PRIVATE_IP:"$DATABASE_PORT" -p 22 "$SESSION_ID"@host.bastion.sa-saopaulo-1.oci.oraclecloud.com
 fi

@@ -30,7 +30,7 @@ FRONTEND:
 - Para itens de formulário, use o `Form`, por padrão ele irá remover campos com strings vazias `""` ao realizar submit. Também sempre forneça o defaultValues, garanta que ao menos uma string vazia `""` seja fornecida e não undefined
 - Para usar um dialog, use do componente `Dialog` e do hook `useDialog`, que fornece um state para controle do dialog é métodos úteis como `close`, `open`, `toggle` e `handle`
 - As queries keys do React Query estão definidas em `global/types/index.ts`
-- Para executar testes com Cypress execute `frontend/npm run cypress:test`, para abrir execute `frontend/npm run cypress:open`
+- Para executar testes com Cypress execute `frontend/npm run cypress:run`, para abrir execute `frontend/npm run cypress:open`
 
 SHARED:
 

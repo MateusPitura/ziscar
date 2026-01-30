@@ -1,6 +1,8 @@
+import FingerprintJS from "@fingerprintjs/fingerprintjs";
 import { DOMAIN } from "@shared/constants";
 import { initializeApp } from "firebase/app";
 import { addDoc, collection, getFirestore } from "firebase/firestore";
+import { nanoid } from "nanoid";
 import { isProduction } from "../constants";
 
 interface Navigator {
@@ -15,12 +17,9 @@ interface Navigator {
   };
 }
 
-export function auditInterceptor(): void {
-  const app = initializeApp({ projectId: "project-ziscar" });
-  const db = getFirestore(app);
-
-  if (localStorage.getItem("DISABLE_AUDIT") === "true") {
-    let cookie = "DISABLE_AUDIT=true; path=/;";
+export async function auditInterceptor(): Promise<void> {
+  if (localStorage.getItem("DISABLE_AUDIT_ZISCAR") === "true") {
+    let cookie = "DISABLE_AUDIT_ZISCAR=true; path=/;";
     if (isProduction) {
       cookie += ` domain=.${DOMAIN};`;
     }
@@ -28,7 +27,19 @@ export function auditInterceptor(): void {
     return;
   }
 
+  const app = initializeApp({ projectId: "project-ziscar" });
+  const db = getFirestore(app);
+
+  let clientId = localStorage.getItem("CLIENT_ID_ZISCAR");
+  if (!clientId) {
+    clientId = nanoid();
+    localStorage.setItem("CLIENT_ID_ZISCAR", clientId);
+  }
+
   const connection = (navigator as Navigator)?.connection;
+
+  const fp = await FingerprintJS.load();
+  const fingerprint = await fp.get();
 
   const audit = {
     userAgent: navigator?.userAgent ?? null,
@@ -52,6 +63,8 @@ export function auditInterceptor(): void {
     memory: (navigator as Navigator)?.deviceMemory ?? null,
     language: navigator?.language,
     cookieEnabled: navigator?.cookieEnabled,
+    fingerprint: fingerprint.visitorId,
+    clientId,
   };
 
   try {

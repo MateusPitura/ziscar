@@ -17,5 +17,5 @@
 import "./commands";
 
 beforeEach(() => {
-  localStorage.setItem("DISABLE_AUDIT", "true");
+  localStorage.setItem("DISABLE_AUDIT_ZISCAR", "true");
 });
