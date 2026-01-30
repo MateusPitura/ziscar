@@ -1,0 +1,1 @@
+import{r as o}from"./index-BtjjDFk5.js";import{i as r}from"./useDialog-CIz-U4bO.js";function n(){const t=o.useContext(r);if(!t)throw new Error("useDialogContext must be used within a DialogProvider");return t}export{n as u};
